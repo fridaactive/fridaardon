@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FridaActive · Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:    #1C55E5;
+    --blue-dk: #0F3FA8;
+    --blue-lt: #EEF4FF;
+    --cream:   #F5ECCB;
+    --text:    #0a1628;
+    --muted:   #7a8499;
+    --border:  #E8E3D0;
+    --grad:    linear-gradient(135deg, #F5ECCB 0%, #ffffff 100%);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#fff; font-family:'DM Sans',sans-serif; min-height:100vh; }
+
+  /* ── LOGIN ── */
+  #login-screen {
+    min-height: 100vh;
+    background: var(--blue);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #login-screen::before {
+    content:'';
+    position:absolute;
+    top:-80px; right:-80px;
+    width:280px; height:280px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.05);
+  }
+
+  #login-screen::after {
+    content:'';
+    position:absolute;
+    bottom:-60px; left:-40px;
+    width:200px; height:200px;
+    border-radius:50%;
+    background:rgba(245,236,203,0.07);
+  }
+
+  .login-logo {
+    font-size:2rem;
+    font-weight:700;
+    color:#fff;
+    background:rgba(255,255,255,0.15);
+    padding:0.5rem 1rem;
+    border-radius:12px;
+    margin-bottom:0.75rem;
+    position:relative; z-index:1;
+  }
+
+  .login-brand {
+    font-size:0.65rem;
+    color:rgba(255,255,255,0.5);
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    margin-bottom:2.5rem;
+    position:relative; z-index:1;
+  }
+
+  .login-card {
+    background:#fff;
+    border-radius:20px;
+    padding:2rem 1.75rem;
+    width:100%;
+    max-width:340px;
+    position:relative; z-index:1;
+    box-shadow:0 20px 60px rgba(0,0,0,0.2);
+  }
+
+  .login-title {
+    font-size:1.1rem;
+    font-weight:700;
+    color:var(--text);
+    margin-bottom:0.3rem;
+  }
+
+  .login-sub {
+    font-size:0.75rem;
+    color:var(--muted);
+    margin-bottom:1.5rem;
+    font-weight:300;
+  }
+
+  .login-label {
+    font-size:0.65rem;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--muted);
+    font-weight:600;
+    margin-bottom:0.4rem;
+    display:block;
+  }
+
+  .login-input {
+    width:100%;
+    border:1.5px solid var(--border);
+    border-radius:10px;
+    padding:0.75rem 1rem;
+    font-size:0.9rem;
+    font-family:'DM Sans',sans-serif;
+    color:var(--text);
+    outline:none;
+    transition:border-color 0.2s;
+    margin-bottom:1rem;
+  }
+
+  .login-input:focus { border-color:var(--blue); }
+
+  .login-btn {
+    width:100%;
+    background:var(--blue);
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    padding:0.85rem;
+    font-size:0.85rem;
+    font-weight:700;
+    font-family:'DM Sans',sans-serif;
+    cursor:pointer;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+    transition:opacity 0.2s;
+  }
+
+  .login-btn:active { opacity:0.85; }
+
+  .login-error {
+    font-size:0.72rem;
+    color:#e53e3e;
+    margin-top:0.75rem;
+    text-align:center;
+    min-height:1rem;
+    font-weight:500;
+  }
+
+  /* ── DASHBOARD ── */
+  #dashboard-screen { display:none; }
+
+  .dash-hero {
+    background:var(--blue);
+    padding:2.5rem 1.5rem 1.75rem;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .dash-hero::before {
+    content:'';
+    position:absolute;
+    top:-60px; right:-60px;
+    width:200px; height:200px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.05);
+  }
+
+  .dash-brand-row {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:1.5rem;
+    position:relative; z-index:1;
+  }
+
+  .dash-brand {
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+  }
+
+  .dash-logo {
+    font-size:1.4rem;
+    font-weight:700;
+    color:#fff;
+    background:rgba(255,255,255,0.15);
+    padding:0.2rem 0.55rem;
+    border-radius:8px;
+  }
+
+  .dash-brand-name {
+    font-size:0.65rem;
+    color:rgba(255,255,255,0.6);
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+  }
+
+  .logout-btn {
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.2);
+    color:rgba(255,255,255,0.7);
+    border-radius:100px;
+    padding:0.3rem 0.85rem;
+    font-size:0.62rem;
+    font-family:'DM Sans',sans-serif;
+    cursor:pointer;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+    letter-spacing:0.05em;
+  }
+
+  .dash-greeting {
+    font-size:clamp(1.8rem,7vw,2.8rem);
+    font-weight:700;
+    color:#fff;
+    line-height:1.1;
+    position:relative; z-index:1;
+    margin-bottom:0.3rem;
+  }
+
+  .dash-greeting span { color:var(--cream); }
+
+  .dash-sub {
+    font-size:0.75rem;
+    color:rgba(255,255,255,0.55);
+    font-weight:300;
+    position:relative; z-index:1;
+  }
+
+  /* ── CLIENTS ── */
+  .dash-body {
+    padding:1.5rem 1.25rem;
+    max-width:720px;
+    margin:0 auto;
+  }
+
+  .section-hdr {
+    display:flex;
+    align-items:center;
+    gap:0.75rem;
+    margin-bottom:1rem;
+  }
+
+  .section-hdr-line { flex:1; height:1px; background:var(--border); }
+  .section-hdr-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.18em; color:var(--muted); white-space:nowrap; }
+
+  .client-card {
+    background:#fff;
+    border:1.5px solid var(--border);
+    border-radius:16px;
+    padding:1.1rem 1.25rem;
+    margin-bottom:0.75rem;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    cursor:pointer;
+    text-decoration:none;
+    transition:border-color 0.2s, box-shadow 0.2s;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+  }
+
+  .client-card:active {
+    border-color:var(--blue);
+    box-shadow:0 4px 16px rgba(28,85,229,0.15);
+  }
+
+  .client-avatar {
+    width:3rem; height:3rem;
+    background:var(--blue);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.1rem;
+    font-weight:700;
+    color:#fff;
+    flex-shrink:0;
+  }
+
+  .client-info { flex:1; }
+
+  .client-name {
+    font-size:0.95rem;
+    font-weight:700;
+    color:var(--text);
+    margin-bottom:0.2rem;
+  }
+
+  .client-meta {
+    font-size:0.68rem;
+    color:var(--muted);
+    font-weight:300;
+  }
+
+  .client-badge {
+    background:var(--blue-lt);
+    color:var(--blue);
+    font-size:0.6rem;
+    font-weight:700;
+    padding:0.25rem 0.65rem;
+    border-radius:100px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    flex-shrink:0;
+  }
+
+  .client-arrow {
+    font-size:1rem;
+    color:var(--muted);
+    flex-shrink:0;
+  }
+
+  /* ── COMING SOON ── */
+  .coming-soon {
+    background:var(--grad);
+    border:1.5px dashed var(--border);
+    border-radius:16px;
+    padding:1.25rem;
+    text-align:center;
+    margin-top:0.5rem;
+  }
+
+  .coming-soon-text {
+    font-size:0.78rem;
+    color:var(--muted);
+    font-weight:300;
+  }
+
+  /* ── FOOTER ── */
+  .dash-footer {
+    text-align:center;
+    padding:2rem 1rem;
+    font-size:0.65rem;
+    color:var(--muted);
+  }
+
+  .dash-footer-brand {
+    font-weight:700;
+    color:var(--blue);
+    font-size:0.85rem;
+    display:block;
+    margin-bottom:0.2rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-logo">fa</div>
+  <div class="login-brand">fridaactive</div>
+  <div class="login-card">
+    <div class="login-title">Bienvenida, Frida</div>
+    <div class="login-sub">Ingresá tu contraseña para acceder al dashboard</div>
+    <label class="login-label">Contraseña</label>
+    <input class="login-input" type="password" id="pwd-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPassword()">
+    <button class="login-btn" onclick="checkPassword()">Ingresar</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard-screen">
+  <div class="dash-hero">
+    <div class="dash-brand-row">
+      <div class="dash-brand">
+        <div class="dash-logo">fa</div>
+        <div class="dash-brand-name">fridaactive</div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    </div>
+    <div class="dash-greeting">Hola,<br><span>Frida</span></div>
+    <div class="dash-sub">Tu biblioteca de clientas</div>
+  </div>
+
+  <div class="dash-body">
+
+    <div class="section-hdr">
+      <div class="section-hdr-label">Clientas activas</div>
+      <div class="section-hdr-line"></div>
+    </div>
+    <div style="display:flex;gap:0.75rem;margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;gap:0.35rem;">
+        <div style="background:#F0FFF0;color:#2a7a2a;font-size:0.58rem;font-weight:700;padding:0.18rem 0.55rem;border-radius:100px;">Online</div>
+        <span style="font-size:0.65rem;color:var(--muted);">Rutina mensual</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.35rem;">
+        <div style="background:#EBF0FF;color:var(--blue);font-size:0.58rem;font-weight:700;padding:0.18rem 0.55rem;border-radius:100px;">Presencial</div>
+        <span style="font-size:0.65rem;color:var(--muted);">Entrenamiento personal</span>
+      </div>
+    </div>
+
+    <!-- CLIENTA 1 -->
+    <a class="client-card" href="https://playful-croquembouche-3aaf7d.netlify.app/" target="_blank">
+      <div class="client-avatar">JM</div>
+      <div class="client-info">
+        <div class="client-name">Jimena & Mariana Miranda</div>
+        <div class="client-meta">Junio 2026 · Hipertrofia y fuerza</div>
+      </div>
+      <div class="client-badge" style="background:#F0FFF0;color:#2a7a2a;">Online</div>
+      <div class="client-arrow">›</div>
+    </a>
+
+    <!-- CLIENTA 2 — Majo Morales -->
+    <a class="client-card" href="https://dainty-tulumba-d1c37b.netlify.app/" target="_blank">
+      <div class="client-avatar" style="background:#0F3FA8;">MM</div>
+      <div class="client-info">
+        <div class="client-name">Majo Morales</div>
+        <div class="client-meta">Junio 2026 · Readaptación funcional</div>
+      </div>
+      <div class="client-badge" style="background:#EBF0FF;color:var(--blue);">Presencial</div>
+      <div class="client-arrow">›</div>
+    </a>
+
+    <!-- CLIENTA 3 — Sara Schwank -->
+    <a class="client-card" href="https://willowy-tapioca-9a852d.netlify.app/" target="_blank">
+      <div class="client-avatar" style="background:#0F3FA8;">SS</div>
+      <div class="client-info">
+        <div class="client-name">Sara Schwank</div>
+        <div class="client-meta">Mayo 2026 · Full Body · Core & Glúteos</div>
+      </div>
+      <div class="client-badge" style="background:#EBF0FF;color:var(--blue);">Presencial</div>
+      <div class="client-arrow">›</div>
+    </a>
+
+    <div class="dash-footer">
+      <span class="dash-footer-brand">fridaactive</span>
+      Dashboard personal · Frida
+    </div>
+
+  </div>
+</div>
+
+<script>
+var PASSWORD = 'frida2026';
+var SESSION_KEY = 'fa_dashboard_auth';
+
+function checkPassword() {
+  var input = document.getElementById('pwd-input').value;
+  var error = document.getElementById('login-error');
+  if (input === PASSWORD) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    showDashboard();
+  } else {
+    error.textContent = 'Contraseña incorrecta. Intentá de nuevo.';
+    document.getElementById('pwd-input').value = '';
+  }
+}
+
+function showDashboard() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('dashboard-screen').style.display = 'block';
+}
+
+function logout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('dashboard-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('pwd-input').value = '';
+}
+
+window.onload = function() {
+  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+    showDashboard();
+  }
+};
+</script>
+</body>
+</html>
