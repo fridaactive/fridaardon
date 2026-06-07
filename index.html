@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FridaActive · Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:    #1C55E5;
+    --blue-dk: #0F3FA8;
+    --blue-lt: #EEF4FF;
+    --cream:   #F5ECCB;
+    --coral:   #F2827F;
+    --text:    #0a1628;
+    --muted:   #7a8499;
+    --border:  #E8E3D0;
+    --grad:    linear-gradient(135deg, #F5ECCB 0%, #ffffff 100%);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#fff; font-family:'DM Sans',sans-serif; min-height:100vh; }
+
+  /* ── SCREENS ── */
+  .screen { display:none; min-height:100vh; }
+  .screen.active { display:block; }
+
+  /* ══════════════════════════════
+     LOGIN
+  ══════════════════════════════ */
+  #login {
+    background: var(--blue);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+  #login.active { display:flex; }
+
+  #login::before { content:''; position:absolute; top:-80px; right:-80px; width:280px; height:280px; border-radius:50%; background:rgba(255,255,255,0.05); }
+  #login::after  { content:''; position:absolute; bottom:-60px; left:-40px; width:200px; height:200px; border-radius:50%; background:rgba(245,236,203,0.07); }
+
+  .login-logo { font-size:2rem; font-weight:700; color:#fff; background:rgba(255,255,255,0.15); padding:0.5rem 1rem; border-radius:12px; margin-bottom:0.75rem; position:relative; z-index:1; }
+  .login-brand { font-size:0.65rem; color:rgba(255,255,255,0.5); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:2.5rem; position:relative; z-index:1; }
+  .login-card { background:#fff; border-radius:20px; padding:2rem 1.75rem; width:100%; max-width:340px; position:relative; z-index:1; box-shadow:0 20px 60px rgba(0,0,0,0.2); }
+  .login-title { font-size:1.1rem; font-weight:700; color:var(--text); margin-bottom:0.3rem; }
+  .login-sub { font-size:0.75rem; color:var(--muted); margin-bottom:1.5rem; font-weight:300; }
+  .login-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); font-weight:600; margin-bottom:0.4rem; display:block; }
+  .login-input { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:0.75rem 1rem; font-size:0.9rem; font-family:'DM Sans',sans-serif; color:var(--text); outline:none; transition:border-color 0.2s; margin-bottom:1rem; }
+  .login-input:focus { border-color:var(--blue); }
+  .login-btn { width:100%; background:var(--blue); color:#fff; border:none; border-radius:10px; padding:0.85rem; font-size:0.85rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+  .login-error { font-size:0.72rem; color:#e53e3e; margin-top:0.75rem; text-align:center; min-height:1rem; font-weight:500; }
+
+  /* ══════════════════════════════
+     MAIN DASHBOARD
+  ══════════════════════════════ */
+  #dashboard { display:none; }
+  #dashboard.active { display:block; }
+
+  .dash-hero { background:var(--blue); padding:2.5rem 1.5rem 1.75rem; position:relative; overflow:hidden; }
+  .dash-hero::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,0.05); }
+
+  .dash-brand-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; position:relative; z-index:1; }
+  .dash-brand { display:flex; align-items:center; gap:0.6rem; }
+  .dash-logo { font-size:1.4rem; font-weight:700; color:#fff; background:rgba(255,255,255,0.15); padding:0.2rem 0.55rem; border-radius:8px; }
+  .dash-brand-name { font-size:0.65rem; color:rgba(255,255,255,0.6); letter-spacing:0.2em; text-transform:uppercase; }
+  .logout-btn { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.7); border-radius:100px; padding:0.3rem 0.85rem; font-size:0.62rem; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+
+  .dash-greeting { font-size:clamp(1.8rem,7vw,2.8rem); font-weight:700; color:#fff; line-height:1.1; position:relative; z-index:1; margin-bottom:0.3rem; }
+  .dash-greeting span { color:var(--cream); }
+  .dash-sub { font-size:0.75rem; color:rgba(255,255,255,0.55); font-weight:300; position:relative; z-index:1; }
+
+  /* ── MAIN MENU ── */
+  .menu-wrap { padding:1.5rem 1.25rem; max-width:720px; margin:0 auto; }
+
+  .menu-card {
+    background:#fff;
+    border:1.5px solid var(--border);
+    border-radius:18px;
+    margin-bottom:1rem;
+    overflow:hidden;
+    cursor:pointer;
+    transition:border-color 0.2s, box-shadow 0.2s;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+  }
+
+  .menu-card:active { border-color:var(--blue); box-shadow:0 4px 20px rgba(28,85,229,0.12); }
+
+  .menu-card-header {
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    padding:1.25rem 1.25rem;
+  }
+
+  .menu-icon {
+    width:3rem; height:3rem;
+    border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.3rem;
+    flex-shrink:0;
+  }
+
+  .menu-icon.blue { background:var(--blue-lt); }
+  .menu-icon.cream { background:var(--grad); }
+  .menu-icon.green { background:#F0FFF0; }
+
+  .menu-info { flex:1; }
+  .menu-title { font-size:1rem; font-weight:700; color:var(--text); margin-bottom:0.2rem; }
+  .menu-desc { font-size:0.7rem; color:var(--muted); font-weight:300; }
+  .menu-arrow { font-size:1.2rem; color:var(--muted); }
+
+  /* ══════════════════════════════
+     CLIENTES SCREEN
+  ══════════════════════════════ */
+  #clientes { display:none; }
+  #clientes.active { display:block; }
+
+  .sub-hero { background:var(--blue); padding:1.75rem 1.5rem 1.5rem; position:relative; overflow:hidden; }
+  .sub-hero::before { content:''; position:absolute; top:-40px; right:-40px; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,0.05); }
+  .back-row { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.25rem; position:relative; z-index:1; }
+  .back-btn { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:100px; padding:0.3rem 0.85rem; font-size:0.65rem; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+  .sub-brand { font-size:0.65rem; color:rgba(255,255,255,0.5); letter-spacing:0.15em; text-transform:uppercase; }
+  .sub-title { font-size:clamp(1.5rem,6vw,2.2rem); font-weight:700; color:#fff; line-height:1.1; position:relative; z-index:1; }
+  .sub-title span { color:var(--cream); }
+
+  .clients-wrap { padding:1.5rem 1.25rem; max-width:720px; margin:0 auto; }
+
+  .clients-section-hdr { display:flex; align-items:center; gap:0.75rem; margin:1.25rem 0 0.85rem; }
+  .clients-section-line { flex:1; height:1px; background:var(--border); }
+  .clients-section-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.18em; color:var(--muted); white-space:nowrap; }
+
+  .client-card { background:#fff; border:1.5px solid var(--border); border-radius:16px; padding:1.1rem 1.25rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:1rem; cursor:pointer; text-decoration:none; transition:border-color 0.2s, box-shadow 0.2s; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+  .client-card:active { border-color:var(--blue); box-shadow:0 4px 16px rgba(28,85,229,0.15); }
+  .client-avatar { width:3rem; height:3rem; background:var(--blue); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:700; color:#fff; flex-shrink:0; }
+  .client-info { flex:1; }
+  .client-name { font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:0.2rem; }
+  .client-meta { font-size:0.68rem; color:var(--muted); font-weight:300; }
+  .client-badge { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.08em; padding:0.25rem 0.65rem; border-radius:100px; font-weight:600; flex-shrink:0; }
+  .badge-online { background:#F0FFF0; color:#2a7a2a; }
+  .badge-presencial { background:var(--blue-lt); color:var(--blue); }
+  .badge-pending { background:#f5f5f5; color:var(--muted); }
+  .client-arrow { font-size:1rem; color:var(--muted); flex-shrink:0; }
+
+  /* legend */
+  .legend { display:flex; gap:0.75rem; margin-bottom:0.5rem; flex-wrap:wrap; }
+  .legend-item { display:flex; align-items:center; gap:0.35rem; }
+  .legend-badge { font-size:0.58rem; font-weight:700; padding:0.18rem 0.55rem; border-radius:100px; }
+
+  /* ══════════════════════════════
+     PLANIFICACIÓN SCREEN
+  ══════════════════════════════ */
+  #planificacion { display:none; }
+  #planificacion.active { display:block; }
+
+  .plan-wrap { padding:1rem 1.25rem 5rem; max-width:900px; margin:0 auto; }
+
+  /* Week nav */
+  .week-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; background:var(--blue-lt); border-radius:14px; padding:0.75rem 1rem; border:1.5px solid var(--border-b,#ccdaf5); }
+  .week-nav-btn { background:var(--blue); color:#fff; border:none; border-radius:100px; width:2rem; height:2rem; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+  .week-label { font-size:0.82rem; font-weight:600; color:var(--blue); text-align:center; }
+  .week-label-sub { font-size:0.62rem; color:var(--muted); text-align:center; margin-top:0.1rem; }
+
+  /* Calendar grid */
+  .cal-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .cal-grid {
+    display:grid;
+    grid-template-columns: 3.5rem repeat(6,1fr);
+    min-width:580px;
+    border-radius:14px;
+    overflow:hidden;
+    border:1.5px solid var(--border);
+  }
+
+  /* Header row */
+  .cal-day-header {
+    background:var(--blue);
+    color:#fff;
+    text-align:center;
+    padding:0.6rem 0.25rem;
+    font-size:0.65rem;
+    font-weight:700;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+  }
+  .cal-day-header.today { background:var(--cream); color:var(--blue); }
+  .cal-time-header { background:var(--blue); padding:0.6rem 0.25rem; }
+
+  /* Time column */
+  .cal-time {
+    background:#fafafa;
+    border-right:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    padding:0.35rem 0.4rem;
+    font-size:0.58rem;
+    color:var(--muted);
+    text-align:right;
+    display:flex;
+    align-items:flex-start;
+    justify-content:flex-end;
+  }
+
+  /* Cell */
+  .cal-cell {
+    border-right:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    min-height:3rem;
+    position:relative;
+    cursor:pointer;
+    transition:background 0.15s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .cal-cell:last-child { border-right:none; }
+  .cal-cell:hover { background:var(--blue-lt); }
+  .cal-cell.today-col { background:#fdfcf5; }
+  .cal-cell.today-col:hover { background:#f5f0e0; }
+
+  /* Event */
+  .cal-event {
+    position:absolute;
+    top:2px; left:2px; right:2px;
+    background:var(--blue);
+    color:#fff;
+    border-radius:6px;
+    padding:0.25rem 0.4rem;
+    font-size:0.6rem;
+    font-weight:600;
+    line-height:1.3;
+    cursor:pointer;
+    z-index:2;
+    overflow:hidden;
+    touch-action:manipulation;
+  }
+  .cal-event.type-cliente { background:var(--blue); }
+  .cal-event.type-tarea { background:#2a7a2a; }
+  .cal-event.type-personal { background:#9a7700; }
+  .cal-event.type-otro { background:#7a2a6a; }
+
+  /* Modal */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:999; display:none; align-items:flex-end; justify-content:center; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:#fff; border-radius:20px 20px 0 0; padding:1.5rem 1.25rem 2rem; width:100%; max-width:480px; }
+  .modal-title { font-size:1rem; font-weight:700; color:var(--text); margin-bottom:1.25rem; }
+  .modal-field { margin-bottom:0.85rem; }
+  .modal-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); font-weight:600; margin-bottom:0.35rem; display:block; }
+  .modal-input, .modal-select { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:0.65rem 0.85rem; font-size:0.85rem; font-family:'DM Sans',sans-serif; color:var(--text); outline:none; }
+  .modal-input:focus, .modal-select:focus { border-color:var(--blue); }
+  .modal-btns { display:flex; gap:0.75rem; margin-top:1rem; }
+  .modal-btn { flex:1; border:none; border-radius:10px; padding:0.75rem; font-size:0.82rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; }
+  .modal-btn.primary { background:var(--blue); color:#fff; }
+  .modal-btn.danger { background:#fff; color:#e53e3e; border:1.5px solid #fcc; }
+  .modal-btn.cancel { background:#f5f5f5; color:var(--muted); }
+
+  /* Type pills */
+  .type-pills { display:flex; gap:0.5rem; flex-wrap:wrap; }
+  .type-pill { border:none; border-radius:100px; padding:0.3rem 0.75rem; font-size:0.68rem; font-weight:600; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; opacity:0.5; }
+  .type-pill.selected { opacity:1; }
+  .type-pill.cliente { background:#EBF0FF; color:var(--blue); }
+  .type-pill.tarea { background:#F0FFF0; color:#2a7a2a; }
+  .type-pill.personal { background:#fdf8ee; color:#9a7700; }
+  .type-pill.otro { background:#f5eeff; color:#7a2a6a; }
+
+  /* ══════════════════════════════
+     FINANZAS SCREEN — FridaActive style
+  ══════════════════════════════ */
+  #finanzas { display:none; }
+  #finanzas.active { display:block; }
+
+  .fin-body { font-family:'DM Sans',sans-serif; background:#fff; color:var(--text); min-height:100vh; }
+  .fin-topbar { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; border-bottom:1px solid var(--border); background:#fff; position:sticky; top:0; z-index:100; }
+  .fin-logo { font-size:0.7rem; letter-spacing:0.2em; color:var(--muted); text-transform:uppercase; }
+  .fin-logo span { color:var(--blue); font-weight:700; }
+  .fin-back { font-size:0.65rem; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; background:none; border:none; font-family:'DM Sans',sans-serif; touch-action:manipulation; }
+  .fin-page-header { padding:1.5rem 1.25rem 0; text-align:center; }
+  .fin-eyebrow { font-size:0.6rem; letter-spacing:0.2em; color:var(--blue); text-transform:uppercase; margin-bottom:0.4rem; font-weight:600; }
+  .fin-h1 { font-size:1.6rem; font-weight:700; color:var(--text); }
+  .fin-date { font-size:0.68rem; color:var(--muted); margin-top:0.3rem; }
+  .fin-month-nav { display:flex; align-items:center; justify-content:center; gap:1.25rem; padding:1.25rem; }
+  .fin-nav-btn { background:var(--blue); border:none; color:#fff; border-radius:50%; width:2rem; height:2rem; font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; touch-action:manipulation; }
+  .fin-month-label .fin-month-name { font-size:1.1rem; color:var(--blue); font-weight:700; text-align:center; }
+  .fin-month-label .fin-year { font-size:0.7rem; color:var(--muted); margin-top:0.1rem; text-align:center; }
+  .fin-cards-row { display:flex; gap:0.6rem; padding:0 1.25rem 1.25rem; overflow-x:auto; }
+  .fin-card { flex:0 0 120px; background:var(--blue-lt); border:1.5px solid var(--border-b,#ccdaf5); border-radius:14px; padding:0.85rem 0.75rem; }
+  .fin-card .fin-icon { font-size:1rem; margin-bottom:0.25rem; }
+  .fin-card .fin-card-label { font-size:0.55rem; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; }
+  .fin-card .fin-card-value { font-size:1rem; font-weight:700; margin-top:0.2rem; }
+  .fin-card .fin-card-sub { font-size:0.55rem; color:var(--muted); margin-top:0.1rem; }
+  .fin-fixed-banner { margin:0 1.25rem 0.85rem; background:var(--grad); border:1.5px solid var(--border); border-radius:12px; padding:0.85rem 1rem; }
+  .fin-fixed-banner .fin-banner-title { font-size:0.6rem; letter-spacing:0.12em; color:var(--blue); text-transform:uppercase; font-weight:700; margin-bottom:0.6rem; }
+  .fin-fixed-items { display:flex; gap:0.6rem; }
+  .fin-fixed-item { flex:1; background:#fff; border-radius:8px; padding:0.5rem 0.75rem; border:1px solid var(--border); }
+  .fin-fixed-item .fi-label { font-size:0.68rem; color:var(--muted); }
+  .fin-fixed-item .fi-value { font-size:0.88rem; color:var(--coral); font-weight:700; }
+  .fin-tabs { display:flex; gap:0.4rem; padding:0 1.25rem 1rem; overflow-x:auto; }
+  .fin-tab-btn { flex-shrink:0; padding:0.4rem 0.9rem; background:#fff; border:1.5px solid var(--border); color:var(--muted); border-radius:100px; font-size:0.68rem; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.2s; touch-action:manipulation; }
+  .fin-tab-btn.active { background:var(--blue); color:#fff; border-color:var(--blue); font-weight:700; }
+  .fin-content { padding:0 1.25rem 5rem; display:none; }
+  .fin-content.active { display:block; }
+  .fin-section-title { font-size:0.6rem; letter-spacing:0.15em; color:var(--blue); text-transform:uppercase; font-weight:700; margin-bottom:0.75rem; margin-top:0.25rem; }
+  .fin-month-chip { background:var(--blue-lt); border:1.5px solid #ccdaf5; border-radius:10px; padding:0.5rem 0.85rem; margin-bottom:0.85rem; font-size:0.72rem; color:var(--blue); text-align:center; font-weight:500; }
+  .fin-goal-card { background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:0.85rem; margin-bottom:0.6rem; }
+  .fin-goal-header { display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.82rem; }
+  .fin-goal-amount { font-size:0.75rem; }
+  .fin-progress-bg { background:var(--border); border-radius:99px; height:7px; }
+  .fin-progress-fill { height:100%; border-radius:99px; transition:width 0.5s; }
+  .fin-goal-footer { display:flex; justify-content:space-between; margin-top:0.4rem; font-size:0.62rem; color:var(--muted); }
+  .fin-stats-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem; margin-bottom:0.6rem; }
+  .fin-stat-box { text-align:center; background:var(--blue-lt); border-radius:8px; padding:0.4rem; }
+  .fin-stat-label { font-size:0.55rem; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; }
+  .fin-stat-value { font-size:0.88rem; font-weight:700; margin-top:0.15rem; }
+  .fin-form-card { background:var(--blue-lt); border:1.5px solid #ccdaf5; border-radius:16px; padding:1rem; margin-bottom:1.1rem; }
+  .fin-form-row { margin-bottom:0.75rem; }
+  .fin-form-label { font-size:0.6rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.3rem; display:block; font-weight:600; }
+  .fin-form-input, .fin-form-select { width:100%; padding:0.65rem 0.85rem; background:#fff; border:1.5px solid var(--border); border-radius:10px; color:var(--text); font-size:0.85rem; font-family:'DM Sans',sans-serif; outline:none; }
+  .fin-form-input:focus, .fin-form-select:focus { border-color:var(--blue); }
+  .fin-add-btn { width:100%; padding:0.75rem; background:var(--blue); border:none; border-radius:12px; color:#fff; font-size:0.85rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; }
+  .fin-total-box { border-radius:12px; padding:0.85rem; margin-bottom:1rem; text-align:center; }
+  .fin-total-box .fin-tb-label { font-size:0.6rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
+  .fin-total-box .fin-tb-value { font-size:1.6rem; font-weight:700; margin-top:0.35rem; }
+  .fin-entry-row { display:flex; justify-content:space-between; align-items:center; padding:0.65rem 0.85rem; margin-bottom:0.4rem; background:var(--blue-lt); border-radius:10px; border:1px solid #ccdaf5; }
+  .fin-entry-left { font-size:0.8rem; color:var(--text); }
+  .fin-entry-note { font-size:0.65rem; color:var(--muted); margin-left:0.5rem; }
+  .fin-entry-value { font-weight:700; font-size:0.85rem; }
+  .fin-history-card { background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:0.85rem; margin-bottom:0.6rem; cursor:pointer; transition:border-color 0.2s; }
+  .fin-history-card:hover { border-color:var(--blue); }
+  .fin-history-card.active-month { border-color:var(--blue); background:var(--blue-lt); }
+  .fin-history-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem; }
+  .fin-history-month { font-size:0.88rem; font-weight:600; }
+  .fin-history-chip { font-size:0.55rem; color:var(--blue); background:var(--blue-lt); border-radius:99px; padding:0.15rem 0.5rem; letter-spacing:0.08em; font-weight:700; }
+  .fin-history-grid { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0.35rem; }
+  .fin-hg-item { text-align:center; }
+  .fin-hg-label { font-size:0.55rem; color:var(--muted); }
+  .fin-hg-value { font-size:0.72rem; font-weight:700; margin-top:0.1rem; }
+  .fin-empty-state { text-align:center; color:var(--muted); padding:2rem 0; font-size:0.82rem; }
+  .fin-priority-box { background:var(--grad); border:1.5px solid var(--border); border-radius:12px; padding:0.85rem; margin-bottom:1.1rem; }
+  .fin-priority-title { font-size:0.6rem; letter-spacing:0.12em; color:var(--blue); text-transform:uppercase; font-weight:700; margin-bottom:0.6rem; }
+  .fin-priority-item { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.5rem; }
+  .fin-priority-num { width:1.2rem; height:1.2rem; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-size:0.6rem; color:#fff; font-weight:700; flex-shrink:0; }
+  .fin-priority-text { font-size:0.78rem; color:var(--text); font-weight:500; }
+  .fin-priority-note { font-size:0.62rem; color:var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- ══════════ LOGIN ══════════ -->
+<div id="login" class="active">
+  <div class="login-logo">fa</div>
+  <div class="login-brand">fridaactive</div>
+  <div class="login-card">
+    <div class="login-title">Bienvenida, Frida</div>
+    <div class="login-sub">Ingresá tu contraseña para acceder</div>
+    <label class="login-label">Contraseña</label>
+    <input class="login-input" type="password" id="pwd-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPassword()">
+    <button class="login-btn" onclick="checkPassword()">Ingresar</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- ══════════ DASHBOARD PRINCIPAL ══════════ -->
+<div id="dashboard">
+  <div class="dash-hero">
+    <div class="dash-brand-row">
+      <div class="dash-brand">
+        <div class="dash-logo">fa</div>
+        <div class="dash-brand-name">fridaactive</div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    </div>
+    <div class="dash-greeting">Hola,<br><span>Frida</span></div>
+    <div class="dash-sub">¿Qué vas a hacer hoy?</div>
+  </div>
+
+  <div class="menu-wrap">
+
+    <div class="menu-card" onclick="showScreen('clientes')">
+      <div class="menu-card-header">
+        <div class="menu-icon blue">👥</div>
+        <div class="menu-info">
+          <div class="menu-title">Mis Clientas</div>
+          <div class="menu-desc">Presenciales · Online · Rutinas</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+    </div>
+
+    <div class="menu-card" onclick="showScreen('planificacion')">
+      <div class="menu-card-header">
+        <div class="menu-icon cream">📅</div>
+        <div class="menu-info">
+          <div class="menu-title">Planificación Semanal</div>
+          <div class="menu-desc">Calendario Lun–Sáb · 5 am – 7 pm</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+    </div>
+
+    <div class="menu-card" onclick="showScreen('finanzas')">
+      <div class="menu-card-header">
+        <div class="menu-icon green">💰</div>
+        <div class="menu-info">
+          <div class="menu-title">Mis Finanzas</div>
+          <div class="menu-desc">Ingresos · Gastos · Metas · Ahorros</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ CLIENTES ══════════ -->
+<div id="clientes">
+  <div class="sub-hero">
+    <div class="back-row">
+      <button class="back-btn" onclick="showScreen('dashboard')">← Volver</button>
+      <div class="sub-brand">fridaactive</div>
+    </div>
+    <div class="sub-title">Mis<br><span>Clientas</span></div>
+  </div>
+
+  <div class="clients-wrap">
+    <div class="legend">
+      <div class="legend-item"><div class="legend-badge badge-online" style="background:#F0FFF0;color:#2a7a2a;font-size:0.58rem;font-weight:700;padding:0.18rem 0.55rem;border-radius:100px;">Online</div><span style="font-size:0.65rem;color:var(--muted);">Rutina mensual</span></div>
+      <div class="legend-item"><div class="legend-badge" style="background:#EBF0FF;color:var(--blue);font-size:0.58rem;font-weight:700;padding:0.18rem 0.55rem;border-radius:100px;">Presencial</div><span style="font-size:0.65rem;color:var(--muted);">Entrenamiento personal</span></div>
+    </div>
+
+    <!-- ONLINE -->
+    <div class="clients-section-hdr">
+      <div class="clients-section-label">Online</div>
+      <div class="clients-section-line"></div>
+    </div>
+
+    <a class="client-card" href="https://fridaactive.github.io/fridaardon/jime-mar.html" target="_blank">
+      <div class="client-avatar">JM</div>
+      <div class="client-info">
+        <div class="client-name">Jimena & Mariana Miranda</div>
+        <div class="client-meta">Junio 2026 · Hipertrofia y fuerza</div>
+      </div>
+      <div class="client-badge badge-online">Online</div>
+      <div class="client-arrow">›</div>
+    </a>
+
+    <!-- PRESENCIALES -->
+    <div class="clients-section-hdr">
+      <div class="clients-section-label">Presenciales</div>
+      <div class="clients-section-line"></div>
+    </div>
+
+    <a class="client-card" href="https://fridaactive.github.io/fridaardon/majo.html" target="_blank">
+      <div class="client-avatar" style="background:#0F3FA8;">MM</div>
+      <div class="client-info">
+        <div class="client-name">Majo Morales</div>
+        <div class="client-meta">Junio 2026 · Readaptación funcional · LCA</div>
+      </div>
+      <div class="client-badge badge-presencial">Presencial</div>
+      <div class="client-arrow">›</div>
+    </a>
+
+    <a class="client-card" href="https://fridaactive.github.io/fridaardon/sara.html" target="_blank">
+      <div class="client-avatar" style="background:#0F3FA8;">SS</div>
+      <div class="client-info">
+        <div class="client-name">Sara Schwank</div>
+        <div class="client-meta">Mayo 2026 · Full Body · Core & Glúteos</div>
+      </div>
+      <div class="client-badge badge-presencial">Presencial</div>
+      <div class="client-arrow">›</div>
+    </a>
+
+    <div class="client-card" style="cursor:default;">
+      <div class="client-avatar" style="background:#ccdaf5;color:var(--blue);">VD</div>
+      <div class="client-info">
+        <div class="client-name">Verónica Duarte</div>
+        <div class="client-meta">Rutina por agregar</div>
+      </div>
+      <div class="client-badge badge-pending" style="background:#f5f5f5;color:var(--muted);">Presencial</div>
+      <div class="client-arrow" style="color:#ddd;">›</div>
+    </div>
+
+    <div class="client-card" style="cursor:default;">
+      <div class="client-avatar" style="background:#ccdaf5;color:var(--blue);">CC</div>
+      <div class="client-info">
+        <div class="client-name">Claudia C.</div>
+        <div class="client-meta">Rutina por agregar</div>
+      </div>
+      <div class="client-badge badge-pending" style="background:#f5f5f5;color:var(--muted);">Presencial</div>
+      <div class="client-arrow" style="color:#ddd;">›</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ PLANIFICACIÓN ══════════ -->
+<div id="planificacion">
+  <div class="sub-hero">
+    <div class="back-row">
+      <button class="back-btn" onclick="showScreen('dashboard')">← Volver</button>
+      <div class="sub-brand">fridaactive</div>
+    </div>
+    <div class="sub-title">Planificación<br><span>Semanal</span></div>
+  </div>
+
+  <div class="plan-wrap">
+    <div class="week-nav">
+      <button class="week-nav-btn" onclick="changeWeek(-1)">‹</button>
+      <div>
+        <div class="week-label" id="week-label">Cargando...</div>
+        <div class="week-label-sub" id="week-sub"></div>
+      </div>
+      <button class="week-nav-btn" onclick="changeWeek(1)">›</button>
+    </div>
+
+    <div class="cal-scroll">
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FINANZAS ══════════ -->
+<div id="finanzas">
+  <div class="fin-body">
+    <div class="fin-topbar">
+      <div class="fin-logo"><span>fa</span> fridaactive</div>
+      <button class="fin-back" onclick="showScreen('dashboard')">← Dashboard</button>
+    </div>
+    <div class="fin-page-header">
+      <div class="fin-eyebrow">Mi Diario Financiero</div>
+      <div class="fin-h1">Mis Finanzas ✦</div>
+      <div class="fin-date" id="fin-today-date"></div>
+    </div>
+    <div class="fin-month-nav">
+      <button class="fin-nav-btn" onclick="finChangeMonth(-1)">‹</button>
+      <div class="fin-month-label">
+        <div class="fin-month-name" id="fin-month-display"></div>
+        <div class="fin-year" id="fin-year-display"></div>
+      </div>
+      <button class="fin-nav-btn" onclick="finChangeMonth(1)">›</button>
+    </div>
+    <div class="fin-cards-row" id="fin-summary-cards"></div>
+    <div class="fin-fixed-banner">
+      <div class="fin-banner-title">📌 Gastos Fijos del Mes</div>
+      <div class="fin-fixed-items">
+        <div class="fin-fixed-item"><div class="fi-label">⚖️ Abogada</div><div class="fi-value">$100</div></div>
+        <div class="fin-fixed-item"><div class="fi-label">🧴 Facial</div><div class="fi-value">$100</div></div>
+        <div class="fin-fixed-item"><div class="fi-label">Total fijos</div><div class="fi-value">$200</div></div>
+      </div>
+    </div>
+    <div class="fin-tabs">
+      <button class="fin-tab-btn active" onclick="finSwitchTab('resumen',this)">Resumen</button>
+      <button class="fin-tab-btn" onclick="finSwitchTab('ingresos',this)">Ingresos</button>
+      <button class="fin-tab-btn" onclick="finSwitchTab('gastos',this)">Gastos</button>
+      <button class="fin-tab-btn" onclick="finSwitchTab('metas',this)">Metas</button>
+      <button class="fin-tab-btn" onclick="finSwitchTab('compras',this)">Compras</button>
+      <button class="fin-tab-btn" onclick="finSwitchTab('historial',this)">Historial</button>
+    </div>
+
+    <div class="fin-content active" id="fin-tab-resumen">
+      <div class="fin-section-title">🎯 Metas Grandes — Acumulado</div>
+      <div id="fin-resumen-goals"></div>
+      <div class="fin-section-title" style="margin-top:16px">🛍️ Compras a Corto Plazo</div>
+      <div id="fin-resumen-short"></div>
+      <div class="fin-section-title" style="margin-top:16px">🍩 Gastos por Categoría</div>
+      <div id="fin-resumen-cats"></div>
+    </div>
+
+    <div class="fin-content" id="fin-tab-ingresos">
+      <div class="fin-month-chip" id="fin-income-chip"></div>
+      <div class="fin-section-title">➕ Registrar Ingreso</div>
+      <div class="fin-form-card">
+        <div class="fin-form-row"><div class="fin-form-label">Monto ($)</div><input class="fin-form-input" id="fin-inc-amount" type="number" placeholder="0.00"/></div>
+        <div class="fin-form-row"><div class="fin-form-label">Nota</div><input class="fin-form-input" id="fin-inc-note" type="text" placeholder="Ej: clientes semana 1"/></div>
+        <button class="fin-add-btn" onclick="finAddIncome()">Agregar Ingreso</button>
+      </div>
+      <div class="fin-total-box" style="background:#0d1a12;border:1px solid #1a3a22">
+        <div class="fin-tb-label" id="fin-income-total-label"></div>
+        <div class="fin-tb-value" style="color:#7ce8a8" id="fin-income-total-value">$0.00</div>
+      </div>
+      <div class="fin-section-title" id="fin-income-list-title"></div>
+      <div id="fin-income-list"></div>
+    </div>
+
+    <div class="fin-content" id="fin-tab-gastos">
+      <div class="fin-month-chip" id="fin-expense-chip"></div>
+      <div class="fin-section-title">➕ Registrar Gasto</div>
+      <div class="fin-form-card">
+        <div class="fin-form-row"><div class="fin-form-label">Categoría</div>
+          <select class="fin-form-select" id="fin-exp-cat">
+            <option>🍽️ Comida</option><option>🚌 Transporte</option><option>💡 Servicios</option>
+            <option>👗 Personal</option><option>🎉 Ocio</option><option>💊 Salud</option>
+            <option>⚖️ Abogada</option><option>🧴 Facial</option><option>📦 Otro</option>
+          </select>
+        </div>
+        <div class="fin-form-row"><div class="fin-form-label">Monto ($)</div><input class="fin-form-input" id="fin-exp-amount" type="number" placeholder="0.00"/></div>
+        <div class="fin-form-row"><div class="fin-form-label">Nota</div><input class="fin-form-input" id="fin-exp-note" type="text" placeholder="Ej: mercado semanal"/></div>
+        <button class="fin-add-btn" onclick="finAddExpense()">Agregar Gasto</button>
+      </div>
+      <div class="fin-total-box" style="background:#1a0d0d;border:1px solid #3a1515">
+        <div class="fin-tb-label" id="fin-expense-total-label"></div>
+        <div class="fin-tb-value" style="color:#e87c7c" id="fin-expense-total-value">$0.00</div>
+      </div>
+      <div class="fin-section-title" id="fin-expense-list-title"></div>
+      <div id="fin-expense-list"></div>
+    </div>
+
+    <div class="fin-content" id="fin-tab-metas">
+      <div class="fin-month-chip" id="fin-goal-chip"></div>
+      <div class="fin-section-title">💰 Abonar a Meta</div>
+      <div class="fin-form-card">
+        <div class="fin-form-row"><div class="fin-form-label">Meta</div>
+          <select class="fin-form-select" id="fin-goal-sel">
+            <option value="casa">🏠 Reconstruir la Casa</option>
+            <option value="carro">🚗 Comprar Carro</option>
+            <option value="mudanza">✨ Nueva Casa/Depto</option>
+          </select>
+        </div>
+        <div class="fin-form-row"><div class="fin-form-label">Monto ($)</div><input class="fin-form-input" id="fin-goal-amount" type="number" placeholder="0.00"/></div>
+        <button class="fin-add-btn" onclick="finAddGoalSaving()">Abonar — Banco Agrícola</button>
+      </div>
+      <div class="fin-section-title">🎯 Progreso Acumulado</div>
+      <div id="fin-goals-list"></div>
+    </div>
+
+    <div class="fin-content" id="fin-tab-compras">
+      <div class="fin-month-chip" id="fin-short-chip"></div>
+      <div class="fin-section-title">🛍️ Abonar a Compra</div>
+      <div class="fin-form-card">
+        <div class="fin-form-row"><div class="fin-form-label">Compra</div>
+          <select class="fin-form-select" id="fin-short-sel">
+            <option value="anteojos">👓 Anteojos</option>
+            <option value="tripode">🎙️ Trípode + Micrófono</option>
+            <option value="compu">💻 Computadora</option>
+            <option value="tablet">📱 Tablet</option>
+          </select>
+        </div>
+        <div class="fin-form-row"><div class="fin-form-label">Monto ($)</div><input class="fin-form-input" id="fin-short-amount" type="number" placeholder="0.00"/></div>
+        <button class="fin-add-btn" onclick="finAddShortSaving()">Abonar — Banco Agrícola</button>
+      </div>
+      <div class="fin-priority-box">
+        <div class="fin-priority-title">📋 Orden Sugerido</div>
+        <div class="fin-priority-item"><div class="fin-priority-num">1</div><div><div class="fin-priority-text">👓 Anteojos</div><div class="fin-priority-note">Salud primero</div></div></div>
+        <div class="fin-priority-item"><div class="fin-priority-num">2</div><div><div class="fin-priority-text">🎙️ Trípode + Micrófono</div><div class="fin-priority-note">Inversión rápida</div></div></div>
+        <div class="fin-priority-item"><div class="fin-priority-num">3</div><div><div class="fin-priority-text">💻 Computadora</div><div class="fin-priority-note">Meta principal</div></div></div>
+        <div class="fin-priority-item"><div class="fin-priority-num">4</div><div><div class="fin-priority-text">📱 Tablet</div><div class="fin-priority-note">Después de compu</div></div></div>
+      </div>
+      <div class="fin-section-title">📊 Progreso Acumulado</div>
+      <div id="fin-short-list"></div>
+    </div>
+
+    <div class="fin-content" id="fin-tab-historial">
+      <div class="fin-section-title">📅 Historial por Mes</div>
+      <div id="fin-history-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL EVENTO ══════════ -->
+<div class="modal-overlay" id="event-modal">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Nuevo evento</div>
+    <div class="modal-field">
+      <label class="modal-label">Tipo</label>
+      <div class="type-pills">
+        <button class="type-pill cliente selected" onclick="selectType('cliente',this)">Clienta</button>
+        <button class="type-pill tarea" onclick="selectType('tarea',this)">Tarea</button>
+        <button class="type-pill personal" onclick="selectType('personal',this)">Personal</button>
+        <button class="type-pill otro" onclick="selectType('otro',this)">Otro</button>
+      </div>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Título</label>
+      <input class="modal-input" id="ev-title" placeholder="Ej: Sesión Majo Morales">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Hora inicio</label>
+      <input class="modal-input" id="ev-hour" type="time">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Nota (opcional)</label>
+      <input class="modal-input" id="ev-note" placeholder="Ej: Llevar bandas">
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="closeModal()">Cancelar</button>
+      <button class="modal-btn danger" id="btn-delete" onclick="deleteEvent()" style="display:none">Eliminar</button>
+      <button class="modal-btn primary" onclick="saveEvent()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════
+// AUTH
+// ══════════════════════════════
+var PASSWORD = 'frida2026';
+var SESSION_KEY = 'fa_auth_v2';
+var currentScreen = 'dashboard';
+
+function checkPassword() {
+  var input = document.getElementById('pwd-input').value;
+  if (input === PASSWORD) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    showScreen('dashboard');
+  } else {
+    document.getElementById('login-error').textContent = 'Contraseña incorrecta.';
+    document.getElementById('pwd-input').value = '';
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  showScreen('login');
+  document.getElementById('pwd-input').value = '';
+}
+
+function showScreen(name) {
+  var screens = ['login','dashboard','clientes','planificacion','finanzas'];
+  screens.forEach(function(s) {
+    var el = document.getElementById(s);
+    if (el) el.classList.remove('active');
+  });
+  var target = document.getElementById(name);
+  if (target) target.classList.add('active');
+  currentScreen = name;
+  if (name === 'planificacion') renderCalendar();
+  if (name === 'finanzas') finRender();
+  window.scrollTo(0,0);
+}
+
+window.onload = function() {
+  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+    showScreen('dashboard');
+  } else {
+    showScreen('login');
+  }
+};
+
+// ══════════════════════════════
+// CALENDAR
+// ══════════════════════════════
+var DAYS = ['Lun','Mar','Mié','Jue','Vie','Sáb'];
+var HOURS = [];
+for (var h = 5; h <= 19; h++) { HOURS.push(h); }
+
+var weekOffset = 0;
+var calEvents = JSON.parse(localStorage.getItem('fa_cal_events') || '{}');
+var modalData = { day:null, hour:null, eventId:null };
+var selectedType = 'cliente';
+
+function getWeekDates(offset) {
+  var now = new Date();
+  var dayOfWeek = now.getDay();
+  var monday = new Date(now);
+  var diff = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
+  monday.setDate(now.getDate() + diff + (offset * 7));
+  var days = [];
+  for (var i = 0; i < 6; i++) {
+    var d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    days.push(d);
+  }
+  return days;
+}
+
+function dateKey(date) {
+  return date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2,'0') + '-' + String(date.getDate()).padStart(2,'0');
+}
+
+function isToday(date) {
+  var now = new Date();
+  return date.toDateString() === now.toDateString();
+}
+
+function changeWeek(dir) { weekOffset += dir; renderCalendar(); }
+
+function renderCalendar() {
+  // Always reload from localStorage to get latest saved events
+  calEvents = JSON.parse(localStorage.getItem('fa_cal_events') || '{}');
+  var days = getWeekDates(weekOffset);
+  var now = new Date();
+
+  // Week label
+  var first = days[0], last = days[5];
+  var months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  document.getElementById('week-label').textContent =
+    first.getDate() + ' ' + months[first.getMonth()] + ' — ' + last.getDate() + ' ' + months[last.getMonth()] + ' ' + last.getFullYear();
+  document.getElementById('week-sub').textContent = weekOffset === 0 ? 'Semana actual' : (weekOffset < 0 ? 'Semana anterior' : 'Semana siguiente');
+
+  var grid = document.getElementById('cal-grid');
+  var html = '';
+
+  // Header
+  html += '<div class="cal-time-header"></div>';
+  days.forEach(function(d) {
+    var todayClass = isToday(d) ? ' today' : '';
+    html += '<div class="cal-day-header' + todayClass + '">' + DAYS[days.indexOf(d)] + '<br>' + d.getDate() + '</div>';
+  });
+
+  // Rows
+  HOURS.forEach(function(h) {
+    var timeStr = h < 12 ? h + ' am' : (h === 12 ? '12 pm' : (h-12) + ' pm');
+    html += '<div class="cal-time">' + timeStr + '</div>';
+    days.forEach(function(d) {
+      var dk = dateKey(d);
+      var todayClass = isToday(d) ? ' today-col' : '';
+      html += '<div class="cal-cell' + todayClass + '" onclick="openModal(\'' + dk + '\',' + h + ',null)">';
+      var dayEvs = calEvents[dk] || [];
+      dayEvs.forEach(function(ev) {
+        if (ev.hour === h) {
+          html += '<div class="cal-event type-' + ev.type + '" onclick="event.stopPropagation();openModal(\'' + dk + '\',' + h + ',\'' + ev.id + '\')">' + ev.title + (ev.note ? '<br><span style="opacity:0.7;font-weight:300">' + ev.note + '</span>' : '') + '</div>';
+        }
+      });
+      html += '</div>';
+    });
+  });
+
+  grid.innerHTML = html;
+}
+
+function openModal(day, hour, eventId) {
+  modalData = { day:day, hour:hour, eventId:eventId };
+  var modal = document.getElementById('event-modal');
+  var deleteBtn = document.getElementById('btn-delete');
+
+  if (eventId) {
+    var ev = (calEvents[day] || []).find(function(e) { return e.id === eventId; });
+    if (ev) {
+      document.getElementById('modal-title').textContent = 'Editar evento';
+      document.getElementById('ev-title').value = ev.title;
+      document.getElementById('ev-note').value = ev.note || '';
+      document.getElementById('ev-hour').value = String(ev.hour).padStart(2,'0') + ':00';
+      selectedType = ev.type;
+      deleteBtn.style.display = 'block';
+    }
+  } else {
+    document.getElementById('modal-title').textContent = 'Nuevo evento';
+    document.getElementById('ev-title').value = '';
+    document.getElementById('ev-note').value = '';
+    document.getElementById('ev-hour').value = String(hour).padStart(2,'0') + ':00';
+    selectedType = 'cliente';
+    deleteBtn.style.display = 'none';
+  }
+
+  // Update pills
+  document.querySelectorAll('.type-pill').forEach(function(p) { p.classList.remove('selected'); });
+  var activePill = document.querySelector('.type-pill.' + selectedType);
+  if (activePill) activePill.classList.add('selected');
+
+  modal.classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('event-modal').classList.remove('open');
+}
+
+function selectType(type, btn) {
+  selectedType = type;
+  document.querySelectorAll('.type-pill').forEach(function(p) { p.classList.remove('selected'); });
+  btn.classList.add('selected');
+}
+
+function saveEvent() {
+  var title = document.getElementById('ev-title').value.trim();
+  if (!title) return;
+  var hourVal = document.getElementById('ev-hour').value;
+  var hour = hourVal ? parseInt(hourVal.split(':')[0]) : modalData.hour;
+  var note = document.getElementById('ev-note').value.trim();
+  var day = modalData.day;
+
+  if (!calEvents[day]) calEvents[day] = [];
+
+  if (modalData.eventId) {
+    calEvents[day] = calEvents[day].filter(function(e) { return e.id !== modalData.eventId; });
+  }
+
+  calEvents[day].push({ id: Date.now().toString(), title:title, hour:hour, note:note, type:selectedType });
+  localStorage.setItem('fa_cal_events', JSON.stringify(calEvents));
+  closeModal();
+  renderCalendar();
+}
+
+function deleteEvent() {
+  var day = modalData.day;
+  if (!modalData.eventId) return;
+  calEvents[day] = (calEvents[day] || []).filter(function(e) { return e.id !== modalData.eventId; });
+  localStorage.setItem('fa_cal_events', JSON.stringify(calEvents));
+  closeModal();
+  renderCalendar();
+}
+
+// Close modal on overlay click
+document.getElementById('event-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ══════════════════════════════
+// FINANZAS
+// ══════════════════════════════
+var FIN_MONTHS = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+var FIN_GOALS_CFG = [
+  { id:"casa",    label:"🏠 Reconstruir la Casa", target:4000, color:"#c9a96e" },
+  { id:"carro",   label:"🚗 Comprar Carro",       target:8000, color:"#7cb8e8" },
+  { id:"mudanza", label:"✨ Nueva Casa/Depto",     target:5000, color:"#a87ce8" },
+];
+var FIN_SHORT_CFG = [
+  { id:"anteojos", label:"👓 Anteojos",            target:250,  color:"#7ce8c8" },
+  { id:"tripode",  label:"🎙️ Trípode + Micrófono", target:150,  color:"#8ec97c" },
+  { id:"compu",    label:"💻 Computadora",          target:1200, color:"#e87cb8" },
+  { id:"tablet",   label:"📱 Tablet",               target:500,  color:"#7c9ce8" },
+];
+
+var finNow = new Date();
+var finViewYear = finNow.getFullYear();
+var finViewMonth = finNow.getMonth();
+var finAllData = JSON.parse(localStorage.getItem('fa_finanzas') || '{}');
+
+function finMonthKey(y,m) { return y+'-'+String(m+1).padStart(2,'0'); }
+function finEmptyMonth() { return { incomes:[], expenses:[], goalSavings:{casa:0,carro:0,mudanza:0}, shortSavings:{anteojos:0,tripode:0,compu:0,tablet:0} }; }
+function finGetMonth(y,m) { var k=finMonthKey(y,m); if(!finAllData[k]) finAllData[k]=finEmptyMonth(); return finAllData[k]; }
+function finSave() { localStorage.setItem('fa_finanzas', JSON.stringify(finAllData)); }
+function finFmt(n) { return '$'+Number(n||0).toFixed(2); }
+
+function finMonthTotals(d) {
+  var inc=d.incomes.reduce(function(s,i){return s+Number(i.amount);},0);
+  var exp=d.expenses.reduce(function(s,e){return s+Number(e.amount);},0);
+  var gsv=Object.values(d.goalSavings).reduce(function(s,v){return s+v;},0);
+  var ssv=Object.values(d.shortSavings).reduce(function(s,v){return s+v;},0);
+  return {inc:inc,exp:exp,saved:gsv+ssv,bal:inc-exp-gsv-ssv};
+}
+
+function finCumulativeSavings(upToKey) {
+  var gs={casa:0,carro:0,mudanza:0}, ss={anteojos:0,tripode:0,compu:0,tablet:0};
+  Object.entries(finAllData).forEach(function(e) {
+    var k=e[0],d=e[1];
+    if(k<=upToKey) {
+      Object.keys(gs).forEach(function(g){gs[g]+=(d.goalSavings[g]||0);});
+      Object.keys(ss).forEach(function(g){ss[g]+=(d.shortSavings[g]||0);});
+    }
+  });
+  return {gs:gs,ss:ss};
+}
+
+function finRender() {
+  // Always reload from localStorage
+  finAllData = JSON.parse(localStorage.getItem('fa_finanzas') || '{}');
+  var key=finMonthKey(finViewYear,finViewMonth);
+  var md=finGetMonth(finViewYear,finViewMonth);
+  var t=finMonthTotals(md);
+  var cum=finCumulativeSavings(key);
+
+  document.getElementById('fin-today-date').textContent = finNow.toLocaleDateString('es-SV',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('fin-month-display').textContent = FIN_MONTHS[finViewMonth];
+  document.getElementById('fin-year-display').textContent = finViewYear;
+
+  var chipText='📅 Registrando en: '+FIN_MONTHS[finViewMonth]+' '+finViewYear;
+  ['fin-income-chip','fin-expense-chip','fin-goal-chip','fin-short-chip'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.textContent=chipText;
+  });
+
+  document.getElementById('fin-summary-cards').innerHTML = [
+    {label:'Ingresos',value:finFmt(t.inc),color:'#7ce8a8',icon:'↑'},
+    {label:'Gastos',value:finFmt(t.exp),color:'#e87c7c',icon:'↓'},
+    {label:'Ahorrado',value:finFmt(t.saved),color:'#c9a96e',icon:'★'},
+    {label:'Disponible',value:finFmt(t.bal),color:'#7cb8e8',icon:'◈'},
+  ].map(function(c){return '<div class="fin-card"><div class="fin-icon" style="color:'+c.color+'">'+c.icon+'</div><div class="fin-card-label">'+c.label+'</div><div class="fin-card-value" style="color:'+c.color+'">'+c.value+'</div><div class="fin-card-sub">este mes</div></div>';}).join('');
+
+  document.getElementById('fin-resumen-goals').innerHTML = FIN_GOALS_CFG.map(function(g){
+    var sv=cum.gs[g.id],pct=Math.min(sv/g.target*100,100),thisM=md.goalSavings[g.id]||0;
+    return '<div class="fin-goal-card" style="border-color:'+g.color+'22"><div class="fin-goal-header"><span>'+g.label+'</span><span class="fin-goal-amount" style="color:'+g.color+'">'+finFmt(sv)+' / '+finFmt(g.target)+'</span></div><div class="fin-progress-bg"><div class="fin-progress-fill" style="width:'+pct+'%;background:'+g.color+'"></div></div><div class="fin-goal-footer"><span>'+pct.toFixed(1)+'% acumulado</span>'+(thisM>0?'<span style="color:'+g.color+'">+'+finFmt(thisM)+' este mes</span>':'')+'</div></div>';
+  }).join('');
+
+  document.getElementById('fin-resumen-short').innerHTML = FIN_SHORT_CFG.map(function(g){
+    var sv=cum.ss[g.id],pct=Math.min(sv/g.target*100,100);
+    return '<div class="fin-goal-card" style="margin-bottom:8px;border-color:'+g.color+'22"><div class="fin-goal-header"><span style="font-size:13px">'+g.label+'</span><span style="font-size:11px;color:'+g.color+'">'+finFmt(sv)+'/'+finFmt(g.target)+'</span></div><div class="fin-progress-bg" style="height:5px"><div class="fin-progress-fill" style="width:'+pct+'%;background:'+g.color+'"></div></div><div class="fin-goal-footer"><span>'+pct.toFixed(1)+'%</span>'+(pct>=100?'<span style="color:'+g.color+'">¡Lista! 🎉</span>':'')+'</div></div>';
+  }).join('');
+
+  var cats={};
+  md.expenses.forEach(function(e){cats[e.category]=(cats[e.category]||0)+Number(e.amount);});
+  document.getElementById('fin-resumen-cats').innerHTML = Object.keys(cats).length===0
+    ? '<div class="fin-empty-state">Sin gastos registrados este mes</div>'
+    : Object.entries(cats).map(function(e){return '<div class="fin-entry-row"><div class="fin-entry-left">'+e[0]+'</div><div class="fin-entry-value" style="color:#e87c7c">'+finFmt(e[1])+'</div></div>';}).join('');
+
+  document.getElementById('fin-income-total-label').textContent='Total ingresos '+FIN_MONTHS[finViewMonth];
+  document.getElementById('fin-income-total-value').textContent=finFmt(t.inc);
+  document.getElementById('fin-income-list-title').textContent='Ingresos de '+FIN_MONTHS[finViewMonth];
+  document.getElementById('fin-income-list').innerHTML = md.incomes.length===0
+    ? '<div class="fin-empty-state">Sin ingresos este mes</div>'
+    : [...md.incomes].reverse().map(function(i){return '<div class="fin-entry-row"><div class="fin-entry-left">'+( i.note||'Ingreso')+'</div><div class="fin-entry-value" style="color:#7ce8a8">'+finFmt(i.amount)+'</div></div>';}).join('');
+
+  document.getElementById('fin-expense-total-label').textContent='Total gastos '+FIN_MONTHS[finViewMonth];
+  document.getElementById('fin-expense-total-value').textContent=finFmt(t.exp);
+  document.getElementById('fin-expense-list-title').textContent='Gastos de '+FIN_MONTHS[finViewMonth];
+  document.getElementById('fin-expense-list').innerHTML = md.expenses.length===0
+    ? '<div class="fin-empty-state">Sin gastos este mes</div>'
+    : [...md.expenses].reverse().map(function(e){return '<div class="fin-entry-row"><div class="fin-entry-left">'+e.category+'<span class="fin-entry-note">'+(e.note||'')+'</span></div><div class="fin-entry-value" style="color:#e87c7c">'+finFmt(e.amount)+'</div></div>';}).join('');
+
+  document.getElementById('fin-goals-list').innerHTML = FIN_GOALS_CFG.map(function(g){
+    var sv=cum.gs[g.id],rem=Math.max(g.target-sv,0),pct=Math.min(sv/g.target*100,100),months=rem>0?Math.ceil(rem/150):0,thisM=md.goalSavings[g.id]||0;
+    return '<div class="fin-goal-card" style="border-color:'+g.color+'33;margin-bottom:14px"><div style="font-size:14px;margin-bottom:10px">'+g.label+'</div><div class="fin-stats-grid"><div class="fin-stat-box"><div class="fin-stat-label">Ahorrado</div><div class="fin-stat-value" style="color:'+g.color+'">'+finFmt(sv)+'</div></div><div class="fin-stat-box"><div class="fin-stat-label">Meta</div><div class="fin-stat-value">'+finFmt(g.target)+'</div></div><div class="fin-stat-box"><div class="fin-stat-label">Falta</div><div class="fin-stat-value" style="color:#e87c7c">'+finFmt(rem)+'</div></div></div><div class="fin-progress-bg" style="height:8px"><div class="fin-progress-fill" style="width:'+pct+'%;background:'+g.color+';box-shadow:0 0 8px '+g.color+'88"></div></div><div class="fin-goal-footer"><span>'+pct.toFixed(1)+'% acumulado</span>'+(months>0?'<span>~'+months+' meses más</span>':'<span style="color:'+g.color+'">¡Meta alcanzada! 🎉</span>')+'</div>'+(thisM>0?'<div style="font-size:11px;color:'+g.color+';text-align:right;margin-top:6px">+'+finFmt(thisM)+' este mes</div>':'')+'</div>';
+  }).join('');
+
+  document.getElementById('fin-short-list').innerHTML = FIN_SHORT_CFG.map(function(g){
+    var sv=cum.ss[g.id],rem=Math.max(g.target-sv,0),pct=Math.min(sv/g.target*100,100),thisM=md.shortSavings[g.id]||0;
+    return '<div class="fin-goal-card" style="border-color:'+g.color+'22;margin-bottom:12px"><div style="font-size:13px;margin-bottom:9px">'+g.label+'</div><div class="fin-stats-grid"><div class="fin-stat-box"><div class="fin-stat-label">Ahorrado</div><div class="fin-stat-value" style="color:'+g.color+'">'+finFmt(sv)+'</div></div><div class="fin-stat-box"><div class="fin-stat-label">Meta</div><div class="fin-stat-value">'+finFmt(g.target)+'</div></div><div class="fin-stat-box"><div class="fin-stat-label">Falta</div><div class="fin-stat-value" style="color:#e87c7c">'+finFmt(rem)+'</div></div></div><div class="fin-progress-bg" style="height:6px"><div class="fin-progress-fill" style="width:'+pct+'%;background:'+g.color+'"></div></div><div class="fin-goal-footer"><span>'+pct.toFixed(1)+'%</span>'+(pct>=100?'<span style="color:'+g.color+'">¡Lista para comprar! 🎉</span>':'<span>Faltan '+finFmt(rem)+'</span>')+'</div>'+(thisM>0?'<div style="font-size:11px;color:'+g.color+';text-align:right;margin-top:5px">+'+finFmt(thisM)+' este mes</div>':'')+'</div>';
+  }).join('');
+
+  var keys=Object.keys(finAllData).sort().reverse();
+  document.getElementById('fin-history-list').innerHTML = keys.length===0
+    ? '<div class="fin-empty-state">Aún no hay datos</div>'
+    : keys.map(function(k){
+        var parts=k.split('-'),y=parts[0],m=parts[1];
+        var d=finAllData[k]||finEmptyMonth(),t2=finMonthTotals(d),isActive=k===key;
+        return '<div class="fin-history-card '+(isActive?'active-month':'')+'" onclick="finGoToMonth('+y+','+(Number(m)-1)+')"><div class="fin-history-header"><div class="fin-history-month" style="color:'+(isActive?'#c9a96e':'#ccc')+'">'+FIN_MONTHS[Number(m)-1]+' '+y+'</div>'+(isActive?'<div class="fin-history-chip">MES ACTUAL</div>':'')+'</div><div class="fin-history-grid"><div class="fin-hg-item"><div class="fin-hg-label">↑ Ingreso</div><div class="fin-hg-value" style="color:#7ce8a8">'+finFmt(t2.inc)+'</div></div><div class="fin-hg-item"><div class="fin-hg-label">↓ Gasto</div><div class="fin-hg-value" style="color:#e87c7c">'+finFmt(t2.exp)+'</div></div><div class="fin-hg-item"><div class="fin-hg-label">★ Ahorro</div><div class="fin-hg-value" style="color:#c9a96e">'+finFmt(t2.saved)+'</div></div><div class="fin-hg-item"><div class="fin-hg-label">◈ Saldo</div><div class="fin-hg-value" style="color:#7cb8e8">'+finFmt(t2.bal)+'</div></div></div></div>';
+      }).join('');
+}
+
+function finChangeMonth(dir) {
+  finViewMonth+=dir;
+  if(finViewMonth>11){finViewMonth=0;finViewYear++;}
+  if(finViewMonth<0){finViewMonth=11;finViewYear--;}
+  finGetMonth(finViewYear,finViewMonth); finRender();
+}
+
+function finGoToMonth(y,m) {
+  finViewYear=Number(y); finViewMonth=Number(m);
+  finSwitchTab('resumen', document.querySelector('.fin-tab-btn'));
+  finRender();
+}
+
+function finAddIncome() {
+  var amt=parseFloat(document.getElementById('fin-inc-amount').value);
+  var note=document.getElementById('fin-inc-note').value;
+  if(!amt) return;
+  finGetMonth(finViewYear,finViewMonth).incomes.push({amount:amt,note:note,id:Date.now()});
+  finSave(); finRender();
+  document.getElementById('fin-inc-amount').value='';
+  document.getElementById('fin-inc-note').value='';
+}
+
+function finAddExpense() {
+  var amt=parseFloat(document.getElementById('fin-exp-amount').value);
+  var cat=document.getElementById('fin-exp-cat').value;
+  var note=document.getElementById('fin-exp-note').value;
+  if(!amt) return;
+  finGetMonth(finViewYear,finViewMonth).expenses.push({amount:amt,category:cat,note:note,id:Date.now()});
+  finSave(); finRender();
+  document.getElementById('fin-exp-amount').value='';
+  document.getElementById('fin-exp-note').value='';
+}
+
+function finAddGoalSaving() {
+  var amt=parseFloat(document.getElementById('fin-goal-amount').value);
+  var goal=document.getElementById('fin-goal-sel').value;
+  if(!amt) return;
+  var md=finGetMonth(finViewYear,finViewMonth);
+  md.goalSavings[goal]=(md.goalSavings[goal]||0)+amt;
+  finSave(); finRender();
+  document.getElementById('fin-goal-amount').value='';
+}
+
+function finAddShortSaving() {
+  var amt=parseFloat(document.getElementById('fin-short-amount').value);
+  var goal=document.getElementById('fin-short-sel').value;
+  if(!amt) return;
+  var md=finGetMonth(finViewYear,finViewMonth);
+  md.shortSavings[goal]=(md.shortSavings[goal]||0)+amt;
+  finSave(); finRender();
+  document.getElementById('fin-short-amount').value='';
+}
+
+function finSwitchTab(id,btn) {
+  document.querySelectorAll('.fin-content').forEach(function(c){c.classList.remove('active');});
+  document.querySelectorAll('.fin-tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('fin-tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  else document.querySelector('.fin-tab-btn').classList.add('active');
+}
+</script>
+</body>
+</html>
