@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FridaActive · Finanzas</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #0f0f0f;
+      color: #f0ebe3;
+      min-height: 100vh;
+    }
+
+    /* ── TOP NAV (mismo estilo que el dashboard) ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      border-bottom: 1px solid #1e1e1e;
+      background: #0f0f0f;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: #888;
+      text-transform: uppercase;
+    }
+    .logo span { color: #f0ebe3; font-weight: bold; }
+    .back-btn {
+      font-size: 12px;
+      color: #888;
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .back-btn:hover { color: #f0ebe3; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 36px 28px 0;
+      text-align: center;
+    }
+    .page-header .eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: #c9a96e;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: normal;
+      letter-spacing: 1px;
+      color: #f0ebe3;
+    }
+    .page-header .date {
+      font-size: 12px;
+      color: #555;
+      margin-top: 6px;
+    }
+
+    /* ── MONTH NAVIGATOR ── */
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    .nav-btn {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      color: #f0ebe3;
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .nav-btn:hover { border-color: #c9a96e; }
+    .month-label { text-align: center; }
+    .month-label .month-name { font-size: 18px; color: #c9a96e; }
+    .month-label .year { font-size: 12px; color: #555; margin-top: 2px; }
+
+    /* ── SUMMARY CARDS ── */
+    .cards-row {
+      display: flex;
+      gap: 10px;
+      padding: 0 20px 20px;
+      overflow-x: auto;
+    }
+    .card {
+      flex: 0 0 130px;
+      background: #161616;
+      border: 1px solid #222;
+      border-radius: 14px;
+      padding: 14px 12px;
+    }
+    .card .icon { font-size: 16px; margin-bottom: 4px; }
+    .card .card-label { font-size: 9px; color: #555; letter-spacing: 1px; text-transform: uppercase; }
+    .card .card-value { font-size: 16px; font-weight: bold; margin-top: 4px; }
+    .card .card-sub { font-size: 9px; color: #444; margin-top: 2px; }
+
+    /* ── FIXED EXPENSES BANNER ── */
+    .fixed-banner {
+      margin: 0 20px 14px;
+      background: #1a1010;
+      border: 1px solid #3a1515;
+      border-radius: 12px;
+      padding: 12px 16px;
+    }
+    .fixed-banner .banner-title {
+      font-size: 9px; letter-spacing: 2px; color: #c97c7c;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .fixed-items { display: flex; gap: 10px; }
+    .fixed-item {
+      flex: 1;
+      background: #1e1212;
+      border-radius: 8px;
+      padding: 7px 10px;
+    }
+    .fixed-item .fi-label { font-size: 11px; color: #aaa; }
+    .fixed-item .fi-value { font-size: 14px; color: #c97c7c; font-weight: bold; }
+
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      padding: 0 20px 16px;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      flex-shrink: 0;
+      padding: 8px 14px;
+      background: #161616;
+      border: 1px solid #222;
+      color: #666;
+      border-radius: 10px;
+      font-size: 11px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+    }
+    .tab-btn.active {
+      background: #c9a96e;
+      color: #0f0f0f;
+      border-color: #c9a96e;
+      font-weight: bold;
+    }
+
+    /* ── CONTENT ── */
+    .content { padding: 0 20px 40px; display: none; }
+    .content.active { display: block; }
+
+    .section-title {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #c9a96e;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      margin-top: 4px;
+    }
+
+    .month-chip {
+      background: #1a1a12;
+      border: 1px solid #c9a96e44;
+      border-radius: 10px;
+      padding: 8px 14px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      color: #c9a96e;
+      text-align: center;
+    }
+
+    /* ── GOAL BARS ── */
+    .goal-card {
+      background: #161616;
+      border: 1px solid #222;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .goal-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .goal-amount { font-size: 12px; }
+    .progress-bg {
+      background: #222;
+      border-radius: 99px;
+      height: 7px;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.5s;
+    }
+    .goal-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 10px;
+      color: #555;
+    }
+
+    /* ── STATS GRID ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .stat-box { text-align: center; }
+    .stat-label { font-size: 9px; color: #555; letter-spacing: 1px; text-transform: uppercase; }
+    .stat-value { font-size: 14px; font-weight: bold; margin-top: 3px; }
+
+    /* ── FORM ── */
+    .form-card {
+      background: #161616;
+      border: 1px solid #222;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .form-row { margin-bottom: 12px; }
+    .form-label {
+      font-size: 9px;
+      color: #555;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      padding: 10px 12px;
+      background: #1e1e1e;
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      color: #f0ebe3;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-select:focus { border-color: #c9a96e; }
+    .form-select option { background: #1e1e1e; }
+    .add-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #c9a96e, #b8925a);
+      border: none;
+      border-radius: 12px;
+      color: #0f0f0f;
+      font-size: 14px;
+      font-weight: bold;
+      font-family: inherit;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s;
+    }
+    .add-btn:hover { opacity: 0.9; }
+
+    /* ── TOTAL BOX ── */
+    .total-box {
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .total-box .tb-label { font-size: 10px; color: #888; letter-spacing: 1px; text-transform: uppercase; }
+    .total-box .tb-value { font-size: 26px; font-weight: bold; margin-top: 6px; }
+
+    /* ── ENTRY ROW ── */
+    .entry-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      margin-bottom: 7px;
+      background: #161616;
+      border-radius: 10px;
+      border: 1px solid #1e1e1e;
+    }
+    .entry-left { font-size: 13px; color: #ccc; }
+    .entry-note { font-size: 11px; color: #555; margin-left: 8px; }
+    .entry-value { font-weight: bold; font-size: 14px; }
+
+    /* ── HISTORY ── */
+    .history-card {
+      background: #161616;
+      border: 1px solid #1e1e1e;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .history-card:hover { border-color: #c9a96e44; }
+    .history-card.active-month { border-color: #c9a96e66; background: #1a1a12; }
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .history-month { font-size: 14px; }
+    .history-chip {
+      font-size: 9px; color: #c9a96e;
+      background: #c9a96e22; border-radius: 99px;
+      padding: 2px 8px; letter-spacing: 1px;
+    }
+    .history-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 6px;
+    }
+    .hg-item { text-align: center; }
+    .hg-label { font-size: 9px; color: #555; }
+    .hg-value { font-size: 12px; font-weight: bold; margin-top: 2px; }
+
+    .empty-state {
+      text-align: center;
+      color: #444;
+      padding: 30px 0;
+      font-size: 13px;
+    }
+
+    /* ── PRIORITY LIST ── */
+    .priority-box {
+      background: #161616;
+      border: 1px solid #1e1e1e;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+    .priority-title {
+      font-size: 9px; letter-spacing: 2px; color: #8ec97c;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .priority-item {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+    .priority-num {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: #1e2e1e; border: 1px solid #8ec97c44;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: #8ec97c; flex-shrink: 0;
+    }
+    .priority-text { font-size: 12px; color: #ccc; }
+    .priority-note { font-size: 10px; color: #555; }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo"><span>fa</span> fridaactive</div>
+  <a href="index.html" class="back-btn">← Dashboard</a>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="eyebrow">Mi Diario Financiero</div>
+  <h1>Mis Finanzas ✦</h1>
+  <div class="date" id="today-date"></div>
+</div>
+
+<!-- MONTH NAVIGATOR -->
+<div class="month-nav">
+  <button class="nav-btn" onclick="changeMonth(-1)">‹</button>
+  <div class="month-label">
+    <div class="month-name" id="month-display"></div>
+    <div class="year" id="year-display"></div>
+  </div>
+  <button class="nav-btn" onclick="changeMonth(1)">›</button>
+</div>
+
+<!-- SUMMARY CARDS -->
+<div class="cards-row" id="summary-cards"></div>
+
+<!-- FIXED EXPENSES BANNER -->
+<div class="fixed-banner">
+  <div class="banner-title">📌 Gastos Fijos del Mes</div>
+  <div class="fixed-items">
+    <div class="fixed-item"><div class="fi-label">⚖️ Abogada</div><div class="fi-value">$100</div></div>
+    <div class="fixed-item"><div class="fi-label">🧴 Facial</div><div class="fi-value">$100</div></div>
+    <div class="fixed-item"><div class="fi-label">Total fijos</div><div class="fi-value">$200</div></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('resumen', this)">Resumen</button>
+  <button class="tab-btn" onclick="switchTab('ingresos', this)">Ingresos</button>
+  <button class="tab-btn" onclick="switchTab('gastos', this)">Gastos</button>
+  <button class="tab-btn" onclick="switchTab('metas', this)">Metas</button>
+  <button class="tab-btn" onclick="switchTab('compras', this)">Compras</button>
+  <button class="tab-btn" onclick="switchTab('historial', this)">Historial</button>
+</div>
+
+<!-- ══════════════════════════════ RESUMEN ══════════════════════════════ -->
+<div class="content active" id="tab-resumen">
+  <div class="section-title">🎯 Metas Grandes — Acumulado</div>
+  <div id="resumen-goals"></div>
+  <div class="section-title" style="margin-top:16px">🛍️ Compras a Corto Plazo</div>
+  <div id="resumen-short"></div>
+  <div class="section-title" style="margin-top:16px">🍩 Gastos por Categoría</div>
+  <div id="resumen-cats"></div>
+</div>
+
+<!-- ══════════════════════════════ INGRESOS ══════════════════════════════ -->
+<div class="content" id="tab-ingresos">
+  <div class="month-chip" id="income-chip"></div>
+  <div class="section-title">➕ Registrar Ingreso</div>
+  <div class="form-card">
+    <div class="form-row">
+      <div class="form-label">Monto ($)</div>
+      <input class="form-input" id="inc-amount" type="number" placeholder="0.00" />
+    </div>
+    <div class="form-row">
+      <div class="form-label">Nota</div>
+      <input class="form-input" id="inc-note" type="text" placeholder="Ej: clientes semana 1" />
+    </div>
+    <button class="add-btn" onclick="addIncome()">Agregar Ingreso</button>
+  </div>
+  <div class="total-box" style="background:#0d1a12;border:1px solid #1a3a22">
+    <div class="tb-label" id="income-total-label"></div>
+    <div class="tb-value" style="color:#7ce8a8" id="income-total-value">$0.00</div>
+  </div>
+  <div class="section-title" id="income-list-title"></div>
+  <div id="income-list"></div>
+</div>
+
+<!-- ══════════════════════════════ GASTOS ══════════════════════════════ -->
+<div class="content" id="tab-gastos">
+  <div class="month-chip" id="expense-chip"></div>
+  <div class="section-title">➕ Registrar Gasto</div>
+  <div class="form-card">
+    <div class="form-row">
+      <div class="form-label">Categoría</div>
+      <select class="form-select" id="exp-cat">
+        <option>🍽️ Comida</option><option>🚌 Transporte</option><option>💡 Servicios</option>
+        <option>👗 Personal</option><option>🎉 Ocio</option><option>💊 Salud</option>
+        <option>⚖️ Abogada</option><option>🧴 Facial</option><option>📦 Otro</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-label">Monto ($)</div>
+      <input class="form-input" id="exp-amount" type="number" placeholder="0.00" />
+    </div>
+    <div class="form-row">
+      <div class="form-label">Nota</div>
+      <input class="form-input" id="exp-note" type="text" placeholder="Ej: mercado semanal" />
+    </div>
+    <button class="add-btn" onclick="addExpense()">Agregar Gasto</button>
+  </div>
+  <div class="total-box" style="background:#1a0d0d;border:1px solid #3a1515">
+    <div class="tb-label" id="expense-total-label"></div>
+    <div class="tb-value" style="color:#e87c7c" id="expense-total-value">$0.00</div>
+  </div>
+  <div class="section-title" id="expense-list-title"></div>
+  <div id="expense-list"></div>
+</div>
+
+<!-- ══════════════════════════════ METAS ══════════════════════════════ -->
+<div class="content" id="tab-metas">
+  <div class="month-chip" id="goal-chip"></div>
+  <div class="section-title">💰 Abonar a Meta</div>
+  <div class="form-card">
+    <div class="form-row">
+      <div class="form-label">Meta</div>
+      <select class="form-select" id="goal-sel">
+        <option value="casa">🏠 Reconstruir la Casa</option>
+        <option value="carro">🚗 Comprar Carro</option>
+        <option value="mudanza">✨ Nueva Casa/Depto</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-label">Monto ($)</div>
+      <input class="form-input" id="goal-amount" type="number" placeholder="0.00" />
+    </div>
+    <button class="add-btn" onclick="addGoalSaving()">Abonar — Banco Agrícola</button>
+  </div>
+  <div class="section-title">🎯 Progreso Acumulado</div>
+  <div id="goals-list"></div>
+</div>
+
+<!-- ══════════════════════════════ COMPRAS ══════════════════════════════ -->
+<div class="content" id="tab-compras">
+  <div class="month-chip" id="short-chip"></div>
+  <div class="section-title">🛍️ Abonar a Compra</div>
+  <div class="form-card">
+    <div class="form-row">
+      <div class="form-label">Compra</div>
+      <select class="form-select" id="short-sel">
+        <option value="anteojos">👓 Anteojos</option>
+        <option value="tripode">🎙️ Trípode + Micrófono</option>
+        <option value="compu">💻 Computadora</option>
+        <option value="tablet">📱 Tablet</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-label">Monto ($)</div>
+      <input class="form-input" id="short-amount" type="number" placeholder="0.00" />
+    </div>
+    <button class="add-btn" onclick="addShortSaving()">Abonar — Banco Agrícola</button>
+  </div>
+  <div class="priority-box">
+    <div class="priority-title">📋 Orden Sugerido</div>
+    <div class="priority-item"><div class="priority-num">1</div><div><div class="priority-text">👓 Anteojos</div><div class="priority-note">Salud primero</div></div></div>
+    <div class="priority-item"><div class="priority-num">2</div><div><div class="priority-text">🎙️ Trípode + Micrófono</div><div class="priority-note">Inversión rápida</div></div></div>
+    <div class="priority-item"><div class="priority-num">3</div><div><div class="priority-text">💻 Computadora</div><div class="priority-note">Meta principal</div></div></div>
+    <div class="priority-item"><div class="priority-num">4</div><div><div class="priority-text">📱 Tablet</div><div class="priority-note">Después de compu</div></div></div>
+  </div>
+  <div class="section-title">📊 Progreso Acumulado</div>
+  <div id="short-list"></div>
+</div>
+
+<!-- ══════════════════════════════ HISTORIAL ══════════════════════════════ -->
+<div class="content" id="tab-historial">
+  <div class="section-title">📅 Historial por Mes</div>
+  <div id="history-list"></div>
+</div>
+
+<script>
+  const MONTHS = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+
+  const GOALS_CFG = [
+    { id:"casa",    label:"🏠 Reconstruir la Casa", target:4000, color:"#c9a96e" },
+    { id:"carro",   label:"🚗 Comprar Carro",       target:8000, color:"#7cb8e8" },
+    { id:"mudanza", label:"✨ Nueva Casa/Depto",     target:5000, color:"#a87ce8" },
+  ];
+  const SHORT_CFG = [
+    { id:"anteojos", label:"👓 Anteojos",           target:250,  color:"#7ce8c8" },
+    { id:"tripode",  label:"🎙️ Trípode + Micrófono",target:150,  color:"#8ec97c" },
+    { id:"compu",    label:"💻 Computadora",         target:1200, color:"#e87cb8" },
+    { id:"tablet",   label:"📱 Tablet",              target:500,  color:"#7c9ce8" },
+  ];
+
+  const now = new Date();
+  let viewYear = now.getFullYear();
+  let viewMonth = now.getMonth();
+
+  // Load data from localStorage
+  let allData = JSON.parse(localStorage.getItem('fa_finanzas') || '{}');
+
+  function monthKey(y, m) { return `${y}-${String(m+1).padStart(2,'0')}`; }
+  function emptyMonth() {
+    return {
+      incomes: [], expenses: [],
+      goalSavings: {casa:0,carro:0,mudanza:0},
+      shortSavings: {anteojos:0,tripode:0,compu:0,tablet:0}
+    };
+  }
+  function getMonth(y, m) {
+    const k = monthKey(y, m);
+    if (!allData[k]) allData[k] = emptyMonth();
+    return allData[k];
+  }
+  function save() { localStorage.setItem('fa_finanzas', JSON.stringify(allData)); }
+  function fmt(n) { return '$' + Number(n||0).toFixed(2); }
+
+  function cumulativeSavings(upToKey) {
+    const gs = {casa:0,carro:0,mudanza:0};
+    const ss = {anteojos:0,tripode:0,compu:0,tablet:0};
+    Object.entries(allData).forEach(([k,d]) => {
+      if (k <= upToKey) {
+        Object.keys(gs).forEach(g => gs[g] += d.goalSavings[g]||0);
+        Object.keys(ss).forEach(g => ss[g] += d.shortSavings[g]||0);
+      }
+    });
+    return { gs, ss };
+  }
+
+  function monthTotals(d) {
+    const inc = d.incomes.reduce((s,i)=>s+Number(i.amount),0);
+    const exp = d.expenses.reduce((s,e)=>s+Number(e.amount),0);
+    const gsv = Object.values(d.goalSavings).reduce((s,v)=>s+v,0);
+    const ssv = Object.values(d.shortSavings).reduce((s,v)=>s+v,0);
+    return { inc, exp, saved: gsv+ssv, bal: inc-exp-gsv-ssv };
+  }
+
+  // ── RENDER ──────────────────────────────────────────────────────────────
+  function render() {
+    const key = monthKey(viewYear, viewMonth);
+    const md = getMonth(viewYear, viewMonth);
+    const { inc, exp, saved, bal } = monthTotals(md);
+    const cum = cumulativeSavings(key);
+
+    // Date & month nav
+    document.getElementById('today-date').textContent =
+      now.toLocaleDateString('es-SV', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+    document.getElementById('month-display').textContent = MONTHS[viewMonth];
+    document.getElementById('year-display').textContent = viewYear;
+
+    // Month chips
+    const chipText = `📅 Registrando en: ${MONTHS[viewMonth]} ${viewYear}`;
+    ['income-chip','expense-chip','goal-chip','short-chip'].forEach(id => {
+      document.getElementById(id).textContent = chipText;
+    });
+
+    // Summary cards
+    document.getElementById('summary-cards').innerHTML = [
+      { label:'Ingresos', value:fmt(inc), color:'#7ce8a8', icon:'↑' },
+      { label:'Gastos',   value:fmt(exp), color:'#e87c7c', icon:'↓' },
+      { label:'Ahorrado', value:fmt(saved), color:'#c9a96e', icon:'★' },
+      { label:'Disponible', value:fmt(bal), color:'#7cb8e8', icon:'◈' },
+    ].map(c => `
+      <div class="card">
+        <div class="icon" style="color:${c.color}">${c.icon}</div>
+        <div class="card-label">${c.label}</div>
+        <div class="card-value" style="color:${c.color}">${c.value}</div>
+        <div class="card-sub">este mes</div>
+      </div>`).join('');
+
+    // ── RESUMEN ──
+    document.getElementById('resumen-goals').innerHTML = GOALS_CFG.map(g => {
+      const sv = cum.gs[g.id]; const pct = Math.min(sv/g.target*100,100);
+      const thisM = md.goalSavings[g.id]||0;
+      return `<div class="goal-card" style="border-color:${g.color}22">
+        <div class="goal-header"><span>${g.label}</span><span class="goal-amount" style="color:${g.color}">${fmt(sv)} / ${fmt(g.target)}</span></div>
+        <div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${g.color}"></div></div>
+        <div class="goal-footer"><span>${pct.toFixed(1)}% acumulado</span>${thisM>0?`<span style="color:${g.color}">+${fmt(thisM)} este mes</span>`:''}</div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('resumen-short').innerHTML = SHORT_CFG.map(g => {
+      const sv = cum.ss[g.id]; const pct = Math.min(sv/g.target*100,100);
+      return `<div class="goal-card" style="margin-bottom:8px;border-color:${g.color}22">
+        <div class="goal-header"><span style="font-size:13px">${g.label}</span><span style="font-size:11px;color:${g.color}">${fmt(sv)}/${fmt(g.target)}</span></div>
+        <div class="progress-bg" style="height:5px"><div class="progress-fill" style="width:${pct}%;background:${g.color}"></div></div>
+        <div class="goal-footer"><span>${pct.toFixed(1)}%</span>${pct>=100?`<span style="color:${g.color}">¡Lista! 🎉</span>`:''}</div>
+      </div>`;
+    }).join('');
+
+    const cats = {};
+    md.expenses.forEach(e => { cats[e.category]=(cats[e.category]||0)+Number(e.amount); });
+    document.getElementById('resumen-cats').innerHTML = Object.keys(cats).length === 0
+      ? '<div class="empty-state">Sin gastos registrados este mes</div>'
+      : Object.entries(cats).map(([c,a]) => `
+        <div class="entry-row">
+          <div class="entry-left">${c}</div>
+          <div class="entry-value" style="color:#e87c7c">${fmt(a)}</div>
+        </div>`).join('');
+
+    // ── INGRESOS ──
+    document.getElementById('income-total-label').textContent = `Total ingresos ${MONTHS[viewMonth]}`;
+    document.getElementById('income-total-value').textContent = fmt(inc);
+    document.getElementById('income-list-title').textContent = `Ingresos de ${MONTHS[viewMonth]}`;
+    document.getElementById('income-list').innerHTML = md.incomes.length === 0
+      ? '<div class="empty-state">Sin ingresos este mes</div>'
+      : [...md.incomes].reverse().map(i => `
+        <div class="entry-row">
+          <div class="entry-left">${i.note||'Ingreso'}</div>
+          <div class="entry-value" style="color:#7ce8a8">${fmt(i.amount)}</div>
+        </div>`).join('');
+
+    // ── GASTOS ──
+    document.getElementById('expense-total-label').textContent = `Total gastos ${MONTHS[viewMonth]}`;
+    document.getElementById('expense-total-value').textContent = fmt(exp);
+    document.getElementById('expense-list-title').textContent = `Gastos de ${MONTHS[viewMonth]}`;
+    document.getElementById('expense-list').innerHTML = md.expenses.length === 0
+      ? '<div class="empty-state">Sin gastos este mes</div>'
+      : [...md.expenses].reverse().map(e => `
+        <div class="entry-row">
+          <div class="entry-left">${e.category}<span class="entry-note">${e.note||''}</span></div>
+          <div class="entry-value" style="color:#e87c7c">${fmt(e.amount)}</div>
+        </div>`).join('');
+
+    // ── METAS ──
+    document.getElementById('goals-list').innerHTML = GOALS_CFG.map(g => {
+      const sv = cum.gs[g.id]; const rem = Math.max(g.target-sv,0);
+      const pct = Math.min(sv/g.target*100,100);
+      const months = rem>0?Math.ceil(rem/150):0;
+      const thisM = md.goalSavings[g.id]||0;
+      return `<div class="goal-card" style="border-color:${g.color}33;margin-bottom:14px">
+        <div style="font-size:14px;margin-bottom:10px">${g.label}</div>
+        <div class="stats-grid">
+          <div class="stat-box"><div class="stat-label">Ahorrado</div><div class="stat-value" style="color:${g.color}">${fmt(sv)}</div></div>
+          <div class="stat-box"><div class="stat-label">Meta</div><div class="stat-value">${fmt(g.target)}</div></div>
+          <div class="stat-box"><div class="stat-label">Falta</div><div class="stat-value" style="color:#e87c7c">${fmt(rem)}</div></div>
+        </div>
+        <div class="progress-bg" style="height:8px"><div class="progress-fill" style="width:${pct}%;background:${g.color};box-shadow:0 0 8px ${g.color}88"></div></div>
+        <div class="goal-footer">
+          <span>${pct.toFixed(1)}% acumulado</span>
+          ${months>0?`<span>~${months} meses más</span>`:`<span style="color:${g.color}">¡Meta alcanzada! 🎉</span>`}
+        </div>
+        ${thisM>0?`<div style="font-size:11px;color:${g.color};text-align:right;margin-top:6px">+${fmt(thisM)} este mes</div>`:''}
+      </div>`;
+    }).join('');
+
+    // ── COMPRAS ──
+    document.getElementById('short-list').innerHTML = SHORT_CFG.map(g => {
+      const sv = cum.ss[g.id]; const rem = Math.max(g.target-sv,0);
+      const pct = Math.min(sv/g.target*100,100);
+      const thisM = md.shortSavings[g.id]||0;
+      return `<div class="goal-card" style="border-color:${g.color}22;margin-bottom:12px">
+        <div style="font-size:13px;margin-bottom:9px">${g.label}</div>
+        <div class="stats-grid">
+          <div class="stat-box"><div class="stat-label">Ahorrado</div><div class="stat-value" style="color:${g.color}">${fmt(sv)}</div></div>
+          <div class="stat-box"><div class="stat-label">Meta</div><div class="stat-value">${fmt(g.target)}</div></div>
+          <div class="stat-box"><div class="stat-label">Falta</div><div class="stat-value" style="color:#e87c7c">${fmt(rem)}</div></div>
+        </div>
+        <div class="progress-bg" style="height:6px"><div class="progress-fill" style="width:${pct}%;background:${g.color}"></div></div>
+        <div class="goal-footer">
+          <span>${pct.toFixed(1)}%</span>
+          ${pct>=100?`<span style="color:${g.color}">¡Lista para comprar! 🎉</span>`:`<span>Faltan ${fmt(rem)}</span>`}
+        </div>
+        ${thisM>0?`<div style="font-size:11px;color:${g.color};text-align:right;margin-top:5px">+${fmt(thisM)} este mes</div>`:''}
+      </div>`;
+    }).join('');
+
+    // ── HISTORIAL ──
+    const keys = Object.keys(allData).sort().reverse();
+    document.getElementById('history-list').innerHTML = keys.length === 0
+      ? '<div class="empty-state">Aún no hay datos</div>'
+      : keys.map(k => {
+          const [y,m] = k.split('-');
+          const d = allData[k] || emptyMonth();
+          const t = monthTotals(d);
+          const isActive = k === key;
+          return `<div class="history-card ${isActive?'active-month':''}" onclick="goToMonth(${y},${Number(m)-1})">
+            <div class="history-header">
+              <div class="history-month" style="color:${isActive?'#c9a96e':'#ccc'}">${MONTHS[Number(m)-1]} ${y}</div>
+              ${isActive?'<div class="history-chip">MES ACTUAL</div>':''}
+            </div>
+            <div class="history-grid">
+              <div class="hg-item"><div class="hg-label">↑ Ingreso</div><div class="hg-value" style="color:#7ce8a8">${fmt(t.inc)}</div></div>
+              <div class="hg-item"><div class="hg-label">↓ Gasto</div><div class="hg-value" style="color:#e87c7c">${fmt(t.exp)}</div></div>
+              <div class="hg-item"><div class="hg-label">★ Ahorro</div><div class="hg-value" style="color:#c9a96e">${fmt(t.saved)}</div></div>
+              <div class="hg-item"><div class="hg-label">◈ Saldo</div><div class="hg-value" style="color:#7cb8e8">${fmt(t.bal)}</div></div>
+            </div>
+          </div>`;
+        }).join('');
+  }
+
+  // ── ACTIONS ────────────────────────────────────────────────────────────
+  function changeMonth(dir) {
+    viewMonth += dir;
+    if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    if (viewMonth < 0)  { viewMonth = 11; viewYear--; }
+    getMonth(viewYear, viewMonth);
+    render();
+  }
+
+  function goToMonth(y, m) {
+    viewYear = Number(y); viewMonth = Number(m);
+    switchTab('resumen', document.querySelector('.tab-btn'));
+    render();
+  }
+
+  function addIncome() {
+    const amt = parseFloat(document.getElementById('inc-amount').value);
+    const note = document.getElementById('inc-note').value;
+    if (!amt) return;
+    getMonth(viewYear,viewMonth).incomes.push({ amount:amt, note, id:Date.now() });
+    save(); render();
+    document.getElementById('inc-amount').value = '';
+    document.getElementById('inc-note').value = '';
+  }
+
+  function addExpense() {
+    const amt = parseFloat(document.getElementById('exp-amount').value);
+    const cat = document.getElementById('exp-cat').value;
+    const note = document.getElementById('exp-note').value;
+    if (!amt) return;
+    getMonth(viewYear,viewMonth).expenses.push({ amount:amt, category:cat, note, id:Date.now() });
+    save(); render();
+    document.getElementById('exp-amount').value = '';
+    document.getElementById('exp-note').value = '';
+  }
+
+  function addGoalSaving() {
+    const amt = parseFloat(document.getElementById('goal-amount').value);
+    const goal = document.getElementById('goal-sel').value;
+    if (!amt) return;
+    getMonth(viewYear,viewMonth).goalSavings[goal] = (getMonth(viewYear,viewMonth).goalSavings[goal]||0) + amt;
+    save(); render();
+    document.getElementById('goal-amount').value = '';
+  }
+
+  function addShortSaving() {
+    const amt = parseFloat(document.getElementById('short-amount').value);
+    const goal = document.getElementById('short-sel').value;
+    if (!amt) return;
+    getMonth(viewYear,viewMonth).shortSavings[goal] = (getMonth(viewYear,viewMonth).shortSavings[goal]||0) + amt;
+    save(); render();
+    document.getElementById('short-amount').value = '';
+  }
+
+  function switchTab(id, btn) {
+    document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    if (btn) btn.classList.add('active');
+    else document.querySelector('.tab-btn').classList.add('active');
+  }
+
+  // Init
+  getMonth(viewYear, viewMonth);
+  render();
+</script>
+</body>
+</html>
