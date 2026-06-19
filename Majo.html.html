@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FridaActive · Majo Morales · Julio 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#FFFFFF; --cream:#F5ECCB; --blue:#1C55E5; --blue-dk:#0F3FA8;
+    --blue-lt:#EEF4FF; --warn:#FF9500; --text:#0a1628; --muted:#7a8499;
+    --border:#E8E3D0; --border-b:#ccdaf5; --grad:linear-gradient(135deg,#F5ECCB 0%,#ffffff 100%);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; padding:0 0 6rem; }
+  .hero { background:var(--blue); padding:2.5rem 1.5rem 0; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; top:-60px; right:-60px; width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.05); }
+  .brand-row { display:flex; align-items:center; gap:0.6rem; margin-bottom:1.75rem; position:relative; z-index:1; }
+  .brand-icon { font-size:1.5rem; font-weight:700; color:#fff; background:rgba(255,255,255,0.15); padding:0.25rem 0.6rem; border-radius:8px; }
+  .brand-name { font-size:0.7rem; color:rgba(255,255,255,0.6); letter-spacing:0.2em; text-transform:uppercase; }
+  .hero-tag { display:inline-block; background:rgba(245,236,203,0.2); color:#F5ECCB; font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; padding:0.3rem 0.8rem; border-radius:100px; margin-bottom:0.9rem; position:relative; z-index:1; border:1px solid rgba(245,236,203,0.3); }
+  .hero-names { font-size:clamp(2.4rem,9vw,4rem); font-weight:700; color:#fff; line-height:1; letter-spacing:-0.02em; position:relative; z-index:1; margin-bottom:0.4rem; }
+  .hero-names span { color:#F5ECCB; }
+  .hero-sub { font-size:0.78rem; color:rgba(255,255,255,0.55); font-weight:300; position:relative; z-index:1; margin-top:0.5rem; margin-bottom:1.75rem; }
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:0.6rem; padding:0 1.25rem 1.75rem; position:relative; z-index:1; background:transparent; }
+  .stat { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:14px; padding:0.85rem 0.5rem; text-align:center; }
+  .stat-val { font-size:1.4rem; font-weight:700; color:#fff; line-height:1; }
+  .stat-label { font-size:0.52rem; color:rgba(255,255,255,0.65); text-transform:uppercase; letter-spacing:0.08em; margin-top:0.25rem; }
+  .body-wrap { padding:1.5rem 1.25rem; max-width:720px; margin:0 auto; }
+  .objetivo-box { background:var(--blue-lt); border-radius:14px; padding:1.1rem 1.25rem; margin-bottom:1.25rem; border:1.5px solid var(--border-b); border-left:4px solid var(--blue); }
+  .objetivo-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.2em; color:var(--blue); font-weight:700; margin-bottom:0.35rem; }
+  .objetivo-text { font-size:0.85rem; font-weight:500; color:var(--text); line-height:1.5; }
+  .rodilla-box { background:#FFF8F0; border-radius:14px; padding:1rem 1.25rem; margin-bottom:1.75rem; border:1.5px solid #FFD9A0; border-left:4px solid var(--warn); }
+  .rodilla-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--warn); font-weight:700; margin-bottom:0.35rem; }
+  .rodilla-text { font-size:0.78rem; color:var(--text); line-height:1.55; font-weight:300; }
+  .section-hdr { display:flex; align-items:center; gap:0.75rem; margin:2rem 0 1rem; }
+  .section-hdr-line { flex:1; height:1px; background:var(--border); }
+  .section-hdr-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.18em; color:var(--muted); white-space:nowrap; }
+  details { border-radius:14px; overflow:hidden; margin-bottom:0.75rem; border:1.5px solid var(--border); }
+  details[open] { border-color:var(--blue); }
+  details summary { display:flex; align-items:center; gap:0.85rem; padding:1rem 1.1rem; background:#fafafa; cursor:pointer; list-style:none; -webkit-tap-highlight-color:transparent; }
+  details[open] summary { background:var(--blue); }
+  details summary::-webkit-details-marker { display:none; }
+  .dia-num { font-size:1.6rem; font-weight:700; color:var(--blue); }
+  details[open] .dia-num { color:#F5ECCB; }
+  .dia-info { flex:1; }
+  .dia-title { font-size:0.88rem; font-weight:600; color:var(--text); }
+  details[open] .dia-title { color:#fff; }
+  .dia-meta { font-size:0.65rem; color:var(--muted); }
+  details[open] .dia-meta { color:rgba(255,255,255,0.6); }
+  .dia-badge { font-size:0.58rem; text-transform:uppercase; padding:0.18rem 0.55rem; border-radius:100px; font-weight:600; }
+  .badge-inf { background:#EBF0FF; color:var(--blue); }
+  .badge-sup { background:#fdf8ee; color:#5a4200; }
+  .badge-glut { background:#F0FFF0; color:#2a7a2a; }
+  details[open] .dia-badge { opacity:0.9; }
+  .chevron { font-size:0.9rem; color:var(--muted); transition:transform 0.25s; }
+  details[open] .chevron { transform:rotate(180deg); color:rgba(255,255,255,0.7); }
+  .ex-table { background:var(--blue-lt); border-top:1px solid var(--border-b); padding:0.85rem; display:flex; flex-direction:column; gap:0.6rem; }
+  .warm-box { background:linear-gradient(135deg,#fdf8ee,#fff); border:1.5px solid #E8D8A0; border-radius:12px; padding:0.9rem 1.1rem; }
+  .warm-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.15em; color:#9a7700; font-weight:700; margin-bottom:0.5rem; }
+  .warm-item { font-size:0.78rem; color:var(--text); font-weight:300; display:flex; gap:0.5rem; margin-bottom:0.25rem; }
+  .warm-dot { color:#9a7700; font-size:0.7rem; margin-top:0.2rem; flex-shrink:0; }
+  .ex-card { background:#fff; border-radius:12px; border:1.5px solid var(--border-b); overflow:hidden; }
+  .ex-group { border-radius:12px; border:1.5px solid var(--blue); overflow:hidden; }
+  .ex-group-header { background:var(--blue); color:#fff; font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; padding:0.35rem 0.9rem; }
+  .ex-group .ex-card { border-radius:0; border:none; border-top:1px solid #e0eafc; }
+  .ex-group .ex-card:first-of-type { border-top:none; }
+  .ex-row { display:flex; align-items:center; gap:0.65rem; padding:0.8rem 0.9rem; }
+  .ex-num { width:2rem; height:2rem; background:var(--blue); color:#fff; border-radius:50%; font-size:0.72rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .ex-group .ex-num { background:#ccdaf5; color:var(--blue-dk); }
+  .ex-info { flex:1; min-width:0; }
+  .ex-name { font-size:0.82rem; font-weight:600; color:var(--text); }
+  .ex-note { font-size:0.63rem; color:var(--muted); margin-top:0.1rem; font-style:italic; }
+  .ex-warn { font-size:0.63rem; color:var(--warn); margin-top:0.1rem; font-weight:600; }
+  .ex-right { display:flex; flex-direction:column; align-items:flex-end; gap:0.3rem; flex-shrink:0; }
+  .chip { background:var(--grad); border-radius:6px; padding:0.2rem 0.5rem; font-size:0.65rem; font-weight:700; color:var(--blue-dk); white-space:nowrap; border:1px solid #d4c890; }
+  .chip-sm { font-size:0.58rem; color:var(--muted); text-align:right; }
+  .reg-row { display:flex; gap:0.35rem; align-items:flex-end; flex-wrap:wrap; justify-content:flex-end; margin-top:0.3rem; }
+  .reg-wrap { display:flex; flex-direction:column; align-items:center; gap:0.1rem; }
+  .reg-lbl { font-size:0.5rem; color:var(--muted); text-align:center; }
+  .inp-carga { background:var(--blue-lt); border:1.5px solid var(--border-b); border-radius:7px; padding:0.25rem 0.3rem; font-size:0.7rem; font-weight:600; color:var(--blue); text-align:center; width:3.8rem; font-family:'DM Sans',sans-serif; outline:none; }
+  .inp-rpe { background:#FFF8F0; border:1.5px solid #FFD9A0; border-radius:7px; padding:0.25rem 0.3rem; font-size:0.7rem; font-weight:700; color:var(--warn); text-align:center; width:2.8rem; font-family:'DM Sans',sans-serif; outline:none; }
+  .inp-reps { background:#F0FFF0; border:1.5px solid #a8ddb8; border-radius:7px; padding:0.25rem 0.3rem; font-size:0.7rem; font-weight:700; color:#2a7a2a; text-align:center; width:2.8rem; font-family:'DM Sans',sans-serif; outline:none; }
+  .inp-carga::placeholder, .inp-rpe::placeholder, .inp-reps::placeholder { font-size:0.58rem; font-weight:300; opacity:0.6; }
+  .descanso-bar { background:#f4f8ff; border-top:1px solid var(--border-b); padding:0.45rem 0.9rem; font-size:0.65rem; color:var(--muted); }
+  .descanso-bar strong { color:var(--blue-dk); }
+  .notas-box { background:var(--blue-lt); border-radius:12px; border:1.5px solid var(--border-b); overflow:hidden; }
+  .notas-hdr { background:var(--blue); color:#fff; font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; padding:0.35rem 0.9rem; }
+  .notas-ta { width:100%; border:none; background:transparent; padding:0.75rem 0.9rem; font-size:0.8rem; font-family:'DM Sans',sans-serif; color:var(--text); resize:none; outline:none; min-height:4rem; }
+  .notas-ta::placeholder { color:#aac; font-weight:300; }
+  .footer { text-align:center; padding:2rem 1rem 0; font-size:0.65rem; color:var(--muted); }
+  .footer-brand { font-weight:700; color:var(--blue); font-size:0.9rem; display:block; margin-bottom:0.2rem; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="brand-row">
+    <div class="brand-icon">fa</div>
+    <div class="brand-name">fridaactive</div>
+  </div>
+  <div class="hero-tag">Entrenamiento Presencial</div>
+  <div class="hero-names">Majo<br><span>Morales</span></div>
+  <div class="hero-sub">Julio 2026 · Readaptación funcional · LCA</div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">3</div><div class="stat-label">Días/semana</div></div>
+    <div class="stat"><div class="stat-val">LCA</div><div class="stat-label">Post-cirugía</div></div>
+    <div class="stat"><div class="stat-val">↑</div><div class="stat-label">Progresión</div></div>
+  </div>
+</div>
+
+<div class="body-wrap">
+  <div style="height:1.5rem"></div>
+
+  <div class="objetivo-box">
+    <div class="objetivo-label">Objetivo</div>
+    <div class="objetivo-text">Resiliencia, readaptación funcional y desarrollar capacidad de tolerancia a la carga.</div>
+  </div>
+
+  <div class="rodilla-box">
+    <div class="rodilla-label">⚠️ Consideración de rodilla</div>
+    <div class="rodilla-text">Cirugía de reconstrucción de LCA. Jumping Jacks en progresión — máximo 30–40 seg. Respetar rango de movimiento disponible.</div>
+  </div>
+
+  <div class="section-hdr">
+    <div class="section-hdr-label">Plan de entrenamiento</div>
+    <div class="section-hdr-line"></div>
+  </div>
+
+  <!-- DÍA 1 -->
+  <details>
+    <summary>
+      <div class="dia-num">01</div>
+      <div class="dia-info">
+        <div class="dia-title">Pierna Completa</div>
+        <div class="dia-meta">4 ejercicios · 2 min descanso</div>
+      </div>
+      <span class="dia-badge badge-inf">Inferior</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="ex-table">
+      <div class="warm-box">
+        <div class="warm-label">Calentamiento · 2 rondas</div>
+        <div class="warm-item"><span class="warm-dot">●</span><span>Flexión de rodillas en Pike — 15 reps</span></div>
+        <div class="warm-item"><span class="warm-dot">●</span><span>Plank to Squat — 10 reps</span></div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-row">
+          <div class="ex-num">1</div>
+          <div class="ex-info"><div class="ex-name">Step Down</div><div class="ex-note">3 × 10–12 · 2 min descanso</div></div>
+          <div class="ex-right">
+            <div class="chip">3 × 10-12</div>
+            <div class="reg-row">
+              <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+              <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+              <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-row">
+          <div class="ex-num">2</div>
+          <div class="ex-info"><div class="ex-name">Prensa</div><div class="ex-note">3 × 10–15 · 2 min descanso</div></div>
+          <div class="ex-right">
+            <div class="chip">3 × 10-15</div>
+            <div class="reg-row">
+              <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+              <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+              <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-group">
+        <div class="ex-group-header">Ejercicio 3 — Biserie · 2 min descanso</div>
+        <div class="ex-card">
+          <div class="ex-row">
+            <div class="ex-num">A</div>
+            <div class="ex-info"><div class="ex-name">Aductores en máquina</div><div class="ex-note">3 × 15 reps</div></div>
+            <div class="ex-right">
+              <div class="chip">3 × 15</div>
+              <div class="reg-row">
+                <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+                <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+                <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ex-card">
+          <div class="ex-row">
+            <div class="ex-num">B</div>
+            <div class="ex-info"><div class="ex-name">Pantorrilla sentada</div><div class="ex-note">3 × 15 reps</div></div>
+            <div class="ex-right">
+              <div class="chip">3 × 15</div>
+              <div class="reg-row">
+                <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+                <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+                <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-row">
+          <div class="ex-num">4</div>
+          <div class="ex-info"><div class="ex-name">Búlgaras en Smith</div><div class="ex-note">3 × 10–12 c/pierna · 2 min descanso</div></div>
+          <div class="ex-right">
+            <div class="chip">3 × 10-12</div>
+            <div class="chip-sm">c/pierna</div>
+            <div class="reg-row">
+              <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+              <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+              <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notas-box">
+        <div class="notas-hdr">Notas de la sesión</div>
+        <textarea class="notas-ta" placeholder="Observaciones, ajustes, cómo se sintió Majo hoy..."></textarea>
+      </div>
+    </div>
+  </details>
+
+  <!-- DÍA 2 -->
+  <details>
+    <summary>
+      <div class="dia-num">02</div>
+      <div class="dia-info">
+        <div class="dia-title">Tren Superior</div>
+        <div class="dia-meta">4 biseries · Escaleras 10 min</div>
+      </div>
+      <span class="dia-badge badge-sup">Superior</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="ex-table">
+      <div class="warm-box">
+        <div class="warm-label">Calentamiento</div>
+        <div class="warm-item"><span class="warm-dot">●</span><span>Escaleras — 10 min aumentando velocidad progresivamente</span></div>
+      </div>
+
+      <div class="ex-group">
+        <div class="ex-group-header">Ejercicio 1 — Biserie</div>
+        <div class="ex-card">
+          <div class="ex-row">
+            <div class="ex-num">A</div>
+            <div class="ex-info"><div class="ex-name">Press de hombros de rodillas</div><div class="ex-note">3 × 8–12 · Der / Izq / Doble</div></div>
+            <div class="ex-right">
+              <div class="chip">3 × 8-12</div>
+              <div class="reg-row">
+                <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+                <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+                <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ex-card">
+          <div class="ex-row">
+            <div class="ex-num">B</div>
+            <div class="ex-info"><div class="ex-name">Abdominales con rueda</div><div class="ex-note">3 × 6–10 reps</div></div>
+            <div class="ex-right">
+              <div class="chip">3 × 6-10</div>
+              <div class="reg-row">
+                <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="descanso-bar"><strong>Descanso:</strong> entre sets</div>
+      </div>
+
+      <div class="ex-group">
+        <div class="ex-group-header">Ejercicio 2 — Biserie</div>
+        <div class="ex-card">
+          <div class="ex-row">
+            <div class="ex-num">A</div>
+            <div class="ex-info"><div class="ex-name">Remo con barra</div><div class="ex-note">3 × 10–12 reps</div></div>
+            <div class="ex-right">
+              <div class="chip">3 × 10-12</div>
+              <div class="reg-row">
+                <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+                <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+                <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ex-card">
+          <div class="ex-row">
+            <div class="ex-num">B</div>
+            <div class="ex-info"><div class="ex-name">Martillo con mancuerna</div><div class="ex-note">3 × 10–15 reps</div></div>
+            <div class="ex-right">
+              <div class="chip">3 × 10-15</div>
+              <div class="reg-row">
+                <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+                <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+                <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="descanso-bar"><strong>Descanso:</strong> entre sets</div>
+      </div>
+
+      <div class="ex-group">
+        <div class="ex-group-header">Ejercicio 3 — Biserie</div>
+        <div class="ex-card">
+          <div class="ex-row">
+            <div class="ex-num">A</div>
+            <div class="ex-info"><div class="ex-name">Face Pull</div><div class="ex-note">3 × 15 reps</div></div>
+            <div class="ex-right">
+              <div class="chip">3 × 15</div>
+              <div class="reg-row">
+                <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+                <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+                <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ex-card">
+          <div class="ex-row">
+            <div class="ex-num">B</div>
+            <div class="ex-info"><div class="ex-name">Trícep en polea con soga</div><div class="ex-note">3 × 10–15 reps</div></div>
+            <div class="ex-right">
+              <div class="chip">3 × 10-15</div>
+              <div class="reg-row">
+                <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+                <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+                <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="descanso-bar"><strong>Descanso:</strong> entre sets</div>
+      </div>
+
+      <div class="ex-group">
+        <div class="ex-group-header">Ejercicio 4 — Biserie Abs</div>
+        <div class="ex-card">
+          <div class="ex-row">
+            <div class="ex-num">A</div>
+            <div class="ex-info"><div class="ex-name">Renegade Row</div><div class="ex-note">3 × 20 reps</div></div>
+            <div class="ex-right">
+              <div class="chip">3 × 20</div>
+              <div class="reg-row">
+                <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+                <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+                <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ex-card">
+          <div class="ex-row">
+            <div class="ex-num">B</div>
+            <div class="ex-info">
+              <div class="ex-name">Jumping Jacks</div>
+              <div class="ex-note">3 × 30–40 seg</div>
+              <div class="ex-warn">⚠️ Monitorear rodilla — no superar 40 seg</div>
+            </div>
+            <div class="ex-right"><div class="chip">3 × 30-40"</div></div>
+          </div>
+        </div>
+        <div class="descanso-bar"><strong>Descanso:</strong> entre sets</div>
+      </div>
+
+      <div class="notas-box">
+        <div class="notas-hdr">Notas de la sesión</div>
+        <textarea class="notas-ta" placeholder="Observaciones, ajustes, cómo se sintió Majo hoy..."></textarea>
+      </div>
+    </div>
+  </details>
+
+  <!-- DÍA 3 -->
+  <details>
+    <summary>
+      <div class="dia-num">03</div>
+      <div class="dia-info">
+        <div class="dia-title">Glúteos & Femorales</div>
+        <div class="dia-meta">4 ejercicios · 2 min descanso</div>
+      </div>
+      <span class="dia-badge badge-glut">Glúteos</span>
+      <span class="chevron">▾</span>
+    </summary>
+    <div class="ex-table">
+      <div class="warm-box">
+        <div class="warm-label">Calentamiento · 2 rondas con banda</div>
+        <div class="warm-item"><span class="warm-dot">●</span><span>Squat + pasos laterales — 15 reps</span></div>
+        <div class="warm-item"><span class="warm-dot">●</span><span>Glute bridge con abducción — 15 reps</span></div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-row">
+          <div class="ex-num">1</div>
+          <div class="ex-info"><div class="ex-name">Sumo Squat con barra</div><div class="ex-note">3 × 10–12 · 2 min descanso</div></div>
+          <div class="ex-right">
+            <div class="chip">3 × 10-12</div>
+            <div class="reg-row">
+              <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+              <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+              <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-row">
+          <div class="ex-num">2</div>
+          <div class="ex-info"><div class="ex-name">Peso muerto unilateral</div><div class="ex-note">3 × 8–10 c/pierna · 2 min descanso</div></div>
+          <div class="ex-right">
+            <div class="chip">3 × 8-10</div>
+            <div class="chip-sm">c/pierna</div>
+            <div class="reg-row">
+              <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+              <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+              <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-row">
+          <div class="ex-num">3</div>
+          <div class="ex-info"><div class="ex-name">Hip Thrust bilateral en máquina</div><div class="ex-note">3 × 12–15 · 2 min descanso</div></div>
+          <div class="ex-right">
+            <div class="chip">3 × 12-15</div>
+            <div class="reg-row">
+              <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+              <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+              <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-row">
+          <div class="ex-num">4</div>
+          <div class="ex-info"><div class="ex-name">Abducciones de pie</div><div class="ex-note">3 × 15 c/pierna · 2 min descanso</div></div>
+          <div class="ex-right">
+            <div class="chip">3 × 15</div>
+            <div class="chip-sm">c/pierna</div>
+            <div class="reg-row">
+              <div class="reg-wrap"><input class="inp-carga" type="text" placeholder="lbs/kg"><div class="reg-lbl">Carga</div></div>
+              <div class="reg-wrap"><input class="inp-rpe" type="text" placeholder="0-10"><div class="reg-lbl">RPE</div></div>
+              <div class="reg-wrap"><input class="inp-reps" type="text" placeholder="reps"><div class="reg-lbl">Reps</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notas-box">
+        <div class="notas-hdr">Notas de la sesión</div>
+        <textarea class="notas-ta" placeholder="Observaciones, ajustes, cómo se sintió Majo hoy..."></textarea>
+      </div>
+    </div>
+  </details>
+
+  <div class="footer">
+    <span class="footer-brand">fridaactive</span>
+    Majo Morales · Julio 2026
+  </div>
+</div>
+
+<div style="position:fixed;bottom:0;left:0;right:0;height:9rem;background:linear-gradient(to top,rgba(255,255,255,0.95) 60%,rgba(255,255,255,0) 100%);pointer-events:none;z-index:9998;"></div>
+<div style="position:fixed;bottom:2.5rem;left:0;right:0;display:flex;justify-content:center;z-index:9999;pointer-events:none;">
+  <div style="pointer-events:all;display:flex;flex-direction:column;align-items:center;gap:0.4rem;">
+    <button id="btnGuardar" style="background:#1C55E5;color:#fff;border:none;border-radius:100px;padding:0.85rem 2.5rem;font-size:0.78rem;font-weight:700;font-family:sans-serif;box-shadow:0 6px 24px rgba(28,85,229,0.4);white-space:nowrap;">Guardar mis notas</button>
+    <div id="toast" style="color:#1C55E5;font-size:0.72rem;font-weight:600;min-height:1rem;font-family:sans-serif;text-align:center;"></div>
+  </div>
+</div>
+
+<script>
+var SK = 'fa_majo_julio2026';
+function guardar() {
+  try {
+    var els = document.querySelectorAll('input.inp-carga,input.inp-rpe,input.inp-reps,textarea.notas-ta');
+    var data = {};
+    els.forEach(function(el,i){ if(el.value) data['e'+i]=el.value; });
+    localStorage.setItem(SK, JSON.stringify(data));
+    toast('Guardado correctamente');
+  } catch(e){ toast('Error al guardar'); }
+}
+function cargar() {
+  try {
+    var saved = localStorage.getItem(SK);
+    if(!saved) return;
+    var data = JSON.parse(saved);
+    var els = document.querySelectorAll('input.inp-carga,input.inp-rpe,input.inp-reps,textarea.notas-ta');
+    els.forEach(function(el,i){ if(data['e'+i]) el.value=data['e'+i]; });
+  } catch(e){}
+}
+function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; setTimeout(function(){t.textContent='';},2500); }
+window.onload=function(){
+  cargar();
+  var btn=document.getElementById('btnGuardar');
+  btn.addEventListener('click',guardar);
+  btn.addEventListener('touchstart',function(e){e.preventDefault();guardar();});
+};
+</script>
+</body>
+</html>
