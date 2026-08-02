@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FridaActive · Mi Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<style>
+  :root {
+    --blue: #1C55E5;
+    --blue-dk: #0F3FA8;
+    --text: #0a1628;
+    --muted: #7a8499;
+    --border: #E8E3D0;
+    --grad: linear-gradient(135deg, #F5ECCB 0%, #ffffff 100%);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin:0; font-family:'DM Sans',sans-serif; background:#fafafa; color:var(--text); }
+  .screen { display:none; min-height:100vh; }
+  .screen.active { display:block; }
+
+  /* ── AUTH SCREENS ── */
+  #auth-wrap { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--blue); background:linear-gradient(160deg, var(--blue) 0%, var(--blue-dk) 100%); padding:2rem 1.25rem; position:relative; overflow:hidden; }
+  .login-logo { font-size:2rem; font-weight:700; color:#fff; background:rgba(255,255,255,0.15); padding:0.5rem 1rem; border-radius:12px; margin-bottom:0.75rem; }
+  .login-brand { font-size:0.65rem; color:rgba(255,255,255,0.5); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:2rem; }
+  .auth-card { background:#fff; border-radius:20px; padding:2rem 1.75rem; width:100%; max-width:360px; box-shadow:0 20px 60px rgba(0,0,0,0.2); }
+  .auth-title { font-size:1.1rem; font-weight:700; color:var(--text); margin-bottom:0.3rem; }
+  .auth-sub { font-size:0.75rem; color:var(--muted); margin-bottom:1.5rem; font-weight:300; }
+  .auth-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); font-weight:600; margin-bottom:0.4rem; display:block; }
+  .auth-input { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:0.75rem 1rem; font-size:0.9rem; font-family:'DM Sans',sans-serif; color:var(--text); outline:none; margin-bottom:1rem; }
+  .auth-input:focus { border-color:var(--blue); }
+  .auth-btn { width:100%; background:var(--blue); color:#fff; border:none; border-radius:10px; padding:0.85rem; font-size:0.85rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; }
+  .auth-error { font-size:0.72rem; color:#e53e3e; margin-top:0.75rem; text-align:center; min-height:1rem; font-weight:500; }
+  .auth-switch { text-align:center; margin-top:1.25rem; font-size:0.78rem; color:var(--muted); }
+  .auth-switch a { color:var(--blue); font-weight:700; text-decoration:none; cursor:pointer; }
+
+  /* ── DASHBOARD ── */
+  .dash-hero { background:var(--blue); padding:2.25rem 1.5rem 1.75rem; color:#fff; }
+  .dash-hero .brand { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.6; margin-bottom:0.5rem; }
+  .dash-hero .greeting { font-size:1.3rem; font-weight:700; }
+  .dash-body { padding:1.25rem; max-width:480px; margin:0 auto; }
+  .card { background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:1.1rem 1.25rem; margin-bottom:1.1rem; }
+  .card-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--blue); font-weight:700; margin-bottom:0.6rem; }
+  .rutina-btn { display:block; background:var(--blue); color:#fff; text-align:center; padding:0.85rem; border-radius:12px; font-weight:700; font-size:0.85rem; text-decoration:none; }
+  .progreso-form-row { margin-bottom:0.85rem; }
+  .progreso-input { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:0.7rem 0.9rem; font-size:0.85rem; font-family:'DM Sans',sans-serif; color:var(--text); outline:none; }
+  .progreso-input:focus { border-color:var(--blue); }
+  .save-btn { width:100%; background:#2a7a2a; color:#fff; border:none; border-radius:10px; padding:0.8rem; font-weight:700; font-size:0.82rem; font-family:'DM Sans',sans-serif; cursor:pointer; }
+  .entry-row { display:flex; justify-content:space-between; align-items:center; padding:0.55rem 0; border-bottom:1px solid var(--border); font-size:0.8rem; }
+  .entry-row:last-child { border-bottom:none; }
+  .entry-date { color:var(--muted); font-size:0.72rem; }
+  .logout-btn { width:100%; background:none; border:1.5px solid var(--border); color:#c44; border-radius:10px; padding:0.75rem; font-weight:700; font-size:0.8rem; font-family:'DM Sans',sans-serif; cursor:pointer; margin-top:0.5rem; }
+  .empty-note { font-size:0.75rem; color:var(--muted); text-align:center; padding:0.5rem 0; }
+  #loading { position:fixed; inset:0; background:#fff; display:none; align-items:center; justify-content:center; z-index:9999; font-size:0.85rem; color:var(--muted); }
+</style>
+</head>
+<body>
+
+<div id="loading"><div>Cargando…</div></div>
+
+<!-- ══════════ LOGIN ══════════ -->
+<div id="screen-login" class="screen active">
+  <div id="auth-wrap">
+    <div class="login-logo">fa</div>
+    <div class="login-brand">fridaactive · portal de clientas</div>
+    <div class="auth-card">
+      <div class="auth-title">Bienvenida</div>
+      <div class="auth-sub">Ingresá con tu cuenta para ver tu rutina y tu progreso.</div>
+      <label class="auth-label">Email</label>
+      <input class="auth-input" type="email" id="login-email" placeholder="tu@email.com">
+      <label class="auth-label">Contraseña</label>
+      <input class="auth-input" type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="auth-btn" onclick="doLogin()">Ingresar</button>
+      <div class="auth-error" id="login-error"></div>
+      <div class="auth-switch">¿Aún no tenés cuenta? <a onclick="showScreen('screen-register')">Registrate acá</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ REGISTRO ══════════ -->
+<div id="screen-register" class="screen">
+  <div id="auth-wrap">
+    <div class="login-logo">fa</div>
+    <div class="login-brand">fridaactive · portal de clientas</div>
+    <div class="auth-card">
+      <div class="auth-title">Creá tu cuenta</div>
+      <div class="auth-sub">Necesitás el código de acceso que te dio Frida.</div>
+      <label class="auth-label">Nombre completo</label>
+      <input class="auth-input" type="text" id="reg-nombre" placeholder="Tu nombre">
+      <label class="auth-label">Email</label>
+      <input class="auth-input" type="email" id="reg-email" placeholder="tu@email.com">
+      <label class="auth-label">Teléfono</label>
+      <input class="auth-input" type="tel" id="reg-telefono" placeholder="+503 0000-0000">
+      <label class="auth-label">Contraseña</label>
+      <input class="auth-input" type="password" id="reg-password" placeholder="Mínimo 6 caracteres">
+      <label class="auth-label">Código de acceso</label>
+      <input class="auth-input" type="text" id="reg-code" placeholder="Ej: A3F92K" style="text-transform:uppercase;letter-spacing:0.1em;">
+      <button class="auth-btn" onclick="doRegister()">Crear cuenta</button>
+      <div class="auth-error" id="register-error"></div>
+      <div class="auth-switch">¿Ya tenés cuenta? <a onclick="showScreen('screen-login')">Iniciá sesión</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ DASHBOARD ══════════ -->
+<div id="screen-dashboard" class="screen">
+  <div class="dash-hero">
+    <div class="brand">fridaactive</div>
+    <div class="greeting" id="dash-greeting">Hola 👋</div>
+  </div>
+  <div class="dash-body">
+    <div class="card">
+      <div class="card-label">Tu rutina</div>
+      <a id="dash-rutina-btn" class="rutina-btn" href="#" target="_blank">📋 Ver mi rutina →</a>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Registrar progreso</div>
+      <div class="progreso-form-row">
+        <input class="progreso-input" type="date" id="prog-fecha">
+      </div>
+      <div class="progreso-form-row">
+        <input class="progreso-input" type="number" step="0.1" id="prog-peso" placeholder="Peso (kg)">
+      </div>
+      <div class="progreso-form-row">
+        <input class="progreso-input" type="number" step="0.1" id="prog-cintura" placeholder="Cintura (cm) — opcional">
+      </div>
+      <div class="progreso-form-row">
+        <textarea class="progreso-input" id="prog-notas" rows="2" placeholder="Notas — ¿cómo te sentiste?" style="resize:vertical;"></textarea>
+      </div>
+      <button class="save-btn" onclick="saveProgreso()">Guardar registro</button>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Tu historial</div>
+      <div id="progreso-list"><div class="empty-note">Sin registros todavía.</div></div>
+    </div>
+
+    <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
+  </div>
+</div>
+
+<script>
+var firebaseConfig = {
+  apiKey: "AIzaSyBiOfRq28zYeP6lZ0J5iNb9v4P92INQuPk",
+  authDomain: "fridaactive.firebaseapp.com",
+  databaseURL: "https://fridaactive-default-rtdb.firebaseio.com",
+  projectId: "fridaactive",
+  storageBucket: "fridaactive.firebasestorage.app",
+  messagingSenderId: "293980063666",
+  appId: "1:293980063666:web:c43dd2dc40019c44f686ab"
+};
+try { firebase.initializeApp(firebaseConfig); } catch(e) {}
+
+function db() { return firebase.database(); }
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(el) { el.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+}
+
+function setLoading(on) {
+  document.getElementById('loading').style.display = on ? 'flex' : 'none';
+}
+
+// ── REGISTRO ──
+function doRegister() {
+  var nombre = document.getElementById('reg-nombre').value.trim();
+  var email = document.getElementById('reg-email').value.trim();
+  var telefono = document.getElementById('reg-telefono').value.trim();
+  var password = document.getElementById('reg-password').value;
+  var code = document.getElementById('reg-code').value.trim().toUpperCase();
+  var errEl = document.getElementById('register-error');
+  errEl.textContent = '';
+
+  if (!nombre || !email || !password || !code) {
+    errEl.textContent = 'Completá todos los campos obligatorios.';
+    return;
+  }
+  if (password.length < 6) {
+    errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+    return;
+  }
+
+  setLoading(true);
+
+  // Validate the access code BEFORE creating the account, so a bad code
+  // doesn't leave behind an orphaned Firebase Auth user.
+  db().ref('linkCodes/' + code).once('value').then(function(snap) {
+    var codeData = snap.val();
+    if (!codeData || !codeData.clientId) {
+      setLoading(false);
+      errEl.textContent = 'Código de acceso inválido o ya utilizado.';
+      return;
+    }
+    firebase.auth().createUserWithEmailAndPassword(email, password).then(function(cred) {
+      var uid = cred.user.uid;
+      var clientId = codeData.clientId;
+      var updates = {};
+      updates['clientasPortal/' + uid + '/perfil'] = { nombre: nombre, email: email, telefono: telefono, clientId: clientId, fechaRegistro: new Date().toISOString() };
+      updates['client_links/' + clientId] = uid;
+      db().ref().update(updates).then(function() {
+        return db().ref('linkCodes/' + code).remove();
+      }).then(function() {
+        setLoading(false);
+        loadDashboard(uid);
+      }).catch(function(e) {
+        setLoading(false);
+        errEl.textContent = 'Error al guardar tu cuenta: ' + e.message;
+      });
+    }).catch(function(e) {
+      setLoading(false);
+      errEl.textContent = e.code === 'auth/email-already-in-use' ? 'Ese email ya está registrado. Iniciá sesión.' : 'Error: ' + e.message;
+    });
+  }).catch(function(e) {
+    setLoading(false);
+    errEl.textContent = 'Error al validar el código: ' + e.message;
+  });
+}
+
+// ── LOGIN ──
+function doLogin() {
+  var email = document.getElementById('login-email').value.trim();
+  var password = document.getElementById('login-password').value;
+  var errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  if (!email || !password) { errEl.textContent = 'Completá tu email y contraseña.'; return; }
+  setLoading(true);
+  firebase.auth().signInWithEmailAndPassword(email, password).then(function(cred) {
+    setLoading(false);
+    loadDashboard(cred.user.uid);
+  }).catch(function(e) {
+    setLoading(false);
+    errEl.textContent = 'Email o contraseña incorrectos.';
+  });
+}
+
+function doLogout() {
+  firebase.auth().signOut().then(function() { showScreen('screen-login'); });
+}
+
+// ── DASHBOARD ──
+var CLIENT_ROUTINE_URLS = {
+  'jime-mar': 'jime-mar.html', 'majo': 'majo.html', 'sara': 'sara.html',
+  'claudia': 'claudia.html', 'kennya': 'kennya.html', 'saca': 'herberth.html'
+};
+
+function loadDashboard(uid) {
+  setLoading(true);
+  db().ref('clientasPortal/' + uid).once('value').then(function(snap) {
+    var portal = snap.val() || {};
+    var perfil = portal.perfil || {};
+    document.getElementById('dash-greeting').textContent = 'Hola, ' + (perfil.nombre ? perfil.nombre.split(' ')[0] : '') + ' 👋';
+
+    var rutinaBtn = document.getElementById('dash-rutina-btn');
+    var rutinaUrl = CLIENT_ROUTINE_URLS[perfil.clientId];
+    if (rutinaUrl) {
+      rutinaBtn.href = rutinaUrl;
+      rutinaBtn.style.display = 'block';
+    } else {
+      rutinaBtn.removeAttribute('href');
+      rutinaBtn.textContent = 'Tu entrenadora todavía no asignó tu rutina.';
+      rutinaBtn.style.opacity = '0.6';
+    }
+
+    renderProgresoList(portal.progreso || {});
+    document.getElementById('prog-fecha').valueAsDate = new Date();
+    setLoading(false);
+    showScreen('screen-dashboard');
+  }).catch(function(e) {
+    setLoading(false);
+    console.warn('loadDashboard error', e.message);
+    showScreen('screen-dashboard');
+  });
+}
+
+function renderProgresoList(progreso) {
+  var entries = Object.keys(progreso).map(function(k) { return progreso[k]; });
+  entries.sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
+  var listEl = document.getElementById('progreso-list');
+  if (entries.length === 0) {
+    listEl.innerHTML = '<div class="empty-note">Sin registros todavía.</div>';
+    return;
+  }
+  var html = '';
+  entries.forEach(function(en) {
+    html += '<div class="entry-row"><div><div>' + (en.peso ? en.peso + ' kg' : '—') + (en.cintura ? ' · ' + en.cintura + ' cm' : '') + '</div>';
+    if (en.notas) html += '<div style="color:var(--muted);font-size:0.72rem;margin-top:0.15rem;">' + escapeHtml(en.notas) + '</div>';
+    html += '</div><div class="entry-date">' + (en.fecha || '') + '</div></div>';
+  });
+  listEl.innerHTML = html;
+}
+
+function escapeHtml(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function saveProgreso() {
+  var user = firebase.auth().currentUser;
+  if (!user) return;
+  var fecha = document.getElementById('prog-fecha').value;
+  var peso = document.getElementById('prog-peso').value;
+  var cintura = document.getElementById('prog-cintura').value;
+  var notas = document.getElementById('prog-notas').value.trim();
+  if (!fecha || !peso) { alert('Ingresá al menos la fecha y el peso.'); return; }
+
+  var entry = { fecha: fecha, peso: parseFloat(peso), ts: Date.now() };
+  if (cintura) entry.cintura = parseFloat(cintura);
+  if (notas) entry.notas = notas;
+
+  db().ref('clientasPortal/' + user.uid + '/progreso').push(entry).then(function() {
+    document.getElementById('prog-peso').value = '';
+    document.getElementById('prog-cintura').value = '';
+    document.getElementById('prog-notas').value = '';
+    loadDashboard(user.uid);
+  }).catch(function(e) {
+    alert('No se pudo guardar: ' + e.message);
+  });
+}
+
+// ── SESSION PERSISTENCE ──
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    loadDashboard(user.uid);
+  } else {
+    showScreen('screen-login');
+  }
+});
+</script>
+</body>
+</html>

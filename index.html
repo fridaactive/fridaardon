@@ -8,6 +8,7 @@
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script>
   var firebaseConfig = {
     apiKey: "AIzaSyBiOfRq28zYeP6lZ0J5iNb9v4P92INQuPk",
@@ -762,6 +763,11 @@
     <div id="cd-quotation" style="margin-bottom:1.5rem;"></div>
     <a id="cd-rutina-btn" href="#" target="_blank" style="display:block;background:var(--blue);color:#fff;text-align:center;padding:0.85rem;border-radius:12px;font-weight:700;font-size:0.85rem;text-decoration:none;margin-bottom:1.5rem;">Ver rutina →</a>
     <div class="section-hdr">
+      <div class="section-hdr-label">Cuenta del portal</div>
+      <div class="section-hdr-line"></div>
+    </div>
+    <div id="cd-portal" style="margin-bottom:1.5rem;"></div>
+    <div class="section-hdr">
       <div class="section-hdr-label">Cuadro de asistencia</div>
       <div class="section-hdr-line"></div>
     </div>
@@ -1226,6 +1232,106 @@ function fbListen(path, cb) {
   } catch(e) {}
 }
 
+// ══════════════════════════════
+// FIREBASE AUTH (admin) — signs Frida into Firebase Auth transparently
+// using her existing dashboard password, so her session carries a valid
+// auth token for the RTDB security rules.
+// ══════════════════════════════
+var ADMIN_EMAIL = 'admin@fridaactive.app';
+
+function bootstrapAdmin(uid) {
+  if (!uid) return;
+  try {
+    getDB().ref('admins/' + uid).set(true).catch(function(e) { console.warn('bootstrapAdmin error', e.message); });
+  } catch(e) { console.warn('bootstrapAdmin catch', e); }
+}
+
+function ensureAdminAuth(cb) {
+  try {
+    if (typeof firebase === 'undefined' || !firebase.auth) { if (cb) cb(); return; }
+    getDB();
+    firebase.auth().signInWithEmailAndPassword(ADMIN_EMAIL, PASSWORD)
+      .then(function(cred) { bootstrapAdmin(cred.user.uid); if (cb) cb(); })
+      .catch(function(err) {
+        var code = err && err.code;
+        if (code === 'auth/user-not-found' || code === 'auth/invalid-credential' || code === 'auth/invalid-login-credentials') {
+          firebase.auth().createUserWithEmailAndPassword(ADMIN_EMAIL, PASSWORD)
+            .then(function(cred) { bootstrapAdmin(cred.user.uid); if (cb) cb(); })
+            .catch(function(e2) { console.warn('Admin signup error', e2.message); if (cb) cb(); });
+        } else {
+          console.warn('Admin signin error', err && err.message);
+          if (cb) cb();
+        }
+      });
+  } catch(e) { console.warn('ensureAdminAuth catch', e); if (cb) cb(); }
+}
+
+// ── PORTAL DE CLIENTAS: códigos de vinculación de un solo uso ──
+function generateLinkCode() {
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var code = '';
+  for (var i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+  return code;
+}
+
+function createPortalLinkCode(clientId, cb) {
+  var code = generateLinkCode();
+  var db = getDB();
+  if (!db) { if (cb) cb(null); return; }
+  db.ref('linkCodes/' + code).set({ clientId: clientId, createdAt: Date.now() })
+    .then(function() { if (cb) cb(code); })
+    .catch(function(e) { console.warn('createPortalLinkCode error', e.message); if (cb) cb(null); });
+}
+
+function renderPortalSection(clientId) {
+  var el = document.getElementById('cd-portal');
+  if (!el) return;
+  el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);">Cargando…</div>';
+  var uid = CLIENT_LINKS[clientId];
+  if (uid) {
+    fbGet('clientasPortal/' + uid, function(portal) {
+      var perfil = (portal && portal.perfil) || {};
+      var progreso = (portal && portal.progreso) || {};
+      var entries = Object.keys(progreso).map(function(k) { return progreso[k]; }).sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
+      var html = '<div style="background:#F0FFF0;border:1px solid #cde8cd;border-radius:12px;padding:0.9rem 1rem;font-size:0.78rem;color:var(--text);">';
+      html += '<div style="font-weight:700;color:#2a7a2a;margin-bottom:0.3rem;">✅ Cuenta vinculada</div>';
+      html += '<div>' + (perfil.email || 'Sin email registrado') + '</div>';
+      html += '</div>';
+      if (entries.length > 0) {
+        html += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Últimos registros de progreso</div>';
+        html += '<div style="margin-top:0.4rem;">';
+        entries.slice(0, 5).forEach(function(en) {
+          html += '<div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.75rem;">';
+          html += '<span>' + (en.fecha || '') + '</span>';
+          html += '<span>' + (en.peso ? en.peso + ' kg' : '') + '</span>';
+          html += '</div>';
+        });
+        html += '</div>';
+      } else {
+        html += '<div style="margin-top:0.5rem;font-size:0.72rem;color:var(--muted);">Aún no registra progreso.</div>';
+      }
+      el.innerHTML = html;
+    });
+  } else {
+    el.innerHTML = '<div style="background:#fff8ee;border:1px solid #f0dca0;border-radius:12px;padding:0.9rem 1rem;font-size:0.78rem;color:var(--text);">'
+      + '<div style="margin-bottom:0.6rem;">Esta clienta aún no se registró en el portal.</div>'
+      + '<button onclick="handleGenerateLinkCode(\'' + clientId + '\')" style="background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.6rem 1rem;font-weight:700;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Generar código de acceso</button>'
+      + '</div>';
+  }
+}
+
+function handleGenerateLinkCode(clientId) {
+  var el = document.getElementById('cd-portal');
+  createPortalLinkCode(clientId, function(code) {
+    if (!code) { alert('No se pudo generar el código. Revisá la conexión con Firebase.'); return; }
+    el.innerHTML = '<div style="background:#eef6ff;border:1px solid #cfe3fb;border-radius:12px;padding:1rem;text-align:center;">'
+      + '<div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.4rem;">Código de acceso (un solo uso)</div>'
+      + '<div style="font-size:1.5rem;font-weight:700;letter-spacing:0.15em;color:var(--blue);margin-bottom:0.6rem;">' + code + '</div>'
+      + '<div style="font-size:0.72rem;color:var(--muted);">Enviaselo a la clienta para que lo use al registrarse en el portal (portal.html).</div>'
+      + '</div>';
+  });
+}
+
 // ── GASTOS FIJOS ──
 function renderFijos() {
   var fijos = JSON.parse(localStorage.getItem('fa_fijos') || '[]');
@@ -1313,8 +1419,8 @@ function checkPassword() {
     if (loadingEl) loadingEl.style.display = 'flex';
     // Hide all screens first
     document.querySelectorAll('.screen, [id="login"], [id="dashboard"], [id="clientes"], [id="client-detail"], [id="planificacion"], [id="finanzas"]').forEach(function(el) { el.classList.remove('active'); });
-    // Trigger Firebase sync
-    window.onload();
+    // Authenticate against Firebase Auth, then trigger Firebase sync
+    ensureAdminAuth(function() { window.onload(); });
   } else {
     document.getElementById('login-error').textContent = 'Contraseña incorrecta.';
     document.getElementById('pwd-input').value = '';
@@ -1449,6 +1555,7 @@ function slugify(name) {
 
 loadCustomClients();
 
+var CLIENT_LINKS = JSON.parse(localStorage.getItem('fa_client_links') || '{}');
 var currentClient = null;
 
 function countSessionsInCycle(id, c) {
@@ -2310,6 +2417,9 @@ function openClientDetail(id) {
   // Asistencia
   renderAsistencia(id, c);
 
+  // Portal de clienta
+  renderPortalSection(id);
+
   showScreen('client-detail');
 }
 
@@ -2824,8 +2934,15 @@ window.onload = function() {
     // Show loading while Firebase syncs
     var loadingEl = document.getElementById('loading');
     if (loadingEl) loadingEl.style.display = 'flex';
+    ensureAdminAuth(syncAllFirebaseData);
+  } else {
+    showScreen('login');
+  }
+};
+
+function syncAllFirebaseData() {
     // Sync all data from Firebase first, then show dashboard
-    var totalRequests = 9;
+    var totalRequests = 10;
     var completedRequests = 0;
 
     function onFirebaseReady() {
@@ -2926,16 +3043,18 @@ window.onload = function() {
       });
     });
 
+    fbGet('client_links', function(data) {
+      CLIENT_LINKS = data || {};
+      localStorage.setItem('fa_client_links', JSON.stringify(CLIENT_LINKS));
+      onFirebaseReady();
+    });
+
     fbGet('cal/marks', function(marks) {
       calMarks = (marks && Object.keys(marks).length > 0) ? marks : JSON.parse(localStorage.getItem('fa_cal_marks') || '{}');
       localStorage.setItem('fa_cal_marks', JSON.stringify(calMarks));
       onFirebaseReady();
     });
-
-  } else {
-    showScreen('login');
-  }
-};
+}
 
 // ══════════════════════════════
 // CALENDAR
