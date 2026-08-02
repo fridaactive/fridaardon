@@ -302,17 +302,19 @@ function doRegister() {
 
   setLoading(true);
 
-  // Validate the access code BEFORE creating the account, so a bad code
-  // doesn't leave behind an orphaned Firebase Auth user.
-  db().ref('linkCodes/' + code).once('value').then(function(snap) {
-    var codeData = snap.val();
-    if (!codeData || !codeData.clientId) {
-      setLoading(false);
-      errEl.textContent = 'Código de acceso inválido o ya utilizado.';
-      return;
-    }
-    firebase.auth().createUserWithEmailAndPassword(email, password).then(function(cred) {
-      var uid = cred.user.uid;
+  // The security rules require being signed in to read linkCodes, so the
+  // account has to exist first. If the code turns out to be invalid, we
+  // delete the just-created account instead of leaving it orphaned.
+  firebase.auth().createUserWithEmailAndPassword(email, password).then(function(cred) {
+    var uid = cred.user.uid;
+    db().ref('linkCodes/' + code).once('value').then(function(snap) {
+      var codeData = snap.val();
+      if (!codeData || !codeData.clientId) {
+        cred.user.delete().catch(function() {});
+        setLoading(false);
+        errEl.textContent = 'Código de acceso inválido o ya utilizado.';
+        return;
+      }
       var clientId = codeData.clientId;
       var updates = {};
       updates['clientasPortal/' + uid + '/perfil'] = { nombre: nombre, email: email, telefono: telefono, clientId: clientId, fechaRegistro: new Date().toISOString() };
@@ -327,12 +329,13 @@ function doRegister() {
         errEl.textContent = 'Error al guardar tu cuenta: ' + e.message;
       });
     }).catch(function(e) {
+      cred.user.delete().catch(function() {});
       setLoading(false);
-      errEl.textContent = e.code === 'auth/email-already-in-use' ? 'Ese email ya está registrado. Iniciá sesión.' : 'Error: ' + e.message;
+      errEl.textContent = 'Error al validar el código: ' + e.message;
     });
   }).catch(function(e) {
     setLoading(false);
-    errEl.textContent = 'Error al validar el código: ' + e.message;
+    errEl.textContent = e.code === 'auth/email-already-in-use' ? 'Ese email ya está registrado. Iniciá sesión.' : 'Error: ' + e.message;
   });
 }
 
