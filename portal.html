@@ -177,6 +177,7 @@
       <input class="auth-input" type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
       <button class="auth-btn" onclick="doLogin()">Ingresar</button>
       <div class="auth-error" id="login-error"></div>
+      <div class="auth-switch"><a onclick="doForgotPassword()">¿Olvidaste tu contraseña?</a></div>
       <div class="auth-switch">¿Aún no tenés cuenta? <a onclick="showScreen('screen-register')">Registrate acá</a></div>
     </div>
   </div>
@@ -588,6 +589,26 @@ function doLogin() {
   }).catch(function(e) {
     setLoading(false);
     errEl.textContent = 'Email o contraseña incorrectos.';
+  });
+}
+
+function doForgotPassword() {
+  var email = document.getElementById('login-email').value.trim();
+  var errEl = document.getElementById('login-error');
+  if (!email) {
+    errEl.style.color = '#e53e3e';
+    errEl.textContent = 'Escribí tu email arriba y volvé a hacer clic en "¿Olvidaste tu contraseña?".';
+    return;
+  }
+  setLoading(true);
+  firebase.auth().sendPasswordResetEmail(email).then(function() {
+    setLoading(false);
+    errEl.style.color = '#2a7a2a';
+    errEl.textContent = 'Te enviamos un email a ' + email + ' con instrucciones para restablecer tu contraseña.';
+  }).catch(function(e) {
+    setLoading(false);
+    errEl.style.color = '#e53e3e';
+    errEl.textContent = e.code === 'auth/user-not-found' ? 'No existe ninguna cuenta con ese email.' : 'Error: ' + e.message;
   });
 }
 
