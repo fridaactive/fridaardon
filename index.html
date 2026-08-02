@@ -1149,6 +1149,13 @@
   </div>
   <div class="clients-wrap">
     <div class="section-hdr">
+      <div class="section-hdr-label">Solicitudes nuevas</div>
+      <div class="section-hdr-line"></div>
+    </div>
+    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Personas que se registraron solas desde tu link (ej. Instagram) y todavía no son clientas activas.</div>
+    <div id="pc-leads-list" style="margin-bottom:1.5rem;"></div>
+
+    <div class="section-hdr">
       <div class="section-hdr-label">Beneficios / Descuentos</div>
       <div class="section-hdr-line"></div>
     </div>
@@ -1423,8 +1430,52 @@ function renderPortalSection(clientId) {
   }
 }
 
+// ── PORTAL DE CLIENTAS: solicitudes nuevas (leads sin ficha vinculada) ──
+var pendingLeadUid = null;
+
+function renderLeadsSection() {
+  var db = getDB();
+  if (!db) return;
+  db.ref('clientasPortal').once('value').then(function(snap) {
+    var data = snap.val() || {};
+    var el = document.getElementById('pc-leads-list');
+    if (!el) return;
+    var leads = [];
+    Object.keys(data).forEach(function(uid) {
+      var perfil = data[uid] && data[uid].perfil;
+      if (perfil && !perfil.clientId) leads.push({ uid: uid, perfil: perfil });
+    });
+    leads.sort(function(a, b) { return (b.perfil.fechaRegistro || '').localeCompare(a.perfil.fechaRegistro || ''); });
+    if (leads.length === 0) {
+      el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Sin solicitudes nuevas.</div>';
+      return;
+    }
+    var html = '';
+    leads.forEach(function(l) {
+      var waNum = (l.perfil.telefono || '').replace(/[^0-9]/g, '');
+      var safeName = (l.perfil.nombre || '').replace(/'/g, "\\'");
+      html += '<div style="border:1px solid var(--border);border-radius:10px;padding:0.85rem 1rem;margin-bottom:0.6rem;">';
+      html += '<div style="font-weight:700;font-size:0.85rem;">' + (l.perfil.nombre || '') + '</div>';
+      html += '<div style="color:var(--muted);font-size:0.72rem;margin-top:0.15rem;">' + (l.perfil.email || '') + (l.perfil.telefono ? ' · ' + l.perfil.telefono : '') + '</div>';
+      html += '<div style="display:flex;gap:0.5rem;margin-top:0.6rem;">';
+      if (waNum) html += '<a href="https://wa.me/' + waNum + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;text-decoration:none;">💬 WhatsApp</a>';
+      html += '<button onclick="convertLeadToClient(\'' + l.uid + '\',\'' + safeName + '\')" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">✅ Convertir en clienta</button>';
+      html += '</div></div>';
+    });
+    el.innerHTML = html;
+  }).catch(function(e) { console.warn('renderLeadsSection error', e.message); });
+}
+
+function convertLeadToClient(uid, name) {
+  pendingLeadUid = uid;
+  openNewClientModal();
+  document.getElementById('nc-name').value = name || '';
+  document.getElementById('nc-type').value = 'online';
+}
+
 // ── PORTAL DE CLIENTAS: contenido global (beneficios / servicios) ──
 function renderPortalContentScreen() {
+  renderLeadsSection();
   fbGet('beneficios', function(data) {
     var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
     var el = document.getElementById('pc-beneficios-list');
@@ -3061,13 +3112,26 @@ function handleSaveNewClient() {
   localStorage.setItem('fa_cal_events', JSON.stringify(calEvents));
   fbSet('cal/events', calEvents);
 
+  if (pendingLeadUid) {
+    var leadUid = pendingLeadUid;
+    pendingLeadUid = null;
+    withAdminAuth(function() {
+      var db = getDB();
+      if (!db) return;
+      var linkUpdates = {};
+      linkUpdates['client_links/' + id] = leadUid;
+      linkUpdates['clientasPortal/' + leadUid + '/perfil/clientId'] = id;
+      db.ref().update(linkUpdates).catch(function(e) { console.warn('link lead error', e.message); });
+    });
+  }
+
   closeNewClientModal();
   renderClientsList();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
   var btnNew = document.getElementById('btn-new-client');
-  if (btnNew) btnNew.addEventListener('click', openNewClientModal);
+  if (btnNew) btnNew.addEventListener('click', function() { pendingLeadUid = null; openNewClientModal(); });
 
   var ncModalClose = document.getElementById('nc-modal-close');
   if (ncModalClose) ncModalClose.addEventListener('click', closeNewClientModal);
