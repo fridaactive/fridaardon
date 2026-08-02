@@ -1336,6 +1336,14 @@ function ensureAdminAuth(cb) {
   } catch(e) { console.warn('ensureAdminAuth catch', e); if (cb) cb(); }
 }
 
+// Re-authenticates right before a write instead of trusting a possibly
+// stale cached session (e.g. a long-idle tab whose ID token expired) —
+// Firebase rejects expired tokens as permission_denied just like a missing
+// one, and firebase.auth().currentUser stays truthy either way.
+function withAdminAuth(fn) {
+  ensureAdminAuth(fn);
+}
+
 // ── PORTAL DE CLIENTAS: códigos de vinculación de un solo uso ──
 function generateLinkCode() {
   var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -1345,12 +1353,14 @@ function generateLinkCode() {
 }
 
 function createPortalLinkCode(clientId, cb) {
-  var code = generateLinkCode();
-  var db = getDB();
-  if (!db) { if (cb) cb(null); return; }
-  db.ref('linkCodes/' + code).set({ clientId: clientId, createdAt: Date.now() })
-    .then(function() { if (cb) cb(code); })
-    .catch(function(e) { console.warn('createPortalLinkCode error', e.message); if (cb) cb(null); });
+  withAdminAuth(function() {
+    var code = generateLinkCode();
+    var db = getDB();
+    if (!db) { if (cb) cb(null); return; }
+    db.ref('linkCodes/' + code).set({ clientId: clientId, createdAt: Date.now() })
+      .then(function() { if (cb) cb(code); })
+      .catch(function(e) { console.warn('createPortalLinkCode error', e.message); if (cb) cb(null); });
+  });
 }
 
 function renderPortalSection(clientId) {
@@ -1474,17 +1484,21 @@ function saveBeneficio() {
     descuento: document.getElementById('bn-descuento').value.trim(),
     descripcion: document.getElementById('bn-descripcion').value.trim()
   };
-  var db = getDB();
-  if (!db) { alert('No se pudo conectar con Firebase.'); return; }
-  db.ref('beneficios').push(item).then(function() {
-    hideBeneficioModal();
-    renderPortalContentScreen();
-  }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) { alert('No se pudo conectar con Firebase.'); return; }
+    db.ref('beneficios').push(item).then(function() {
+      hideBeneficioModal();
+      renderPortalContentScreen();
+    }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
+  });
 }
 function deleteBeneficio(id) {
-  var db = getDB();
-  if (!db) return;
-  db.ref('beneficios/' + id).remove().then(function() { renderPortalContentScreen(); });
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) return;
+    db.ref('beneficios/' + id).remove().then(function() { renderPortalContentScreen(); });
+  });
 }
 
 function showServicioModal() {
@@ -1502,28 +1516,34 @@ function saveServicio() {
     titulo: titulo,
     descripcion: document.getElementById('sv-descripcion').value.trim()
   };
-  var db = getDB();
-  if (!db) { alert('No se pudo conectar con Firebase.'); return; }
-  db.ref('servicios').push(item).then(function() {
-    hideServicioModal();
-    renderPortalContentScreen();
-  }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) { alert('No se pudo conectar con Firebase.'); return; }
+    db.ref('servicios').push(item).then(function() {
+      hideServicioModal();
+      renderPortalContentScreen();
+    }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
+  });
 }
 function deleteServicio(id) {
-  var db = getDB();
-  if (!db) return;
-  db.ref('servicios/' + id).remove().then(function() { renderPortalContentScreen(); });
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) return;
+    db.ref('servicios/' + id).remove().then(function() { renderPortalContentScreen(); });
+  });
 }
 
 function handleSendCheckin(uid) {
   var input = document.getElementById('cd-checkin-input');
   var pregunta = input.value.trim();
   if (!pregunta) { alert('Escribí la pregunta para la clienta.'); return; }
-  var db = getDB();
-  if (!db) { alert('No se pudo conectar con Firebase.'); return; }
-  db.ref('clientasPortal/' + uid + '/checkins').push({ pregunta: pregunta, estado: 'pendiente', ts: Date.now() })
-    .then(function() { renderPortalSection(currentClient); })
-    .catch(function(e) { alert('No se pudo enviar: ' + e.message); });
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) { alert('No se pudo conectar con Firebase.'); return; }
+    db.ref('clientasPortal/' + uid + '/checkins').push({ pregunta: pregunta, estado: 'pendiente', ts: Date.now() })
+      .then(function() { renderPortalSection(currentClient); })
+      .catch(function(e) { alert('No se pudo enviar: ' + e.message); });
+  });
 }
 
 function handleGenerateLinkCode(clientId) {
