@@ -154,7 +154,7 @@
   .ls-cta-eyebrow { font-size:0.6rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.6); margin-bottom:0.5rem; }
   .ls-cta-title { font-size:1.1rem; font-weight:800; color:#fff; line-height:1.3; margin-bottom:0.35rem; }
   .ls-cta-title span { color:var(--ls-cream); }
-  .ls-cta-question { font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:1rem; }
+  .ls-cta-question { font-size:0.95rem; font-weight:700; color:var(--ls-text); text-align:center; margin-bottom:1rem; }
   .ls-wa-btn { display:flex; align-items:center; justify-content:center; gap:0.6rem; background:#25D366; color:#fff; text-decoration:none; font-size:0.88rem; font-weight:700; padding:1rem; border-radius:14px; }
   .ls-wa-btn svg { width:20px; height:20px; flex-shrink:0; }
 </style>
@@ -300,6 +300,179 @@
   </div>
 </div>
 
+<!-- ══════════ LANDING DE SERVICIOS (leads sin cuenta vinculada todavía) ══════════ -->
+<div id="screen-services-landing" class="screen">
+  <div class="ls-topbar">
+    <div class="ls-topbar-brand">fridaactive</div>
+    <button class="ls-logout-btn" onclick="doLogout()">Salir</button>
+  </div>
+
+  <div class="ls-hero">
+    <div class="ls-hero-greeting" id="ls-greeting"></div>
+    <h1 class="ls-hero-title">Entrenamientos<br><span>personalizados.</span></h1>
+    <p class="ls-hero-sub">Comienza tu mejor versión con estructura y propósito.</p>
+  </div>
+
+  <div class="ls-content">
+
+    <!-- ONLINE -->
+    <div class="ls-sec-label" style="margin-top:1.25rem;">Entrenamiento online</div>
+
+    <div style="background:linear-gradient(135deg,#F5ECCB,#FFF3C4);border:1.5px solid #E8D8A0;border-radius:16px;padding:1.1rem 1.25rem;margin-bottom:0.85rem;">
+      <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#9A7700;margin-bottom:0.35rem;">Introducción</div>
+      <div style="font-size:1rem;font-weight:800;color:#0D1B3E;margin-bottom:0.3rem;">¿Por qué online con Frida?</div>
+      <div style="font-size:0.78rem;color:#7A5C00;line-height:1.5;">Misma calidad y seguimiento personalizado — sin importar dónde estés. Entrenás desde casa, el gym o donde quieras.</div>
+    </div>
+
+    <!-- EN VIVO -->
+    <div class="ls-svc-card featured" style="margin-bottom:0.6rem;">
+      <div class="ls-svc-header blue-bg">
+        <div>
+          <div class="ls-svc-tag light">Online en vivo · Videollamada</div>
+          <div class="ls-svc-name white">Sesión 1:1 en tiempo real</div>
+        </div>
+        <div class="ls-svc-price-badge dark">
+          <div class="ls-svc-price-val white">$15</div>
+          <div class="ls-svc-price-unit light">/ sesión</div>
+        </div>
+      </div>
+      <div class="ls-svc-body">
+        <div class="ls-svc-desc">Te observo, corrijo tu técnica y te guío en tiempo real por videollamada. La opción más personalizada del online.</div>
+
+        <div class="ls-plan-mini">
+          <div>
+            <div style="font-size:0.82rem;font-weight:700;color:var(--ls-text);">Starter</div>
+            <div style="font-size:0.7rem;color:var(--ls-muted);">2 sesiones por semana</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:1.1rem;font-weight:800;color:var(--ls-blue);">$120</div>
+            <div style="font-size:0.55rem;color:var(--ls-muted);">/mes · 8 sesiones</div>
+          </div>
+        </div>
+
+        <div class="ls-plan-mini" style="margin-bottom:0.75rem;">
+          <div>
+            <div style="font-size:0.82rem;font-weight:700;color:var(--ls-text);">Active</div>
+            <div style="font-size:0.7rem;color:var(--ls-muted);">3 sesiones por semana</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:1.1rem;font-weight:800;color:var(--ls-blue);">$180</div>
+            <div style="font-size:0.55rem;color:var(--ls-muted);">/mes · 12 sesiones</div>
+          </div>
+        </div>
+
+        <div class="ls-svc-tags">
+          <span class="ls-tag">Corrección en vivo</span>
+          <span class="ls-tag">Técnica guiada</span>
+          <span class="ls-tag">Gym o casa</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RUTINA MENSUAL -->
+    <div class="ls-svc-card" style="margin-bottom:1.75rem;">
+      <div class="ls-svc-header">
+        <div>
+          <div class="ls-svc-tag">Online · Rutina mensual</div>
+          <div class="ls-svc-name">Plan de entrenamiento a través del sitio web</div>
+        </div>
+        <div class="ls-svc-price-badge">
+          <div class="ls-svc-price-val">$40</div>
+          <div class="ls-svc-price-unit">/ mes</div>
+        </div>
+      </div>
+      <div class="ls-svc-body">
+        <div class="ls-svc-desc">Rutina mensual 100% personalizada accesible desde tu perfil en nuestra plataforma. Para entrenar en el gym o desde casa, a tu ritmo.</div>
+        <div class="ls-svc-tags">
+          <span class="ls-tag">Cuenta personal</span>
+          <span class="ls-tag">Gym o casa</span>
+          <span class="ls-tag">Descuentos</span>
+          <span class="ls-tag">Progress tracking</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRESENCIAL -->
+    <div class="ls-sec-label" style="margin-top:1.25rem;">Entrenamiento presencial</div>
+
+    <div class="ls-svc-card featured" style="margin-bottom:0.6rem;">
+      <div class="ls-svc-header blue-bg">
+        <div>
+          <div class="ls-svc-tag light">Presencial · 60 min por sesión</div>
+          <div class="ls-svc-name white">Personal Coaching 1:1</div>
+        </div>
+        <div class="ls-svc-price-badge dark">
+          <div class="ls-svc-price-val white">$25</div>
+          <div class="ls-svc-price-unit light">/ sesión</div>
+        </div>
+      </div>
+      <div class="ls-svc-body">
+        <div class="ls-svc-desc">Entrenamiento 100% presencial y personalizado. Te guío, corrijo y motivo en cada sesión.</div>
+
+        <div class="ls-plan-mini">
+          <div>
+            <div style="font-size:0.82rem;font-weight:700;color:var(--ls-text);">Starter</div>
+            <div style="font-size:0.7rem;color:var(--ls-muted);">2 sesiones por semana</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:1.1rem;font-weight:800;color:var(--ls-blue);">$200</div>
+            <div style="font-size:0.55rem;color:var(--ls-muted);">/mes · 8 sesiones</div>
+          </div>
+        </div>
+
+        <div class="ls-plan-mini" style="margin-bottom:0.75rem;">
+          <div>
+            <div style="font-size:0.82rem;font-weight:700;color:var(--ls-text);">Active</div>
+            <div style="font-size:0.7rem;color:var(--ls-muted);">3 sesiones por semana</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:1.1rem;font-weight:800;color:var(--ls-blue);">$300</div>
+            <div style="font-size:0.55rem;color:var(--ls-muted);">/mes · 12 sesiones</div>
+          </div>
+        </div>
+
+        <div class="ls-svc-tags">
+          <span class="ls-tag">Guía y corrección de técnica y posturas</span>
+          <span class="ls-tag">Llevo el gym hasta tu casa</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADDON -->
+    <div class="ls-sec-label">Add-on disponible</div>
+    <div class="ls-addon">
+      <div class="ls-addon-icon">🥗</div>
+      <div>
+        <div class="ls-addon-title">Plan de alimentación con nutricionista</div>
+        <div class="ls-addon-desc">Adquiere tu plan nutricional personalizado con un experto en nutrición deportiva.</div>
+        <div class="ls-addon-price">+$10 a cualquier plan</div>
+      </div>
+    </div>
+
+    <!-- INCLUYE -->
+    <div class="ls-sec-label">Todo plan incluye</div>
+    <ul class="ls-includes">
+      <li>Rutina 100% personalizada según tus objetivos</li>
+      <li>Seguimiento y ajuste continuo de tu progreso</li>
+      <li>Atención directa 1:1 con Frida</li>
+      <li>Flexibilidad de horarios</li>
+    </ul>
+
+    <!-- CTA -->
+    <div class="ls-cta-box">
+      <div class="ls-cta-eyebrow">FridaActive</div>
+      <div class="ls-cta-title">Tu mejor versión<br><span>comienza con un paso.</span></div>
+    </div>
+
+    <div class="ls-cta-question">¿En cuál plan de entrenamiento estás interesada?</div>
+    <a class="ls-wa-btn" id="ls-wa-link" href="#" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 1.67c2.24 0 4.35.87 5.94 2.46a8.3 8.3 0 0 1 2.45 5.78c0 4.55-3.7 8.25-8.25 8.25h-.01a8.3 8.3 0 0 1-4.1-1.11l-.29-.17-3.12.82.83-3.04-.19-.31a8.24 8.24 0 0 1-1.27-4.4c0-4.55 3.7-8.28 8.28-8.28zm-2.1 4.3c-.15 0-.4.06-.61.29-.21.23-.8.78-.8 1.9 0 1.12.82 2.2.93 2.35.12.15 1.6 2.53 3.94 3.45 1.94.76 2.34.61 2.76.57.42-.04 1.36-.55 1.55-1.09.19-.53.19-.98.13-1.08-.06-.09-.21-.15-.44-.27-.23-.12-1.36-.67-1.57-.75-.21-.08-.36-.11-.52.12-.15.23-.6.75-.73.9-.13.15-.27.17-.5.06-.23-.12-.96-.35-1.83-1.12-.68-.6-1.13-1.34-1.27-1.57-.13-.23-.01-.35.1-.47.11-.11.23-.27.35-.4.11-.14.15-.23.23-.38.08-.15.04-.29-.02-.4-.06-.12-.52-1.26-.72-1.72-.19-.45-.38-.39-.52-.4h-.44z"/></svg>
+      Escribime por WhatsApp
+    </a>
+
+  </div>
+</div>
+
 <script>
 var firebaseConfig = {
   apiKey: "AIzaSyBiOfRq28zYeP6lZ0J5iNb9v4P92INQuPk",
@@ -346,8 +519,8 @@ function doRegister() {
   var errEl = document.getElementById('register-error');
   errEl.textContent = '';
 
-  if (!nombre || !email || !password || !code) {
-    errEl.textContent = 'Completá todos los campos obligatorios.';
+  if (!nombre || !email || !password) {
+    errEl.textContent = 'Completá tu nombre, email y contraseña.';
     return;
   }
   if (password.length < 6) {
@@ -358,10 +531,29 @@ function doRegister() {
   setLoading(true);
 
   // The security rules require being signed in to read linkCodes, so the
-  // account has to exist first. If the code turns out to be invalid, we
-  // delete the just-created account instead of leaving it orphaned.
+  // account has to exist first. If a code was entered and turns out to be
+  // invalid, we delete the just-created account instead of leaving it
+  // orphaned. No code at all just means: sign up as a lead, unlinked for now.
   firebase.auth().createUserWithEmailAndPassword(email, password).then(function(cred) {
     var uid = cred.user.uid;
+
+    function finishRegistration(clientId) {
+      var updates = {};
+      updates['clientasPortal/' + uid + '/perfil'] = { nombre: nombre, email: email, telefono: telefono, clientId: clientId || null, fechaRegistro: new Date().toISOString() };
+      if (clientId) updates['client_links/' + clientId] = uid;
+      db().ref().update(updates).then(function() {
+        return clientId ? db().ref('linkCodes/' + code).remove() : Promise.resolve();
+      }).then(function() {
+        setLoading(false);
+        loadDashboard(uid);
+      }).catch(function(e) {
+        setLoading(false);
+        errEl.textContent = 'Error al guardar tu cuenta: ' + e.message;
+      });
+    }
+
+    if (!code) { finishRegistration(null); return; }
+
     db().ref('linkCodes/' + code).once('value').then(function(snap) {
       var codeData = snap.val();
       if (!codeData || !codeData.clientId) {
@@ -370,19 +562,7 @@ function doRegister() {
         errEl.textContent = 'Código de acceso inválido o ya utilizado.';
         return;
       }
-      var clientId = codeData.clientId;
-      var updates = {};
-      updates['clientasPortal/' + uid + '/perfil'] = { nombre: nombre, email: email, telefono: telefono, clientId: clientId, fechaRegistro: new Date().toISOString() };
-      updates['client_links/' + clientId] = uid;
-      db().ref().update(updates).then(function() {
-        return db().ref('linkCodes/' + code).remove();
-      }).then(function() {
-        setLoading(false);
-        loadDashboard(uid);
-      }).catch(function(e) {
-        setLoading(false);
-        errEl.textContent = 'Error al guardar tu cuenta: ' + e.message;
-      });
+      finishRegistration(codeData.clientId);
     }).catch(function(e) {
       cred.user.delete().catch(function() {});
       setLoading(false);
@@ -420,6 +600,8 @@ var CLIENT_ROUTINE_URLS = {
   'jime-mar': 'jime-mar.html', 'majo': 'majo.html', 'sara': 'sara.html',
   'claudia': 'claudia.html', 'kennya': 'kennya.html', 'saca': 'herberth.html'
 };
+var WHATSAPP_NUMBER = '50372005790';
+var WHATSAPP_MESSAGE = 'Hola Frida, estoy interesada en tomar un plan de entrenamiento contigo.';
 
 var currentUid = null;
 var currentClientId = null;
@@ -433,7 +615,19 @@ function loadDashboard(uid) {
     var portal = snap.val() || {};
     var perfil = portal.perfil || {};
     currentClientId = perfil.clientId;
-    document.getElementById('dash-greeting').textContent = 'Hola, ' + (perfil.nombre ? perfil.nombre.split(' ')[0] : '') + ' 👋';
+    var firstName = perfil.nombre ? perfil.nombre.split(' ')[0] : '';
+
+    // No linked client record yet — she's a lead, not an active clienta.
+    // Show the services landing instead of an empty dashboard.
+    if (!currentClientId) {
+      document.getElementById('ls-greeting').textContent = firstName ? ('¡Hola, ' + firstName + '!') : '';
+      document.getElementById('ls-wa-link').href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(WHATSAPP_MESSAGE);
+      setLoading(false);
+      showScreen('screen-services-landing');
+      return;
+    }
+
+    document.getElementById('dash-greeting').textContent = 'Hola, ' + firstName + ' 👋';
 
     loadRutinaTab(currentClientId);
     renderProgresoList(portal.progreso || {});
