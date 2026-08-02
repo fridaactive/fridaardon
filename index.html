@@ -584,6 +584,17 @@
       </div>
     </div>
 
+    <div class="menu-card" onclick="showScreen('portal-content')">
+      <div class="menu-card-header">
+        <div class="menu-icon cream">🎁</div>
+        <div class="menu-info">
+          <div class="menu-title">Portal de Clientas</div>
+          <div class="menu-desc">Beneficios · Servicios</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+    </div>
+
     <button id="btn-quick-quote" style="width:100%;margin-top:0.5rem;background:linear-gradient(135deg,#1C55E5,#0F3FA8);color:#fff;border:none;border-radius:16px;padding:1.1rem 1.25rem;font-size:0.95rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:0.75rem;text-align:left;">
       <span style="font-size:1.5rem;">📋</span>
       <div>
@@ -762,11 +773,13 @@
     </div>
     <div id="cd-quotation" style="margin-bottom:1.5rem;"></div>
     <a id="cd-rutina-btn" href="#" target="_blank" style="display:block;background:var(--blue);color:#fff;text-align:center;padding:0.85rem;border-radius:12px;font-weight:700;font-size:0.85rem;text-decoration:none;margin-bottom:1.5rem;">Ver rutina →</a>
-    <div class="section-hdr">
-      <div class="section-hdr-label">Cuenta del portal</div>
-      <div class="section-hdr-line"></div>
+    <div id="cd-portal-section">
+      <div class="section-hdr">
+        <div class="section-hdr-label">Cuenta del portal</div>
+        <div class="section-hdr-line"></div>
+      </div>
+      <div id="cd-portal" style="margin-bottom:1.5rem;"></div>
     </div>
-    <div id="cd-portal" style="margin-bottom:1.5rem;"></div>
     <div class="section-hdr">
       <div class="section-hdr-label">Cuadro de asistencia</div>
       <div class="section-hdr-line"></div>
@@ -1123,6 +1136,61 @@
   </div>
 </div>
 
+<!-- ══════════ PORTAL DE CLIENTAS (CONTENIDO) ══════════ -->
+<div id="portal-content">
+  <div class="sub-hero">
+    <div class="back-row">
+      <button class="back-btn" onclick="showScreen('dashboard')">← Volver</button>
+      <div class="sub-brand">fridaactive</div>
+    </div>
+    <div class="sub-title">Portal de<br><span>Clientas</span></div>
+  </div>
+  <div class="clients-wrap">
+    <div class="section-hdr">
+      <div class="section-hdr-label">Beneficios / Descuentos</div>
+      <div class="section-hdr-line"></div>
+    </div>
+    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Esta lista la ven todas tus clientas online en la pestaña "Beneficios" de su portal.</div>
+    <div id="pc-beneficios-list" style="margin-bottom:0.75rem;"></div>
+    <button onclick="showBeneficioModal()" style="width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.5rem;">+ Agregar beneficio</button>
+
+    <div class="section-hdr">
+      <div class="section-hdr-label">Servicios</div>
+      <div class="section-hdr-line"></div>
+    </div>
+    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Descripción de tus servicios, visible en la pestaña "Servicios" del portal.</div>
+    <div id="pc-servicios-list" style="margin-bottom:0.75rem;"></div>
+    <button onclick="showServicioModal()" style="width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.5rem;">+ Agregar servicio</button>
+  </div>
+</div>
+
+<!-- MODAL BENEFICIO -->
+<div id="beneficio-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;">
+    <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;">Nuevo beneficio</div>
+    <div class="fin-form-row"><div class="fin-form-label">Marca</div><input class="fin-form-input" id="bn-marca" type="text" placeholder="Ej: Gatorade"></div>
+    <div class="fin-form-row"><div class="fin-form-label">Descuento</div><input class="fin-form-input" id="bn-descuento" type="text" placeholder="Ej: 15% de descuento"></div>
+    <div class="fin-form-row"><div class="fin-form-label">Descripción</div><textarea class="fin-form-input" id="bn-descripcion" rows="2" placeholder="Detalles, código, dónde usarlo..." style="resize:vertical;"></textarea></div>
+    <div style="display:flex;gap:0.75rem;margin-top:1rem;">
+      <button onclick="hideBeneficioModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
+      <button onclick="saveBeneficio()" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SERVICIO -->
+<div id="servicio-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;">
+    <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;">Nuevo servicio</div>
+    <div class="fin-form-row"><div class="fin-form-label">Título</div><input class="fin-form-input" id="sv-titulo" type="text" placeholder="Ej: Entrenamiento Online Mensual"></div>
+    <div class="fin-form-row"><div class="fin-form-label">Descripción</div><textarea class="fin-form-input" id="sv-descripcion" rows="3" placeholder="Qué incluye, precio, condiciones..." style="resize:vertical;"></textarea></div>
+    <div style="display:flex;gap:0.75rem;margin-top:1rem;">
+      <button onclick="hideServicioModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
+      <button onclick="saveServicio()" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════ MODAL EVENTO ══════════ -->
 <div class="modal-overlay" id="event-modal">
   <div class="modal">
@@ -1292,11 +1360,22 @@ function renderPortalSection(clientId) {
     fbGet('clientasPortal/' + uid, function(portal) {
       var perfil = (portal && portal.perfil) || {};
       var progreso = (portal && portal.progreso) || {};
+      var entrenoLogs = (portal && portal.entrenoLogs) || {};
+      var checkins = (portal && portal.checkins) || {};
       var entries = Object.keys(progreso).map(function(k) { return progreso[k]; }).sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
+      var logEntries = Object.keys(entrenoLogs).map(function(k) { return entrenoLogs[k]; }).sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
+      var checkinEntries = Object.keys(checkins).map(function(k) { return checkins[k]; }).sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
+      var pendingCheckin = checkinEntries.find(function(c){ return c.estado === 'pendiente'; });
+      var lastAnswered = checkinEntries.find(function(c){ return c.estado === 'respondido'; });
+
       var html = '<div style="background:#F0FFF0;border:1px solid #cde8cd;border-radius:12px;padding:0.9rem 1rem;font-size:0.78rem;color:var(--text);">';
       html += '<div style="font-weight:700;color:#2a7a2a;margin-bottom:0.3rem;">✅ Cuenta vinculada</div>';
       html += '<div>' + (perfil.email || 'Sin email registrado') + '</div>';
       html += '</div>';
+
+      html += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Sesiones registradas</div>';
+      html += '<div style="margin-top:0.3rem;font-size:0.78rem;">' + logEntries.length + ' sesión' + (logEntries.length !== 1 ? 'es' : '') + (logEntries.length > 0 ? ' · última: ' + logEntries[0].fecha : '') + '</div>';
+
       if (entries.length > 0) {
         html += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Últimos registros de progreso</div>';
         html += '<div style="margin-top:0.4rem;">';
@@ -1310,6 +1389,18 @@ function renderPortalSection(clientId) {
       } else {
         html += '<div style="margin-top:0.5rem;font-size:0.72rem;color:var(--muted);">Aún no registra progreso.</div>';
       }
+
+      html += '<div style="margin-top:0.9rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Check-in semanal</div>';
+      if (pendingCheckin) {
+        html += '<div style="margin-top:0.3rem;font-size:0.75rem;color:var(--muted);">Pregunta pendiente: "' + pendingCheckin.pregunta + '"</div>';
+      } else if (lastAnswered) {
+        html += '<div style="margin-top:0.3rem;font-size:0.75rem;">' + (lastAnswered.emoji || '') + ' ' + (lastAnswered.texto ? lastAnswered.texto : '(sin comentario)') + '</div>';
+      }
+      html += '<div style="display:flex;gap:0.5rem;margin-top:0.5rem;">';
+      html += '<input id="cd-checkin-input" type="text" placeholder="Ej: ¿Cómo te sentiste esta semana?" style="flex:1;border:1.5px solid var(--border);border-radius:8px;padding:0.5rem 0.7rem;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;">';
+      html += '<button onclick="handleSendCheckin(\'' + uid + '\')" style="background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem 0.9rem;font-weight:700;font-size:0.72rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Enviar</button>';
+      html += '</div>';
+
       el.innerHTML = html;
     });
   } else {
@@ -1318,6 +1409,119 @@ function renderPortalSection(clientId) {
       + '<button onclick="handleGenerateLinkCode(\'' + clientId + '\')" style="background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.6rem 1rem;font-weight:700;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Generar código de acceso</button>'
       + '</div>';
   }
+}
+
+// ── PORTAL DE CLIENTAS: contenido global (beneficios / servicios) ──
+function renderPortalContentScreen() {
+  fbGet('beneficios', function(data) {
+    var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
+    var el = document.getElementById('pc-beneficios-list');
+    if (items.length === 0) {
+      el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Sin beneficios cargados todavía.</div>';
+    } else {
+      var html = '';
+      items.forEach(function(it) {
+        html += '<div style="border:1px solid var(--border);border-radius:10px;padding:0.75rem 0.9rem;margin-bottom:0.6rem;">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;">';
+        html += '<div><div style="font-weight:700;font-size:0.82rem;">' + (it.data.marca||'') + '</div>';
+        if (it.data.descuento) html += '<div style="color:#2a7a2a;font-weight:700;font-size:0.75rem;margin-top:0.15rem;">' + it.data.descuento + '</div>';
+        if (it.data.descripcion) html += '<div style="color:var(--muted);font-size:0.72rem;margin-top:0.15rem;">' + it.data.descripcion + '</div>';
+        html += '</div>';
+        html += '<button onclick="deleteBeneficio(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.9rem;cursor:pointer;">✕</button>';
+        html += '</div></div>';
+      });
+      el.innerHTML = html;
+    }
+  });
+
+  fbGet('servicios', function(data) {
+    var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
+    var el = document.getElementById('pc-servicios-list');
+    if (items.length === 0) {
+      el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Sin servicios cargados todavía.</div>';
+    } else {
+      var html = '';
+      items.forEach(function(it) {
+        html += '<div style="border:1px solid var(--border);border-radius:10px;padding:0.75rem 0.9rem;margin-bottom:0.6rem;">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;">';
+        html += '<div><div style="font-weight:700;font-size:0.82rem;">' + (it.data.titulo||'') + '</div>';
+        if (it.data.descripcion) html += '<div style="color:var(--muted);font-size:0.72rem;margin-top:0.15rem;">' + it.data.descripcion + '</div>';
+        html += '</div>';
+        html += '<button onclick="deleteServicio(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.9rem;cursor:pointer;">✕</button>';
+        html += '</div></div>';
+      });
+      el.innerHTML = html;
+    }
+  });
+}
+
+function showBeneficioModal() {
+  document.getElementById('bn-marca').value = '';
+  document.getElementById('bn-descuento').value = '';
+  document.getElementById('bn-descripcion').value = '';
+  document.getElementById('beneficio-modal').style.display = 'flex';
+}
+function hideBeneficioModal() {
+  document.getElementById('beneficio-modal').style.display = 'none';
+}
+function saveBeneficio() {
+  var marca = document.getElementById('bn-marca').value.trim();
+  if (!marca) { alert('Ingresá el nombre de la marca.'); return; }
+  var item = {
+    marca: marca,
+    descuento: document.getElementById('bn-descuento').value.trim(),
+    descripcion: document.getElementById('bn-descripcion').value.trim()
+  };
+  var db = getDB();
+  if (!db) { alert('No se pudo conectar con Firebase.'); return; }
+  db.ref('beneficios').push(item).then(function() {
+    hideBeneficioModal();
+    renderPortalContentScreen();
+  }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
+}
+function deleteBeneficio(id) {
+  var db = getDB();
+  if (!db) return;
+  db.ref('beneficios/' + id).remove().then(function() { renderPortalContentScreen(); });
+}
+
+function showServicioModal() {
+  document.getElementById('sv-titulo').value = '';
+  document.getElementById('sv-descripcion').value = '';
+  document.getElementById('servicio-modal').style.display = 'flex';
+}
+function hideServicioModal() {
+  document.getElementById('servicio-modal').style.display = 'none';
+}
+function saveServicio() {
+  var titulo = document.getElementById('sv-titulo').value.trim();
+  if (!titulo) { alert('Ingresá el título del servicio.'); return; }
+  var item = {
+    titulo: titulo,
+    descripcion: document.getElementById('sv-descripcion').value.trim()
+  };
+  var db = getDB();
+  if (!db) { alert('No se pudo conectar con Firebase.'); return; }
+  db.ref('servicios').push(item).then(function() {
+    hideServicioModal();
+    renderPortalContentScreen();
+  }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
+}
+function deleteServicio(id) {
+  var db = getDB();
+  if (!db) return;
+  db.ref('servicios/' + id).remove().then(function() { renderPortalContentScreen(); });
+}
+
+function handleSendCheckin(uid) {
+  var input = document.getElementById('cd-checkin-input');
+  var pregunta = input.value.trim();
+  if (!pregunta) { alert('Escribí la pregunta para la clienta.'); return; }
+  var db = getDB();
+  if (!db) { alert('No se pudo conectar con Firebase.'); return; }
+  db.ref('clientasPortal/' + uid + '/checkins').push({ pregunta: pregunta, estado: 'pendiente', ts: Date.now() })
+    .then(function() { renderPortalSection(currentClient); })
+    .catch(function(e) { alert('No se pudo enviar: ' + e.message); });
 }
 
 function handleGenerateLinkCode(clientId) {
@@ -2417,8 +2621,16 @@ function openClientDetail(id) {
   // Asistencia
   renderAsistencia(id, c);
 
-  // Portal de clienta
-  renderPortalSection(id);
+  // Portal de clienta — solo aplica a clientas online
+  var portalSectionEl = document.getElementById('cd-portal-section');
+  if (portalSectionEl) {
+    if (c.type === 'online') {
+      portalSectionEl.style.display = '';
+      renderPortalSection(id);
+    } else {
+      portalSectionEl.style.display = 'none';
+    }
+  }
 
   showScreen('client-detail');
 }
@@ -2882,8 +3094,12 @@ function showScreen(name) {
   if (newClientModal) newClientModal.style.display = 'none';
   var fijoModal = document.getElementById('fin-fijo-modal');
   if (fijoModal) fijoModal.style.display = 'none';
+  var beneficioModal = document.getElementById('beneficio-modal');
+  if (beneficioModal) beneficioModal.style.display = 'none';
+  var servicioModal = document.getElementById('servicio-modal');
+  if (servicioModal) servicioModal.style.display = 'none';
 
-  var screens = ['login','dashboard','clientes','client-detail','planificacion','finanzas','rutina-editor'];
+  var screens = ['login','dashboard','clientes','client-detail','planificacion','finanzas','rutina-editor','portal-content'];
   screens.forEach(function(s) {
     var el = document.getElementById(s);
     if (el) el.classList.remove('active');
@@ -2892,6 +3108,7 @@ function showScreen(name) {
   if (target) target.classList.add('active');
   currentScreen = name;
   if (name === 'clientes') updateClientBadges();
+  if (name === 'portal-content') renderPortalContentScreen();
   if (name === 'planificacion') {
     // Load from Firebase first, then render
     fbGet('cal/events', function(data) {

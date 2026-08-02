@@ -8,10 +8,12 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root {
     --blue: #1C55E5;
     --blue-dk: #0F3FA8;
+    --blue-lt: #EEF4FF;
     --text: #0a1628;
     --muted: #7a8499;
     --border: #E8E3D0;
@@ -37,24 +39,69 @@
   .auth-switch { text-align:center; margin-top:1.25rem; font-size:0.78rem; color:var(--muted); }
   .auth-switch a { color:var(--blue); font-weight:700; text-decoration:none; cursor:pointer; }
 
-  /* ── DASHBOARD ── */
-  .dash-hero { background:var(--blue); padding:2.25rem 1.5rem 1.75rem; color:#fff; }
+  /* ── DASHBOARD SHELL ── */
+  .dash-hero { background:var(--blue); padding:1.75rem 1.5rem 1rem; color:#fff; }
   .dash-hero .brand { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.6; margin-bottom:0.5rem; }
-  .dash-hero .greeting { font-size:1.3rem; font-weight:700; }
-  .dash-body { padding:1.25rem; max-width:480px; margin:0 auto; }
+  .dash-hero-row { display:flex; justify-content:space-between; align-items:center; }
+  .dash-hero .greeting { font-size:1.25rem; font-weight:700; }
+  .logout-icon-btn { background:rgba(255,255,255,0.15); border:none; color:#fff; font-size:0.7rem; font-weight:700; border-radius:100px; padding:0.4rem 0.8rem; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .dash-body { padding:1rem 1.25rem 2rem; max-width:520px; margin:0 auto; }
+
+  /* ── TABS ── */
+  .tab-bar { display:flex; gap:0.4rem; overflow-x:auto; padding:0 1.25rem 0.75rem; max-width:520px; margin:0 auto; }
+  .tab-btn { flex-shrink:0; background:none; border:none; padding:0.5rem 0.85rem; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.55); font-family:'DM Sans',sans-serif; cursor:pointer; border-radius:100px; white-space:nowrap; }
+  .tab-btn.active { background:#fff; color:var(--blue); }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+
   .card { background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:1.1rem 1.25rem; margin-bottom:1.1rem; }
   .card-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--blue); font-weight:700; margin-bottom:0.6rem; }
-  .rutina-btn { display:block; background:var(--blue); color:#fff; text-align:center; padding:0.85rem; border-radius:12px; font-weight:700; font-size:0.85rem; text-decoration:none; }
-  .progreso-form-row { margin-bottom:0.85rem; }
-  .progreso-input { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:0.7rem 0.9rem; font-size:0.85rem; font-family:'DM Sans',sans-serif; color:var(--text); outline:none; }
-  .progreso-input:focus { border-color:var(--blue); }
+  .btn-primary { display:block; width:100%; background:var(--blue); color:#fff; text-align:center; padding:0.8rem; border-radius:12px; font-weight:700; font-size:0.82rem; text-decoration:none; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .btn-secondary { display:block; width:100%; background:var(--blue-lt); color:var(--blue); text-align:center; padding:0.75rem; border-radius:12px; font-weight:700; font-size:0.78rem; text-decoration:none; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; margin-top:0.5rem; }
+  .form-row { margin-bottom:0.85rem; }
+  .form-input { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:0.7rem 0.9rem; font-size:0.85rem; font-family:'DM Sans',sans-serif; color:var(--text); outline:none; }
+  .form-input:focus { border-color:var(--blue); }
   .save-btn { width:100%; background:#2a7a2a; color:#fff; border:none; border-radius:10px; padding:0.8rem; font-weight:700; font-size:0.82rem; font-family:'DM Sans',sans-serif; cursor:pointer; }
   .entry-row { display:flex; justify-content:space-between; align-items:center; padding:0.55rem 0; border-bottom:1px solid var(--border); font-size:0.8rem; }
   .entry-row:last-child { border-bottom:none; }
   .entry-date { color:var(--muted); font-size:0.72rem; }
-  .logout-btn { width:100%; background:none; border:1.5px solid var(--border); color:#c44; border-radius:10px; padding:0.75rem; font-weight:700; font-size:0.8rem; font-family:'DM Sans',sans-serif; cursor:pointer; margin-top:0.5rem; }
   .empty-note { font-size:0.75rem; color:var(--muted); text-align:center; padding:0.5rem 0; }
   #loading { position:fixed; inset:0; background:#fff; display:none; align-items:center; justify-content:center; z-index:9999; font-size:0.85rem; color:var(--muted); }
+
+  /* ── RUTINA TAB ── */
+  .day-selector { display:flex; gap:0.4rem; overflow-x:auto; margin-bottom:1rem; }
+  .day-chip { flex-shrink:0; background:var(--blue-lt); color:var(--blue); border:none; padding:0.5rem 0.9rem; border-radius:100px; font-size:0.72rem; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; }
+  .day-chip.active { background:var(--blue); color:#fff; }
+  .block-title { font-size:0.85rem; font-weight:700; margin:0.9rem 0 0.5rem; color:var(--text); }
+  .ex-row { border:1px solid var(--border); border-radius:10px; padding:0.7rem 0.85rem; margin-bottom:0.6rem; }
+  .ex-name { font-size:0.82rem; font-weight:700; margin-bottom:0.2rem; }
+  .ex-prescribed { font-size:0.7rem; color:var(--muted); margin-bottom:0.5rem; }
+  .ex-inputs { display:flex; gap:0.5rem; }
+  .ex-inputs input { flex:1; border:1.5px solid var(--border); border-radius:8px; padding:0.5rem 0.6rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; outline:none; }
+  .ex-inputs input:focus { border-color:var(--blue); }
+
+  /* ── TRACKING CALENDAR ── */
+  .track-stat { display:flex; gap:0.75rem; margin-bottom:0.9rem; }
+  .track-stat-box { flex:1; background:var(--blue-lt); border-radius:12px; padding:0.75rem; text-align:center; }
+  .track-stat-num { font-size:1.3rem; font-weight:700; color:var(--blue); }
+  .track-stat-label { font-size:0.62rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; }
+  .track-days { display:flex; flex-wrap:wrap; gap:0.35rem; }
+  .track-day { width:2.1rem; height:2.1rem; border-radius:8px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:0.62rem; color:var(--muted); }
+  .track-day.done { background:#2a7a2a; color:#fff; font-weight:700; }
+
+  /* ── BENEFICIOS / SERVICIOS ── */
+  .benef-card { border:1px solid var(--border); border-radius:12px; padding:0.9rem 1rem; margin-bottom:0.7rem; }
+  .benef-marca { font-size:0.85rem; font-weight:700; }
+  .benef-descuento { font-size:0.78rem; color:#2a7a2a; font-weight:700; margin:0.2rem 0; }
+  .benef-desc { font-size:0.75rem; color:var(--muted); }
+
+  /* ── CHECK-IN TAB ── */
+  .emoji-row { display:flex; justify-content:space-between; gap:0.5rem; margin:0.9rem 0; }
+  .emoji-btn { flex:1; background:#fff; border:1.5px solid var(--border); border-radius:12px; padding:0.7rem 0.3rem; font-size:1.4rem; cursor:pointer; text-align:center; }
+  .emoji-btn.selected { border-color:var(--blue); background:var(--blue-lt); }
+  .checkin-q { font-size:0.9rem; font-weight:700; margin-bottom:0.3rem; }
+  .checkin-hist-item { padding:0.6rem 0; border-bottom:1px solid var(--border); font-size:0.78rem; }
+  .checkin-hist-item:last-child { border-bottom:none; }
 </style>
 </head>
 <body>
@@ -108,38 +155,93 @@
 <!-- ══════════ DASHBOARD ══════════ -->
 <div id="screen-dashboard" class="screen">
   <div class="dash-hero">
-    <div class="brand">fridaactive</div>
-    <div class="greeting" id="dash-greeting">Hola 👋</div>
+    <div class="dash-hero-row">
+      <div>
+        <div class="brand">fridaactive</div>
+        <div class="greeting" id="dash-greeting">Hola 👋</div>
+      </div>
+      <button class="logout-icon-btn" onclick="doLogout()">Salir</button>
+    </div>
   </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="tab-rutina" onclick="showTab('tab-rutina')">💪 Rutina</button>
+    <button class="tab-btn" data-tab="tab-progreso" onclick="showTab('tab-progreso')">📈 Progreso</button>
+    <button class="tab-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')">🎁 Beneficios</button>
+    <button class="tab-btn" data-tab="tab-servicios" onclick="showTab('tab-servicios')">📋 Servicios</button>
+    <button class="tab-btn" data-tab="tab-checkin" onclick="showTab('tab-checkin')">💬 Check-in</button>
+  </div>
+
   <div class="dash-body">
-    <div class="card">
-      <div class="card-label">Tu rutina</div>
-      <a id="dash-rutina-btn" class="rutina-btn" href="#" target="_blank">📋 Ver mi rutina →</a>
+
+    <!-- RUTINA -->
+    <div class="tab-panel active" id="tab-rutina">
+      <div class="card" id="rutina-card">
+        <div class="card-label">Tu rutina</div>
+        <div id="rutina-content"><div class="empty-note">Cargando tu rutina…</div></div>
+      </div>
     </div>
 
-    <div class="card">
-      <div class="card-label">Registrar progreso</div>
-      <div class="progreso-form-row">
-        <input class="progreso-input" type="date" id="prog-fecha">
+    <!-- PROGRESO -->
+    <div class="tab-panel" id="tab-progreso">
+      <div class="card">
+        <div class="card-label">Días entrenados</div>
+        <div class="track-stat">
+          <div class="track-stat-box"><div class="track-stat-num" id="track-mes">0</div><div class="track-stat-label">Este mes</div></div>
+          <div class="track-stat-box"><div class="track-stat-num" id="track-racha">0</div><div class="track-stat-label">Racha (semanas)</div></div>
+        </div>
+        <div class="track-days" id="track-days"></div>
       </div>
-      <div class="progreso-form-row">
-        <input class="progreso-input" type="number" step="0.1" id="prog-peso" placeholder="Peso (kg)">
+
+      <div class="card">
+        <div class="card-label">Registrar peso / medidas</div>
+        <div class="form-row"><input class="form-input" type="date" id="prog-fecha"></div>
+        <div class="form-row"><input class="form-input" type="number" step="0.1" id="prog-peso" placeholder="Peso (kg)"></div>
+        <div class="form-row"><input class="form-input" type="number" step="0.1" id="prog-cintura" placeholder="Cintura (cm) — opcional"></div>
+        <div class="form-row"><textarea class="form-input" id="prog-notas" rows="2" placeholder="Notas — ¿cómo te sentiste?" style="resize:vertical;"></textarea></div>
+        <button class="save-btn" onclick="saveProgreso()">Guardar registro</button>
       </div>
-      <div class="progreso-form-row">
-        <input class="progreso-input" type="number" step="0.1" id="prog-cintura" placeholder="Cintura (cm) — opcional">
+
+      <div class="card">
+        <div class="card-label">Tu historial</div>
+        <div id="progreso-list"><div class="empty-note">Sin registros todavía.</div></div>
       </div>
-      <div class="progreso-form-row">
-        <textarea class="progreso-input" id="prog-notas" rows="2" placeholder="Notas — ¿cómo te sentiste?" style="resize:vertical;"></textarea>
-      </div>
-      <button class="save-btn" onclick="saveProgreso()">Guardar registro</button>
     </div>
 
-    <div class="card">
-      <div class="card-label">Tu historial</div>
-      <div id="progreso-list"><div class="empty-note">Sin registros todavía.</div></div>
+    <!-- BENEFICIOS -->
+    <div class="tab-panel" id="tab-beneficios">
+      <div class="card">
+        <div class="card-label">Descuentos de marcas aliadas</div>
+        <div id="beneficios-list"><div class="empty-note">Cargando…</div></div>
+      </div>
     </div>
 
-    <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
+    <!-- SERVICIOS -->
+    <div class="tab-panel" id="tab-servicios">
+      <div class="card">
+        <div class="card-label">Mis servicios</div>
+        <div id="servicios-list"><div class="empty-note">Cargando…</div></div>
+      </div>
+    </div>
+
+    <!-- CHECK-IN -->
+    <div class="tab-panel" id="tab-checkin">
+      <div class="card" id="checkin-pending-card" style="display:none;">
+        <div class="card-label">Check-in de esta semana</div>
+        <div class="checkin-q" id="checkin-pregunta"></div>
+        <div class="emoji-row" id="checkin-emojis"></div>
+        <div class="form-row"><textarea class="form-input" id="checkin-texto" rows="2" placeholder="Contale algo más a Frida (opcional)" style="resize:vertical;"></textarea></div>
+        <button class="save-btn" onclick="responderCheckin()">Enviar respuesta</button>
+      </div>
+      <div class="card" id="checkin-empty-card">
+        <div class="empty-note">Frida no te dejó ninguna pregunta pendiente esta semana.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Historial</div>
+        <div id="checkin-history"><div class="empty-note">Sin check-ins todavía.</div></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -162,8 +264,21 @@ function showScreen(id) {
   document.getElementById(id).classList.add('active');
 }
 
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  document.querySelector('.tab-btn[data-tab="' + id + '"]').classList.add('active');
+}
+
 function setLoading(on) {
   document.getElementById('loading').style.display = on ? 'flex' : 'none';
+}
+
+function escapeHtml(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
 }
 
 // ── REGISTRO ──
@@ -248,26 +363,28 @@ var CLIENT_ROUTINE_URLS = {
   'claudia': 'claudia.html', 'kennya': 'kennya.html', 'saca': 'herberth.html'
 };
 
+var currentUid = null;
+var currentClientId = null;
+var currentRutinaData = null;
+var currentRutinaDay = 0;
+
 function loadDashboard(uid) {
+  currentUid = uid;
   setLoading(true);
   db().ref('clientasPortal/' + uid).once('value').then(function(snap) {
     var portal = snap.val() || {};
     var perfil = portal.perfil || {};
+    currentClientId = perfil.clientId;
     document.getElementById('dash-greeting').textContent = 'Hola, ' + (perfil.nombre ? perfil.nombre.split(' ')[0] : '') + ' 👋';
 
-    var rutinaBtn = document.getElementById('dash-rutina-btn');
-    var rutinaUrl = CLIENT_ROUTINE_URLS[perfil.clientId];
-    if (rutinaUrl) {
-      rutinaBtn.href = rutinaUrl;
-      rutinaBtn.style.display = 'block';
-    } else {
-      rutinaBtn.removeAttribute('href');
-      rutinaBtn.textContent = 'Tu entrenadora todavía no asignó tu rutina.';
-      rutinaBtn.style.opacity = '0.6';
-    }
-
+    loadRutinaTab(currentClientId);
     renderProgresoList(portal.progreso || {});
+    renderTrainingTracker(portal.entrenoLogs || {});
+    renderCheckinTab(portal.checkins || {});
     document.getElementById('prog-fecha').valueAsDate = new Date();
+    loadBeneficios();
+    loadServicios();
+
     setLoading(false);
     showScreen('screen-dashboard');
   }).catch(function(e) {
@@ -277,6 +394,135 @@ function loadDashboard(uid) {
   });
 }
 
+// ── RUTINA TAB ──
+function loadRutinaTab(clientId) {
+  var el = document.getElementById('rutina-content');
+  if (!clientId) { el.innerHTML = '<div class="empty-note">Tu entrenadora todavía no vinculó tu rutina.</div>'; return; }
+  db().ref('rutinas/' + clientId).once('value').then(function(snap) {
+    var data = snap.val();
+    if (!data || !data.days || data.days.length === 0) {
+      el.innerHTML = '<div class="empty-note">Tu entrenadora todavía no asignó tu rutina.</div>';
+      return;
+    }
+    currentRutinaData = data;
+    currentRutinaDay = 0;
+    renderRutinaDay();
+  }).catch(function(e) {
+    el.innerHTML = '<div class="empty-note">No se pudo cargar tu rutina.</div>';
+    console.warn('loadRutinaTab error', e.message);
+  });
+}
+
+function renderRutinaDay() {
+  var el = document.getElementById('rutina-content');
+  var days = currentRutinaData.days;
+  var day = days[currentRutinaDay];
+
+  var html = '<div class="day-selector">';
+  days.forEach(function(d, i) {
+    html += '<button class="day-chip' + (i === currentRutinaDay ? ' active' : '') + '" onclick="selectRutinaDay(' + i + ')">' + escapeHtml(d.name) + '</button>';
+  });
+  html += '</div>';
+
+  (day.blocks || []).forEach(function(block) {
+    if (!block.exercises || block.exercises.length === 0) return;
+    html += '<div class="block-title">' + escapeHtml(block.name) + '</div>';
+    block.exercises.forEach(function(ex) {
+      var prescribed = [];
+      if (ex.series) prescribed.push(ex.series + ' series');
+      if (ex.reps) prescribed.push(ex.reps + ' reps');
+      if (ex.rpe) prescribed.push('RPE ' + ex.rpe);
+      html += '<div class="ex-row">';
+      html += '<div class="ex-name">' + escapeHtml(ex.name) + '</div>';
+      if (prescribed.length) html += '<div class="ex-prescribed">Sugerido: ' + prescribed.join(' · ') + '</div>';
+      html += '<div class="ex-inputs">';
+      html += '<input type="number" step="0.5" placeholder="Carga (kg)" data-ex="' + ex.id + '" data-field="carga">';
+      html += '<input type="text" placeholder="Reps hechas" data-ex="' + ex.id + '" data-field="reps">';
+      html += '</div></div>';
+    });
+  });
+
+  html += '<button class="btn-primary" onclick="guardarSesion()">✅ Guardar sesión de hoy</button>';
+  html += '<button class="btn-secondary" onclick="descargarRutinaPDF()">⬇️ Descargar rutina en PDF</button>';
+  var classicUrl = CLIENT_ROUTINE_URLS[currentClientId];
+  if (classicUrl) {
+    html += '<a class="btn-secondary" style="display:block;text-decoration:none;box-sizing:border-box;" href="' + classicUrl + '" target="_blank">⏱️ Ver con temporizador</a>';
+  }
+
+  el.innerHTML = html;
+}
+
+function selectRutinaDay(i) {
+  currentRutinaDay = i;
+  renderRutinaDay();
+}
+
+function guardarSesion() {
+  var day = currentRutinaData.days[currentRutinaDay];
+  var ejercicios = {};
+  var any = false;
+  document.querySelectorAll('#rutina-content [data-ex]').forEach(function(input) {
+    var exId = input.getAttribute('data-ex');
+    var field = input.getAttribute('data-field');
+    if (!input.value) return;
+    if (!ejercicios[exId]) ejercicios[exId] = {};
+    ejercicios[exId][field] = input.value;
+    any = true;
+  });
+  if (!any) { alert('Ingresá al menos la carga o las repeticiones de un ejercicio.'); return; }
+
+  var entry = {
+    fecha: new Date().toISOString().slice(0, 10),
+    dayId: day.id,
+    dayName: day.name,
+    ejercicios: ejercicios,
+    ts: Date.now()
+  };
+
+  db().ref('clientasPortal/' + currentUid + '/entrenoLogs').push(entry).then(function() {
+    alert('¡Sesión guardada! 💪');
+    db().ref('clientasPortal/' + currentUid + '/entrenoLogs').once('value').then(function(snap) {
+      renderTrainingTracker(snap.val() || {});
+    });
+  }).catch(function(e) {
+    alert('No se pudo guardar: ' + e.message);
+  });
+}
+
+function descargarRutinaPDF() {
+  if (!window.jspdf) { alert('No se pudo generar el PDF, intentá de nuevo.'); return; }
+  var doc = new window.jspdf.jsPDF();
+  var y = 15;
+  doc.setFontSize(16);
+  doc.text('FridaActive — Rutina', 14, y);
+  y += 10;
+  doc.setFontSize(9);
+  currentRutinaData.days.forEach(function(day) {
+    doc.setFontSize(12);
+    if (y > 275) { doc.addPage(); y = 15; }
+    doc.text(day.name, 14, y);
+    y += 6;
+    (day.blocks || []).forEach(function(block) {
+      if (!block.exercises || block.exercises.length === 0) return;
+      doc.setFontSize(10);
+      if (y > 275) { doc.addPage(); y = 15; }
+      doc.text(block.name, 16, y);
+      y += 5;
+      doc.setFontSize(9);
+      block.exercises.forEach(function(ex) {
+        if (y > 280) { doc.addPage(); y = 15; }
+        var line = '• ' + ex.name + '  —  ' + (ex.series || '–') + ' series x ' + (ex.reps || '–') + ' reps' + (ex.carga ? ', carga: ' + ex.carga : '') + (ex.rpe ? ', RPE ' + ex.rpe : '');
+        doc.text(line, 18, y);
+        y += 5;
+      });
+      y += 2;
+    });
+    y += 4;
+  });
+  doc.save('rutina-fridaactive.pdf');
+}
+
+// ── PROGRESO / TRACKING ──
 function renderProgresoList(progreso) {
   var entries = Object.keys(progreso).map(function(k) { return progreso[k]; });
   entries.sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
@@ -294,15 +540,7 @@ function renderProgresoList(progreso) {
   listEl.innerHTML = html;
 }
 
-function escapeHtml(s) {
-  var d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
-}
-
 function saveProgreso() {
-  var user = firebase.auth().currentUser;
-  if (!user) return;
   var fecha = document.getElementById('prog-fecha').value;
   var peso = document.getElementById('prog-peso').value;
   var cintura = document.getElementById('prog-cintura').value;
@@ -313,13 +551,160 @@ function saveProgreso() {
   if (cintura) entry.cintura = parseFloat(cintura);
   if (notas) entry.notas = notas;
 
-  db().ref('clientasPortal/' + user.uid + '/progreso').push(entry).then(function() {
+  db().ref('clientasPortal/' + currentUid + '/progreso').push(entry).then(function() {
     document.getElementById('prog-peso').value = '';
     document.getElementById('prog-cintura').value = '';
     document.getElementById('prog-notas').value = '';
-    loadDashboard(user.uid);
+    db().ref('clientasPortal/' + currentUid + '/progreso').once('value').then(function(snap) {
+      renderProgresoList(snap.val() || {});
+    });
   }).catch(function(e) {
     alert('No se pudo guardar: ' + e.message);
+  });
+}
+
+function renderTrainingTracker(entrenoLogs) {
+  var entries = Object.keys(entrenoLogs).map(function(k) { return entrenoLogs[k]; });
+  var fechas = {};
+  entries.forEach(function(en) { if (en.fecha) fechas[en.fecha] = true; });
+
+  var now = new Date();
+  var mesCount = 0;
+  Object.keys(fechas).forEach(function(f) {
+    var d = new Date(f + 'T00:00:00');
+    if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) mesCount++;
+  });
+  document.getElementById('track-mes').textContent = mesCount;
+
+  // Racha: semanas consecutivas (hacia atrás desde hoy) con al menos 1 sesión
+  var racha = 0;
+  var cursor = new Date(now);
+  for (var w = 0; w < 52; w++) {
+    var weekStart = new Date(cursor);
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+    var hasSession = false;
+    for (var i = 0; i < 7; i++) {
+      var d2 = new Date(weekStart);
+      d2.setDate(d2.getDate() + i);
+      var key = d2.getFullYear() + '-' + String(d2.getMonth() + 1).padStart(2, '0') + '-' + String(d2.getDate()).padStart(2, '0');
+      if (fechas[key]) { hasSession = true; break; }
+    }
+    if (hasSession) { racha++; cursor.setDate(cursor.getDate() - 7); } else { break; }
+  }
+  document.getElementById('track-racha').textContent = racha;
+
+  // Últimos 28 días como grilla
+  var daysEl = document.getElementById('track-days');
+  var html = '';
+  for (var d = 27; d >= 0; d--) {
+    var dt = new Date(now);
+    dt.setDate(dt.getDate() - d);
+    var key = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+    var done = !!fechas[key];
+    html += '<div class="track-day' + (done ? ' done' : '') + '">' + dt.getDate() + '</div>';
+  }
+  daysEl.innerHTML = html;
+}
+
+// ── BENEFICIOS / SERVICIOS ──
+function loadBeneficios() {
+  db().ref('beneficios').once('value').then(function(snap) {
+    var data = snap.val() || {};
+    var items = Object.keys(data).map(function(k) { return data[k]; });
+    var el = document.getElementById('beneficios-list');
+    if (items.length === 0) { el.innerHTML = '<div class="empty-note">Todavía no hay beneficios cargados.</div>'; return; }
+    var html = '';
+    items.forEach(function(b) {
+      html += '<div class="benef-card"><div class="benef-marca">' + escapeHtml(b.marca || '') + '</div>';
+      if (b.descuento) html += '<div class="benef-descuento">' + escapeHtml(b.descuento) + '</div>';
+      if (b.descripcion) html += '<div class="benef-desc">' + escapeHtml(b.descripcion) + '</div>';
+      html += '</div>';
+    });
+    el.innerHTML = html;
+  }).catch(function(e) { console.warn('loadBeneficios error', e.message); });
+}
+
+function loadServicios() {
+  db().ref('servicios').once('value').then(function(snap) {
+    var data = snap.val() || {};
+    var items = Object.keys(data).map(function(k) { return data[k]; });
+    var el = document.getElementById('servicios-list');
+    if (items.length === 0) { el.innerHTML = '<div class="empty-note">Todavía no hay servicios cargados.</div>'; return; }
+    var html = '';
+    items.forEach(function(s) {
+      html += '<div class="benef-card"><div class="benef-marca">' + escapeHtml(s.titulo || '') + '</div>';
+      if (s.descripcion) html += '<div class="benef-desc">' + escapeHtml(s.descripcion) + '</div>';
+      html += '</div>';
+    });
+    el.innerHTML = html;
+  }).catch(function(e) { console.warn('loadServicios error', e.message); });
+}
+
+// ── CHECK-IN TAB ──
+var CHECKIN_EMOJIS = ['💪', '🙂', '😓', '🤕', '😴'];
+var selectedEmoji = null;
+var pendingCheckinId = null;
+
+function renderCheckinTab(checkins) {
+  var entries = Object.keys(checkins).map(function(k) { return { id: k, data: checkins[k] }; });
+  entries.sort(function(a, b) { return (b.data.ts || 0) - (a.data.ts || 0); });
+
+  var pending = entries.find(function(e) { return e.data.estado === 'pendiente'; });
+  var pendingCard = document.getElementById('checkin-pending-card');
+  var emptyCard = document.getElementById('checkin-empty-card');
+
+  if (pending) {
+    pendingCheckinId = pending.id;
+    selectedEmoji = null;
+    document.getElementById('checkin-pregunta').textContent = pending.data.pregunta;
+    var emojiEl = document.getElementById('checkin-emojis');
+    emojiEl.innerHTML = CHECKIN_EMOJIS.map(function(e) {
+      return '<button type="button" class="emoji-btn" data-emoji="' + e + '" onclick="selectEmoji(\'' + e + '\')">' + e + '</button>';
+    }).join('');
+    document.getElementById('checkin-texto').value = '';
+    pendingCard.style.display = 'block';
+    emptyCard.style.display = 'none';
+  } else {
+    pendingCard.style.display = 'none';
+    emptyCard.style.display = 'block';
+  }
+
+  var histEl = document.getElementById('checkin-history');
+  var answered = entries.filter(function(e) { return e.data.estado === 'respondido'; });
+  if (answered.length === 0) {
+    histEl.innerHTML = '<div class="empty-note">Sin check-ins todavía.</div>';
+    return;
+  }
+  var html = '';
+  answered.forEach(function(e) {
+    html += '<div class="checkin-hist-item"><strong>' + escapeHtml(e.data.pregunta || '') + '</strong><br>';
+    html += (e.data.emoji || '') + ' ' + escapeHtml(e.data.texto || '');
+    html += '</div>';
+  });
+  histEl.innerHTML = html;
+}
+
+function selectEmoji(emoji) {
+  selectedEmoji = emoji;
+  document.querySelectorAll('.emoji-btn').forEach(function(btn) {
+    btn.classList.toggle('selected', btn.getAttribute('data-emoji') === emoji);
+  });
+}
+
+function responderCheckin() {
+  if (!selectedEmoji) { alert('Elegí un emoji para responder.'); return; }
+  var texto = document.getElementById('checkin-texto').value.trim();
+  db().ref('clientasPortal/' + currentUid + '/checkins/' + pendingCheckinId).update({
+    estado: 'respondido',
+    emoji: selectedEmoji,
+    texto: texto,
+    respondidaEn: Date.now()
+  }).then(function() {
+    db().ref('clientasPortal/' + currentUid + '/checkins').once('value').then(function(snap) {
+      renderCheckinTab(snap.val() || {});
+    });
+  }).catch(function(e) {
+    alert('No se pudo enviar: ' + e.message);
   });
 }
 
