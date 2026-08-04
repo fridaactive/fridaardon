@@ -5010,6 +5010,7 @@ function renderExerciseBankDatalist() {
 function showExerciseBankModal() {
   document.getElementById('eb-nombre').value = '';
   document.getElementById('eb-grupo').value = '';
+  document.getElementById('eb-video').value = '';
   renderExerciseBankList();
   document.getElementById('exercise-bank-modal').style.display = 'flex';
 }
@@ -5028,7 +5029,8 @@ function renderExerciseBankList() {
   items.forEach(function(it) {
     html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.55rem 0;border-bottom:1px solid var(--border);font-size:0.8rem;">';
     html += '<div><div style="font-weight:600;">' + it.data.nombre + '</div>';
-    if (it.data.grupo) html += '<div style="font-size:0.68rem;color:var(--muted);">' + it.data.grupo + '</div>';
+    if (it.data.grupo) html += '<div style="font-size:0.68rem;color:var(--muted);">' + it.data.grupo + (it.data.video ? ' · 🎥 con video' : '') + '</div>';
+    else if (it.data.video) html += '<div style="font-size:0.68rem;color:var(--muted);">🎥 con video</div>';
     html += '</div>';
     html += '<button onclick="deleteExerciseBankItem(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.85rem;cursor:pointer;">✕</button>';
     html += '</div>';
@@ -5039,6 +5041,8 @@ function saveExerciseBankItem() {
   var nombre = document.getElementById('eb-nombre').value.trim();
   if (!nombre) { alert('Ingresá el nombre del ejercicio.'); return; }
   var item = { nombre: nombre, grupo: document.getElementById('eb-grupo').value.trim() };
+  var video = document.getElementById('eb-video').value.trim();
+  if (video) item.video = video;
   withAdminAuth(function() {
     var db = getDB();
     if (!db) { alert('No se pudo conectar con Firebase.'); return; }
@@ -5049,6 +5053,7 @@ function saveExerciseBankItem() {
       renderExerciseBankList();
       document.getElementById('eb-nombre').value = '';
       document.getElementById('eb-grupo').value = '';
+      document.getElementById('eb-video').value = '';
     }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
   });
 }
@@ -5932,6 +5937,7 @@ function renderAhorrosMes() {
     <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;">Los ejercicios que agregués acá aparecen como sugerencia al escribir el nombre en cualquier rutina.</div>
     <div class="fin-form-row"><div class="fin-form-label">Nombre del ejercicio</div><input class="fin-form-input" id="eb-nombre" type="text" placeholder="Ej: Sentadilla búlgara"></div>
     <div class="fin-form-row"><div class="fin-form-label">Grupo muscular (opcional)</div><input class="fin-form-input" id="eb-grupo" type="text" placeholder="Ej: Pierna"></div>
+    <div class="fin-form-row"><div class="fin-form-label">Video de YouTube (opcional)</div><input class="fin-form-input" id="eb-video" type="text" placeholder="Pegá el link — subilo como 'No listado' en YouTube"></div>
     <button onclick="saveExerciseBankItem()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;">+ Agregar al banco</button>
     <div id="exercise-bank-list"></div>
   </div>

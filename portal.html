@@ -474,6 +474,18 @@
   </div>
 </div>
 
+<!-- ══════════ MODAL VIDEO DE TÉCNICA ══════════ -->
+<div id="video-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center;padding:1rem;">
+  <div style="width:100%;max-width:520px;">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:0.5rem;">
+      <button onclick="hideVideoModal()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1rem;width:2.2rem;height:2.2rem;border-radius:50%;cursor:pointer;">✕</button>
+    </div>
+    <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;background:#000;">
+      <iframe id="video-modal-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
 <script>
 var firebaseConfig = {
   apiKey: "AIzaSyBiOfRq28zYeP6lZ0J5iNb9v4P92INQuPk",
@@ -628,6 +640,7 @@ var currentUid = null;
 var currentClientId = null;
 var currentRutinaData = null;
 var currentRutinaDay = 0;
+var EXERCISE_BANK = {};
 
 function loadDashboard(uid) {
   currentUid = uid;
@@ -671,7 +684,11 @@ function loadDashboard(uid) {
 function loadRutinaTab(clientId) {
   var el = document.getElementById('rutina-content');
   if (!clientId) { el.innerHTML = '<div class="empty-note">Tu entrenadora todavía no vinculó tu rutina.</div>'; return; }
-  db().ref('rutinas/' + clientId).once('value').then(function(snap) {
+  db().ref('exerciseBank').once('value').then(function(snap) {
+    EXERCISE_BANK = snap.val() || {};
+  }).catch(function() {}).then(function() {
+    return db().ref('rutinas/' + clientId).once('value');
+  }).then(function(snap) {
     var data = snap.val();
     if (!data || !data.days || data.days.length === 0) {
       el.innerHTML = '<div class="empty-note">Tu entrenadora todavía no asignó tu rutina.</div>';
@@ -684,6 +701,14 @@ function loadRutinaTab(clientId) {
     el.innerHTML = '<div class="empty-note">No se pudo cargar tu rutina.</div>';
     console.warn('loadRutinaTab error', e.message);
   });
+}
+
+function findExerciseVideo(name) {
+  if (!name) return null;
+  var normalized = name.trim().toLowerCase();
+  var match = Object.keys(EXERCISE_BANK).map(function(k) { return EXERCISE_BANK[k]; })
+    .find(function(item) { return item.nombre && item.nombre.trim().toLowerCase() === normalized; });
+  return (match && match.video) ? match.video : null;
 }
 
 function renderRutinaDay() {
@@ -705,8 +730,12 @@ function renderRutinaDay() {
       if (ex.series) prescribed.push(ex.series + ' series');
       if (ex.reps) prescribed.push(ex.reps + ' reps');
       if (ex.rpe) prescribed.push('RPE ' + ex.rpe);
+      var videoUrl = findExerciseVideo(ex.name);
       html += '<div class="ex-row">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
       html += '<div class="ex-name">' + escapeHtml(ex.name) + '</div>';
+      if (videoUrl) html += '<button type="button" onclick="showExerciseVideo(\'' + videoUrl.replace(/'/g, "\\'") + '\')" style="flex-shrink:0;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">🎥 Ver técnica</button>';
+      html += '</div>';
       if (prescribed.length) html += '<div class="ex-prescribed">Sugerido: ' + prescribed.join(' · ') + '</div>';
       html += '<div class="ex-inputs">';
       html += '<input type="number" step="0.5" placeholder="Carga (kg)" data-ex="' + ex.id + '" data-field="carga">';
@@ -728,6 +757,24 @@ function renderRutinaDay() {
 function selectRutinaDay(i) {
   currentRutinaDay = i;
   renderRutinaDay();
+}
+
+// ── VIDEO DE TÉCNICA ──
+function getYouTubeEmbedUrl(url) {
+  var id = null;
+  var m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{6,})/);
+  if (m) id = m[1];
+  return id ? ('https://www.youtube.com/embed/' + id + '?autoplay=1') : url;
+}
+
+function showExerciseVideo(url) {
+  document.getElementById('video-modal-frame').src = getYouTubeEmbedUrl(url);
+  document.getElementById('video-modal').style.display = 'flex';
+}
+
+function hideVideoModal() {
+  document.getElementById('video-modal-frame').src = '';
+  document.getElementById('video-modal').style.display = 'none';
 }
 
 function guardarSesion() {
