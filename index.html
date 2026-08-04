@@ -1149,6 +1149,12 @@
   </div>
   <div class="clients-wrap">
     <div class="section-hdr">
+      <div class="section-hdr-label">Actividad de clientas online</div>
+      <div class="section-hdr-line"></div>
+    </div>
+    <div id="pc-progress-list" style="margin-bottom:1.5rem;"></div>
+
+    <div class="section-hdr">
       <div class="section-hdr-label">Solicitudes nuevas</div>
       <div class="section-hdr-line"></div>
     </div>
@@ -1179,7 +1185,8 @@
     <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;">Nuevo beneficio</div>
     <div class="fin-form-row"><div class="fin-form-label">Marca</div><input class="fin-form-input" id="bn-marca" type="text" placeholder="Ej: Gatorade"></div>
     <div class="fin-form-row"><div class="fin-form-label">Descuento</div><input class="fin-form-input" id="bn-descuento" type="text" placeholder="Ej: 15% de descuento"></div>
-    <div class="fin-form-row"><div class="fin-form-label">Descripción</div><textarea class="fin-form-input" id="bn-descripcion" rows="2" placeholder="Detalles, código, dónde usarlo..." style="resize:vertical;"></textarea></div>
+    <div class="fin-form-row"><div class="fin-form-label">Descripción</div><textarea class="fin-form-input" id="bn-descripcion" rows="2" placeholder="Detalles, dónde usarlo..." style="resize:vertical;"></textarea></div>
+    <div class="fin-form-row"><div class="fin-form-label">Vence el (opcional)</div><input class="fin-form-input" id="bn-vencimiento" type="date"></div>
     <div style="display:flex;gap:0.75rem;margin-top:1rem;">
       <button onclick="hideBeneficioModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
       <button onclick="saveBeneficio()" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Guardar</button>
@@ -1430,6 +1437,64 @@ function renderPortalSection(clientId) {
   }
 }
 
+// ── PORTAL DE CLIENTAS: actividad / progreso de clientas online ──
+function renderClientsProgressOverview() {
+  var el = document.getElementById('pc-progress-list');
+  if (!el) return;
+  var onlineLinked = Object.keys(CLIENTS).filter(function(id) {
+    return CLIENTS[id].type === 'online' && CLIENT_LINKS[id];
+  });
+  if (onlineLinked.length === 0) {
+    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientas online vinculadas al portal.</div>';
+    return;
+  }
+  el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Cargando…</div>';
+  var results = [];
+  var pending = onlineLinked.length;
+  onlineLinked.forEach(function(clientId) {
+    var uid = CLIENT_LINKS[clientId];
+    fbGet('clientasPortal/' + uid + '/entrenoLogs', function(logs) {
+      var entries = Object.keys(logs || {}).map(function(k) { return logs[k]; });
+      entries.sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
+      var weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      var thisWeekCount = entries.filter(function(e) {
+        return e.fecha && new Date(e.fecha + 'T00:00:00') >= weekAgo;
+      }).length;
+      results.push({
+        clientId: clientId,
+        name: CLIENTS[clientId].name,
+        lastFecha: entries[0] ? entries[0].fecha : null,
+        thisWeekCount: thisWeekCount
+      });
+      pending--;
+      if (pending === 0) renderProgressResults(results);
+    });
+  });
+}
+
+function renderProgressResults(results) {
+  var el = document.getElementById('pc-progress-list');
+  results.sort(function(a, b) {
+    if (!a.lastFecha && !b.lastFecha) return 0;
+    if (!a.lastFecha) return -1;
+    if (!b.lastFecha) return 1;
+    return a.lastFecha < b.lastFecha ? -1 : 1;
+  });
+  var html = '';
+  results.forEach(function(r) {
+    var statusColor = r.thisWeekCount > 0 ? '#2a7a2a' : (r.lastFecha ? '#9A7700' : '#c44');
+    var statusBg = r.thisWeekCount > 0 ? '#F0FFF0' : (r.lastFecha ? '#fff8e0' : '#fff0f0');
+    var statusText = r.thisWeekCount > 0 ? '🟢 Activa esta semana' : (r.lastFecha ? '🟡 Última: ' + r.lastFecha : '🔴 Sin sesiones registradas');
+    html += '<div onclick="openClientDetail(\'' + r.clientId + '\')" style="cursor:pointer;border:1px solid var(--border);border-radius:10px;padding:0.75rem 0.9rem;margin-bottom:0.6rem;display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
+    html += '<div><div style="font-weight:700;font-size:0.82rem;">' + r.name + '</div>';
+    html += '<div style="font-size:0.7rem;color:var(--muted);margin-top:0.15rem;">' + r.thisWeekCount + ' sesión' + (r.thisWeekCount !== 1 ? 'es' : '') + ' esta semana</div></div>';
+    html += '<span style="font-size:0.65rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:100px;background:' + statusBg + ';color:' + statusColor + ';white-space:nowrap;">' + statusText + '</span>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
 // ── PORTAL DE CLIENTAS: solicitudes nuevas (leads sin ficha vinculada) ──
 var pendingLeadUid = null;
 
@@ -1475,6 +1540,7 @@ function convertLeadToClient(uid, name) {
 
 // ── PORTAL DE CLIENTAS: contenido global (beneficios / servicios) ──
 function renderPortalContentScreen() {
+  renderClientsProgressOverview();
   renderLeadsSection();
   fbGet('beneficios', function(data) {
     var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
@@ -1482,13 +1548,20 @@ function renderPortalContentScreen() {
     if (items.length === 0) {
       el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Sin beneficios cargados todavía.</div>';
     } else {
+      var todayStr = new Date().toISOString().slice(0, 10);
       var html = '';
       items.forEach(function(it) {
+        var vencido = it.data.vencimiento && it.data.vencimiento < todayStr;
+        var canjesCount = Object.keys(it.data.canjes || {}).length;
         html += '<div style="border:1px solid var(--border);border-radius:10px;padding:0.75rem 0.9rem;margin-bottom:0.6rem;">';
         html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;">';
         html += '<div><div style="font-weight:700;font-size:0.82rem;">' + (it.data.marca||'') + '</div>';
         if (it.data.descuento) html += '<div style="color:#2a7a2a;font-weight:700;font-size:0.75rem;margin-top:0.15rem;">' + it.data.descuento + '</div>';
         if (it.data.descripcion) html += '<div style="color:var(--muted);font-size:0.72rem;margin-top:0.15rem;">' + it.data.descripcion + '</div>';
+        html += '<div style="display:flex;gap:0.5rem;margin-top:0.4rem;flex-wrap:wrap;">';
+        html += '<span style="font-size:0.65rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:100px;background:' + (vencido ? '#fff0f0;color:#c44' : '#F0FFF0;color:#2a7a2a') + ';">' + (vencido ? 'Vencido' : (it.data.vencimiento ? 'Vence ' + it.data.vencimiento : 'Sin vencimiento')) + '</span>';
+        html += '<span style="font-size:0.65rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:100px;background:var(--blue-lt);color:var(--blue);">' + canjesCount + ' canje' + (canjesCount !== 1 ? 's' : '') + '</span>';
+        html += '</div>';
         html += '</div>';
         html += '<button onclick="deleteBeneficio(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.9rem;cursor:pointer;">✕</button>';
         html += '</div></div>';
@@ -1522,6 +1595,7 @@ function showBeneficioModal() {
   document.getElementById('bn-marca').value = '';
   document.getElementById('bn-descuento').value = '';
   document.getElementById('bn-descripcion').value = '';
+  document.getElementById('bn-vencimiento').value = '';
   document.getElementById('beneficio-modal').style.display = 'flex';
 }
 function hideBeneficioModal() {
@@ -1530,11 +1604,13 @@ function hideBeneficioModal() {
 function saveBeneficio() {
   var marca = document.getElementById('bn-marca').value.trim();
   if (!marca) { alert('Ingresá el nombre de la marca.'); return; }
+  var vencimiento = document.getElementById('bn-vencimiento').value;
   var item = {
     marca: marca,
     descuento: document.getElementById('bn-descuento').value.trim(),
     descripcion: document.getElementById('bn-descripcion').value.trim()
   };
+  if (vencimiento) item.vencimiento = vencimiento;
   withAdminAuth(function() {
     var db = getDB();
     if (!db) { alert('No se pudo conectar con Firebase.'); return; }
@@ -1833,6 +1909,7 @@ function slugify(name) {
 loadCustomClients();
 
 var CLIENT_LINKS = JSON.parse(localStorage.getItem('fa_client_links') || '{}');
+var EXERCISE_BANK = JSON.parse(localStorage.getItem('fa_exercise_bank') || '{}');
 var currentClient = null;
 
 function countSessionsInCycle(id, c) {
@@ -3184,6 +3261,10 @@ function showScreen(name) {
   if (beneficioModal) beneficioModal.style.display = 'none';
   var servicioModal = document.getElementById('servicio-modal');
   if (servicioModal) servicioModal.style.display = 'none';
+  var exerciseBankModal = document.getElementById('exercise-bank-modal');
+  if (exerciseBankModal) exerciseBankModal.style.display = 'none';
+  var templateModal = document.getElementById('template-modal');
+  if (templateModal) templateModal.style.display = 'none';
 
   var screens = ['login','dashboard','clientes','client-detail','planificacion','finanzas','rutina-editor','portal-content'];
   screens.forEach(function(s) {
@@ -3245,7 +3326,7 @@ window.onload = function() {
 
 function syncAllFirebaseData() {
     // Sync all data from Firebase first, then show dashboard
-    var totalRequests = 10;
+    var totalRequests = 11;
     var completedRequests = 0;
 
     function onFirebaseReady() {
@@ -3349,6 +3430,13 @@ function syncAllFirebaseData() {
     fbGet('client_links', function(data) {
       CLIENT_LINKS = data || {};
       localStorage.setItem('fa_client_links', JSON.stringify(CLIENT_LINKS));
+      onFirebaseReady();
+    });
+
+    fbGet('exerciseBank', function(data) {
+      EXERCISE_BANK = data || {};
+      localStorage.setItem('fa_exercise_bank', JSON.stringify(EXERCISE_BANK));
+      renderExerciseBankDatalist();
       onFirebaseReady();
     });
 
@@ -4911,6 +4999,162 @@ function makeNewExercise() {
   return { id: 'ex-' + Date.now() + '-' + Math.random().toString(36).substr(2,5), name: '', series: '', reps: '', carga: '', rpe: '' };
 }
 
+// ── BANCO DE EJERCICIOS ──
+function renderExerciseBankDatalist() {
+  var el = document.getElementById('exercise-bank-datalist');
+  if (!el) return;
+  var names = Object.keys(EXERCISE_BANK).map(function(k) { return EXERCISE_BANK[k].nombre; }).filter(Boolean);
+  el.innerHTML = names.map(function(n) { return '<option value="' + n.replace(/"/g,'&quot;') + '">'; }).join('');
+}
+
+function showExerciseBankModal() {
+  document.getElementById('eb-nombre').value = '';
+  document.getElementById('eb-grupo').value = '';
+  renderExerciseBankList();
+  document.getElementById('exercise-bank-modal').style.display = 'flex';
+}
+function hideExerciseBankModal() {
+  document.getElementById('exercise-bank-modal').style.display = 'none';
+}
+function renderExerciseBankList() {
+  var el = document.getElementById('exercise-bank-list');
+  var items = Object.keys(EXERCISE_BANK).map(function(k) { return { id: k, data: EXERCISE_BANK[k] }; });
+  if (items.length === 0) {
+    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Sin ejercicios guardados todavía.</div>';
+    return;
+  }
+  items.sort(function(a,b) { return (a.data.nombre||'').localeCompare(b.data.nombre||''); });
+  var html = '';
+  items.forEach(function(it) {
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.55rem 0;border-bottom:1px solid var(--border);font-size:0.8rem;">';
+    html += '<div><div style="font-weight:600;">' + it.data.nombre + '</div>';
+    if (it.data.grupo) html += '<div style="font-size:0.68rem;color:var(--muted);">' + it.data.grupo + '</div>';
+    html += '</div>';
+    html += '<button onclick="deleteExerciseBankItem(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.85rem;cursor:pointer;">✕</button>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+function saveExerciseBankItem() {
+  var nombre = document.getElementById('eb-nombre').value.trim();
+  if (!nombre) { alert('Ingresá el nombre del ejercicio.'); return; }
+  var item = { nombre: nombre, grupo: document.getElementById('eb-grupo').value.trim() };
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) { alert('No se pudo conectar con Firebase.'); return; }
+    db.ref('exerciseBank').push(item).then(function(ref) {
+      EXERCISE_BANK[ref.key] = item;
+      localStorage.setItem('fa_exercise_bank', JSON.stringify(EXERCISE_BANK));
+      renderExerciseBankDatalist();
+      renderExerciseBankList();
+      document.getElementById('eb-nombre').value = '';
+      document.getElementById('eb-grupo').value = '';
+    }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
+  });
+}
+function deleteExerciseBankItem(id) {
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) return;
+    db.ref('exerciseBank/' + id).remove().then(function() {
+      delete EXERCISE_BANK[id];
+      localStorage.setItem('fa_exercise_bank', JSON.stringify(EXERCISE_BANK));
+      renderExerciseBankDatalist();
+      renderExerciseBankList();
+    });
+  });
+}
+
+// ── PLANTILLAS DE PROGRAMAS ──
+function uid5() { return Math.random().toString(36).substr(2, 5); }
+
+function cloneDaysWithNewIds(days) {
+  return (days || []).map(function(day, di) {
+    return {
+      id: 'd-' + Date.now() + '-' + di + '-' + uid5(),
+      name: day.name,
+      blocks: (day.blocks || []).map(function(block, bi) {
+        return {
+          id: 'b-' + Date.now() + '-' + bi + '-' + uid5(),
+          name: block.name,
+          mode: block.mode,
+          workSecs: block.workSecs,
+          restSecs: block.restSecs,
+          exercises: (block.exercises || []).map(function(ex) {
+            return { id: 'ex-' + Date.now() + '-' + uid5(), name: ex.name, series: ex.series, reps: ex.reps, carga: ex.carga, rpe: ex.rpe };
+          })
+        };
+      })
+    };
+  });
+}
+
+function showTemplateModal() {
+  document.getElementById('tpl-nombre').value = '';
+  renderTemplatesList();
+  document.getElementById('template-modal').style.display = 'flex';
+}
+function hideTemplateModal() {
+  document.getElementById('template-modal').style.display = 'none';
+}
+function renderTemplatesList() {
+  var el = document.getElementById('template-list');
+  el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Cargando…</div>';
+  fbGet('programTemplates', function(data) {
+    var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
+    if (items.length === 0) {
+      el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Sin plantillas guardadas todavía.</div>';
+      return;
+    }
+    var html = '';
+    items.forEach(function(it) {
+      var dayCount = (it.data.days || []).length;
+      html += '<div style="border:1px solid var(--border);border-radius:10px;padding:0.75rem 0.9rem;margin-bottom:0.6rem;">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;">';
+      html += '<div><div style="font-weight:700;font-size:0.82rem;">' + it.data.nombre + '</div>';
+      html += '<div style="color:var(--muted);font-size:0.7rem;margin-top:0.15rem;">' + dayCount + ' día' + (dayCount !== 1 ? 's' : '') + '</div></div>';
+      html += '<button onclick="deleteTemplate(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.85rem;cursor:pointer;">✕</button>';
+      html += '</div>';
+      html += '<button onclick="applyTemplate(\'' + it.id + '\')" style="width:100%;margin-top:0.6rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Usar en esta clienta</button>';
+      html += '</div>';
+    });
+    el.innerHTML = html;
+  });
+}
+function saveCurrentAsTemplate() {
+  var nombre = document.getElementById('tpl-nombre').value.trim();
+  if (!nombre) { alert('Ingresá un nombre para la plantilla.'); return; }
+  if (!rutinaData || !rutinaData.days || rutinaData.days.length === 0) { alert('Esta rutina todavía no tiene días para guardar.'); return; }
+  var item = { nombre: nombre, days: cloneDaysWithNewIds(rutinaData.days) };
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) { alert('No se pudo conectar con Firebase.'); return; }
+    db.ref('programTemplates').push(item).then(function() {
+      document.getElementById('tpl-nombre').value = '';
+      renderTemplatesList();
+      alert('Plantilla guardada ✅');
+    }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
+  });
+}
+function applyTemplate(templateId) {
+  if (!confirm('Esto reemplaza la rutina actual de esta clienta por la plantilla elegida. ¿Continuar?')) return;
+  fbGet('programTemplates/' + templateId, function(tpl) {
+    if (!tpl) { alert('No se pudo cargar la plantilla.'); return; }
+    rutinaData = { days: cloneDaysWithNewIds(tpl.days) };
+    rutinaCurrentDay = 0;
+    saveRutinaData(rutinaClientId, rutinaData);
+    hideTemplateModal();
+    renderRutinaEditor();
+  });
+}
+function deleteTemplate(id) {
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) return;
+    db.ref('programTemplates/' + id).remove().then(function() { renderTemplatesList(); });
+  });
+}
+
 function renderRutinaEditor() {
   var days = rutinaData.days || [];
 
@@ -5006,7 +5250,7 @@ function renderRutinaEditor() {
     block.exercises.forEach(function(ex) {
       if (mode === 'reps') {
         html += '<div class="rutina-exercise-row" data-exid="'+ex.id+'" data-blockid="'+block.id+'">';
-        html += '<input class="rutina-ex-input ex-name" placeholder="Ejercicio" value="'+escHtml(ex.name || '')+'">';
+        html += '<input class="rutina-ex-input ex-name" list="exercise-bank-datalist" placeholder="Ejercicio" value="'+escHtml(ex.name || '')+'">';
         html += '<input class="rutina-ex-input ex-series" placeholder="4" value="'+escHtml(ex.series || '')+'" style="text-align:center;">';
         html += '<input class="rutina-ex-input ex-reps" placeholder="12" value="'+escHtml(ex.reps || '')+'" style="text-align:center;">';
         html += '<input class="rutina-ex-input ex-carga" placeholder="kg" value="'+escHtml(ex.carga || '')+'" style="text-align:center;">';
@@ -5016,7 +5260,7 @@ function renderRutinaEditor() {
       } else {
         // Tiempo mode: just name
         html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--border);">';
-        html += '<input class="rutina-ex-input ex-name" placeholder="Nombre del ejercicio" value="'+escHtml(ex.name || '')+'" data-exid="'+ex.id+'" data-blockid="'+block.id+'" style="flex:1;">';
+        html += '<input class="rutina-ex-input ex-name" list="exercise-bank-datalist" placeholder="Nombre del ejercicio" value="'+escHtml(ex.name || '')+'" data-exid="'+ex.id+'" data-blockid="'+block.id+'" style="flex:1;">';
         html += '<button class="rutina-del-ex" data-exid="'+ex.id+'" data-blockid="'+block.id+'" style="background:none;border:none;color:#c44;cursor:pointer;font-size:0.8rem;padding:0;">✕</button>';
         html += '</div>';
       }
@@ -5651,10 +5895,14 @@ function renderAhorrosMes() {
     <div class="back-row">
       <button class="back-btn" id="rutina-back-btn">← Volver</button>
       <div class="sub-brand">fridaactive</div>
+      <button onclick="showExerciseBankModal()" class="rv-edit-btn" style="margin-right:0.4rem;">📚 Banco</button>
+      <button onclick="showTemplateModal()" class="rv-edit-btn" style="margin-right:0.4rem;">📋 Plantillas</button>
       <button id="rutina-mode-btn" class="rv-edit-btn">✏️ Editar</button>
     </div>
     <div class="sub-title" id="rutina-editor-title">Rutina</div>
   </div>
+
+  <datalist id="exercise-bank-datalist"></datalist>
 
   <!-- Day tabs (shared between both modes) -->
   <div class="rv-day-tabs" id="rutina-day-tabs-top"></div>
@@ -5671,6 +5919,38 @@ function renderAhorrosMes() {
       </div>
       <div id="rutina-day-content"></div>
     </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL BANCO DE EJERCICIOS ══════════ -->
+<div id="exercise-bank-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-size:1rem;font-weight:700;color:var(--text);">📚 Banco de ejercicios</div>
+      <button onclick="hideExerciseBankModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
+    </div>
+    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;">Los ejercicios que agregués acá aparecen como sugerencia al escribir el nombre en cualquier rutina.</div>
+    <div class="fin-form-row"><div class="fin-form-label">Nombre del ejercicio</div><input class="fin-form-input" id="eb-nombre" type="text" placeholder="Ej: Sentadilla búlgara"></div>
+    <div class="fin-form-row"><div class="fin-form-label">Grupo muscular (opcional)</div><input class="fin-form-input" id="eb-grupo" type="text" placeholder="Ej: Pierna"></div>
+    <button onclick="saveExerciseBankItem()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;">+ Agregar al banco</button>
+    <div id="exercise-bank-list"></div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL PLANTILLAS DE PROGRAMAS ══════════ -->
+<div id="template-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-size:1rem;font-weight:700;color:var(--text);">📋 Plantillas de programas</div>
+      <button onclick="hideTemplateModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
+    </div>
+
+    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Guardá la rutina que estás viendo como plantilla para reutilizarla en otras clientas.</div>
+    <div class="fin-form-row"><div class="fin-form-label">Nombre de la plantilla</div><input class="fin-form-input" id="tpl-nombre" type="text" placeholder="Ej: Full Body Principiante 4 semanas"></div>
+    <button onclick="saveCurrentAsTemplate()" style="width:100%;background:#2a7a2a;color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.5rem;">💾 Guardar rutina actual como plantilla</button>
+
+    <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);font-weight:700;margin-bottom:0.75rem;">Plantillas guardadas</div>
+    <div id="template-list"></div>
   </div>
 </div>
 
