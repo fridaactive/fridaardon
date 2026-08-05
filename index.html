@@ -40,28 +40,37 @@
   .auth-switch a { color:var(--blue); font-weight:700; text-decoration:none; cursor:pointer; }
 
   /* ── DASHBOARD SHELL ── */
-  .dash-hero { background:var(--blue); padding:1.75rem 1.5rem 1rem; color:#fff; }
-  .dash-hero .brand { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.6; margin-bottom:0.5rem; }
-  .dash-hero-row { display:flex; justify-content:space-between; align-items:center; }
+  .dash-hero { background:linear-gradient(160deg, #0F3FA8 0%, #1C55E5 100%); padding:1.75rem 1.5rem 1rem; color:#fff; position:relative; overflow:hidden; }
+  .dash-hero::before { content:''; position:absolute; width:220px; height:220px; border-radius:50%; background:rgba(245,236,203,0.08); top:-70px; right:-50px; }
+  .dash-hero .brand { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.6; margin-bottom:0.5rem; position:relative; }
+  .dash-hero-row { display:flex; justify-content:space-between; align-items:center; position:relative; }
   .dash-hero .greeting { font-size:1.25rem; font-weight:700; }
-  .logout-icon-btn { background:rgba(255,255,255,0.15); border:none; color:#fff; font-size:0.7rem; font-weight:700; border-radius:100px; padding:0.4rem 0.8rem; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .logout-icon-btn { background:rgba(255,255,255,0.15); border:none; color:#fff; font-size:0.7rem; font-weight:700; border-radius:100px; padding:0.4rem 0.8rem; cursor:pointer; font-family:'DM Sans',sans-serif; transition:transform 0.15s, background 0.15s; }
+  .logout-icon-btn:active { transform:scale(0.94); background:rgba(255,255,255,0.28); }
   .dash-body { padding:1rem 1.25rem 2rem; max-width:520px; margin:0 auto; }
 
   /* ── TABS ── */
-  .tab-bar { display:flex; gap:0.4rem; overflow-x:auto; padding:0 1.25rem 0.75rem; max-width:520px; margin:0 auto; }
-  .tab-btn { flex-shrink:0; background:none; border:none; padding:0.5rem 0.85rem; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.55); font-family:'DM Sans',sans-serif; cursor:pointer; border-radius:100px; white-space:nowrap; }
-  .tab-btn.active { background:#fff; color:var(--blue); }
-  .tab-panel { display:none; }
+  .tab-bar { display:flex; gap:0.4rem; overflow-x:auto; padding:0 1.25rem 0.75rem; max-width:520px; margin:0 auto; position:relative; }
+  .tab-btn { flex-shrink:0; display:inline-flex; align-items:center; gap:0.35rem; background:none; border:none; padding:0.5rem 0.85rem; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.55); font-family:'DM Sans',sans-serif; cursor:pointer; border-radius:100px; white-space:nowrap; transition:transform 0.15s, background 0.15s, color 0.15s; }
+  .tab-btn svg { width:14px; height:14px; flex-shrink:0; }
+  .tab-btn:active { transform:scale(0.94); }
+  .tab-btn.active { background:#fff; color:var(--blue); box-shadow:0 2px 8px rgba(15,63,168,0.18); }
+  .tab-panel { display:none; animation:fa-tab-in 0.22s ease; }
   .tab-panel.active { display:block; }
+  @keyframes fa-tab-in { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
 
-  .card { background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:1.1rem 1.25rem; margin-bottom:1.1rem; }
-  .card-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--blue); font-weight:700; margin-bottom:0.6rem; }
-  .btn-primary { display:block; width:100%; background:var(--blue); color:#fff; text-align:center; padding:0.8rem; border-radius:12px; font-weight:700; font-size:0.82rem; text-decoration:none; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; }
-  .btn-secondary { display:block; width:100%; background:var(--blue-lt); color:var(--blue); text-align:center; padding:0.75rem; border-radius:12px; font-weight:700; font-size:0.78rem; text-decoration:none; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; margin-top:0.5rem; }
+  .card { background:#fff; border:1.5px solid var(--border); border-radius:16px; padding:1.1rem 1.25rem; margin-bottom:1.1rem; box-shadow:0 2px 14px rgba(15,63,168,0.05); }
+  .card-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--blue); font-weight:700; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.5rem; }
+  .card-label::after { content:''; flex:1; height:1px; background:var(--border); }
+  .btn-primary { display:block; width:100%; background:var(--blue); color:#fff; text-align:center; padding:0.8rem; border-radius:14px; font-weight:700; font-size:0.82rem; text-decoration:none; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; transition:transform 0.12s, box-shadow 0.12s; box-shadow:0 4px 14px rgba(28,85,229,0.25); }
+  .btn-primary:active { transform:scale(0.97); box-shadow:0 2px 6px rgba(28,85,229,0.2); }
+  .btn-secondary { display:block; width:100%; background:var(--blue-lt); color:var(--blue); text-align:center; padding:0.75rem; border-radius:14px; font-weight:700; font-size:0.78rem; text-decoration:none; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; margin-top:0.5rem; transition:transform 0.12s; }
+  .btn-secondary:active { transform:scale(0.97); }
   .form-row { margin-bottom:0.85rem; }
-  .form-input { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:0.7rem 0.9rem; font-size:0.85rem; font-family:'DM Sans',sans-serif; color:var(--text); outline:none; }
+  .form-input { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:0.7rem 0.9rem; font-size:0.85rem; font-family:'DM Sans',sans-serif; color:var(--text); outline:none; transition:border-color 0.15s; }
   .form-input:focus { border-color:var(--blue); }
-  .save-btn { width:100%; background:#2a7a2a; color:#fff; border:none; border-radius:10px; padding:0.8rem; font-weight:700; font-size:0.82rem; font-family:'DM Sans',sans-serif; cursor:pointer; }
+  .save-btn { width:100%; background:#2a7a2a; color:#fff; border:none; border-radius:14px; padding:0.8rem; font-weight:700; font-size:0.82rem; font-family:'DM Sans',sans-serif; cursor:pointer; transition:transform 0.12s; box-shadow:0 4px 14px rgba(42,122,42,0.22); }
+  .save-btn:active { transform:scale(0.97); }
   .entry-row { display:flex; justify-content:space-between; align-items:center; padding:0.55rem 0; border-bottom:1px solid var(--border); font-size:0.8rem; }
   .entry-row:last-child { border-bottom:none; }
   .entry-date { color:var(--muted); font-size:0.72rem; }
@@ -221,11 +230,11 @@
   </div>
 
   <div class="tab-bar">
-    <button class="tab-btn active" data-tab="tab-rutina" onclick="showTab('tab-rutina')">💪 Rutina</button>
-    <button class="tab-btn" data-tab="tab-progreso" onclick="showTab('tab-progreso')">📈 Progreso</button>
-    <button class="tab-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')">🎁 Beneficios</button>
-    <button class="tab-btn" data-tab="tab-servicios" onclick="showTab('tab-servicios')">📋 Servicios</button>
-    <button class="tab-btn" data-tab="tab-checkin" onclick="showTab('tab-checkin')">💬 Check-in</button>
+    <button class="tab-btn active" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8.5v7M17.5 8.5v7M3 10v4M21 10v4M6.5 12h11"/></svg> Rutina</button>
+    <button class="tab-btn" data-tab="tab-progreso" onclick="showTab('tab-progreso')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 19.5 9 13l4 3 7-9"/><path d="M15.5 6.5H20v4.5"/></svg> Progreso</button>
+    <button class="tab-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/></svg> Beneficios</button>
+    <button class="tab-btn" data-tab="tab-servicios" onclick="showTab('tab-servicios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M8.5 10h7M8.5 13.5h7M8.5 17h4"/></svg> Servicios</button>
+    <button class="tab-btn" data-tab="tab-checkin" onclick="showTab('tab-checkin')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10H9l-4 3.5v-3.5H4Z"/></svg> Check-in</button>
   </div>
 
   <div class="dash-body">
