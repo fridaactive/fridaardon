@@ -1291,7 +1291,20 @@ function fbGet(path, cb) {
     if (db) {
       db.ref(path).once('value')
         .then(function(snap) { cb(snap.val()); })
-        .catch(function(e) { console.warn('fbGet error', path, e); cb(null); });
+        .catch(function(e) {
+          // A long-idle tab can hold an expired auth token that Firebase
+          // rejects as PERMISSION_DENIED even though the app still looks
+          // signed in. Re-authenticate once and retry before giving up.
+          if (e && e.code === 'PERMISSION_DENIED' && typeof ensureAdminAuth === 'function') {
+            ensureAdminAuth(function() {
+              getDB().ref(path).once('value')
+                .then(function(snap) { cb(snap.val()); })
+                .catch(function(e2) { console.warn('fbGet retry error', path, e2); cb(null); });
+            });
+          } else {
+            console.warn('fbGet error', path, e); cb(null);
+          }
+        });
     } else { cb(null); }
   } catch(e) { console.warn('fbGet catch', e); cb(null); }
 }
@@ -1302,7 +1315,17 @@ function fbSet(path, data) {
     if (db) {
       db.ref(path).set(data)
         .then(function() { console.log('fbSet OK:', path); })
-        .catch(function(e) { console.warn('fbSet error', path, e); });
+        .catch(function(e) {
+          if (e && e.code === 'PERMISSION_DENIED' && typeof ensureAdminAuth === 'function') {
+            ensureAdminAuth(function() {
+              getDB().ref(path).set(data)
+                .then(function() { console.log('fbSet retry OK:', path); })
+                .catch(function(e2) { console.warn('fbSet retry error', path, e2); });
+            });
+          } else {
+            console.warn('fbSet error', path, e);
+          }
+        });
     } else { console.warn('fbSet skipped - Firebase not ready for path:', path); }
   } catch(e) { console.warn('fbSet catch', e); }
 }
@@ -4907,7 +4930,11 @@ function openRutinaEditor(clientId) {
   rutinaClientId = clientId;
   rutinaCurrentDay = 0;
 
-  // Load from Firebase first, then localStorage, then defaults
+  // Load from Firebase first, then localStorage, then defaults.
+  // Re-authenticate right before reading — a long-idle tab can hold an
+  // expired token that Firebase rejects as permission_denied even though
+  // the session still looks signed in.
+  withAdminAuth(function() {
   fbGet('rutinas/' + clientId, function(data) {
     // Check if data has real content (days with at least one block with exercises)
     function hasRealContent(d) {
@@ -4964,6 +4991,7 @@ function openRutinaEditor(clientId) {
     showScreen('rutina-editor');
     rutinaMode = 'view';
     switchRutinaMode('view');
+  });
   });
 }
 
@@ -5203,7 +5231,8 @@ function renderRutinaEditor() {
   html += '</div>';
 
   // Blocks
-  day.blocks.forEach(function(block) {
+  (day.blocks || []).forEach(function(block) {
+    if (!block.exercises) block.exercises = [];
     var blockName = block.name || block.type || 'Bloque';
     var mode = block.mode || 'reps';
     var workSecs = block.workSecs || 40;
