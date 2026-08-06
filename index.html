@@ -649,6 +649,8 @@ function doForgotPassword() {
 }
 
 function doLogout() {
+  currentUid = null;
+  currentClientId = null;
   firebase.auth().signOut().then(function() { showScreen('screen-login'); });
 }
 
@@ -679,6 +681,9 @@ function loadDashboard(uid) {
 // still empty after that.
 function fetchPortalAndRender(uid, isRetry) {
   db().ref('clientasPortal/' + uid).once('value').then(function(snap) {
+    // A logout (or a newer login) may have happened while this read was in
+    // flight — don't let a stale response overwrite the screen it set.
+    if (uid !== currentUid) return;
     var portal = snap.val() || {};
     var perfil = portal.perfil || {};
     var clientId = perfil.clientId;
@@ -722,6 +727,7 @@ function fetchPortalAndRender(uid, isRetry) {
     setLoading(false);
     showScreen('screen-dashboard');
   }).catch(function(e) {
+    if (uid !== currentUid) return;
     if (!isRetry) {
       var user = firebase.auth().currentUser;
       var refresh = user ? user.getIdToken(true) : Promise.resolve();
@@ -1134,6 +1140,8 @@ firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     loadDashboard(user.uid);
   } else {
+    currentUid = null;
+    currentClientId = null;
     showScreen('screen-login');
   }
 });
