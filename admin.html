@@ -1203,6 +1203,9 @@
     <div class="fin-form-row"><div class="fin-form-label">Marca</div><input class="fin-form-input" id="bn-marca" type="text" placeholder="Ej: Gatorade"></div>
     <div class="fin-form-row"><div class="fin-form-label">Descuento</div><input class="fin-form-input" id="bn-descuento" type="text" placeholder="Ej: 15% de descuento"></div>
     <div class="fin-form-row"><div class="fin-form-label">Descripción</div><textarea class="fin-form-input" id="bn-descripcion" rows="2" placeholder="Detalles, dónde usarlo..." style="resize:vertical;"></textarea></div>
+    <div class="fin-form-row"><div class="fin-form-label">URL del logo (opcional)</div><input class="fin-form-input" id="bn-logo" type="text" placeholder="Link a la imagen del logo de la marca"></div>
+    <div class="fin-form-row"><div class="fin-form-label">Ubicación (opcional)</div><input class="fin-form-input" id="bn-ubicacion" type="text" placeholder="Ej: San Salvador, Metrocentro"></div>
+    <div class="fin-form-row"><div class="fin-form-label">Instagram (opcional)</div><input class="fin-form-input" id="bn-instagram" type="text" placeholder="Ej: @gatorade_sv"></div>
     <div class="fin-form-row"><div class="fin-form-label">Vence el (opcional)</div><input class="fin-form-input" id="bn-vencimiento" type="date"></div>
     <div style="display:flex;gap:0.75rem;margin-top:1rem;">
       <button onclick="hideBeneficioModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
@@ -1617,16 +1620,24 @@ function renderPortalContentScreen() {
         var canjesCount = Object.keys(it.data.canjes || {}).length;
         html += '<div style="border:1px solid var(--border);border-radius:10px;padding:0.75rem 0.9rem;margin-bottom:0.6rem;">';
         html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;">';
+        html += '<div style="display:flex;gap:0.6rem;align-items:flex-start;">';
+        if (it.data.logoUrl) {
+          html += '<img src="' + it.data.logoUrl + '" style="width:2.2rem;height:2.2rem;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid var(--border);" onerror="this.style.display=\'none\'">';
+        }
         html += '<div><div style="font-weight:700;font-size:0.82rem;">' + (it.data.marca||'') + '</div>';
         if (it.data.descuento) html += '<div style="color:#2a7a2a;font-weight:700;font-size:0.75rem;margin-top:0.15rem;">' + it.data.descuento + '</div>';
         if (it.data.descripcion) html += '<div style="color:var(--muted);font-size:0.72rem;margin-top:0.15rem;">' + it.data.descripcion + '</div>';
+        if (it.data.ubicacion || it.data.instagram) {
+          html += '<div style="color:var(--muted);font-size:0.68rem;margin-top:0.15rem;">' + [it.data.ubicacion, it.data.instagram].filter(Boolean).join(' · ') + '</div>';
+        }
         html += '<div style="display:flex;gap:0.5rem;margin-top:0.4rem;flex-wrap:wrap;">';
         html += '<span style="font-size:0.65rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:100px;background:' + (vencido ? '#fff0f0;color:#c44' : '#F0FFF0;color:#2a7a2a') + ';">' + (vencido ? 'Vencido' : (it.data.vencimiento ? 'Vence ' + it.data.vencimiento : 'Sin vencimiento')) + '</span>';
         html += '<span style="font-size:0.65rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:100px;background:var(--blue-lt);color:var(--blue);">' + canjesCount + ' canje' + (canjesCount !== 1 ? 's' : '') + '</span>';
         html += '</div>';
-        html += '</div>';
+        html += '</div>'; // close text-column
+        html += '</div>'; // close avatar+text flex
         html += '<button onclick="deleteBeneficio(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.9rem;cursor:pointer;">✕</button>';
-        html += '</div></div>';
+        html += '</div></div>'; // close justify-between + card
       });
       el.innerHTML = html;
     }
@@ -1657,6 +1668,9 @@ function showBeneficioModal() {
   document.getElementById('bn-marca').value = '';
   document.getElementById('bn-descuento').value = '';
   document.getElementById('bn-descripcion').value = '';
+  document.getElementById('bn-logo').value = '';
+  document.getElementById('bn-ubicacion').value = '';
+  document.getElementById('bn-instagram').value = '';
   document.getElementById('bn-vencimiento').value = '';
   document.getElementById('beneficio-modal').style.display = 'flex';
 }
@@ -1667,12 +1681,18 @@ function saveBeneficio() {
   var marca = document.getElementById('bn-marca').value.trim();
   if (!marca) { alert('Ingresá el nombre de la marca.'); return; }
   var vencimiento = document.getElementById('bn-vencimiento').value;
+  var logoUrl = document.getElementById('bn-logo').value.trim();
+  var ubicacion = document.getElementById('bn-ubicacion').value.trim();
+  var instagram = document.getElementById('bn-instagram').value.trim();
   var item = {
     marca: marca,
     descuento: document.getElementById('bn-descuento').value.trim(),
     descripcion: document.getElementById('bn-descripcion').value.trim()
   };
   if (vencimiento) item.vencimiento = vencimiento;
+  if (logoUrl) item.logoUrl = logoUrl;
+  if (ubicacion) item.ubicacion = ubicacion;
+  if (instagram) item.instagram = instagram;
   withAdminAuth(function() {
     var db = getDB();
     if (!db) { alert('No se pudo conectar con Firebase.'); return; }

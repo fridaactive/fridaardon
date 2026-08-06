@@ -128,9 +128,17 @@
 
   /* ── BENEFICIOS / SERVICIOS ── */
   .benef-card { border:1px solid var(--border); border-radius:12px; padding:0.9rem 1rem; margin-bottom:0.7rem; }
+  .benef-row { display:flex; gap:0.7rem; align-items:flex-start; }
+  .benef-logo { width:2.6rem; height:2.6rem; border-radius:50%; object-fit:cover; flex-shrink:0; border:1px solid var(--border); }
+  .benef-logo-fallback { width:2.6rem; height:2.6rem; border-radius:50%; flex-shrink:0; background:var(--blue-lt); color:var(--blue); font-weight:700; font-size:0.9rem; display:flex; align-items:center; justify-content:center; }
+  .benef-body { flex:1; min-width:0; }
   .benef-marca { font-size:0.85rem; font-weight:700; }
   .benef-descuento { font-size:0.78rem; color:#2a7a2a; font-weight:700; margin:0.2rem 0; }
   .benef-desc { font-size:0.75rem; color:var(--muted); }
+  .benef-meta { display:flex; flex-direction:column; gap:0.2rem; margin-top:0.4rem; }
+  .benef-meta-item { display:flex; align-items:center; gap:0.35rem; font-size:0.7rem; color:var(--muted); text-decoration:none; }
+  .benef-meta-item svg { width:12px; height:12px; flex-shrink:0; }
+  a.benef-meta-item { color:var(--blue); }
 
   /* ── CHECK-IN TAB ── */
   .emoji-row { display:flex; justify-content:space-between; gap:0.5rem; margin:0.9rem 0; }
@@ -1017,10 +1025,20 @@ function generateShortCode() {
   return code;
 }
 
+var LOADED_BENEFICIOS = {};
+
+function getInstagramUrl(handle) {
+  if (!handle) return null;
+  if (/^https?:\/\//i.test(handle)) return handle;
+  return 'https://instagram.com/' + handle.replace(/^@/, '');
+}
+
 function loadBeneficios() {
   db().ref('beneficios').once('value').then(function(snap) {
     var data = snap.val() || {};
     var items = Object.keys(data).map(function(k) { return Object.assign({ id: k }, data[k]); });
+    LOADED_BENEFICIOS = {};
+    items.forEach(function(b) { LOADED_BENEFICIOS[b.id] = b; });
     var el = document.getElementById('beneficios-list');
     if (items.length === 0) { el.innerHTML = '<div class="empty-note">Todavía no hay beneficios cargados.</div>'; return; }
     var todayStr = new Date().toISOString().slice(0, 10);
@@ -1028,24 +1046,72 @@ function loadBeneficios() {
     items.forEach(function(b) {
       var vencido = b.vencimiento && b.vencimiento < todayStr;
       var miCanje = b.canjes && b.canjes[currentUid];
-      html += '<div class="benef-card"><div class="benef-marca">' + escapeHtml(b.marca || '') + '</div>';
+      html += '<div class="benef-card"><div class="benef-row">';
+      if (b.logoUrl) {
+        html += '<img class="benef-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.outerHTML=\'<div class=&quot;benef-logo-fallback&quot;>' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>\'">';
+      } else {
+        html += '<div class="benef-logo-fallback">' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>';
+      }
+      html += '<div class="benef-body">';
+      html += '<div class="benef-marca">' + escapeHtml(b.marca || '') + '</div>';
       if (b.descuento) html += '<div class="benef-descuento">' + escapeHtml(b.descuento) + '</div>';
       if (b.descripcion) html += '<div class="benef-desc">' + escapeHtml(b.descripcion) + '</div>';
+      if (b.ubicacion || b.instagram) {
+        html += '<div class="benef-meta">';
+        if (b.ubicacion) {
+          html += '<div class="benef-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>' + escapeHtml(b.ubicacion) + '</div>';
+        }
+        if (b.instagram) {
+          html += '<a class="benef-meta-item" href="' + getInstagramUrl(b.instagram) + '" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" stroke="none"/></svg>' + escapeHtml(b.instagram) + '</a>';
+        }
+        html += '</div>';
+      }
       if (b.vencimiento) html += '<div style="font-size:0.68rem;color:' + (vencido ? '#e53e3e' : 'var(--muted)') + ';margin-top:0.25rem;">' + (vencido ? 'Venció el ' : 'Válido hasta el ') + b.vencimiento + '</div>';
       if (miCanje) {
         html += '<div style="margin-top:0.6rem;background:var(--blue-lt);border-radius:8px;padding:0.6rem 0.8rem;text-align:center;">';
         html += '<div style="font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">Tu código</div>';
         html += '<div style="font-size:1.1rem;font-weight:700;color:var(--blue);letter-spacing:0.1em;">' + miCanje.code + '</div>';
         html += '</div>';
+        html += '<button class="btn-secondary" style="margin-top:0.5rem;" onclick="descargarVoucher(\'' + b.id + '\')">⬇️ Descargar código</button>';
       } else if (vencido) {
         html += '<button class="btn-secondary" disabled style="margin-top:0.6rem;opacity:0.5;cursor:not-allowed;">Beneficio vencido</button>';
       } else {
         html += '<button class="btn-secondary" style="margin-top:0.6rem;" onclick="canjearBeneficio(\'' + b.id + '\')">🎁 Canjear beneficio</button>';
       }
-      html += '</div>';
+      html += '</div></div></div>';
     });
     el.innerHTML = html;
   }).catch(function(e) { console.warn('loadBeneficios error', e.message); });
+}
+
+function descargarVoucher(beneficioId) {
+  var b = LOADED_BENEFICIOS[beneficioId];
+  var miCanje = b && b.canjes && b.canjes[currentUid];
+  if (!b || !miCanje || !window.jspdf) { alert('No se pudo generar el vale, intentá de nuevo.'); return; }
+  var doc = new window.jspdf.jsPDF({ unit: 'mm', format: [100, 60] });
+  doc.setFillColor(28, 85, 229);
+  doc.rect(0, 0, 100, 60, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(8);
+  doc.text('FRIDAACTIVE · BENEFICIO', 8, 10);
+  doc.setFontSize(15);
+  doc.text(b.marca || '', 8, 20);
+  if (b.descuento) {
+    doc.setFontSize(10);
+    doc.text(b.descuento, 8, 27);
+  }
+  doc.setFillColor(255, 255, 255);
+  doc.roundedRect(8, 33, 84, 19, 3, 3, 'F');
+  doc.setTextColor(28, 85, 229);
+  doc.setFontSize(7);
+  doc.text('TU CÓDIGO', 12, 40);
+  doc.setFontSize(17);
+  doc.text(miCanje.code, 12, 48);
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(7);
+  var footer = b.vencimiento ? ('Válido hasta ' + b.vencimiento) : 'Presentalo en ' + (b.marca || 'la marca');
+  doc.text(footer, 8, 57);
+  doc.save('beneficio-' + (b.marca || 'fridaactive').toLowerCase().replace(/\s+/g, '-') + '.pdf');
 }
 
 function canjearBeneficio(beneficioId) {
