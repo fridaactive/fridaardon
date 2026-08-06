@@ -4764,6 +4764,11 @@ function renderRutinaView() {
 
   html += '<div style="height:1.5rem;"></div>';
 
+  // Mensaje de bienvenida (lo que verá la clienta en su portal)
+  if (rutinaData.mensajeInicial) {
+    html += '<div class="rv-objetivo" style="border-left-color:#d4c890;"><div class="rv-objetivo-label">Mensaje de bienvenida</div><div class="rv-objetivo-text" style="white-space:pre-wrap;">'+escHtml(rutinaData.mensajeInicial)+'</div></div>';
+  }
+
   // Objetivo
   var objetivo = profile.objetivo || c.meta || '';
   if (objetivo) {
@@ -4854,6 +4859,11 @@ function renderRutinaView() {
 
     html += '</div></details>'; // close ex-table + details
   });
+
+  // Mensaje final (lo que verá la clienta en su portal)
+  if (rutinaData.mensajeFinal) {
+    html += '<div class="rv-objetivo" style="border-left-color:#d4c890;margin-top:1.5rem;"><div class="rv-objetivo-label">Mensaje final</div><div class="rv-objetivo-text" style="white-space:pre-wrap;">'+escHtml(rutinaData.mensajeFinal)+'</div></div>';
+  }
 
   viewEl.innerHTML = html;
 
@@ -4981,6 +4991,18 @@ function openRutinaEditor(clientId) {
     document.getElementById('rutina-editor-title').textContent = c.name;
     document.getElementById('rutina-back-btn').onclick = function() {
       showScreen('client-detail');
+    };
+    var msgInicialEl = document.getElementById('rutina-msg-inicial');
+    var msgFinalEl = document.getElementById('rutina-msg-final');
+    msgInicialEl.value = rutinaData.mensajeInicial || '';
+    msgFinalEl.value = rutinaData.mensajeFinal || '';
+    msgInicialEl.onblur = function() {
+      rutinaData.mensajeInicial = this.value;
+      saveRutinaData(rutinaClientId, rutinaData);
+    };
+    msgFinalEl.onblur = function() {
+      rutinaData.mensajeFinal = this.value;
+      saveRutinaData(rutinaClientId, rutinaData);
     };
     var modeBtn = document.getElementById('rutina-mode-btn');
     if (modeBtn) {
@@ -5947,6 +5969,12 @@ function renderAhorrosMes() {
   <!-- EDIT MODE -->
   <div id="rutina-edit-mode" style="display:none;">
     <div class="clients-wrap" style="padding-top:0;">
+      <div style="margin-bottom:1.1rem;">
+        <div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">💬 Mensaje de bienvenida (aparece arriba de la rutina)</div>
+        <textarea id="rutina-msg-inicial" class="fin-form-input" style="width:100%;min-height:4rem;resize:vertical;font-family:'DM Sans',sans-serif;margin-bottom:0.9rem;" placeholder="Ej: ¡Hola! Acá les dejo su nueva rutina, espero se la disfruten..."></textarea>
+        <div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">💬 Mensaje final (aparece al terminar la rutina)</div>
+        <textarea id="rutina-msg-final" class="fin-form-input" style="width:100%;min-height:4rem;resize:vertical;font-family:'DM Sans',sans-serif;" placeholder="Ej: Recuerden que siempre pueden contar conmigo..."></textarea>
+      </div>
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center;">
         <div id="rutina-day-tabs" style="display:flex;gap:0.5rem;flex-wrap:wrap;flex:1;"></div>
         <button id="rutina-add-day-btn" style="background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.5rem 0.85rem;font-size:0.72rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;touch-action:manipulation;white-space:nowrap;">+ Día</button>

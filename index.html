@@ -80,16 +80,41 @@
   #loading { position:fixed; inset:0; background:#fff; display:none; align-items:center; justify-content:center; z-index:9999; font-size:0.85rem; color:var(--muted); }
 
   /* ── RUTINA TAB ── */
-  .day-selector { display:flex; gap:0.4rem; overflow-x:auto; margin-bottom:1rem; }
-  .day-chip { flex-shrink:0; background:var(--blue-lt); color:var(--blue); border:none; padding:0.5rem 0.9rem; border-radius:100px; font-size:0.72rem; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; }
-  .day-chip.active { background:var(--blue); color:#fff; }
   .block-title { font-size:0.85rem; font-weight:700; margin:0.9rem 0 0.5rem; color:var(--text); }
   .ex-row { border:1px solid var(--border); border-radius:10px; padding:0.7rem 0.85rem; margin-bottom:0.6rem; }
   .ex-name { font-size:0.82rem; font-weight:700; margin-bottom:0.2rem; }
   .ex-prescribed { font-size:0.7rem; color:var(--muted); margin-bottom:0.5rem; }
   .ex-inputs { display:flex; gap:0.5rem; }
-  .ex-inputs input { flex:1; border:1.5px solid var(--border); border-radius:8px; padding:0.5rem 0.6rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; outline:none; }
+  .ex-inputs input { flex:1; min-width:0; border:1.5px solid var(--border); border-radius:8px; padding:0.5rem 0.6rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; outline:none; }
   .ex-inputs input:focus { border-color:var(--blue); }
+
+  /* ── RUTINA: mensaje + días desplegables ── */
+  .rt-msg-card { background:var(--grad); border:1.5px solid var(--border); border-radius:16px; padding:1.15rem 1.25rem; margin-bottom:1.1rem; position:relative; overflow:hidden; }
+  .rt-msg-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.18em; color:var(--blue); font-weight:700; margin-bottom:0.5rem; }
+  .rt-msg-text { font-size:0.85rem; color:var(--text); line-height:1.6; font-weight:400; white-space:pre-wrap; }
+  .rt-closing-card { background:var(--grad); border:1.5px solid var(--border); border-radius:16px; padding:1.25rem 1.25rem; margin:1.1rem 0; }
+  .rt-closing-text { font-size:0.85rem; color:var(--text); line-height:1.7; font-weight:400; white-space:pre-wrap; margin-bottom:1rem; }
+  .rt-closing-sign { display:flex; align-items:center; gap:0.65rem; border-top:1px solid #E8D8A0; padding-top:0.9rem; }
+  .rt-closing-badge { background:var(--blue); color:#fff; font-size:0.85rem; font-weight:700; padding:0.3rem 0.6rem; border-radius:8px; }
+  .rt-closing-name { font-size:0.78rem; font-weight:700; color:var(--blue); }
+  .rt-closing-sub { font-size:0.62rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
+
+  .rt-day { border:1.5px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:0.75rem; background:#fff; }
+  .rt-day[open] { border-color:var(--blue); }
+  .rt-day-summary { display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1rem; cursor:pointer; list-style:none; -webkit-tap-highlight-color:transparent; }
+  .rt-day-summary::-webkit-details-marker { display:none; }
+  .rt-day[open] .rt-day-summary { background:var(--blue); }
+  .rt-day-num { font-size:1.3rem; font-weight:700; color:var(--blue); line-height:1; min-width:1.8rem; }
+  .rt-day[open] .rt-day-num { color:#F5ECCB; }
+  .rt-day-info { flex:1; }
+  .rt-day-title { font-size:0.85rem; font-weight:700; color:var(--text); }
+  .rt-day[open] .rt-day-title { color:#fff; }
+  .rt-day-meta { font-size:0.65rem; color:var(--muted); margin-top:0.1rem; }
+  .rt-day[open] .rt-day-meta { color:rgba(255,255,255,0.65); }
+  .rt-day-chevron { font-size:0.85rem; color:var(--muted); flex-shrink:0; transition:transform 0.15s; }
+  .rt-day[open] .rt-day-chevron { color:rgba(255,255,255,0.75); transform:rotate(180deg); }
+  .rt-day-body { padding:1rem; background:var(--blue-lt); }
+  .rt-day-save { margin-top:0.25rem; }
 
   /* ── TRACKING CALENDAR ── */
   .track-stat { display:flex; gap:0.75rem; margin-bottom:0.9rem; }
@@ -243,10 +268,7 @@
 
     <!-- RUTINA -->
     <div class="tab-panel active" id="tab-rutina">
-      <div class="card" id="rutina-card">
-        <div class="card-label">Tu rutina</div>
-        <div id="rutina-content"><div class="empty-note">Cargando tu rutina…</div></div>
-      </div>
+      <div id="rutina-content"><div class="empty-note">Cargando tu rutina…</div></div>
     </div>
 
     <!-- PROGRESO -->
@@ -640,7 +662,6 @@ var WHATSAPP_MESSAGE = 'Hola Frida, estoy interesada en tomar un plan de entrena
 var currentUid = null;
 var currentClientId = null;
 var currentRutinaData = null;
-var currentRutinaDay = 0;
 var EXERCISE_BANK = {};
 
 function loadDashboard(uid) {
@@ -696,8 +717,7 @@ function loadRutinaTab(clientId) {
       return;
     }
     currentRutinaData = data;
-    currentRutinaDay = 0;
-    renderRutinaDay();
+    renderRutinaTab();
   }).catch(function(e) {
     el.innerHTML = '<div class="empty-note">No se pudo cargar tu rutina.</div>';
     console.warn('loadRutinaTab error', e.message);
@@ -712,17 +732,8 @@ function findExerciseVideo(name) {
   return (match && match.video) ? match.video : null;
 }
 
-function renderRutinaDay() {
-  var el = document.getElementById('rutina-content');
-  var days = currentRutinaData.days;
-  var day = days[currentRutinaDay];
-
-  var html = '<div class="day-selector">';
-  days.forEach(function(d, i) {
-    html += '<button class="day-chip' + (i === currentRutinaDay ? ' active' : '') + '" onclick="selectRutinaDay(' + i + ')">' + escapeHtml(d.name) + '</button>';
-  });
-  html += '</div>';
-
+function renderExerciseBlocksHtml(day) {
+  var html = '';
   (day.blocks || []).forEach(function(block) {
     if (!block.exercises || block.exercises.length === 0) return;
     html += '<div class="block-title">' + escapeHtml(block.name) + '</div>';
@@ -744,20 +755,46 @@ function renderRutinaDay() {
       html += '</div></div>';
     });
   });
+  return html;
+}
 
-  html += '<button class="btn-primary" onclick="guardarSesion()">✅ Guardar sesión de hoy</button>';
-  html += '<button class="btn-secondary" onclick="descargarRutinaPDF()">⬇️ Descargar rutina en PDF</button>';
+function renderRutinaTab() {
+  var el = document.getElementById('rutina-content');
+  var days = currentRutinaData.days;
+  var html = '';
+
+  if (currentRutinaData.mensajeInicial) {
+    html += '<div class="rt-msg-card"><div class="rt-msg-label">Mensaje de Frida</div><div class="rt-msg-text">' + escapeHtml(currentRutinaData.mensajeInicial) + '</div></div>';
+  }
+
+  days.forEach(function(day, i) {
+    var blockCount = (day.blocks || []).filter(function(b) { return b.exercises && b.exercises.length > 0; }).length;
+    html += '<details class="rt-day"' + (i === 0 ? ' open' : '') + '>';
+    html += '<summary class="rt-day-summary">';
+    html += '<div class="rt-day-num">' + String(i + 1).padStart(2, '0') + '</div>';
+    html += '<div class="rt-day-info"><div class="rt-day-title">' + escapeHtml(day.name) + '</div><div class="rt-day-meta">' + blockCount + ' bloque' + (blockCount !== 1 ? 's' : '') + '</div></div>';
+    html += '<div class="rt-day-chevron">▾</div>';
+    html += '</summary>';
+    html += '<div class="rt-day-body">';
+    html += renderExerciseBlocksHtml(day);
+    html += '<button class="btn-primary rt-day-save" onclick="guardarSesion(' + i + ', this)">✅ Guardar sesión de este día</button>';
+    html += '</div></details>';
+  });
+
+  html += '<button class="btn-secondary" style="margin-top:0.5rem;" onclick="descargarRutinaPDF()">⬇️ Descargar rutina en PDF</button>';
   var classicUrl = CLIENT_ROUTINE_URLS[currentClientId];
   if (classicUrl) {
     html += '<a class="btn-secondary" style="display:block;text-decoration:none;box-sizing:border-box;" href="' + classicUrl + '" target="_blank">⏱️ Ver con temporizador</a>';
   }
 
-  el.innerHTML = html;
-}
+  if (currentRutinaData.mensajeFinal) {
+    html += '<div class="rt-closing-card">';
+    html += '<div class="rt-closing-text">' + escapeHtml(currentRutinaData.mensajeFinal) + '</div>';
+    html += '<div class="rt-closing-sign"><div class="rt-closing-badge">fa</div><div><div class="rt-closing-name">Con cariño, Frida</div><div class="rt-closing-sub">fridaactive</div></div></div>';
+    html += '</div>';
+  }
 
-function selectRutinaDay(i) {
-  currentRutinaDay = i;
-  renderRutinaDay();
+  el.innerHTML = html;
 }
 
 // ── VIDEO DE TÉCNICA ──
@@ -778,11 +815,12 @@ function hideVideoModal() {
   document.getElementById('video-modal').style.display = 'none';
 }
 
-function guardarSesion() {
-  var day = currentRutinaData.days[currentRutinaDay];
+function guardarSesion(dayIndex, btnEl) {
+  var day = currentRutinaData.days[dayIndex];
+  var dayEl = btnEl ? btnEl.closest('.rt-day') : document.getElementById('rutina-content');
   var ejercicios = {};
   var any = false;
-  document.querySelectorAll('#rutina-content [data-ex]').forEach(function(input) {
+  dayEl.querySelectorAll('[data-ex]').forEach(function(input) {
     var exId = input.getAttribute('data-ex');
     var field = input.getAttribute('data-field');
     if (!input.value) return;
