@@ -9,6 +9,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script>
   var firebaseConfig = {
     apiKey: "AIzaSyBiOfRq28zYeP6lZ0J5iNb9v4P92INQuPk",
@@ -1203,7 +1204,21 @@
     <div class="fin-form-row"><div class="fin-form-label">Marca</div><input class="fin-form-input" id="bn-marca" type="text" placeholder="Ej: Gatorade"></div>
     <div class="fin-form-row"><div class="fin-form-label">Descuento</div><input class="fin-form-input" id="bn-descuento" type="text" placeholder="Ej: 15% de descuento"></div>
     <div class="fin-form-row"><div class="fin-form-label">Descripción</div><textarea class="fin-form-input" id="bn-descripcion" rows="2" placeholder="Detalles, dónde usarlo..." style="resize:vertical;"></textarea></div>
-    <div class="fin-form-row"><div class="fin-form-label">URL del logo (opcional)</div><input class="fin-form-input" id="bn-logo" type="text" placeholder="Link a la imagen del logo de la marca"></div>
+    <div class="fin-form-row">
+      <div class="fin-form-label">Logo de la marca (opcional)</div>
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <div id="bn-logo-preview-wrap" style="width:3rem;height:3rem;border-radius:50%;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">
+          <img id="bn-logo-preview" src="" style="width:100%;height:100%;object-fit:cover;display:none;" onload="this.style.display='block';document.getElementById('bn-logo-preview-icon').style.display='none';" onerror="this.style.display='none';document.getElementById('bn-logo-preview-icon').style.display='block';">
+          <svg id="bn-logo-preview-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;color:var(--blue);"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+        </div>
+        <div style="flex:1;">
+          <button type="button" onclick="document.getElementById('bn-logo-file').click()" style="background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.5rem 0.85rem;font-size:0.75rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Subir foto</button>
+          <input type="file" id="bn-logo-file" accept="image/*" style="display:none;" onchange="handleLogoFileSelect(this)">
+          <div id="bn-logo-status" style="font-size:0.68rem;color:var(--muted);margin-top:0.35rem;"></div>
+        </div>
+      </div>
+      <input class="fin-form-input" id="bn-logo" type="text" placeholder="...o pegá un link a la imagen" style="margin-top:0.6rem;" oninput="updateLogoPreview()">
+    </div>
     <div class="fin-form-row"><div class="fin-form-label">Ubicación (opcional)</div><input class="fin-form-input" id="bn-ubicacion" type="text" placeholder="Ej: San Salvador, Metrocentro"></div>
     <div class="fin-form-row"><div class="fin-form-label">Instagram (opcional)</div><input class="fin-form-input" id="bn-instagram" type="text" placeholder="Ej: @gatorade_sv"></div>
     <div class="fin-form-row"><div class="fin-form-label">Alianza vigente hasta (opcional)</div><input class="fin-form-input" id="bn-vencimiento" type="date"><div style="font-size:0.65rem;color:var(--muted);margin-top:0.3rem;">Después de esta fecha ya no se puede canjear. El beneficio ya se puede canjear 1 vez por mes automáticamente, esto es solo si la alianza con la marca termina.</div></div>
@@ -1669,13 +1684,55 @@ function showBeneficioModal() {
   document.getElementById('bn-descuento').value = '';
   document.getElementById('bn-descripcion').value = '';
   document.getElementById('bn-logo').value = '';
+  document.getElementById('bn-logo-file').value = '';
+  document.getElementById('bn-logo-status').textContent = '';
   document.getElementById('bn-ubicacion').value = '';
   document.getElementById('bn-instagram').value = '';
   document.getElementById('bn-vencimiento').value = '';
+  updateLogoPreview();
   document.getElementById('beneficio-modal').style.display = 'flex';
 }
 function hideBeneficioModal() {
   document.getElementById('beneficio-modal').style.display = 'none';
+}
+
+function updateLogoPreview() {
+  var url = document.getElementById('bn-logo').value.trim();
+  var img = document.getElementById('bn-logo-preview');
+  if (url) {
+    img.src = url;
+  } else {
+    img.removeAttribute('src');
+    img.style.display = 'none';
+    document.getElementById('bn-logo-preview-icon').style.display = 'block';
+  }
+}
+
+function handleLogoFileSelect(input) {
+  var file = input.files && input.files[0];
+  if (!file) return;
+  var statusEl = document.getElementById('bn-logo-status');
+  statusEl.style.color = 'var(--muted)';
+  statusEl.textContent = 'Subiendo...';
+  withAdminAuth(function() {
+    if (typeof firebase === 'undefined' || !firebase.storage) {
+      statusEl.style.color = '#c44';
+      statusEl.textContent = 'Storage no está disponible todavía.';
+      return;
+    }
+    var path = 'beneficio-logos/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+    firebase.storage().ref(path).put(file).then(function(snap) {
+      return snap.ref.getDownloadURL();
+    }).then(function(url) {
+      document.getElementById('bn-logo').value = url;
+      updateLogoPreview();
+      statusEl.style.color = '#2a7a2a';
+      statusEl.textContent = 'Foto subida ✓';
+    }).catch(function(e) {
+      statusEl.style.color = '#c44';
+      statusEl.textContent = 'No se pudo subir: ' + e.message;
+    });
+  });
 }
 function saveBeneficio() {
   var marca = document.getElementById('bn-marca').value.trim();
