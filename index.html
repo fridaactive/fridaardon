@@ -92,12 +92,13 @@
   .rt-msg-card { background:var(--grad); border:1.5px solid var(--border); border-radius:16px; padding:1.15rem 1.25rem; margin-bottom:1.1rem; position:relative; overflow:hidden; }
   .rt-msg-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.18em; color:var(--blue); font-weight:700; margin-bottom:0.5rem; }
   .rt-msg-text { font-size:0.85rem; color:var(--text); line-height:1.6; font-weight:400; white-space:pre-wrap; }
-  .rt-closing-card { background:var(--grad); border:1.5px solid var(--border); border-radius:16px; padding:1.25rem 1.25rem; margin:1.1rem 0; }
-  .rt-closing-text { font-size:0.85rem; color:var(--text); line-height:1.7; font-weight:400; white-space:pre-wrap; margin-bottom:1rem; }
-  .rt-closing-sign { display:flex; align-items:center; gap:0.65rem; border-top:1px solid #E8D8A0; padding-top:0.9rem; }
-  .rt-closing-badge { background:var(--blue); color:#fff; font-size:0.85rem; font-weight:700; padding:0.3rem 0.6rem; border-radius:8px; }
-  .rt-closing-name { font-size:0.78rem; font-weight:700; color:var(--blue); }
-  .rt-closing-sub { font-size:0.62rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
+  .rt-acl-card { background:#fff; border:1.5px solid var(--border); border-radius:16px; padding:1.1rem 1.25rem; margin-bottom:1.1rem; }
+  .rt-acl-title { display:flex; align-items:center; gap:0.45rem; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--blue); font-weight:700; margin-bottom:0.85rem; }
+  .rt-acl-title svg { width:14px; height:14px; flex-shrink:0; }
+  .rt-acl-item { display:flex; gap:0.65rem; align-items:flex-start; margin-bottom:0.65rem; }
+  .rt-acl-item:last-child { margin-bottom:0; }
+  .rt-acl-num { flex-shrink:0; width:1.35rem; height:1.35rem; border-radius:50%; background:var(--blue); color:#fff; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; margin-top:0.05rem; }
+  .rt-acl-text { font-size:0.82rem; color:var(--text); line-height:1.55; }
 
   .rt-day { border:1.5px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:0.75rem; background:#fff; }
   .rt-day[open] { border-color:var(--blue); }
@@ -767,6 +768,14 @@ function renderRutinaTab() {
     html += '<div class="rt-msg-card"><div class="rt-msg-label">Mensaje de Frida</div><div class="rt-msg-text">' + escapeHtml(currentRutinaData.mensajeInicial) + '</div></div>';
   }
 
+  if (currentRutinaData.aclaraciones && currentRutinaData.aclaraciones.length) {
+    html += '<div class="rt-acl-card"><div class="rt-acl-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg> Antes de empezar</div>';
+    currentRutinaData.aclaraciones.forEach(function(item, i) {
+      html += '<div class="rt-acl-item"><div class="rt-acl-num">' + (i + 1) + '</div><div class="rt-acl-text">' + escapeHtml(item) + '</div></div>';
+    });
+    html += '</div>';
+  }
+
   days.forEach(function(day, i) {
     var blockCount = (day.blocks || []).filter(function(b) { return b.exercises && b.exercises.length > 0; }).length;
     html += '<details class="rt-day"' + (i === 0 ? ' open' : '') + '>';
@@ -785,13 +794,6 @@ function renderRutinaTab() {
   var classicUrl = CLIENT_ROUTINE_URLS[currentClientId];
   if (classicUrl) {
     html += '<a class="btn-secondary" style="display:block;text-decoration:none;box-sizing:border-box;" href="' + classicUrl + '" target="_blank">⏱️ Ver con temporizador</a>';
-  }
-
-  if (currentRutinaData.mensajeFinal) {
-    html += '<div class="rt-closing-card">';
-    html += '<div class="rt-closing-text">' + escapeHtml(currentRutinaData.mensajeFinal) + '</div>';
-    html += '<div class="rt-closing-sign"><div class="rt-closing-badge">fa</div><div><div class="rt-closing-name">Con cariño, Frida</div><div class="rt-closing-sub">fridaactive</div></div></div>';
-    html += '</div>';
   }
 
   el.innerHTML = html;

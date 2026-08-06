@@ -4769,6 +4769,15 @@ function renderRutinaView() {
     html += '<div class="rv-objetivo" style="border-left-color:#d4c890;"><div class="rv-objetivo-label">Mensaje de bienvenida</div><div class="rv-objetivo-text" style="white-space:pre-wrap;">'+escHtml(rutinaData.mensajeInicial)+'</div></div>';
   }
 
+  // Aclaraciones importantes (lo que verá la clienta en su portal)
+  if (rutinaData.aclaraciones && rutinaData.aclaraciones.length) {
+    html += '<div class="rv-objetivo" style="border-left-color:#d4c890;"><div class="rv-objetivo-label">⚡ Antes de empezar</div>';
+    rutinaData.aclaraciones.forEach(function(item, i) {
+      html += '<div style="display:flex;gap:0.6rem;align-items:flex-start;margin-top:'+(i===0?'0.5rem':'0.5rem')+';"><div style="flex-shrink:0;width:1.3rem;height:1.3rem;border-radius:50%;background:var(--blue);color:#fff;font-size:0.62rem;font-weight:700;display:flex;align-items:center;justify-content:center;">'+(i+1)+'</div><div class="rv-objetivo-text" style="margin:0;">'+escHtml(item)+'</div></div>';
+    });
+    html += '</div>';
+  }
+
   // Objetivo
   var objetivo = profile.objetivo || c.meta || '';
   if (objetivo) {
@@ -4859,11 +4868,6 @@ function renderRutinaView() {
 
     html += '</div></details>'; // close ex-table + details
   });
-
-  // Mensaje final (lo que verá la clienta en su portal)
-  if (rutinaData.mensajeFinal) {
-    html += '<div class="rv-objetivo" style="border-left-color:#d4c890;margin-top:1.5rem;"><div class="rv-objetivo-label">Mensaje final</div><div class="rv-objetivo-text" style="white-space:pre-wrap;">'+escHtml(rutinaData.mensajeFinal)+'</div></div>';
-  }
 
   viewEl.innerHTML = html;
 
@@ -4993,15 +4997,15 @@ function openRutinaEditor(clientId) {
       showScreen('client-detail');
     };
     var msgInicialEl = document.getElementById('rutina-msg-inicial');
-    var msgFinalEl = document.getElementById('rutina-msg-final');
+    var aclaracionesEl = document.getElementById('rutina-aclaraciones');
     msgInicialEl.value = rutinaData.mensajeInicial || '';
-    msgFinalEl.value = rutinaData.mensajeFinal || '';
+    aclaracionesEl.value = (rutinaData.aclaraciones || []).join('\n');
     msgInicialEl.onblur = function() {
       rutinaData.mensajeInicial = this.value;
       saveRutinaData(rutinaClientId, rutinaData);
     };
-    msgFinalEl.onblur = function() {
-      rutinaData.mensajeFinal = this.value;
+    aclaracionesEl.onblur = function() {
+      rutinaData.aclaraciones = this.value.split('\n').map(function(l) { return l.trim(); }).filter(Boolean);
       saveRutinaData(rutinaClientId, rutinaData);
     };
     var modeBtn = document.getElementById('rutina-mode-btn');
@@ -5971,9 +5975,9 @@ function renderAhorrosMes() {
     <div class="clients-wrap" style="padding-top:0;">
       <div style="margin-bottom:1.1rem;">
         <div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">💬 Mensaje de bienvenida (aparece arriba de la rutina)</div>
-        <textarea id="rutina-msg-inicial" class="fin-form-input" style="width:100%;min-height:4rem;resize:vertical;font-family:'DM Sans',sans-serif;margin-bottom:0.9rem;" placeholder="Ej: ¡Hola! Acá les dejo su nueva rutina, espero se la disfruten..."></textarea>
-        <div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">💬 Mensaje final (aparece al terminar la rutina)</div>
-        <textarea id="rutina-msg-final" class="fin-form-input" style="width:100%;min-height:4rem;resize:vertical;font-family:'DM Sans',sans-serif;" placeholder="Ej: Recuerden que siempre pueden contar conmigo..."></textarea>
+        <textarea id="rutina-msg-inicial" class="fin-form-input" style="width:100%;min-height:3.5rem;resize:vertical;font-family:'DM Sans',sans-serif;margin-bottom:0.9rem;" placeholder="Ej: ¡Hola! Acá les dejo su nueva rutina, espero se la disfruten..."></textarea>
+        <div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">⚡ Aclaraciones importantes (una por línea)</div>
+        <textarea id="rutina-aclaraciones" class="fin-form-input" style="width:100%;min-height:4.5rem;resize:vertical;font-family:'DM Sans',sans-serif;" placeholder="Ej: 5 días de hipertrofia + 2 días de cardio.&#10;Cuando veas REST-PAUSE: descansá 10 segundos y continuá sin soltar el ejercicio."></textarea>
       </div>
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center;">
         <div id="rutina-day-tabs" style="display:flex;gap:0.5rem;flex-wrap:wrap;flex:1;"></div>
