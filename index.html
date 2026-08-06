@@ -40,7 +40,7 @@
   .auth-switch a { color:var(--blue); font-weight:700; text-decoration:none; cursor:pointer; }
 
   /* ── DASHBOARD SHELL ── */
-  .dash-hero { background:linear-gradient(160deg, #0F3FA8 0%, #1C55E5 100%); padding:1.75rem 1.5rem 1rem; color:#fff; position:relative; overflow:hidden; }
+  .dash-hero { background:linear-gradient(160deg, #0F3FA8 0%, #1C55E5 100%); padding:1.75rem 1.5rem 1.25rem; color:#fff; position:relative; overflow:hidden; }
   .dash-hero::before { content:''; position:absolute; width:220px; height:220px; border-radius:50%; background:rgba(245,236,203,0.08); top:-70px; right:-50px; }
   .dash-hero .brand { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.6; margin-bottom:0.5rem; position:relative; }
   .dash-hero-row { display:flex; justify-content:space-between; align-items:center; position:relative; }
@@ -50,7 +50,7 @@
   .dash-body { padding:1rem 1.25rem 2rem; max-width:520px; margin:0 auto; }
 
   /* ── TABS ── */
-  .tab-bar { display:flex; gap:0.4rem; overflow-x:auto; padding:0 1.25rem 0.75rem; max-width:520px; margin:0 auto; position:relative; scrollbar-width:none; -ms-overflow-style:none; }
+  .tab-bar { display:flex; gap:0.4rem; overflow-x:auto; padding:0; max-width:520px; margin:1.25rem auto 0; position:relative; scrollbar-width:none; -ms-overflow-style:none; }
   .tab-bar::-webkit-scrollbar { display:none; }
   .tab-btn { flex-shrink:0; display:inline-flex; align-items:center; gap:0.35rem; background:rgba(255,255,255,0.14); border:none; padding:0.5rem 0.85rem; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.92); font-family:'DM Sans',sans-serif; cursor:pointer; border-radius:100px; white-space:nowrap; transition:transform 0.15s, background 0.15s, color 0.15s; }
   .tab-btn svg { width:14px; height:14px; flex-shrink:0; }
@@ -229,14 +229,14 @@
       </div>
       <button class="logout-icon-btn" onclick="doLogout()">Salir</button>
     </div>
-  </div>
 
-  <div class="tab-bar">
-    <button class="tab-btn active" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8.5v7M17.5 8.5v7M3 10v4M21 10v4M6.5 12h11"/></svg> Rutina</button>
-    <button class="tab-btn" data-tab="tab-progreso" onclick="showTab('tab-progreso')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 19.5 9 13l4 3 7-9"/><path d="M15.5 6.5H20v4.5"/></svg> Progreso</button>
-    <button class="tab-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/></svg> Beneficios</button>
-    <button class="tab-btn" data-tab="tab-servicios" onclick="showTab('tab-servicios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M8.5 10h7M8.5 13.5h7M8.5 17h4"/></svg> Servicios</button>
-    <button class="tab-btn" data-tab="tab-checkin" onclick="showTab('tab-checkin')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10H9l-4 3.5v-3.5H4Z"/></svg> Check-in</button>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8.5v7M17.5 8.5v7M3 10v4M21 10v4M6.5 12h11"/></svg> Rutina</button>
+      <button class="tab-btn" data-tab="tab-progreso" onclick="showTab('tab-progreso')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 19.5 9 13l4 3 7-9"/><path d="M15.5 6.5H20v4.5"/></svg> Progreso</button>
+      <button class="tab-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/></svg> Beneficios</button>
+      <button class="tab-btn" data-tab="tab-servicios" onclick="showTab('tab-servicios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M8.5 10h7M8.5 13.5h7M8.5 17h4"/></svg> Servicios</button>
+      <button class="tab-btn" data-tab="tab-checkin" onclick="showTab('tab-checkin')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10H9l-4 3.5v-3.5H4Z"/></svg> Check-in</button>
+    </div>
   </div>
 
   <div class="dash-body">
