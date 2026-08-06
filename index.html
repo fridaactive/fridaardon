@@ -50,8 +50,9 @@
   .dash-body { padding:1rem 1.25rem 2rem; max-width:520px; margin:0 auto; }
 
   /* ── TABS ── */
-  .tab-bar { display:flex; gap:0.4rem; overflow-x:auto; padding:0 1.25rem 0.75rem; max-width:520px; margin:0 auto; position:relative; }
-  .tab-btn { flex-shrink:0; display:inline-flex; align-items:center; gap:0.35rem; background:none; border:none; padding:0.5rem 0.85rem; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.55); font-family:'DM Sans',sans-serif; cursor:pointer; border-radius:100px; white-space:nowrap; transition:transform 0.15s, background 0.15s, color 0.15s; }
+  .tab-bar { display:flex; gap:0.4rem; overflow-x:auto; padding:0 1.25rem 0.75rem; max-width:520px; margin:0 auto; position:relative; scrollbar-width:none; -ms-overflow-style:none; }
+  .tab-bar::-webkit-scrollbar { display:none; }
+  .tab-btn { flex-shrink:0; display:inline-flex; align-items:center; gap:0.35rem; background:rgba(255,255,255,0.14); border:none; padding:0.5rem 0.85rem; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.92); font-family:'DM Sans',sans-serif; cursor:pointer; border-radius:100px; white-space:nowrap; transition:transform 0.15s, background 0.15s, color 0.15s; }
   .tab-btn svg { width:14px; height:14px; flex-shrink:0; }
   .tab-btn:active { transform:scale(0.94); }
   .tab-btn.active { background:#fff; color:var(--blue); box-shadow:0 2px 8px rgba(15,63,168,0.18); }
