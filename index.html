@@ -668,10 +668,35 @@ var EXERCISE_BANK = {};
 function loadDashboard(uid) {
   currentUid = uid;
   setLoading(true);
+  fetchPortalAndRender(uid, false);
+}
+
+// A tab left open for hours can hold a stale Firebase Auth token — the read
+// below then comes back without perfil.clientId even for an already-linked
+// clienta, which used to bump her straight to the leads landing screen.
+// Force-refresh the ID token and retry once before trusting a "no client
+// linked" result, and fall back to the last confirmed clientId if it's
+// still empty after that.
+function fetchPortalAndRender(uid, isRetry) {
   db().ref('clientasPortal/' + uid).once('value').then(function(snap) {
     var portal = snap.val() || {};
     var perfil = portal.perfil || {};
-    currentClientId = perfil.clientId;
+    var clientId = perfil.clientId;
+
+    if (!clientId && !isRetry) {
+      var user = firebase.auth().currentUser;
+      var refresh = user ? user.getIdToken(true) : Promise.resolve();
+      refresh.then(function() { fetchPortalAndRender(uid, true); })
+        .catch(function() { fetchPortalAndRender(uid, true); });
+      return;
+    }
+
+    if (!clientId) {
+      clientId = localStorage.getItem('fa_last_client_' + uid) || null;
+    } else {
+      localStorage.setItem('fa_last_client_' + uid, clientId);
+    }
+    currentClientId = clientId;
     var firstName = perfil.nombre ? perfil.nombre.split(' ')[0] : '';
 
     // No linked client record yet — she's a lead, not an active clienta.
@@ -697,6 +722,13 @@ function loadDashboard(uid) {
     setLoading(false);
     showScreen('screen-dashboard');
   }).catch(function(e) {
+    if (!isRetry) {
+      var user = firebase.auth().currentUser;
+      var refresh = user ? user.getIdToken(true) : Promise.resolve();
+      refresh.then(function() { fetchPortalAndRender(uid, true); })
+        .catch(function() { fetchPortalAndRender(uid, true); });
+      return;
+    }
     setLoading(false);
     console.warn('loadDashboard error', e.message);
     showScreen('screen-dashboard');
