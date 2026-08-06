@@ -663,6 +663,7 @@ function doForgotPassword() {
 function doLogout() {
   currentUid = null;
   currentClientId = null;
+  currentClientName = null;
   firebase.auth().signOut().then(function() { showScreen('screen-login'); });
 }
 
@@ -676,6 +677,7 @@ var WHATSAPP_MESSAGE = 'Hola Frida, estoy interesada en tomar un plan de entrena
 
 var currentUid = null;
 var currentClientId = null;
+var currentClientName = null;
 var currentRutinaData = null;
 var EXERCISE_BANK = {};
 
@@ -714,6 +716,7 @@ function fetchPortalAndRender(uid, isRetry) {
       localStorage.setItem('fa_last_client_' + uid, clientId);
     }
     currentClientId = clientId;
+    currentClientName = perfil.nombre || '';
     var firstName = perfil.nombre ? perfil.nombre.split(' ')[0] : '';
 
     // No linked client record yet — she's a lead, not an active clienta.
@@ -1026,11 +1029,24 @@ function generateShortCode() {
 }
 
 var LOADED_BENEFICIOS = {};
+var MESES_LARGOS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
 function getInstagramUrl(handle) {
   if (!handle) return null;
   if (/^https?:\/\//i.test(handle)) return handle;
   return 'https://instagram.com/' + handle.replace(/^@/, '');
+}
+
+// Beneficios se canjean 1 vez por mes calendario — no es un código de por
+// vida, cada mes se abre un cupo nuevo. Si no se canjeó dentro del mes, esa
+// oportunidad se pierde (no hay forma de canjear "el mes pasado").
+function getCurrentMonthKey() {
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+}
+function monthLabel(monthKey) {
+  var parts = monthKey.split('-');
+  return MESES_LARGOS[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
 }
 
 function loadBeneficios() {
@@ -1041,11 +1057,12 @@ function loadBeneficios() {
     items.forEach(function(b) { LOADED_BENEFICIOS[b.id] = b; });
     var el = document.getElementById('beneficios-list');
     if (items.length === 0) { el.innerHTML = '<div class="empty-note">Todavía no hay beneficios cargados.</div>'; return; }
+    var monthKey = getCurrentMonthKey();
     var todayStr = new Date().toISOString().slice(0, 10);
     var html = '';
     items.forEach(function(b) {
-      var vencido = b.vencimiento && b.vencimiento < todayStr;
-      var miCanje = b.canjes && b.canjes[currentUid];
+      var alianzaTerminada = b.vencimiento && b.vencimiento < todayStr;
+      var miCanje = b.canjes && b.canjes[currentUid] && b.canjes[currentUid][monthKey];
       html += '<div class="benef-card"><div class="benef-row">';
       if (b.logoUrl) {
         html += '<img class="benef-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.outerHTML=\'<div class=&quot;benef-logo-fallback&quot;>' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>\'">';
@@ -1066,15 +1083,17 @@ function loadBeneficios() {
         }
         html += '</div>';
       }
-      if (b.vencimiento) html += '<div style="font-size:0.68rem;color:' + (vencido ? '#e53e3e' : 'var(--muted)') + ';margin-top:0.25rem;">' + (vencido ? 'Venció el ' : 'Válido hasta el ') + b.vencimiento + '</div>';
+      if (!alianzaTerminada) {
+        html += '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.25rem;">Se puede canjear 1 vez por mes · ' + monthLabel(monthKey) + '</div>';
+      }
       if (miCanje) {
         html += '<div style="margin-top:0.6rem;background:var(--blue-lt);border-radius:8px;padding:0.6rem 0.8rem;text-align:center;">';
-        html += '<div style="font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">Tu código</div>';
+        html += '<div style="font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">Tu código de ' + monthLabel(monthKey) + '</div>';
         html += '<div style="font-size:1.1rem;font-weight:700;color:var(--blue);letter-spacing:0.1em;">' + miCanje.code + '</div>';
         html += '</div>';
-        html += '<button class="btn-secondary" style="margin-top:0.5rem;" onclick="descargarVoucher(\'' + b.id + '\')">⬇️ Descargar código</button>';
-      } else if (vencido) {
-        html += '<button class="btn-secondary" disabled style="margin-top:0.6rem;opacity:0.5;cursor:not-allowed;">Beneficio vencido</button>';
+        html += '<button class="btn-secondary" style="margin-top:0.5rem;" onclick="descargarVoucher(\'' + b.id + '\')">⬇️ Descargar cupón</button>';
+      } else if (alianzaTerminada) {
+        html += '<button class="btn-secondary" disabled style="margin-top:0.6rem;opacity:0.5;cursor:not-allowed;">Alianza finalizada</button>';
       } else {
         html += '<button class="btn-secondary" style="margin-top:0.6rem;" onclick="canjearBeneficio(\'' + b.id + '\')">🎁 Canjear beneficio</button>';
       }
@@ -1086,11 +1105,12 @@ function loadBeneficios() {
 
 function descargarVoucher(beneficioId) {
   var b = LOADED_BENEFICIOS[beneficioId];
-  var miCanje = b && b.canjes && b.canjes[currentUid];
+  var monthKey = getCurrentMonthKey();
+  var miCanje = b && b.canjes && b.canjes[currentUid] && b.canjes[currentUid][monthKey];
   if (!b || !miCanje || !window.jspdf) { alert('No se pudo generar el vale, intentá de nuevo.'); return; }
-  var doc = new window.jspdf.jsPDF({ unit: 'mm', format: [100, 60] });
+  var doc = new window.jspdf.jsPDF({ unit: 'mm', format: [100, 74] });
   doc.setFillColor(28, 85, 229);
-  doc.rect(0, 0, 100, 60, 'F');
+  doc.rect(0, 0, 100, 74, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(8);
   doc.text('FRIDAACTIVE · BENEFICIO', 8, 10);
@@ -1107,16 +1127,28 @@ function descargarVoucher(beneficioId) {
   doc.text('TU CÓDIGO', 12, 40);
   doc.setFontSize(17);
   doc.text(miCanje.code, 12, 48);
+
+  // Clienta + código de acceso — para que Frida valide contra su lista de
+  // clientas activas que le comparte a las marcas.
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(7);
-  var footer = b.vencimiento ? ('Válido hasta ' + b.vencimiento) : 'Presentalo en ' + (b.marca || 'la marca');
-  doc.text(footer, 8, 57);
-  doc.save('beneficio-' + (b.marca || 'fridaactive').toLowerCase().replace(/\s+/g, '-') + '.pdf');
+  doc.text('CLIENTA', 8, 59);
+  doc.setFontSize(10);
+  doc.text(currentClientName || '', 8, 64);
+  doc.setFontSize(7);
+  doc.text('CÓDIGO DE ACCESO', 55, 59);
+  doc.setFontSize(10);
+  doc.text(currentClientId || '', 55, 64);
+
+  doc.setFontSize(6.5);
+  doc.text('Válido durante ' + monthLabel(monthKey), 8, 71);
+  doc.save('beneficio-' + (b.marca || 'fridaactive').toLowerCase().replace(/\s+/g, '-') + '-' + monthKey + '.pdf');
 }
 
 function canjearBeneficio(beneficioId) {
+  var monthKey = getCurrentMonthKey();
   var entry = { code: generateShortCode(), canjeadoEn: Date.now() };
-  db().ref('beneficios/' + beneficioId + '/canjes/' + currentUid).set(entry).then(function() {
+  db().ref('beneficios/' + beneficioId + '/canjes/' + currentUid + '/' + monthKey).set(entry).then(function() {
     loadBeneficios();
   }).catch(function(e) { alert('No se pudo canjear: ' + e.message); });
 }
