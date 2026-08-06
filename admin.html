@@ -709,47 +709,51 @@
     <div class="fin-form-row"><div class="fin-form-label">Nombre completo</div><input class="fin-form-input" id="nc-name" type="text" placeholder="Ej: María López"></div>
 
     <div class="fin-form-row"><div class="fin-form-label">Tipo</div>
-      <select class="fin-form-select" id="nc-type">
+      <select class="fin-form-select" id="nc-type" onchange="updateNCTypeUI()">
         <option value="presencial">Presencial</option>
         <option value="online-1a1">Online 1:1</option>
         <option value="rutina-personalizada">Rutina personalizada</option>
       </select>
     </div>
 
-    <div class="fin-form-row"><div class="fin-form-label">Valor por sesión ($)</div><input class="fin-form-input" id="nc-cuota" type="number" placeholder="Ej: 20.00"></div>
+    <div class="fin-form-row" id="nc-cuota-row"><div class="fin-form-label" id="nc-cuota-label">Valor por sesión ($)</div><input class="fin-form-input" id="nc-cuota" type="number" placeholder="Ej: 20.00"></div>
 
-    <div style="display:flex;gap:0.6rem;margin-bottom:0.85rem;">
+    <div class="fin-form-row" id="nc-startdate-row" style="display:none;"><div class="fin-form-label">Fecha de inicio</div><input class="fin-form-input" id="nc-start-date" type="date"></div>
+
+    <div id="nc-hours-row" style="display:flex;gap:0.6rem;margin-bottom:0.85rem;">
       <div style="flex:1;"><div class="fin-form-label">Hora inicio</div><input class="fin-form-input" id="nc-hour-start" type="time"></div>
       <div style="flex:1;"><div class="fin-form-label">Hora fin</div><input class="fin-form-input" id="nc-hour-end" type="time"></div>
     </div>
 
     <!-- Calendario de selección de días -->
-    <div class="fin-form-label" style="margin-bottom:0.5rem;">Seleccioná los días del ciclo</div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
-      <button id="nc-prev-month" type="button" style="background:none;border:none;font-size:1.2rem;color:var(--blue);cursor:pointer;padding:0.25rem 0.5rem;">‹</button>
-      <div id="nc-month-label" style="font-size:0.82rem;font-weight:700;color:var(--text);"></div>
-      <button id="nc-next-month" type="button" style="background:none;border:none;font-size:1.2rem;color:var(--blue);cursor:pointer;padding:0.25rem 0.5rem;">›</button>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px;">
-      <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Do</div>
-      <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Lu</div>
-      <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Ma</div>
-      <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Mi</div>
-      <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Ju</div>
-      <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Vi</div>
-      <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Sá</div>
-    </div>
-    <div id="nc-calendar-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:0.85rem;"></div>
-
-    <!-- Resumen automático -->
-    <div id="nc-summary" style="background:var(--blue-lt);border-radius:10px;padding:0.75rem;margin-bottom:0.85rem;display:none;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem;">
-        <span style="font-size:0.72rem;color:var(--muted);">Sesiones seleccionadas</span>
-        <span style="font-size:0.82rem;font-weight:700;color:var(--text);" id="nc-count">0</span>
+    <div id="nc-calendar-section">
+      <div class="fin-form-label" style="margin-bottom:0.5rem;">Seleccioná los días del ciclo</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+        <button id="nc-prev-month" type="button" style="background:none;border:none;font-size:1.2rem;color:var(--blue);cursor:pointer;padding:0.25rem 0.5rem;">‹</button>
+        <div id="nc-month-label" style="font-size:0.82rem;font-weight:700;color:var(--text);"></div>
+        <button id="nc-next-month" type="button" style="background:none;border:none;font-size:1.2rem;color:var(--blue);cursor:pointer;padding:0.25rem 0.5rem;">›</button>
       </div>
-      <div style="display:flex;justify-content:space-between;">
-        <span style="font-size:0.72rem;color:var(--muted);">Total del ciclo</span>
-        <span style="font-size:0.95rem;font-weight:700;color:var(--blue);" id="nc-total">$0.00</span>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px;">
+        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Do</div>
+        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Lu</div>
+        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Ma</div>
+        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Mi</div>
+        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Ju</div>
+        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Vi</div>
+        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Sá</div>
+      </div>
+      <div id="nc-calendar-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:0.85rem;"></div>
+
+      <!-- Resumen automático -->
+      <div id="nc-summary" style="background:var(--blue-lt);border-radius:10px;padding:0.75rem;margin-bottom:0.85rem;display:none;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem;">
+          <span style="font-size:0.72rem;color:var(--muted);">Sesiones seleccionadas</span>
+          <span style="font-size:0.82rem;font-weight:700;color:var(--text);" id="nc-count">0</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-size:0.72rem;color:var(--muted);">Total del ciclo</span>
+          <span style="font-size:0.95rem;font-weight:700;color:var(--blue);" id="nc-total">$0.00</span>
+        </div>
       </div>
     </div>
 
@@ -1575,6 +1579,7 @@ function convertLeadToClient(uid, name) {
   openNewClientModal();
   document.getElementById('nc-name').value = name || '';
   document.getElementById('nc-type').value = 'online-1a1';
+  updateNCTypeUI();
 }
 
 function deleteLead(uid, name) {
@@ -3104,15 +3109,29 @@ function openNewClientModal() {
   document.getElementById('nc-hour-start').value = '';
   document.getElementById('nc-hour-end').value = '';
   document.getElementById('nc-cuota').value = '';
+  document.getElementById('nc-start-date').value = '';
   document.getElementById('nc-meta').value = '';
   document.getElementById('nc-error').style.display = 'none';
   document.getElementById('nc-summary').style.display = 'none';
   document.getElementById('new-client-modal').style.display = 'flex';
   renderNCCalendar();
+  updateNCTypeUI();
 }
 
 function closeNewClientModal() {
   document.getElementById('new-client-modal').style.display = 'none';
+}
+
+function updateNCTypeUI() {
+  var isRutina = document.getElementById('nc-type').value === 'rutina-personalizada';
+  document.getElementById('nc-cuota-label').textContent = isRutina ? 'Monto mensual ($)' : 'Valor por sesión ($)';
+  document.getElementById('nc-startdate-row').style.display = isRutina ? '' : 'none';
+  document.getElementById('nc-hours-row').style.display = isRutina ? 'none' : 'flex';
+  document.getElementById('nc-calendar-section').style.display = isRutina ? 'none' : '';
+  if (isRutina) {
+    var startInput = document.getElementById('nc-start-date');
+    if (!startInput.value) startInput.value = new Date().toISOString().slice(0, 10);
+  }
 }
 
 function renderNCCalendar() {
@@ -3159,23 +3178,76 @@ function timeStrToDecimal(timeStr) {
   return parseInt(parts[0]) + (parseInt(parts[1] || '0') / 60);
 }
 
+function linkPendingLead(id) {
+  if (!pendingLeadUid) return;
+  var leadUid = pendingLeadUid;
+  pendingLeadUid = null;
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) return;
+    var linkUpdates = {};
+    linkUpdates['client_links/' + id] = leadUid;
+    linkUpdates['clientasPortal/' + leadUid + '/perfil/clientId'] = id;
+    db.ref().update(linkUpdates).catch(function(e) { console.warn('link lead error', e.message); });
+  });
+}
+
 function handleSaveNewClient() {
   var errorEl = document.getElementById('nc-error');
   errorEl.style.display = 'none';
 
   var name = document.getElementById('nc-name').value.trim();
   var type = document.getElementById('nc-type').value;
-  var hourStartVal = document.getElementById('nc-hour-start').value;
-  var hourEndVal = document.getElementById('nc-hour-end').value;
   var cuotaVal = document.getElementById('nc-cuota').value;
   var metaText = document.getElementById('nc-meta').value.trim();
-  var pricePerSession = cuotaVal ? parseFloat(cuotaVal) : 0;
 
   if (!name) {
     errorEl.textContent = 'El nombre es obligatorio.';
     errorEl.style.display = 'block';
     return;
   }
+
+  // Rutina personalizada: un solo pago mensual, sin sesiones ni calendario —
+  // el plan dura exactamente 1 mes desde la fecha de inicio elegida.
+  if (type === 'rutina-personalizada') {
+    var startDateVal = document.getElementById('nc-start-date').value;
+    if (!startDateVal) {
+      errorEl.textContent = 'Indicá la fecha de inicio.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    var id = slugify(name);
+    var startD = new Date(startDateVal + 'T00:00:00');
+    var endD = new Date(startD);
+    endD.setMonth(endD.getMonth() + 1);
+    var endDateVal = endD.toISOString().slice(0, 10);
+    var monthlyPrice = cuotaVal ? parseFloat(cuotaVal) : 0;
+
+    var rutinaClientData = {
+      name: name,
+      firstEverDate: startDateVal,
+      initDate: startDateVal,
+      endDate: endDateVal,
+      type: type,
+      sessions: 0,
+      days: [],
+      cuota: monthlyPrice || null,
+      rutina: null,
+      meta: metaText || 'Rutina por agregar'
+    };
+
+    CLIENTS[id] = rutinaClientData;
+    saveCustomClient(id, rutinaClientData);
+    linkPendingLead(id);
+    closeNewClientModal();
+    renderClientsList();
+    return;
+  }
+
+  var hourStartVal = document.getElementById('nc-hour-start').value;
+  var hourEndVal = document.getElementById('nc-hour-end').value;
+  var pricePerSession = cuotaVal ? parseFloat(cuotaVal) : 0;
+
   if (ncSelectedDays.length === 0) {
     errorEl.textContent = 'Seleccioná al menos un día en el calendario.';
     errorEl.style.display = 'block';
@@ -3251,18 +3323,7 @@ function handleSaveNewClient() {
   localStorage.setItem('fa_cal_events', JSON.stringify(calEvents));
   fbSet('cal/events', calEvents);
 
-  if (pendingLeadUid) {
-    var leadUid = pendingLeadUid;
-    pendingLeadUid = null;
-    withAdminAuth(function() {
-      var db = getDB();
-      if (!db) return;
-      var linkUpdates = {};
-      linkUpdates['client_links/' + id] = leadUid;
-      linkUpdates['clientasPortal/' + leadUid + '/perfil/clientId'] = id;
-      db.ref().update(linkUpdates).catch(function(e) { console.warn('link lead error', e.message); });
-    });
-  }
+  linkPendingLead(id);
 
   closeNewClientModal();
   renderClientsList();
