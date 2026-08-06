@@ -711,7 +711,8 @@
     <div class="fin-form-row"><div class="fin-form-label">Tipo</div>
       <select class="fin-form-select" id="nc-type">
         <option value="presencial">Presencial</option>
-        <option value="online">Online</option>
+        <option value="online-1a1">Online 1:1</option>
+        <option value="rutina-personalizada">Rutina personalizada</option>
       </select>
     </div>
 
@@ -1477,7 +1478,7 @@ function renderClientsProgressOverview() {
   var el = document.getElementById('pc-progress-list');
   if (!el) return;
   var onlineLinked = Object.keys(CLIENTS).filter(function(id) {
-    return CLIENTS[id].type === 'online' && CLIENT_LINKS[id];
+    return isOnlineType(CLIENTS[id].type) && CLIENT_LINKS[id];
   });
   if (onlineLinked.length === 0) {
     el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientas online vinculadas al portal.</div>';
@@ -1573,7 +1574,7 @@ function convertLeadToClient(uid, name) {
   pendingLeadUid = uid;
   openNewClientModal();
   document.getElementById('nc-name').value = name || '';
-  document.getElementById('nc-type').value = 'online';
+  document.getElementById('nc-type').value = 'online-1a1';
 }
 
 function deleteLead(uid, name) {
@@ -1982,6 +1983,11 @@ function countSessionsInCycle(id, c) {
     }
   });
   return count;
+}
+
+var TYPE_LABELS = { presencial: 'Presencial', online: 'Online 1:1', 'online-1a1': 'Online 1:1', 'rutina-personalizada': 'Rutina personalizada' };
+function isOnlineType(type) {
+  return type === 'online' || type === 'online-1a1' || type === 'rutina-personalizada';
 }
 
 function isActive(c, id) {
@@ -2830,7 +2836,7 @@ function openClientDetail(id) {
   // Portal de clienta — solo aplica a clientas online
   var portalSectionEl = document.getElementById('cd-portal-section');
   if (portalSectionEl) {
-    if (c.type === 'online') {
+    if (isOnlineType(c.type)) {
       portalSectionEl.style.display = '';
       renderPortalSection(id);
     } else {
@@ -2842,7 +2848,7 @@ function openClientDetail(id) {
 }
 
 function renderAsistencia(id, c) {
-  if (c.type === 'online') {
+  if (isOnlineType(c.type)) {
     document.getElementById('cd-asistencia').innerHTML = '<div style="text-align:center;color:var(--muted);font-size:0.78rem;padding:1rem 0;">Las clientas online no tienen cuadro de asistencia presencial.</div>';
     return;
   }
@@ -3027,8 +3033,8 @@ function renderClientsList() {
     return clientsTab === 'activas' ? active : !active;
   });
 
-  var onlineIds = ids.filter(function(id){ return CLIENTS[id].type === 'online'; });
-  var presIds = ids.filter(function(id){ return CLIENTS[id].type !== 'online'; });
+  var onlineIds = ids.filter(function(id){ return isOnlineType(CLIENTS[id].type); });
+  var presIds = ids.filter(function(id){ return !isOnlineType(CLIENTS[id].type); });
 
   var html = '';
 
@@ -3040,8 +3046,8 @@ function renderClientsList() {
     var c = CLIENTS[id];
     var active = isActive(c, id);
     var badgeText, badgeBg, badgeColor;
-    if (c.type === 'online') {
-      badgeText = active ? 'Online ●' : 'Inactiva';
+    if (isOnlineType(c.type)) {
+      badgeText = active ? (TYPE_LABELS[c.type] || 'Online') + ' ●' : 'Inactiva';
       badgeBg = active ? '#F0FFF0' : '#fff0f0';
       badgeColor = active ? '#2a7a2a' : '#c44';
     } else {
@@ -3054,7 +3060,7 @@ function renderClientsList() {
     var metaText = 'Inicio: '+start.getDate()+' '+mnames[start.getMonth()]+' '+start.getFullYear();
     if (c.days && c.days.length > 0) metaText += ' · ' + c.days.join('/');
     if (c.sessions > 0) metaText += ' · ' + c.sessions + ' sesiones';
-    var avatarColor = c.type === 'online' ? 'var(--blue)' : '#0F3FA8';
+    var avatarColor = isOnlineType(c.type) ? 'var(--blue)' : '#0F3FA8';
     return '<div class="client-card" data-cid="'+id+'">'
       + '<div class="client-avatar" style="background:'+avatarColor+';">'+initials(c.name)+'</div>'
       + '<div class="client-info"><div class="client-name">'+c.name+'</div><div class="client-meta">'+metaText+'</div></div>'
