@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herberth · Movilidad & Fuerza · Programa Completo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:#1C55E5; --blue-lt:#EEF4FF; --blue-dk:#0F3FA8;
+    --cream:#F5ECCB; --text:#0a1628; --muted:#7a8499;
+    --border:#E8E3D0; --border-b:#ccdaf5;
+    --grad:linear-gradient(135deg,#F5ECCB 0%,#fff 100%);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:#fff; color:var(--text); padding:0 0 4rem; }
+
+  /* HERO */
+  .hero { background:var(--blue); padding:2.5rem 1.5rem 2rem; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; top:-60px; right:-60px; width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.05); }
+  .gym-name { font-size:0.65rem; color:rgba(255,255,255,0.5); letter-spacing:0.25em; text-transform:uppercase; margin-bottom:0.5rem; position:relative; z-index:1; }
+  .hero-title { font-size:1.8rem; font-weight:700; color:#fff; line-height:1.1; margin-bottom:0.3rem; position:relative; z-index:1; }
+  .hero-title span { color:var(--cream); }
+  .hero-sub { font-size:0.78rem; color:rgba(255,255,255,0.6); font-weight:300; position:relative; z-index:1; margin-bottom:1.5rem; }
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:0.5rem; position:relative; z-index:1; }
+  .stat { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:0.75rem 0.4rem; text-align:center; }
+  .stat-val { font-size:1.3rem; font-weight:700; color:#fff; }
+  .stat-label { font-size:0.48rem; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.08em; margin-top:0.2rem; }
+
+  .body { padding:1rem 1.25rem; max-width:720px; margin:0 auto; }
+
+  /* DÍA TABS */
+  .day-tabs { display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem; margin:1.25rem 0; }
+  .day-tab { border:1.5px solid var(--border); border-radius:12px; padding:0.75rem 0.5rem; text-align:center; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; transition:all 0.2s; background:#fff; }
+  .day-tab.active { background:var(--blue); border-color:var(--blue); }
+  .day-tab-num { font-size:1rem; font-weight:700; color:var(--muted); }
+  .day-tab.active .day-tab-num { color:var(--cream); }
+  .day-tab-name { font-size:0.58rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-top:0.15rem; }
+  .day-tab.active .day-tab-name { color:rgba(255,255,255,0.7); }
+
+  /* DÍA CONTENT */
+  .day-content { display:none; }
+  .day-content.active { display:block; }
+
+  /* BLOQUE HEADER */
+  .bloque-hdr { background:var(--blue); border-radius:14px 14px 0 0; padding:1rem 1.25rem; margin-top:1.25rem; }
+  .bloque-tag { font-size:0.55rem; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.2em; margin-bottom:0.3rem; }
+  .bloque-title { font-size:1rem; font-weight:700; color:#fff; }
+  .bloque-desc { font-size:0.7rem; color:rgba(255,255,255,0.65); margin-top:0.25rem; font-weight:300; font-style:italic; }
+  .bloque-body { border:1.5px solid var(--border-b); border-top:none; border-radius:0 0 14px 14px; overflow:hidden; }
+
+  /* EJERCICIO */
+  .ex { padding:1rem 1.25rem; border-bottom:1px solid var(--border); background:#fff; }
+  .ex:last-child { border-bottom:none; }
+  .ex-num-row { display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem; }
+  .ex-num { background:var(--blue); color:#fff; border-radius:50%; width:1.8rem; height:1.8rem; display:flex; align-items:center; justify-content:center; font-size:0.65rem; font-weight:700; flex-shrink:0; }
+  .ex-name { font-size:0.9rem; font-weight:700; color:var(--text); flex:1; }
+  .ex-chip { background:var(--grad); border:1px solid #d4c890; border-radius:6px; padding:0.2rem 0.55rem; font-size:0.63rem; font-weight:700; color:var(--blue-dk); white-space:nowrap; flex-shrink:0; }
+  .ex-desc { font-size:0.74rem; color:var(--muted); line-height:1.65; font-weight:300; }
+  .ex-tip { background:var(--blue-lt); border-radius:8px; padding:0.6rem 0.85rem; margin-top:0.5rem; font-size:0.7rem; color:var(--blue-dk); font-weight:300; line-height:1.55; }
+  .ex-tip strong { font-weight:700; }
+
+  /* SUPERSERIE */
+  .superserie { border:1.5px solid var(--blue); border-radius:12px; overflow:hidden; margin:0.75rem 1.25rem; }
+  .superserie-hdr { background:var(--blue); padding:0.5rem 0.9rem; }
+  .superserie-tag { font-size:0.56rem; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:0.1em; }
+  .superserie-name { font-size:0.78rem; font-weight:700; color:#fff; margin-top:0.1rem; }
+  .sub-ex { padding:0.85rem 1rem; border-top:1px solid #e0eafc; background:#fff; }
+  .sub-ex:first-of-type { border-top:none; }
+  .sub-ex-row { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.35rem; }
+  .sub-tag { background:#ccdaf5; color:var(--blue-dk); border-radius:5px; padding:0.15rem 0.45rem; font-size:0.6rem; font-weight:700; flex-shrink:0; }
+  .sub-name { font-size:0.84rem; font-weight:600; color:var(--text); flex:1; }
+  .sub-chip { background:var(--grad); border:1px solid #d4c890; border-radius:6px; padding:0.18rem 0.5rem; font-size:0.62rem; font-weight:700; color:var(--blue-dk); white-space:nowrap; }
+  .sub-desc { font-size:0.72rem; color:var(--muted); line-height:1.6; font-weight:300; }
+  .super-note { background:#f4f8ff; padding:0.4rem 0.9rem; font-size:0.62rem; color:var(--muted); border-top:1px solid var(--border-b); }
+
+  /* NOTA */
+  .nota-box { background:var(--grad); border:1.5px solid var(--border); border-radius:14px; padding:1.1rem; margin-top:1.5rem; }
+  .nota-label { font-size:0.58rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--blue); font-weight:700; margin-bottom:0.5rem; }
+  .nota-item { font-size:0.73rem; color:var(--text); font-weight:300; line-height:1.6; display:flex; gap:0.5rem; margin-bottom:0.25rem; }
+  .nota-dot { color:var(--blue); flex-shrink:0; }
+
+  .footer { text-align:center; padding:2rem 1rem 0; font-size:0.65rem; color:var(--muted); }
+  .footer strong { color:var(--blue); display:block; font-size:0.85rem; margin-bottom:0.2rem; }
+</style>
+</head>
+<body>
+
+<div style="background:#F5ECCB;border-bottom:2px solid #d4c890;padding:0.85rem 1.25rem;text-align:center;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#0a1628;">
+  📁 Rutina archivada — <strong>Fase 1</strong> (versión anterior). <a href="/herberth.html" style="color:#1C55E5;font-weight:700;text-decoration:none;">Ver la rutina actual →</a>
+</div>
+
+<div class="hero">
+  <div class="gym-name">FridaActive</div>
+  <div class="hero-title">Movilidad & <span>Fuerza</span></div>
+  <div class="hero-sub">Herberth · Programa personalizado · 3 días</div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">60</div><div class="stat-label">Años</div></div>
+    <div class="stat"><div class="stat-val">3</div><div class="stat-label">Días</div></div>
+    <div class="stat"><div class="stat-val">2</div><div class="stat-label">Bloques</div></div>
+    <div class="stat"><div class="stat-val">3</div><div class="stat-label">Series c/u</div></div>
+  </div>
+</div>
+
+<div class="body">
+
+  <!-- TABS -->
+  <div class="day-tabs">
+    <div class="day-tab active" onclick="showDay(1)">
+      <div class="day-tab-num">01</div>
+      <div class="day-tab-name">Tren Inferior</div>
+    </div>
+    <div class="day-tab" onclick="showDay(2)">
+      <div class="day-tab-num">02</div>
+      <div class="day-tab-name">Tren Superior</div>
+    </div>
+    <div class="day-tab" onclick="showDay(3)">
+      <div class="day-tab-num">03</div>
+      <div class="day-tab-name">Coordinación</div>
+    </div>
+  </div>
+
+  <!-- ═══════════ DÍA 1 ═══════════ -->
+  <div class="day-content active" id="day-1">
+
+    <div class="bloque-hdr">
+      <div class="bloque-tag">Bloque 1 · Día 1</div>
+      <div class="bloque-title">Movilidad — Tren Inferior</div>
+      <div class="bloque-desc">2 rondas. Nunca forzar el rango — llegar al límite cómodo y respirar ahí. 30-45 seg descanso entre ejercicios.</div>
+    </div>
+    <div class="bloque-body">
+      <div class="ex">
+        <div class="ex-num-row"><div class="ex-num">01</div><div class="ex-name">Movilidad de tobillo de pie</div><div class="ex-chip">2 × 8/lado</div></div>
+        <div class="ex-desc">De pie frente a la pared con una mano de apoyo. Adelantar un pie unos 10 cm. Doblar la rodilla hacia adelante intentando tocar la pared sin levantar el talón del piso. Mantener 2 seg y volver. Si la rodilla llega fácil, alejar el pie un poco más.</div>
+        <div class="ex-tip"><strong>¿Por qué?</strong> Mejora la dorsiflexión del tobillo, esencial para sentadillas seguras y buen equilibrio al caminar.</div>
+      </div>
+      <div class="ex">
+        <div class="ex-num-row"><div class="ex-num">02</div><div class="ex-name">Apertura de cadera en 4 puntos de apoyo</div><div class="ex-chip">2 × 8/lado</div></div>
+        <div class="ex-desc">En posición de gato (manos y rodillas en el piso), levantar una rodilla hacia afuera en arco amplio como dibujando un círculo. Mantener la espalda neutra y el core activo. Lento y controlado sin dejar caer la cadera.</div>
+        <div class="ex-tip"><strong>¿Por qué?</strong> Abre la articulación de la cadera y activa el glúteo medio — fundamental para subir escaleras y caminar sin compensaciones.</div>
+      </div>
+      <div class="ex">
+        <div class="ex-num-row"><div class="ex-num">03</div><div class="ex-name">Rotación de cadera de pie con apoyo</div><div class="ex-chip">2 × 6/lado</div></div>
+        <div class="ex-desc">De pie con una mano en la pared. Levantar una rodilla a la altura de la cadera y trazar círculos amplios hacia afuera y hacia adentro. Mantener el tronco estable y erguido. 6 círculos en cada dirección por pierna.</div>
+        <div class="ex-tip"><strong>¿Por qué?</strong> Mejora la movilidad activa de la cadera — reduce el riesgo de caídas y facilita movimientos cotidianos como entrar al auto.</div>
+      </div>
+      <div class="ex">
+        <div class="ex-num-row"><div class="ex-num">04</div><div class="ex-name">Estiramiento de cadena posterior de pie</div><div class="ex-chip">3 × 6/lado</div></div>
+        <div class="ex-desc">De pie frente a la silla. Apoyar el talón de una pierna en el asiento con la pierna extendida. Inclinar el tronco suavemente hacia adelante con la espalda recta hasta sentir estiramiento en la parte posterior del muslo. Mantener 3 seg y volver. Sin redondear la espalda.</div>
+        <div class="ex-tip"><strong>¿Por qué?</strong> Libera tensión en isquiotibiales y mejora la postura. Muy importante para personas con trabajo sedentario.</div>
+      </div>
+    </div>
+
+    <div class="bloque-hdr">
+      <div class="bloque-tag">Bloque 2 · Día 1</div>
+      <div class="bloque-title">Fuerza — Tren Inferior</div>
+      <div class="bloque-desc">Superseries: A → 20 seg descanso → B → 45 seg descanso → repetir 3 veces.</div>
+    </div>
+    <div class="bloque-body">
+      <div class="superserie">
+        <div class="superserie-hdr">
+          <div class="superserie-tag">Superserie A · Cuádriceps + Equilibrio · 3 rondas</div>
+          <div class="superserie-name">Sentadilla · Step up · Equilibrio</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">A1</div><div class="sub-name">Sentadilla a silla con pausa</div><div class="sub-chip">3 × 8</div></div>
+          <div class="sub-desc">De pie frente a la silla, pies al ancho de hombros. Bajar lentamente hasta rozar el asiento sin sentarse del todo, pausa de 2 seg y volver a subir empujando con los talones. Los brazos pueden extenderse al frente como contrapeso. Control total en la bajada.</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">A2</div><div class="sub-name">Step up lateral con elevación de rodilla + mancuerna</div><div class="sub-chip">3 × 8/lado</div></div>
+          <div class="sub-desc">De pie al lado de un banco o escalón bajo, sosteniendo una mancuerna liviana en la mano del lado opuesto al banco. Subir lateralmente con la pierna más cercana al banco, y al llegar arriba elevar la rodilla opuesta hasta la altura de la cadera. Bajar controlado. Usar la pared con la otra mano si es necesario al inicio.</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">A3</div><div class="sub-name">Equilibrio estático en un pie</div><div class="sub-chip">3 × 20 seg/lado</div></div>
+          <div class="sub-desc">De pie con una mano disponible en la pared. Levantar un pie apenas despegado del piso y mantener. La pierna de apoyo trabaja la estabilidad mientras descansa del esfuerzo anterior. Ojos abiertos primero, luego intentar con ojos cerrados.</div>
+        </div>
+        <div class="super-note">Descanso: 20 seg entre ejercicios · 45 seg entre rondas</div>
+      </div>
+
+      <div class="superserie">
+        <div class="superserie-hdr">
+          <div class="superserie-tag">Superserie B · Cadena posterior + Cadera · 3 rondas</div>
+          <div class="superserie-name">Bridge · Abducciones · Elevación de talones</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">B1</div><div class="sub-name">Bridge de cadera lento</div><div class="sub-chip">3 × 8</div></div>
+          <div class="sub-desc">Boca arriba, pies apoyados al ancho de cadera, rodillas dobladas. Subir la cadera despacio vértebra por vértebra desde la lumbar hacia arriba, hasta línea recta de hombros a rodillas. Mantener 2 seg arriba y bajar en el mismo orden. No arquear el cuello.</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">B2</div><div class="sub-name">Abducción de cadera de pie con banda</div><div class="sub-chip">3 × 12/lado</div></div>
+          <div class="sub-desc">De pie con una mano en la pared y banda elástica en los tobillos. Levantar una pierna hacia afuera lentamente sin inclinar el tronco. Mantener 1 seg arriba y bajar controlado. Si no hay banda, hacerlo sin resistencia igualmente.</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">B3</div><div class="sub-name">Elevación de talones de pie</div><div class="sub-chip">3 × 15</div></div>
+          <div class="sub-desc">De pie con ambas manos en la pared. Subir lentamente en puntas de pie, mantener 2 seg en el tope y bajar controlado. Fortalece pantorrillas y mejora la estabilidad del tobillo. Progresar a una sola mano cuando haya confianza.</div>
+        </div>
+        <div class="super-note">Descanso: 20 seg entre ejercicios · 45 seg entre rondas</div>
+      </div>
+    </div>
+
+    <div class="nota-box">
+      <div class="nota-label">💡 Nota del día 1</div>
+      <div class="nota-item"><span class="nota-dot">●</span><span>Usar calzado con buena suela antideslizante.</span></div>
+      <div class="nota-item"><span class="nota-dot">●</span><span>En la sentadilla: si hay incomodidad en rodillas, reducir el rango de bajada.</span></div>
+      <div class="nota-item"><span class="nota-dot">●</span><span>El bridge de cadera puede hacerse con una almohada debajo de la cabeza si es más cómodo.</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ DÍA 2 ═══════════ -->
+  <div class="day-content" id="day-2">
+
+    <div class="bloque-hdr">
+      <div class="bloque-tag">Bloque 1 · Día 2</div>
+      <div class="bloque-title">Movilidad — Tren Superior & Columna</div>
+      <div class="bloque-desc">2 rondas. Movimientos lentos y controlados. Respirar en cada posición límite.</div>
+    </div>
+    <div class="bloque-body">
+      <div class="ex">
+        <div class="ex-num-row"><div class="ex-num">01</div><div class="ex-name">Rotación de columna acostado</div><div class="ex-chip">2 × 6/lado</div></div>
+        <div class="ex-desc">Boca arriba, rodillas dobladas y pies apoyados en el piso. Brazos abiertos en cruz. Dejar caer ambas rodillas lentamente hacia un lado hasta donde lleguen sin forzar, mantener 2 seg, volver al centro y repetir al otro lado. Los hombros deben quedar pegados al piso todo el tiempo.</div>
+        <div class="ex-tip"><strong>¿Por qué?</strong> Moviliza la columna dorsal y lumbar. Muy efectivo para reducir rigidez matutina y mejorar la rotación del tronco.</div>
+      </div>
+      <div class="ex">
+        <div class="ex-num-row"><div class="ex-num">02</div><div class="ex-name">Gato-vaca lento con respiración</div><div class="ex-chip">2 × 8</div></div>
+        <div class="ex-desc">En 4 puntos de apoyo, inhalar arqueando la espalda hacia abajo (vaca) y exhalar redondeando hacia arriba (gato). Sincronizar cada movimiento con la respiración. Mantener 2 seg en cada extremo. Moviliza toda la columna vertebral de manera segura y sin impacto.</div>
+        <div class="ex-tip"><strong>¿Por qué?</strong> Uno de los mejores ejercicios para la columna. Lubrica las vértebras, activa el core profundo y mejora la respiración.</div>
+      </div>
+      <div class="ex">
+        <div class="ex-num-row"><div class="ex-num">03</div><div class="ex-name">Círculos de hombro con bastón o toalla</div><div class="ex-chip">2 × 8/sentido</div></div>
+        <div class="ex-desc">De pie con apoyo si es necesario. Agarrar el bastón o toalla con ambas manos al frente, a un ancho mayor que los hombros. Hacer círculos amplios llevando el bastón por encima de la cabeza y hacia atrás, luego regresar en sentido contrario. Mantener los codos lo más extendidos posible.</div>
+        <div class="ex-tip"><strong>¿Por qué?</strong> Aumenta el rango de movimiento del hombro y mejora la postura cifótica (espalda redondeada hacia adelante).</div>
+      </div>
+      <div class="ex">
+        <div class="ex-num-row"><div class="ex-num">04</div><div class="ex-name">Movilidad cervical guiada</div><div class="ex-chip">2 × 4/dirección</div></div>
+        <div class="ex-desc">De pie o sentado con espalda recta. Ejecutar cada movimiento por separado: oreja al hombro (inclinación lateral), mentón al pecho (flexión), mirar por encima del hombro (rotación). Lento, sin forzar, sin elevar el hombro al inclinar. Mantener 2–3 seg en cada posición límite.</div>
+        <div class="ex-tip"><strong>¿Por qué?</strong> Alivia la tensión cervical acumulada y mejora la amplitud de giro del cuello, importante para conducir y para la postura general.</div>
+      </div>
+    </div>
+
+    <div class="bloque-hdr">
+      <div class="bloque-tag">Bloque 2 · Día 2</div>
+      <div class="bloque-title">Fuerza — Tren Superior</div>
+      <div class="bloque-desc">Superseries: A → 20 seg descanso → B → 45 seg descanso → repetir 3 veces.</div>
+    </div>
+    <div class="bloque-body">
+      <div class="superserie">
+        <div class="superserie-hdr">
+          <div class="superserie-tag">Superserie A · Hombros + Postura · 3 rondas</div>
+          <div class="superserie-name">Press · Fly · Retracción</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">A1</div><div class="sub-name">Press de hombro sentado con mancuernas</div><div class="sub-chip">3 × 10</div></div>
+          <div class="sub-desc">Sentado al borde de la silla sin apoyar la espalda, pies firmes en el piso. Mancuernas a la altura de los hombros, empujar hacia arriba hasta extender los brazos y bajar controlado. El core trabaja para estabilizar la columna en todo momento. Peso ligero, técnica perfecta.</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">A2</div><div class="sub-name">Apertura (Fly) con banda elástica sentado</div><div class="sub-chip">3 × 12</div></div>
+          <div class="sub-desc">Sentado al borde pisando la banda con ambos pies. Sostener un extremo en cada mano con palmas hacia arriba y codos ligeramente doblados. Elevar los brazos en arco hacia los lados hasta la altura de los hombros y bajar controlado. Sin elevar los hombros. Abre el pecho y moviliza el hombro.</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">A3</div><div class="sub-name">Retracción escapular sentado</div><div class="sub-chip">3 × 10</div></div>
+          <div class="sub-desc">Sentado al borde, brazos relajados a los costados. Juntar los omóplatos hacia atrás y abajo como si quisiera aplastar algo entre ellos, mantener 2 seg y soltar. Sin implementos. Equilibra el press y mejora la postura de hombros y columna torácica.</div>
+        </div>
+        <div class="super-note">Descanso: 20 seg entre ejercicios · 45 seg entre rondas</div>
+      </div>
+
+      <div class="superserie">
+        <div class="superserie-hdr">
+          <div class="superserie-tag">Superserie B · Pecho + Espalda + Movilidad · 3 rondas</div>
+          <div class="superserie-name">Press · Remo · Ángeles</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">B1</div><div class="sub-name">Press de pecho sentado con banda o mancuernas</div><div class="sub-chip">3 × 10</div></div>
+          <div class="sub-desc">Sentado al borde sin apoyar la espalda. Con banda: pisarla con ambos pies y empujar hacia adelante extendiendo los brazos desde la altura del pecho. Con mancuernas: codos a 45°, empujar al frente y volver controlado. Activa pecho, hombro anterior y trícep.</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">B2</div><div class="sub-name">Remo con banda elástica sentado</div><div class="sub-chip">3 × 10</div></div>
+          <div class="sub-desc">Sentado al borde con la banda anclada al frente (en una columna o puerta). Sostener un extremo en cada mano, brazos extendidos. Jalar los codos hacia atrás juntando los omóplatos, mantener 1 seg y volver controlado. Activa espalda media y bícep. Sin redondear la espalda.</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">B3</div><div class="sub-name">Apertura de brazos sentado (Ángeles)</div><div class="sub-chip">3 × 12</div></div>
+          <div class="sub-desc">Sentado al borde con espalda recta, brazos a los costados con palmas hacia adelante. Abrir los brazos hacia arriba en arco hasta que se junten sobre la cabeza y volver. Lento y sin elevar los hombros. Mejora la movilidad del hombro y abre el pecho.</div>
+        </div>
+        <div class="super-note">Descanso: 20 seg entre ejercicios · 45 seg entre rondas</div>
+      </div>
+    </div>
+
+    <div class="nota-box">
+      <div class="nota-label">💡 Nota del día 2</div>
+      <div class="nota-item"><span class="nota-dot">●</span><span>Comenzar con mancuernas muy ligeras (1-2 kg) y progresar según comodidad.</span></div>
+      <div class="nota-item"><span class="nota-dot">●</span><span>En la rotación acostado: si hay incomodidad lumbar, reducir el rango de caída de rodillas.</span></div>
+      <div class="nota-item"><span class="nota-dot">●</span><span>La retracción escapular puede hacerse en cualquier momento del día para mejorar postura.</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ DÍA 3 ═══════════ -->
+  <div class="day-content" id="day-3">
+
+    <div class="bloque-hdr">
+      <div class="bloque-tag">Bloque 1 · Día 3</div>
+      <div class="bloque-title">Movilidad — Desplazamiento & Coordinación</div>
+      <div class="bloque-desc">Movimientos lentos y controlados. Foco en la conciencia corporal y el equilibrio.</div>
+    </div>
+    <div class="bloque-body">
+      <div class="ex">
+        <div class="ex-num-row"><div class="ex-num">01</div><div class="ex-name">Extensión de rodilla sentado con pausa</div><div class="ex-chip">2 × 10/lado</div></div>
+        <div class="ex-desc">Sentado al borde de la silla con espalda recta. Extender una pierna lentamente hasta que quede recta, mantener 2 seg contrayendo el cuádriceps y bajar controlado sin dejar caer el pie. Alternando piernas. Activa y moviliza la rodilla sin carga articular.</div>
+        <div class="ex-tip"><strong>¿Por qué?</strong> Fortalece el cuádriceps y mejora el control neuromuscular de la rodilla, fundamental para bajar escaleras con seguridad.</div>
+      </div>
+      <div class="ex">
+        <div class="ex-num-row"><div class="ex-num">02</div><div class="ex-name">Pendulum de columna sentado</div><div class="ex-chip">2 × 6/lado</div></div>
+        <div class="ex-desc">Sentado al borde de la silla con pies firmes. Inclinar el tronco lentamente hacia un lado dejando que la mano resbale por el lateral de la pierna, mantener 2 seg y volver al centro. Sin doblar hacia adelante. Moviliza la columna lateral y estira los cuadrados lumbares.</div>
+        <div class="ex-tip"><strong>¿Por qué?</strong> Mejora la flexibilidad lateral de la columna y prepara el cuerpo para movimientos de alcance en el día a día.</div>
+      </div>
+      <div class="ex">
+        <div class="ex-num-row"><div class="ex-num">03</div><div class="ex-name">Rotación de muñeca y apertura de dedos en 4 puntos</div><div class="ex-chip">2 × 8/sentido</div></div>
+        <div class="ex-desc">En posición de 4 puntos de apoyo (manos y rodillas en el piso). Levantar una mano del piso y hacer círculos lentos con la muñeca en ambas direcciones. Luego abrir y cerrar los dedos con fuerza 10 veces. Repetir con la otra mano. Esta posición prepara directamente para el ejercicio siguiente.</div>
+        <div class="ex-tip"><strong>¿Por qué?</strong> Mantiene la motricidad fina y la circulación en manos y muñecas — y al hacerlo en 4 puntos evita levantarse del piso antes del Bird Dog.</div>
+      </div>
+      <div class="ex">
+        <div class="ex-num-row"><div class="ex-num">04</div><div class="ex-name">Bird Dog</div><div class="ex-chip">2 × 6/lado</div></div>
+        <div class="ex-desc">En 4 puntos de apoyo (manos y rodillas). Desde posición neutra, extender simultáneamente el brazo derecho al frente y la pierna izquierda hacia atrás. Mantener 2 seg con el cuerpo en línea recta y volver controlado. Alternando lados. Sin rotar la cadera ni el tronco en ningún momento.</div>
+        <div class="ex-tip"><strong>¿Por qué?</strong> El Bird Dog ejercita la coordinación cruzada — un patrón neurológico esencial — activa el core profundo y mejora el equilibrio dinámico. Ideal para la prevención de caídas.</div>
+      </div>
+    </div>
+
+    <div class="bloque-hdr">
+      <div class="bloque-tag">Bloque 2 · Día 3</div>
+      <div class="bloque-title">Fuerza — Coordinación & Equilibrio</div>
+      <div class="bloque-desc">Superseries: A → 20 seg descanso → B → 45 seg descanso → repetir 3 veces.</div>
+    </div>
+    <div class="bloque-body">
+      <div class="superserie">
+        <div class="superserie-hdr">
+          <div class="superserie-tag">Superserie A · Coordinación + Core · 3 rondas</div>
+          <div class="superserie-name">Marcha · Plancha · Zig-zag</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">A1</div><div class="sub-name">Marcha estática con empuje de brazos hacia arriba (mancuerna)</div><div class="sub-chip">3 × 8/lado</div></div>
+          <div class="sub-desc">De pie con apoyo disponible. Sostener una mancuerna liviana en cada mano a la altura de los hombros. Levantar una rodilla hasta la cadera y al mismo tiempo empujar ambas mancuernas hacia arriba extendiendo los brazos. Bajar todo controlado y alternar piernas. Coordinación de tren superior e inferior simultáneamente.</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">A2</div><div class="sub-name">Plancha en pared</div><div class="sub-chip">3 × 20 seg</div></div>
+          <div class="sub-desc">De pie frente a la pared, apoyar ambas manos a la altura del pecho y alejarse un paso. Mantener el cuerpo recto como tabla, core activo, sin hundir la cadera. Estabilidad de core y hombros en posición funcional, sin carga en el piso.</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">A3</div><div class="sub-name">Pasos laterales en zig-zag con banda</div><div class="sub-chip">3 × 10/lado</div></div>
+          <div class="sub-desc">Banda elástica en los tobillos, rodillas ligeramente flexionadas. Dar pasos laterales en diagonal hacia adelante y hacia atrás trazando un zig-zag. 5 pasos en una dirección y 5 en la otra. Sin cruzar los pies. Mantener el tronco estable y erguido en todo momento. Desafía el equilibrio dinámico y la agilidad.</div>
+        </div>
+        <div class="super-note">Descanso: 20 seg entre ejercicios · 45 seg entre rondas</div>
+      </div>
+
+      <div class="superserie">
+        <div class="superserie-hdr">
+          <div class="superserie-tag">Superserie B · Desplazamiento + Equilibrio · 3 rondas</div>
+          <div class="superserie-name">Pasos con squat · Plancha · Tandem</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">B1</div><div class="sub-name">Pasos laterales con banda + squat al abrir pies</div><div class="sub-chip">3 × 10/lado</div></div>
+          <div class="sub-desc">Banda elástica en los tobillos. Dar un paso lateral y al tener los pies más separados que los hombros hacer un squat corto controlado. Cerrar los pies y repetir en la misma dirección (5 pasos+squats) y luego volver al lado contrario. Rodillas alineadas con los pies en todo momento. Activa glúteos, cuádriceps y estabilidad lateral.</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">B2</div><div class="sub-name">Plancha en posición de mesa</div><div class="sub-chip">3 × 20 seg</div></div>
+          <div class="sub-desc">En 4 puntos de apoyo, levantar las rodillas apenas 2-3 cm del piso y mantener el cuerpo como tabla. Core activado, espalda neutra, sin hundir ni elevar la cadera. Versión progresiva de la plancha clásica, sin carga excesiva en hombros ni columna.</div>
+        </div>
+        <div class="sub-ex">
+          <div class="sub-ex-row"><div class="sub-tag">B3</div><div class="sub-name">Tandem stance (pie ante pie)</div><div class="sub-chip">3 × 20 seg/lado</div></div>
+          <div class="sub-desc">De pie con apoyo de pared disponible. Colocar un pie directamente delante del otro como en una línea recta. Mantener el equilibrio con los ojos abiertos primero, luego intentar con ojos cerrados si es posible. Mejora el equilibrio dinámico y la propiocepción. Cambiar el pie delantero en cada ronda.</div>
+        </div>
+        <div class="super-note">Descanso: 20 seg entre ejercicios · 45 seg entre rondas</div>
+      </div>
+    </div>
+
+    <div class="nota-box">
+      <div class="nota-label">💡 Nota del día 3</div>
+      <div class="nota-item"><span class="nota-dot">●</span><span>El paso lateral puede hacerse sin banda si no hay disponible — el movimiento igualmente activa el glúteo medio.</span></div>
+      <div class="nota-item"><span class="nota-dot">●</span><span>En el tandem stance: tener siempre la pared cerca. La seguridad es lo primero.</span></div>
+      <div class="nota-item"><span class="nota-dot">●</span><span>La coordinación cruzada puede sentirse "rara" al principio — es normal y mejora rápido con la práctica.</span></div>
+    </div>
+  </div>
+
+  <!-- NOTA GENERAL -->
+  <div class="nota-box" style="margin-top:1.5rem;">
+    <div class="nota-label">💡 Consideraciones generales del programa</div>
+    <div class="nota-item"><span class="nota-dot">●</span><span>Nunca forzar el rango de movimiento — llegar al límite cómodo y respirar ahí.</span></div>
+    <div class="nota-item"><span class="nota-dot">●</span><span>Descansar 30–45 seg entre ejercicios del bloque de movilidad.</span></div>
+    <div class="nota-item"><span class="nota-dot">●</span><span>En superseries: 20 seg entre ejercicios, 45 seg entre rondas completas.</span></div>
+    <div class="nota-item"><span class="nota-dot">●</span><span>Usar un peso donde se puedan completar todas las reps sin perder la postura.</span></div>
+    <div class="nota-item"><span class="nota-dot">●</span><span>La consistencia es más importante que la intensidad.</span></div>
+  </div>
+
+  <div class="footer">
+    <strong>FridaActive</strong>
+    Herberth · Programa personalizado · © 2026
+  </div>
+
+</div>
+
+<script>
+function showDay(num) {
+  document.querySelectorAll('.day-content').forEach(function(el){ el.classList.remove('active'); });
+  document.querySelectorAll('.day-tab').forEach(function(el){ el.classList.remove('active'); });
+  document.getElementById('day-'+num).classList.add('active');
+  document.querySelectorAll('.day-tab')[num-1].classList.add('active');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
