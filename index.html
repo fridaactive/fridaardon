@@ -9,6 +9,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
   :root {
     --blue: #1C55E5;
@@ -546,6 +547,20 @@ try { firebase.initializeApp(firebaseConfig); } catch(e) {}
 
 function db() { return firebase.database(); }
 
+// EmailJS: notifies Frida by email whenever someone registers. Best-effort —
+// never blocks or breaks the registration flow if it fails.
+var EMAILJS_SERVICE_ID = 'service_yxn0qlj';
+var EMAILJS_TEMPLATE_ID = 'nfznzcz';
+try { emailjs.init({ publicKey: 'RYbQW_b262s3sqJou' }); } catch(e) {}
+
+function notifyNewRegistration(nombre, email, telefono) {
+  try {
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      nombre: nombre, email: email, telefono: telefono || ''
+    }).catch(function(e) { console.warn('notifyNewRegistration error', e); });
+  } catch (e) { console.warn('notifyNewRegistration error', e); }
+}
+
 // Personalized invite links (?code=XXXX) let Frida link a clienta to an
 // already-existing client profile without showing a confusing "código de
 // acceso" field on the registration form — the code travels in the URL.
@@ -611,6 +626,7 @@ function doRegister() {
       }).then(function() {
         return cred.user.sendEmailVerification();
       }).then(function() {
+        notifyNewRegistration(nombre, email, telefono);
         setLoading(false);
         currentUid = uid;
         document.getElementById('verify-email-address').textContent = email;
