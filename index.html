@@ -251,6 +251,22 @@
   </div>
 </div>
 
+<!-- ══════════ VERIFICAR CORREO ══════════ -->
+<div id="screen-verify-email" class="screen">
+  <div id="auth-wrap">
+    <div class="login-logo">fa</div>
+    <div class="login-brand">fridaactive · fitness club</div>
+    <div class="auth-card">
+      <div class="auth-title">Verificá tu correo</div>
+      <div class="auth-sub">Te enviamos un link de confirmación a <strong id="verify-email-address"></strong>. Abrilo para activar tu cuenta.</div>
+      <button class="auth-btn" onclick="checkEmailVerified()">Ya verifiqué mi correo</button>
+      <div class="auth-error" id="verify-email-error"></div>
+      <div class="auth-switch"><a onclick="resendVerificationEmail()">Reenviar correo de verificación</a></div>
+      <div class="auth-switch"><a onclick="doLogout()">Cerrar sesión</a></div>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════ DASHBOARD ══════════ -->
 <div id="screen-dashboard" class="screen">
   <div class="dash-hero">
@@ -593,8 +609,12 @@ function doRegister() {
       db().ref().update(updates).then(function() {
         return clientId ? db().ref('linkCodes/' + code).remove() : Promise.resolve();
       }).then(function() {
+        return cred.user.sendEmailVerification();
+      }).then(function() {
         setLoading(false);
-        loadDashboard(uid);
+        currentUid = uid;
+        document.getElementById('verify-email-address').textContent = email;
+        showScreen('screen-verify-email');
       }).catch(function(e) {
         setLoading(false);
         errEl.textContent = 'Error al guardar tu cuenta: ' + e.message;
@@ -633,6 +653,12 @@ function doLogin() {
   setLoading(true);
   firebase.auth().signInWithEmailAndPassword(email, password).then(function(cred) {
     setLoading(false);
+    if (!cred.user.emailVerified) {
+      currentUid = cred.user.uid;
+      document.getElementById('verify-email-address').textContent = cred.user.email;
+      showScreen('screen-verify-email');
+      return;
+    }
     loadDashboard(cred.user.uid);
   }).catch(function(e) {
     setLoading(false);
@@ -665,6 +691,40 @@ function doLogout() {
   currentClientId = null;
   currentClientName = null;
   firebase.auth().signOut().then(function() { showScreen('screen-login'); });
+}
+
+// ── VERIFICACIÓN DE CORREO ──
+function checkEmailVerified() {
+  var errEl = document.getElementById('verify-email-error');
+  errEl.textContent = '';
+  var user = firebase.auth().currentUser;
+  if (!user) { showScreen('screen-login'); return; }
+  setLoading(true);
+  user.reload().then(function() {
+    setLoading(false);
+    if (firebase.auth().currentUser.emailVerified) {
+      loadDashboard(user.uid);
+    } else {
+      errEl.textContent = 'Todavía no verificamos tu correo. Revisá tu bandeja de entrada (y spam).';
+    }
+  }).catch(function(e) {
+    setLoading(false);
+    errEl.textContent = 'Error: ' + e.message;
+  });
+}
+
+function resendVerificationEmail() {
+  var errEl = document.getElementById('verify-email-error');
+  errEl.textContent = '';
+  var user = firebase.auth().currentUser;
+  if (!user) { showScreen('screen-login'); return; }
+  user.sendEmailVerification().then(function() {
+    errEl.style.color = '#2a7a2a';
+    errEl.textContent = 'Te reenviamos el correo de verificación.';
+  }).catch(function(e) {
+    errEl.style.color = '#e53e3e';
+    errEl.textContent = e.code === 'auth/too-many-requests' ? 'Esperá un momento antes de pedir otro correo.' : 'Error: ' + e.message;
+  });
 }
 
 // ── DASHBOARD ──
@@ -1240,6 +1300,12 @@ function responderCheckin() {
 // ── SESSION PERSISTENCE ──
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
+    if (!user.emailVerified) {
+      currentUid = user.uid;
+      document.getElementById('verify-email-address').textContent = user.email;
+      showScreen('screen-verify-email');
+      return;
+    }
     loadDashboard(user.uid);
   } else {
     currentUid = null;
