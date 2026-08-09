@@ -1556,6 +1556,18 @@ function renderProgressResults(results) {
 // ── PORTAL DE CLIENTAS: solicitudes nuevas (leads sin ficha vinculada) ──
 var pendingLeadUid = null;
 
+function formatFechaHora(isoString) {
+  if (!isoString) return '';
+  var d = new Date(isoString);
+  if (isNaN(d.getTime())) return '';
+  var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  var horas = d.getHours();
+  var ampm = horas >= 12 ? 'p.m.' : 'a.m.';
+  var horas12 = horas % 12 || 12;
+  var minutos = String(d.getMinutes()).padStart(2, '0');
+  return d.getDate() + ' ' + meses[d.getMonth()] + ' ' + d.getFullYear() + ' · ' + horas12 + ':' + minutos + ' ' + ampm;
+}
+
 function renderLeadsSection() {
   var db = getDB();
   if (!db) return;
@@ -1580,7 +1592,9 @@ function renderLeadsSection() {
       html += '<div style="border:1px solid var(--border);border-radius:10px;padding:0.85rem 1rem;margin-bottom:0.6rem;">';
       html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">';
       html += '<div><div style="font-weight:700;font-size:0.85rem;">' + (l.perfil.nombre || '') + '</div>';
-      html += '<div style="color:var(--muted);font-size:0.72rem;margin-top:0.15rem;">' + (l.perfil.email || '') + (l.perfil.telefono ? ' · ' + l.perfil.telefono : '') + '</div></div>';
+      html += '<div style="color:var(--muted);font-size:0.72rem;margin-top:0.15rem;">' + (l.perfil.email || '') + (l.perfil.telefono ? ' · ' + l.perfil.telefono : '') + '</div>';
+      if (l.perfil.fechaRegistro) html += '<div style="color:var(--muted);font-size:0.68rem;margin-top:0.15rem;display:flex;align-items:center;gap:0.3rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Registrada el ' + formatFechaHora(l.perfil.fechaRegistro) + '</div>';
+      html += '</div>';
       html += '<button onclick="deleteLead(\'' + l.uid + '\',\'' + safeName + '\')" style="background:none;border:none;color:#c44;font-size:0.9rem;cursor:pointer;flex-shrink:0;padding:0.1rem;">✕</button>';
       html += '</div>';
       html += '<div style="display:flex;gap:0.5rem;margin-top:0.6rem;">';

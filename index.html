@@ -624,13 +624,17 @@ function doRegister() {
       db().ref().update(updates).then(function() {
         return clientId ? db().ref('linkCodes/' + code).remove() : Promise.resolve();
       }).then(function() {
-        return cred.user.sendEmailVerification();
-      }).then(function() {
+        // The registration itself is complete at this point — notify Frida
+        // and show the verify screen regardless of whether the verification
+        // email below succeeds, so a hiccup there (e.g. Firebase's rate
+        // limit on verification emails) can't hide a successful signup or
+        // silently swallow the notification to Frida.
         notifyNewRegistration(nombre, email, telefono);
         setLoading(false);
         currentUid = uid;
         document.getElementById('verify-email-address').textContent = email;
         showScreen('screen-verify-email');
+        cred.user.sendEmailVerification().catch(function(e) { console.warn('sendEmailVerification error', e); });
       }).catch(function(e) {
         setLoading(false);
         errEl.textContent = 'Error al guardar tu cuenta: ' + e.message;
