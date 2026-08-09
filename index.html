@@ -8,6 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
@@ -45,7 +46,13 @@
   .dash-hero::before { content:''; position:absolute; width:220px; height:220px; border-radius:50%; background:rgba(245,236,203,0.08); top:-70px; right:-50px; }
   .dash-hero .brand { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.6; margin-bottom:0.5rem; position:relative; }
   .dash-hero-row { display:flex; justify-content:space-between; align-items:center; position:relative; }
+  .dash-hero-id { display:flex; align-items:center; gap:0.7rem; }
   .dash-hero .greeting { font-size:1.25rem; font-weight:700; }
+  .avatar-wrap { position:relative; width:48px; height:48px; flex-shrink:0; cursor:pointer; }
+  .avatar-circle { width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,0.18); border:2px solid rgba(255,255,255,0.4); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1rem; color:#fff; overflow:hidden; }
+  .avatar-circle img { width:100%; height:100%; object-fit:cover; }
+  .avatar-edit-badge { position:absolute; bottom:-2px; right:-2px; width:19px; height:19px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 4px rgba(0,0,0,0.3); }
+  .avatar-edit-badge svg { width:11px; height:11px; color:var(--blue); }
   .logout-icon-btn { background:rgba(255,255,255,0.15); border:none; color:#fff; font-size:0.7rem; font-weight:700; border-radius:100px; padding:0.4rem 0.8rem; cursor:pointer; font-family:'DM Sans',sans-serif; transition:transform 0.15s, background 0.15s; }
   .logout-icon-btn:active { transform:scale(0.94); background:rgba(255,255,255,0.28); }
   .dash-body { padding:1rem 1.25rem 2rem; max-width:520px; margin:0 auto; }
@@ -272,9 +279,16 @@
 <div id="screen-dashboard" class="screen">
   <div class="dash-hero">
     <div class="dash-hero-row">
-      <div>
-        <div class="brand">fridaactive</div>
-        <div class="greeting" id="dash-greeting">Hola 👋</div>
+      <div class="dash-hero-id">
+        <div class="avatar-wrap" onclick="document.getElementById('avatar-file-input').click()">
+          <div class="avatar-circle" id="dash-avatar-circle"></div>
+          <div class="avatar-edit-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        </div>
+        <input type="file" id="avatar-file-input" accept="image/*" style="display:none;" onchange="handleAvatarFileSelect(this)">
+        <div>
+          <div class="brand">fridaactive</div>
+          <div class="greeting" id="dash-greeting">Hola 👋</div>
+        </div>
       </div>
       <button class="logout-icon-btn" onclick="doLogout()">Salir</button>
     </div>
@@ -810,6 +824,7 @@ function fetchPortalAndRender(uid, isRetry) {
     }
 
     document.getElementById('dash-greeting').textContent = 'Hola, ' + firstName + ' 👋';
+    renderAvatar(perfil.fotoPerfil, currentClientName);
 
     loadRutinaTab(currentClientId);
     renderProgresoList(portal.progreso || {});
@@ -833,6 +848,40 @@ function fetchPortalAndRender(uid, isRetry) {
     setLoading(false);
     console.warn('loadDashboard error', e.message);
     showScreen('screen-dashboard');
+  });
+}
+
+// ── FOTO DE PERFIL ──
+function renderAvatar(url, nombre) {
+  var el = document.getElementById('dash-avatar-circle');
+  if (!el) return;
+  if (url) {
+    el.innerHTML = '<img src="' + url + '" alt="Foto de perfil">';
+    return;
+  }
+  var initials = (nombre || '').trim().split(/\s+/).slice(0, 2).map(function(w) { return w[0] || ''; }).join('').toUpperCase();
+  el.textContent = initials;
+}
+
+function handleAvatarFileSelect(input) {
+  var file = input.files && input.files[0];
+  input.value = '';
+  if (!file || !currentUid) return;
+  if (!file.type.startsWith('image/')) { alert('Elegí un archivo de imagen.'); return; }
+  var el = document.getElementById('dash-avatar-circle');
+  var prevHtml = el.innerHTML;
+  el.innerHTML = '<span style="font-size:0.5rem;">Subiendo…</span>';
+  var path = 'client-photos/' + currentUid + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+  firebase.storage().ref(path).put(file).then(function(snap) {
+    return snap.ref.getDownloadURL();
+  }).then(function(url) {
+    return db().ref('clientasPortal/' + currentUid + '/perfil/fotoPerfil').set(url).then(function() { return url; });
+  }).then(function(url) {
+    renderAvatar(url);
+  }).catch(function(e) {
+    console.warn('avatar upload error', e);
+    el.innerHTML = prevHtml;
+    alert('No se pudo subir la foto. Intentá de nuevo.');
   });
 }
 
