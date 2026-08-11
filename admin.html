@@ -1392,8 +1392,13 @@ function ensureAdminAuth(cb) {
   try {
     if (typeof firebase === 'undefined' || !firebase.auth) { if (cb) cb(); return; }
     getDB();
-    firebase.auth().signInWithEmailAndPassword(ADMIN_EMAIL, PASSWORD)
-      .then(function(cred) { bootstrapAdmin(cred.user.uid); if (cb) cb(); })
+    // Session-scoped persistence keeps this account out of the browser's
+    // shared (cross-tab) auth storage, so it can't leak into a clienta
+    // portal tab opened on the same device — see index.html's ADMIN_EMAIL
+    // guard for the other half of this fix.
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function() {
+      return firebase.auth().signInWithEmailAndPassword(ADMIN_EMAIL, PASSWORD);
+    }).then(function(cred) { bootstrapAdmin(cred.user.uid); if (cb) cb(); })
       .catch(function(err) {
         var code = err && err.code;
         if (code === 'auth/user-not-found' || code === 'auth/invalid-credential' || code === 'auth/invalid-login-credentials') {
