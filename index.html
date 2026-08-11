@@ -210,6 +210,34 @@
   .ls-cta-question { font-size:0.95rem; font-weight:700; color:var(--ls-text); text-align:center; margin-bottom:1rem; }
   .ls-wa-btn { display:flex; align-items:center; justify-content:center; gap:0.6rem; background:#25D366; color:#fff; text-decoration:none; font-size:0.88rem; font-weight:700; padding:1rem; border-radius:14px; }
   .ls-wa-btn svg { width:20px; height:20px; flex-shrink:0; }
+
+  /* ── CUESTIONARIO DE BIENVENIDA (onboarding, una pregunta por pantalla) ── */
+  #screen-cuestionario { background:#fff; }
+  .cq-wrap { min-height:100vh; display:flex; flex-direction:column; max-width:480px; margin:0 auto; padding:1.25rem 1.5rem 1.5rem; }
+  .cq-top { display:flex; align-items:center; gap:0.75rem; margin-bottom:2.25rem; }
+  .cq-back-btn { background:none; border:none; font-size:1.2rem; color:var(--text); cursor:pointer; padding:0.25rem 0.4rem; line-height:1; flex-shrink:0; font-family:'DM Sans',sans-serif; }
+  .cq-progress-bar { flex:1; display:flex; gap:0.3rem; }
+  .cq-progress-seg { flex:1; height:4px; border-radius:100px; background:var(--border); }
+  .cq-progress-seg.filled { background:var(--blue); }
+  .cq-body { flex:1; }
+  .cq-question { font-size:1.35rem; font-weight:700; color:var(--text); line-height:1.3; margin-bottom:0.5rem; }
+  .cq-sub { font-size:0.8rem; color:var(--muted); margin-bottom:1.25rem; font-weight:400; line-height:1.5; }
+  .cq-field { margin-top:1.5rem; }
+  .cq-input { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:0.85rem 1rem; font-size:1rem; font-family:'DM Sans',sans-serif; color:var(--text); outline:none; }
+  .cq-input:focus { border-color:var(--blue); }
+  .cq-textarea { resize:vertical; }
+  .cq-number-wrap { position:relative; display:flex; align-items:center; }
+  .cq-number-wrap .cq-input { padding-right:3rem; }
+  .cq-unit { position:absolute; right:1rem; font-size:0.85rem; color:var(--muted); font-weight:600; pointer-events:none; }
+  .cq-option { display:flex; align-items:center; gap:0.75rem; border:1.5px solid var(--border); border-radius:12px; padding:0.9rem 1rem; margin-bottom:0.6rem; cursor:pointer; transition:border-color 0.15s, background 0.15s; }
+  .cq-option:active { transform:scale(0.99); }
+  .cq-option.selected { border-color:var(--blue); background:var(--blue-lt); }
+  .cq-option-dot { width:1.1rem; height:1.1rem; border-radius:50%; border:2px solid var(--border); flex-shrink:0; box-sizing:border-box; }
+  .cq-option.selected .cq-option-dot { border-color:var(--blue); background:var(--blue); box-shadow:inset 0 0 0 3px #fff; }
+  .cq-option-label { font-size:0.88rem; color:var(--text); font-weight:500; line-height:1.4; }
+  .cq-error { font-size:0.75rem; color:#e53e3e; margin-top:0.75rem; min-height:1rem; }
+  .cq-footer { padding-top:1.5rem; }
+  .cq-skip { display:block; width:100%; background:none; border:none; color:var(--muted); font-size:0.8rem; font-weight:600; text-align:center; padding:0.6rem; cursor:pointer; font-family:'DM Sans',sans-serif; }
 </style>
 </head>
 <body>
@@ -271,6 +299,26 @@
       <div class="auth-error" id="verify-email-error"></div>
       <div class="auth-switch"><a onclick="resendVerificationEmail()">Reenviar correo de verificación</a></div>
       <div class="auth-switch"><a onclick="doLogout()">Cerrar sesión</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CUESTIONARIO DE BIENVENIDA ══════════ -->
+<div id="screen-cuestionario" class="screen">
+  <div class="cq-wrap">
+    <div class="cq-top">
+      <button class="cq-back-btn" id="cq-back-btn" onclick="cqBack()">←</button>
+      <div class="cq-progress-bar" id="cq-progress-bar"></div>
+    </div>
+    <div class="cq-body">
+      <div class="cq-question" id="cq-question"></div>
+      <div class="cq-sub" id="cq-sub"></div>
+      <div class="cq-field" id="cq-field"></div>
+      <div class="cq-error" id="cq-error"></div>
+    </div>
+    <div class="cq-footer">
+      <button class="cq-skip" id="cq-skip-btn" onclick="cqSkip()">Omitir</button>
+      <button class="auth-btn" id="cq-continue-btn" onclick="cqNext()">Continuar</button>
     </div>
   </div>
 </div>
@@ -633,7 +681,7 @@ function doRegister() {
 
     function finishRegistration(clientId) {
       var updates = {};
-      updates['clientasPortal/' + uid + '/perfil'] = { nombre: nombre, email: email, telefono: telefono, clientId: clientId || null, fechaRegistro: new Date().toISOString() };
+      updates['clientasPortal/' + uid + '/perfil'] = { nombre: nombre, email: email, telefono: telefono, clientId: clientId || null, fechaRegistro: new Date().toISOString(), requiereCuestionario: true };
       if (clientId) updates['client_links/' + clientId] = uid;
       db().ref().update(updates).then(function() {
         return clientId ? db().ref('linkCodes/' + code).remove() : Promise.resolve();
@@ -822,31 +870,18 @@ function fetchPortalAndRender(uid, isRetry) {
     }
     currentClientId = clientId;
     currentClientName = perfil.nombre || '';
-    var firstName = perfil.nombre ? perfil.nombre.split(' ')[0] : '';
 
-    // No linked client record yet — she's a lead, not an active clienta.
-    // Show the services landing instead of an empty dashboard.
-    if (!currentClientId) {
-      document.getElementById('ls-greeting').textContent = firstName ? ('¡Hola, ' + firstName + '!') : '';
-      document.getElementById('ls-wa-link').href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(WHATSAPP_MESSAGE);
+    // New signups must complete the essential questionnaire before they can
+    // see their dashboard or the services landing — it's how Frida gets the
+    // data she needs to build their plan. Accounts created before this
+    // feature existed never got the flag, so they skip straight through.
+    if (perfil.requiereCuestionario && !portal.cuestionario) {
       setLoading(false);
-      showScreen('screen-services-landing');
+      startCuestionario(perfil);
       return;
     }
 
-    document.getElementById('dash-greeting').textContent = 'Hola, ' + firstName + ' 👋';
-    renderAvatar(perfil.fotoPerfil, currentClientName);
-
-    loadRutinaTab(currentClientId);
-    renderProgresoList(portal.progreso || {});
-    renderTrainingTracker(portal.entrenoLogs || {});
-    renderCheckinTab(portal.checkins || {});
-    document.getElementById('prog-fecha').valueAsDate = new Date();
-    loadBeneficios();
-    loadServicios();
-
-    setLoading(false);
-    showScreen('screen-dashboard');
+    renderPortalScreen(portal, perfil);
   }).catch(function(e) {
     if (uid !== currentUid) return;
     if (!isRetry) {
@@ -859,6 +894,193 @@ function fetchPortalAndRender(uid, isRetry) {
     setLoading(false);
     console.warn('loadDashboard error', e.message);
     showScreen('screen-dashboard');
+  });
+}
+
+function renderPortalScreen(portal, perfil) {
+  var firstName = perfil.nombre ? perfil.nombre.split(' ')[0] : '';
+
+  // No linked client record yet — she's a lead, not an active clienta.
+  // Show the services landing instead of an empty dashboard.
+  if (!currentClientId) {
+    document.getElementById('ls-greeting').textContent = firstName ? ('¡Hola, ' + firstName + '!') : '';
+    document.getElementById('ls-wa-link').href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(WHATSAPP_MESSAGE);
+    setLoading(false);
+    showScreen('screen-services-landing');
+    return;
+  }
+
+  document.getElementById('dash-greeting').textContent = 'Hola, ' + firstName + ' 👋';
+  renderAvatar(perfil.fotoPerfil, currentClientName);
+
+  loadRutinaTab(currentClientId);
+  renderProgresoList(portal.progreso || {});
+  renderTrainingTracker(portal.entrenoLogs || {});
+  renderCheckinTab(portal.checkins || {});
+  document.getElementById('prog-fecha').valueAsDate = new Date();
+  loadBeneficios();
+  loadServicios();
+
+  setLoading(false);
+  showScreen('screen-dashboard');
+}
+
+// ── CUESTIONARIO DE BIENVENIDA (onboarding) ──
+// One question per screen, Hevy-style, gated by perfil.requiereCuestionario.
+// Answers are saved once at the end to clientasPortal/{uid}/cuestionario —
+// their mere presence is what marks the questionnaire as completed.
+var CQ_QUESTIONS = [
+  { key: 'fechaNacimiento', type: 'date', required: true, label: '¿Cuándo es tu cumpleaños?' },
+  { key: 'genero', type: 'select', required: false, label: '¿Cuál es tu género?', options: ['Femenino', 'Masculino', 'Otro'] },
+  { key: 'peso', type: 'number', required: true, unit: 'kg', label: '¿Cuál es tu peso actual?' },
+  { key: 'estatura', type: 'number', required: true, unit: 'cm', label: '¿Cuánto medís?' },
+  { key: 'objetivo', type: 'select', required: true, label: '¿Cuál es tu objetivo principal?', options: ['Bajar grasa', 'Ganar músculo', 'Tonificar', 'Salud y bienestar'] },
+  { key: 'nutricionista', type: 'select', required: true, label: '¿Tenés nutricionista?', options: [
+      { value: 'si_tengo', label: 'Sí, ya tengo nutri' },
+      { value: 'no_quiero', label: 'No, pero quiero acompañar mi rutina de ejercicio con un plan de alimentación' },
+      { value: 'no_interesada', label: 'No tengo y no estoy interesada por el momento' }
+    ] },
+  { key: 'experiencia', type: 'select', required: true, label: '¿Entrenás actualmente?', options: [
+      'Sí, de 2 a más días por semana',
+      'Sí, pero de forma intermitente (1 vez por semana)',
+      'Unas cuantas veces al mes',
+      'Tengo meses de no hacer nada',
+      'Tengo años de no hacer nada'
+    ] },
+  { key: 'lesion', type: 'yesno', required: true, label: '¿Tenés alguna lesión, condición médica o restricción que debamos conocer?' },
+  { key: 'lesionDetalle', type: 'text', required: true, label: 'Contanos un poco más', sub: 'Zona, intensidad y desde cuándo, por ejemplo.', showIf: function(a) { return a.lesion === 'si'; } },
+  { key: 'diasSemana', type: 'select', required: true, label: '¿Cuántos días por semana podés entrenar realmente?', options: ['2 días', '3 días', '4 días', '5 días', '6 días o más'] },
+  { key: 'lugar', type: 'select', required: true, label: '¿Dónde entrenarás?', options: ['Casa', 'Gimnasio', 'Ambos'] },
+  { key: 'equipoCasa', type: 'text', required: true, label: '¿Con qué equipo contás en casa?', sub: "Mancuernas, bandas, banco... si no tenés nada, escribí \"ninguno\".", showIf: function(a) { return a.lugar === 'Casa' || a.lugar === 'Ambos'; } }
+];
+
+var cqAnswers = {};
+var cqIndex = 0;
+
+function cqVisible(q, answers) { return !q.showIf || q.showIf(answers); }
+
+function cqFindIndex(startIndex, dir, answers) {
+  var i = startIndex;
+  while (i >= 0 && i < CQ_QUESTIONS.length) {
+    if (cqVisible(CQ_QUESTIONS[i], answers)) return i;
+    i += dir;
+  }
+  return dir > 0 ? CQ_QUESTIONS.length : -1;
+}
+
+function startCuestionario(perfil) {
+  cqAnswers = {};
+  cqIndex = cqFindIndex(0, 1, cqAnswers);
+  showScreen('screen-cuestionario');
+  cqRender();
+}
+
+function cqRender() {
+  var q = CQ_QUESTIONS[cqIndex];
+  document.getElementById('cq-error').textContent = '';
+
+  var visList = CQ_QUESTIONS.filter(function(item) { return cqVisible(item, cqAnswers); });
+  var posInVis = visList.indexOf(q);
+  document.getElementById('cq-progress-bar').innerHTML = visList.map(function(_, i) {
+    return '<div class="cq-progress-seg' + (i <= posInVis ? ' filled' : '') + '"></div>';
+  }).join('');
+
+  document.getElementById('cq-question').textContent = q.label;
+  var subEl = document.getElementById('cq-sub');
+  subEl.textContent = q.sub || '';
+  subEl.style.display = q.sub ? 'block' : 'none';
+
+  var fieldEl = document.getElementById('cq-field');
+  var currentVal = cqAnswers[q.key];
+
+  if (q.type === 'date') {
+    fieldEl.innerHTML = '<input type="date" class="cq-input" id="cq-input" value="' + (currentVal || '') + '">';
+  } else if (q.type === 'number') {
+    fieldEl.innerHTML = '<div class="cq-number-wrap"><input type="number" inputmode="decimal" class="cq-input" id="cq-input" placeholder="0" value="' + (currentVal != null ? currentVal : '') + '"><span class="cq-unit">' + (q.unit || '') + '</span></div>';
+  } else if (q.type === 'text') {
+    fieldEl.innerHTML = '<textarea class="cq-input cq-textarea" id="cq-input" rows="3" placeholder="Escribí acá…">' + escapeHtml(currentVal || '') + '</textarea>';
+  } else if (q.type === 'select' || q.type === 'yesno') {
+    var opts = q.type === 'yesno' ? [{ value: 'si', label: 'Sí' }, { value: 'no', label: 'No' }] : q.options.map(function(o) {
+      return typeof o === 'string' ? { value: o, label: o } : o;
+    });
+    fieldEl.innerHTML = opts.map(function(o) {
+      var selected = currentVal === o.value;
+      return '<div class="cq-option' + (selected ? ' selected' : '') + '" data-value="' + escapeHtml(o.value) + '">'
+        + '<span class="cq-option-dot"></span><span class="cq-option-label">' + escapeHtml(o.label) + '</span></div>';
+    }).join('');
+    fieldEl.querySelectorAll('.cq-option').forEach(function(el) {
+      el.addEventListener('click', function() { cqSelect(q.key, this.getAttribute('data-value')); });
+    });
+  }
+
+  document.getElementById('cq-back-btn').style.visibility = (cqFindIndex(cqIndex - 1, -1, cqAnswers) >= 0) ? 'visible' : 'hidden';
+  document.getElementById('cq-skip-btn').style.display = q.required ? 'none' : 'block';
+
+  var isLast = cqFindIndex(cqIndex + 1, 1, cqAnswers) >= CQ_QUESTIONS.length;
+  document.getElementById('cq-continue-btn').textContent = isLast ? 'Finalizar' : 'Continuar';
+}
+
+function cqSelect(key, val) {
+  cqAnswers[key] = val;
+  cqRender();
+}
+
+function cqCaptureInput() {
+  var q = CQ_QUESTIONS[cqIndex];
+  if (q.type !== 'date' && q.type !== 'number' && q.type !== 'text') return;
+  var input = document.getElementById('cq-input');
+  if (!input) return;
+  var v = input.value;
+  if (q.type === 'number') v = v === '' ? null : parseFloat(v);
+  cqAnswers[q.key] = v;
+}
+
+function cqValid(q) {
+  if (!q.required) return true;
+  var v = cqAnswers[q.key];
+  if (q.type === 'number') return v !== null && v !== undefined && !isNaN(v);
+  if (q.type === 'text') return !!(v && ('' + v).trim());
+  return v !== undefined && v !== null && v !== '';
+}
+
+function cqNext() {
+  cqCaptureInput();
+  var q = CQ_QUESTIONS[cqIndex];
+  if (!cqValid(q)) {
+    document.getElementById('cq-error').textContent = 'Esta respuesta es necesaria para continuar.';
+    return;
+  }
+  var next = cqFindIndex(cqIndex + 1, 1, cqAnswers);
+  if (next >= CQ_QUESTIONS.length) { cqFinish(); return; }
+  cqIndex = next;
+  cqRender();
+}
+
+function cqSkip() {
+  var q = CQ_QUESTIONS[cqIndex];
+  delete cqAnswers[q.key];
+  var next = cqFindIndex(cqIndex + 1, 1, cqAnswers);
+  if (next >= CQ_QUESTIONS.length) { cqFinish(); return; }
+  cqIndex = next;
+  cqRender();
+}
+
+function cqBack() {
+  cqCaptureInput();
+  var prev = cqFindIndex(cqIndex - 1, -1, cqAnswers);
+  if (prev < 0) return;
+  cqIndex = prev;
+  cqRender();
+}
+
+function cqFinish() {
+  setLoading(true);
+  var payload = Object.assign({}, cqAnswers, { completadoEn: new Date().toISOString() });
+  db().ref('clientasPortal/' + currentUid + '/cuestionario').set(payload).then(function() {
+    fetchPortalAndRender(currentUid, true);
+  }).catch(function(e) {
+    setLoading(false);
+    document.getElementById('cq-error').textContent = 'No se pudo guardar: ' + e.message;
   });
 }
 
