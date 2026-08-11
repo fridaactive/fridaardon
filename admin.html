@@ -1440,6 +1440,48 @@ function createPortalLinkCode(clientId, cb) {
   });
 }
 
+// ── CUESTIONARIO INICIAL (respuestas de onboarding de la clienta) ──
+var CQ_LABELS = {
+  fechaNacimiento: 'Fecha de nacimiento', genero: 'Género', peso: 'Peso actual', estatura: 'Estatura',
+  objetivo: 'Objetivo principal', nutricionista: 'Nutricionista', experiencia: '¿Entrena actualmente?',
+  lesion: '¿Lesión o condición médica?', lesionDetalle: 'Detalle de la lesión', diasSemana: 'Días por semana',
+  lugar: '¿Dónde entrena?', equipoCasa: 'Equipo en casa'
+};
+var CQ_ORDER = ['fechaNacimiento', 'genero', 'peso', 'estatura', 'objetivo', 'nutricionista', 'experiencia', 'lesion', 'lesionDetalle', 'diasSemana', 'lugar', 'equipoCasa'];
+var CQ_NUTRI_LABELS = {
+  si_tengo: 'Sí, ya tiene nutricionista',
+  no_quiero: 'No, pero quiere el servicio de nutrición',
+  no_interesada: 'No tiene y no está interesada'
+};
+
+function escapeHtmlAdmin(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function formatCuestionarioValue(key, val) {
+  if (val === undefined || val === null || val === '') return null;
+  if (key === 'nutricionista') return CQ_NUTRI_LABELS[val] || val;
+  if (key === 'lesion') return val === 'si' ? 'Sí' : 'No';
+  if (key === 'peso') return val + ' kg';
+  if (key === 'estatura') return val + ' cm';
+  return val;
+}
+
+function cuestionarioHtml(cuestionario) {
+  if (!cuestionario) return '';
+  var rows = CQ_ORDER.map(function(key) {
+    var v = formatCuestionarioValue(key, cuestionario[key]);
+    if (v === null) return '';
+    return '<div style="display:flex;justify-content:space-between;gap:0.75rem;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.75rem;">'
+      + '<span style="color:var(--muted);flex-shrink:0;">' + CQ_LABELS[key] + '</span>'
+      + '<span style="text-align:right;">' + escapeHtmlAdmin(String(v)) + '</span></div>';
+  }).filter(Boolean).join('');
+  if (!rows) return '';
+  return '<div style="margin-top:0.9rem;"><div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;">📋 Cuestionario inicial</div>' + rows + '</div>';
+}
+
 function renderPortalSection(clientId) {
   var el = document.getElementById('cd-portal');
   if (!el) return;
@@ -1489,6 +1531,8 @@ function renderPortalSection(clientId) {
       html += '<input id="cd-checkin-input" type="text" placeholder="Ej: ¿Cómo te sentiste esta semana?" style="flex:1;border:1.5px solid var(--border);border-radius:8px;padding:0.5rem 0.7rem;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;">';
       html += '<button onclick="handleSendCheckin(\'' + uid + '\')" style="background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem 0.9rem;font-weight:700;font-size:0.72rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Enviar</button>';
       html += '</div>';
+
+      html += cuestionarioHtml(portal && portal.cuestionario);
 
       el.innerHTML = html;
     });
@@ -1587,7 +1631,7 @@ function renderLeadsSection() {
     var leads = [];
     Object.keys(data).forEach(function(uid) {
       var perfil = data[uid] && data[uid].perfil;
-      if (perfil && !perfil.clientId) leads.push({ uid: uid, perfil: perfil });
+      if (perfil && !perfil.clientId) leads.push({ uid: uid, perfil: perfil, cuestionario: data[uid].cuestionario });
     });
     leads.sort(function(a, b) { return (b.perfil.fechaRegistro || '').localeCompare(a.perfil.fechaRegistro || ''); });
     if (leads.length === 0) {
@@ -1609,7 +1653,13 @@ function renderLeadsSection() {
       html += '<div style="display:flex;gap:0.5rem;margin-top:0.6rem;">';
       if (waNum) html += '<a href="https://wa.me/' + waNum + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;text-decoration:none;">💬 WhatsApp</a>';
       html += '<button onclick="convertLeadToClient(\'' + l.uid + '\',\'' + safeName + '\')" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">✅ Convertir en clienta</button>';
-      html += '</div></div>';
+      html += '</div>';
+      if (l.cuestionario) {
+        html += '<details style="margin-top:0.6rem;"><summary style="font-size:0.72rem;font-weight:700;color:var(--blue);cursor:pointer;">📋 Ver cuestionario inicial</summary>' + cuestionarioHtml(l.cuestionario) + '</details>';
+      } else {
+        html += '<div style="margin-top:0.6rem;font-size:0.68rem;color:var(--muted);">Todavía no completó el cuestionario inicial.</div>';
+      }
+      html += '</div>';
     });
     el.innerHTML = html;
   }).catch(function(e) { console.warn('renderLeadsSection error', e.message); });
