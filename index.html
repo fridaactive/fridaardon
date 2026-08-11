@@ -687,6 +687,11 @@ function doLogin() {
   setLoading(true);
   firebase.auth().signInWithEmailAndPassword(email, password).then(function(cred) {
     setLoading(false);
+    if (cred.user.email === ADMIN_EMAIL) {
+      firebase.auth().signOut();
+      errEl.textContent = 'Email o contraseña incorrectos.';
+      return;
+    }
     if (!cred.user.emailVerified) {
       currentUid = cred.user.uid;
       document.getElementById('verify-email-address').textContent = cred.user.email;
@@ -768,6 +773,12 @@ var CLIENT_ROUTINE_URLS = {
 };
 var WHATSAPP_NUMBER = '50372005790';
 var WHATSAPP_MESSAGE = 'Hola Frida, estoy interesada en tomar un plan de entrenamiento contigo.';
+
+// admin.html signs into this fixed account behind the scenes (so its Storage/
+// DB writes pass auth-based rules) — Firebase persists that session on this
+// same domain, so it can leak into the clienta portal on shared devices.
+// Never treat it as a clienta session.
+var ADMIN_EMAIL = 'admin@fridaactive.app';
 
 var currentUid = null;
 var currentClientId = null;
@@ -1368,6 +1379,10 @@ function responderCheckin() {
 
 // ── SESSION PERSISTENCE ──
 firebase.auth().onAuthStateChanged(function(user) {
+  if (user && user.email === ADMIN_EMAIL) {
+    firebase.auth().signOut();
+    return;
+  }
   if (user) {
     if (!user.emailVerified) {
       currentUid = user.uid;
