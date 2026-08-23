@@ -2744,15 +2744,11 @@ function openCycleModal(id) {
 
   var existing = getCycleConfig(id);
   if (existing) {
-    cycleSelectedDays = (existing.days || []).slice();
+    // Only carry over price/hours as defaults — never the old days, since this
+    // modal opens to start a NEW cycle and the previous days are already in the past.
     if (existing.startHour !== undefined) document.getElementById('cycle-hour-start').value = decimalToTimeStr(existing.startHour);
     if (existing.endHour !== undefined) document.getElementById('cycle-hour-end').value = decimalToTimeStr(existing.endHour);
     if (existing.pricePerSession) document.getElementById('cycle-price').value = existing.pricePerSession;
-    if (cycleSelectedDays.length > 0) {
-      var d = new Date(cycleSelectedDays[0] + 'T00:00:00');
-      cycleViewYear = d.getFullYear();
-      cycleViewMonth = d.getMonth();
-    }
   } else {
     document.getElementById('cycle-hour-start').value = c.schedule ? decimalToTimeStr(c.schedule.startHour) : '';
     document.getElementById('cycle-hour-end').value = c.schedule ? decimalToTimeStr(c.schedule.endHour) : '';
