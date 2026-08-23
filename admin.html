@@ -5255,27 +5255,19 @@ function openRutinaEditor(clientId) {
     }
 
     if (hasRealContent(data)) {
-      // Check version - if default has been updated, force reload
-      var storedVersion = localStorage.getItem('fa_rutinas_version_' + clientId);
-      if (storedVersion === RUTINAS_VERSION) {
-        rutinaData = data;
-        var stored = JSON.parse(localStorage.getItem('fa_rutinas') || '{}');
-        stored[clientId] = data;
-        localStorage.setItem('fa_rutinas', JSON.stringify(stored));
-      } else {
-        // Version changed — force reload from defaults if available
-        if (DEFAULT_RUTINAS[clientId]) {
-          rutinaData = DEFAULT_RUTINAS[clientId];
-        } else {
-          rutinaData = data;
-        }
-        saveRutinaData(clientId, rutinaData);
-        localStorage.setItem('fa_rutinas_version_' + clientId, RUTINAS_VERSION);
-      }
+      // Real trainer-edited content always wins over the built-in default
+      // template, no matter what RUTINAS_VERSION says — a version bump
+      // must never silently overwrite someone's saved work.
+      rutinaData = data;
+      var stored = JSON.parse(localStorage.getItem('fa_rutinas') || '{}');
+      stored[clientId] = data;
+      localStorage.setItem('fa_rutinas', JSON.stringify(stored));
+      localStorage.setItem('fa_rutinas_version_' + clientId, RUTINAS_VERSION);
     } else {
       var stored = JSON.parse(localStorage.getItem('fa_rutinas') || '{}');
-      if (hasRealContent(stored[clientId]) && localStorage.getItem('fa_rutinas_version_' + clientId) === RUTINAS_VERSION) {
+      if (hasRealContent(stored[clientId])) {
         rutinaData = stored[clientId];
+        saveRutinaData(clientId, rutinaData);
       } else if (DEFAULT_RUTINAS[clientId]) {
         rutinaData = DEFAULT_RUTINAS[clientId];
         saveRutinaData(clientId, rutinaData);
