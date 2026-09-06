@@ -5304,34 +5304,30 @@ function openRutinaEditor(clientId) {
   // the session still looks signed in.
   withAdminAuth(function() {
   fbGet('rutinas/' + clientId, function(data) {
-    // Check if data has real content (days with at least one block with exercises)
-    function hasRealContent(d) {
-      if (!d || !d.days || d.days.length === 0) return false;
-      return d.days.some(function(day) {
-        return day.blocks && day.blocks.some(function(b) {
-          return b.exercises && b.exercises.length > 0;
-        });
-      });
+    // Any saved day structure — even a block that has no exercises added to
+    // it yet — is real, in-progress work and must never be swapped out for
+    // the built-in default template. Requiring an exercise to "count" used
+    // to wipe a trainer's just-created day/block layout the moment she left
+    // and reopened the editor, before she'd had a chance to fill it in.
+    // Defaults only ever apply the very first time, when nothing has been
+    // saved for this client anywhere yet.
+    function hasAnyData(d) {
+      return !!(d && d.days && d.days.length > 0);
     }
 
-    if (hasRealContent(data)) {
-      // Real trainer-edited content always wins over the built-in default
-      // template, no matter what RUTINAS_VERSION says — a version bump
-      // must never silently overwrite someone's saved work.
+    if (hasAnyData(data)) {
       rutinaData = data;
       var stored = JSON.parse(localStorage.getItem('fa_rutinas') || '{}');
       stored[clientId] = data;
       localStorage.setItem('fa_rutinas', JSON.stringify(stored));
-      localStorage.setItem('fa_rutinas_version_' + clientId, RUTINAS_VERSION);
     } else {
       var stored = JSON.parse(localStorage.getItem('fa_rutinas') || '{}');
-      if (hasRealContent(stored[clientId])) {
+      if (hasAnyData(stored[clientId])) {
         rutinaData = stored[clientId];
         saveRutinaData(clientId, rutinaData);
       } else if (DEFAULT_RUTINAS[clientId]) {
         rutinaData = DEFAULT_RUTINAS[clientId];
         saveRutinaData(clientId, rutinaData);
-        localStorage.setItem('fa_rutinas_version_' + clientId, RUTINAS_VERSION);
       } else {
         rutinaData = { days: [makeNewDay(1)] };
         saveRutinaData(clientId, rutinaData);
