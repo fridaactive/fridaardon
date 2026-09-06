@@ -5284,7 +5284,7 @@ function renderRutinaView() {
         html += '<div class="rv-blq-item">';
         html += '<div class="rv-ex-num" style="background:'+labelBg+';color:'+labelColor+';">'+label+'</div>';
         html += '<div style="flex:1;">';
-        html += '<div class="rv-ex-nm" style="cursor:pointer;'+(exVideo?'color:var(--blue);text-decoration:underline;text-decoration-style:dotted;':'')+'" onclick="openExerciseVideoModal(\''+exNameAttr+'\')" title="Tocá para ver/agregar el video de técnica">'+(exVideo?'🎥 ':'')+escHtml(ex.name)+'</div>';
+        html += '<div class="rv-ex-nm" style="cursor:pointer;'+(exVideo?'color:var(--blue);text-decoration:underline;text-decoration-style:dotted;':'')+'" onclick="openExerciseVideoModal(\''+exNameAttr+'\')" title="Tocá para ver/agregar el video de técnica">'+escHtml(ex.name)+'</div>';
         if (subLine) html += '<div style="font-size:0.62rem;color:var(--muted);margin-top:0.1rem;">'+escHtml(subLine)+'</div>';
         html += '</div>';
         html += badge;
