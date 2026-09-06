@@ -737,6 +737,12 @@
 
     <div class="fin-form-row" id="nc-startdate-row" style="display:none;"><div class="fin-form-label">Fecha de inicio</div><input class="fin-form-input" id="nc-start-date" type="date"></div>
 
+    <div class="fin-form-row" id="nc-rutina-days-row" style="display:none;">
+      <div class="fin-form-label">Días de entrenamiento por semana</div>
+      <div id="nc-rutina-days-pills" style="display:flex;gap:0.4rem;flex-wrap:wrap;"></div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-top:0.4rem;">El plan dura exactamente 1 mes desde la fecha de inicio — así buscamos que renueve mes a mes.</div>
+    </div>
+
     <div id="nc-hours-row" style="display:flex;gap:0.6rem;margin-bottom:0.85rem;">
       <div style="flex:1;"><div class="fin-form-label">Hora inicio</div><input class="fin-form-input" id="nc-hour-start" type="time"></div>
       <div style="flex:1;"><div class="fin-form-label">Hora fin</div><input class="fin-form-input" id="nc-hour-end" type="time"></div>
@@ -865,6 +871,10 @@
 
       <!-- ENTRENAMIENTO -->
       <div id="cp-entrenamiento" class="cp-content" style="display:none;">
+        <div class="fin-form-row" id="cp-dias-row" style="display:none;">
+          <div class="fin-form-label">Días de entrenamiento por semana</div>
+          <div id="cp-dias-pills" style="display:flex;gap:0.4rem;flex-wrap:wrap;"></div>
+        </div>
         <div class="fin-form-row"><div class="fin-form-label">Objetivo principal</div><input class="fin-form-input cp-field" data-field="objetivo" type="text" placeholder="Ej: Pérdida de grasa, fuerza..."></div>
         <div class="fin-form-row"><div class="fin-form-label">Nivel de condición física</div>
           <select class="fin-form-select cp-field" data-field="nivel">
@@ -2209,6 +2219,23 @@ function saveCustomClient(id, clientData) {
   fbSet('clients_custom/' + id, clientData);
 }
 
+// Same dual-write pattern as saveCycle(): a per-field override for clientas
+// whose base data still lives in the hardcoded CLIENTS seed, plus the full
+// merged object under clients_custom so it's what actually loads next time.
+function saveClientDaysPerWeek(id, days) {
+  var c = CLIENTS[id];
+  if (!c) return;
+  c.days = days;
+  fbSet('clients/' + id + '/days', days);
+  var custom = JSON.parse(localStorage.getItem('fa_custom_clients') || '{}');
+  var existingData = custom[id] || {};
+  var updatedData = Object.assign({}, CLIENTS[id], existingData, { days: days });
+  custom[id] = updatedData;
+  CLIENTS[id] = Object.assign(CLIENTS[id], updatedData);
+  localStorage.setItem('fa_custom_clients', JSON.stringify(custom));
+  fbSet('clients_custom/' + id, updatedData);
+}
+
 function slugify(name) {
   var base = name.toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -2361,6 +2388,8 @@ function saveClientProfile(id, profile) {
   fbSet('client_profiles/' + id, profile);
 }
 
+var cpSelectedDays = [];
+
 function openClientProfile(id) {
   var c = CLIENTS[id];
   if (!c) return;
@@ -2379,6 +2408,15 @@ function openClientProfile(id) {
     }
   });
 
+  // Días/semana — solo aplica a "Rutina personalizada": presencial y online
+  // 1:1 ya calculan esto automáticamente del calendario de sesiones.
+  var isRutinaType = c.type === 'rutina-personalizada';
+  document.getElementById('cp-dias-row').style.display = isRutinaType ? '' : 'none';
+  if (isRutinaType) {
+    cpSelectedDays = (c.days || []).slice();
+    renderDayPills('cp-dias-pills', cpSelectedDays);
+  }
+
   // Render payment section inside modal
   renderCpPayments(id, c);
 
@@ -2394,6 +2432,7 @@ function openClientProfile(id) {
       profile[el.getAttribute('data-field')] = el.value;
     });
     saveClientProfile(id, profile);
+    if (isRutinaType) saveClientDaysPerWeek(id, cpSelectedDays.slice());
     // Flash confirmation
     var btn = document.getElementById('cp-save-btn');
     btn.textContent = '✓ Guardado';
@@ -3422,6 +3461,7 @@ var ncViewMonth = new Date().getMonth();
 
 function openNewClientModal() {
   ncSelectedDays = [];
+  ncRutinaDays = [];
   ncViewYear = new Date().getFullYear();
   ncViewMonth = new Date().getMonth();
   document.getElementById('nc-name').value = '';
@@ -3446,12 +3486,35 @@ function updateNCTypeUI() {
   var isRutina = document.getElementById('nc-type').value === 'rutina-personalizada';
   document.getElementById('nc-cuota-label').textContent = isRutina ? 'Monto mensual ($)' : 'Valor por sesión ($)';
   document.getElementById('nc-startdate-row').style.display = isRutina ? '' : 'none';
+  document.getElementById('nc-rutina-days-row').style.display = isRutina ? '' : 'none';
   document.getElementById('nc-hours-row').style.display = isRutina ? 'none' : 'flex';
   document.getElementById('nc-calendar-section').style.display = isRutina ? 'none' : '';
   if (isRutina) {
     var startInput = document.getElementById('nc-start-date');
     if (!startInput.value) startInput.value = new Date().toISOString().slice(0, 10);
   }
+  renderDayPills('nc-rutina-days-pills', ncRutinaDays);
+}
+
+// ── SELECTOR DE DÍAS/SEMANA (para clientas "Rutina personalizada", que no
+// pasan por el calendario de sesiones específicas) ──
+var WEEKDAY_NAMES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+var ncRutinaDays = [];
+
+function renderDayPills(containerId, selectedArr) {
+  var el = document.getElementById(containerId);
+  el.innerHTML = WEEKDAY_NAMES.map(function(d) {
+    var sel = selectedArr.indexOf(d) !== -1;
+    return '<button type="button" data-day="'+d+'" style="padding:0.4rem 0.7rem;border-radius:100px;border:1.5px solid '+(sel?'var(--blue)':'var(--border)')+';background:'+(sel?'var(--blue)':'#fff')+';color:'+(sel?'#fff':'var(--text)')+';font-size:0.72rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">'+d+'</button>';
+  }).join('');
+  el.querySelectorAll('button').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var day = this.getAttribute('data-day');
+      var idx = selectedArr.indexOf(day);
+      if (idx === -1) selectedArr.push(day); else selectedArr.splice(idx, 1);
+      renderDayPills(containerId, selectedArr);
+    });
+  });
 }
 
 function renderNCCalendar() {
@@ -3550,7 +3613,7 @@ function handleSaveNewClient() {
       endDate: endDateVal,
       type: type,
       sessions: 0,
-      days: [],
+      days: ncRutinaDays.slice(),
       cuota: monthlyPrice || null,
       rutina: null,
       meta: metaText || 'Rutina por agregar'
