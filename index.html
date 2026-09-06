@@ -489,6 +489,20 @@
 
   <div class="ls-content">
 
+    <!-- VINCULAR CON CÓDIGO (para cuentas ya existentes sin perfil de clienta) -->
+    <div style="background:#fff;border:1.5px solid var(--ls-border);border-radius:16px;padding:1rem 1.1rem;margin-bottom:1.25rem;">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--ls-text);margin-bottom:0.5rem;">¿Tu entrenadora ya te armó un plan?</div>
+      <div style="font-size:0.72rem;color:var(--ls-muted);margin-bottom:0.7rem;line-height:1.4;">Ingresá tu nombre y el código de acceso que te compartió para ver tu rutina con esta misma cuenta.</div>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        <input id="ls-linkcode-name" type="text" placeholder="Tu nombre" style="border:1.5px solid var(--ls-border);border-radius:10px;padding:0.6rem 0.75rem;font-size:0.85rem;font-family:'DM Sans',sans-serif;">
+        <div style="display:flex;gap:0.5rem;">
+          <input id="ls-linkcode-input" type="text" placeholder="CÓDIGO" style="flex:1;min-width:0;border:1.5px solid var(--ls-border);border-radius:10px;padding:0.6rem 0.75rem;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.05em;font-family:'DM Sans',sans-serif;">
+          <button onclick="redeemLinkCode()" style="background:var(--ls-blue);color:#fff;border:none;border-radius:10px;padding:0.6rem 1rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;">Vincular</button>
+        </div>
+      </div>
+      <div id="ls-linkcode-error" style="color:#c0392b;font-size:0.7rem;margin-top:0.5rem;"></div>
+    </div>
+
     <!-- ONLINE -->
     <div class="ls-sec-label" style="margin-top:1.25rem;">Entrenamiento online</div>
 
@@ -786,6 +800,53 @@ function doRegister() {
   }).catch(function(e) {
     setLoading(false);
     errEl.textContent = e.code === 'auth/email-already-in-use' ? 'Ese email ya está registrado. Iniciá sesión.' : 'Error: ' + e.message;
+  });
+}
+
+// ── VINCULAR CUENTA EXISTENTE CON CÓDIGO ──
+// Para una cuenta ya autenticada que quedó sin perfil de clienta vinculado
+// (por ejemplo si Frida borró por error su solicitud en "Leads", o si se
+// registró como lead antes de tener un plan) — evita tener que crear una
+// cuenta nueva para volver a vincularla.
+function redeemLinkCode() {
+  var nameInput = document.getElementById('ls-linkcode-name');
+  var codeInput = document.getElementById('ls-linkcode-input');
+  var errEl = document.getElementById('ls-linkcode-error');
+  var nombre = nameInput.value.trim();
+  var code = codeInput.value.trim().toUpperCase();
+  errEl.textContent = '';
+
+  if (!nombre) { errEl.textContent = 'Ingresá tu nombre.'; return; }
+  if (!code) { errEl.textContent = 'Ingresá el código de acceso.'; return; }
+  if (!currentUid) return;
+
+  setLoading(true);
+  db().ref('linkCodes/' + code).once('value').then(function(snap) {
+    var codeData = snap.val();
+    if (!codeData || !codeData.clientId) {
+      setLoading(false);
+      errEl.textContent = 'Código inválido o ya utilizado.';
+      return;
+    }
+    var clientId = codeData.clientId;
+    var user = firebase.auth().currentUser;
+    var updates = {};
+    updates['clientasPortal/' + currentUid + '/perfil/clientId'] = clientId;
+    updates['clientasPortal/' + currentUid + '/perfil/nombre'] = nombre;
+    updates['clientasPortal/' + currentUid + '/perfil/email'] = (user && user.email) || '';
+    updates['clientasPortal/' + currentUid + '/perfil/requiereCuestionario'] = true;
+    updates['client_links/' + clientId] = currentUid;
+    db().ref().update(updates).then(function() {
+      return db().ref('linkCodes/' + code).remove();
+    }).then(function() {
+      fetchPortalAndRender(currentUid, true);
+    }).catch(function(e) {
+      setLoading(false);
+      errEl.textContent = 'No se pudo vincular: ' + e.message;
+    });
+  }).catch(function(e) {
+    setLoading(false);
+    errEl.textContent = 'Error: ' + e.message;
   });
 }
 
