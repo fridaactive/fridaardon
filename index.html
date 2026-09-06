@@ -135,18 +135,42 @@
   .track-day.done { background:#2a7a2a; color:#fff; font-weight:700; }
 
   /* ── BENEFICIOS / SERVICIOS ── */
-  .benef-card { border:1px solid var(--border); border-radius:12px; padding:0.9rem 1rem; margin-bottom:0.7rem; }
-  .benef-row { display:flex; gap:0.7rem; align-items:flex-start; }
+  .benef-card { border:1px solid var(--border); border-radius:12px; padding:0.9rem 1rem; margin-bottom:0.7rem; cursor:pointer; background:#fff; }
+  .benef-card:active { background:#fafafa; }
+  .benef-row { display:flex; gap:0.7rem; align-items:center; }
   .benef-logo { width:2.6rem; height:2.6rem; border-radius:50%; object-fit:cover; flex-shrink:0; border:1px solid var(--border); }
   .benef-logo-fallback { width:2.6rem; height:2.6rem; border-radius:50%; flex-shrink:0; background:var(--blue-lt); color:var(--blue); font-weight:700; font-size:0.9rem; display:flex; align-items:center; justify-content:center; }
   .benef-body { flex:1; min-width:0; }
   .benef-marca { font-size:0.85rem; font-weight:700; }
   .benef-descuento { font-size:0.78rem; color:#2a7a2a; font-weight:700; margin:0.2rem 0; }
   .benef-desc { font-size:0.75rem; color:var(--muted); }
-  .benef-meta { display:flex; flex-direction:column; gap:0.2rem; margin-top:0.4rem; }
-  .benef-meta-item { display:flex; align-items:center; gap:0.35rem; font-size:0.7rem; color:var(--muted); text-decoration:none; }
-  .benef-meta-item svg { width:12px; height:12px; flex-shrink:0; }
-  a.benef-meta-item { color:var(--blue); }
+  .benef-status { font-size:0.66rem; margin-top:0.3rem; font-weight:700; }
+  .benef-status.ok { color:#2a7a2a; }
+  .benef-status.pend { color:var(--blue); }
+  .benef-chevron { flex-shrink:0; color:var(--muted); width:18px; height:18px; }
+
+  /* ── PERFIL DE MARCA ── */
+  #benef-profile-modal { display:none; position:fixed; inset:0; background:#fff; z-index:9998; overflow-y:auto; }
+  .bp-header { position:sticky; top:0; background:#fff; padding:1rem 1.1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:0.75rem; z-index:2; }
+  .bp-back-btn { background:none; border:none; font-size:1.3rem; cursor:pointer; color:var(--text); line-height:1; padding:0.2rem; }
+  .bp-header-title { font-weight:700; font-size:0.95rem; }
+  .bp-content { padding:1.1rem 1.1rem 2.5rem; max-width:480px; margin:0 auto; }
+  .bp-gallery { display:flex; gap:0.5rem; overflow-x:auto; margin-bottom:1rem; padding-bottom:0.2rem; }
+  .bp-gallery img { width:7.5rem; height:7.5rem; object-fit:cover; border-radius:12px; flex-shrink:0; border:1px solid var(--border); }
+  .bp-hero-logo { width:4rem; height:4rem; border-radius:50%; object-fit:cover; border:1px solid var(--border); flex-shrink:0; }
+  .bp-hero-logo-fallback { width:4rem; height:4rem; border-radius:50%; background:var(--blue-lt); color:var(--blue); font-weight:700; font-size:1.3rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .bp-hero-row { display:flex; align-items:center; gap:0.85rem; margin-bottom:1rem; }
+  .bp-marca { font-size:1.15rem; font-weight:800; }
+  .bp-descuento { font-size:0.85rem; color:#2a7a2a; font-weight:700; margin-top:0.15rem; }
+  .bp-section-label { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:1.1rem 0 0.4rem; }
+  .bp-section-text { font-size:0.82rem; color:var(--text); line-height:1.55; white-space:pre-line; }
+  .bp-meta-item { display:flex; align-items:center; gap:0.4rem; font-size:0.78rem; color:var(--muted); margin-top:0.3rem; }
+  .bp-meta-item svg { width:14px; height:14px; flex-shrink:0; }
+  .bp-ig-btn { display:inline-flex; align-items:center; gap:0.4rem; margin-top:0.9rem; background:var(--blue-lt); color:var(--blue); text-decoration:none; font-size:0.78rem; font-weight:700; padding:0.55rem 0.9rem; border-radius:100px; }
+  .bp-coupon { margin-top:1.5rem; border:2px dashed var(--blue); border-radius:14px; padding:1.1rem; text-align:center; background:var(--blue-lt); }
+  .bp-coupon-label { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--blue); }
+  .bp-coupon-code { font-size:1.6rem; font-weight:800; color:var(--blue); letter-spacing:0.12em; margin:0.3rem 0; }
+  .bp-coupon-sub { font-size:0.68rem; color:var(--muted); }
 
   /* ── CHECK-IN TAB ── */
   .emoji-row { display:flex; justify-content:space-between; gap:0.5rem; margin:0.9rem 0; }
@@ -593,6 +617,15 @@
       <iframe id="video-modal-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
   </div>
+</div>
+
+<!-- ══════════ PERFIL DE MARCA (BENEFICIOS) ══════════ -->
+<div id="benef-profile-modal">
+  <div class="bp-header">
+    <button class="bp-back-btn" onclick="closeBenefProfile()">←</button>
+    <div class="bp-header-title" id="bp-header-title">Marca</div>
+  </div>
+  <div class="bp-content" id="bp-content"></div>
 </div>
 
 <script>
@@ -1399,9 +1432,12 @@ function getInstagramUrl(handle) {
   return 'https://instagram.com/' + handle.replace(/^@/, '');
 }
 
-// Beneficios se canjean 1 vez por mes calendario — no es un código de por
-// vida, cada mes se abre un cupo nuevo. Si no se canjeó dentro del mes, esa
-// oportunidad se pierde (no hay forma de canjear "el mes pasado").
+// Beneficios se canjean 1 vez por ciclo — no es un código de por vida.
+// El "ciclo" es el período de plan activo de la clienta (su initDate en el
+// panel de admin), así que el cupo se renueva justo cuando Frida le activa
+// un nuevo mes, no el día 1 de cada mes calendario. Si por algún motivo no
+// se puede leer su ciclo (clienta sin registro de plan todavía), se usa el
+// mes calendario como respaldo.
 function getCurrentMonthKey() {
   var d = new Date();
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
@@ -1410,65 +1446,141 @@ function monthLabel(monthKey) {
   var parts = monthKey.split('-');
   return MESES_LARGOS[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
 }
+var currentCycleKey = null;
+function loadCycleKey(cb) {
+  if (!currentClientId) { currentCycleKey = getCurrentMonthKey(); cb(); return; }
+  db().ref('clients/' + currentClientId + '/initDate').once('value').then(function(snap) {
+    currentCycleKey = snap.val() || getCurrentMonthKey();
+    cb();
+  }).catch(function() { currentCycleKey = getCurrentMonthKey(); cb(); });
+}
+function cycleLabel(key) {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(key)) {
+    var d = new Date(key + 'T00:00:00');
+    return 'tu ciclo desde el ' + d.getDate() + ' de ' + MESES_LARGOS[d.getMonth()];
+  }
+  return monthLabel(key);
+}
 
 function loadBeneficios() {
-  db().ref('beneficios').once('value').then(function(snap) {
-    var data = snap.val() || {};
-    var items = Object.keys(data).map(function(k) { return Object.assign({ id: k }, data[k]); });
-    LOADED_BENEFICIOS = {};
-    items.forEach(function(b) { LOADED_BENEFICIOS[b.id] = b; });
-    var el = document.getElementById('beneficios-list');
-    if (items.length === 0) { el.innerHTML = '<div class="empty-note">Todavía no hay beneficios cargados.</div>'; return; }
-    var monthKey = getCurrentMonthKey();
-    var todayStr = new Date().toISOString().slice(0, 10);
-    var html = '';
-    items.forEach(function(b) {
-      var alianzaTerminada = b.vencimiento && b.vencimiento < todayStr;
-      var miCanje = b.canjes && b.canjes[currentUid] && b.canjes[currentUid][monthKey];
-      html += '<div class="benef-card"><div class="benef-row">';
-      if (b.logoUrl) {
-        html += '<img class="benef-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.outerHTML=\'<div class=&quot;benef-logo-fallback&quot;>' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>\'">';
-      } else {
-        html += '<div class="benef-logo-fallback">' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>';
-      }
-      html += '<div class="benef-body">';
-      html += '<div class="benef-marca">' + escapeHtml(b.marca || '') + '</div>';
-      if (b.descuento) html += '<div class="benef-descuento">' + escapeHtml(b.descuento) + '</div>';
-      if (b.descripcion) html += '<div class="benef-desc">' + escapeHtml(b.descripcion) + '</div>';
-      if (b.ubicacion || b.instagram) {
-        html += '<div class="benef-meta">';
-        if (b.ubicacion) {
-          html += '<div class="benef-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>' + escapeHtml(b.ubicacion) + '</div>';
-        }
-        if (b.instagram) {
-          html += '<a class="benef-meta-item" href="' + getInstagramUrl(b.instagram) + '" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" stroke="none"/></svg>' + escapeHtml(b.instagram) + '</a>';
-        }
-        html += '</div>';
-      }
-      if (!alianzaTerminada) {
-        html += '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.25rem;">Se puede canjear 1 vez por mes · ' + monthLabel(monthKey) + '</div>';
-      }
-      if (miCanje) {
-        html += '<div style="margin-top:0.6rem;background:var(--blue-lt);border-radius:8px;padding:0.6rem 0.8rem;text-align:center;">';
-        html += '<div style="font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">Tu código de ' + monthLabel(monthKey) + '</div>';
-        html += '<div style="font-size:1.1rem;font-weight:700;color:var(--blue);letter-spacing:0.1em;">' + miCanje.code + '</div>';
-        html += '</div>';
-        html += '<button class="btn-secondary" style="margin-top:0.5rem;" onclick="descargarVoucher(\'' + b.id + '\')">⬇️ Descargar cupón</button>';
-      } else if (alianzaTerminada) {
-        html += '<button class="btn-secondary" disabled style="margin-top:0.6rem;opacity:0.5;cursor:not-allowed;">Alianza finalizada</button>';
-      } else {
-        html += '<button class="btn-secondary" style="margin-top:0.6rem;" onclick="canjearBeneficio(\'' + b.id + '\')">🎁 Canjear beneficio</button>';
-      }
-      html += '</div></div></div>';
-    });
-    el.innerHTML = html;
-  }).catch(function(e) { console.warn('loadBeneficios error', e.message); });
+  loadCycleKey(function() {
+    db().ref('beneficios').once('value').then(function(snap) {
+      var data = snap.val() || {};
+      LOADED_BENEFICIOS = {};
+      Object.keys(data).forEach(function(k) { LOADED_BENEFICIOS[k] = Object.assign({ id: k }, data[k]); });
+      renderBeneficiosList();
+    }).catch(function(e) { console.warn('loadBeneficios error', e.message); });
+  });
+}
+
+function renderBeneficiosList() {
+  var el = document.getElementById('beneficios-list');
+  var items = Object.keys(LOADED_BENEFICIOS).map(function(k) { return LOADED_BENEFICIOS[k]; });
+  if (items.length === 0) { el.innerHTML = '<div class="empty-note">Todavía no hay beneficios cargados.</div>'; return; }
+  var todayStr = new Date().toISOString().slice(0, 10);
+  var html = '';
+  items.forEach(function(b) {
+    var alianzaTerminada = b.vencimiento && b.vencimiento < todayStr;
+    var miCanje = b.canjes && b.canjes[currentUid] && b.canjes[currentUid][currentCycleKey];
+    html += '<div class="benef-card" onclick="openBenefProfile(\'' + b.id + '\')"><div class="benef-row">';
+    if (b.logoUrl) {
+      html += '<img class="benef-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.outerHTML=\'<div class=&quot;benef-logo-fallback&quot;>' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>\'">';
+    } else {
+      html += '<div class="benef-logo-fallback">' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>';
+    }
+    html += '<div class="benef-body">';
+    html += '<div class="benef-marca">' + escapeHtml(b.marca || '') + '</div>';
+    if (b.descuento) html += '<div class="benef-descuento">' + escapeHtml(b.descuento) + '</div>';
+    if (alianzaTerminada) {
+      html += '<div class="benef-status" style="color:#c44;">Alianza finalizada</div>';
+    } else if (miCanje) {
+      html += '<div class="benef-status ok">✓ Ya canjeaste este ciclo</div>';
+    } else {
+      html += '<div class="benef-status pend">Disponible · toca para ver</div>';
+    }
+    html += '</div>';
+    html += '<svg class="benef-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>';
+    html += '</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+var currentBenefProfileId = null;
+
+function openBenefProfile(beneficioId) {
+  var b = LOADED_BENEFICIOS[beneficioId];
+  if (!b) return;
+  currentBenefProfileId = beneficioId;
+  document.getElementById('bp-header-title').textContent = b.marca || '';
+  document.getElementById('bp-content').innerHTML = renderBenefProfileHtml(b);
+  document.getElementById('benef-profile-modal').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function closeBenefProfile() {
+  currentBenefProfileId = null;
+  document.getElementById('benef-profile-modal').style.display = 'none';
+}
+
+function renderBenefProfileHtml(b) {
+  var todayStr = new Date().toISOString().slice(0, 10);
+  var alianzaTerminada = b.vencimiento && b.vencimiento < todayStr;
+  var miCanje = b.canjes && b.canjes[currentUid] && b.canjes[currentUid][currentCycleKey];
+  var html = '';
+
+  if (b.fotos && b.fotos.length) {
+    html += '<div class="bp-gallery">';
+    b.fotos.forEach(function(url) { html += '<img src="' + escapeHtml(url) + '">'; });
+    html += '</div>';
+  }
+
+  html += '<div class="bp-hero-row">';
+  if (b.logoUrl) {
+    html += '<img class="bp-hero-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.outerHTML=\'<div class=&quot;bp-hero-logo-fallback&quot;>' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>\'">';
+  } else {
+    html += '<div class="bp-hero-logo-fallback">' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>';
+  }
+  html += '<div><div class="bp-marca">' + escapeHtml(b.marca || '') + '</div>';
+  if (b.descuento) html += '<div class="bp-descuento">' + escapeHtml(b.descuento) + '</div>';
+  html += '</div></div>';
+
+  if (b.descripcion) {
+    html += '<div class="bp-section-label">Quiénes son</div>';
+    html += '<div class="bp-section-text">' + escapeHtml(b.descripcion) + '</div>';
+  }
+  if (b.servicios) {
+    html += '<div class="bp-section-label">Qué ofrecen</div>';
+    html += '<div class="bp-section-text">' + escapeHtml(b.servicios) + '</div>';
+  }
+  if (b.ubicacion) {
+    html += '<div class="bp-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>' + escapeHtml(b.ubicacion) + '</div>';
+  }
+  if (b.instagram) {
+    html += '<a class="bp-ig-btn" href="' + getInstagramUrl(b.instagram) + '" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" stroke="none"/></svg> Ver Instagram · ' + escapeHtml(b.instagram) + '</a>';
+  }
+
+  html += '<div class="bp-coupon">';
+  if (alianzaTerminada) {
+    html += '<div class="bp-coupon-label">Alianza finalizada</div>';
+    html += '<div class="bp-coupon-sub" style="margin-top:0.4rem;">Esta marca ya no forma parte de los beneficios activos.</div>';
+  } else if (miCanje) {
+    html += '<div class="bp-coupon-label">Tu cupón · ' + escapeHtml(cycleLabel(currentCycleKey)) + '</div>';
+    html += '<div class="bp-coupon-code">' + escapeHtml(miCanje.code) + '</div>';
+    html += '<div class="bp-coupon-sub">Mostrá esta pantalla (podés sacarle captura) en el negocio · ' + escapeHtml(currentClientName || '') + '</div>';
+    html += '<button class="btn-secondary" style="margin-top:0.7rem;" onclick="descargarVoucher(\'' + b.id + '\')">⬇️ Descargar cupón en PDF</button>';
+  } else {
+    html += '<div class="bp-coupon-label">Cupón disponible</div>';
+    html += '<div class="bp-coupon-sub" style="margin:0.4rem 0 0.8rem;">Se puede usar 1 vez por ciclo de tu plan · se renueva cuando renovás</div>';
+    html += '<button class="save-btn" onclick="canjearBeneficio(\'' + b.id + '\')">🎁 Generar mi cupón</button>';
+  }
+  html += '</div>';
+
+  return html;
 }
 
 function descargarVoucher(beneficioId) {
   var b = LOADED_BENEFICIOS[beneficioId];
-  var monthKey = getCurrentMonthKey();
-  var miCanje = b && b.canjes && b.canjes[currentUid] && b.canjes[currentUid][monthKey];
+  var miCanje = b && b.canjes && b.canjes[currentUid] && b.canjes[currentUid][currentCycleKey];
   if (!b || !miCanje || !window.jspdf) { alert('No se pudo generar el vale, intentá de nuevo.'); return; }
   var doc = new window.jspdf.jsPDF({ unit: 'mm', format: [100, 74] });
   doc.setFillColor(28, 85, 229);
@@ -1503,15 +1615,23 @@ function descargarVoucher(beneficioId) {
   doc.text(currentClientId || '', 55, 64);
 
   doc.setFontSize(6.5);
-  doc.text('Válido durante ' + monthLabel(monthKey), 8, 71);
-  doc.save('beneficio-' + (b.marca || 'fridaactive').toLowerCase().replace(/\s+/g, '-') + '-' + monthKey + '.pdf');
+  doc.text('Válido durante ' + cycleLabel(currentCycleKey), 8, 71);
+  doc.save('beneficio-' + (b.marca || 'fridaactive').toLowerCase().replace(/\s+/g, '-') + '-' + currentCycleKey + '.pdf');
 }
 
 function canjearBeneficio(beneficioId) {
-  var monthKey = getCurrentMonthKey();
   var entry = { code: generateShortCode(), canjeadoEn: Date.now() };
-  db().ref('beneficios/' + beneficioId + '/canjes/' + currentUid + '/' + monthKey).set(entry).then(function() {
-    loadBeneficios();
+  db().ref('beneficios/' + beneficioId + '/canjes/' + currentUid + '/' + currentCycleKey).set(entry).then(function() {
+    var b = LOADED_BENEFICIOS[beneficioId];
+    if (b) {
+      b.canjes = b.canjes || {};
+      b.canjes[currentUid] = b.canjes[currentUid] || {};
+      b.canjes[currentUid][currentCycleKey] = entry;
+    }
+    renderBeneficiosList();
+    if (currentBenefProfileId === beneficioId && b) {
+      document.getElementById('bp-content').innerHTML = renderBenefProfileHtml(b);
+    }
   }).catch(function(e) { alert('No se pudo canjear: ' + e.message); });
 }
 

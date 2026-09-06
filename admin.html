@@ -1203,7 +1203,8 @@
     <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;" id="bn-modal-title">Nuevo beneficio</div>
     <div class="fin-form-row"><div class="fin-form-label">Marca</div><input class="fin-form-input" id="bn-marca" type="text" placeholder="Ej: Gatorade"></div>
     <div class="fin-form-row"><div class="fin-form-label">Descuento</div><input class="fin-form-input" id="bn-descuento" type="text" placeholder="Ej: 15% de descuento"></div>
-    <div class="fin-form-row"><div class="fin-form-label">Descripción</div><textarea class="fin-form-input" id="bn-descripcion" rows="2" placeholder="Detalles, dónde usarlo..." style="resize:vertical;"></textarea></div>
+    <div class="fin-form-row"><div class="fin-form-label">Quiénes son (descripción)</div><textarea class="fin-form-input" id="bn-descripcion" rows="2" placeholder="Quiénes son, dónde usarlo..." style="resize:vertical;"></textarea></div>
+    <div class="fin-form-row"><div class="fin-form-label">Qué venden / servicios (opcional)</div><textarea class="fin-form-input" id="bn-servicios" rows="2" placeholder="Ej: Consultas quiroprácticas, masajes, terapia física..." style="resize:vertical;"></textarea></div>
     <div class="fin-form-row">
       <div class="fin-form-label">Logo de la marca (opcional)</div>
       <div style="display:flex;align-items:center;gap:0.75rem;">
@@ -1218,6 +1219,14 @@
         </div>
       </div>
       <input class="fin-form-input" id="bn-logo" type="text" placeholder="...o pegá un link a la imagen" style="margin-top:0.6rem;" oninput="updateLogoPreview()">
+    </div>
+    <div class="fin-form-row">
+      <div class="fin-form-label">Fotos del perfil (opcional)</div>
+      <div id="bn-fotos-grid" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.6rem;"></div>
+      <button type="button" onclick="document.getElementById('bn-fotos-file').click()" style="background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.5rem 0.85rem;font-size:0.75rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">+ Agregar fotos</button>
+      <input type="file" id="bn-fotos-file" accept="image/*" multiple style="display:none;" onchange="handleFotosFileSelect(this)">
+      <div id="bn-fotos-status" style="font-size:0.68rem;color:var(--muted);margin-top:0.35rem;"></div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-top:0.3rem;">Estas fotos se muestran en el perfil de la marca que ven tus clientas.</div>
     </div>
     <div class="fin-form-row"><div class="fin-form-label">Ubicación (opcional)</div><input class="fin-form-input" id="bn-ubicacion" type="text" placeholder="Ej: San Salvador, Metrocentro"></div>
     <div class="fin-form-row"><div class="fin-form-label">Instagram (opcional)</div><input class="fin-form-input" id="bn-instagram" type="text" placeholder="Ej: @gatorade_sv"></div>
@@ -1759,6 +1768,7 @@ function renderPortalContentScreen() {
 
 var ADMIN_BENEFICIOS_CACHE = {};
 var editingBeneficioId = null;
+var editingBeneficioFotos = [];
 
 function showBeneficioModal(id) {
   editingBeneficioId = id || null;
@@ -1767,14 +1777,62 @@ function showBeneficioModal(id) {
   document.getElementById('bn-marca').value = data.marca || '';
   document.getElementById('bn-descuento').value = data.descuento || '';
   document.getElementById('bn-descripcion').value = data.descripcion || '';
+  document.getElementById('bn-servicios').value = data.servicios || '';
   document.getElementById('bn-logo').value = data.logoUrl || '';
   document.getElementById('bn-logo-file').value = '';
   document.getElementById('bn-logo-status').textContent = '';
   document.getElementById('bn-ubicacion').value = data.ubicacion || '';
   document.getElementById('bn-instagram').value = data.instagram || '';
   document.getElementById('bn-vencimiento').value = data.vencimiento || '';
+  editingBeneficioFotos = (data.fotos || []).slice();
+  document.getElementById('bn-fotos-file').value = '';
+  document.getElementById('bn-fotos-status').textContent = '';
+  renderFotosGrid();
   updateLogoPreview();
   document.getElementById('beneficio-modal').style.display = 'flex';
+}
+
+function renderFotosGrid() {
+  var grid = document.getElementById('bn-fotos-grid');
+  grid.innerHTML = editingBeneficioFotos.map(function(url, i) {
+    return '<div style="position:relative;width:4.2rem;height:4.2rem;">' +
+      '<img src="' + escapeHtmlAdmin(url) + '" style="width:100%;height:100%;object-fit:cover;border-radius:8px;border:1px solid var(--border);">' +
+      '<button type="button" onclick="removeBeneficioFoto(' + i + ')" style="position:absolute;top:-0.35rem;right:-0.35rem;width:1.3rem;height:1.3rem;border-radius:50%;background:#c44;color:#fff;border:2px solid #fff;font-size:0.7rem;line-height:1;cursor:pointer;">×</button>' +
+      '</div>';
+  }).join('');
+}
+
+function removeBeneficioFoto(i) {
+  editingBeneficioFotos.splice(i, 1);
+  renderFotosGrid();
+}
+
+function handleFotosFileSelect(input) {
+  var files = input.files ? Array.prototype.slice.call(input.files) : [];
+  if (!files.length) return;
+  var statusEl = document.getElementById('bn-fotos-status');
+  statusEl.style.color = 'var(--muted)';
+  statusEl.textContent = 'Subiendo ' + files.length + ' foto' + (files.length > 1 ? 's' : '') + '...';
+  withAdminAuth(function() {
+    if (typeof firebase === 'undefined' || !firebase.storage) {
+      statusEl.style.color = '#c44';
+      statusEl.textContent = 'Storage no está disponible todavía.';
+      return;
+    }
+    Promise.all(files.map(function(file) {
+      var path = 'beneficio-photos/' + Date.now() + '-' + Math.random().toString(36).slice(2) + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+      return firebase.storage().ref(path).put(file).then(function(snap) { return snap.ref.getDownloadURL(); });
+    })).then(function(urls) {
+      editingBeneficioFotos = editingBeneficioFotos.concat(urls);
+      renderFotosGrid();
+      statusEl.style.color = '#2a7a2a';
+      statusEl.textContent = 'Fotos subidas ✓';
+      input.value = '';
+    }).catch(function(e) {
+      statusEl.style.color = '#c44';
+      statusEl.textContent = 'No se pudo subir: ' + e.message;
+    });
+  });
 }
 function hideBeneficioModal() {
   editingBeneficioId = null;
@@ -1833,8 +1891,10 @@ function saveBeneficio() {
     marca: marca,
     descuento: document.getElementById('bn-descuento').value.trim(),
     descripcion: document.getElementById('bn-descripcion').value.trim(),
+    servicios: document.getElementById('bn-servicios').value.trim() || null,
     vencimiento: vencimiento || null,
     logoUrl: logoUrl || null,
+    fotos: editingBeneficioFotos.length ? editingBeneficioFotos : null,
     ubicacion: ubicacion || null,
     instagram: instagram || null
   };
