@@ -5201,10 +5201,13 @@ function renderRutinaView() {
         if (ex.series && ex.reps) subLine = ex.series+' × '+ex.reps;
         if (ex.carga) subLine += (subLine ? ' · ' : '') + ex.carga;
 
+        var exVideo = findExerciseVideo(ex.name);
+        var exNameAttr = (ex.name || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+
         html += '<div class="rv-blq-item">';
         html += '<div class="rv-ex-num" style="background:'+labelBg+';color:'+labelColor+';">'+label+'</div>';
         html += '<div style="flex:1;">';
-        html += '<div class="rv-ex-nm">'+escHtml(ex.name)+'</div>';
+        html += '<div class="rv-ex-nm" style="cursor:pointer;'+(exVideo?'color:var(--blue);text-decoration:underline;text-decoration-style:dotted;':'')+'" onclick="openExerciseVideoModal(\''+exNameAttr+'\')" title="Tocá para ver/agregar el video de técnica">'+(exVideo?'🎥 ':'')+escHtml(ex.name)+'</div>';
         if (subLine) html += '<div style="font-size:0.62rem;color:var(--muted);margin-top:0.1rem;">'+escHtml(subLine)+'</div>';
         html += '</div>';
         html += badge;
@@ -5463,6 +5466,84 @@ function deleteExerciseBankItem(id) {
       renderExerciseBankDatalist();
       renderExerciseBankList();
     });
+  });
+}
+
+// ── VIDEO/TÉCNICA POR EJERCICIO (desde la vista de rutina) ──
+// Reutiliza el mismo banco de ejercicios que ya ve la clienta en su portal:
+// tocar el nombre de un ejercicio en "Ver rutina" abre este modal para ver
+// o pegar el link de YouTube, sin tener que buscarlo en el Banco aparte.
+function findExerciseVideo(name) {
+  if (!name) return null;
+  var normalized = name.trim().toLowerCase();
+  var match = Object.keys(EXERCISE_BANK).map(function(k) { return EXERCISE_BANK[k]; })
+    .find(function(item) { return item.nombre && item.nombre.trim().toLowerCase() === normalized; });
+  return (match && match.video) ? match.video : null;
+}
+
+function getYouTubeEmbedUrl(url) {
+  var id = null;
+  var m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{6,})/);
+  if (m) id = m[1];
+  return id ? ('https://www.youtube.com/embed/' + id + '?autoplay=1') : url;
+}
+
+var evModalExerciseName = null;
+
+function openExerciseVideoModal(name) {
+  if (!name) return;
+  evModalExerciseName = name;
+  document.getElementById('ev-modal-title').textContent = '🎥 ' + name;
+  document.getElementById('ev-modal-name-inline').textContent = name;
+  var existing = findExerciseVideo(name) || '';
+  document.getElementById('ev-video').value = existing;
+  var wrap = document.getElementById('ev-preview-wrap');
+  var frame = document.getElementById('ev-preview-frame');
+  if (existing) {
+    frame.src = getYouTubeEmbedUrl(existing);
+    wrap.style.display = 'block';
+  } else {
+    frame.src = '';
+    wrap.style.display = 'none';
+  }
+  document.getElementById('exercise-video-modal').style.display = 'flex';
+}
+
+function hideExerciseVideoModal() {
+  document.getElementById('exercise-video-modal').style.display = 'none';
+  document.getElementById('ev-preview-frame').src = '';
+  evModalExerciseName = null;
+}
+
+function saveExerciseVideoModal() {
+  var name = evModalExerciseName;
+  if (!name) return;
+  var video = document.getElementById('ev-video').value.trim();
+  var normalized = name.trim().toLowerCase();
+  var existingId = Object.keys(EXERCISE_BANK).find(function(k) {
+    var n = EXERCISE_BANK[k].nombre;
+    return n && n.trim().toLowerCase() === normalized;
+  });
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) { alert('No se pudo conectar con Firebase.'); return; }
+    var promise;
+    if (existingId) {
+      promise = db.ref('exerciseBank/' + existingId).update({ video: video || null }).then(function() {
+        if (video) EXERCISE_BANK[existingId].video = video;
+        else delete EXERCISE_BANK[existingId].video;
+      });
+    } else {
+      var item = { nombre: name };
+      if (video) item.video = video;
+      promise = db.ref('exerciseBank').push(item).then(function(ref) { EXERCISE_BANK[ref.key] = item; });
+    }
+    promise.then(function() {
+      localStorage.setItem('fa_exercise_bank', JSON.stringify(EXERCISE_BANK));
+      renderExerciseBankDatalist();
+      hideExerciseVideoModal();
+      if (rutinaMode === 'view') renderRutinaView();
+    }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
   });
 }
 
@@ -6343,6 +6424,22 @@ function renderAhorrosMes() {
     <div class="fin-form-row"><div class="fin-form-label">Video de YouTube (opcional)</div><input class="fin-form-input" id="eb-video" type="text" placeholder="Pegá el link — subilo como 'No listado' en YouTube"></div>
     <button onclick="saveExerciseBankItem()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;">+ Agregar al banco</button>
     <div id="exercise-bank-list"></div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL VIDEO/TÉCNICA DE UN EJERCICIO ══════════ -->
+<div id="exercise-video-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-size:1rem;font-weight:700;color:var(--text);" id="ev-modal-title">🎥 Ejercicio</div>
+      <button onclick="hideExerciseVideoModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
+    </div>
+    <div id="ev-preview-wrap" style="display:none;position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;background:#000;margin-bottom:1rem;">
+      <iframe id="ev-preview-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+    <div class="fin-form-row"><div class="fin-form-label">Video de YouTube</div><input class="fin-form-input" id="ev-video" type="text" placeholder="Pegá el link — subilo como 'No listado' en YouTube"></div>
+    <div style="font-size:0.68rem;color:var(--muted);margin-bottom:1rem;">Este video queda guardado en el banco de ejercicios y se muestra automáticamente a tus clientas cuando vean "<span id="ev-modal-name-inline"></span>" en su rutina.</div>
+    <button onclick="saveExerciseVideoModal()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;">Guardar</button>
   </div>
 </div>
 
