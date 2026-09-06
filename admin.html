@@ -2222,14 +2222,20 @@ function saveCustomClient(id, clientData) {
 // Same dual-write pattern as saveCycle(): a per-field override for clientas
 // whose base data still lives in the hardcoded CLIENTS seed, plus the full
 // merged object under clients_custom so it's what actually loads next time.
+// Sessions/mes se recalcula sola a partir de los días — no hay un calendario
+// de fechas puntuales para este tipo de plan, así que no tiene sentido
+// pedírselo a Frida por separado.
 function saveClientDaysPerWeek(id, days) {
   var c = CLIENTS[id];
   if (!c) return;
+  var sessions = days.length * 4;
   c.days = days;
+  c.sessions = sessions;
   fbSet('clients/' + id + '/days', days);
+  fbSet('clients/' + id + '/sessions', sessions);
   var custom = JSON.parse(localStorage.getItem('fa_custom_clients') || '{}');
   var existingData = custom[id] || {};
-  var updatedData = Object.assign({}, CLIENTS[id], existingData, { days: days });
+  var updatedData = Object.assign({}, CLIENTS[id], existingData, { days: days, sessions: sessions });
   custom[id] = updatedData;
   CLIENTS[id] = Object.assign(CLIENTS[id], updatedData);
   localStorage.setItem('fa_custom_clients', JSON.stringify(custom));
@@ -3612,7 +3618,8 @@ function handleSaveNewClient() {
       initDate: startDateVal,
       endDate: endDateVal,
       type: type,
-      sessions: 0,
+      // ~4 semanas por ciclo mensual — se recalcula solo si cambian los días.
+      sessions: ncRutinaDays.length * 4,
       days: ncRutinaDays.slice(),
       cuota: monthlyPrice || null,
       rutina: null,
