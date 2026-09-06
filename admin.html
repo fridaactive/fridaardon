@@ -5196,7 +5196,7 @@ function renderRutinaView() {
   html += '.rv-hero-names{font-size:clamp(1.8rem,7vw,3rem);font-weight:700;color:#fff;line-height:1;letter-spacing:-0.02em;margin-bottom:0.4rem;}';
   html += '.rv-hero-names span{color:#F5ECCB;}';
   html += '.rv-hero-sub{font-size:0.78rem;color:rgba(255,255,255,0.55);font-weight:300;margin-bottom:1.5rem;}';
-  html += '.rv-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;margin-bottom:1.5rem;}';
+  html += '.rv-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:0.6rem;margin-bottom:1.5rem;}';
   html += '.rv-stat{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:14px;padding:0.85rem 0.5rem;text-align:center;}';
   html += '.rv-stat-val{font-size:1.4rem;font-weight:700;color:#fff;line-height:1;}';
   html += '.rv-stat-label{font-size:0.52rem;color:rgba(255,255,255,0.65);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.25rem;}';
@@ -5254,11 +5254,6 @@ function renderRutinaView() {
   html += '<div class="rv-stats">';
   html += '<div class="rv-stat"><div class="rv-stat-val">'+(c.days ? c.days.length : '-')+'</div><div class="rv-stat-label">Días/semana</div></div>';
   html += '<div class="rv-stat"><div class="rv-stat-val">'+(c.sessions || '-')+'</div><div class="rv-stat-label">Sesiones</div></div>';
-  // Se calcula sola de la fecha de inicio real de la clienta — a diferencia
-  // de "Trabajo" (que dependía de armar un bloque en modo Tiempo), esto
-  // siempre tiene un valor sin que Frida tenga que configurar nada extra.
-  var mesesContigo = monthsWith(c.firstEverDate || c.initDate);
-  html += '<div class="rv-stat"><div class="rv-stat-val">'+mesesContigo+'</div><div class="rv-stat-label">Meses contigo</div></div>';
   html += '</div></div>'; // close stats + hero
 
   html += '<div style="height:1.5rem;"></div>';
