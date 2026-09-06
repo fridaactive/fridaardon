@@ -420,7 +420,7 @@
         <div class="card-label">Días entrenados</div>
         <div class="track-stat">
           <div class="track-stat-box"><div class="track-stat-num" id="track-mes">0</div><div class="track-stat-label">Este mes</div></div>
-          <div class="track-stat-box"><div class="track-stat-num" id="track-racha">0</div><div class="track-stat-label">Racha (semanas)</div></div>
+          <div class="track-stat-box"><div class="track-stat-num" id="track-meta">-</div><div class="track-stat-label">Meta del mes</div></div>
         </div>
         <div class="track-days" id="track-days"></div>
         <div style="font-size:0.65rem;color:var(--muted);margin-top:0.6rem;line-height:1.4;">Un día se marca solo cuando guardás una sesión desde la pestaña Rutina — no se toca manualmente acá.</div>
@@ -1650,22 +1650,19 @@ function renderTrainingTracker(entrenoLogs) {
   });
   document.getElementById('track-mes').textContent = mesCount;
 
-  // Racha: semanas consecutivas (hacia atrás desde hoy) con al menos 1 sesión
-  var racha = 0;
-  var cursor = new Date(now);
-  for (var w = 0; w < 52; w++) {
-    var weekStart = new Date(cursor);
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-    var hasSession = false;
-    for (var i = 0; i < 7; i++) {
-      var d2 = new Date(weekStart);
-      d2.setDate(d2.getDate() + i);
-      var key = d2.getFullYear() + '-' + String(d2.getMonth() + 1).padStart(2, '0') + '-' + String(d2.getDate()).padStart(2, '0');
-      if (fechas[key]) { hasSession = true; break; }
-    }
-    if (hasSession) { racha++; cursor.setDate(cursor.getDate() - 7); } else { break; }
+  // Meta del mes: días/semana × 4 semanas — mismo criterio que ya usa el
+  // admin para calcular "Sesiones" al armar el plan de la clienta.
+  if (currentClientId) {
+    db().ref('clients/' + currentClientId + '/days').once('value').then(function(snap) {
+      var days = snap.val();
+      var meta = (days && days.length) ? days.length * 4 : null;
+      document.getElementById('track-meta').textContent = meta !== null ? meta : '-';
+    }).catch(function() {
+      document.getElementById('track-meta').textContent = '-';
+    });
+  } else {
+    document.getElementById('track-meta').textContent = '-';
   }
-  document.getElementById('track-racha').textContent = racha;
 
   // Últimos 28 días como grilla
   var daysEl = document.getElementById('track-days');
