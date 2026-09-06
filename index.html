@@ -125,6 +125,27 @@
   .rt-day-body { padding:1rem; background:var(--blue-lt); }
   .rt-day-save { margin-top:0.25rem; }
 
+  /* ── TRANSFORMACIÓN (ANTES/DESPUÉS) ── */
+  .transf-card { padding-bottom:0.9rem; }
+  .transf-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.9rem; }
+  .transf-privacy { font-size:0.6rem; color:var(--muted); background:#f5f5f5; padding:0.25rem 0.6rem; border-radius:100px; display:flex; align-items:center; gap:0.3rem; white-space:nowrap; }
+  .transf-month { border-radius:16px; overflow:hidden; border:1.5px solid var(--border); margin-bottom:0.9rem; background:linear-gradient(160deg,#fff,#fafbff); }
+  .transf-month:last-child { margin-bottom:0; }
+  .transf-month.current { border-color:var(--blue); box-shadow:0 4px 18px rgba(28,85,229,0.12); }
+  .transf-month-hdr { font-size:0.72rem; font-weight:700; color:var(--text); padding:0.7rem 0.9rem; text-transform:capitalize; display:flex; justify-content:space-between; align-items:center; }
+  .transf-month.current .transf-month-hdr { color:var(--blue); }
+  .transf-month-tag { font-size:0.55rem; text-transform:uppercase; letter-spacing:0.1em; color:#fff; background:var(--blue); padding:0.2rem 0.55rem; border-radius:100px; font-weight:700; }
+  .transf-pair { display:flex; align-items:stretch; gap:0.5rem; padding:0 0.9rem 0.9rem; }
+  .transf-slot { flex:1; aspect-ratio:3/4; border-radius:12px; overflow:hidden; position:relative; background:#f2f4f9; border:1.5px dashed var(--border); cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .transf-slot.filled { border-style:solid; border-color:transparent; }
+  .transf-slot img { width:100%; height:100%; object-fit:cover; display:block; }
+  .transf-slot-empty { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.35rem; color:var(--muted); }
+  .transf-slot-empty svg { width:22px; height:22px; }
+  .transf-slot-empty span { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; }
+  .transf-slot-label { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(to top, rgba(0,0,0,0.55), transparent); color:#fff; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:0.5rem 0.5rem 0.35rem; }
+  .transf-arrow { display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:1rem; flex-shrink:0; width:1.2rem; }
+  .transf-uploading { position:absolute; inset:0; background:rgba(255,255,255,0.85); display:flex; align-items:center; justify-content:center; font-size:0.62rem; color:var(--blue); font-weight:700; }
+
   /* ── TRACKING CALENDAR ── */
   .track-stat { display:flex; gap:0.75rem; margin-bottom:0.9rem; }
   .track-stat-box { flex:1; background:var(--blue-lt); border-radius:12px; padding:0.75rem; text-align:center; }
@@ -383,6 +404,15 @@
 
     <!-- PROGRESO -->
     <div class="tab-panel" id="tab-progreso">
+      <div class="card transf-card">
+        <div class="transf-hdr">
+          <div class="card-label" style="margin-bottom:0;">📸 Tu transformación</div>
+          <div class="transf-privacy">🔒 Solo vos y Frida</div>
+        </div>
+        <div id="transformacion-list"><div class="empty-note">Cargando…</div></div>
+        <input type="file" id="transf-file-input" accept="image/*" style="display:none;" onchange="handleTransfFileSelect(this)">
+      </div>
+
       <div class="card">
         <div class="card-label">Días entrenados</div>
         <div class="track-stat">
@@ -949,6 +979,7 @@ function renderPortalScreen(portal, perfil) {
 
   loadRutinaTab(currentClientId);
   renderProgresoList(portal.progreso || {});
+  renderTransformacion(portal.fotosProgreso || {});
   renderTrainingTracker(portal.entrenoLogs || {});
   renderCheckinTab(portal.checkins || {});
   document.getElementById('prog-fecha').valueAsDate = new Date();
@@ -1396,6 +1427,78 @@ function saveProgreso() {
     });
   }).catch(function(e) {
     alert('No se pudo guardar: ' + e.message);
+  });
+}
+
+// ── TRANSFORMACIÓN (ANTES/DESPUÉS) ──
+// Privado: estas fotos viven bajo clientasPortal/{uid}, la misma rama que ya
+// solo lee la clienta dueña de la cuenta y Frida desde el admin — nadie más
+// tiene forma de llegar a ellas.
+var TRANSF_DATA = {};
+
+function renderTransformacion(fotosProgreso) {
+  TRANSF_DATA = fotosProgreso || {};
+  var el = document.getElementById('transformacion-list');
+  if (!el) return;
+  var now = new Date();
+  var currentKey = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+  var keys = Object.keys(TRANSF_DATA);
+  if (keys.indexOf(currentKey) === -1) keys.push(currentKey);
+  keys.sort().reverse();
+  var html = '';
+  keys.forEach(function(key) {
+    var isCurrent = key === currentKey;
+    var parts = key.split('-');
+    var label = MESES_LARGOS[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
+    var data = TRANSF_DATA[key] || {};
+    html += '<div class="transf-month' + (isCurrent ? ' current' : '') + '">';
+    html += '<div class="transf-month-hdr"><span>' + escapeHtml(label) + '</span>' + (isCurrent ? '<span class="transf-month-tag">Este mes</span>' : '') + '</div>';
+    html += '<div class="transf-pair">';
+    html += renderTransfSlot(key, 'inicio', data.inicio, 'Día 1');
+    html += '<div class="transf-arrow">→</div>';
+    html += renderTransfSlot(key, 'fin', data.fin, 'Último día');
+    html += '</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+function renderTransfSlot(monthKey, tipo, entry, label) {
+  var id = 'transf-slot-' + monthKey + '-' + tipo;
+  if (entry && entry.url) {
+    return '<div class="transf-slot filled" id="' + id + '" onclick="pickTransfPhoto(\'' + monthKey + '\',\'' + tipo + '\')"><img src="' + escapeHtml(entry.url) + '" alt=""><div class="transf-slot-label">' + escapeHtml(label) + '</div></div>';
+  }
+  return '<div class="transf-slot" id="' + id + '" onclick="pickTransfPhoto(\'' + monthKey + '\',\'' + tipo + '\')"><div class="transf-slot-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg><span>' + escapeHtml(label) + '</span></div></div>';
+}
+
+var transfPendingKey = null, transfPendingTipo = null;
+function pickTransfPhoto(monthKey, tipo) {
+  transfPendingKey = monthKey;
+  transfPendingTipo = tipo;
+  document.getElementById('transf-file-input').click();
+}
+
+function handleTransfFileSelect(input) {
+  var file = input.files && input.files[0];
+  input.value = '';
+  if (!file || !currentUid || !transfPendingKey) return;
+  if (!file.type.startsWith('image/')) { alert('Elegí un archivo de imagen.'); return; }
+  var monthKey = transfPendingKey, tipo = transfPendingTipo;
+  var slotEl = document.getElementById('transf-slot-' + monthKey + '-' + tipo);
+  if (slotEl) slotEl.insertAdjacentHTML('beforeend', '<div class="transf-uploading">Subiendo…</div>');
+  var path = 'progress-photos/' + currentUid + '/' + monthKey + '-' + tipo + '-' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+  firebase.storage().ref(path).put(file).then(function(snap) {
+    return snap.ref.getDownloadURL();
+  }).then(function(url) {
+    var entry = { url: url, subidoEn: Date.now() };
+    return db().ref('clientasPortal/' + currentUid + '/fotosProgreso/' + monthKey + '/' + tipo).set(entry).then(function() { return entry; });
+  }).then(function(entry) {
+    TRANSF_DATA[monthKey] = TRANSF_DATA[monthKey] || {};
+    TRANSF_DATA[monthKey][tipo] = entry;
+    renderTransformacion(TRANSF_DATA);
+  }).catch(function(e) {
+    console.warn('transf upload error', e);
+    alert('No se pudo subir la foto. Intentá de nuevo.');
+    renderTransformacion(TRANSF_DATA);
   });
 }
 

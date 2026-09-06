@@ -514,6 +514,22 @@
   .fin-priority-num { width:1.2rem; height:1.2rem; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-size:0.6rem; color:#fff; font-weight:700; flex-shrink:0; }
   .fin-priority-text { font-size:0.78rem; color:var(--text); font-weight:500; }
   .fin-priority-note { font-size:0.62rem; color:var(--muted); }
+
+  /* ── PERFIL DE FOTOS (ANTES/DESPUÉS) ── */
+  .transf-month { border-radius:16px; overflow:hidden; border:1.5px solid var(--border); margin-bottom:0.9rem; background:linear-gradient(160deg,#fff,#fafbff); }
+  .transf-month:last-child { margin-bottom:0; }
+  .transf-month.current { border-color:var(--blue); box-shadow:0 4px 18px rgba(28,85,229,0.12); }
+  .transf-month-hdr { font-size:0.72rem; font-weight:700; color:var(--text); padding:0.7rem 0.9rem; text-transform:capitalize; display:flex; justify-content:space-between; align-items:center; }
+  .transf-month.current .transf-month-hdr { color:var(--blue); }
+  .transf-month-tag { font-size:0.55rem; text-transform:uppercase; letter-spacing:0.1em; color:#fff; background:var(--blue); padding:0.2rem 0.55rem; border-radius:100px; font-weight:700; }
+  .transf-pair { display:flex; align-items:stretch; gap:0.5rem; padding:0 0.9rem 0.9rem; }
+  .transf-slot { flex:1; aspect-ratio:3/4; border-radius:12px; overflow:hidden; position:relative; background:#f2f4f9; border:1.5px dashed var(--border); }
+  .transf-slot.filled { border-style:solid; border-color:transparent; cursor:pointer; }
+  .transf-slot img { width:100%; height:100%; object-fit:cover; display:block; }
+  .transf-slot-empty { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.35rem; color:var(--muted); }
+  .transf-slot-empty span { font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; }
+  .transf-slot-label { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(to top, rgba(0,0,0,0.55), transparent); color:#fff; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:0.5rem 0.5rem 0.35rem; }
+  .transf-arrow { display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:1rem; flex-shrink:0; width:1.2rem; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
@@ -780,6 +796,7 @@
     <div class="sub-title" id="cd-name">Clienta</div>
   </div>
   <div class="clients-wrap">
+    <button id="cd-photos-btn" onclick="openClientPhotosModal(currentClient)" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:12px;padding:0.7rem;font-weight:700;font-size:0.8rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1rem;">📸 Ir a perfil (antes/después) →</button>
     <div style="background:var(--grad);border-radius:14px;padding:1.1rem 1.25rem;margin-bottom:1rem;border:1.5px solid #E8D8A0;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
         <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--blue);font-weight:700;">Estado del programa</div>
@@ -3089,6 +3106,66 @@ function openClientDetail(id) {
   }
 
   showScreen('client-detail');
+}
+
+// ── PERFIL DE FOTOS (ANTES/DESPUÉS) — solo lectura desde el admin ──
+// La clienta sube estas fotos desde su portal (clientasPortal/{uid}/fotosProgreso);
+// acá solo se muestran, no se suben ni editan desde este lado.
+function openClientPhotosModal(clientId) {
+  var c = CLIENTS[clientId];
+  if (!c) return;
+  document.getElementById('cp-modal-name').textContent = c.name;
+  var uid = CLIENT_LINKS[clientId];
+  var listEl = document.getElementById('client-photos-list');
+  if (!uid) {
+    listEl.innerHTML = '<div style="font-size:0.78rem;color:var(--muted);text-align:center;padding:1.5rem 0;">Todavía no vinculó su cuenta del portal, así que no tiene fotos guardadas.</div>';
+    document.getElementById('client-photos-modal').style.display = 'flex';
+    return;
+  }
+  listEl.innerHTML = '<div style="font-size:0.78rem;color:var(--muted);text-align:center;padding:1.5rem 0;">Cargando…</div>';
+  document.getElementById('client-photos-modal').style.display = 'flex';
+  withAdminAuth(function() {
+    fbGet('clientasPortal/' + uid + '/fotosProgreso', function(data) {
+      renderClientPhotosList(data || {});
+    });
+  });
+}
+
+function hideClientPhotosModal() {
+  document.getElementById('client-photos-modal').style.display = 'none';
+}
+
+function renderClientPhotosList(fotosProgreso) {
+  var listEl = document.getElementById('client-photos-list');
+  var MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var now = new Date();
+  var currentKey = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+  var keys = Object.keys(fotosProgreso);
+  if (keys.indexOf(currentKey) === -1) keys.push(currentKey);
+  keys.sort().reverse();
+
+  var html = '';
+  keys.forEach(function(key) {
+    var isCurrent = key === currentKey;
+    var parts = key.split('-');
+    var label = MESES[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
+    var data = fotosProgreso[key] || {};
+    html += '<div class="transf-month' + (isCurrent ? ' current' : '') + '">';
+    html += '<div class="transf-month-hdr"><span>' + escHtml(label) + '</span>' + (isCurrent ? '<span class="transf-month-tag">Este mes</span>' : '') + '</div>';
+    html += '<div class="transf-pair">';
+    html += renderClientPhotoSlot(data.inicio, 'Día 1');
+    html += '<div class="transf-arrow">→</div>';
+    html += renderClientPhotoSlot(data.fin, 'Último día');
+    html += '</div></div>';
+  });
+  listEl.innerHTML = html;
+}
+
+function renderClientPhotoSlot(entry, label) {
+  if (entry && entry.url) {
+    return '<div class="transf-slot filled" onclick="window.open(\'' + entry.url.replace(/'/g, "\\'") + '\',\'_blank\')"><img src="' + escHtml(entry.url) + '"><div class="transf-slot-label">' + escHtml(label) + '</div></div>';
+  }
+  return '<div class="transf-slot"><div class="transf-slot-empty"><span>' + escHtml(label) + '</span></div></div>';
 }
 
 function renderAsistencia(id, c) {
@@ -6449,6 +6526,18 @@ function renderAhorrosMes() {
     <div class="fin-form-row"><div class="fin-form-label">Nota / descripción (opcional)</div><textarea class="fin-form-input" id="ev-descripcion" rows="3" placeholder="Ej: Espalda pegada al respaldo, no bloquear la rodilla arriba..." style="resize:vertical;"></textarea></div>
     <div style="font-size:0.68rem;color:var(--muted);margin-bottom:1rem;">Esto queda guardado en el banco de ejercicios y se muestra automáticamente a tus clientas cuando vean "<span id="ev-modal-name-inline"></span>" en su rutina.</div>
     <button onclick="saveExerciseVideoModal()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;">Guardar</button>
+  </div>
+</div>
+
+<!-- ══════════ MODAL PERFIL DE FOTOS (ANTES/DESPUÉS) ══════════ -->
+<div id="client-photos-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.25rem;">
+      <div style="font-size:1rem;font-weight:700;color:var(--text);">📸 <span id="cp-modal-name"></span></div>
+      <button onclick="hideClientPhotosModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
+    </div>
+    <div style="font-size:0.68rem;color:var(--muted);margin-bottom:1rem;">🔒 Solo vos y ella pueden ver estas fotos.</div>
+    <div id="client-photos-list"></div>
   </div>
 </div>
 
