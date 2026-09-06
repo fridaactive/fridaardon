@@ -145,6 +145,10 @@
   .transf-slot-label { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(to top, rgba(0,0,0,0.55), transparent); color:#fff; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:0.5rem 0.5rem 0.35rem; }
   .transf-arrow { display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:1rem; flex-shrink:0; width:1.2rem; }
   .transf-uploading { position:absolute; inset:0; background:rgba(255,255,255,0.85); display:flex; align-items:center; justify-content:center; font-size:0.62rem; color:var(--blue); font-weight:700; }
+  .transf-captions { display:flex; gap:0.5rem; padding:0 0.9rem 0.9rem; }
+  .transf-caption { flex:1; min-width:0; }
+  .transf-caption-nums { font-size:0.72rem; font-weight:700; color:var(--text); }
+  .transf-caption-notas { font-size:0.68rem; color:var(--muted); margin-top:0.15rem; line-height:1.4; }
 
   /* ── TRACKING CALENDAR ── */
   .track-stat { display:flex; gap:0.75rem; margin-bottom:0.9rem; }
@@ -410,7 +414,6 @@
           <div class="transf-privacy">🔒 Solo vos y Frida</div>
         </div>
         <div id="transformacion-list"><div class="empty-note">Cargando…</div></div>
-        <input type="file" id="transf-file-input" accept="image/*" style="display:none;" onchange="handleTransfFileSelect(this)">
       </div>
 
       <div class="card">
@@ -422,19 +425,6 @@
         <div class="track-days" id="track-days"></div>
       </div>
 
-      <div class="card">
-        <div class="card-label">Registrar peso / medidas</div>
-        <div class="form-row"><input class="form-input" type="date" id="prog-fecha"></div>
-        <div class="form-row"><input class="form-input" type="number" step="0.1" id="prog-peso" placeholder="Peso (kg)"></div>
-        <div class="form-row"><input class="form-input" type="number" step="0.1" id="prog-cintura" placeholder="Cintura (cm) — opcional"></div>
-        <div class="form-row"><textarea class="form-input" id="prog-notas" rows="2" placeholder="Notas — ¿cómo te sentiste?" style="resize:vertical;"></textarea></div>
-        <button class="save-btn" onclick="saveProgreso()">Guardar registro</button>
-      </div>
-
-      <div class="card">
-        <div class="card-label">Tu historial</div>
-        <div id="progreso-list"><div class="empty-note">Sin registros todavía.</div></div>
-      </div>
     </div>
 
     <!-- BENEFICIOS -->
@@ -671,6 +661,29 @@
     <div class="bp-header-title" id="bp-header-title">Marca</div>
   </div>
   <div class="bp-content" id="bp-content"></div>
+</div>
+
+<!-- ══════════ PUBLICAR FOTO DE TRANSFORMACIÓN (con caption) ══════════ -->
+<div id="transf-caption-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9998;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.4rem 1.1rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-weight:700;font-size:0.95rem;" id="tc-title">Día 1</div>
+      <button onclick="closeTransfCaptionModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
+    </div>
+    <div id="tc-photo-preview" style="width:100%;aspect-ratio:1;border-radius:14px;overflow:hidden;background:#f2f4f9;display:flex;align-items:center;justify-content:center;margin-bottom:0.6rem;cursor:pointer;" onclick="document.getElementById('tc-file-input').click()">
+      <div id="tc-photo-placeholder" style="color:var(--muted);font-size:0.75rem;text-align:center;padding:1rem;">Toca para elegir una foto</div>
+      <img id="tc-photo-img" style="width:100%;height:100%;object-fit:cover;display:none;" alt="">
+    </div>
+    <input type="file" id="tc-file-input" accept="image/*" style="display:none;" onchange="handleTcFileSelect(this)">
+    <button type="button" onclick="document.getElementById('tc-file-input').click()" style="width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.55rem;font-size:0.75rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1rem;">📷 <span id="tc-photo-btn-label">Elegir foto</span></button>
+
+    <div class="form-row"><input class="form-input" type="number" step="0.1" id="tc-peso" placeholder="Peso (kg)"></div>
+    <div class="form-row"><input class="form-input" type="number" step="0.1" id="tc-cintura" placeholder="Cintura (cm) — opcional"></div>
+    <div class="form-row"><textarea class="form-input" id="tc-notas" rows="3" placeholder="¿Cómo te sentís? — opcional" style="resize:vertical;"></textarea></div>
+
+    <div id="tc-error" style="color:#c0392b;font-size:0.72rem;margin-bottom:0.6rem;display:none;"></div>
+    <button class="save-btn" id="tc-save-btn" onclick="saveTransfCaption()">Publicar</button>
+  </div>
 </div>
 
 <script>
@@ -1039,11 +1052,9 @@ function renderPortalScreen(portal, perfil) {
   renderAvatar(perfil.fotoPerfil, currentClientName);
 
   loadRutinaTab(currentClientId);
-  renderProgresoList(portal.progreso || {});
   renderTransformacion(portal.fotosProgreso || {});
   renderTrainingTracker(portal.entrenoLogs || {});
   renderCheckinTab(portal.checkins || {});
-  document.getElementById('prog-fecha').valueAsDate = new Date();
   loadBeneficios();
   loadServicios();
 
@@ -1450,47 +1461,6 @@ function descargarRutinaPDF() {
   doc.save('rutina-fridaactive.pdf');
 }
 
-// ── PROGRESO / TRACKING ──
-function renderProgresoList(progreso) {
-  var entries = Object.keys(progreso).map(function(k) { return progreso[k]; });
-  entries.sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
-  var listEl = document.getElementById('progreso-list');
-  if (entries.length === 0) {
-    listEl.innerHTML = '<div class="empty-note">Sin registros todavía.</div>';
-    return;
-  }
-  var html = '';
-  entries.forEach(function(en) {
-    html += '<div class="entry-row"><div><div>' + (en.peso ? en.peso + ' kg' : '—') + (en.cintura ? ' · ' + en.cintura + ' cm' : '') + '</div>';
-    if (en.notas) html += '<div style="color:var(--muted);font-size:0.72rem;margin-top:0.15rem;">' + escapeHtml(en.notas) + '</div>';
-    html += '</div><div class="entry-date">' + (en.fecha || '') + '</div></div>';
-  });
-  listEl.innerHTML = html;
-}
-
-function saveProgreso() {
-  var fecha = document.getElementById('prog-fecha').value;
-  var peso = document.getElementById('prog-peso').value;
-  var cintura = document.getElementById('prog-cintura').value;
-  var notas = document.getElementById('prog-notas').value.trim();
-  if (!fecha || !peso) { alert('Ingresá al menos la fecha y el peso.'); return; }
-
-  var entry = { fecha: fecha, peso: parseFloat(peso), ts: Date.now() };
-  if (cintura) entry.cintura = parseFloat(cintura);
-  if (notas) entry.notas = notas;
-
-  db().ref('clientasPortal/' + currentUid + '/progreso').push(entry).then(function() {
-    document.getElementById('prog-peso').value = '';
-    document.getElementById('prog-cintura').value = '';
-    document.getElementById('prog-notas').value = '';
-    db().ref('clientasPortal/' + currentUid + '/progreso').once('value').then(function(snap) {
-      renderProgresoList(snap.val() || {});
-    });
-  }).catch(function(e) {
-    alert('No se pudo guardar: ' + e.message);
-  });
-}
-
 // ── TRANSFORMACIÓN (ANTES/DESPUÉS) ──
 // Privado: estas fotos viven bajo clientasPortal/{uid}, la misma rama que ya
 // solo lee la clienta dueña de la cuenta y Frida desde el admin — nadie más
@@ -1518,7 +1488,12 @@ function renderTransformacion(fotosProgreso) {
     html += renderTransfSlot(key, 'inicio', data.inicio, 'Día 1');
     html += '<div class="transf-arrow">→</div>';
     html += renderTransfSlot(key, 'fin', data.fin, 'Último día');
-    html += '</div></div>';
+    html += '</div>';
+    html += '<div class="transf-captions">';
+    html += renderTransfCaption(data.inicio);
+    html += renderTransfCaption(data.fin);
+    html += '</div>';
+    html += '</div>';
   });
   el.innerHTML = html;
 }
@@ -1526,45 +1501,139 @@ function renderTransformacion(fotosProgreso) {
 function renderTransfSlot(monthKey, tipo, entry, label) {
   var id = 'transf-slot-' + monthKey + '-' + tipo;
   if (entry && entry.url) {
-    return '<div class="transf-slot filled" id="' + id + '" onclick="pickTransfPhoto(\'' + monthKey + '\',\'' + tipo + '\')"><img src="' + escapeHtml(entry.url) + '" alt=""><div class="transf-slot-label">' + escapeHtml(label) + '</div></div>';
+    return '<div class="transf-slot filled" id="' + id + '" onclick="openTransfCaptionModal(\'' + monthKey + '\',\'' + tipo + '\')"><img src="' + escapeHtml(entry.url) + '" alt=""><div class="transf-slot-label">' + escapeHtml(label) + '</div></div>';
   }
-  return '<div class="transf-slot" id="' + id + '" onclick="pickTransfPhoto(\'' + monthKey + '\',\'' + tipo + '\')"><div class="transf-slot-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg><span>' + escapeHtml(label) + '</span></div></div>';
+  return '<div class="transf-slot" id="' + id + '" onclick="openTransfCaptionModal(\'' + monthKey + '\',\'' + tipo + '\')"><div class="transf-slot-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg><span>' + escapeHtml(label) + '</span></div></div>';
 }
 
-var transfPendingKey = null, transfPendingTipo = null;
-function pickTransfPhoto(monthKey, tipo) {
-  transfPendingKey = monthKey;
-  transfPendingTipo = tipo;
-  document.getElementById('transf-file-input').click();
+// Caption estilo Instagram: peso/medidas/cómo-te-sentís quedan debajo de la
+// foto de ese día en vez de en un formulario aparte.
+function renderTransfCaption(entry) {
+  if (!entry || (!entry.peso && !entry.cintura && !entry.notas)) return '<div class="transf-caption"></div>';
+  var html = '<div class="transf-caption">';
+  var parts = [];
+  if (entry.peso) parts.push(entry.peso + ' kg');
+  if (entry.cintura) parts.push(entry.cintura + ' cm');
+  if (parts.length) html += '<div class="transf-caption-nums">' + escapeHtml(parts.join(' · ')) + '</div>';
+  if (entry.notas) html += '<div class="transf-caption-notas">' + escapeHtml(entry.notas) + '</div>';
+  html += '</div>';
+  return html;
 }
 
-function handleTransfFileSelect(input) {
+// ── MODAL: PUBLICAR FOTO + CAPTION ──
+var tcMonthKey = null, tcTipo = null, tcSelectedFile = null, tcExistingUrl = null;
+
+function openTransfCaptionModal(monthKey, tipo) {
+  tcMonthKey = monthKey;
+  tcTipo = tipo;
+  tcSelectedFile = null;
+  var entry = (TRANSF_DATA[monthKey] || {})[tipo] || {};
+  tcExistingUrl = entry.url || null;
+  var parts = monthKey.split('-');
+  var monthLabel = MESES_LARGOS[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
+  document.getElementById('tc-title').textContent = (tipo === 'inicio' ? 'Día 1' : 'Último día') + ' · ' + monthLabel;
+  document.getElementById('tc-peso').value = entry.peso || '';
+  document.getElementById('tc-cintura').value = entry.cintura || '';
+  document.getElementById('tc-notas').value = entry.notas || '';
+  document.getElementById('tc-error').style.display = 'none';
+  document.getElementById('tc-file-input').value = '';
+  updateTcPhotoPreview(tcExistingUrl);
+  document.getElementById('tc-photo-btn-label').textContent = tcExistingUrl ? 'Cambiar foto' : 'Elegir foto';
+  document.getElementById('transf-caption-modal').style.display = 'flex';
+}
+
+function closeTransfCaptionModal() {
+  document.getElementById('transf-caption-modal').style.display = 'none';
+}
+
+function updateTcPhotoPreview(url) {
+  var img = document.getElementById('tc-photo-img');
+  var placeholder = document.getElementById('tc-photo-placeholder');
+  if (url) {
+    img.src = url;
+    img.style.display = 'block';
+    placeholder.style.display = 'none';
+  } else {
+    img.removeAttribute('src');
+    img.style.display = 'none';
+    placeholder.style.display = 'block';
+  }
+}
+
+function handleTcFileSelect(input) {
   var file = input.files && input.files[0];
-  input.value = '';
-  if (!file || !currentUid || !transfPendingKey) return;
+  if (!file) return;
   if (!file.type.startsWith('image/')) { alert('Elegí un archivo de imagen.'); return; }
-  var monthKey = transfPendingKey, tipo = transfPendingTipo;
-  var slotEl = document.getElementById('transf-slot-' + monthKey + '-' + tipo);
-  if (slotEl) slotEl.insertAdjacentHTML('beforeend', '<div class="transf-uploading">Subiendo…</div>');
-  // Storage rules only grant write access one level under client-photos/{uid}/
-  // (the exact shape the avatar upload already uses) — an extra "progreso/"
-  // subfolder falls outside that rule and gets denied as unauthorized, so
-  // this has to sit flat right next to the avatar file, not nested.
-  var path = 'client-photos/' + currentUid + '/progreso-' + monthKey + '-' + tipo + '-' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-  firebase.storage().ref(path).put(file).then(function(snap) {
-    return snap.ref.getDownloadURL();
-  }).then(function(url) {
-    var entry = { url: url, subidoEn: Date.now() };
-    return db().ref('clientasPortal/' + currentUid + '/fotosProgreso/' + monthKey + '/' + tipo).set(entry).then(function() { return entry; });
-  }).then(function(entry) {
-    TRANSF_DATA[monthKey] = TRANSF_DATA[monthKey] || {};
-    TRANSF_DATA[monthKey][tipo] = entry;
-    renderTransformacion(TRANSF_DATA);
-  }).catch(function(e) {
-    console.warn('transf upload error', e);
-    alert('No se pudo subir la foto. Intentá de nuevo.');
-    renderTransformacion(TRANSF_DATA);
-  });
+  tcSelectedFile = file;
+  var reader = new FileReader();
+  reader.onload = function(e) { updateTcPhotoPreview(e.target.result); };
+  reader.readAsDataURL(file);
+  document.getElementById('tc-photo-btn-label').textContent = 'Cambiar foto';
+}
+
+function saveTransfCaption() {
+  var errEl = document.getElementById('tc-error');
+  errEl.style.display = 'none';
+  if (!tcSelectedFile && !tcExistingUrl) {
+    errEl.textContent = 'Elegí una foto primero.';
+    errEl.style.display = 'block';
+    return;
+  }
+  var peso = document.getElementById('tc-peso').value;
+  var cintura = document.getElementById('tc-cintura').value;
+  var notas = document.getElementById('tc-notas').value.trim();
+  var monthKey = tcMonthKey, tipo = tcTipo;
+  var btn = document.getElementById('tc-save-btn');
+  btn.textContent = 'Publicando…';
+  btn.disabled = true;
+
+  function finishSave(url, subidoEn) {
+    var entry = { url: url, subidoEn: subidoEn };
+    if (peso) entry.peso = parseFloat(peso);
+    if (cintura) entry.cintura = parseFloat(cintura);
+    if (notas) entry.notas = notas;
+    db().ref('clientasPortal/' + currentUid + '/fotosProgreso/' + monthKey + '/' + tipo).set(entry).then(function() {
+      // Espejo en /progreso (misma clave por mes+tipo, sin duplicar) para que
+      // el resumen de progreso que ve Frida en el admin siga funcionando.
+      var progresoEntry = { fecha: new Date().toISOString().slice(0, 10), ts: subidoEn };
+      if (peso) progresoEntry.peso = parseFloat(peso);
+      if (cintura) progresoEntry.cintura = parseFloat(cintura);
+      if (notas) progresoEntry.notas = notas;
+      return db().ref('clientasPortal/' + currentUid + '/progreso/' + monthKey + '-' + tipo).set(progresoEntry);
+    }).then(function() {
+      TRANSF_DATA[monthKey] = TRANSF_DATA[monthKey] || {};
+      TRANSF_DATA[monthKey][tipo] = entry;
+      renderTransformacion(TRANSF_DATA);
+      closeTransfCaptionModal();
+      btn.textContent = 'Publicar';
+      btn.disabled = false;
+    }).catch(function(e) {
+      console.warn('transf save error', e);
+      errEl.textContent = 'No se pudo guardar. Intentá de nuevo.';
+      errEl.style.display = 'block';
+      btn.textContent = 'Publicar';
+      btn.disabled = false;
+    });
+  }
+
+  if (tcSelectedFile) {
+    // Mismo nivel que client-photos/{uid}/ (sin subcarpeta) — una carpeta
+    // anidada extra queda fuera de la regla de Storage y se rechaza.
+    var path = 'client-photos/' + currentUid + '/progreso-' + monthKey + '-' + tipo + '-' + Date.now() + '-' + tcSelectedFile.name.replace(/[^a-zA-Z0-9.]/g, '_');
+    firebase.storage().ref(path).put(tcSelectedFile).then(function(snap) {
+      return snap.ref.getDownloadURL();
+    }).then(function(url) {
+      finishSave(url, Date.now());
+    }).catch(function(e) {
+      console.warn('transf upload error', e);
+      errEl.textContent = 'No se pudo subir la foto. Intentá de nuevo.';
+      errEl.style.display = 'block';
+      btn.textContent = 'Publicar';
+      btn.disabled = false;
+    });
+  } else {
+    finishSave(tcExistingUrl, Date.now());
+  }
 }
 
 function renderTrainingTracker(entrenoLogs) {
