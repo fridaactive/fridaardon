@@ -1561,7 +1561,7 @@ function handleTransfFileSelect(input) {
     renderTransformacion(TRANSF_DATA);
   }).catch(function(e) {
     console.warn('transf upload error', e);
-    alert('No se pudo subir la foto. Intentá de nuevo.');
+    alert('No se pudo subir la foto: ' + (e && e.code ? e.code : '') + ' ' + (e && e.message ? e.message : e));
     renderTransformacion(TRANSF_DATA);
   });
 }
