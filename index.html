@@ -1546,7 +1546,10 @@ function handleTransfFileSelect(input) {
   var monthKey = transfPendingKey, tipo = transfPendingTipo;
   var slotEl = document.getElementById('transf-slot-' + monthKey + '-' + tipo);
   if (slotEl) slotEl.insertAdjacentHTML('beforeend', '<div class="transf-uploading">Subiendo…</div>');
-  var path = 'progress-photos/' + currentUid + '/' + monthKey + '-' + tipo + '-' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+  // Reuses the client-photos/{uid}/ prefix that the avatar upload already
+  // writes to successfully — a brand-new top-level Storage path here isn't
+  // covered by the existing security rules and the upload just gets denied.
+  var path = 'client-photos/' + currentUid + '/progreso/' + monthKey + '-' + tipo + '-' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
   firebase.storage().ref(path).put(file).then(function(snap) {
     return snap.ref.getDownloadURL();
   }).then(function(url) {
