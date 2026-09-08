@@ -1306,7 +1306,15 @@ function renderExerciseBlocksHtml(day) {
       html += '<div class="ex-row">';
       html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
       html += '<div class="ex-name">' + escapeHtml(ex.name) + '</div>';
-      if (videoUrl || nota) html += '<button type="button" onclick="showExerciseVideo(\'' + jsAttrEscape(videoUrl || '') + '\', \'' + jsAttrEscape(nota || '') + '\')" style="flex-shrink:0;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">' + (videoUrl ? '🎥 Ver técnica' : '📝 Ver nota') + '</button>';
+      if (videoUrl || nota) {
+        // Minimalista, en línea con los íconos de la barra de pestañas —
+        // sin emojis en la interfaz.
+        var exBtnIcon = videoUrl
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="m10.3 8.5 5 3.5-5 3.5v-7Z"/></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M7 3.5h7l4 4v13H7Z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></svg>';
+        var exBtnLabel = videoUrl ? 'Ver técnica' : 'Ver nota';
+        html += '<button type="button" onclick="showExerciseVideo(\'' + jsAttrEscape(videoUrl || '') + '\', \'' + jsAttrEscape(nota || '') + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">' + exBtnIcon + exBtnLabel + '</button>';
+      }
       html += '</div>';
       if (prescribed.length) html += '<div class="ex-prescribed">Sugerido: ' + prescribed.join(' · ') + '</div>';
       html += '<div class="ex-inputs">';
