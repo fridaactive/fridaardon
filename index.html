@@ -976,6 +976,7 @@ var currentUid = null;
 var currentClientId = null;
 var currentClientName = null;
 var currentRutinaData = null;
+var CURRENT_ENTRENO_LOGS = {};
 var EXERCISE_BANK = {};
 
 function loadDashboard(uid) {
@@ -1057,9 +1058,10 @@ function renderPortalScreen(portal, perfil) {
   document.getElementById('dash-greeting').textContent = 'Hola, ' + firstName + ' 👋';
   renderAvatar(perfil.fotoPerfil, currentClientName);
 
+  CURRENT_ENTRENO_LOGS = portal.entrenoLogs || {};
   loadRutinaTab(currentClientId);
   renderTransformacion(portal.fotosProgreso || {});
-  renderTrainingTracker(portal.entrenoLogs || {});
+  renderTrainingTracker(CURRENT_ENTRENO_LOGS);
   renderCheckinTab(portal.checkins || {});
   loadBeneficios();
   loadServicios();
@@ -1295,6 +1297,19 @@ function findExerciseVideo(name) {
   return (match && match.video) ? match.video : null;
 }
 
+// Los datos que ya guardaste (carga/reps) siguen ahí en entrenoLogs — lo
+// único que faltaba era volver a mostrártelos al reabrir la rutina, ya que
+// los campos siempre se dibujaban en blanco sin importar lo guardado.
+function findLastExerciseLog(dayId, exId) {
+  var entries = Object.keys(CURRENT_ENTRENO_LOGS).map(function(k) { return CURRENT_ENTRENO_LOGS[k]; });
+  entries.sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
+  for (var i = 0; i < entries.length; i++) {
+    var en = entries[i];
+    if (en.dayId === dayId && en.ejercicios && en.ejercicios[exId]) return en.ejercicios[exId];
+  }
+  return null;
+}
+
 function renderExerciseBlocksHtml(day) {
   var html = '';
   (day.blocks || []).forEach(function(block) {
@@ -1333,9 +1348,12 @@ function renderExerciseBlocksHtml(day) {
       }
       html += '</div>';
       if (prescribed.length) html += '<div class="ex-prescribed">Repeticiones: ' + prescribed.join(' · ') + '</div>';
+      var lastLog = findLastExerciseLog(day.id, ex.id);
+      var lastCarga = lastLog && lastLog.carga ? escapeHtml(String(lastLog.carga)) : '';
+      var lastReps = lastLog && lastLog.reps ? escapeHtml(String(lastLog.reps)) : '';
       html += '<div class="ex-inputs">';
-      html += '<input type="number" step="0.5" placeholder="Carga (lbs)" data-ex="' + ex.id + '" data-field="carga">';
-      html += '<input type="text" placeholder="Reps hechas" data-ex="' + ex.id + '" data-field="reps">';
+      html += '<input type="number" step="0.5" placeholder="Carga (lbs)" value="' + lastCarga + '" data-ex="' + ex.id + '" data-field="carga">';
+      html += '<input type="text" placeholder="Reps hechas" value="' + lastReps + '" data-ex="' + ex.id + '" data-field="reps">';
       html += '</div></div></div>';
     });
 
@@ -1448,7 +1466,8 @@ function guardarSesion(dayIndex, btnEl) {
   db().ref('clientasPortal/' + currentUid + '/entrenoLogs').push(entry).then(function() {
     alert('¡Sesión guardada! 💪');
     db().ref('clientasPortal/' + currentUid + '/entrenoLogs').once('value').then(function(snap) {
-      renderTrainingTracker(snap.val() || {});
+      CURRENT_ENTRENO_LOGS = snap.val() || {};
+      renderTrainingTracker(CURRENT_ENTRENO_LOGS);
     });
   }).catch(function(e) {
     alert('No se pudo guardar: ' + e.message);
