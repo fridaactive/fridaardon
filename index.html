@@ -660,6 +660,17 @@
   </div>
 </div>
 
+<!-- ══════════ PROGRESO DE UN EJERCICIO (historial de carga/reps) ══════════ -->
+<div id="ex-progress-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9998;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.4rem 1.1rem 2rem;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;box-sizing:border-box;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-weight:700;font-size:0.95rem;" id="ex-progress-title">Ejercicio</div>
+      <button onclick="closeExProgressModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
+    </div>
+    <div id="ex-progress-list"></div>
+  </div>
+</div>
+
 <!-- ══════════ PERFIL DE MARCA (BENEFICIOS) ══════════ -->
 <div id="benef-profile-modal">
   <div class="bp-header">
@@ -1310,6 +1321,35 @@ function findLastExerciseLog(dayId, exId) {
   return null;
 }
 
+// Cada "Guardar sesión" crea un registro nuevo (push), nunca sobreescribe el
+// anterior — este modal es simplemente la primera pantalla que muestra ese
+// historial completo, semana a semana, para un ejercicio puntual.
+function openExProgressModal(dayId, exId, exName) {
+  document.getElementById('ex-progress-title').textContent = exName;
+  var entries = Object.keys(CURRENT_ENTRENO_LOGS).map(function(k) { return CURRENT_ENTRENO_LOGS[k]; })
+    .filter(function(en) { return en.dayId === dayId && en.ejercicios && en.ejercicios[exId]; })
+    .sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
+  var listEl = document.getElementById('ex-progress-list');
+  if (entries.length === 0) {
+    listEl.innerHTML = '<div class="empty-note">Todavía no registraste este ejercicio.</div>';
+  } else {
+    var html = '';
+    entries.forEach(function(en) {
+      var log = en.ejercicios[exId];
+      var parts = [];
+      if (log.carga) parts.push(escapeHtml(String(log.carga)) + ' lbs');
+      if (log.reps) parts.push(escapeHtml(String(log.reps)) + ' reps');
+      html += '<div class="entry-row"><div>' + (parts.length ? parts.join(' · ') : '—') + '</div><div class="entry-date">' + escapeHtml(en.fecha || '') + '</div></div>';
+    });
+    listEl.innerHTML = html;
+  }
+  document.getElementById('ex-progress-modal').style.display = 'flex';
+}
+
+function closeExProgressModal() {
+  document.getElementById('ex-progress-modal').style.display = 'none';
+}
+
 function renderExerciseBlocksHtml(day) {
   var html = '';
   (day.blocks || []).forEach(function(block) {
@@ -1335,8 +1375,9 @@ function renderExerciseBlocksHtml(day) {
       html += '<div class="rt-blq-item">';
       html += '<div class="rt-ex-num">' + label + '</div>';
       html += '<div style="flex:1;min-width:0;">';
-      html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;flex-wrap:wrap;">';
       html += '<div class="ex-name">' + escapeHtml(ex.name) + '</div>';
+      html += '<div style="display:flex;gap:0.4rem;flex-shrink:0;">';
       if (videoUrl || nota) {
         // Minimalista, en línea con los íconos de la barra de pestañas —
         // sin emojis en la interfaz.
@@ -1346,7 +1387,8 @@ function renderExerciseBlocksHtml(day) {
         var exBtnLabel = videoUrl ? 'Ver ejercicio' : 'Ver nota';
         html += '<button type="button" onclick="showExerciseVideo(\'' + jsAttrEscape(videoUrl || '') + '\', \'' + jsAttrEscape(nota || '') + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">' + exBtnIcon + exBtnLabel + '</button>';
       }
-      html += '</div>';
+      html += '<button type="button" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Progreso</button>';
+      html += '</div></div>';
       if (prescribed.length) html += '<div class="ex-prescribed">Repeticiones: ' + prescribed.join(' · ') + '</div>';
       var lastLog = findLastExerciseLog(day.id, ex.id);
       var lastCarga = lastLog && lastLog.carga ? escapeHtml(String(lastLog.carga)) : '';
