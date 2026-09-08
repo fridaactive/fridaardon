@@ -1527,8 +1527,8 @@ function descargarRutinaPDF() {
   var pageH = doc.internal.pageSize.getHeight();
   var margin = 14;
   var contentW = pageW - margin * 2;
-  var HEADER_H = 16;
-  var FOOTER_H = 10;
+  var HEADER_H = 22;
+  var FOOTER_H = 14;
   var contentTop = HEADER_H + 8;
   var contentBottomLimit = pageH - FOOTER_H - 6;
   var y = contentTop;
@@ -1677,12 +1677,12 @@ function descargarRutinaPDF() {
 
     doc.setFillColor(28, 85, 229);
     doc.rect(0, 0, pageW, HEADER_H, 'F');
-    var hLogoH = 8, hLogoW = hLogoH * wordmarkRatio;
+    var hLogoH = 13, hLogoW = hLogoH * wordmarkRatio;
     doc.addImage(LOGO_WORDMARK_B64, 'PNG', margin, (HEADER_H - hLogoH) / 2, hLogoW, hLogoH, 'fa-wordmark', 'SLOW');
 
     doc.setFillColor(28, 85, 229);
     doc.rect(0, pageH - FOOTER_H, pageW, FOOTER_H, 'F');
-    var fLogoH = 5, fLogoW = fLogoH * wordmarkRatio;
+    var fLogoH = 8, fLogoW = fLogoH * wordmarkRatio;
     doc.addImage(LOGO_WORDMARK_B64, 'PNG', (pageW - fLogoW) / 2, pageH - FOOTER_H + (FOOTER_H - fLogoH) / 2, fLogoW, fLogoH, 'fa-wordmark', 'SLOW');
   }
 
