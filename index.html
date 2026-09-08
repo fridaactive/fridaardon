@@ -1527,8 +1527,8 @@ function descargarRutinaPDF() {
   var pageH = doc.internal.pageSize.getHeight();
   var margin = 14;
   var contentW = pageW - margin * 2;
-  var HEADER_H = 22;
-  var FOOTER_H = 14;
+  var HEADER_H = 27;
+  var FOOTER_H = 17;
   var contentTop = HEADER_H + 8;
   var contentBottomLimit = pageH - FOOTER_H - 6;
   var y = contentTop;
@@ -1672,17 +1672,17 @@ function descargarRutinaPDF() {
 
     // El alias reutiliza la misma imagen embebida en vez de duplicarla en
     // cada página — sin esto el PDF pesaba varios MB en lugar de unos KB.
-    var wmW = 90, wmH = wmW * watermarkRatio;
+    var wmW = 130, wmH = wmW * watermarkRatio;
     doc.addImage(LOGO_WATERMARK_B64, 'PNG', (pageW - wmW) / 2, (pageH - wmH) / 2, wmW, wmH, 'fa-watermark', 'SLOW');
 
     doc.setFillColor(28, 85, 229);
     doc.rect(0, 0, pageW, HEADER_H, 'F');
-    var hLogoH = 13, hLogoW = hLogoH * wordmarkRatio;
+    var hLogoH = 17, hLogoW = hLogoH * wordmarkRatio;
     doc.addImage(LOGO_WORDMARK_B64, 'PNG', margin, (HEADER_H - hLogoH) / 2, hLogoW, hLogoH, 'fa-wordmark', 'SLOW');
 
     doc.setFillColor(28, 85, 229);
     doc.rect(0, pageH - FOOTER_H, pageW, FOOTER_H, 'F');
-    var fLogoH = 8, fLogoW = fLogoH * wordmarkRatio;
+    var fLogoH = 11, fLogoW = fLogoH * wordmarkRatio;
     doc.addImage(LOGO_WORDMARK_B64, 'PNG', (pageW - fLogoW) / 2, pageH - FOOTER_H + (FOOTER_H - fLogoH) / 2, fLogoW, fLogoH, 'fa-wordmark', 'SLOW');
   }
 
