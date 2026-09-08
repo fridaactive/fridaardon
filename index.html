@@ -88,8 +88,13 @@
   #loading { position:fixed; inset:0; background:#fff; display:none; align-items:center; justify-content:center; z-index:9999; font-size:0.85rem; color:var(--muted); }
 
   /* ── RUTINA TAB ── */
-  .block-title { font-size:0.85rem; font-weight:700; margin:0.9rem 0 0.5rem; color:var(--text); }
-  .ex-row { border:1px solid var(--border); border-radius:10px; padding:0.7rem 0.85rem; margin-bottom:0.6rem; }
+  .rt-blq { border-radius:12px; overflow:hidden; border:1.5px solid var(--blue); margin-bottom:0.75rem; }
+  .rt-blq-hdr { background:var(--blue); color:#fff; padding:0.55rem 0.9rem; }
+  .rt-blq-title { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; }
+  .rt-blq-sub { font-size:0.62rem; color:rgba(255,255,255,0.75); margin-top:0.1rem; }
+  .rt-blq-item { display:flex; align-items:flex-start; gap:0.65rem; background:#fff; padding:0.75rem 0.9rem; border-top:1px solid var(--border); }
+  .rt-blq-item:first-of-type { border-top:none; }
+  .rt-ex-num { width:1.6rem; height:1.6rem; border-radius:50%; background:var(--blue-lt); color:var(--blue); font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .ex-name { font-size:0.82rem; font-weight:700; margin-bottom:0.2rem; }
   .ex-prescribed { font-size:0.7rem; color:var(--muted); margin-bottom:0.5rem; }
   .ex-inputs { display:flex; gap:0.5rem; }
@@ -1294,8 +1299,16 @@ function renderExerciseBlocksHtml(day) {
   var html = '';
   (day.blocks || []).forEach(function(block) {
     if (!block.exercises || block.exercises.length === 0) return;
-    html += '<div class="block-title">' + escapeHtml(block.name) + '</div>';
-    block.exercises.forEach(function(ex) {
+    var blockNameLower = (block.name || '').toLowerCase();
+    var isBiserie = blockNameLower.indexOf('biserie') !== -1 || blockNameLower.indexOf('superserie') !== -1;
+    var letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+    var sub = block.mode === 'tiempo' ? (block.workSecs || 40) + '"trabajo · ' + (block.restSecs || 20) + '"descanso' : 'Por repeticiones';
+
+    html += '<div class="rt-blq">';
+    html += '<div class="rt-blq-hdr"><div class="rt-blq-title">' + escapeHtml(block.name) + '</div><div class="rt-blq-sub">' + sub + '</div></div>';
+
+    block.exercises.forEach(function(ex, i) {
+      var label = isBiserie ? (letters[i] || String(i + 1)) : String(i + 1);
       var prescribed = [];
       if (ex.series) prescribed.push(ex.series + ' series');
       if (ex.reps) prescribed.push(ex.reps + ' reps');
@@ -1303,7 +1316,10 @@ function renderExerciseBlocksHtml(day) {
       var bankItem = findExerciseBankItem(ex.name);
       var videoUrl = bankItem && bankItem.video;
       var nota = bankItem && bankItem.descripcion;
-      html += '<div class="ex-row">';
+
+      html += '<div class="rt-blq-item">';
+      html += '<div class="rt-ex-num">' + label + '</div>';
+      html += '<div style="flex:1;min-width:0;">';
       html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
       html += '<div class="ex-name">' + escapeHtml(ex.name) + '</div>';
       if (videoUrl || nota) {
@@ -1320,8 +1336,10 @@ function renderExerciseBlocksHtml(day) {
       html += '<div class="ex-inputs">';
       html += '<input type="number" step="0.5" placeholder="Carga (kg)" data-ex="' + ex.id + '" data-field="carga">';
       html += '<input type="text" placeholder="Reps hechas" data-ex="' + ex.id + '" data-field="reps">';
-      html += '</div></div>';
+      html += '</div></div></div>';
     });
+
+    html += '</div>';
   });
   return html;
 }
