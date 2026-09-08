@@ -170,10 +170,12 @@
   .track-stat-box { flex:1; background:var(--blue-lt); border-radius:12px; padding:0.75rem; text-align:center; }
   .track-stat-num { font-size:1.3rem; font-weight:700; color:var(--blue); }
   .track-stat-label { font-size:0.62rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; }
-  .track-days { display:flex; flex-wrap:wrap; gap:0.35rem; }
-  .track-day { width:2.1rem; height:2.1rem; border-radius:8px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:0.62rem; color:var(--muted); cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none; }
+  .track-days { display:grid; grid-template-columns:repeat(7,1fr); gap:0.35rem; margin-bottom:0.5rem; }
+  .track-day-header { text-align:center; font-size:0.55rem; color:var(--muted); font-weight:700; text-transform:uppercase; padding:0.2rem 0; }
+  .track-day { aspect-ratio:1; border-radius:8px; border:1.5px solid var(--border); background:#fff; display:flex; align-items:center; justify-content:center; font-size:0.65rem; font-weight:700; color:var(--muted); cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none; transition:all 0.15s; touch-action:manipulation; }
   .track-day:active { transform:scale(0.92); }
-  .track-day.done { background:#2a7a2a; color:#fff; font-weight:700; }
+  .track-day.done { background:#F0FFF0; color:#2a7a2a; border-color:#a8ddb8; }
+  .track-day.empty { border:none; cursor:default; background:transparent; }
 
   /* ── BENEFICIOS / SERVICIOS ── */
   .benef-card { border:1px solid var(--border); border-radius:12px; padding:0.9rem 1rem; margin-bottom:0.7rem; cursor:pointer; background:#fff; }
@@ -419,6 +421,11 @@
 
     <!-- RUTINA -->
     <div class="tab-panel active" id="tab-rutina">
+      <div id="rutina-content"><div class="empty-note">Cargando tu rutina…</div></div>
+    </div>
+
+    <!-- PROGRESO -->
+    <div class="tab-panel" id="tab-progreso">
       <details class="track-card">
         <summary class="track-summary">
           <span class="track-summary-label">Días entrenados</span>
@@ -436,11 +443,7 @@
           <div style="font-size:0.65rem;color:var(--muted);margin-top:0.6rem;line-height:1.4;">Tocá un día para marcarlo como entrenado.</div>
         </div>
       </details>
-      <div id="rutina-content"><div class="empty-note">Cargando tu rutina…</div></div>
-    </div>
 
-    <!-- PROGRESO -->
-    <div class="tab-panel" id="tab-progreso">
       <div class="card transf-card">
         <div class="transf-hdr">
           <div class="card-label" style="margin-bottom:0;">📸 Tu transformación</div>
@@ -1887,7 +1890,6 @@ var CURRENT_DIAS_ENTRENADOS = {};
 function renderTrainingTracker(diasEntrenados) {
   CURRENT_DIAS_ENTRENADOS = diasEntrenados || {};
   var now = new Date();
-  var todayKey = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
 
   var mesCount = 0;
   Object.keys(CURRENT_DIAS_ENTRENADOS).forEach(function(key) {
@@ -1912,18 +1914,23 @@ function renderTrainingTracker(diasEntrenados) {
     document.getElementById('track-meta').textContent = '-';
   }
 
-  // Últimos 28 días como grilla, tocable (no se puede marcar el futuro)
+  // Grilla del mes actual, con los días alineados por día de la semana —
+  // mismo formato que el "Cuadro de asistencia" que ya usás en el admin.
   var daysEl = document.getElementById('track-days');
+  var DAY_NAMES = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  var year = now.getFullYear(), month = now.getMonth();
+  var daysInMonth = new Date(year, month + 1, 0).getDate();
+  var firstDay = new Date(year, month, 1).getDay();
   var html = '';
-  for (var d = 27; d >= 0; d--) {
-    var dt = new Date(now);
-    dt.setDate(dt.getDate() - d);
-    var key = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+  DAY_NAMES.forEach(function(d) { html += '<div class="track-day-header">' + d + '</div>'; });
+  for (var i = 0; i < firstDay; i++) html += '<div class="track-day empty"></div>';
+  for (var day = 1; day <= daysInMonth; day++) {
+    var key = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     var done = !!CURRENT_DIAS_ENTRENADOS[key];
-    html += '<div class="track-day' + (done ? ' done' : '') + '" data-dk="' + key + '">' + dt.getDate() + '</div>';
+    html += '<div class="track-day' + (done ? ' done' : '') + '" data-dk="' + key + '">' + day + '</div>';
   }
   daysEl.innerHTML = html;
-  daysEl.querySelectorAll('.track-day').forEach(function(cell) {
+  daysEl.querySelectorAll('.track-day:not(.empty)').forEach(function(cell) {
     cell.addEventListener('click', function() {
       toggleDiaEntrenado(this.getAttribute('data-dk'));
     });
