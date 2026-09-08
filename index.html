@@ -100,6 +100,7 @@
   .ex-inputs { display:flex; gap:0.5rem; }
   .ex-inputs input { flex:1; min-width:0; border:1.5px solid var(--border); border-radius:8px; padding:0.5rem 0.6rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; outline:none; }
   .ex-inputs input:focus { border-color:var(--blue); }
+  .ex-progress-btn { display:flex; align-items:center; justify-content:center; gap:0.4rem; width:100%; margin-top:0.5rem; background:#F5ECCB; color:#7A5C00; border:1.5px solid #E8D8A0; border-radius:10px; padding:0.5rem; font-size:0.72rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; }
 
   /* ── RUTINA: mensaje + días desplegables ── */
   .rt-msg-card { background:var(--grad); border:1.5px solid var(--border); border-radius:16px; padding:1.15rem 1.25rem; margin-bottom:1.1rem; position:relative; overflow:hidden; }
@@ -1387,7 +1388,6 @@ function renderExerciseBlocksHtml(day) {
         var exBtnLabel = videoUrl ? 'Ver ejercicio' : 'Ver nota';
         html += '<button type="button" onclick="showExerciseVideo(\'' + jsAttrEscape(videoUrl || '') + '\', \'' + jsAttrEscape(nota || '') + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">' + exBtnIcon + exBtnLabel + '</button>';
       }
-      html += '<button type="button" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Progreso</button>';
       html += '</div></div>';
       if (prescribed.length) html += '<div class="ex-prescribed">Repeticiones: ' + prescribed.join(' · ') + '</div>';
       var lastLog = findLastExerciseLog(day.id, ex.id);
@@ -1396,7 +1396,9 @@ function renderExerciseBlocksHtml(day) {
       html += '<div class="ex-inputs">';
       html += '<input type="number" step="0.5" placeholder="Carga (lbs)" value="' + lastCarga + '" data-ex="' + ex.id + '" data-field="carga">';
       html += '<input type="text" placeholder="Reps hechas" value="' + lastReps + '" data-ex="' + ex.id + '" data-field="reps">';
-      html += '</div></div></div>';
+      html += '</div>';
+      html += '<button type="button" class="ex-progress-btn" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Progresión de mis cargas</button>';
+      html += '</div></div>';
     });
 
     html += '</div>';
