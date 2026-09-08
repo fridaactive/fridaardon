@@ -69,6 +69,15 @@
   @keyframes fa-tab-in { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
 
   .card { background:#fff; border:1.5px solid var(--border); border-radius:16px; padding:1.1rem 1.25rem; margin-bottom:1.1rem; box-shadow:0 2px 14px rgba(15,63,168,0.05); }
+  .track-card { background:#fff; border:1.5px solid var(--border); border-radius:16px; margin-bottom:1.1rem; box-shadow:0 2px 14px rgba(15,63,168,0.05); overflow:hidden; }
+  .track-summary { list-style:none; cursor:pointer; padding:0.9rem 1.25rem; display:flex; justify-content:space-between; align-items:center; -webkit-tap-highlight-color:transparent; }
+  .track-summary::-webkit-details-marker { display:none; }
+  .track-summary-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--blue); font-weight:700; }
+  .track-summary-right { display:flex; align-items:center; gap:0.6rem; }
+  .track-summary-count { font-size:0.75rem; color:var(--muted); font-weight:600; }
+  .track-summary-chevron { font-size:0.7rem; color:var(--muted); transition:transform 0.15s; }
+  .track-card[open] .track-summary-chevron { transform:rotate(180deg); }
+  .track-body { padding:0 1.25rem 1.1rem; }
   .card-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--blue); font-weight:700; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.5rem; }
   .card-label::after { content:''; flex:1; height:1px; background:var(--border); }
   .btn-primary { display:block; width:100%; background:var(--blue); color:#fff; text-align:center; padding:0.8rem; border-radius:14px; font-weight:700; font-size:0.82rem; text-decoration:none; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; transition:transform 0.12s, box-shadow 0.12s; box-shadow:0 4px 14px rgba(28,85,229,0.25); }
@@ -162,7 +171,8 @@
   .track-stat-num { font-size:1.3rem; font-weight:700; color:var(--blue); }
   .track-stat-label { font-size:0.62rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; }
   .track-days { display:flex; flex-wrap:wrap; gap:0.35rem; }
-  .track-day { width:2.1rem; height:2.1rem; border-radius:8px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:0.62rem; color:var(--muted); }
+  .track-day { width:2.1rem; height:2.1rem; border-radius:8px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:0.62rem; color:var(--muted); cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none; }
+  .track-day:active { transform:scale(0.92); }
   .track-day.done { background:#2a7a2a; color:#fff; font-weight:700; }
 
   /* ── BENEFICIOS / SERVICIOS ── */
@@ -409,6 +419,23 @@
 
     <!-- RUTINA -->
     <div class="tab-panel active" id="tab-rutina">
+      <details class="track-card">
+        <summary class="track-summary">
+          <span class="track-summary-label">Días entrenados</span>
+          <span class="track-summary-right">
+            <span class="track-summary-count" id="track-summary-count">0 este mes</span>
+            <span class="track-summary-chevron">▾</span>
+          </span>
+        </summary>
+        <div class="track-body">
+          <div class="track-stat">
+            <div class="track-stat-box"><div class="track-stat-num" id="track-mes">0</div><div class="track-stat-label">Este mes</div></div>
+            <div class="track-stat-box"><div class="track-stat-num" id="track-meta">-</div><div class="track-stat-label">Meta del mes</div></div>
+          </div>
+          <div class="track-days" id="track-days"></div>
+          <div style="font-size:0.65rem;color:var(--muted);margin-top:0.6rem;line-height:1.4;">Tocá un día para marcarlo como entrenado.</div>
+        </div>
+      </details>
       <div id="rutina-content"><div class="empty-note">Cargando tu rutina…</div></div>
     </div>
 
@@ -420,16 +447,6 @@
           <div class="transf-privacy">🔒 Solo vos y Frida</div>
         </div>
         <div id="transformacion-list"><div class="empty-note">Cargando…</div></div>
-      </div>
-
-      <div class="card">
-        <div class="card-label">Días entrenados</div>
-        <div class="track-stat">
-          <div class="track-stat-box"><div class="track-stat-num" id="track-mes">0</div><div class="track-stat-label">Este mes</div></div>
-          <div class="track-stat-box"><div class="track-stat-num" id="track-meta">-</div><div class="track-stat-label">Meta del mes</div></div>
-        </div>
-        <div class="track-days" id="track-days"></div>
-        <div style="font-size:0.65rem;color:var(--muted);margin-top:0.6rem;line-height:1.4;">Un día se marca solo cuando guardás una sesión desde la pestaña Rutina — no se toca manualmente acá.</div>
       </div>
 
     </div>
@@ -1075,7 +1092,7 @@ function renderPortalScreen(portal, perfil) {
   CURRENT_ENTRENO_LOGS = portal.entrenoLogs || {};
   loadRutinaTab(currentClientId);
   renderTransformacion(portal.fotosProgreso || {});
-  renderTrainingTracker(CURRENT_ENTRENO_LOGS);
+  renderTrainingTracker(portal.diasEntrenados || {});
   renderCheckinTab(portal.checkins || {});
   loadBeneficios();
   loadServicios();
@@ -1513,7 +1530,6 @@ function guardarSesion(dayIndex, btnEl) {
     alert('¡Sesión guardada! 💪');
     db().ref('clientasPortal/' + currentUid + '/entrenoLogs').once('value').then(function(snap) {
       CURRENT_ENTRENO_LOGS = snap.val() || {};
-      renderTrainingTracker(CURRENT_ENTRENO_LOGS);
     });
   }).catch(function(e) {
     alert('No se pudo guardar: ' + e.message);
@@ -1864,18 +1880,23 @@ function saveTransfCaption() {
   }
 }
 
-function renderTrainingTracker(entrenoLogs) {
-  var entries = Object.keys(entrenoLogs).map(function(k) { return entrenoLogs[k]; });
-  var fechas = {};
-  entries.forEach(function(en) { if (en.fecha) fechas[en.fecha] = true; });
+// Marcado manual — la clienta toca el día directamente al entrenar, en vez
+// de depender de que haya guardado una sesión completa con carga/reps.
+var CURRENT_DIAS_ENTRENADOS = {};
 
+function renderTrainingTracker(diasEntrenados) {
+  CURRENT_DIAS_ENTRENADOS = diasEntrenados || {};
   var now = new Date();
+  var todayKey = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+
   var mesCount = 0;
-  Object.keys(fechas).forEach(function(f) {
-    var d = new Date(f + 'T00:00:00');
+  Object.keys(CURRENT_DIAS_ENTRENADOS).forEach(function(key) {
+    if (!CURRENT_DIAS_ENTRENADOS[key]) return;
+    var d = new Date(key + 'T00:00:00');
     if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) mesCount++;
   });
   document.getElementById('track-mes').textContent = mesCount;
+  document.getElementById('track-summary-count').textContent = mesCount + (mesCount === 1 ? ' día' : ' días') + ' este mes';
 
   // Meta del mes: días/semana × 4 semanas — mismo criterio que ya usa el
   // admin para calcular "Sesiones" al armar el plan de la clienta.
@@ -1891,17 +1912,32 @@ function renderTrainingTracker(entrenoLogs) {
     document.getElementById('track-meta').textContent = '-';
   }
 
-  // Últimos 28 días como grilla
+  // Últimos 28 días como grilla, tocable (no se puede marcar el futuro)
   var daysEl = document.getElementById('track-days');
   var html = '';
   for (var d = 27; d >= 0; d--) {
     var dt = new Date(now);
     dt.setDate(dt.getDate() - d);
     var key = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
-    var done = !!fechas[key];
-    html += '<div class="track-day' + (done ? ' done' : '') + '">' + dt.getDate() + '</div>';
+    var done = !!CURRENT_DIAS_ENTRENADOS[key];
+    html += '<div class="track-day' + (done ? ' done' : '') + '" data-dk="' + key + '">' + dt.getDate() + '</div>';
   }
   daysEl.innerHTML = html;
+  daysEl.querySelectorAll('.track-day').forEach(function(cell) {
+    cell.addEventListener('click', function() {
+      toggleDiaEntrenado(this.getAttribute('data-dk'));
+    });
+  });
+}
+
+function toggleDiaEntrenado(key) {
+  var nowDone = !!CURRENT_DIAS_ENTRENADOS[key];
+  var newVal = !nowDone;
+  CURRENT_DIAS_ENTRENADOS[key] = newVal;
+  renderTrainingTracker(CURRENT_DIAS_ENTRENADOS);
+  db().ref('clientasPortal/' + currentUid + '/diasEntrenados/' + key).set(newVal).catch(function(e) {
+    console.warn('toggleDiaEntrenado error', e.message);
+  });
 }
 
 // ── BENEFICIOS / SERVICIOS ──
