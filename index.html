@@ -1334,7 +1334,7 @@ function renderExerciseBlocksHtml(day) {
       html += '</div>';
       if (prescribed.length) html += '<div class="ex-prescribed">Repeticiones: ' + prescribed.join(' · ') + '</div>';
       html += '<div class="ex-inputs">';
-      html += '<input type="number" step="0.5" placeholder="Carga (kg)" data-ex="' + ex.id + '" data-field="carga">';
+      html += '<input type="number" step="0.5" placeholder="Carga (lbs)" data-ex="' + ex.id + '" data-field="carga">';
       html += '<input type="text" placeholder="Reps hechas" data-ex="' + ex.id + '" data-field="reps">';
       html += '</div></div></div>';
     });
