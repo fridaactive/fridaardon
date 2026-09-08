@@ -1337,7 +1337,7 @@ function renderRutinaTab() {
 
   days.forEach(function(day, i) {
     var blockCount = (day.blocks || []).filter(function(b) { return b.exercises && b.exercises.length > 0; }).length;
-    html += '<details class="rt-day"' + (i === 0 ? ' open' : '') + '>';
+    html += '<details class="rt-day">';
     html += '<summary class="rt-day-summary">';
     html += '<div class="rt-day-num">' + String(i + 1).padStart(2, '0') + '</div>';
     html += '<div class="rt-day-info"><div class="rt-day-title">' + escapeHtml(day.name) + '</div><div class="rt-day-meta">' + blockCount + ' bloque' + (blockCount !== 1 ? 's' : '') + '</div></div>';
