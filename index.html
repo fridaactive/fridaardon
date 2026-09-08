@@ -1332,7 +1332,7 @@ function renderExerciseBlocksHtml(day) {
         html += '<button type="button" onclick="showExerciseVideo(\'' + jsAttrEscape(videoUrl || '') + '\', \'' + jsAttrEscape(nota || '') + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">' + exBtnIcon + exBtnLabel + '</button>';
       }
       html += '</div>';
-      if (prescribed.length) html += '<div class="ex-prescribed">Sugerido: ' + prescribed.join(' · ') + '</div>';
+      if (prescribed.length) html += '<div class="ex-prescribed">Repeticiones: ' + prescribed.join(' · ') + '</div>';
       html += '<div class="ex-inputs">';
       html += '<input type="number" step="0.5" placeholder="Carga (kg)" data-ex="' + ex.id + '" data-field="carga">';
       html += '<input type="text" placeholder="Reps hechas" data-ex="' + ex.id + '" data-field="reps">';
