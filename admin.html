@@ -5274,7 +5274,7 @@ function renderRutinaView() {
     var blockCount = blocks.length;
     var meta = blockCount + ' bloque' + (blockCount !== 1 ? 's' : '');
 
-    html += '<details class="rv-details"' + (dayIdx === 0 ? ' open' : '') + '>';
+    html += '<details class="rv-details">';
     html += '<summary class="rv-summary" style="list-style:none;">';
     html += '<div class="rv-dia-num">' + String(dayIdx+1).padStart(2,'0') + '</div>';
     html += '<div class="rv-dia-info"><div class="rv-dia-title">' + escHtml(day.name) + '</div>';
