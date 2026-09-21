@@ -6090,6 +6090,24 @@ function renderRutinaEditor() {
       }
     });
   });
+
+  // Event: auto-save exercise name for blocks en modo Tiempo — esas filas no
+  // usan el wrapper .rutina-exercise-row, así que el nombre nunca se guardaba
+  // y se perdía al agregar otro ejercicio o al volver a renderizar.
+  contentEl.querySelectorAll('.ex-name[data-exid]').forEach(function(input) {
+    input.addEventListener('blur', function() {
+      var exId = this.getAttribute('data-exid');
+      var blockId = this.getAttribute('data-blockid');
+      var block = rutinaData.days[rutinaCurrentDay].blocks.find(function(b){ return b.id === blockId; });
+      if (block) {
+        var ex = block.exercises.find(function(e){ return e.id === exId; });
+        if (ex) {
+          ex.name = this.value;
+          saveRutinaData(rutinaClientId, rutinaData);
+        }
+      }
+    });
+  });
 }
 
 function escHtml(str) {
