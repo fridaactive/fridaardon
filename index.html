@@ -1319,6 +1319,19 @@ function loadRutinaTab(clientId) {
   });
 }
 
+// Un ejercicio puede traer su propio tipo (reps/tiempo); si es una rutina
+// vieja de antes de poder mezclar tipos dentro de un bloque, se hereda del
+// modo del bloque completo.
+function exTipo(block, ex) {
+  if (ex && (ex.tipo === 'reps' || ex.tipo === 'tiempo')) return ex.tipo;
+  return block && block.mode === 'tiempo' ? 'tiempo' : 'reps';
+}
+function exSegundos(block, ex) {
+  var s = ex && parseInt(ex.segundos);
+  if (s) return s;
+  return (block && block.workSecs) || 40;
+}
+
 function findExerciseBankItem(name) {
   if (!name) return null;
   var normalized = name.trim().toLowerCase();
@@ -1380,17 +1393,26 @@ function renderExerciseBlocksHtml(day) {
     var blockNameLower = (block.name || '').toLowerCase();
     var isBiserie = blockNameLower.indexOf('biserie') !== -1 || blockNameLower.indexOf('superserie') !== -1;
     var letters = ['A', 'B', 'C', 'D', 'E', 'F'];
-    var sub = block.mode === 'tiempo' ? (block.workSecs || 40) + '"trabajo · ' + (block.restSecs || 20) + '"descanso' : 'Por repeticiones';
+    var hasTiempoEx = block.exercises.some(function(e){ return exTipo(block, e) === 'tiempo'; });
+    var hasRepsEx = block.exercises.some(function(e){ return exTipo(block, e) === 'reps'; });
+    var sub = hasTiempoEx && hasRepsEx ? 'Reps + tiempo · descanso ' + (block.restSecs || 20) + '"'
+      : hasTiempoEx ? 'Por tiempo · descanso ' + (block.restSecs || 20) + '"'
+      : 'Por repeticiones';
 
     html += '<div class="rt-blq">';
     html += '<div class="rt-blq-hdr"><div class="rt-blq-title">' + escapeHtml(block.name) + '</div><div class="rt-blq-sub">' + sub + '</div></div>';
 
     block.exercises.forEach(function(ex, i) {
       var label = isBiserie ? (letters[i] || String(i + 1)) : String(i + 1);
+      var tipo = exTipo(block, ex);
       var prescribed = [];
-      if (ex.series) prescribed.push(ex.series + ' series');
-      if (ex.reps) prescribed.push(ex.reps + ' reps');
-      if (ex.rpe) prescribed.push('RPE ' + ex.rpe);
+      if (tipo === 'tiempo') {
+        prescribed.push(exSegundos(block, ex) + ' seg');
+      } else {
+        if (ex.series) prescribed.push(ex.series + ' series');
+        if (ex.reps) prescribed.push(ex.reps + ' reps');
+        if (ex.rpe) prescribed.push('RPE ' + ex.rpe);
+      }
       var bankItem = findExerciseBankItem(ex.name);
       var videoUrl = bankItem && bankItem.video;
       var nota = bankItem && bankItem.descripcion;
@@ -1411,15 +1433,19 @@ function renderExerciseBlocksHtml(day) {
         html += '<button type="button" onclick="showExerciseVideo(\'' + jsAttrEscape(videoUrl || '') + '\', \'' + jsAttrEscape(nota || '') + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">' + exBtnIcon + exBtnLabel + '</button>';
       }
       html += '</div></div>';
-      if (prescribed.length) html += '<div class="ex-prescribed">Repeticiones: ' + prescribed.join(' · ') + '</div>';
-      var lastLog = findLastExerciseLog(day.id, ex.id);
-      var lastCarga = lastLog && lastLog.carga ? escapeHtml(String(lastLog.carga)) : '';
-      var lastReps = lastLog && lastLog.reps ? escapeHtml(String(lastLog.reps)) : '';
-      html += '<div class="ex-inputs">';
-      html += '<input type="number" step="0.5" placeholder="Carga (lbs)" value="' + lastCarga + '" data-ex="' + ex.id + '" data-field="carga">';
-      html += '<input type="text" placeholder="Reps hechas" value="' + lastReps + '" data-ex="' + ex.id + '" data-field="reps">';
-      html += '</div>';
-      html += '<button type="button" class="ex-progress-btn" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Progresión de mis cargas</button>';
+      if (tipo === 'tiempo') {
+        if (prescribed.length) html += '<div class="ex-prescribed">Duración: ' + prescribed.join(' · ') + '</div>';
+      } else {
+        if (prescribed.length) html += '<div class="ex-prescribed">Repeticiones: ' + prescribed.join(' · ') + '</div>';
+        var lastLog = findLastExerciseLog(day.id, ex.id);
+        var lastCarga = lastLog && lastLog.carga ? escapeHtml(String(lastLog.carga)) : '';
+        var lastReps = lastLog && lastLog.reps ? escapeHtml(String(lastLog.reps)) : '';
+        html += '<div class="ex-inputs">';
+        html += '<input type="number" step="0.5" placeholder="Carga (lbs)" value="' + lastCarga + '" data-ex="' + ex.id + '" data-field="carga">';
+        html += '<input type="text" placeholder="Reps hechas" value="' + lastReps + '" data-ex="' + ex.id + '" data-field="reps">';
+        html += '</div>';
+        html += '<button type="button" class="ex-progress-btn" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Progresión de mis cargas</button>';
+      }
       html += '</div></div>';
     });
 
@@ -1617,14 +1643,22 @@ function descargarRutinaPDF() {
       var blockNameLower = (block.name || '').toLowerCase();
       var isBiserie = blockNameLower.indexOf('biserie') !== -1 || blockNameLower.indexOf('superserie') !== -1;
       var letters = ['A', 'B', 'C', 'D', 'E', 'F'];
-      var sub = block.mode === 'tiempo' ? (block.workSecs || 40) + '"trabajo · ' + (block.restSecs || 20) + '"descanso' : 'Por repeticiones';
+      var hasTiempoEx = block.exercises.some(function(e){ return exTipo(block, e) === 'tiempo'; });
+      var hasRepsEx = block.exercises.some(function(e){ return exTipo(block, e) === 'reps'; });
+      var sub = hasTiempoEx && hasRepsEx ? 'Reps + tiempo · descanso ' + (block.restSecs || 20) + '"'
+        : hasTiempoEx ? 'Por tiempo · descanso ' + (block.restSecs || 20) + '"'
+        : 'Por repeticiones';
 
       var rows = block.exercises.map(function(ex, i) {
         var prescribed = [];
-        if (ex.series) prescribed.push(ex.series + ' series');
-        if (ex.reps) prescribed.push(ex.reps + ' reps');
-        if (ex.carga) prescribed.push('carga: ' + ex.carga + ' lbs');
-        if (ex.rpe) prescribed.push('RPE ' + ex.rpe);
+        if (exTipo(block, ex) === 'tiempo') {
+          prescribed.push(exSegundos(block, ex) + ' seg');
+        } else {
+          if (ex.series) prescribed.push(ex.series + ' series');
+          if (ex.reps) prescribed.push(ex.reps + ' reps');
+          if (ex.carga) prescribed.push('carga: ' + ex.carga + ' lbs');
+          if (ex.rpe) prescribed.push('RPE ' + ex.rpe);
+        }
         var nameLines = doc.splitTextToSize(ex.name, contentW - 18);
         var subText = prescribed.join(' · ');
         return {

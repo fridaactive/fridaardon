@@ -190,19 +190,6 @@
   .rutina-mode-btn { padding:0.25rem 0.65rem; border-radius:6px; border:none; font-size:0.62rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; color:var(--muted); background:transparent; touch-action:manipulation; }
   .rutina-mode-btn.active { background:#fff; color:var(--blue); box-shadow:0 1px 3px rgba(0,0,0,0.1); }
 
-  /* Timer */
-  .rutina-timer-wrap { padding:0.85rem 1rem; background:#f0f4ff; border-bottom:1px solid var(--border); }
-  .rutina-timer-config { display:flex; gap:0.5rem; margin-bottom:0.75rem; align-items:flex-end; }
-  .rutina-timer-field { flex:1; }
-  .rutina-timer-label { font-size:0.55rem; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.25rem; }
-  .rutina-timer-display { display:flex; gap:0.5rem; justify-content:center; align-items:center; margin-bottom:0.65rem; }
-  .rutina-timer-circle { width:90px; height:90px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'DM Sans',sans-serif; }
-  .rutina-timer-circle.work { background:var(--blue); color:#fff; }
-  .rutina-timer-circle.rest { background:#e8f7ee; border:2px solid #2a7a2a; color:#2a7a2a; }
-  .rutina-timer-time { font-size:1.5rem; font-weight:700; line-height:1; }
-  .rutina-timer-sublabel { font-size:0.5rem; text-transform:uppercase; letter-spacing:0.1em; opacity:0.8; }
-  .rutina-timer-btns { display:flex; gap:0.5rem; justify-content:center; }
-  .rutina-timer-btn { flex:1; max-width:100px; padding:0.6rem; border:none; border-radius:10px; font-size:0.72rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; }
   .sub-brand { font-size:0.65rem; color:rgba(255,255,255,0.5); letter-spacing:0.15em; text-transform:uppercase; }
   .sub-title { font-size:clamp(1.5rem,6vw,2.2rem); font-weight:700; color:#fff; line-height:1.1; position:relative; z-index:1; }
   .sub-title span { color:var(--cream); }
@@ -5285,9 +5272,7 @@ function renderRutinaView() {
   days.forEach(function(day, dayIdx) {
     var blocks = (day.blocks || []).filter(function(b){ return b.exercises && b.exercises.length > 0; });
     var blockCount = blocks.length;
-    var firstTime = blocks.find(function(b){ return b.mode === 'tiempo'; });
     var meta = blockCount + ' bloque' + (blockCount !== 1 ? 's' : '');
-    if (firstTime) meta += ' · ' + firstTime.workSecs + '"trabajo / ' + firstTime.restSecs + '"descanso';
 
     html += '<details class="rv-details"' + (dayIdx === 0 ? ' open' : '') + '>';
     html += '<summary class="rv-summary" style="list-style:none;">';
@@ -5301,17 +5286,22 @@ function renderRutinaView() {
 
     blocks.forEach(function(block) {
       var label = block.name || block.type || 'Bloque';
-      var sub = block.mode === 'tiempo'
-        ? block.workSecs + '"trabajo · ' + block.restSecs + '"descanso'
+      var hasTiempo = block.exercises.some(function(e){ return exTipo(block, e) === 'tiempo'; });
+      var hasReps = block.exercises.some(function(e){ return exTipo(block, e) === 'reps'; });
+      var sub = hasTiempo && hasReps ? 'Reps + tiempo · descanso ' + (block.restSecs || 20) + '"'
+        : hasTiempo ? 'Por tiempo · descanso ' + (block.restSecs || 20) + '"'
         : 'Por repeticiones';
 
       html += '<div class="rv-blq">';
-      var ws = block.workSecs || 40;
+      var firstTiempoEx = block.exercises.find(function(e){ return exTipo(block, e) === 'tiempo'; });
+      var ws = firstTiempoEx ? exSegundos(block, firstTiempoEx) : 40;
       var rs = block.restSecs || 20;
       var bid = escHtml(block.id);
       html += '<div class="rv-blq-hdr" style="display:flex;justify-content:space-between;align-items:center;">';
       html += '<div><div class="rv-blq-title">' + label + '</div><div class="rv-blq-sub">' + sub + '</div></div>';
-      html += '<button class="rv-timer-toggle-btn" data-blockid="'+bid+'" data-work="'+ws+'" data-rest="'+rs+'" data-name="'+escHtml(label)+'" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:#fff;border-radius:8px;padding:0.25rem 0.6rem;font-size:0.65rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;touch-action:manipulation;white-space:nowrap;">⏱</button>';
+      if (hasTiempo) {
+        html += '<button class="rv-timer-toggle-btn" data-blockid="'+bid+'" data-work="'+ws+'" data-rest="'+rs+'" data-name="'+escHtml(label)+'" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:#fff;border-radius:8px;padding:0.25rem 0.6rem;font-size:0.65rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;touch-action:manipulation;white-space:nowrap;">⏱</button>';
+      }
       html += '</div>';
 
       block.exercises.forEach(function(ex, i) {
@@ -5325,9 +5315,11 @@ function renderRutinaView() {
         var labelBg = isBiserie ? (i === 0 ? '#c8d8f0' : '#f0f0c8') : '#d5e8f5';
         var labelColor = 'var(--blue)';
 
+        var exTipoVal = exTipo(block, ex);
         var badge = '';
-        if (block.mode === 'tiempo') {
-          badge = '<div class="rv-ex-tm" data-blockid="'+escHtml(block.id)+'" data-work="'+block.workSecs+'" data-rest="'+block.restSecs+'">'+block.workSecs+'"</div>';
+        if (exTipoVal === 'tiempo') {
+          var segs = exSegundos(block, ex);
+          badge = '<div class="rv-ex-tm" data-blockid="'+escHtml(block.id)+'" data-work="'+segs+'" data-rest="'+(block.restSecs||20)+'">'+segs+'"</div>';
         } else {
           var info = [];
           if (ex.series && ex.reps) info.push(ex.series+' × '+ex.reps);
@@ -5534,8 +5526,21 @@ function makeNewDay(num) {
   };
 }
 
-function makeNewExercise() {
-  return { id: 'ex-' + Date.now() + '-' + Math.random().toString(36).substr(2,5), name: '', series: '', reps: '', carga: '', rpe: '' };
+function makeNewExercise(tipo) {
+  return { id: 'ex-' + Date.now() + '-' + Math.random().toString(36).substr(2,5), name: '', series: '', reps: '', carga: '', rpe: '', tipo: tipo === 'tiempo' ? 'tiempo' : 'reps', segundos: '' };
+}
+
+// Un ejercicio puede traer su propio tipo (reps/tiempo); si es una rutina
+// vieja de antes de poder mezclar tipos dentro de un bloque, se hereda del
+// modo del bloque completo.
+function exTipo(block, ex) {
+  if (ex && (ex.tipo === 'reps' || ex.tipo === 'tiempo')) return ex.tipo;
+  return block && block.mode === 'tiempo' ? 'tiempo' : 'reps';
+}
+function exSegundos(block, ex) {
+  var s = ex && parseInt(ex.segundos);
+  if (s) return s;
+  return (block && block.workSecs) || 40;
 }
 
 // ── BANCO DE EJERCICIOS ──
@@ -5711,7 +5716,7 @@ function cloneDaysWithNewIds(days) {
           workSecs: block.workSecs,
           restSecs: block.restSecs,
           exercises: (block.exercises || []).map(function(ex) {
-            return { id: 'ex-' + Date.now() + '-' + uid5(), name: ex.name, series: ex.series, reps: ex.reps, carga: ex.carga, rpe: ex.rpe };
+            return { id: 'ex-' + Date.now() + '-' + uid5(), name: ex.name, series: ex.series, reps: ex.reps, carga: ex.carga, rpe: ex.rpe, tipo: ex.tipo, segundos: ex.segundos };
           })
         };
       })
@@ -5831,47 +5836,33 @@ function renderRutinaEditor() {
   (day.blocks || []).forEach(function(block) {
     if (!block.exercises) block.exercises = [];
     var blockName = block.name || block.type || 'Bloque';
-    var mode = block.mode || 'reps';
-    var workSecs = block.workSecs || 40;
     var restSecs = block.restSecs || 20;
+    var hasTiempoEx = block.exercises.some(function(e){ return exTipo(block, e) === 'tiempo'; });
+    var allReps = block.exercises.length > 0 && block.exercises.every(function(e){ return exTipo(block, e) === 'reps'; });
 
     html += '<div class="rutina-block">';
 
-    // Block header with editable name, mode toggle, and delete button
+    // Block header with editable name and delete button — el tipo (reps o
+    // tiempo) ahora se elige por ejercicio, para poder mezclarlos.
     html += '<div class="rutina-block-header" style="flex-wrap:wrap;gap:0.4rem;">';
     html += '<input class="rutina-block-name-input" data-blockid="'+block.id+'" value="'+escHtml(blockName)+'" style="flex:1;min-width:120px;background:transparent;border:1px solid rgba(255,255,255,0.5);color:#fff;border-radius:6px;padding:0.2rem 0.5rem;font-size:0.7rem;font-weight:700;font-family:DM Sans,sans-serif;outline:none;">';
-    html += '<div style="display:flex;align-items:center;gap:0.4rem;">';
-    html += '<div class="rutina-mode-toggle">';
-    html += '<button class="rutina-mode-btn'+(mode==='reps'?' active':'')+'" data-blockid="'+block.id+'" data-mode="reps">Reps</button>';
-    html += '<button class="rutina-mode-btn'+(mode==='tiempo'?' active':'')+'" data-blockid="'+block.id+'" data-mode="tiempo">Tiempo</button>';
-    html += '</div>';
     html += '<button class="rutina-del-block" data-blockid="'+block.id+'" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:6px;padding:0.2rem 0.5rem;font-size:0.7rem;cursor:pointer;">🗑️</button>';
-    html += '</div></div>';
+    html += '</div>';
 
-    // Timer section (only if tiempo mode)
-    if (mode === 'tiempo') {
-      html += '<div class="rutina-timer-wrap">';
-      html += '<div class="rutina-timer-config">';
-      html += '<div class="rutina-timer-field"><div class="rutina-timer-label">⚡ Trabajo (seg)</div><input class="fin-form-input rutina-work-input" data-blockid="'+block.id+'" type="number" value="'+workSecs+'" style="text-align:center;padding:0.4rem;"></div>';
-      html += '<div class="rutina-timer-field"><div class="rutina-timer-label">😮‍💨 Descanso (seg)</div><input class="fin-form-input rutina-rest-input" data-blockid="'+block.id+'" type="number" value="'+restSecs+'" style="text-align:center;padding:0.4rem;"></div>';
-      html += '<button class="rutina-apply-timer" data-blockid="'+block.id+'" style="background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.4rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;white-space:nowrap;align-self:flex-end;">Aplicar</button>';
+    // Descanso general entre ejercicios de tiempo de este bloque
+    if (hasTiempoEx) {
+      html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:#f0f4ff;border-bottom:1px solid var(--border);flex-wrap:wrap;">';
+      html += '<div style="font-size:0.62rem;color:var(--muted);font-weight:700;">⏱️ Descanso entre ejercicios de tiempo:</div>';
+      html += '<input class="fin-form-input rutina-rest-input" data-blockid="'+block.id+'" type="number" value="'+restSecs+'" style="width:4.5rem;text-align:center;padding:0.3rem;">';
+      html += '<div style="font-size:0.6rem;color:var(--muted);">seg</div>';
       html += '</div>';
-      // Timer display
-      html += '<div class="rutina-timer-display">';
-      html += '<div class="rutina-timer-circle work" id="timer-work-'+block.id+'"><div class="rutina-timer-time" id="timer-work-val-'+block.id+'">'+String(workSecs).padStart(2,'0')+'</div><div class="rutina-timer-sublabel">Trabajo</div></div>';
-      html += '<div style="font-size:1.5rem;color:var(--muted);">⇄</div>';
-      html += '<div class="rutina-timer-circle rest" id="timer-rest-'+block.id+'"><div class="rutina-timer-time" id="timer-rest-val-'+block.id+'">'+String(restSecs).padStart(2,'0')+'</div><div class="rutina-timer-sublabel">Descanso</div></div>';
-      html += '</div>';
-      html += '<div class="rutina-timer-btns">';
-      html += '<button class="rutina-timer-btn" data-blockid="'+block.id+'" id="timer-start-'+block.id+'" style="background:var(--blue);color:#fff;" onclick="timerToggle(\''+block.id+'\','+workSecs+','+restSecs+')">▶ Iniciar</button>';
-      html += '<button class="rutina-timer-btn" style="background:#f0f0f0;color:var(--muted);" onclick="timerReset(\''+block.id+'\','+workSecs+','+restSecs+')">↺ Reset</button>';
-      html += '</div></div>';
     }
 
-    // Column headers for reps mode
-    if (mode === 'reps' && block.exercises.length > 0) {
-      html += '<div style="display:grid;grid-template-columns:1fr 2.5rem 2.5rem 3rem 2.5rem 2rem;gap:0.3rem;padding:0.3rem 0.75rem;background:#f8f8f8;">';
-      ['Ejercicio','Series','Reps','Carga','RPE',''].forEach(function(h) {
+    // Column headers — solo cuando todo el bloque es de reps; si hay ejercicios
+    // de tiempo mezclados, cada fila trae su propio campo con su propia etiqueta.
+    if (allReps) {
+      html += '<div style="display:grid;grid-template-columns:auto 1fr 2.5rem 2.5rem 3rem 2.5rem 2rem;gap:0.3rem;padding:0.3rem 0.75rem;background:#f8f8f8;">';
+      ['','Ejercicio','Series','Reps','Carga','RPE',''].forEach(function(h) {
         html += '<div class="rutina-ex-label">'+h+'</div>';
       });
       html += '</div>';
@@ -5879,8 +5870,14 @@ function renderRutinaEditor() {
 
     // Exercises
     block.exercises.forEach(function(ex) {
-      if (mode === 'reps') {
-        html += '<div class="rutina-exercise-row" data-exid="'+ex.id+'" data-blockid="'+block.id+'">';
+      var tipo = exTipo(block, ex);
+      var toggle = '<div class="rutina-mode-toggle">'
+        + '<button class="rutina-mode-btn'+(tipo==='reps'?' active':'')+'" data-exid="'+ex.id+'" data-blockid="'+block.id+'" data-mode="reps">Reps</button>'
+        + '<button class="rutina-mode-btn'+(tipo==='tiempo'?' active':'')+'" data-exid="'+ex.id+'" data-blockid="'+block.id+'" data-mode="tiempo">Tiempo</button>'
+        + '</div>';
+      if (tipo === 'reps') {
+        html += '<div class="rutina-exercise-row" data-exid="'+ex.id+'" data-blockid="'+block.id+'" style="grid-template-columns:auto 1fr 2.5rem 2.5rem 3rem 2.5rem 2rem;">';
+        html += toggle;
         html += '<input class="rutina-ex-input ex-name" list="exercise-bank-datalist" placeholder="Ejercicio" value="'+escHtml(ex.name || '')+'">';
         html += '<input class="rutina-ex-input ex-series" placeholder="4" value="'+escHtml(ex.series || '')+'" style="text-align:center;">';
         html += '<input class="rutina-ex-input ex-reps" placeholder="12" value="'+escHtml(ex.reps || '')+'" style="text-align:center;">';
@@ -5889,9 +5886,10 @@ function renderRutinaEditor() {
         html += '<button class="rutina-del-ex" data-exid="'+ex.id+'" data-blockid="'+block.id+'" style="background:none;border:none;color:#c44;cursor:pointer;font-size:0.8rem;padding:0;">✕</button>';
         html += '</div>';
       } else {
-        // Tiempo mode: just name
-        html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--border);">';
-        html += '<input class="rutina-ex-input ex-name" list="exercise-bank-datalist" placeholder="Nombre del ejercicio" value="'+escHtml(ex.name || '')+'" data-exid="'+ex.id+'" data-blockid="'+block.id+'" style="flex:1;">';
+        html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--border);flex-wrap:wrap;">';
+        html += toggle;
+        html += '<input class="rutina-ex-input ex-name" list="exercise-bank-datalist" placeholder="Nombre del ejercicio" value="'+escHtml(ex.name || '')+'" data-exid="'+ex.id+'" data-blockid="'+block.id+'" style="flex:1;min-width:100px;">';
+        html += '<input class="rutina-ex-input ex-segundos" type="number" placeholder="seg" value="'+escHtml(ex.segundos || '')+'" data-exid="'+ex.id+'" data-blockid="'+block.id+'" style="width:3.5rem;text-align:center;">';
         html += '<button class="rutina-del-ex" data-exid="'+ex.id+'" data-blockid="'+block.id+'" style="background:none;border:none;color:#c44;cursor:pointer;font-size:0.8rem;padding:0;">✕</button>';
         html += '</div>';
       }
@@ -6012,43 +6010,66 @@ function renderRutinaEditor() {
     });
   }
 
-  // Event: mode toggle
+  // Event: tipo toggle por ejercicio (Reps/Tiempo)
   contentEl.querySelectorAll('.rutina-mode-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
+      var exId = this.getAttribute('data-exid');
       var blockId = this.getAttribute('data-blockid');
-      var mode = this.getAttribute('data-mode');
+      var newTipo = this.getAttribute('data-mode');
       var block = rutinaData.days[rutinaCurrentDay].blocks.find(function(b){ return b.id === blockId; });
       if (block) {
-        block.mode = mode;
-        saveRutinaData(rutinaClientId, rutinaData);
-        renderRutinaEditor();
+        var ex = block.exercises.find(function(e){ return e.id === exId; });
+        if (ex) {
+          ex.tipo = newTipo;
+          if (newTipo === 'tiempo' && !ex.segundos) ex.segundos = block.workSecs || 40;
+          saveRutinaData(rutinaClientId, rutinaData);
+          renderRutinaEditor();
+        }
       }
     });
   });
 
-  // Event: apply timer config
-  contentEl.querySelectorAll('.rutina-apply-timer').forEach(function(btn) {
-    btn.addEventListener('click', function() {
+  // Event: descanso general del bloque (entre ejercicios de tiempo)
+  contentEl.querySelectorAll('.rutina-rest-input').forEach(function(input) {
+    input.addEventListener('blur', function() {
       var blockId = this.getAttribute('data-blockid');
       var block = rutinaData.days[rutinaCurrentDay].blocks.find(function(b){ return b.id === blockId; });
       if (block) {
-        var workInput = contentEl.querySelector('.rutina-work-input[data-blockid="'+blockId+'"]');
-        var restInput = contentEl.querySelector('.rutina-rest-input[data-blockid="'+blockId+'"]');
-        block.workSecs = parseInt(workInput.value) || 40;
-        block.restSecs = parseInt(restInput.value) || 20;
+        var rs = parseInt(this.value);
+        block.restSecs = isNaN(rs) || rs < 0 ? 20 : rs;
         saveRutinaData(rutinaClientId, rutinaData);
-        renderRutinaEditor();
       }
     });
   });
 
-  // Event: add exercise
+  // Event: duración (segundos) de un ejercicio de tiempo
+  contentEl.querySelectorAll('.ex-segundos[data-exid]').forEach(function(input) {
+    input.addEventListener('blur', function() {
+      var exId = this.getAttribute('data-exid');
+      var blockId = this.getAttribute('data-blockid');
+      var block = rutinaData.days[rutinaCurrentDay].blocks.find(function(b){ return b.id === blockId; });
+      if (block) {
+        var ex = block.exercises.find(function(e){ return e.id === exId; });
+        if (ex) {
+          var s = parseInt(this.value);
+          ex.segundos = isNaN(s) || s < 1 ? '' : s;
+          saveRutinaData(rutinaClientId, rutinaData);
+        }
+      }
+    });
+  });
+
+  // Event: add exercise — nuevo ejercicio hereda el tipo del último de ese bloque
   contentEl.querySelectorAll('.rutina-add-ex-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var blockId = this.getAttribute('data-blockid');
       var block = rutinaData.days[rutinaCurrentDay].blocks.find(function(b){ return b.id === blockId; });
       if (block) {
-        block.exercises.push(makeNewExercise());
+        var lastEx = block.exercises[block.exercises.length - 1];
+        var defaultTipo = lastEx ? exTipo(block, lastEx) : (block.mode === 'tiempo' ? 'tiempo' : 'reps');
+        var newEx = makeNewExercise(defaultTipo);
+        if (defaultTipo === 'tiempo') newEx.segundos = block.workSecs || 40;
+        block.exercises.push(newEx);
         saveRutinaData(rutinaClientId, rutinaData);
         renderRutinaEditor();
       }
@@ -6399,78 +6420,6 @@ function rvTimerReset(bid) {
 function getAudioCtx() { return rvAudioCtx; }
 var rvTimerIntervals = {};
 var rvTimerStates = {};
-
-// ── TIMER (Edit mode) ──
-var timerIntervals = {};
-var timerStates = {};
-
-function timerToggle(blockId, workSecs, restSecs) {
-  if (timerStates[blockId] && timerStates[blockId].running) {
-    // Pause
-    clearInterval(timerIntervals[blockId]);
-    timerStates[blockId].running = false;
-    var btn = document.getElementById('timer-start-'+blockId);
-    if (btn) btn.textContent = '▶ Continuar';
-  } else {
-    // Start or continue
-    if (!timerStates[blockId]) {
-      timerStates[blockId] = { phase: 'work', remaining: workSecs, running: false };
-    }
-    timerStates[blockId].running = true;
-    var btn = document.getElementById('timer-start-'+blockId);
-    if (btn) btn.textContent = '⏸ Pausar';
-
-    timerIntervals[blockId] = setInterval(function() {
-      var state = timerStates[blockId];
-      if (!state) return;
-      state.remaining--;
-
-      if (state.remaining <= 0) {
-        // Switch phase
-        if (state.phase === 'work') {
-          state.phase = 'rest';
-          state.remaining = restSecs;
-        } else {
-          state.phase = 'work';
-          state.remaining = workSecs;
-        }
-      }
-
-      // Update display
-      var workEl = document.getElementById('timer-work-val-'+blockId);
-      var restEl = document.getElementById('timer-rest-val-'+blockId);
-      var workCircle = document.getElementById('timer-work-'+blockId);
-      var restCircle = document.getElementById('timer-rest-'+blockId);
-
-      if (state.phase === 'work') {
-        if (workEl) workEl.textContent = String(state.remaining).padStart(2,'0');
-        if (restEl) restEl.textContent = String(restSecs).padStart(2,'0');
-        if (workCircle) workCircle.style.opacity = '1';
-        if (restCircle) restCircle.style.opacity = '0.4';
-      } else {
-        if (restEl) restEl.textContent = String(state.remaining).padStart(2,'0');
-        if (workEl) workEl.textContent = String(workSecs).padStart(2,'0');
-        if (restCircle) restCircle.style.opacity = '1';
-        if (workCircle) workCircle.style.opacity = '0.4';
-      }
-    }, 1000);
-  }
-}
-
-function timerReset(blockId, workSecs, restSecs) {
-  clearInterval(timerIntervals[blockId]);
-  delete timerStates[blockId];
-  var workEl = document.getElementById('timer-work-val-'+blockId);
-  var restEl = document.getElementById('timer-rest-val-'+blockId);
-  var workCircle = document.getElementById('timer-work-'+blockId);
-  var restCircle = document.getElementById('timer-rest-'+blockId);
-  if (workEl) workEl.textContent = String(workSecs).padStart(2,'0');
-  if (restEl) restEl.textContent = String(restSecs).padStart(2,'0');
-  if (workCircle) workCircle.style.opacity = '1';
-  if (restCircle) restCircle.style.opacity = '1';
-  var btn = document.getElementById('timer-start-'+blockId);
-  if (btn) btn.textContent = '▶ Iniciar';
-}
 
 function renderAhorrosMes() {
   var md = finGetMonth(finViewYear, finViewMonth);
