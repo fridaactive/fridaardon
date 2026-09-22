@@ -603,7 +603,7 @@
         <div class="menu-icon cream"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/><path d="M12 9c-1-2.2-2.6-3.5-4-3.5S6 6.5 6.3 8 8.5 9 12 9Z"/><path d="M12 9c1-2.2 2.6-3.5 4-3.5S18 6.5 17.7 8 15.5 9 12 9Z"/></svg></div>
         <div class="menu-info">
           <div class="menu-title">Portal de Clientas</div>
-          <div class="menu-desc">Beneficios · Servicios</div>
+          <div class="menu-desc">Beneficios</div>
         </div>
         <div class="menu-arrow">›</div>
       </div>
@@ -1180,7 +1180,6 @@
       <button class="pc-tab-btn active" onclick="pcSwitchTab('solicitudes',this)">Solicitudes nuevas</button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('online',this)">Clientas online</button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('beneficios',this)">Beneficios/Descuentos</button>
-      <button class="pc-tab-btn" onclick="pcSwitchTab('servicios',this)">Servicios FridaActive</button>
     </div>
 
     <!-- SOLICITUDES NUEVAS -->
@@ -1200,13 +1199,6 @@
       <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Esta lista la ven todas tus clientas online en la pestaña "Beneficios" de su portal.</div>
       <div id="pc-beneficios-list" style="margin-bottom:0.75rem;"></div>
       <button onclick="showBeneficioModal()" style="width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;">+ Agregar beneficio</button>
-    </div>
-
-    <!-- SERVICIOS FRIDAACTIVE -->
-    <div class="pc-content" id="pc-tab-servicios">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Descripción de tus servicios, visible en la pestaña "Servicios" del portal.</div>
-      <div id="pc-servicios-list" style="margin-bottom:0.75rem;"></div>
-      <button onclick="showServicioModal()" style="width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;">+ Agregar servicio</button>
     </div>
   </div>
 </div>
@@ -1248,19 +1240,6 @@
     <div style="display:flex;gap:0.75rem;margin-top:1rem;">
       <button onclick="hideBeneficioModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
       <button onclick="saveBeneficio()" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL SERVICIO -->
-<div id="servicio-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;">
-  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
-    <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;">Nuevo servicio</div>
-    <div class="fin-form-row"><div class="fin-form-label">Título</div><input class="fin-form-input" id="sv-titulo" type="text" placeholder="Ej: Entrenamiento Online Mensual"></div>
-    <div class="fin-form-row"><div class="fin-form-label">Descripción</div><textarea class="fin-form-input" id="sv-descripcion" rows="3" placeholder="Qué incluye, precio, condiciones..." style="resize:vertical;"></textarea></div>
-    <div style="display:flex;gap:0.75rem;margin-top:1rem;">
-      <button onclick="hideServicioModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
-      <button onclick="saveServicio()" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Guardar</button>
     </div>
   </div>
 </div>
@@ -1758,26 +1737,6 @@ function renderPortalContentScreen() {
       el.innerHTML = html;
     }
   });
-
-  fbGet('servicios', function(data) {
-    var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
-    var el = document.getElementById('pc-servicios-list');
-    if (items.length === 0) {
-      el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Sin servicios cargados todavía.</div>';
-    } else {
-      var html = '';
-      items.forEach(function(it) {
-        html += '<div style="border:1px solid var(--border);border-radius:10px;padding:0.75rem 0.9rem;margin-bottom:0.6rem;">';
-        html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;">';
-        html += '<div><div style="font-weight:700;font-size:0.82rem;">' + (it.data.titulo||'') + '</div>';
-        if (it.data.descripcion) html += '<div style="color:var(--muted);font-size:0.72rem;margin-top:0.15rem;">' + it.data.descripcion + '</div>';
-        html += '</div>';
-        html += '<button onclick="deleteServicio(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.9rem;cursor:pointer;">✕</button>';
-        html += '</div></div>';
-      });
-      el.innerHTML = html;
-    }
-  });
 }
 
 var ADMIN_BENEFICIOS_CACHE = {};
@@ -1929,38 +1888,6 @@ function deleteBeneficio(id) {
     var db = getDB();
     if (!db) return;
     db.ref('beneficios/' + id).remove().then(function() { renderPortalContentScreen(); });
-  });
-}
-
-function showServicioModal() {
-  document.getElementById('sv-titulo').value = '';
-  document.getElementById('sv-descripcion').value = '';
-  document.getElementById('servicio-modal').style.display = 'flex';
-}
-function hideServicioModal() {
-  document.getElementById('servicio-modal').style.display = 'none';
-}
-function saveServicio() {
-  var titulo = document.getElementById('sv-titulo').value.trim();
-  if (!titulo) { alert('Ingresá el título del servicio.'); return; }
-  var item = {
-    titulo: titulo,
-    descripcion: document.getElementById('sv-descripcion').value.trim()
-  };
-  withAdminAuth(function() {
-    var db = getDB();
-    if (!db) { alert('No se pudo conectar con Firebase.'); return; }
-    db.ref('servicios').push(item).then(function() {
-      hideServicioModal();
-      renderPortalContentScreen();
-    }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
-  });
-}
-function deleteServicio(id) {
-  withAdminAuth(function() {
-    var db = getDB();
-    if (!db) return;
-    db.ref('servicios/' + id).remove().then(function() { renderPortalContentScreen(); });
   });
 }
 
@@ -3759,8 +3686,6 @@ function showScreen(name) {
   if (fijoModal) fijoModal.style.display = 'none';
   var beneficioModal = document.getElementById('beneficio-modal');
   if (beneficioModal) beneficioModal.style.display = 'none';
-  var servicioModal = document.getElementById('servicio-modal');
-  if (servicioModal) servicioModal.style.display = 'none';
   var exerciseBankModal = document.getElementById('exercise-bank-modal');
   if (exerciseBankModal) exerciseBankModal.style.display = 'none';
   var templateModal = document.getElementById('template-modal');
