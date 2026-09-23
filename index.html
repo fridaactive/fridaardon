@@ -206,26 +206,29 @@
   .benef-status-txt { font-size:0.6rem; color:var(--muted); margin-top:auto; padding-top:0.2rem; }
 
   /* ── PERFIL (tab) ── */
-  .pf-hero { border-radius:20px; background:#fff; border:1px solid var(--border); margin-bottom:0.75rem; padding:1.5rem 1rem 1.25rem; text-align:center; }
-  .pf-avatar-wrap { position:relative; width:5.5rem; height:5.5rem; margin:0 auto; }
-  .pf-avatar { width:100%; height:100%; border-radius:50%; background:var(--blue-lt); color:var(--blue); border:none; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.6rem; overflow:hidden; }
+  .pf-hero { border-radius:22px; background:#fff; border:1px solid var(--border); margin-bottom:0.75rem; padding:1.75rem 1.25rem 1.5rem; text-align:center; box-shadow:0 4px 18px rgba(10,22,40,0.05); }
+  .pf-avatar-wrap { position:relative; width:6rem; height:6rem; margin:0 auto; }
+  .pf-avatar { width:100%; height:100%; border-radius:50%; background:var(--blue-lt); color:var(--blue); border:none; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.7rem; overflow:hidden; box-shadow:0 0 0 4px #fff, 0 0 0 5px var(--border); }
   .pf-avatar img { width:100%; height:100%; object-fit:cover; }
-  .pf-avatar-edit { width:1.7rem; height:1.7rem; background:#fff; border:1px solid var(--border); }
+  .pf-avatar-edit { width:1.8rem; height:1.8rem; background:#fff; border:1px solid var(--border); box-shadow:0 2px 6px rgba(10,22,40,0.12); }
   .pf-avatar-edit svg { width:13px; height:13px; color:var(--blue); }
-  .pf-name { font-size:1.05rem; font-weight:800; margin-top:0.7rem; color:var(--text); }
+  .pf-name { font-size:1.1rem; font-weight:800; margin-top:0.85rem; color:var(--text); }
   .pf-role { font-size:0.72rem; color:var(--muted); margin-top:0.15rem; min-height:1em; }
-  .pf-chat-btn { margin-top:0.9rem; display:inline-flex; align-items:center; gap:0.4rem; background:var(--blue-lt); color:var(--blue); border:none; border-radius:100px; padding:0.55rem 1rem; font-size:0.75rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; position:relative; }
-  .pf-chat-btn:active { transform:scale(0.96); }
-  #chat-unread-dot { position:absolute; top:-2px; right:-2px; width:9px; height:9px; border-radius:50%; background:#e5486b; border:2px solid #fff; }
+  .pf-chat-btn { margin-top:1.1rem; display:inline-flex; align-items:center; gap:0.5rem; background:var(--blue); color:#fff; border:none; border-radius:100px; padding:0.75rem 1.35rem; font-size:0.8rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; position:relative; box-shadow:0 8px 18px rgba(28,85,229,0.28); transition:transform 0.15s ease, box-shadow 0.15s ease; }
+  .pf-chat-btn:active { transform:scale(0.95); box-shadow:0 3px 10px rgba(28,85,229,0.3); }
+  #chat-unread-dot { position:absolute; top:-2px; right:-2px; width:10px; height:10px; border-radius:50%; background:#e5486b; border:2px solid #fff; }
   .anuncios-strip { display:flex; gap:0.6rem; overflow-x:auto; padding-bottom:0.2rem; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
   .anuncios-strip::-webkit-scrollbar { display:none; }
-  .anuncio-card { flex-shrink:0; width:min(78vw,20rem); display:flex; align-items:center; gap:0.65rem; background:linear-gradient(135deg,#F5ECCB,#FBF4DC); border:1px solid #E8D8A0; border-radius:14px; padding:0.8rem 0.9rem; }
-  .anuncio-icon { flex-shrink:0; width:2.1rem; height:2.1rem; border-radius:50%; background:rgba(122,92,0,0.12); color:#7A5C00; display:flex; align-items:center; justify-content:center; }
+  .anuncio-card { flex-shrink:0; width:min(78vw,20rem); display:flex; align-items:center; gap:0.65rem; background:linear-gradient(135deg,#F5ECCB,#FBF4DC); border:1px solid #E8D8A0; border-radius:16px; padding:0.85rem 0.95rem; box-shadow:0 3px 12px rgba(122,92,0,0.08); }
+  .anuncio-icon { flex-shrink:0; width:2.2rem; height:2.2rem; border-radius:50%; background:rgba(122,92,0,0.12); color:#7A5C00; display:flex; align-items:center; justify-content:center; }
   .anuncio-icon svg { width:16px; height:16px; }
   .anuncio-text { font-size:0.76rem; font-weight:700; color:#5c4600; line-height:1.35; }
-  .pf-plan-card { border-radius:16px; padding:0.9rem 1rem; }
-  .pf-plan-label { font-size:0.76rem; font-weight:800; }
-  .pf-plan-bar-track { height:6px; border-radius:100px; background:rgba(0,0,0,0.08); margin-top:0.55rem; overflow:hidden; }
+  .pf-plan-card { border-radius:18px; padding:1rem 1.1rem; box-shadow:0 3px 14px rgba(10,22,40,0.05); display:flex; align-items:center; gap:0.7rem; }
+  .pf-plan-icon { flex-shrink:0; width:2.2rem; height:2.2rem; border-radius:50%; background:rgba(255,255,255,0.55); display:flex; align-items:center; justify-content:center; }
+  .pf-plan-icon svg { width:15px; height:15px; }
+  .pf-plan-body { flex:1; min-width:0; }
+  .pf-plan-label { font-size:0.78rem; font-weight:800; }
+  .pf-plan-bar-track { height:6px; border-radius:100px; background:rgba(0,0,0,0.08); margin-top:0.5rem; overflow:hidden; }
   .pf-plan-bar-fill { height:100%; border-radius:100px; }
 
   /* ── CHAT ── */
@@ -506,8 +509,8 @@
 
       <div class="card transf-card">
         <div class="transf-hdr">
-          <div class="card-label" style="margin-bottom:0;">📸 Tu transformación</div>
-          <div class="transf-privacy">🔒 Solo vos y Frida</div>
+          <div class="card-label" style="margin-bottom:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M4 8h2.5l1.8-2h7.4l1.8 2H20v11H4Z"/><circle cx="12" cy="13.5" r="3.2"/></svg> Tu transformación</div>
+          <div class="transf-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="5" y="10" width="14" height="9" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Solo vos y Frida</div>
         </div>
         <div id="transformacion-list"><div class="empty-note">Cargando…</div></div>
       </div>
@@ -2368,8 +2371,9 @@ function renderPlanCountdown(c) {
   var label = daysLeft <= 0 ? 'Tu plan venció' : daysLeft === 1 ? 'Queda 1 día de tu plan' : 'Quedan ' + daysLeft + ' días de tu plan';
   el.style.display = '';
   el.style.background = cc.bg;
-  el.innerHTML = '<div class="pf-plan-label" style="color:' + cc.fg + ';">' + label + '</div>'
-    + '<div class="pf-plan-bar-track"><div class="pf-plan-bar-fill" style="width:' + pct + '%;background:' + cc.bar + ';"></div></div>';
+  el.innerHTML = '<div class="pf-plan-icon" style="color:' + cc.fg + ';"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg></div>'
+    + '<div class="pf-plan-body"><div class="pf-plan-label" style="color:' + cc.fg + ';">' + label + '</div>'
+    + '<div class="pf-plan-bar-track"><div class="pf-plan-bar-fill" style="width:' + pct + '%;background:' + cc.bar + ';"></div></div></div>';
 }
 
 // ── ANUNCIOS (promos que carga Frida) ──
