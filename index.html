@@ -179,12 +179,18 @@
 
   /* ── BENEFICIOS ── */
   #beneficios-list, #bc-list { display:grid; grid-template-columns:1fr 1fr; gap:0.65rem; }
-  .benef-cat-tile { aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.5rem; border:1px solid var(--border); border-radius:16px; background:#fff; cursor:pointer; padding:0.75rem; text-align:center; }
-  .benef-cat-tile:active { transform:scale(0.96); }
-  .benef-cat-tile-icon { width:2.5rem; height:2.5rem; border-radius:50%; background:var(--blue-lt); color:var(--blue); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .benef-cat-tile-icon svg { width:20px; height:20px; }
-  .benef-cat-tile-name { font-size:0.74rem; font-weight:700; line-height:1.25; }
-  .benef-cat-tile-count { font-size:0.62rem; color:var(--muted); }
+  .benef-cat-tile { aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.55rem; border:1px solid var(--border); border-radius:18px; background:#fff; cursor:pointer; padding:0.75rem; text-align:center; box-shadow:0 2px 10px rgba(10,22,40,0.05); transition:transform 0.18s cubic-bezier(.34,1.56,.64,1), box-shadow 0.18s ease; }
+  .benef-cat-tile.hero { border-color:transparent; box-shadow:0 6px 16px rgba(28,85,229,0.28); }
+  .benef-cat-tile:active { transform:scale(0.93); box-shadow:0 1px 4px rgba(10,22,40,0.08); }
+  .benef-cat-tile:active .benef-cat-tile-icon { transform:scale(1.12) rotate(-4deg); }
+  @media (hover:hover) {
+    .benef-cat-tile:hover { transform:translateY(-3px); box-shadow:0 10px 20px rgba(10,22,40,0.09); }
+    .benef-cat-tile.hero:hover { box-shadow:0 10px 24px rgba(28,85,229,0.32); }
+  }
+  .benef-cat-tile-icon { width:2.7rem; height:2.7rem; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:transform 0.18s ease; }
+  .benef-cat-tile-icon svg { width:21px; height:21px; }
+  .benef-cat-tile-name { font-size:0.76rem; font-weight:800; line-height:1.25; }
+  .benef-cat-tile-count { font-size:0.6rem; font-weight:700; padding:0.15rem 0.55rem; border-radius:100px; }
   .benef-card { position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; gap:0.4rem; border:1px solid var(--border); border-radius:16px; padding:1.1rem 0.7rem 0.85rem; cursor:pointer; background:#fff; transition:transform 0.15s ease, box-shadow 0.15s ease; }
   .benef-card:active { transform:scale(0.96); }
   .benef-card.is-vencida { opacity:0.55; }
@@ -2055,6 +2061,30 @@ var BENEF_CAT_ICONS = {
 };
 function benefCatIcon(cat) { return BENEF_CAT_ICONS[cat] || BENEF_CAT_ICONS['Otros']; }
 
+// Cada categoría tiene su propio color, para que la pestaña se sienta viva
+// en vez de un mosaico plano de tarjetas iguales. "Todas" es la tarjeta
+// destacada, con un degradado sólido en vez de un tinte suave.
+var BENEF_CAT_COLORS = {
+  'Todas':                       { icon: '#fff', iconBg: 'rgba(255,255,255,0.22)', cardBg: 'linear-gradient(135deg,#1C55E5,#3E72F2)', text: '#fff', countBg: 'rgba(255,255,255,0.22)', countText: '#fff' },
+  'Fitness y deporte':           { icon: '#1C55E5', iconBg: '#EAF0FF', cardBg: '#fff', text: 'var(--text)', countBg: '#EAF0FF', countText: '#1C55E5' },
+  'Salud y bienestar':           { icon: '#E5486B', iconBg: '#FFEAF0', cardBg: '#fff', text: 'var(--text)', countBg: '#FFEAF0', countText: '#E5486B' },
+  'Nutrición y suplementos':     { icon: '#1FA35C', iconBg: '#E8F9EE', cardBg: '#fff', text: 'var(--text)', countBg: '#E8F9EE', countText: '#1FA35C' },
+  'Belleza y cuidado personal':  { icon: '#9B5DE0', iconBg: '#F3EAFC', cardBg: '#fff', text: 'var(--text)', countBg: '#F3EAFC', countText: '#9B5DE0' },
+  'Moda y ropa deportiva':       { icon: '#E38B29', iconBg: '#FFF2E2', cardBg: '#fff', text: 'var(--text)', countBg: '#FFF2E2', countText: '#E38B29' },
+  'Otros':                       { icon: '#7a8499', iconBg: '#F0F0F0', cardBg: '#fff', text: 'var(--text)', countBg: '#F0F0F0', countText: '#7a8499' }
+};
+function benefCatColors(cat) { return BENEF_CAT_COLORS[cat] || BENEF_CAT_COLORS['Otros']; }
+
+function renderCatTileHtml(cat, count) {
+  var c = benefCatColors(cat);
+  var isHero = cat === 'Todas';
+  return '<div class="benef-cat-tile' + (isHero ? ' hero' : '') + '" style="background:' + c.cardBg + ';" onclick="openBenefCategoryScreen(\'' + jsAttrEscape(cat) + '\')">'
+    + '<div class="benef-cat-tile-icon" style="background:' + c.iconBg + ';color:' + c.icon + ';">' + benefCatIcon(cat) + '</div>'
+    + '<div class="benef-cat-tile-name" style="color:' + c.text + ';">' + escapeHtml(cat) + '</div>'
+    + '<div class="benef-cat-tile-count" style="background:' + c.countBg + ';color:' + c.countText + ';">' + count + ' marca' + (count !== 1 ? 's' : '') + '</div>'
+    + '</div>';
+}
+
 function renderBeneficiosList() {
   var el = document.getElementById('beneficios-list');
   var allItems = Object.keys(LOADED_BENEFICIOS).map(function(k) { return LOADED_BENEFICIOS[k]; });
@@ -2067,18 +2097,9 @@ function renderBeneficiosList() {
   });
   var categorias = Object.keys(counts).sort();
 
-  var html = '';
-  html += '<div class="benef-cat-tile" onclick="openBenefCategoryScreen(\'Todas\')">'
-    + '<div class="benef-cat-tile-icon">' + benefCatIcon('Todas') + '</div>'
-    + '<div class="benef-cat-tile-name">Todas</div>'
-    + '<div class="benef-cat-tile-count">' + allItems.length + ' marca' + (allItems.length !== 1 ? 's' : '') + '</div>'
-    + '</div>';
+  var html = renderCatTileHtml('Todas', allItems.length);
   categorias.forEach(function(cat) {
-    html += '<div class="benef-cat-tile" onclick="openBenefCategoryScreen(\'' + jsAttrEscape(cat) + '\')">'
-      + '<div class="benef-cat-tile-icon">' + benefCatIcon(cat) + '</div>'
-      + '<div class="benef-cat-tile-name">' + escapeHtml(cat) + '</div>'
-      + '<div class="benef-cat-tile-count">' + counts[cat] + ' marca' + (counts[cat] !== 1 ? 's' : '') + '</div>'
-      + '</div>';
+    html += renderCatTileHtml(cat, counts[cat]);
   });
   el.innerHTML = html;
 }
