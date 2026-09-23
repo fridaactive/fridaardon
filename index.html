@@ -214,22 +214,20 @@
   .pf-avatar-edit svg { width:13px; height:13px; color:var(--blue); }
   .pf-name { font-size:1.1rem; font-weight:800; margin-top:0.85rem; color:var(--text); }
   .pf-role { font-size:0.72rem; color:var(--muted); margin-top:0.15rem; min-height:1em; }
-  .pf-chat-btn { margin-top:1.1rem; display:inline-flex; align-items:center; gap:0.5rem; background:var(--blue); color:#fff; border:none; border-radius:100px; padding:0.75rem 1.35rem; font-size:0.8rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; position:relative; box-shadow:0 8px 18px rgba(28,85,229,0.28); transition:transform 0.15s ease, box-shadow 0.15s ease; }
-  .pf-chat-btn:active { transform:scale(0.95); box-shadow:0 3px 10px rgba(28,85,229,0.3); }
-  #chat-unread-dot { position:absolute; top:-2px; right:-2px; width:10px; height:10px; border-radius:50%; background:#e5486b; border:2px solid #fff; }
+  .pf-stat-row { display:flex; justify-content:center; gap:0.5rem; flex-wrap:wrap; margin-top:0.9rem; }
+  .pf-stat-chip { display:inline-flex; align-items:center; gap:0.35rem; border-radius:100px; padding:0.4rem 0.8rem; font-size:0.7rem; font-weight:800; }
+  .pf-stat-chip svg { width:13px; height:13px; flex-shrink:0; }
+  .pf-chat-btn { margin-top:1.1rem; display:inline-flex; align-items:center; gap:0.5rem; background:#f2f4f9; color:var(--text); border:1.5px solid var(--border); border-radius:100px; padding:0.7rem 1.4rem; font-size:0.8rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; position:relative; transition:all 0.2s ease; }
+  .pf-chat-btn.has-unread { background:var(--blue); border-color:var(--blue); color:#fff; box-shadow:0 8px 18px rgba(28,85,229,0.28); }
+  .pf-chat-btn:active { transform:scale(0.95); }
+  #chat-unread-dot { display:none; position:absolute; top:-3px; right:-3px; width:10px; height:10px; border-radius:50%; background:#e5486b; border:2px solid #fff; }
+  .pf-chat-btn.has-unread #chat-unread-dot { display:block; }
   .anuncios-strip { display:flex; gap:0.6rem; overflow-x:auto; padding-bottom:0.2rem; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
   .anuncios-strip::-webkit-scrollbar { display:none; }
   .anuncio-card { flex-shrink:0; width:min(78vw,20rem); display:flex; align-items:center; gap:0.65rem; background:linear-gradient(135deg,#F5ECCB,#FBF4DC); border:1px solid #E8D8A0; border-radius:16px; padding:0.85rem 0.95rem; box-shadow:0 3px 12px rgba(122,92,0,0.08); }
   .anuncio-icon { flex-shrink:0; width:2.2rem; height:2.2rem; border-radius:50%; background:rgba(122,92,0,0.12); color:#7A5C00; display:flex; align-items:center; justify-content:center; }
   .anuncio-icon svg { width:16px; height:16px; }
   .anuncio-text { font-size:0.76rem; font-weight:700; color:#5c4600; line-height:1.35; }
-  .pf-plan-card { border-radius:18px; padding:1rem 1.1rem; box-shadow:0 3px 14px rgba(10,22,40,0.05); display:flex; align-items:center; gap:0.7rem; }
-  .pf-plan-icon { flex-shrink:0; width:2.2rem; height:2.2rem; border-radius:50%; background:rgba(255,255,255,0.55); display:flex; align-items:center; justify-content:center; }
-  .pf-plan-icon svg { width:15px; height:15px; }
-  .pf-plan-body { flex:1; min-width:0; }
-  .pf-plan-label { font-size:0.78rem; font-weight:800; }
-  .pf-plan-bar-track { height:6px; border-radius:100px; background:rgba(0,0,0,0.08); margin-top:0.5rem; overflow:hidden; }
-  .pf-plan-bar-fill { height:100%; border-radius:100px; }
 
   /* ── CHAT ── */
   .chat-messages { flex:1; overflow-y:auto; padding:1rem 1.1rem; display:flex; flex-direction:column; gap:0.5rem; }
@@ -480,14 +478,18 @@
         </div>
         <div class="pf-name" id="perfil-name">Hola</div>
         <div class="pf-role" id="perfil-role"></div>
-        <button class="pf-chat-btn" onclick="openChatModal()">
+
+        <div class="pf-stat-row">
+          <div class="pf-stat-chip" id="pf-stat-dias" style="display:none;"></div>
+          <div class="pf-stat-chip" id="pf-stat-plan" style="display:none;"></div>
+        </div>
+
+        <button class="pf-chat-btn" id="pf-chat-btn" onclick="openChatModal()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0;"><path d="M4 5.5h16v10H9l-4 3.5v-3.5H4Z"/></svg>
-          Escribirle a Frida
-          <span id="chat-unread-dot" style="display:none;"></span>
+          Chat
+          <span id="chat-unread-dot"></span>
         </button>
       </div>
-
-      <div class="card pf-plan-card" id="perfil-plan-card" style="display:none;"></div>
 
       <details class="track-card">
         <summary class="track-summary">
@@ -1996,6 +1998,13 @@ function renderTrainingTracker(diasEntrenados) {
   });
   document.getElementById('track-mes').textContent = mesCount;
   document.getElementById('track-summary-count').textContent = mesCount + (mesCount === 1 ? ' día' : ' días') + ' este mes';
+  var pfStatDias = document.getElementById('pf-stat-dias');
+  if (pfStatDias) {
+    pfStatDias.style.display = '';
+    pfStatDias.style.background = 'var(--blue-lt)';
+    pfStatDias.style.color = 'var(--blue)';
+    pfStatDias.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 19.5 9 13l4 3 7-9"/><path d="M15.5 6.5H20v4.5"/></svg>' + mesCount + (mesCount === 1 ? ' día' : ' días') + ' este mes';
+  }
 
   // Meta del mes: días/semana × 4 semanas — mismo criterio que ya usa el
   // admin para calcular "Sesiones" al armar el plan de la clienta.
@@ -2347,7 +2356,7 @@ function loadPlanInfo() {
 }
 
 function renderPlanCountdown(c) {
-  var el = document.getElementById('perfil-plan-card');
+  var el = document.getElementById('pf-stat-plan');
   if (!el) return;
   if (!c || !c.initDate) { el.style.display = 'none'; return; }
   var start = new Date(c.initDate + 'T00:00:00');
@@ -2357,23 +2366,19 @@ function renderPlanCountdown(c) {
   today.setHours(0, 0, 0, 0);
   var msPerDay = 86400000;
   var daysLeft = Math.ceil((end - today) / msPerDay);
-  var totalDays = Math.max(1, Math.round((end - start) / msPerDay));
-  var elapsed = Math.min(totalDays, Math.max(0, totalDays - daysLeft));
-  var pct = Math.min(100, Math.round((elapsed / totalDays) * 100));
   var urgency = daysLeft <= 0 ? 'expired' : daysLeft <= 3 ? 'urgent' : daysLeft <= 7 ? 'soon' : 'ok';
   var colors = {
-    ok:      { bg: '#EAF9EE', fg: '#1FA35C', bar: '#1FA35C' },
-    soon:    { bg: '#F5ECCB', fg: '#7A5C00', bar: '#C79A00' },
-    urgent:  { bg: '#FFEAEA', fg: '#C0392B', bar: '#C0392B' },
-    expired: { bg: '#F0F0F0', fg: '#7a8499', bar: '#7a8499' }
+    ok:      { bg: '#EAF9EE', fg: '#1FA35C' },
+    soon:    { bg: '#F5ECCB', fg: '#7A5C00' },
+    urgent:  { bg: '#FFEAEA', fg: '#C0392B' },
+    expired: { bg: '#F0F0F0', fg: '#7a8499' }
   };
   var cc = colors[urgency];
-  var label = daysLeft <= 0 ? 'Tu plan venció' : daysLeft === 1 ? 'Queda 1 día de tu plan' : 'Quedan ' + daysLeft + ' días de tu plan';
+  var label = daysLeft <= 0 ? 'Plan vencido' : daysLeft === 1 ? '1 día de plan' : daysLeft + ' días de plan';
   el.style.display = '';
   el.style.background = cc.bg;
-  el.innerHTML = '<div class="pf-plan-icon" style="color:' + cc.fg + ';"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg></div>'
-    + '<div class="pf-plan-body"><div class="pf-plan-label" style="color:' + cc.fg + ';">' + label + '</div>'
-    + '<div class="pf-plan-bar-track"><div class="pf-plan-bar-fill" style="width:' + pct + '%;background:' + cc.bar + ';"></div></div></div>';
+  el.style.color = cc.fg;
+  el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>' + label;
 }
 
 // ── ANUNCIOS (promos que carga Frida) ──
@@ -2413,15 +2418,15 @@ function initChatListener() {
 }
 
 function updateChatUnreadDot() {
-  var dot = document.getElementById('chat-unread-dot');
-  if (!dot) return;
+  var btn = document.getElementById('pf-chat-btn');
+  if (!btn) return;
   db().ref('clientasPortal/' + currentUid + '/chatMeta/lastReadByClient').once('value').then(function(snap) {
     var lastRead = snap.val() || 0;
     var hasUnread = Object.keys(CHAT_MESSAGES).some(function(k) {
       var m = CHAT_MESSAGES[k];
       return m.from === 'admin' && (m.ts || 0) > lastRead;
     });
-    dot.style.display = hasUnread ? 'block' : 'none';
+    btn.classList.toggle('has-unread', hasUnread);
   });
 }
 
@@ -2429,7 +2434,8 @@ function openChatModal() {
   document.getElementById('chat-modal').style.display = 'flex';
   renderChatMessages();
   db().ref('clientasPortal/' + currentUid + '/chatMeta/lastReadByClient').set(Date.now());
-  document.getElementById('chat-unread-dot').style.display = 'none';
+  var btn = document.getElementById('pf-chat-btn');
+  if (btn) btn.classList.remove('has-unread');
 }
 
 function closeChatModal() {
