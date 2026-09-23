@@ -178,6 +178,10 @@
   .track-day.empty { border:none; cursor:default; background:transparent; }
 
   /* ── BENEFICIOS ── */
+  #benef-cat-filter { display:flex; gap:0.4rem; overflow-x:auto; padding-bottom:0.7rem; margin-bottom:0.1rem; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  #benef-cat-filter::-webkit-scrollbar { display:none; }
+  .benef-cat-chip { flex-shrink:0; white-space:nowrap; font-size:0.68rem; font-weight:700; padding:0.4rem 0.85rem; border-radius:100px; border:1px solid var(--border); background:#fff; color:var(--muted); cursor:pointer; }
+  .benef-cat-chip.active { background:var(--blue); border-color:var(--blue); color:#fff; }
   #beneficios-list { display:grid; grid-template-columns:1fr 1fr; gap:0.65rem; }
   .benef-card { position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; gap:0.4rem; border:1px solid var(--border); border-radius:16px; padding:1.1rem 0.7rem 0.85rem; cursor:pointer; background:#fff; transition:transform 0.15s ease, box-shadow 0.15s ease; }
   .benef-card:active { transform:scale(0.96); }
@@ -456,6 +460,7 @@
     <div class="tab-panel" id="tab-beneficios">
       <div class="card">
         <div class="card-label">Descuentos de marcas aliadas</div>
+        <div id="benef-cat-filter"></div>
         <div id="beneficios-list"><div class="empty-note">Cargando…</div></div>
       </div>
     </div>
@@ -2028,10 +2033,37 @@ function loadBeneficios() {
   });
 }
 
+var BENEF_CATEGORY_FILTER = 'Todas';
+
+function renderBenefCategoryFilter(allItems) {
+  var filterEl = document.getElementById('benef-cat-filter');
+  var categorias = [];
+  allItems.forEach(function(b) {
+    var cat = b.categoria || 'Otros';
+    if (categorias.indexOf(cat) === -1) categorias.push(cat);
+  });
+  if (categorias.length < 2) { filterEl.innerHTML = ''; return; }
+  categorias.sort();
+  categorias.unshift('Todas');
+  if (categorias.indexOf(BENEF_CATEGORY_FILTER) === -1) BENEF_CATEGORY_FILTER = 'Todas';
+  var html = '';
+  categorias.forEach(function(cat) {
+    html += '<button type="button" class="benef-cat-chip' + (cat === BENEF_CATEGORY_FILTER ? ' active' : '') + '" onclick="selectBenefCategory(\'' + jsAttrEscape(cat) + '\')">' + escapeHtml(cat) + '</button>';
+  });
+  filterEl.innerHTML = html;
+}
+
+function selectBenefCategory(cat) {
+  BENEF_CATEGORY_FILTER = cat;
+  renderBeneficiosList();
+}
+
 function renderBeneficiosList() {
   var el = document.getElementById('beneficios-list');
-  var items = Object.keys(LOADED_BENEFICIOS).map(function(k) { return LOADED_BENEFICIOS[k]; });
-  if (items.length === 0) { el.innerHTML = '<div class="empty-note">Todavía no hay beneficios cargados.</div>'; return; }
+  var allItems = Object.keys(LOADED_BENEFICIOS).map(function(k) { return LOADED_BENEFICIOS[k]; });
+  if (allItems.length === 0) { document.getElementById('benef-cat-filter').innerHTML = ''; el.innerHTML = '<div class="empty-note" style="grid-column:1/-1;">Todavía no hay beneficios cargados.</div>'; return; }
+  renderBenefCategoryFilter(allItems);
+  var items = BENEF_CATEGORY_FILTER === 'Todas' ? allItems : allItems.filter(function(b) { return (b.categoria || 'Otros') === BENEF_CATEGORY_FILTER; });
   var todayStr = new Date().toISOString().slice(0, 10);
 
   // Estado por beneficio, usado para ordenar: primero los disponibles, luego
@@ -2042,6 +2074,8 @@ function renderBeneficiosList() {
     b._rank = b._vencida ? 2 : (b._canjeado ? 1 : 0);
   });
   items.sort(function(a, b) { return a._rank - b._rank; });
+
+  if (items.length === 0) { el.innerHTML = '<div class="empty-note" style="grid-column:1/-1;">Sin beneficios en esta categoría.</div>'; return; }
 
   var html = '';
   items.forEach(function(b) {
