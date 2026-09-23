@@ -178,11 +178,13 @@
   .track-day.empty { border:none; cursor:default; background:transparent; }
 
   /* ── BENEFICIOS ── */
-  #benef-cat-filter { display:flex; gap:0.4rem; overflow-x:auto; padding-bottom:0.7rem; margin-bottom:0.1rem; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
-  #benef-cat-filter::-webkit-scrollbar { display:none; }
-  .benef-cat-chip { flex-shrink:0; white-space:nowrap; font-size:0.68rem; font-weight:700; padding:0.4rem 0.85rem; border-radius:100px; border:1px solid var(--border); background:#fff; color:var(--muted); cursor:pointer; }
-  .benef-cat-chip.active { background:var(--blue); border-color:var(--blue); color:#fff; }
-  #beneficios-list { display:grid; grid-template-columns:1fr 1fr; gap:0.65rem; }
+  #beneficios-list, #bc-list { display:grid; grid-template-columns:1fr 1fr; gap:0.65rem; }
+  .benef-cat-tile { aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.5rem; border:1px solid var(--border); border-radius:16px; background:#fff; cursor:pointer; padding:0.75rem; text-align:center; }
+  .benef-cat-tile:active { transform:scale(0.96); }
+  .benef-cat-tile-icon { width:2.5rem; height:2.5rem; border-radius:50%; background:var(--blue-lt); color:var(--blue); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .benef-cat-tile-icon svg { width:20px; height:20px; }
+  .benef-cat-tile-name { font-size:0.74rem; font-weight:700; line-height:1.25; }
+  .benef-cat-tile-count { font-size:0.62rem; color:var(--muted); }
   .benef-card { position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; gap:0.4rem; border:1px solid var(--border); border-radius:16px; padding:1.1rem 0.7rem 0.85rem; cursor:pointer; background:#fff; transition:transform 0.15s ease, box-shadow 0.15s ease; }
   .benef-card:active { transform:scale(0.96); }
   .benef-card.is-vencida { opacity:0.55; }
@@ -195,7 +197,8 @@
   .benef-descuento-pill.muted { color:var(--muted); background:#f2f2f2; border-color:var(--border); }
   .benef-status-txt { font-size:0.6rem; color:var(--muted); }
 
-  /* ── PERFIL DE MARCA ── */
+  /* ── MARCAS POR CATEGORÍA / PERFIL DE MARCA ── */
+  #benef-category-modal { display:none; position:fixed; inset:0; background:#fff; z-index:9997; overflow-y:auto; }
   #benef-profile-modal { display:none; position:fixed; inset:0; background:#fff; z-index:9998; overflow-y:auto; }
   .bp-header { position:sticky; top:0; background:#fff; padding:1rem 1.1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:0.75rem; z-index:2; }
   .bp-back-btn { background:none; border:none; font-size:1.3rem; cursor:pointer; color:var(--text); line-height:1; padding:0.2rem; }
@@ -460,7 +463,6 @@
     <div class="tab-panel" id="tab-beneficios">
       <div class="card">
         <div class="card-label">Descuentos de marcas aliadas</div>
-        <div id="benef-cat-filter"></div>
         <div id="beneficios-list"><div class="empty-note">Cargando…</div></div>
       </div>
     </div>
@@ -685,6 +687,15 @@
     </div>
     <div id="ex-progress-list"></div>
   </div>
+</div>
+
+<!-- ══════════ MARCAS DE UNA CATEGORÍA (BENEFICIOS) ══════════ -->
+<div id="benef-category-modal">
+  <div class="bp-header">
+    <button class="bp-back-btn" onclick="closeBenefCategoryScreen()">←</button>
+    <div class="bp-header-title" id="bc-header-title">Categoría</div>
+  </div>
+  <div class="bp-content" id="bc-content"></div>
 </div>
 
 <!-- ══════════ PERFIL DE MARCA (BENEFICIOS) ══════════ -->
@@ -2033,41 +2044,41 @@ function loadBeneficios() {
   });
 }
 
-var BENEF_CATEGORY_FILTER = 'Todas';
-
-function renderBenefCategoryFilter(allItems) {
-  var filterEl = document.getElementById('benef-cat-filter');
-  var categorias = [];
-  allItems.forEach(function(b) {
-    var cat = b.categoria || 'Otros';
-    if (categorias.indexOf(cat) === -1) categorias.push(cat);
-  });
-  if (categorias.length < 2) { filterEl.innerHTML = ''; return; }
-  categorias.sort();
-  categorias.unshift('Todas');
-  if (categorias.indexOf(BENEF_CATEGORY_FILTER) === -1) BENEF_CATEGORY_FILTER = 'Todas';
-  var html = '';
-  categorias.forEach(function(cat) {
-    html += '<button type="button" class="benef-cat-chip' + (cat === BENEF_CATEGORY_FILTER ? ' active' : '') + '" onclick="selectBenefCategory(\'' + jsAttrEscape(cat) + '\')">' + escapeHtml(cat) + '</button>';
-  });
-  filterEl.innerHTML = html;
-}
-
-function selectBenefCategory(cat) {
-  BENEF_CATEGORY_FILTER = cat;
-  renderBeneficiosList();
-}
+var BENEF_CAT_TILE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.59 2.59 2 13.17V22h8.83L21.41 11.41a2 2 0 0 0 0-2.82L15.41 2.59a2 2 0 0 0-2.82 0Z"/><circle cx="7.5" cy="16.5" r="1"/></svg>';
 
 function renderBeneficiosList() {
   var el = document.getElementById('beneficios-list');
   var allItems = Object.keys(LOADED_BENEFICIOS).map(function(k) { return LOADED_BENEFICIOS[k]; });
-  if (allItems.length === 0) { document.getElementById('benef-cat-filter').innerHTML = ''; el.innerHTML = '<div class="empty-note" style="grid-column:1/-1;">Todavía no hay beneficios cargados.</div>'; return; }
-  renderBenefCategoryFilter(allItems);
-  var items = BENEF_CATEGORY_FILTER === 'Todas' ? allItems : allItems.filter(function(b) { return (b.categoria || 'Otros') === BENEF_CATEGORY_FILTER; });
-  var todayStr = new Date().toISOString().slice(0, 10);
+  if (allItems.length === 0) { el.innerHTML = '<div class="empty-note" style="grid-column:1/-1;">Todavía no hay beneficios cargados.</div>'; return; }
 
-  // Estado por beneficio, usado para ordenar: primero los disponibles, luego
-  // los ya canjeados este ciclo, y al final las alianzas finalizadas.
+  var counts = {};
+  allItems.forEach(function(b) {
+    var cat = b.categoria || 'Otros';
+    counts[cat] = (counts[cat] || 0) + 1;
+  });
+  var categorias = Object.keys(counts).sort();
+
+  var html = '';
+  html += '<div class="benef-cat-tile" onclick="openBenefCategoryScreen(\'Todas\')">'
+    + '<div class="benef-cat-tile-icon">' + BENEF_CAT_TILE_ICON + '</div>'
+    + '<div class="benef-cat-tile-name">Todas</div>'
+    + '<div class="benef-cat-tile-count">' + allItems.length + ' marca' + (allItems.length !== 1 ? 's' : '') + '</div>'
+    + '</div>';
+  categorias.forEach(function(cat) {
+    html += '<div class="benef-cat-tile" onclick="openBenefCategoryScreen(\'' + jsAttrEscape(cat) + '\')">'
+      + '<div class="benef-cat-tile-icon">' + BENEF_CAT_TILE_ICON + '</div>'
+      + '<div class="benef-cat-tile-name">' + escapeHtml(cat) + '</div>'
+      + '<div class="benef-cat-tile-count">' + counts[cat] + ' marca' + (counts[cat] !== 1 ? 's' : '') + '</div>'
+      + '</div>';
+  });
+  el.innerHTML = html;
+}
+
+// Genera las tarjetas de marcas (usadas dentro de la pantalla de una
+// categoría), ordenadas: primero disponibles, luego ya canjeadas, y al
+// final las alianzas finalizadas.
+function renderBenefCardsHtml(items) {
+  var todayStr = new Date().toISOString().slice(0, 10);
   items.forEach(function(b) {
     b._vencida = !!(b.vencimiento && b.vencimiento < todayStr);
     b._canjeado = !!(b.canjes && b.canjes[currentUid] && b.canjes[currentUid][currentCycleKey]);
@@ -2075,7 +2086,7 @@ function renderBeneficiosList() {
   });
   items.sort(function(a, b) { return a._rank - b._rank; });
 
-  if (items.length === 0) { el.innerHTML = '<div class="empty-note" style="grid-column:1/-1;">Sin beneficios en esta categoría.</div>'; return; }
+  if (items.length === 0) return '<div class="empty-note" style="grid-column:1/-1;">Sin beneficios en esta categoría.</div>';
 
   var html = '';
   items.forEach(function(b) {
@@ -2099,7 +2110,20 @@ function renderBeneficiosList() {
     }
     html += '</div>';
   });
-  el.innerHTML = html;
+  return html;
+}
+
+function openBenefCategoryScreen(cat) {
+  var allItems = Object.keys(LOADED_BENEFICIOS).map(function(k) { return LOADED_BENEFICIOS[k]; });
+  var items = cat === 'Todas' ? allItems : allItems.filter(function(b) { return (b.categoria || 'Otros') === cat; });
+  document.getElementById('bc-header-title').textContent = cat;
+  document.getElementById('bc-content').innerHTML = '<div id="bc-list">' + renderBenefCardsHtml(items) + '</div>';
+  document.getElementById('benef-category-modal').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function closeBenefCategoryScreen() {
+  document.getElementById('benef-category-modal').style.display = 'none';
 }
 
 var currentBenefProfileId = null;
