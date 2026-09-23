@@ -416,7 +416,7 @@
         <input type="file" id="avatar-file-input" accept="image/*" style="display:none;" onchange="handleAvatarFileSelect(this)">
         <div>
           <div class="brand">fridaactive</div>
-          <div class="greeting" id="dash-greeting">Hola 👋</div>
+          <div class="greeting" id="dash-greeting">Hola</div>
         </div>
       </div>
       <button class="logout-icon-btn" onclick="doLogout()">Salir</button>
@@ -1103,7 +1103,7 @@ function renderPortalScreen(portal, perfil) {
     return;
   }
 
-  document.getElementById('dash-greeting').textContent = 'Hola, ' + firstName + ' 👋';
+  document.getElementById('dash-greeting').textContent = 'Hola, ' + firstName;
   renderAvatar(perfil.fotoPerfil, currentClientName);
 
   CURRENT_ENTRENO_LOGS = portal.entrenoLogs || {};
