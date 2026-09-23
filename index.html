@@ -2044,7 +2044,16 @@ function loadBeneficios() {
   });
 }
 
-var BENEF_CAT_TILE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.59 2.59 2 13.17V22h8.83L21.41 11.41a2 2 0 0 0 0-2.82L15.41 2.59a2 2 0 0 0-2.82 0Z"/><circle cx="7.5" cy="16.5" r="1"/></svg>';
+var BENEF_CAT_ICONS = {
+  'Todas': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
+  'Fitness y deporte': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6M20 9v6"/><rect x="1.5" y="8" width="3" height="8" rx="1"/><rect x="19.5" y="8" width="3" height="8" rx="1"/><path d="M7 12h10"/></svg>',
+  'Salud y bienestar': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.35-9.5-8.5C1 9 2.5 5.5 6 5.5c2 0 3.5 1.2 4 2.5.5-1.3 2-2.5 4-2.5 3.5 0 5 3.5 3.5 7C19 16.65 12 21 12 21Z"/></svg>',
+  'Nutrición y suplementos': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21c0-8 6-14 14-14 0 8-6 14-14 14Z"/><path d="M5 21c2-4 5-7 9-9"/></svg>',
+  'Belleza y cuidado personal': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c.6 4.2 3.6 7.2 7.5 7.5-3.9.3-6.9 3.3-7.5 7.5-.6-4.2-3.6-7.2-7.5-7.5C8.4 9.2 11.4 6.2 12 2Z"/></svg>',
+  'Moda y ropa deportiva': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l2.5 2.5L8 8v12h8V8l1.5 1.5L20 7l-4-4-2.5 2-3-2Z"/></svg>',
+  'Otros': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.59 2.59 2 13.17V22h8.83L21.41 11.41a2 2 0 0 0 0-2.82L15.41 2.59a2 2 0 0 0-2.82 0Z"/><circle cx="7.5" cy="16.5" r="1"/></svg>'
+};
+function benefCatIcon(cat) { return BENEF_CAT_ICONS[cat] || BENEF_CAT_ICONS['Otros']; }
 
 function renderBeneficiosList() {
   var el = document.getElementById('beneficios-list');
@@ -2060,13 +2069,13 @@ function renderBeneficiosList() {
 
   var html = '';
   html += '<div class="benef-cat-tile" onclick="openBenefCategoryScreen(\'Todas\')">'
-    + '<div class="benef-cat-tile-icon">' + BENEF_CAT_TILE_ICON + '</div>'
+    + '<div class="benef-cat-tile-icon">' + benefCatIcon('Todas') + '</div>'
     + '<div class="benef-cat-tile-name">Todas</div>'
     + '<div class="benef-cat-tile-count">' + allItems.length + ' marca' + (allItems.length !== 1 ? 's' : '') + '</div>'
     + '</div>';
   categorias.forEach(function(cat) {
     html += '<div class="benef-cat-tile" onclick="openBenefCategoryScreen(\'' + jsAttrEscape(cat) + '\')">'
-      + '<div class="benef-cat-tile-icon">' + BENEF_CAT_TILE_ICON + '</div>'
+      + '<div class="benef-cat-tile-icon">' + benefCatIcon(cat) + '</div>'
       + '<div class="benef-cat-tile-name">' + escapeHtml(cat) + '</div>'
       + '<div class="benef-cat-tile-count">' + counts[cat] + ' marca' + (counts[cat] !== 1 ? 's' : '') + '</div>'
       + '</div>';
