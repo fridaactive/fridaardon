@@ -205,6 +205,41 @@
   .benef-descuento-pill.muted { color:var(--muted); background:#f2f2f2; border-color:var(--border); }
   .benef-status-txt { font-size:0.6rem; color:var(--muted); margin-top:auto; padding-top:0.2rem; }
 
+  /* ── PERFIL (tab) ── */
+  .pf-hero { border-radius:20px; background:#fff; border:1px solid var(--border); margin-bottom:0.75rem; padding:1.5rem 1rem 1.25rem; text-align:center; }
+  .pf-avatar-wrap { position:relative; width:5.5rem; height:5.5rem; margin:0 auto; }
+  .pf-avatar { width:100%; height:100%; border-radius:50%; background:var(--blue-lt); color:var(--blue); border:none; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.6rem; overflow:hidden; }
+  .pf-avatar img { width:100%; height:100%; object-fit:cover; }
+  .pf-avatar-edit { width:1.7rem; height:1.7rem; background:#fff; border:1px solid var(--border); }
+  .pf-avatar-edit svg { width:13px; height:13px; color:var(--blue); }
+  .pf-name { font-size:1.05rem; font-weight:800; margin-top:0.7rem; color:var(--text); }
+  .pf-role { font-size:0.72rem; color:var(--muted); margin-top:0.15rem; min-height:1em; }
+  .pf-chat-btn { margin-top:0.9rem; display:inline-flex; align-items:center; gap:0.4rem; background:var(--blue-lt); color:var(--blue); border:none; border-radius:100px; padding:0.55rem 1rem; font-size:0.75rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; position:relative; }
+  .pf-chat-btn:active { transform:scale(0.96); }
+  #chat-unread-dot { position:absolute; top:-2px; right:-2px; width:9px; height:9px; border-radius:50%; background:#e5486b; border:2px solid #fff; }
+  .anuncios-strip { display:flex; gap:0.6rem; overflow-x:auto; padding-bottom:0.2rem; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .anuncios-strip::-webkit-scrollbar { display:none; }
+  .anuncio-card { flex-shrink:0; width:min(78vw,20rem); display:flex; align-items:center; gap:0.65rem; background:linear-gradient(135deg,#F5ECCB,#FBF4DC); border:1px solid #E8D8A0; border-radius:14px; padding:0.8rem 0.9rem; }
+  .anuncio-icon { flex-shrink:0; width:2.1rem; height:2.1rem; border-radius:50%; background:rgba(122,92,0,0.12); color:#7A5C00; display:flex; align-items:center; justify-content:center; }
+  .anuncio-icon svg { width:16px; height:16px; }
+  .anuncio-text { font-size:0.76rem; font-weight:700; color:#5c4600; line-height:1.35; }
+  .pf-plan-card { border-radius:16px; padding:0.9rem 1rem; }
+  .pf-plan-label { font-size:0.76rem; font-weight:800; }
+  .pf-plan-bar-track { height:6px; border-radius:100px; background:rgba(0,0,0,0.08); margin-top:0.55rem; overflow:hidden; }
+  .pf-plan-bar-fill { height:100%; border-radius:100px; }
+
+  /* ── CHAT ── */
+  .chat-messages { flex:1; overflow-y:auto; padding:1rem 1.1rem; display:flex; flex-direction:column; gap:0.5rem; }
+  .chat-bubble-row { display:flex; }
+  .chat-bubble-row.mine { justify-content:flex-end; }
+  .chat-bubble { max-width:75%; background:#f2f4f9; color:var(--text); border-radius:14px 14px 14px 4px; padding:0.55rem 0.8rem; font-size:0.82rem; line-height:1.4; white-space:pre-wrap; word-break:break-word; }
+  .chat-bubble.mine { background:var(--blue); color:#fff; border-radius:14px 14px 4px 14px; }
+  .chat-input-row { display:flex; gap:0.5rem; padding:0.75rem 1rem; border-top:1px solid var(--border); }
+  .chat-input-row input { flex:1; border:1px solid var(--border); border-radius:100px; padding:0.6rem 1rem; font-size:0.82rem; font-family:'DM Sans',sans-serif; outline:none; }
+  .chat-input-row input:focus { border-color:var(--blue); }
+  .chat-send-btn { flex-shrink:0; width:2.6rem; height:2.6rem; border-radius:50%; background:var(--blue); color:#fff; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .chat-send-btn svg { width:16px; height:16px; }
+
   /* ── MARCAS POR CATEGORÍA / PERFIL DE MARCA ── */
   #benef-category-modal { display:none; position:fixed; inset:0; background:#fff; z-index:9997; overflow-y:auto; }
   #benef-profile-modal { display:none; position:fixed; inset:0; background:#fff; z-index:9998; overflow-y:auto; }
@@ -228,14 +263,6 @@
   .bp-coupon-label { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--blue); }
   .bp-coupon-code { font-size:1.6rem; font-weight:800; color:var(--blue); letter-spacing:0.12em; margin:0.3rem 0; }
   .bp-coupon-sub { font-size:0.68rem; color:var(--muted); }
-
-  /* ── CHECK-IN TAB ── */
-  .emoji-row { display:flex; justify-content:space-between; gap:0.5rem; margin:0.9rem 0; }
-  .emoji-btn { flex:1; background:#fff; border:1.5px solid var(--border); border-radius:12px; padding:0.7rem 0.3rem; font-size:1.4rem; cursor:pointer; text-align:center; }
-  .emoji-btn.selected { border-color:var(--blue); background:var(--blue-lt); }
-  .checkin-q { font-size:0.9rem; font-weight:700; margin-bottom:0.3rem; }
-  .checkin-hist-item { padding:0.6rem 0; border-bottom:1px solid var(--border); font-size:0.78rem; }
-  .checkin-hist-item:last-child { border-bottom:none; }
 
   /* ── LANDING DE SERVICIOS (para leads sin cuenta vinculada) ── */
   #screen-services-landing { background:#F7F9FF; color:var(--ls-text); }
@@ -410,7 +437,7 @@
     <div class="dash-hero-row">
       <div class="dash-hero-id">
         <div class="avatar-wrap" onclick="document.getElementById('avatar-file-input').click()">
-          <div class="avatar-circle" id="dash-avatar-circle"></div>
+          <div class="avatar-circle js-avatar-circle" id="dash-avatar-circle"></div>
           <div class="avatar-edit-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg></div>
         </div>
         <input type="file" id="avatar-file-input" accept="image/*" style="display:none;" onchange="handleAvatarFileSelect(this)">
@@ -424,9 +451,8 @@
 
     <div class="tab-bar">
       <button class="tab-btn active" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8.5v7M17.5 8.5v7M3 10v4M21 10v4M6.5 12h11"/></svg> Rutina</button>
-      <button class="tab-btn" data-tab="tab-progreso" onclick="showTab('tab-progreso')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 19.5 9 13l4 3 7-9"/><path d="M15.5 6.5H20v4.5"/></svg> Progreso</button>
+      <button class="tab-btn" data-tab="tab-perfil" onclick="showTab('tab-perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21c0-4.2 3.4-7 7.5-7s7.5 2.8 7.5 7"/></svg> Perfil</button>
       <button class="tab-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/></svg> Beneficios</button>
-      <button class="tab-btn" data-tab="tab-checkin" onclick="showTab('tab-checkin')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10H9l-4 3.5v-3.5H4Z"/></svg> Check-in</button>
     </div>
   </div>
 
@@ -437,8 +463,29 @@
       <div id="rutina-content"><div class="empty-note">Cargando tu rutina…</div></div>
     </div>
 
-    <!-- PROGRESO -->
-    <div class="tab-panel" id="tab-progreso">
+    <!-- PERFIL -->
+    <div class="tab-panel" id="tab-perfil">
+
+      <div id="anuncios-wrap" style="display:none;margin-bottom:0.75rem;">
+        <div id="anuncios-strip" class="anuncios-strip"></div>
+      </div>
+
+      <div class="pf-hero">
+        <div class="avatar-wrap pf-avatar-wrap" onclick="document.getElementById('avatar-file-input').click()">
+          <div class="avatar-circle pf-avatar js-avatar-circle" id="perfil-avatar-circle"></div>
+          <div class="avatar-edit-badge pf-avatar-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        </div>
+        <div class="pf-name" id="perfil-name">Hola</div>
+        <div class="pf-role" id="perfil-role"></div>
+        <button class="pf-chat-btn" onclick="openChatModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0;"><path d="M4 5.5h16v10H9l-4 3.5v-3.5H4Z"/></svg>
+          Escribirle a Frida
+          <span id="chat-unread-dot" style="display:none;"></span>
+        </button>
+      </div>
+
+      <div class="card pf-plan-card" id="perfil-plan-card" style="display:none;"></div>
+
       <details class="track-card">
         <summary class="track-summary">
           <span class="track-summary-label">Días entrenados</span>
@@ -472,24 +519,6 @@
       <div class="card">
         <div class="card-label">Descuentos de marcas aliadas</div>
         <div id="beneficios-list"><div class="empty-note">Cargando…</div></div>
-      </div>
-    </div>
-
-    <!-- CHECK-IN -->
-    <div class="tab-panel" id="tab-checkin">
-      <div class="card" id="checkin-pending-card" style="display:none;">
-        <div class="card-label">Check-in de esta semana</div>
-        <div class="checkin-q" id="checkin-pregunta"></div>
-        <div class="emoji-row" id="checkin-emojis"></div>
-        <div class="form-row"><textarea class="form-input" id="checkin-texto" rows="2" placeholder="Contale algo más a Frida (opcional)" style="resize:vertical;"></textarea></div>
-        <button class="save-btn" onclick="responderCheckin()">Enviar respuesta</button>
-      </div>
-      <div class="card" id="checkin-empty-card">
-        <div class="empty-note">Frida no te dejó ninguna pregunta pendiente esta semana.</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Historial</div>
-        <div id="checkin-history"><div class="empty-note">Sin check-ins todavía.</div></div>
       </div>
     </div>
 
@@ -683,6 +712,19 @@
       <iframe id="video-modal-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
     <div id="video-modal-nota" style="display:none;margin-top:0.85rem;background:rgba(255,255,255,0.08);border-radius:12px;padding:0.9rem 1rem;color:#fff;font-size:0.8rem;line-height:1.5;white-space:pre-line;"></div>
+  </div>
+</div>
+
+<!-- ══════════ CHAT CON FRIDA ══════════ -->
+<div id="chat-modal" style="display:none;position:fixed;inset:0;background:#fff;z-index:9999;flex-direction:column;">
+  <div class="bp-header">
+    <button class="bp-back-btn" onclick="closeChatModal()">←</button>
+    <div class="bp-header-title">Frida</div>
+  </div>
+  <div id="chat-messages" class="chat-messages"></div>
+  <div class="chat-input-row">
+    <input type="text" id="chat-input" placeholder="Escribí tu mensaje..." onkeypress="if(event.key==='Enter'){sendChatMessage();}">
+    <button onclick="sendChatMessage()" class="chat-send-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 20 18-8L3 4v7l12 1-12 1v7Z"/></svg></button>
   </div>
 </div>
 
@@ -1104,13 +1146,16 @@ function renderPortalScreen(portal, perfil) {
   }
 
   document.getElementById('dash-greeting').textContent = 'Hola, ' + firstName;
+  document.getElementById('perfil-name').textContent = perfil.nombre || firstName || 'Hola';
   renderAvatar(perfil.fotoPerfil, currentClientName);
 
   CURRENT_ENTRENO_LOGS = portal.entrenoLogs || {};
   loadRutinaTab(currentClientId);
   renderTransformacion(portal.fotosProgreso || {});
   renderTrainingTracker(portal.diasEntrenados || {});
-  renderCheckinTab(portal.checkins || {});
+  loadPlanInfo();
+  loadAnuncios();
+  initChatListener();
   loadBeneficios();
 
   setLoading(false);
@@ -1276,16 +1321,18 @@ function cqFinish() {
   });
 }
 
-// ── FOTO DE PERFIL ──
+// ── FOTO DE PERFIL ── (dos círculos la muestran: el del header y el de Perfil)
+var LAST_AVATAR_NOMBRE = '';
 function renderAvatar(url, nombre) {
-  var el = document.getElementById('dash-avatar-circle');
-  if (!el) return;
+  if (nombre) LAST_AVATAR_NOMBRE = nombre;
+  var els = document.querySelectorAll('.js-avatar-circle');
+  if (!els.length) return;
   if (url) {
-    el.innerHTML = '<img src="' + url + '" alt="Foto de perfil">';
+    els.forEach(function(el) { el.innerHTML = '<img src="' + url + '" alt="Foto de perfil">'; });
     return;
   }
-  var initials = (nombre || '').trim().split(/\s+/).slice(0, 2).map(function(w) { return w[0] || ''; }).join('').toUpperCase();
-  el.textContent = initials;
+  var initials = (LAST_AVATAR_NOMBRE || '').trim().split(/\s+/).slice(0, 2).map(function(w) { return w[0] || ''; }).join('').toUpperCase();
+  els.forEach(function(el) { el.textContent = initials; });
 }
 
 function handleAvatarFileSelect(input) {
@@ -1293,9 +1340,9 @@ function handleAvatarFileSelect(input) {
   input.value = '';
   if (!file || !currentUid) return;
   if (!file.type.startsWith('image/')) { alert('Elegí un archivo de imagen.'); return; }
-  var el = document.getElementById('dash-avatar-circle');
-  var prevHtml = el.innerHTML;
-  el.innerHTML = '<span style="font-size:0.5rem;">Subiendo…</span>';
+  var els = document.querySelectorAll('.js-avatar-circle');
+  var prevHtmls = Array.prototype.map.call(els, function(el) { return el.innerHTML; });
+  els.forEach(function(el) { el.innerHTML = '<span style="font-size:0.5rem;">Subiendo…</span>'; });
   var path = 'client-photos/' + currentUid + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
   firebase.storage().ref(path).put(file).then(function(snap) {
     return snap.ref.getDownloadURL();
@@ -1305,7 +1352,7 @@ function handleAvatarFileSelect(input) {
     renderAvatar(url);
   }).catch(function(e) {
     console.warn('avatar upload error', e);
-    el.innerHTML = prevHtml;
+    els.forEach(function(el, i) { el.innerHTML = prevHtmls[i]; });
     alert('No se pudo subir la foto. Intentá de nuevo.');
   });
 }
@@ -2288,72 +2335,127 @@ function canjearBeneficio(beneficioId) {
   }).catch(function(e) { alert('No se pudo canjear: ' + e.message); });
 }
 
-// ── CHECK-IN TAB ──
-var CHECKIN_EMOJIS = ['💪', '🙂', '😓', '🤕', '😴'];
-var selectedEmoji = null;
-var pendingCheckinId = null;
+// ── PLAN: cuenta regresiva de vencimiento ──
+function loadPlanInfo() {
+  if (!currentClientId) { return; }
+  db().ref('clients/' + currentClientId).once('value').then(function(snap) {
+    renderPlanCountdown(snap.val());
+  }).catch(function() { renderPlanCountdown(null); });
+}
 
-function renderCheckinTab(checkins) {
-  var entries = Object.keys(checkins).map(function(k) { return { id: k, data: checkins[k] }; });
-  entries.sort(function(a, b) { return (b.data.ts || 0) - (a.data.ts || 0); });
+function renderPlanCountdown(c) {
+  var el = document.getElementById('perfil-plan-card');
+  if (!el) return;
+  if (!c || !c.initDate) { el.style.display = 'none'; return; }
+  var start = new Date(c.initDate + 'T00:00:00');
+  var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
+  if (!c.endDate) end.setMonth(end.getMonth() + 1);
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+  var msPerDay = 86400000;
+  var daysLeft = Math.ceil((end - today) / msPerDay);
+  var totalDays = Math.max(1, Math.round((end - start) / msPerDay));
+  var elapsed = Math.min(totalDays, Math.max(0, totalDays - daysLeft));
+  var pct = Math.min(100, Math.round((elapsed / totalDays) * 100));
+  var urgency = daysLeft <= 0 ? 'expired' : daysLeft <= 3 ? 'urgent' : daysLeft <= 7 ? 'soon' : 'ok';
+  var colors = {
+    ok:      { bg: '#EAF9EE', fg: '#1FA35C', bar: '#1FA35C' },
+    soon:    { bg: '#F5ECCB', fg: '#7A5C00', bar: '#C79A00' },
+    urgent:  { bg: '#FFEAEA', fg: '#C0392B', bar: '#C0392B' },
+    expired: { bg: '#F0F0F0', fg: '#7a8499', bar: '#7a8499' }
+  };
+  var cc = colors[urgency];
+  var label = daysLeft <= 0 ? 'Tu plan venció' : daysLeft === 1 ? 'Queda 1 día de tu plan' : 'Quedan ' + daysLeft + ' días de tu plan';
+  el.style.display = '';
+  el.style.background = cc.bg;
+  el.innerHTML = '<div class="pf-plan-label" style="color:' + cc.fg + ';">' + label + '</div>'
+    + '<div class="pf-plan-bar-track"><div class="pf-plan-bar-fill" style="width:' + pct + '%;background:' + cc.bar + ';"></div></div>';
+}
 
-  var pending = entries.find(function(e) { return e.data.estado === 'pendiente'; });
-  var pendingCard = document.getElementById('checkin-pending-card');
-  var emptyCard = document.getElementById('checkin-empty-card');
+// ── ANUNCIOS (promos que carga Frida) ──
+function loadAnuncios() {
+  db().ref('anuncios').once('value').then(function(snap) {
+    var data = snap.val() || {};
+    var items = Object.keys(data).map(function(k) { return Object.assign({ id: k }, data[k]); }).filter(function(a) { return a.activo; });
+    renderAnunciosStrip(items);
+  }).catch(function() { renderAnunciosStrip([]); });
+}
 
-  if (pending) {
-    pendingCheckinId = pending.id;
-    selectedEmoji = null;
-    document.getElementById('checkin-pregunta').textContent = pending.data.pregunta;
-    var emojiEl = document.getElementById('checkin-emojis');
-    emojiEl.innerHTML = CHECKIN_EMOJIS.map(function(e) {
-      return '<button type="button" class="emoji-btn" data-emoji="' + e + '" onclick="selectEmoji(\'' + e + '\')">' + e + '</button>';
-    }).join('');
-    document.getElementById('checkin-texto').value = '';
-    pendingCard.style.display = 'block';
-    emptyCard.style.display = 'none';
-  } else {
-    pendingCard.style.display = 'none';
-    emptyCard.style.display = 'block';
-  }
+function renderAnunciosStrip(items) {
+  var wrap = document.getElementById('anuncios-wrap');
+  if (!wrap) return;
+  if (!items.length) { wrap.style.display = 'none'; return; }
+  wrap.style.display = '';
+  var html = '';
+  items.forEach(function(a) {
+    html += '<div class="anuncio-card"><div class="anuncio-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M15 8a3 3 0 0 1 0 8M18 5a7 7 0 0 1 0 14"/></svg></div><div class="anuncio-text">' + escapeHtml(a.texto || '') + '</div></div>';
+  });
+  document.getElementById('anuncios-strip').innerHTML = html;
+}
 
-  var histEl = document.getElementById('checkin-history');
-  var answered = entries.filter(function(e) { return e.data.estado === 'respondido'; });
-  if (answered.length === 0) {
-    histEl.innerHTML = '<div class="empty-note">Sin check-ins todavía.</div>';
+// ── CHAT CON FRIDA (reemplaza el check-in semanal) ──
+var CHAT_MESSAGES = {};
+var chatListenerRef = null;
+
+function initChatListener() {
+  if (!currentUid) return;
+  if (chatListenerRef) chatListenerRef.off();
+  chatListenerRef = db().ref('clientasPortal/' + currentUid + '/chat');
+  chatListenerRef.on('value', function(snap) {
+    CHAT_MESSAGES = snap.val() || {};
+    updateChatUnreadDot();
+    if (document.getElementById('chat-modal').style.display === 'flex') renderChatMessages();
+  });
+}
+
+function updateChatUnreadDot() {
+  var dot = document.getElementById('chat-unread-dot');
+  if (!dot) return;
+  db().ref('clientasPortal/' + currentUid + '/chatMeta/lastReadByClient').once('value').then(function(snap) {
+    var lastRead = snap.val() || 0;
+    var hasUnread = Object.keys(CHAT_MESSAGES).some(function(k) {
+      var m = CHAT_MESSAGES[k];
+      return m.from === 'admin' && (m.ts || 0) > lastRead;
+    });
+    dot.style.display = hasUnread ? 'block' : 'none';
+  });
+}
+
+function openChatModal() {
+  document.getElementById('chat-modal').style.display = 'flex';
+  renderChatMessages();
+  db().ref('clientasPortal/' + currentUid + '/chatMeta/lastReadByClient').set(Date.now());
+  document.getElementById('chat-unread-dot').style.display = 'none';
+}
+
+function closeChatModal() {
+  document.getElementById('chat-modal').style.display = 'none';
+}
+
+function renderChatMessages() {
+  var el = document.getElementById('chat-messages');
+  var entries = Object.keys(CHAT_MESSAGES).map(function(k) { return CHAT_MESSAGES[k]; });
+  entries.sort(function(a, b) { return (a.ts || 0) - (b.ts || 0); });
+  if (!entries.length) {
+    el.innerHTML = '<div class="empty-note">Escribile a Frida por acá — te va a responder en cuanto pueda.</div>';
     return;
   }
   var html = '';
-  answered.forEach(function(e) {
-    html += '<div class="checkin-hist-item"><strong>' + escapeHtml(e.data.pregunta || '') + '</strong><br>';
-    html += (e.data.emoji || '') + ' ' + escapeHtml(e.data.texto || '');
-    html += '</div>';
+  entries.forEach(function(m) {
+    var mine = m.from === 'client';
+    html += '<div class="chat-bubble-row' + (mine ? ' mine' : '') + '"><div class="chat-bubble' + (mine ? ' mine' : '') + '">' + escapeHtml(m.text || '') + '</div></div>';
   });
-  histEl.innerHTML = html;
+  el.innerHTML = html;
+  el.scrollTop = el.scrollHeight;
 }
 
-function selectEmoji(emoji) {
-  selectedEmoji = emoji;
-  document.querySelectorAll('.emoji-btn').forEach(function(btn) {
-    btn.classList.toggle('selected', btn.getAttribute('data-emoji') === emoji);
-  });
-}
-
-function responderCheckin() {
-  if (!selectedEmoji) { alert('Elegí un emoji para responder.'); return; }
-  var texto = document.getElementById('checkin-texto').value.trim();
-  db().ref('clientasPortal/' + currentUid + '/checkins/' + pendingCheckinId).update({
-    estado: 'respondido',
-    emoji: selectedEmoji,
-    texto: texto,
-    respondidaEn: Date.now()
-  }).then(function() {
-    db().ref('clientasPortal/' + currentUid + '/checkins').once('value').then(function(snap) {
-      renderCheckinTab(snap.val() || {});
-    });
-  }).catch(function(e) {
-    alert('No se pudo enviar: ' + e.message);
-  });
+function sendChatMessage() {
+  var input = document.getElementById('chat-input');
+  var text = input.value.trim();
+  if (!text || !currentUid) return;
+  input.value = '';
+  db().ref('clientasPortal/' + currentUid + '/chat').push({ from: 'client', text: text, ts: Date.now() })
+    .catch(function(e) { alert('No se pudo enviar: ' + e.message); });
 }
 
 // ── SESSION PERSISTENCE ──
