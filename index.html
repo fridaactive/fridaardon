@@ -191,17 +191,19 @@
   .benef-cat-tile-icon svg { width:21px; height:21px; }
   .benef-cat-tile-name { font-size:0.76rem; font-weight:800; line-height:1.25; }
   .benef-cat-tile-count { font-size:0.6rem; font-weight:700; padding:0.15rem 0.55rem; border-radius:100px; }
-  .benef-card { position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; gap:0.4rem; border:1px solid var(--border); border-radius:16px; padding:1.1rem 0.7rem 0.85rem; cursor:pointer; background:#fff; transition:transform 0.15s ease, box-shadow 0.15s ease; }
+  .benef-card { position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; gap:0.4rem; border:1px solid var(--border); border-radius:16px; padding:1.1rem 0.7rem 0.85rem; cursor:pointer; background:#fff; transition:transform 0.15s ease, box-shadow 0.15s ease; height:100%; box-sizing:border-box; }
   .benef-card:active { transform:scale(0.96); }
   .benef-card.is-vencida { opacity:0.55; }
-  .benef-logo { width:3.1rem; height:3.1rem; border-radius:50%; object-fit:cover; border:1px solid var(--border); }
-  .benef-logo-fallback { width:3.1rem; height:3.1rem; border-radius:50%; background:var(--blue-lt); color:var(--blue); font-weight:700; font-size:1.05rem; display:flex; align-items:center; justify-content:center; }
+  .benef-logo { width:3.1rem; height:3.1rem; border-radius:50%; object-fit:cover; border:1px solid var(--border); flex-shrink:0; }
+  .benef-logo-fallback { width:3.1rem; height:3.1rem; border-radius:50%; background:var(--blue-lt); color:var(--blue); font-weight:700; font-size:1.05rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .benef-check-badge { position:absolute; top:0.55rem; right:0.55rem; width:1.3rem; height:1.3rem; border-radius:50%; background:#2a7a2a; color:#fff; display:flex; align-items:center; justify-content:center; }
   .benef-check-badge svg { width:10px; height:10px; }
-  .benef-marca { font-size:0.76rem; font-weight:700; line-height:1.25; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-  .benef-descuento-pill { font-size:0.64rem; font-weight:700; color:#2a7a2a; background:#F0FFF0; border:1px solid #cdeed9; border-radius:100px; padding:0.2rem 0.6rem; white-space:nowrap; }
+  .benef-marca { font-size:0.76rem; font-weight:700; line-height:1.25; min-height:1.9rem; }
+  .benef-marca-text { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .benef-descuento-pill { font-size:0.64rem; font-weight:700; color:#2a7a2a; background:#F0FFF0; border:1px solid #cdeed9; border-radius:10px; padding:0.2rem 0.6rem; min-height:1.7rem; }
+  .benef-descuento-pill-text { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
   .benef-descuento-pill.muted { color:var(--muted); background:#f2f2f2; border-color:var(--border); }
-  .benef-status-txt { font-size:0.6rem; color:var(--muted); }
+  .benef-status-txt { font-size:0.6rem; color:var(--muted); margin-top:auto; padding-top:0.2rem; }
 
   /* ── MARCAS POR CATEGORÍA / PERFIL DE MARCA ── */
   #benef-category-modal { display:none; position:fixed; inset:0; background:#fff; z-index:9997; overflow-y:auto; }
@@ -2129,8 +2131,8 @@ function renderBenefCardsHtml(items) {
     } else {
       html += '<div class="benef-logo-fallback">' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>';
     }
-    html += '<div class="benef-marca">' + escapeHtml(b.marca || '') + '</div>';
-    if (b.descuento) html += '<div class="benef-descuento-pill' + (b._vencida ? ' muted' : '') + '">' + escapeHtml(b.descuento) + '</div>';
+    html += '<div class="benef-marca"><span class="benef-marca-text">' + escapeHtml(b.marca || '') + '</span></div>';
+    if (b.descuento) html += '<div class="benef-descuento-pill' + (b._vencida ? ' muted' : '') + '"><span class="benef-descuento-pill-text">' + escapeHtml(b.descuento) + '</span></div>';
     if (b._vencida) {
       html += '<div class="benef-status-txt">Alianza finalizada</div>';
     } else if (b._canjeado) {
