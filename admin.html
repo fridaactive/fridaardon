@@ -1059,7 +1059,8 @@
           <select class="fin-form-select" id="fin-exp-cat">
             <option>🛒 Supermercado</option><option>💡 Servicios</option><option>⛽ Gasolina</option>
             <option>👗 Personal</option><option>💊 Salud</option><option>💳 Pago de tarjeta</option>
-            <option>🍔 Comida extra</option><option>🎁 Regalos</option>
+            <option>🍔 Comida extra</option><option>🎁 Regalos</option><option>🛵 Pedidos Ya</option>
+            <option>📦 Otros</option>
           </select>
         </div>
         <div class="fin-form-row"><div class="fin-form-label">Monto ($)</div><input class="fin-form-input" id="fin-exp-amount" type="number" placeholder="0.00"/></div>
@@ -1072,6 +1073,13 @@
       </div>
       <div class="fin-section-title" id="fin-expense-list-title"></div>
       <div id="fin-expense-list"></div>
+
+      <div class="fin-cat-chart-wrap" id="fin-cat-chart-wrap" style="display:none;margin-top:1.1rem;">
+        <div class="fin-section-title">Gastos por categoría</div>
+        <div id="fin-cat-chart-box" style="position:relative;">
+          <canvas id="fin-chart-categories" role="img" aria-label="Gráfica de barras mostrando el total gastado en cada categoría este mes"></canvas>
+        </div>
+      </div>
     </div>
 
     <!-- AHORROS -->
@@ -4384,6 +4392,23 @@ document.getElementById('event-modal').addEventListener('click', function(e) {
 // ══════════════════════════════
 var FIN_MONTHS = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 
+// Un color fijo por categoría (misma paleta categórica validada para daltonismo
+// que ya usan las otras gráficas), para que cada categoría se reconozca siempre
+// por el mismo color mes a mes, sin importar el orden en que aparezcan las barras.
+var FIN_CAT_COLORS = {
+  '🛒 Supermercado': '#2a78d6',
+  '💡 Servicios': '#eb6834',
+  '⛽ Gasolina': '#1baf7a',
+  '👗 Personal': '#eda100',
+  '💊 Salud': '#e87ba4',
+  '💳 Pago de tarjeta': '#008300',
+  '🍔 Comida extra': '#4a3aa7',
+  '🎁 Regalos': '#e34948',
+  '🛵 Pedidos Ya': '#0c8599',
+  '📦 Otros': '#898781'
+};
+function finCatColor(cat) { return FIN_CAT_COLORS[cat] || '#898781'; }
+
 // Default data - only loaded if localStorage is empty
 var DEFAULT_AHORROS = [
   { id:'a1', name:'🏠 Casa', saved:0 },
@@ -4532,6 +4557,7 @@ function finRender() {
       btn.addEventListener('click', function() { finDeleteExpense(this.getAttribute('data-id')); });
     });
   }
+  renderFinCategoryChart(md.expenses);
 
   // Metas / Ahorros
   renderAhorrosMes();
@@ -4695,6 +4721,71 @@ function finAddInversion() {
 
 var finBarChart = null;
 var finLineChart = null;
+var finCatChart = null;
+
+// Suma de gastos por categoría del mes actualmente seleccionado — cada
+// categoría conserva siempre el mismo color (finCatColor), y las barras se
+// ordenan de mayor a menor gasto.
+function renderFinCategoryChart(expenses) {
+  var wrap = document.getElementById('fin-cat-chart-wrap');
+  var canvas = document.getElementById('fin-chart-categories');
+  if (!wrap || !canvas || typeof Chart === 'undefined') return;
+
+  var sums = {};
+  (expenses || []).forEach(function(e) {
+    var cat = e.category || 'Otro';
+    sums[cat] = (sums[cat] || 0) + Number(e.amount || 0);
+  });
+  var entries = Object.keys(sums).map(function(cat) { return { cat: cat, total: sums[cat] }; });
+  entries.sort(function(a, b) { return b.total - a.total; });
+
+  if (entries.length === 0) {
+    if (finCatChart) { finCatChart.destroy(); finCatChart = null; }
+    wrap.style.display = 'none';
+    return;
+  }
+  wrap.style.display = '';
+  document.getElementById('fin-cat-chart-box').style.height = (entries.length * 32 + 24) + 'px';
+
+  var labels = entries.map(function(e) { return e.cat; });
+  var data = entries.map(function(e) { return e.total; });
+  var colors = entries.map(function(e) { return finCatColor(e.cat); });
+
+  if (finCatChart) finCatChart.destroy();
+  finCatChart = new Chart(canvas, {
+    type: 'bar',
+    data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderRadius: 4, maxBarThickness: 20 }] },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: { padding: { right: 52 } },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx) { return finFmt(ctx.parsed.x); } } }
+      },
+      scales: {
+        x: { beginAtZero: true, display: false, grid: { display: false } },
+        y: { ticks: { font: { size: 10.5 }, color: '#52514e' }, grid: { display: false } }
+      }
+    },
+    plugins: [{
+      id: 'finCatValueLabels',
+      afterDatasetsDraw: function(chart) {
+        var ctx = chart.ctx;
+        var meta = chart.getDatasetMeta(0);
+        ctx.save();
+        ctx.font = "700 10.5px 'DM Sans', sans-serif";
+        ctx.fillStyle = '#0b0b0b';
+        ctx.textBaseline = 'middle';
+        meta.data.forEach(function(bar, i) {
+          ctx.fillText(finFmt(chart.data.datasets[0].data[i]), bar.x + 6, bar.y);
+        });
+        ctx.restore();
+      }
+    }]
+  });
+}
 
 function renderFinCharts(allData, currentKey) {
   var barCanvas = document.getElementById('fin-chart-bars');
