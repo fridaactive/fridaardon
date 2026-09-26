@@ -4405,7 +4405,14 @@ var FIN_CAT_COLORS = {
   '🍔 Comida extra': '#4a3aa7',
   '🎁 Regalos': '#e34948',
   '🛵 Pedidos Ya': '#0c8599',
-  '📦 Otros': '#898781'
+  '📦 Otros': '#898781',
+  // Categorías que ya no están en la lista pero que gastos viejos todavía
+  // usan — les damos el color de la categoría actual más parecida, en vez
+  // de dejarlas caer todas en el mismo gris por defecto.
+  '🍽️ Comida': '#2a78d6',
+  '🚌 Transporte': '#1baf7a',
+  '🎉 Ocio': '#7c3aed',
+  '📦 Otro': '#898781'
 };
 function finCatColor(cat) { return FIN_CAT_COLORS[cat] || '#898781'; }
 
