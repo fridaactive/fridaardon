@@ -392,11 +392,19 @@
   .pl-hero p { font-size:1rem; color:rgba(255,255,255,0.85); max-width:32rem; margin:0 auto 1.75rem; font-weight:400; line-height:1.6; }
   .pl-hero-actions { display:flex; flex-direction:column; align-items:center; gap:0.8rem; }
   .pl-login-link.pl-hero-login { color:rgba(255,255,255,0.75); }
+  .pl-hero-fade { display:none; }
   @media (min-width:1100px) {
-    .pl-hero { min-height:680px; padding:4rem 0 4rem; }
-    .pl-hero-bg { object-position:center 38%; }
-    .pl-hero h1 { font-size:3rem; max-width:22ch; }
-    .pl-hero p { font-size:1.1rem; max-width:34rem; }
+    .pl-hero { min-height:680px; padding:4rem 0 4rem; text-align:left; align-items:center; background:linear-gradient(100deg,var(--pl-blue-dk) 0%,var(--pl-blue) 100%); }
+    .pl-hero-bg { left:auto; inset:0 0 0 auto; width:auto; height:100%; object-fit:cover; object-position:center 30%; }
+    .pl-hero-fade { display:block; position:absolute; inset:0; background:linear-gradient(90deg, var(--pl-blue-dk) 0%, rgba(15,63,168,0.85) 32%, rgba(15,63,168,0.15) 56%, rgba(15,63,168,0) 70%); }
+    .pl-hero-tint { opacity:0.35; }
+    .pl-hero-scrim-top { display:none; }
+    .pl-hero-scrim-bottom { display:none; }
+    .pl-hero-content { max-width:640px; }
+    .pl-eyebrow, .pl-hero h1, .pl-hero p { margin-left:0; margin-right:0; }
+    .pl-hero-actions { align-items:flex-start; }
+    .pl-hero h1 { font-size:3rem; max-width:16ch; }
+    .pl-hero p { font-size:1.1rem; max-width:30rem; }
   }
 
   .pl-marquee { overflow:hidden; white-space:nowrap; background:var(--pl-blue); padding:0.85rem 0; }
@@ -511,6 +519,7 @@
     <div class="pl-hero-tint2"></div>
     <div class="pl-hero-scrim-top"></div>
     <div class="pl-hero-scrim-bottom"></div>
+    <div class="pl-hero-fade"></div>
     <div class="pl-wrap pl-hero-content">
       <div class="pl-eyebrow">Fitness coach</div>
       <h1>Basta de improvisar. Empezá a entrenar con estructura.</h1>
