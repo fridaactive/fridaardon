@@ -380,31 +380,28 @@
   .pl-btn-cream { background:var(--pl-cream); color:var(--pl-blue-dk); }
   .pl-login-link { font-size:0.8rem; color:var(--pl-muted); font-weight:600; cursor:pointer; }
  
-  .pl-hero { position:relative; overflow:hidden; padding:3rem 0 2.75rem; text-align:center; min-height:560px; display:flex; align-items:flex-end; background:#06123a; }
-  .pl-hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 30%; }
-  .pl-hero-tint { position:absolute; inset:0; background:var(--pl-blue); mix-blend-mode:color; opacity:0.5; }
-  .pl-hero-tint2 { position:absolute; inset:0; background:#0a1e63; mix-blend-mode:multiply; opacity:0.16; }
-  .pl-hero-scrim-top { position:absolute; top:0; left:0; right:0; height:42%; background:linear-gradient(180deg, rgba(5,13,45,0.78) 0%, rgba(5,13,45,0) 100%); }
-  .pl-hero-scrim-bottom { position:absolute; bottom:0; left:0; right:0; height:62%; background:linear-gradient(0deg, rgba(5,13,45,0.92) 0%, rgba(5,13,45,0.55) 55%, rgba(5,13,45,0) 100%); }
-  .pl-hero-content { position:relative; z-index:2; width:100%; }
-  .pl-eyebrow { display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--pl-cream); margin-bottom:1.1rem; }
-  .pl-hero h1 { font-size:2.1rem; font-weight:800; letter-spacing:-0.02em; line-height:1.15; max-width:20ch; margin:0 auto 1.1rem; color:#fff; }
-  .pl-hero p { font-size:1rem; color:rgba(255,255,255,0.85); max-width:32rem; margin:0 auto 1.75rem; font-weight:400; line-height:1.6; }
-  .pl-hero-actions { display:flex; flex-direction:column; align-items:center; gap:0.8rem; }
-  .pl-login-link.pl-hero-login { color:rgba(255,255,255,0.75); }
+  .pl-hero { position:relative; overflow:hidden; padding:3.5rem 0; text-align:center; min-height:620px; display:flex; align-items:center; background:#06123a; }
+  .pl-hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 32%; transform:scale(1.18); }
+  .pl-hero-tint { position:absolute; inset:0; background:var(--pl-blue); mix-blend-mode:color; opacity:0.45; }
+  .pl-hero-tint2 { position:absolute; inset:0; background:#0a1e63; mix-blend-mode:multiply; opacity:0.14; }
+  .pl-hero-scrim-top { position:absolute; top:0; left:0; right:0; height:35%; background:linear-gradient(180deg, rgba(5,13,45,0.55) 0%, rgba(5,13,45,0) 100%); }
+  .pl-hero-scrim-bottom { display:none; }
   .pl-hero-fade { display:none; }
+  .pl-hero-content { position:relative; z-index:2; width:100%; display:flex; justify-content:center; }
+  .pl-hero-panel { backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); background:rgba(6,14,45,0.42); border:1px solid rgba(255,255,255,0.14); border-radius:28px; padding:2.4rem 1.6rem; max-width:34rem; }
+  .pl-eyebrow { display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--pl-cream); margin-bottom:1.1rem; }
+  .pl-hero h1 { font-size:2rem; font-weight:800; letter-spacing:-0.02em; line-height:1.15; margin:0 auto 1.1rem; color:#fff; }
+  .pl-hero p { font-size:0.98rem; color:rgba(255,255,255,0.88); margin:0 auto 1.75rem; font-weight:400; line-height:1.6; }
+  .pl-hero-actions { display:flex; flex-direction:column; align-items:center; gap:0.8rem; }
+  .pl-login-link.pl-hero-login { color:rgba(255,255,255,0.8); }
   @media (min-width:1100px) {
-    .pl-hero { min-height:680px; padding:4rem 0 4rem; text-align:left; align-items:center; background:linear-gradient(100deg,var(--pl-blue-dk) 0%,var(--pl-blue) 100%); }
-    .pl-hero-bg { left:auto; inset:0 0 0 auto; width:auto; height:100%; object-fit:cover; object-position:center 30%; }
-    .pl-hero-fade { display:block; position:absolute; inset:0; background:linear-gradient(90deg, var(--pl-blue-dk) 0%, rgba(15,63,168,0.85) 32%, rgba(15,63,168,0.15) 56%, rgba(15,63,168,0) 70%); }
-    .pl-hero-tint { opacity:0.35; }
-    .pl-hero-scrim-top { display:none; }
-    .pl-hero-scrim-bottom { display:none; }
-    .pl-hero-content { max-width:640px; }
-    .pl-eyebrow, .pl-hero h1, .pl-hero p { margin-left:0; margin-right:0; }
-    .pl-hero-actions { align-items:flex-start; }
-    .pl-hero h1 { font-size:3rem; max-width:16ch; }
-    .pl-hero p { font-size:1.1rem; max-width:30rem; }
+    .pl-hero { min-height:720px; padding:5rem 0; }
+    .pl-hero-bg { object-position:center 36%; transform:scale(1.05); }
+    .pl-hero-content { justify-content:flex-start; }
+    .pl-hero-panel { max-width:38rem; padding:3.2rem 3rem; text-align:left; }
+    .pl-hero-panel .pl-hero-actions { align-items:flex-start; }
+    .pl-hero h1 { font-size:2.9rem; max-width:17ch; }
+    .pl-hero p { font-size:1.1rem; max-width:28rem; }
   }
 
   .pl-marquee { overflow:hidden; white-space:nowrap; background:var(--pl-blue); padding:0.85rem 0; }
@@ -521,12 +518,14 @@
     <div class="pl-hero-scrim-bottom"></div>
     <div class="pl-hero-fade"></div>
     <div class="pl-wrap pl-hero-content">
-      <div class="pl-eyebrow">Fitness coach</div>
-      <h1>Basta de improvisar. Empezá a entrenar con estructura.</h1>
-      <p>¿No ves resultados? ¿No sabés por dónde empezar? Nuestra coach Frida te brindará un programa de entrenamiento 100% personalizado, adaptado a tus objetivos y tu estilo de vida.</p>
-      <div class="pl-hero-actions">
-        <span class="pl-btn pl-btn-primary" onclick="plScrollToContact()">Comienza aquí</span>
-        <span class="pl-login-link pl-hero-login" onclick="showScreen('screen-login')">¿Ya tenés cuenta? Iniciá sesión</span>
+      <div class="pl-hero-panel">
+        <div class="pl-eyebrow">Fitness coach</div>
+        <h1>Basta de improvisar. Empezá a entrenar con estructura.</h1>
+        <p>¿No ves resultados? ¿No sabés por dónde empezar? Nuestra coach Frida te brindará un programa de entrenamiento 100% personalizado, adaptado a tus objetivos y tu estilo de vida.</p>
+        <div class="pl-hero-actions">
+          <span class="pl-btn pl-btn-primary" onclick="plScrollToContact()">Comienza aquí</span>
+          <span class="pl-login-link pl-hero-login" onclick="showScreen('screen-login')">¿Ya tenés cuenta? Iniciá sesión</span>
+        </div>
       </div>
     </div>
   </div>
