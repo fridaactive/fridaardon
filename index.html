@@ -380,15 +380,23 @@
   .pl-btn-cream { background:var(--pl-cream); color:var(--pl-blue-dk); }
   .pl-login-link { font-size:0.8rem; color:var(--pl-muted); font-weight:600; cursor:pointer; }
  
-  .pl-hero { position:relative; padding:4.5rem 0 3.5rem; text-align:center; }
+  .pl-hero { position:relative; padding:3.5rem 0 3rem; text-align:center; }
   .pl-eyebrow { display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--pl-muted); margin-bottom:1.1rem; }
   .pl-hero h1 { font-size:2.2rem; font-weight:800; letter-spacing:-0.02em; line-height:1.15; max-width:20ch; margin:0 auto 1.1rem; color:var(--pl-text); }
   .pl-hero p { font-size:1rem; color:var(--pl-muted); max-width:32rem; margin:0 auto 1.75rem; font-weight:400; line-height:1.6; }
   .pl-hero-actions { display:flex; flex-direction:column; align-items:center; gap:0.8rem; }
+  .pl-hero-grid { display:flex; flex-direction:column; align-items:center; gap:2.5rem; }
+  .pl-hero-photo { width:100%; max-width:320px; order:-1; }
+  .pl-hero-photo img { width:100%; height:auto; display:block; border-radius:28px; box-shadow:0 20px 44px rgba(13,27,62,0.18); }
   @media (min-width:1100px) {
-    .pl-hero { padding:6.5rem 0 5rem; }
-    .pl-hero h1 { font-size:3.1rem; max-width:24ch; }
-    .pl-hero p { font-size:1.1rem; max-width:36rem; }
+    .pl-hero { padding:5rem 0 5rem; }
+    .pl-hero h1 { font-size:3.1rem; max-width:17ch; }
+    .pl-hero p { font-size:1.1rem; max-width:34rem; }
+    .pl-hero-grid { flex-direction:row; align-items:center; justify-content:space-between; gap:4rem; text-align:left; }
+    .pl-hero-text { flex:1; }
+    .pl-hero-text h1, .pl-hero-text p { margin-left:0; margin-right:0; }
+    .pl-hero-actions { align-items:flex-start; }
+    .pl-hero-photo { flex:0 0 380px; max-width:380px; order:0; }
   }
 
   .pl-marquee { overflow:hidden; white-space:nowrap; background:var(--pl-blue); padding:0.85rem 0; }
@@ -499,12 +507,19 @@
  
   <div id="pl-inicio" class="pl-hero">
     <div class="pl-wrap">
-      <div class="pl-eyebrow">Fitness coach</div>
-      <h1>Basta de improvisar. Empezá a entrenar con estructura.</h1>
-      <p>¿No ves resultados? ¿No sabés por dónde empezar? Nuestra coach Frida te brindará un programa de entrenamiento 100% personalizado, adaptado a tus objetivos y tu estilo de vida.</p>
-      <div class="pl-hero-actions">
-        <span class="pl-btn pl-btn-primary" onclick="plScrollToContact()">Comienza aquí</span>
-        <span class="pl-login-link" onclick="showScreen('screen-login')">¿Ya tenés cuenta? Iniciá sesión</span>
+      <div class="pl-hero-grid">
+        <div class="pl-hero-text">
+          <div class="pl-eyebrow">Fitness coach</div>
+          <h1>Basta de improvisar. Empezá a entrenar con estructura.</h1>
+          <p>¿No ves resultados? ¿No sabés por dónde empezar? Nuestra coach Frida te brindará un programa de entrenamiento 100% personalizado, adaptado a tus objetivos y tu estilo de vida.</p>
+          <div class="pl-hero-actions">
+            <span class="pl-btn pl-btn-primary" onclick="plScrollToContact()">Comienza aquí</span>
+            <span class="pl-login-link" onclick="showScreen('screen-login')">¿Ya tenés cuenta? Iniciá sesión</span>
+          </div>
+        </div>
+        <div class="pl-hero-photo">
+          <img src="hero-frida.jpg" alt="Frida, coach de FridaActive" width="900" height="1350">
+        </div>
       </div>
     </div>
   </div>
