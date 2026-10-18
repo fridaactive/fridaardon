@@ -225,6 +225,7 @@
   .pf-ring-progress svg { width:100%; height:100%; }
   .pf-ring-center { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
   .pf-ring-num { font-size:1.15rem; font-weight:800; line-height:1; }
+  .pf-ring-subtext { font-size:0.52rem; font-weight:700; line-height:1.3; text-transform:uppercase; letter-spacing:0.02em; }
   .pf-ring-liquid { position:relative; width:4.6rem; height:4.6rem; border-radius:50%; overflow:hidden; box-shadow:0 6px 14px rgba(15,63,168,0.2); }
   .pf-ring-liquid svg { width:100%; height:100%; display:block; }
   .pf-ring-pct { font-size:1.05rem; font-weight:800; line-height:1; color:#0a1a4d; text-shadow:0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff; }
@@ -861,7 +862,7 @@
                 <defs><linearGradient id="gradMetaRing" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F6D16A"/><stop offset="100%" stop-color="#C9622B"/></linearGradient></defs>
                 <circle cx="32" cy="32" r="27" fill="none" stroke="url(#gradMetaRing)" stroke-width="6" stroke-linecap="round"/>
               </svg>
-              <div class="pf-ring-center"><div class="pf-ring-num" id="pf-ring-meta-num" style="color:#9a5a1e;">-</div></div>
+              <div class="pf-ring-center" style="flex-direction:column;gap:0;"><div class="pf-ring-num" id="pf-ring-meta-num" style="color:#9a5a1e;">-</div><div class="pf-ring-subtext" style="color:#9a5a1e;">sesiones</div></div>
             </div>
             <div class="pf-ring-label">Meta del mes</div>
           </div>
