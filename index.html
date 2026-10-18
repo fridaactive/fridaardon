@@ -223,6 +223,8 @@
   .pf-ring-progress svg { width:100%; height:100%; }
   .pf-ring-center { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
   .pf-ring-num { font-size:1.15rem; font-weight:800; line-height:1; }
+  .pf-ring-flat { width:4.6rem; height:4.6rem; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 14px rgba(15,63,168,0.25); }
+  .pf-ring-pct { font-size:1.05rem; font-weight:800; line-height:1; color:#fff; }
   .pf-ring-label { font-size:0.62rem; color:var(--muted); font-weight:700; text-align:center; }
   .pf-complete-wrap { margin-top:1rem; }
   .pf-complete-label { font-size:0.65rem; color:var(--muted); font-weight:700; margin-bottom:0.35rem; display:flex; justify-content:space-between; }
@@ -859,6 +861,12 @@
               <div class="pf-ring-center"><div class="pf-ring-num" id="pf-ring-meta-num" style="color:#9a5a1e;">-</div></div>
             </div>
             <div class="pf-ring-label">Meta del mes</div>
+          </div>
+          <div class="pf-ring-wrap" style="display:none;">
+            <div class="pf-ring-flat" id="pf-ring-programa" style="background:linear-gradient(135deg,#2a9fd6,#0F3FA8);">
+              <div class="pf-ring-pct" id="pf-ring-programa-pct">-</div>
+            </div>
+            <div class="pf-ring-label">Programa</div>
           </div>
         </div>
 
@@ -2837,8 +2845,14 @@ function loadPlanInfo() {
 
 function renderPlanCountdown(c) {
   var el = document.getElementById('pf-plan-mini');
+  var ringWrap = document.getElementById('pf-ring-programa');
+  var ringPct = document.getElementById('pf-ring-programa-pct');
   if (!el) return;
-  if (!c || !c.initDate) { el.style.display = 'none'; return; }
+  if (!c || !c.initDate) {
+    el.style.display = 'none';
+    if (ringWrap) ringWrap.closest('.pf-ring-wrap').style.display = 'none';
+    return;
+  }
   var start = new Date(c.initDate + 'T00:00:00');
   var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
   if (!c.endDate) end.setMonth(end.getMonth() + 1);
@@ -2854,6 +2868,10 @@ function renderPlanCountdown(c) {
   el.style.display = '';
   el.innerHTML = '<div class="pf-plan-mini-label">' + label + '</div>'
     + '<div class="pf-plan-mini-track"><div class="pf-plan-mini-fill' + (urgent ? ' urgent' : '') + '" style="width:' + pct + '%;"></div></div>';
+  if (ringWrap && ringPct) {
+    ringWrap.closest('.pf-ring-wrap').style.display = '';
+    ringPct.textContent = pct + '%';
+  }
 }
 
 // ── ANUNCIOS (promos que carga Frida) ──
