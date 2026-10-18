@@ -235,10 +235,13 @@
   .pf-complete-pct { color:var(--blue); }
   .pf-complete-track { height:5px; border-radius:100px; background:var(--border); overflow:hidden; }
   .pf-complete-fill { height:100%; border-radius:100px; background:linear-gradient(90deg,var(--blue),#4d7af0); transition:width 0.4s ease; }
-  .pf-bio { margin-top:0.9rem; text-align:left; border:1px dashed var(--border); border-radius:14px; padding:0.8rem 0.9rem; cursor:pointer; }
-  .pf-bio:active { border-color:var(--blue); }
+  .pf-bio { margin-top:0.9rem; text-align:left; }
   .pf-bio-text { font-size:0.78rem; color:var(--text); line-height:1.5; white-space:pre-wrap; }
   .pf-bio-placeholder { font-size:0.78rem; color:var(--muted); font-style:italic; line-height:1.5; }
+  .pf-bio-prompt-line { font-size:0.82rem; color:var(--muted); line-height:1.9; display:flex; align-items:center; gap:0.5rem; }
+  .pf-bio-prompt-line span { font-style:italic; }
+  .pf-edit-btn { margin-top:0.9rem; width:100%; display:flex; align-items:center; justify-content:center; gap:0.5rem; background:#f2f4f9; color:var(--text); border:1.5px solid var(--border); border-radius:100px; padding:0.8rem 1rem; font-size:0.78rem; font-weight:800; font-family:'DM Sans',sans-serif; cursor:pointer; letter-spacing:0.02em; }
+  .pf-edit-btn:active { transform:scale(0.98); background:#eceff5; }
   .pf-bio-edit-row { display:none; margin-top:0.9rem; text-align:left; }
   .pf-bio-edit-row.open { display:block; }
   .pf-bio-textarea { width:100%; border:1px solid var(--border); border-radius:14px; padding:0.7rem 0.85rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; color:var(--text); resize:vertical; min-height:4.5rem; outline:none; box-sizing:border-box; }
@@ -888,9 +891,17 @@
           <div class="pf-complete-track"><div class="pf-complete-fill" id="pf-complete-fill" style="width:0%;"></div></div>
         </div>
 
-        <div class="pf-bio" id="pf-bio-view" onclick="openBioEdit()">
-          <div class="pf-bio-placeholder" id="pf-bio-display">Contame tu meta, qué te motiva, tus hobbies 💪 Tocá para completar tu bio.</div>
+        <div class="pf-bio" id="pf-bio-view">
+          <div id="pf-bio-display">
+            <div class="pf-bio-prompt-line">🚩 <span>Contá tus hobbies</span></div>
+            <div class="pf-bio-prompt-line">🏅 <span>Qué te motiva</span></div>
+            <div class="pf-bio-prompt-line">🏆 <span>Tus metas fitness</span></div>
+          </div>
         </div>
+        <button class="pf-edit-btn" onclick="openBioEdit()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;"><path d="M17 3a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          Editar perfil
+        </button>
         <div class="pf-bio-edit-row" id="pf-bio-edit-row">
           <textarea class="pf-bio-textarea" id="pf-bio-textarea" placeholder="Ej: Mi meta es sentirme fuerte y con más energía. Me motiva verme mejor cada semana. Me encanta el senderismo los fines de semana 🏔️" maxlength="280"></textarea>
           <div class="pf-bio-actions">
@@ -2491,21 +2502,25 @@ var CURRENT_BIO = '';
 var CURRENT_PERFIL_DATA = {};
 var CURRENT_PORTAL_DATA = {};
 
+var PF_BIO_PROMPTS_HTML = '<div class="pf-bio-prompt-line">🚩 <span>Contá tus hobbies</span></div>'
+  + '<div class="pf-bio-prompt-line">🏅 <span>Qué te motiva</span></div>'
+  + '<div class="pf-bio-prompt-line">🏆 <span>Tus metas fitness</span></div>';
+
 function renderBioDisplay(bio) {
   CURRENT_BIO = bio || '';
   var el = document.getElementById('pf-bio-display');
   if (!el) return;
   if (CURRENT_BIO) {
-    el.textContent = CURRENT_BIO;
-    el.className = 'pf-bio-text';
+    el.innerHTML = '<div class="pf-bio-text"></div>';
+    el.firstChild.textContent = CURRENT_BIO;
   } else {
-    el.textContent = 'Contame tu meta, qué te motiva, tus hobbies 💪 Tocá para completar tu bio.';
-    el.className = 'pf-bio-placeholder';
+    el.innerHTML = PF_BIO_PROMPTS_HTML;
   }
 }
 
 function openBioEdit() {
   document.getElementById('pf-bio-view').style.display = 'none';
+  document.querySelector('.pf-edit-btn').style.display = 'none';
   document.getElementById('pf-bio-edit-row').classList.add('open');
   var ta = document.getElementById('pf-bio-textarea');
   ta.value = CURRENT_BIO;
@@ -2515,6 +2530,7 @@ function openBioEdit() {
 function closeBioEdit() {
   document.getElementById('pf-bio-edit-row').classList.remove('open');
   document.getElementById('pf-bio-view').style.display = '';
+  document.querySelector('.pf-edit-btn').style.display = '';
 }
 
 function saveBio() {
