@@ -58,12 +58,14 @@
   .dash-body { padding:1rem 1.25rem 2rem; max-width:520px; margin:0 auto; }
 
   /* ── TABS ── */
-  .tab-bar { display:flex; gap:0.4rem; overflow-x:auto; padding:0; max-width:520px; margin:1.25rem auto 0; position:relative; scrollbar-width:none; -ms-overflow-style:none; }
+  .tab-bar { display:flex; justify-content:center; gap:0.55rem; overflow-x:auto; padding:0; max-width:520px; margin:1.4rem auto 0; position:relative; scrollbar-width:none; -ms-overflow-style:none; }
   .tab-bar::-webkit-scrollbar { display:none; }
-  .tab-btn { flex-shrink:0; display:inline-flex; align-items:center; gap:0.35rem; background:rgba(255,255,255,0.14); border:none; padding:0.5rem 0.85rem; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.92); font-family:'DM Sans',sans-serif; cursor:pointer; border-radius:100px; white-space:nowrap; transition:transform 0.15s, background 0.15s, color 0.15s; }
-  .tab-btn svg { width:14px; height:14px; flex-shrink:0; }
+  .tab-btn { flex-shrink:0; display:inline-flex; align-items:center; gap:0.5rem; background:rgba(255,255,255,0.14); border:none; padding:0.45rem 1rem 0.45rem 0.45rem; font-size:0.78rem; font-weight:800; color:rgba(255,255,255,0.92); font-family:'DM Sans',sans-serif; cursor:pointer; border-radius:100px; white-space:nowrap; transition:transform 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s; }
+  .tab-btn-badge { flex-shrink:0; width:2rem; height:2rem; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#5b8bf5,#7c3aed); box-shadow:0 2px 5px rgba(30,20,90,0.35); }
+  .tab-btn svg { width:15px; height:15px; flex-shrink:0; color:#fff; }
   .tab-btn:active { transform:scale(0.94); }
-  .tab-btn.active { background:#fff; color:var(--blue); box-shadow:0 2px 8px rgba(15,63,168,0.18); }
+  .tab-btn.active { background:#fff; color:var(--blue); box-shadow:0 8px 18px rgba(15,63,168,0.28); transform:scale(1.04); }
+  .tab-btn.active:active { transform:scale(0.98); }
   .tab-panel { display:none; animation:fa-tab-in 0.22s ease; }
   .tab-panel.active { display:block; }
   @keyframes fa-tab-in { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
@@ -812,9 +814,9 @@
     </div>
 
     <div class="tab-bar">
-      <button class="tab-btn active" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8.5v7M17.5 8.5v7M3 10v4M21 10v4M6.5 12h11"/></svg> Rutina</button>
-      <button class="tab-btn" data-tab="tab-perfil" onclick="showTab('tab-perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21c0-4.2 3.4-7 7.5-7s7.5 2.8 7.5 7"/></svg> Perfil</button>
-      <button class="tab-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/></svg> Beneficios</button>
+      <button class="tab-btn active" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8.5v7M17.5 8.5v7M3 10v4M21 10v4M6.5 12h11"/></svg></span> Rutina</button>
+      <button class="tab-btn" data-tab="tab-perfil" onclick="showTab('tab-perfil')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21c0-4.2 3.4-7 7.5-7s7.5 2.8 7.5 7"/></svg></span> Perfil</button>
+      <button class="tab-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/></svg></span> Beneficios</button>
     </div>
   </div>
 
