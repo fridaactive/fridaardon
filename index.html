@@ -1264,6 +1264,8 @@ function showTab(id) {
   document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
   document.querySelector('.tab-btn[data-tab="' + id + '"]').classList.add('active');
+  var fab = document.getElementById('chat-fab');
+  if (fab) fab.style.display = (id === 'tab-rutina') ? '' : 'none';
 }
 
 function setLoading(on) {
