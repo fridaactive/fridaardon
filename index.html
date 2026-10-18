@@ -856,26 +856,18 @@
             <div class="pf-ring-label">Este mes</div>
           </div>
           <div class="pf-ring-wrap">
-            <div class="pf-ring" id="pf-ring-racha" style="border-color:#C9A22B;color:#8A6D14;">
-              <svg viewBox="0 0 24 24" class="pf-ring-icon" style="filter:drop-shadow(0 1.5px 1.5px rgba(138,109,20,0.35));">
-                <defs><linearGradient id="gradRacha" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F6D16A"/><stop offset="100%" stop-color="#C9A22B"/></linearGradient></defs>
-                <path d="M12 1.5c1.3 2.6-1.3 4-1.3 6.8 0 1.6 1.3 2.9 3 2.9a3 3 0 0 0 3-3.2c2.3 1.8 3.4 4.6 3.4 7.2 0 4.8-3.9 8-8.1 8s-8.1-3.2-8.1-8C3.9 9.9 7.8 6.3 12 1.5Z" fill="url(#gradRacha)"/>
-                <path d="M12 9.2c.6 1.1-.8 1.9-.8 3.2 0 1.1.9 1.9 2 1.9.4 0 .8-.1 1.2-.3-.2 2.5-2.1 4-4.2 4-2.3 0-4.2-1.7-4.2-4.2 0-2.7 2.3-4.2 6-4.6Z" fill="#fff" opacity="0.4"/>
-              </svg>
-              <div class="pf-ring-num" id="pf-ring-racha-num">0</div>
-            </div>
-            <div class="pf-ring-label">Racha</div>
-          </div>
-          <div class="pf-ring-wrap">
-            <div class="pf-ring" id="pf-ring-total" style="border-color:var(--blue-dk);color:var(--blue-dk);">
+            <div class="pf-ring" id="pf-ring-meta" style="border-color:var(--blue-dk);color:var(--blue-dk);">
               <svg viewBox="0 0 24 24" class="pf-ring-icon" style="filter:drop-shadow(0 1.5px 1.5px rgba(15,63,168,0.35));">
-                <defs><linearGradient id="gradTotal" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3a6cf0"/><stop offset="100%" stop-color="#0a1a4d"/></linearGradient></defs>
-                <path d="M12 2.3 14.9 8.6 21.7 9.4 16.7 14 18.1 20.7 12 17.3 5.9 20.7 7.3 14 2.3 9.4 9.1 8.6Z" fill="url(#gradTotal)"/>
-                <path d="M12 2.3 14.9 8.6 21.7 9.4 16.7 14 18.1 20.7 12 17.3Z" fill="#fff" opacity="0.14"/>
+                <defs><linearGradient id="gradMeta" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3a6cf0"/><stop offset="100%" stop-color="#0a1a4d"/></linearGradient></defs>
+                <circle cx="12" cy="12" r="9.5" fill="url(#gradMeta)"/>
+                <circle cx="12" cy="12" r="9.3" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.45"/>
+                <circle cx="12" cy="12" r="5.6" fill="none" stroke="#fff" stroke-width="1.4" opacity="0.7"/>
+                <circle cx="12" cy="12" r="2" fill="#fff"/>
+                <circle cx="8.3" cy="7.8" r="2.2" fill="#fff" opacity="0.16"/>
               </svg>
-              <div class="pf-ring-num" id="pf-ring-total-num">0</div>
+              <div class="pf-ring-num" id="pf-ring-meta-num">-</div>
             </div>
-            <div class="pf-ring-label">Total</div>
+            <div class="pf-ring-label">Meta del mes</div>
           </div>
         </div>
 
@@ -2419,16 +2411,10 @@ function renderTrainingTracker(diasEntrenados) {
   document.getElementById('track-mes').textContent = mesCount;
   document.getElementById('track-summary-count').textContent = mesCount + (mesCount === 1 ? ' día' : ' días') + ' este mes';
 
-  var totalCount = 0;
-  Object.keys(CURRENT_DIAS_ENTRENADOS).forEach(function(key) { if (CURRENT_DIAS_ENTRENADOS[key]) totalCount++; });
-  var rachaCount = calcRacha(CURRENT_DIAS_ENTRENADOS);
-
   var ringsEl = document.getElementById('pf-rings');
   if (ringsEl) {
     ringsEl.style.display = '';
     document.getElementById('pf-ring-mes-num').textContent = mesCount;
-    document.getElementById('pf-ring-racha-num').textContent = rachaCount;
-    document.getElementById('pf-ring-total-num').textContent = totalCount;
   }
 
   // Meta del mes: días/semana × 4 semanas — mismo criterio que ya usa el
@@ -2438,11 +2424,17 @@ function renderTrainingTracker(diasEntrenados) {
       var days = snap.val();
       var meta = (days && days.length) ? days.length * 4 : null;
       document.getElementById('track-meta').textContent = meta !== null ? meta : '-';
+      var ringMetaNum = document.getElementById('pf-ring-meta-num');
+      if (ringMetaNum) ringMetaNum.textContent = meta !== null ? meta : '-';
     }).catch(function() {
       document.getElementById('track-meta').textContent = '-';
+      var ringMetaNum = document.getElementById('pf-ring-meta-num');
+      if (ringMetaNum) ringMetaNum.textContent = '-';
     });
   } else {
     document.getElementById('track-meta').textContent = '-';
+    var ringMetaNumEl = document.getElementById('pf-ring-meta-num');
+    if (ringMetaNumEl) ringMetaNumEl.textContent = '-';
   }
 
   // Grilla del mes actual, con los días alineados por día de la semana —
@@ -2466,25 +2458,6 @@ function renderTrainingTracker(diasEntrenados) {
       toggleDiaEntrenado(this.getAttribute('data-dk'));
     });
   });
-}
-
-function fmtDateKey(d) {
-  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-}
-
-// Racha = días consecutivos hasta hoy. Si hoy todavía no se marcó, no
-// rompemos la racha por eso — el día puede no haber terminado — así que
-// arrancamos a contar desde ayer en ese caso.
-function calcRacha(dias) {
-  var cursor = new Date();
-  cursor.setHours(0, 0, 0, 0);
-  if (!dias[fmtDateKey(cursor)]) cursor.setDate(cursor.getDate() - 1);
-  var count = 0;
-  while (dias[fmtDateKey(cursor)]) {
-    count++;
-    cursor.setDate(cursor.getDate() - 1);
-  }
-  return count;
 }
 
 // ── BIO Y PERFIL COMPLETO ──
