@@ -225,8 +225,9 @@
   .pf-ring-progress svg { width:100%; height:100%; }
   .pf-ring-center { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
   .pf-ring-num { font-size:1.15rem; font-weight:800; line-height:1; }
-  .pf-ring-flat { width:4.6rem; height:4.6rem; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 14px rgba(15,63,168,0.25); }
-  .pf-ring-pct { font-size:1.05rem; font-weight:800; line-height:1; color:#fff; }
+  .pf-ring-liquid { position:relative; width:4.6rem; height:4.6rem; border-radius:50%; overflow:hidden; box-shadow:0 6px 14px rgba(15,63,168,0.2); }
+  .pf-ring-liquid svg { width:100%; height:100%; display:block; }
+  .pf-ring-pct { font-size:1.05rem; font-weight:800; line-height:1; color:#0a1a4d; text-shadow:0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff; }
   .pf-ring-label { font-size:0.62rem; color:var(--muted); font-weight:700; text-align:center; }
   .pf-complete-wrap { margin-top:1rem; }
   .pf-complete-label { font-size:0.65rem; color:var(--muted); font-weight:700; margin-bottom:0.35rem; display:flex; justify-content:space-between; }
@@ -865,8 +866,17 @@
             <div class="pf-ring-label">Meta del mes</div>
           </div>
           <div class="pf-ring-wrap" style="display:none;">
-            <div class="pf-ring-flat" id="pf-ring-programa" style="background:linear-gradient(135deg,#2a9fd6,#0F3FA8);">
-              <div class="pf-ring-pct" id="pf-ring-programa-pct">-</div>
+            <div class="pf-ring-liquid">
+              <svg viewBox="0 0 64 64">
+                <defs>
+                  <clipPath id="clipPrograma"><circle cx="32" cy="32" r="30"/></clipPath>
+                  <linearGradient id="gradLiquid" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a6cf0"/><stop offset="100%" stop-color="#0F3FA8"/></linearGradient>
+                </defs>
+                <circle cx="32" cy="32" r="30" fill="#E6EEFC"/>
+                <rect id="pf-ring-programa-fill" x="0" y="64" width="64" height="64" fill="url(#gradLiquid)" clip-path="url(#clipPrograma)" style="transition:y 0.6s ease;"/>
+                <circle cx="32" cy="32" r="30" fill="none" stroke="#0F3FA8" stroke-width="1.5" opacity="0.18"/>
+              </svg>
+              <div class="pf-ring-center"><div class="pf-ring-pct" id="pf-ring-programa-pct">-</div></div>
             </div>
             <div class="pf-ring-label">Programa</div>
           </div>
@@ -2847,12 +2857,12 @@ function loadPlanInfo() {
 
 function renderPlanCountdown(c) {
   var el = document.getElementById('pf-plan-mini');
-  var ringWrap = document.getElementById('pf-ring-programa');
+  var ringFill = document.getElementById('pf-ring-programa-fill');
   var ringPct = document.getElementById('pf-ring-programa-pct');
   if (!el) return;
   if (!c || !c.initDate) {
     el.style.display = 'none';
-    if (ringWrap) ringWrap.closest('.pf-ring-wrap').style.display = 'none';
+    if (ringPct) ringPct.closest('.pf-ring-wrap').style.display = 'none';
     return;
   }
   var start = new Date(c.initDate + 'T00:00:00');
@@ -2870,9 +2880,12 @@ function renderPlanCountdown(c) {
   el.style.display = '';
   el.innerHTML = '<div class="pf-plan-mini-label">' + label + '</div>'
     + '<div class="pf-plan-mini-track"><div class="pf-plan-mini-fill' + (urgent ? ' urgent' : '') + '" style="width:' + pct + '%;"></div></div>';
-  if (ringWrap && ringPct) {
-    ringWrap.closest('.pf-ring-wrap').style.display = '';
+  if (ringFill && ringPct) {
+    ringPct.closest('.pf-ring-wrap').style.display = '';
     ringPct.textContent = pct + '%';
+    var fillHeight = 64 * (pct / 100);
+    ringFill.setAttribute('y', String(64 - fillHeight));
+    ringFill.setAttribute('height', String(fillHeight + 2));
   }
 }
 
