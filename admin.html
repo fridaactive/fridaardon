@@ -1543,22 +1543,73 @@ function renderPortalSection(clientId) {
   var uid = CLIENT_LINKS[clientId];
   if (uid) {
     fbGet('clientasPortal/' + uid, function(portal) {
+      var c = CLIENTS[clientId] || {};
       var perfil = (portal && portal.perfil) || {};
       var progreso = (portal && portal.progreso) || {};
-      var entrenoLogs = (portal && portal.entrenoLogs) || {};
+      var diasEntrenados = (portal && portal.diasEntrenados) || {};
       var chat = (portal && portal.chat) || {};
       var entries = Object.keys(progreso).map(function(k) { return progreso[k]; }).sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
-      var logEntries = Object.keys(entrenoLogs).map(function(k) { return entrenoLogs[k]; }).sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
       var chatEntries = Object.keys(chat).map(function(k) { return chat[k]; }).sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
       var lastMsg = chatEntries[0];
+      var needsReply = lastMsg && lastMsg.from === 'client';
 
-      var html = '<div style="background:#F0FFF0;border:1px solid #cde8cd;border-radius:12px;padding:0.9rem 1rem;font-size:0.78rem;color:var(--text);">';
-      html += '<div style="font-weight:700;color:#2a7a2a;margin-bottom:0.3rem;">✅ Cuenta vinculada</div>';
-      html += '<div>' + (perfil.email || 'Sin email registrado') + '</div>';
+      var html = '';
+
+      // ── CHAT (primero: así ves de un vistazo si hay algo sin responder) ──
+      html += '<div style="background:' + (needsReply ? '#FDEAEA' : '#F7F8FB') + ';border:1px solid ' + (needsReply ? '#F3C6C6' : 'var(--border)') + ';border-radius:12px;padding:0.9rem 1rem;">';
+      html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem;">';
+      html += '<div style="font-weight:700;font-size:0.76rem;color:' + (needsReply ? '#A62B2B' : 'var(--text)') + ';">' + (needsReply ? '🔴 Esperando tu respuesta' : '💬 Chat') + '</div>';
+      html += '</div>';
+      if (lastMsg) {
+        html += '<div style="font-size:0.75rem;color:var(--muted);">' + (lastMsg.from === 'admin' ? 'Vos: ' : '') + escapeHtmlAdmin(lastMsg.text || '') + '</div>';
+      } else {
+        html += '<div style="font-size:0.75rem;color:var(--muted);">Todavía no hay mensajes.</div>';
+      }
+      html += '<button onclick="openAdminChat(\'' + clientId + '\',\'' + uid + '\')" style="margin-top:0.55rem;width:100%;background:' + (needsReply ? '#A62B2B' : 'var(--blue-lt)') + ';color:' + (needsReply ? '#fff' : 'var(--blue)') + ';border:none;border-radius:10px;padding:0.6rem;font-weight:700;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Abrir chat</button>';
       html += '</div>';
 
-      html += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Sesiones registradas</div>';
-      html += '<div style="margin-top:0.3rem;font-size:0.78rem;">' + logEntries.length + ' sesión' + (logEntries.length !== 1 ? 'es' : '') + (logEntries.length > 0 ? ' · última: ' + logEntries[0].fecha : '') + '</div>';
+      // ── ESTADO DE PAGO / PROGRAMA ──
+      if (c.initDate) {
+        var mesActual = (getClientPayments()[clientId] || []).length + 1;
+        var start = new Date(c.initDate + 'T00:00:00');
+        var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
+        if (!c.endDate) end.setMonth(end.getMonth() + 1);
+        var today0 = new Date(); today0.setHours(0,0,0,0);
+        var daysLeft = Math.ceil((end - today0) / 86400000);
+        var paid = isCurrentCyclePaid(clientId, c);
+        var statusColor = daysLeft <= 0 ? '#A62B2B' : !paid ? '#8A6D14' : '#2a7a2a';
+        var statusBg = daysLeft <= 0 ? '#FDEAEA' : !paid ? '#FFF6E0' : '#F0FFF0';
+        var statusBorder = daysLeft <= 0 ? '#F3C6C6' : !paid ? '#F0DFA0' : '#cde8cd';
+        html += '<div style="margin-top:0.75rem;background:' + statusBg + ';border:1px solid ' + statusBorder + ';border-radius:12px;padding:0.9rem 1rem;">';
+        html += '<div style="font-weight:700;font-size:0.76rem;color:' + statusColor + ';margin-bottom:0.3rem;">Mes ' + mesActual + (mesActual <= 3 ? ' de 3' : '') + ' · ' + (daysLeft <= 0 ? 'Ciclo vencido' : 'Quedan ' + daysLeft + (daysLeft===1?' día':' días')) + '</div>';
+        html += '<div style="font-size:0.75rem;color:var(--text);">' + (paid ? '✅ Pagó este ciclo' : '⏳ Pendiente de pago') + (c.cuota ? ' · $' + c.cuota : '') + '</div>';
+        if (!paid && c.cuota) {
+          html += '<button onclick="markClientAsPaid(\'' + clientId + '\');renderPortalSection(\'' + clientId + '\');" style="margin-top:0.55rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.6rem;font-weight:700;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Marcar como pagado</button>';
+        }
+        html += '</div>';
+      }
+
+      // ── ACTIVIDAD: días entrenados este mes ──
+      var nowD = new Date();
+      var mesCount = Object.keys(diasEntrenados).filter(function(k) {
+        if (!diasEntrenados[k]) return false;
+        var d = new Date(k + 'T00:00:00');
+        return d.getMonth() === nowD.getMonth() && d.getFullYear() === nowD.getFullYear();
+      }).length;
+      var metaDias = (c.days && c.days.length) ? c.days.length * 4 : null;
+      html += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Actividad</div>';
+      html += '<div style="margin-top:0.3rem;font-size:0.78rem;">' + mesCount + (metaDias ? ' de ' + metaDias : '') + ' sesiones este mes</div>';
+
+      // ── CUENTA VINCULADA ──
+      html += '<div style="margin-top:0.75rem;background:#F7F8FB;border:1px solid var(--border);border-radius:12px;padding:0.75rem 1rem;font-size:0.76rem;color:var(--muted);">';
+      html += (perfil.email || 'Sin email registrado');
+      html += '</div>';
+
+      // ── BIO ──
+      if (perfil.bio) {
+        html += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Bio</div>';
+        html += '<div style="margin-top:0.3rem;font-size:0.78rem;color:var(--text);line-height:1.5;">' + escapeHtmlAdmin(perfil.bio) + '</div>';
+      }
 
       if (entries.length > 0) {
         html += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Últimos registros de progreso</div>';
@@ -1570,17 +1621,7 @@ function renderPortalSection(clientId) {
           html += '</div>';
         });
         html += '</div>';
-      } else {
-        html += '<div style="margin-top:0.5rem;font-size:0.72rem;color:var(--muted);">Aún no registra progreso.</div>';
       }
-
-      html += '<div style="margin-top:0.9rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Chat</div>';
-      if (lastMsg) {
-        html += '<div style="margin-top:0.3rem;font-size:0.75rem;color:var(--muted);">' + (lastMsg.from === 'admin' ? 'Vos: ' : '') + escapeHtmlAdmin(lastMsg.text || '') + '</div>';
-      } else {
-        html += '<div style="margin-top:0.3rem;font-size:0.75rem;color:var(--muted);">Todavía no hay mensajes.</div>';
-      }
-      html += '<button onclick="openAdminChat(\'' + clientId + '\',\'' + uid + '\')" style="margin-top:0.5rem;width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.6rem;font-weight:700;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Abrir chat</button>';
 
       html += cuestionarioHtml(portal && portal.cuestionario);
 
