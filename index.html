@@ -219,8 +219,9 @@
   .pf-stat-chip svg { width:13px; height:13px; flex-shrink:0; }
   .pf-rings { display:flex; justify-content:center; gap:1.1rem; margin-top:1rem; }
   .pf-ring-wrap { display:flex; flex-direction:column; align-items:center; gap:0.4rem; }
-  .pf-ring { width:3.6rem; height:3.6rem; border-radius:50%; display:flex; align-items:center; justify-content:center; border:3px solid; background:#fff; }
-  .pf-ring-num { font-size:0.95rem; font-weight:800; line-height:1; }
+  .pf-ring { width:4rem; height:4rem; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.15rem; border:3px solid; background:#fff; }
+  .pf-ring-icon { width:13px; height:13px; flex-shrink:0; }
+  .pf-ring-num { font-size:0.85rem; font-weight:800; line-height:1; }
   .pf-ring-label { font-size:0.62rem; color:var(--muted); font-weight:700; text-align:center; }
   .pf-complete-wrap { margin-top:1rem; }
   .pf-complete-label { font-size:0.65rem; color:var(--muted); font-weight:700; margin-bottom:0.35rem; display:flex; justify-content:space-between; }
@@ -838,15 +839,24 @@
 
         <div class="pf-rings" id="pf-rings" style="display:none;">
           <div class="pf-ring-wrap">
-            <div class="pf-ring" id="pf-ring-mes" style="border-color:var(--blue);color:var(--blue);"><div class="pf-ring-num" id="pf-ring-mes-num">0</div></div>
+            <div class="pf-ring" id="pf-ring-mes" style="border-color:var(--blue);color:var(--blue);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pf-ring-icon"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>
+              <div class="pf-ring-num" id="pf-ring-mes-num">0</div>
+            </div>
             <div class="pf-ring-label">Este mes</div>
           </div>
           <div class="pf-ring-wrap">
-            <div class="pf-ring" id="pf-ring-racha" style="border-color:#C9A22B;color:#8A6D14;"><div class="pf-ring-num" id="pf-ring-racha-num">0</div></div>
+            <div class="pf-ring" id="pf-ring-racha" style="border-color:#C9A22B;color:#8A6D14;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pf-ring-icon"><path d="M12 2.5c1.2 2.4-1.2 3.6-1.2 6 0 1.4 1.2 2.5 2.6 2.5a2.6 2.6 0 0 0 2.6-2.8c2 1.6 3 4 3 6.3 0 4.2-3.4 7-7 7s-7-2.8-7-7c0-4.5 3.4-7.6 7-12Z"/></svg>
+              <div class="pf-ring-num" id="pf-ring-racha-num">0</div>
+            </div>
             <div class="pf-ring-label">Racha</div>
           </div>
           <div class="pf-ring-wrap">
-            <div class="pf-ring" id="pf-ring-total" style="border-color:#1FA35C;color:#1FA35C;"><div class="pf-ring-num" id="pf-ring-total-num">0</div></div>
+            <div class="pf-ring" id="pf-ring-total" style="border-color:var(--blue-dk);color:var(--blue-dk);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pf-ring-icon"><path d="M3.5 19.5 9 13l4 3 7-9"/><path d="M15.5 6.5H20v4.5"/></svg>
+              <div class="pf-ring-num" id="pf-ring-total-num">0</div>
+            </div>
             <div class="pf-ring-label">Total</div>
           </div>
         </div>
