@@ -444,6 +444,7 @@
   .pc-tabs::-webkit-scrollbar { display:none; }
   .pc-tab-btn { flex-shrink:0; padding:0.55rem 0.95rem; background:#fff; border:1.5px solid var(--border); color:var(--muted); border-radius:100px; font-size:0.7rem; font-weight:600; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.2s; touch-action:manipulation; white-space:nowrap; }
   .pc-tab-btn.active { background:var(--blue); color:#fff; border-color:var(--blue); font-weight:700; }
+  .pc-tab-badge { display:inline-flex; align-items:center; justify-content:center; min-width:1.1rem; height:1.1rem; padding:0 0.25rem; border-radius:100px; background:#e5486b; color:#fff; font-size:0.62rem; font-weight:800; margin-left:0.3rem; }
   .pc-content { display:none; }
   .pc-content.active { display:block; }
   .fin-content { padding:0 1.25rem 5rem; display:none; }
@@ -1186,6 +1187,7 @@
   <div class="clients-wrap">
     <div class="pc-tabs">
       <button class="pc-tab-btn active" onclick="pcSwitchTab('solicitudes',this)">Solicitudes nuevas</button>
+      <button class="pc-tab-btn" onclick="pcSwitchTab('chats',this)">Chats <span class="pc-tab-badge" id="pc-chats-badge" style="display:none;"></span></button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('online',this)">Clientas online</button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('beneficios',this)">Beneficios/Descuentos</button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('anuncios',this)">Anuncios</button>
@@ -1195,6 +1197,12 @@
     <div class="pc-content active" id="pc-tab-solicitudes">
       <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Personas que se registraron solas desde tu link (ej. Instagram) y todavía no son clientas activas.</div>
       <div id="pc-leads-list"></div>
+    </div>
+
+    <!-- CHATS -->
+    <div class="pc-content" id="pc-tab-chats">
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Todos los chats con tus clientas, en un solo lugar.</div>
+      <div id="pc-chats-list"></div>
     </div>
 
     <!-- CLIENTAS ONLINE -->
@@ -1825,9 +1833,75 @@ function pcSwitchTab(id, btn) {
   else { var firstBtn = document.querySelector('.pc-tab-btn'); if (firstBtn) firstBtn.classList.add('active'); }
 }
 
+// ── CHATS: bandeja con todos los chats de clientas, estilo DM ──
+function renderChatsInbox() {
+  var el = document.getElementById('pc-chats-list');
+  if (!el) return;
+  var linkedIds = Object.keys(CLIENT_LINKS).filter(function(id) { return CLIENTS[id]; });
+  if (linkedIds.length === 0) {
+    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientas vinculadas al portal.</div>';
+    var badgeEmpty = document.getElementById('pc-chats-badge');
+    if (badgeEmpty) badgeEmpty.style.display = 'none';
+    return;
+  }
+  el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Cargando…</div>';
+  var results = [];
+  var pending = linkedIds.length;
+  linkedIds.forEach(function(clientId) {
+    var uid = CLIENT_LINKS[clientId];
+    fbGet('clientasPortal/' + uid + '/chat', function(chat) {
+      var entries = Object.keys(chat || {}).map(function(k) { return chat[k]; }).sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
+      var lastMsg = entries[0];
+      if (lastMsg) {
+        results.push({
+          clientId: clientId,
+          uid: uid,
+          name: (CLIENTS[clientId] && CLIENTS[clientId].name) || 'Clienta',
+          text: lastMsg.text || '',
+          ts: lastMsg.ts || 0,
+          needsReply: lastMsg.from === 'client'
+        });
+      }
+      pending--;
+      if (pending === 0) renderChatsInboxResults(results);
+    });
+  });
+}
+
+function renderChatsInboxResults(results) {
+  var el = document.getElementById('pc-chats-list');
+  var badge = document.getElementById('pc-chats-badge');
+  if (!el) return;
+  results.sort(function(a, b) { return b.ts - a.ts; });
+  var unreadCount = results.filter(function(r) { return r.needsReply; }).length;
+  if (badge) {
+    if (unreadCount > 0) { badge.textContent = String(unreadCount); badge.style.display = ''; }
+    else badge.style.display = 'none';
+  }
+  if (results.length === 0) {
+    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no hay chats.</div>';
+    return;
+  }
+  var html = '';
+  results.forEach(function(r) {
+    var when = r.ts ? new Date(r.ts).toLocaleDateString('es-SV', { day: 'numeric', month: 'short' }) : '';
+    html += '<div onclick="openAdminChat(\'' + r.clientId + '\',\'' + r.uid + '\')" style="display:flex;align-items:center;gap:0.7rem;padding:0.8rem 0.5rem;border-bottom:1px solid var(--border);cursor:pointer;' + (r.needsReply ? 'background:#FDEAEA;' : '') + '">';
+    html += '<div style="width:2.4rem;height:2.4rem;border-radius:50%;background:var(--blue-lt);color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.9rem;flex-shrink:0;position:relative;">';
+    html += escapeHtmlAdmin(r.name.charAt(0).toUpperCase());
+    if (r.needsReply) html += '<span style="position:absolute;top:-2px;right:-2px;width:11px;height:11px;border-radius:50%;background:#e5486b;border:2px solid #fff;"></span>';
+    html += '</div>';
+    html += '<div style="flex:1;min-width:0;">';
+    html += '<div style="display:flex;justify-content:space-between;gap:0.5rem;"><span style="font-weight:700;font-size:0.82rem;color:var(--text);">' + escapeHtmlAdmin(r.name) + '</span><span style="font-size:0.65rem;color:var(--muted);flex-shrink:0;">' + when + '</span></div>';
+    html += '<div style="font-size:0.75rem;color:' + (r.needsReply ? '#A62B2B;font-weight:700;' : 'var(--muted);') + 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (r.needsReply ? '' : 'Vos: ') + escapeHtmlAdmin(r.text) + '</div>';
+    html += '</div></div>';
+  });
+  el.innerHTML = html;
+}
+
 function renderPortalContentScreen() {
   pcSwitchTab('solicitudes');
   renderClientsProgressOverview();
+  renderChatsInbox();
   renderLeadsSection();
   fbGet('beneficios', function(data) {
     var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
@@ -2109,6 +2183,7 @@ function closeAdminChat() {
   if (adminChatRef) { adminChatRef.off(); adminChatRef = null; }
   adminChatUid = null;
   renderPortalSection(currentClient);
+  renderChatsInbox();
 }
 
 function renderAdminChatMessages(messages) {
