@@ -265,6 +265,10 @@
   .pf-plan-mini-track { height:3px; border-radius:100px; background:var(--border); overflow:hidden; }
   .pf-plan-mini-fill { height:100%; border-radius:100px; background:var(--muted); }
   .pf-plan-mini-fill.urgent { background:#C0392B; }
+  .pf-program-alert { margin-bottom:0.75rem; border-radius:16px; padding:0.9rem 1rem; display:flex; align-items:flex-start; gap:0.65rem; font-size:0.78rem; font-weight:700; line-height:1.4; }
+  .pf-program-alert svg { width:17px; height:17px; flex-shrink:0; margin-top:0.05rem; }
+  .pf-program-alert.warn { background:#FFF6E0; color:#8A6D14; border:1px solid #F0DFA0; }
+  .pf-program-alert.danger { background:#FDEAEA; color:#A62B2B; border:1px solid #F3C6C6; }
 
   /* ── CHAT ── */
   .chat-messages { flex:1; overflow-y:auto; padding:1rem 1.1rem; display:flex; flex-direction:column; gap:0.5rem; }
@@ -935,6 +939,8 @@
         </div>
       </details>
 
+      <div class="pf-program-alert" id="pf-program-alert" style="display:none;"></div>
+
       <div class="card transf-card">
         <div class="transf-hdr">
           <div class="card-label" style="margin-bottom:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M4 8h2.5l1.8-2h7.4l1.8 2H20v11H4Z"/><circle cx="12" cy="13.5" r="3.2"/></svg> Tu transformación</div>
@@ -1586,6 +1592,7 @@ function renderPortalScreen(portal, perfil) {
   CURRENT_PORTAL_DATA = portal;
   renderBioDisplay(perfil.bio);
   updateProfileCompletion();
+  renderPerfilRoleLine();
 
   CURRENT_ENTRENO_LOGS = portal.entrenoLogs || {};
   loadRutinaTab(currentClientId);
@@ -2904,6 +2911,42 @@ function renderPlanCountdown(c) {
     ringFill.setAttribute('y', String(64 - fillHeight));
     ringFill.setAttribute('height', String(fillHeight + 2));
   }
+
+  CURRENT_PAGOS_COUNT = c.pagosCount || 0;
+  renderPerfilRoleLine();
+
+  var alertEl = document.getElementById('pf-program-alert');
+  if (alertEl) {
+    if (daysLeft <= 0) {
+      alertEl.style.display = '';
+      alertEl.className = 'pf-program-alert danger';
+      alertEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'
+        + '<span>Tu programa está inactivo. Escribile a Frida para reactivarlo con tu pago mensual.</span>';
+    } else if (daysLeft <= 5) {
+      alertEl.style.display = '';
+      alertEl.className = 'pf-program-alert warn';
+      alertEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'
+        + '<span>Tu programa está por cerrarse en ' + daysLeft + (daysLeft === 1 ? ' día' : ' días') + ' — no olvidés tu pago mensual.</span>';
+    } else {
+      alertEl.style.display = 'none';
+    }
+  }
+}
+
+var CURRENT_PAGOS_COUNT = null;
+function renderPerfilRoleLine() {
+  var el = document.getElementById('perfil-role');
+  if (!el) return;
+  var parts = [];
+  if (CURRENT_PAGOS_COUNT !== null) {
+    var mes = CURRENT_PAGOS_COUNT + 1;
+    parts.push('Mes ' + mes + (mes <= 3 ? ' de 3' : ''));
+  }
+  if (CURRENT_PERFIL_DATA.fechaRegistro) {
+    var d = new Date(CURRENT_PERFIL_DATA.fechaRegistro);
+    if (!isNaN(d)) parts.push('Desde ' + MESES_LARGOS[d.getMonth()] + ' ' + d.getFullYear());
+  }
+  el.textContent = parts.join(' · ');
 }
 
 // ── ANUNCIOS (promos que carga Frida) ──

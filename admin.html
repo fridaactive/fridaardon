@@ -2473,6 +2473,12 @@ function markClientAsPaid(id) {
   localStorage.setItem('fa_client_payments', JSON.stringify(payments));
   fbSet('client_payments', payments);
 
+  // Reflejado en clients/{id} (no en el nodo compartido client_payments) para
+  // que la clienta pueda leer cuántos ciclos lleva pagados desde su propio
+  // perfil, sin necesitar acceso al historial de pagos de las demás.
+  c.pagosCount = payments[id].length;
+  fbSet('clients/' + id + '/pagosCount', c.pagosCount);
+
   // Register income in Finanzas for the current calendar month
   var today = new Date();
   var monthData = finGetMonth(today.getFullYear(), today.getMonth());
