@@ -1188,7 +1188,7 @@
     <div class="pc-tabs">
       <button class="pc-tab-btn active" onclick="pcSwitchTab('solicitudes',this)">Solicitudes nuevas</button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('chats',this)">Chats <span class="pc-tab-badge" id="pc-chats-badge" style="display:none;"></span></button>
-      <button class="pc-tab-btn" onclick="pcSwitchTab('online',this)">Clientas online</button>
+      <button class="pc-tab-btn" onclick="pcSwitchTab('online',this)">Clientas</button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('beneficios',this)">Beneficios/Descuentos</button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('anuncios',this)">Anuncios</button>
     </div>
@@ -1207,7 +1207,7 @@
 
     <!-- CLIENTAS ONLINE -->
     <div class="pc-content" id="pc-tab-online">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Actividad de tus clientas online esta semana.</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Todas tus clientas vinculadas al portal. Tocá un nombre para ver su perfil completo.</div>
       <div id="pc-progress-list"></div>
     </div>
 
@@ -1555,6 +1555,7 @@ function renderPortalSection(clientId) {
       var perfil = (portal && portal.perfil) || {};
       var progreso = (portal && portal.progreso) || {};
       var diasEntrenados = (portal && portal.diasEntrenados) || {};
+      var fotosProgreso = (portal && portal.fotosProgreso) || {};
       var chat = (portal && portal.chat) || {};
       var entries = Object.keys(progreso).map(function(k) { return progreso[k]; }).sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
       var chatEntries = Object.keys(chat).map(function(k) { return chat[k]; }).sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
@@ -1562,6 +1563,17 @@ function renderPortalSection(clientId) {
       var needsReply = lastMsg && lastMsg.from === 'client';
 
       var html = '';
+
+      // ── FOTO Y NOMBRE ──
+      html += '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.9rem;">';
+      if (perfil.fotoPerfil) {
+        html += '<img src="' + escapeHtmlAdmin(perfil.fotoPerfil) + '" style="width:3.2rem;height:3.2rem;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid var(--border);">';
+      } else {
+        html += '<div style="width:3.2rem;height:3.2rem;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;flex-shrink:0;">' + initials(perfil.nombre || (CLIENTS[clientId] && CLIENTS[clientId].name) || '') + '</div>';
+      }
+      html += '<div><div style="font-weight:800;font-size:0.95rem;color:var(--text);">' + escapeHtmlAdmin(perfil.nombre || (CLIENTS[clientId] && CLIENTS[clientId].name) || '') + '</div>';
+      html += '<div style="font-size:0.72rem;color:var(--muted);">' + (perfil.email || '') + '</div></div>';
+      html += '</div>';
 
       // ── CHAT (primero: así ves de un vistazo si hay algo sin responder) ──
       html += '<div style="background:' + (needsReply ? 'var(--blue-lt)' : '#F7F8FB') + ';border:1px solid ' + (needsReply ? '#C9D9F5' : 'var(--border)') + ';border-radius:12px;padding:0.9rem 1rem;">';
@@ -1608,19 +1620,39 @@ function renderPortalSection(clientId) {
       html += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Actividad</div>';
       html += '<div style="margin-top:0.3rem;font-size:0.78rem;">' + mesCount + (metaDias ? ' de ' + metaDias : '') + ' sesiones este mes</div>';
 
-      // ── CUENTA VINCULADA ──
-      html += '<div style="margin-top:0.75rem;background:#F7F8FB;border:1px solid var(--border);border-radius:12px;padding:0.75rem 1rem;font-size:0.76rem;color:var(--muted);">';
-      html += (perfil.email || 'Sin email registrado');
-      html += '</div>';
-
       // ── BIO ──
       if (perfil.bio) {
         html += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Bio</div>';
         html += '<div style="margin-top:0.3rem;font-size:0.78rem;color:var(--text);line-height:1.5;">' + escapeHtmlAdmin(perfil.bio) + '</div>';
       }
 
+      // ── FOTOS DE TRANSFORMACIÓN ──
+      var fotoMonthKeys = Object.keys(fotosProgreso).filter(function(k) {
+        return fotosProgreso[k] && (fotosProgreso[k].inicio || fotosProgreso[k].fin);
+      }).sort().reverse();
+      var MESES_LARGOS_ADMIN = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      if (fotoMonthKeys.length > 0) {
+        html += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Fotos de transformación</div>';
+        fotoMonthKeys.forEach(function(key) {
+          var parts = key.split('-');
+          var label = MESES_LARGOS_ADMIN[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
+          var pair = fotosProgreso[key];
+          html += '<div style="margin-top:0.4rem;font-size:0.68rem;color:var(--muted);font-weight:700;">' + escapeHtmlAdmin(label) + '</div>';
+          html += '<div style="display:flex;gap:0.5rem;margin-top:0.3rem;">';
+          ['inicio', 'fin'].forEach(function(tipo) {
+            var entry = pair[tipo];
+            if (entry && entry.url) {
+              html += '<img src="' + escapeHtmlAdmin(entry.url) + '" onclick="window.open(\'' + escapeHtmlAdmin(entry.url) + '\',\'_blank\')" style="width:5.2rem;height:5.2rem;border-radius:10px;object-fit:cover;cursor:pointer;border:1px solid var(--border);">';
+            } else {
+              html += '<div style="width:5.2rem;height:5.2rem;border-radius:10px;background:#F7F8FB;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--muted);text-align:center;padding:0.3rem;">Sin foto</div>';
+            }
+          });
+          html += '</div>';
+        });
+      }
+
       if (entries.length > 0) {
-        html += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Últimos registros de progreso</div>';
+        html += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Últimos registros de peso</div>';
         html += '<div style="margin-top:0.4rem;">';
         entries.slice(0, 5).forEach(function(en) {
           html += '<div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.75rem;">';
@@ -1643,34 +1675,34 @@ function renderPortalSection(clientId) {
   }
 }
 
-// ── PORTAL DE CLIENTAS: actividad / progreso de clientas online ──
+// ── PORTAL DE CLIENTAS: lista de todas las clientas vinculadas, con su actividad real ──
 function renderClientsProgressOverview() {
   var el = document.getElementById('pc-progress-list');
   if (!el) return;
-  var onlineLinked = Object.keys(CLIENTS).filter(function(id) {
-    return isOnlineType(CLIENTS[id].type) && CLIENT_LINKS[id];
+  var allLinked = Object.keys(CLIENTS).filter(function(id) {
+    return CLIENT_LINKS[id];
   });
-  if (onlineLinked.length === 0) {
-    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientas online vinculadas al portal.</div>';
+  if (allLinked.length === 0) {
+    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientas vinculadas al portal.</div>';
     return;
   }
   el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Cargando…</div>';
   var results = [];
-  var pending = onlineLinked.length;
-  onlineLinked.forEach(function(clientId) {
+  var pending = allLinked.length;
+  allLinked.forEach(function(clientId) {
     var uid = CLIENT_LINKS[clientId];
-    fbGet('clientasPortal/' + uid + '/entrenoLogs', function(logs) {
-      var entries = Object.keys(logs || {}).map(function(k) { return logs[k]; });
-      entries.sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
+    fbGet('clientasPortal/' + uid + '/diasEntrenados', function(dias) {
+      dias = dias || {};
       var weekAgo = new Date();
       weekAgo.setDate(weekAgo.getDate() - 7);
-      var thisWeekCount = entries.filter(function(e) {
-        return e.fecha && new Date(e.fecha + 'T00:00:00') >= weekAgo;
+      var entries = Object.keys(dias).filter(function(k) { return dias[k]; }).sort().reverse();
+      var thisWeekCount = entries.filter(function(k) {
+        return new Date(k + 'T00:00:00') >= weekAgo;
       }).length;
       results.push({
         clientId: clientId,
         name: CLIENTS[clientId].name,
-        lastFecha: entries[0] ? entries[0].fecha : null,
+        lastFecha: entries[0] || null,
         thisWeekCount: thisWeekCount
       });
       pending--;
@@ -1698,7 +1730,7 @@ function renderProgressResults(results) {
       : '<div style="width:2.1rem;height:2.1rem;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;">' + initials(r.name) + '</div>';
     html += '<div onclick="openClientDetail(\'' + r.clientId + '\')" style="cursor:pointer;border:1px solid var(--border);border-radius:10px;padding:0.75rem 0.9rem;margin-bottom:0.6rem;display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
     html += '<div style="display:flex;align-items:center;gap:0.6rem;">' + avatarHtml + '<div><div style="font-weight:700;font-size:0.82rem;">' + r.name + '</div>';
-    html += '<div style="font-size:0.7rem;color:var(--muted);margin-top:0.15rem;">' + r.thisWeekCount + ' sesión' + (r.thisWeekCount !== 1 ? 'es' : '') + ' esta semana</div></div></div>';
+    html += '<div style="font-size:0.7rem;color:var(--muted);margin-top:0.15rem;">' + r.thisWeekCount + (r.thisWeekCount !== 1 ? ' sesiones' : ' sesión') + ' esta semana</div></div></div>';
     html += '<span style="font-size:0.65rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:100px;background:' + statusBg + ';color:' + statusColor + ';white-space:nowrap;">' + statusText + '</span>';
     html += '</div>';
   });
