@@ -217,6 +217,27 @@
   .pf-stat-row { display:flex; justify-content:center; gap:0.5rem; flex-wrap:wrap; margin-top:0.9rem; }
   .pf-stat-chip { display:inline-flex; align-items:center; gap:0.35rem; border-radius:100px; padding:0.4rem 0.8rem; font-size:0.7rem; font-weight:800; }
   .pf-stat-chip svg { width:13px; height:13px; flex-shrink:0; }
+  .pf-rings { display:flex; justify-content:center; gap:1.1rem; margin-top:1rem; }
+  .pf-ring-wrap { display:flex; flex-direction:column; align-items:center; gap:0.4rem; }
+  .pf-ring { width:3.6rem; height:3.6rem; border-radius:50%; display:flex; align-items:center; justify-content:center; border:3px solid; background:#fff; }
+  .pf-ring-num { font-size:0.95rem; font-weight:800; line-height:1; }
+  .pf-ring-label { font-size:0.62rem; color:var(--muted); font-weight:700; text-align:center; }
+  .pf-complete-wrap { margin-top:1rem; }
+  .pf-complete-label { font-size:0.65rem; color:var(--muted); font-weight:700; margin-bottom:0.35rem; display:flex; justify-content:space-between; }
+  .pf-complete-pct { color:var(--blue); }
+  .pf-complete-track { height:5px; border-radius:100px; background:var(--border); overflow:hidden; }
+  .pf-complete-fill { height:100%; border-radius:100px; background:linear-gradient(90deg,var(--blue),#4d7af0); transition:width 0.4s ease; }
+  .pf-bio { margin-top:0.9rem; text-align:left; border:1px dashed var(--border); border-radius:14px; padding:0.8rem 0.9rem; cursor:pointer; }
+  .pf-bio:active { border-color:var(--blue); }
+  .pf-bio-text { font-size:0.78rem; color:var(--text); line-height:1.5; white-space:pre-wrap; }
+  .pf-bio-placeholder { font-size:0.78rem; color:var(--muted); font-style:italic; line-height:1.5; }
+  .pf-bio-edit-row { display:none; margin-top:0.9rem; text-align:left; }
+  .pf-bio-edit-row.open { display:block; }
+  .pf-bio-textarea { width:100%; border:1px solid var(--border); border-radius:14px; padding:0.7rem 0.85rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; color:var(--text); resize:vertical; min-height:4.5rem; outline:none; box-sizing:border-box; }
+  .pf-bio-textarea:focus { border-color:var(--blue); }
+  .pf-bio-actions { display:flex; justify-content:flex-end; gap:0.9rem; margin-top:0.5rem; }
+  .pf-bio-save { background:var(--blue); color:#fff; border:none; border-radius:100px; padding:0.45rem 1rem; font-size:0.74rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; }
+  .pf-bio-cancel { background:none; border:none; color:var(--muted); font-size:0.74rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; }
   .pf-chat-btn { margin-top:1.1rem; display:inline-flex; align-items:center; gap:0.5rem; background:#f2f4f9; color:var(--text); border:1.5px solid var(--border); border-radius:100px; padding:0.7rem 1.4rem; font-size:0.8rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; position:relative; transition:all 0.2s ease; }
   .pf-chat-btn.has-unread { background:var(--blue); border-color:var(--blue); color:#fff; box-shadow:0 8px 18px rgba(28,85,229,0.28); }
   .pf-chat-btn:active { transform:scale(0.95); }
@@ -815,8 +836,35 @@
         <div class="pf-name" id="perfil-name">Hola</div>
         <div class="pf-role" id="perfil-role"></div>
 
-        <div class="pf-stat-row">
-          <div class="pf-stat-chip" id="pf-stat-dias" style="display:none;"></div>
+        <div class="pf-rings" id="pf-rings" style="display:none;">
+          <div class="pf-ring-wrap">
+            <div class="pf-ring" id="pf-ring-mes" style="border-color:var(--blue);color:var(--blue);"><div class="pf-ring-num" id="pf-ring-mes-num">0</div></div>
+            <div class="pf-ring-label">Este mes</div>
+          </div>
+          <div class="pf-ring-wrap">
+            <div class="pf-ring" id="pf-ring-racha" style="border-color:#C9A22B;color:#8A6D14;"><div class="pf-ring-num" id="pf-ring-racha-num">0</div></div>
+            <div class="pf-ring-label">Racha</div>
+          </div>
+          <div class="pf-ring-wrap">
+            <div class="pf-ring" id="pf-ring-total" style="border-color:#1FA35C;color:#1FA35C;"><div class="pf-ring-num" id="pf-ring-total-num">0</div></div>
+            <div class="pf-ring-label">Total</div>
+          </div>
+        </div>
+
+        <div class="pf-complete-wrap" id="pf-complete-wrap" style="display:none;">
+          <div class="pf-complete-label"><span>Tu perfil</span><span class="pf-complete-pct" id="pf-complete-pct">0%</span></div>
+          <div class="pf-complete-track"><div class="pf-complete-fill" id="pf-complete-fill" style="width:0%;"></div></div>
+        </div>
+
+        <div class="pf-bio" id="pf-bio-view" onclick="openBioEdit()">
+          <div class="pf-bio-placeholder" id="pf-bio-display">Contame tu meta, qué te motiva, tus hobbies 💪 Tocá para completar tu bio.</div>
+        </div>
+        <div class="pf-bio-edit-row" id="pf-bio-edit-row">
+          <textarea class="pf-bio-textarea" id="pf-bio-textarea" placeholder="Ej: Mi meta es sentirme fuerte y con más energía. Me motiva verme mejor cada semana. Me encanta el senderismo los fines de semana 🏔️" maxlength="280"></textarea>
+          <div class="pf-bio-actions">
+            <button class="pf-bio-cancel" onclick="closeBioEdit()">Cancelar</button>
+            <button class="pf-bio-save" onclick="saveBio()">Guardar</button>
+          </div>
         </div>
 
         <button class="pf-chat-btn" id="pf-chat-btn" onclick="openChatModal()">
@@ -1491,6 +1539,11 @@ function renderPortalScreen(portal, perfil) {
   document.getElementById('perfil-name').textContent = perfil.nombre || firstName || 'Hola';
   renderAvatar(perfil.fotoPerfil, currentClientName);
 
+  CURRENT_PERFIL_DATA = perfil;
+  CURRENT_PORTAL_DATA = portal;
+  renderBioDisplay(perfil.bio);
+  updateProfileCompletion();
+
   CURRENT_ENTRENO_LOGS = portal.entrenoLogs || {};
   loadRutinaTab(currentClientId);
   renderTransformacion(portal.fotosProgreso || {});
@@ -1692,6 +1745,8 @@ function handleAvatarFileSelect(input) {
     return db().ref('clientasPortal/' + currentUid + '/perfil/fotoPerfil').set(url).then(function() { return url; });
   }).then(function(url) {
     renderAvatar(url);
+    CURRENT_PERFIL_DATA.fotoPerfil = url;
+    updateProfileCompletion();
   }).catch(function(e) {
     console.warn('avatar upload error', e);
     els.forEach(function(el, i) { el.innerHTML = prevHtmls[i]; });
@@ -2335,12 +2390,17 @@ function renderTrainingTracker(diasEntrenados) {
   });
   document.getElementById('track-mes').textContent = mesCount;
   document.getElementById('track-summary-count').textContent = mesCount + (mesCount === 1 ? ' día' : ' días') + ' este mes';
-  var pfStatDias = document.getElementById('pf-stat-dias');
-  if (pfStatDias) {
-    pfStatDias.style.display = '';
-    pfStatDias.style.background = 'var(--blue-lt)';
-    pfStatDias.style.color = 'var(--blue)';
-    pfStatDias.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 19.5 9 13l4 3 7-9"/><path d="M15.5 6.5H20v4.5"/></svg>' + mesCount + (mesCount === 1 ? ' día' : ' días') + ' este mes';
+
+  var totalCount = 0;
+  Object.keys(CURRENT_DIAS_ENTRENADOS).forEach(function(key) { if (CURRENT_DIAS_ENTRENADOS[key]) totalCount++; });
+  var rachaCount = calcRacha(CURRENT_DIAS_ENTRENADOS);
+
+  var ringsEl = document.getElementById('pf-rings');
+  if (ringsEl) {
+    ringsEl.style.display = '';
+    document.getElementById('pf-ring-mes-num').textContent = mesCount;
+    document.getElementById('pf-ring-racha-num').textContent = rachaCount;
+    document.getElementById('pf-ring-total-num').textContent = totalCount;
   }
 
   // Meta del mes: días/semana × 4 semanas — mismo criterio que ya usa el
@@ -2378,6 +2438,83 @@ function renderTrainingTracker(diasEntrenados) {
       toggleDiaEntrenado(this.getAttribute('data-dk'));
     });
   });
+}
+
+function fmtDateKey(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+// Racha = días consecutivos hasta hoy. Si hoy todavía no se marcó, no
+// rompemos la racha por eso — el día puede no haber terminado — así que
+// arrancamos a contar desde ayer en ese caso.
+function calcRacha(dias) {
+  var cursor = new Date();
+  cursor.setHours(0, 0, 0, 0);
+  if (!dias[fmtDateKey(cursor)]) cursor.setDate(cursor.getDate() - 1);
+  var count = 0;
+  while (dias[fmtDateKey(cursor)]) {
+    count++;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return count;
+}
+
+// ── BIO Y PERFIL COMPLETO ──
+var CURRENT_BIO = '';
+var CURRENT_PERFIL_DATA = {};
+var CURRENT_PORTAL_DATA = {};
+
+function renderBioDisplay(bio) {
+  CURRENT_BIO = bio || '';
+  var el = document.getElementById('pf-bio-display');
+  if (!el) return;
+  if (CURRENT_BIO) {
+    el.textContent = CURRENT_BIO;
+    el.className = 'pf-bio-text';
+  } else {
+    el.textContent = 'Contame tu meta, qué te motiva, tus hobbies 💪 Tocá para completar tu bio.';
+    el.className = 'pf-bio-placeholder';
+  }
+}
+
+function openBioEdit() {
+  document.getElementById('pf-bio-view').style.display = 'none';
+  document.getElementById('pf-bio-edit-row').classList.add('open');
+  var ta = document.getElementById('pf-bio-textarea');
+  ta.value = CURRENT_BIO;
+  ta.focus();
+}
+
+function closeBioEdit() {
+  document.getElementById('pf-bio-edit-row').classList.remove('open');
+  document.getElementById('pf-bio-view').style.display = '';
+}
+
+function saveBio() {
+  var val = document.getElementById('pf-bio-textarea').value.trim();
+  renderBioDisplay(val);
+  closeBioEdit();
+  CURRENT_PERFIL_DATA.bio = val;
+  updateProfileCompletion();
+  db().ref('clientasPortal/' + currentUid + '/perfil/bio').set(val).catch(function(e) {
+    console.warn('saveBio error', e.message);
+  });
+}
+
+function updateProfileCompletion() {
+  var wrap = document.getElementById('pf-complete-wrap');
+  if (!wrap) return;
+  var items = [
+    !!CURRENT_PERFIL_DATA.fotoPerfil,
+    !!(CURRENT_PERFIL_DATA.bio && CURRENT_PERFIL_DATA.bio.trim()),
+    !!(CURRENT_PORTAL_DATA.fotosProgreso && Object.keys(CURRENT_PORTAL_DATA.fotosProgreso).length)
+  ];
+  var done = items.filter(Boolean).length;
+  var pct = Math.round(done / items.length * 100);
+  if (pct >= 100) { wrap.style.display = 'none'; return; }
+  wrap.style.display = '';
+  document.getElementById('pf-complete-pct').textContent = pct + '%';
+  document.getElementById('pf-complete-fill').style.width = pct + '%';
 }
 
 function toggleDiaEntrenado(key) {
