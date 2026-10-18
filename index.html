@@ -228,7 +228,7 @@
   .pf-ring-subtext { font-size:0.52rem; font-weight:700; line-height:1.3; text-transform:uppercase; letter-spacing:0.02em; }
   .pf-ring-liquid { position:relative; width:4.6rem; height:4.6rem; border-radius:50%; overflow:hidden; box-shadow:0 6px 14px rgba(15,63,168,0.2); }
   .pf-ring-liquid svg { width:100%; height:100%; display:block; }
-  .pf-ring-pct { font-size:1.05rem; font-weight:800; line-height:1; color:#0a1a4d; text-shadow:0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff; }
+  .pf-ring-pct { font-size:1.05rem; font-weight:800; line-height:1; color:#F6D16A; }
   .pf-ring-label { font-size:0.62rem; color:var(--muted); font-weight:700; text-align:center; }
   .pf-complete-wrap { margin-top:1rem; }
   .pf-complete-label { font-size:0.65rem; color:var(--muted); font-weight:700; margin-bottom:0.35rem; display:flex; justify-content:space-between; }
@@ -249,11 +249,13 @@
   .pf-bio-actions { display:flex; justify-content:flex-end; gap:0.9rem; margin-top:0.5rem; }
   .pf-bio-save { background:var(--blue); color:#fff; border:none; border-radius:100px; padding:0.45rem 1rem; font-size:0.74rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; }
   .pf-bio-cancel { background:none; border:none; color:var(--muted); font-size:0.74rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; }
-  .pf-chat-btn { margin-top:1.1rem; display:inline-flex; align-items:center; gap:0.5rem; background:#f2f4f9; color:var(--text); border:1.5px solid var(--border); border-radius:100px; padding:0.7rem 1.4rem; font-size:0.8rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; position:relative; transition:all 0.2s ease; }
-  .pf-chat-btn.has-unread { background:var(--blue); border-color:var(--blue); color:#fff; box-shadow:0 8px 18px rgba(28,85,229,0.28); }
-  .pf-chat-btn:active { transform:scale(0.95); }
-  #chat-unread-dot { display:none; position:absolute; top:-3px; right:-3px; width:10px; height:10px; border-radius:50%; background:#e5486b; border:2px solid #fff; }
-  .pf-chat-btn.has-unread #chat-unread-dot { display:block; }
+  .chat-fab { position:fixed; right:1.1rem; bottom:1.1rem; z-index:40; width:3.4rem; height:3.4rem; border-radius:50%; background:var(--blue); color:#fff; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 8px 20px rgba(28,85,229,0.4); transition:transform 0.15s ease; }
+  .chat-fab svg { width:22px; height:22px; flex-shrink:0; }
+  .chat-fab:active { transform:scale(0.92); }
+  .chat-fab.has-unread { animation:fa-chat-pulse 1.6s ease-in-out infinite; }
+  @keyframes fa-chat-pulse { 0%,100% { box-shadow:0 8px 20px rgba(28,85,229,0.4); } 50% { box-shadow:0 8px 20px rgba(28,85,229,0.4), 0 0 0 7px rgba(28,85,229,0.18); } }
+  #chat-unread-dot { display:none; position:absolute; top:-1px; right:-1px; width:12px; height:12px; border-radius:50%; background:#e5486b; border:2px solid #fff; }
+  .chat-fab.has-unread #chat-unread-dot { display:block; }
   .anuncios-strip { display:flex; gap:0.6rem; overflow-x:auto; padding-bottom:0.2rem; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
   .anuncios-strip::-webkit-scrollbar { display:none; }
   .anuncio-card { flex-shrink:0; width:min(78vw,20rem); display:flex; align-items:center; gap:0.65rem; background:linear-gradient(135deg,#F5ECCB,#FBF4DC); border:1px solid #E8D8A0; border-radius:16px; padding:0.85rem 0.95rem; box-shadow:0 3px 12px rgba(122,92,0,0.08); }
@@ -829,6 +831,11 @@
     </div>
   </div>
 
+  <button class="chat-fab" id="chat-fab" onclick="openChatModal()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10H9l-4 3.5v-3.5H4Z"/></svg>
+    <span id="chat-unread-dot"></span>
+  </button>
+
   <div class="dash-body">
 
     <!-- RUTINA -->
@@ -913,17 +920,11 @@
             <button class="pf-bio-save" onclick="saveBio()">Guardar</button>
           </div>
         </div>
-
-        <button class="pf-chat-btn" id="pf-chat-btn" onclick="openChatModal()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0;"><path d="M4 5.5h16v10H9l-4 3.5v-3.5H4Z"/></svg>
-          Chat
-          <span id="chat-unread-dot"></span>
-        </button>
       </div>
 
-      <details class="track-card">
+      <details class="track-card" open>
         <summary class="track-summary">
-          <span class="track-summary-label">Días entrenados</span>
+          <span class="track-summary-label">Historial de entrenos</span>
           <span class="track-summary-right">
             <span class="track-summary-count" id="track-summary-count">0 este mes</span>
             <span class="track-summary-chevron">▾</span>
@@ -2986,7 +2987,7 @@ function initChatListener() {
 }
 
 function updateChatUnreadDot() {
-  var btn = document.getElementById('pf-chat-btn');
+  var btn = document.getElementById('chat-fab');
   if (!btn) return;
   db().ref('clientasPortal/' + currentUid + '/chatMeta/lastReadByClient').once('value').then(function(snap) {
     var lastRead = snap.val() || 0;
@@ -3002,7 +3003,7 @@ function openChatModal() {
   document.getElementById('chat-modal').style.display = 'flex';
   renderChatMessages();
   db().ref('clientasPortal/' + currentUid + '/chatMeta/lastReadByClient').set(Date.now());
-  var btn = document.getElementById('pf-chat-btn');
+  var btn = document.getElementById('chat-fab');
   if (btn) btn.classList.remove('has-unread');
 }
 
