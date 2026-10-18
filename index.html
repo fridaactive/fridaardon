@@ -219,9 +219,10 @@
   .pf-stat-chip svg { width:13px; height:13px; flex-shrink:0; }
   .pf-rings { display:flex; justify-content:center; gap:1.1rem; margin-top:1rem; }
   .pf-ring-wrap { display:flex; flex-direction:column; align-items:center; gap:0.4rem; }
-  .pf-ring { width:4.3rem; height:4.3rem; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.1rem; border:3px solid; background:#fff; }
-  .pf-ring-emoji { font-size:1.25rem; line-height:1; }
-  .pf-ring-num { font-size:0.85rem; font-weight:800; line-height:1; }
+  .pf-ring-progress { position:relative; width:4.6rem; height:4.6rem; }
+  .pf-ring-progress svg { width:100%; height:100%; }
+  .pf-ring-center { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+  .pf-ring-num { font-size:1.15rem; font-weight:800; line-height:1; }
   .pf-ring-label { font-size:0.62rem; color:var(--muted); font-weight:700; text-align:center; }
   .pf-complete-wrap { margin-top:1rem; }
   .pf-complete-label { font-size:0.65rem; color:var(--muted); font-weight:700; margin-bottom:0.35rem; display:flex; justify-content:space-between; }
@@ -839,16 +840,23 @@
 
         <div class="pf-rings" id="pf-rings" style="display:none;">
           <div class="pf-ring-wrap">
-            <div class="pf-ring" id="pf-ring-mes" style="border-color:var(--blue);">
-              <div class="pf-ring-emoji">📅</div>
-              <div class="pf-ring-num" id="pf-ring-mes-num" style="color:var(--blue);">0</div>
+            <div class="pf-ring-progress">
+              <svg viewBox="0 0 64 64">
+                <defs><linearGradient id="gradMesRing" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5b8bf5"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
+                <circle cx="32" cy="32" r="27" fill="none" stroke="#EEF2FA" stroke-width="6"/>
+                <circle cx="32" cy="32" r="27" fill="none" stroke="url(#gradMesRing)" stroke-width="6" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="169.6" transform="rotate(-90 32 32)" id="pf-ring-mes-arc" style="transition:stroke-dashoffset 0.6s ease;"/>
+              </svg>
+              <div class="pf-ring-center"><div class="pf-ring-num" id="pf-ring-mes-num" style="color:#4a3ea8;">0</div></div>
             </div>
             <div class="pf-ring-label">Este mes</div>
           </div>
           <div class="pf-ring-wrap">
-            <div class="pf-ring" id="pf-ring-meta" style="border-color:var(--blue-dk);">
-              <div class="pf-ring-emoji">🎯</div>
-              <div class="pf-ring-num" id="pf-ring-meta-num" style="color:var(--blue-dk);">-</div>
+            <div class="pf-ring-progress">
+              <svg viewBox="0 0 64 64">
+                <defs><linearGradient id="gradMetaRing" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F6D16A"/><stop offset="100%" stop-color="#C9622B"/></linearGradient></defs>
+                <circle cx="32" cy="32" r="27" fill="none" stroke="url(#gradMetaRing)" stroke-width="6" stroke-linecap="round"/>
+              </svg>
+              <div class="pf-ring-center"><div class="pf-ring-num" id="pf-ring-meta-num" style="color:#9a5a1e;">-</div></div>
             </div>
             <div class="pf-ring-label">Meta del mes</div>
           </div>
@@ -2409,15 +2417,18 @@ function renderTrainingTracker(diasEntrenados) {
       document.getElementById('track-meta').textContent = meta !== null ? meta : '-';
       var ringMetaNum = document.getElementById('pf-ring-meta-num');
       if (ringMetaNum) ringMetaNum.textContent = meta !== null ? meta : '-';
+      setRingProgress(mesCount, meta);
     }).catch(function() {
       document.getElementById('track-meta').textContent = '-';
       var ringMetaNum = document.getElementById('pf-ring-meta-num');
       if (ringMetaNum) ringMetaNum.textContent = '-';
+      setRingProgress(mesCount, null);
     });
   } else {
     document.getElementById('track-meta').textContent = '-';
     var ringMetaNumEl = document.getElementById('pf-ring-meta-num');
     if (ringMetaNumEl) ringMetaNumEl.textContent = '-';
+    setRingProgress(mesCount, null);
   }
 
   // Grilla del mes actual, con los días alineados por día de la semana —
@@ -2441,6 +2452,17 @@ function renderTrainingTracker(diasEntrenados) {
       toggleDiaEntrenado(this.getAttribute('data-dk'));
     });
   });
+}
+
+// Pinta el arco del anillo "Este mes" según el avance real hacia la meta
+// del mes (días/semana × 4). Sin meta conocida, el arco queda lleno a modo
+// decorativo en vez de vacío.
+function setRingProgress(mesCount, meta) {
+  var arc = document.getElementById('pf-ring-mes-arc');
+  if (!arc) return;
+  var circumference = 169.6;
+  var pct = meta ? Math.max(0, Math.min(1, mesCount / meta)) : 1;
+  arc.setAttribute('stroke-dashoffset', String(circumference * (1 - pct)));
 }
 
 // ── BIO Y PERFIL COMPLETO ──
