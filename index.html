@@ -80,6 +80,13 @@
   .track-summary-chevron { font-size:0.7rem; color:var(--muted); transition:transform 0.15s; }
   .track-card[open] .track-summary-chevron { transform:rotate(180deg); }
   .track-body { padding:0 1.25rem 1.1rem; }
+  .benef-faq { background:linear-gradient(135deg,#FFC94A,#F3932B); border:none; border-radius:18px; margin-bottom:1.1rem; overflow:hidden; box-shadow:0 6px 18px rgba(243,147,43,0.3); }
+  .benef-faq-summary { list-style:none; cursor:pointer; padding:1.1rem 1.25rem; display:flex; justify-content:space-between; align-items:center; -webkit-tap-highlight-color:transparent; }
+  .benef-faq-summary::-webkit-details-marker { display:none; }
+  .benef-faq-label { font-size:0.95rem; font-weight:800; color:#fff; display:flex; align-items:center; gap:0.55rem; }
+  .benef-faq-chevron { font-size:0.95rem; font-weight:800; color:#fff; transition:transform 0.15s; flex-shrink:0; }
+  .benef-faq[open] .benef-faq-chevron { transform:rotate(180deg); }
+  .benef-faq-body { padding:0.3rem 1.25rem 1.2rem; background:#fff; }
   .card-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--blue); font-weight:700; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.5rem; }
   .card-label::after { content:''; flex:1; height:1px; background:var(--border); }
   .btn-primary { display:block; width:100%; background:var(--blue); color:#fff; text-align:center; padding:0.8rem; border-radius:14px; font-weight:700; font-size:0.82rem; text-decoration:none; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; transition:transform 0.12s, box-shadow 0.12s; box-shadow:0 4px 14px rgba(28,85,229,0.25); }
@@ -983,12 +990,12 @@
 
     <!-- BENEFICIOS -->
     <div class="tab-panel" id="tab-beneficios">
-      <details class="track-card">
-        <summary class="track-summary">
-          <span class="track-summary-label">¿Cómo canjear tu cupón?</span>
-          <span class="track-summary-right"><span class="track-summary-chevron">▾</span></span>
+      <details class="benef-faq">
+        <summary class="benef-faq-summary">
+          <span class="benef-faq-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex-shrink:0;"><circle cx="12" cy="12" r="9.5"/><path d="M9.5 9.2a2.5 2.5 0 0 1 4.8.8c0 1.6-2.3 1.8-2.3 3.5"/><path d="M12 17.2v.1"/></svg>¿Cómo canjear tu cupón?</span>
+          <span class="benef-faq-chevron">▾</span>
         </summary>
-        <div class="track-body">
+        <div class="benef-faq-body">
           <div class="rt-acl-item"><div class="rt-acl-num">1</div><div class="rt-acl-text">Tocá el botón "Canjear cupón".</div></div>
           <div class="rt-acl-item"><div class="rt-acl-num">2</div><div class="rt-acl-text">Enviá el mensaje para canjear tu cupón por el chat.</div></div>
           <div class="rt-acl-item"><div class="rt-acl-num">3</div><div class="rt-acl-text">Esperá la confirmación por mensaje.</div></div>
@@ -3026,33 +3033,149 @@ function renderBenefProfileHtml(b) {
 // Sin código: Frida le avisa antes a la marca que esta clienta va a pasar
 // (ver canjearBeneficio), así que el comprobante de identidad acá es el
 // nombre de la clienta, no un código que la marca tendría que verificar.
+//
+// Antes esto generaba un PDF con un formato de vale chico (100x74mm), pero
+// muchos visores de PDF de celular lo abrían como una página enorme en
+// blanco con el cupón diminuto y cortado en una esquina. Ahora se genera
+// como imagen (canvas → PNG), con el mismo diseño que el cupón de la app
+// y mostrando los dos logos — FridaActive y la marca — así se ve bien en
+// cualquier galería o visor de imágenes.
 function descargarVoucher(beneficioId) {
   var b = LOADED_BENEFICIOS[beneficioId];
   var miCanje = b && b.canjes && b.canjes[currentUid] && b.canjes[currentUid][currentCycleKey];
-  if (!b || !miCanje || !window.jspdf) { alert('No se pudo generar el vale, intentá de nuevo.'); return; }
-  var doc = new window.jspdf.jsPDF({ unit: 'mm', format: [100, 74] });
-  doc.setFillColor(28, 85, 229);
-  doc.rect(0, 0, 100, 74, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(7);
-  doc.text('ALIANZA FRIDAACTIVE × ' + (b.marca || '').toUpperCase(), 8, 10);
-  if (b.descuento) {
-    doc.setFontSize(11);
-    doc.text(b.descuento, 8, 19);
-  }
-  doc.setFillColor(255, 255, 255);
-  doc.roundedRect(8, 26, 84, 22, 3, 3, 'F');
-  doc.setTextColor(28, 85, 229);
-  doc.setFontSize(7);
-  doc.text('CUPÓN ÚNICO · CLIENTA', 12, 34);
-  doc.setFontSize(16);
-  doc.text(currentClientName || '', 12, 44);
+  if (!b || !miCanje) { alert('No se pudo generar el cupón, intentá de nuevo.'); return; }
+  generarCuponCanvas(b, function(canvas) {
+    try {
+      canvas.toBlob(function(blob) {
+        if (!blob) { alert('No se pudo generar el cupón, intentá de nuevo.'); return; }
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'cupon-' + (b.marca || 'fridaactive').toLowerCase().replace(/\s+/g, '-') + '-' + currentCycleKey + '.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function() { URL.revokeObjectURL(url); }, 2000);
+      });
+    } catch (e) {
+      alert('No se pudo generar el cupón, intentá de nuevo.');
+    }
+  });
+}
 
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(6.5);
-  doc.text('Presentá este cupón en el negocio — Frida ya avisó que ibas a pasar.', 8, 56);
-  doc.text('Válido durante ' + cycleLabel(currentCycleKey), 8, 62);
-  doc.save('beneficio-' + (b.marca || 'fridaactive').toLowerCase().replace(/\s+/g, '-') + '-' + currentCycleKey + '.pdf');
+function cvRoundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function generarCuponCanvas(b, cb) {
+  var W = 900, H = 620;
+  var canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  var ctx = canvas.getContext('2d');
+
+  function draw(logoImg) {
+    var grad = ctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, '#1C55E5');
+    grad.addColorStop(1, '#F3932B');
+    ctx.fillStyle = grad;
+    cvRoundRect(ctx, 0, 0, W, H, 28);
+    ctx.fill();
+
+    ctx.fillStyle = '#fff';
+    ctx.font = '700 32px "DM Sans", sans-serif';
+    ctx.fillText('fridaactive', 48, 72);
+    ctx.font = '400 28px "DM Sans", sans-serif';
+    ctx.fillText('×', 300, 72);
+
+    var logoX = 350, logoY = 36, logoSize = 60;
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    if (logoImg) {
+      ctx.clip();
+      ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+    } else {
+      ctx.fillStyle = '#1C55E5';
+      ctx.font = '700 28px "DM Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText((b.marca || '?').charAt(0).toUpperCase(), logoX + logoSize / 2, logoY + logoSize / 2 + 10);
+      ctx.textAlign = 'left';
+    }
+    ctx.restore();
+
+    ctx.fillStyle = '#fff';
+    ctx.font = '700 28px "DM Sans", sans-serif';
+    ctx.fillText(b.marca || '', logoX + logoSize + 18, 74);
+
+    var panelX = 48, panelY = 170, panelW = W - 96, panelH = 390;
+    ctx.fillStyle = '#fff';
+    cvRoundRect(ctx, panelX, panelY, panelW, panelH, 20);
+    ctx.fill();
+
+    ctx.fillStyle = '#1C55E5';
+    ctx.font = '700 17px "DM Sans", sans-serif';
+    ctx.fillText('CUPÓN ÚNICO · CLIENTA', panelX + 40, panelY + 55);
+
+    ctx.fillStyle = '#131722';
+    ctx.font = '800 46px "DM Sans", sans-serif';
+    ctx.fillText(currentClientName || '', panelX + 40, panelY + 115);
+
+    if (b.descuento) {
+      ctx.fillStyle = '#2a7a2a';
+      ctx.font = '700 30px "DM Sans", sans-serif';
+      ctx.fillText(b.descuento, panelX + 40, panelY + 160);
+    }
+
+    ctx.fillStyle = '#EAF0FF';
+    cvRoundRect(ctx, panelX + 40, panelY + 190, 160, 38, 19);
+    ctx.fill();
+    ctx.fillStyle = '#1C55E5';
+    ctx.font = '700 15px "DM Sans", sans-serif';
+    ctx.fillText('CUPÓN ÚNICO', panelX + 60, panelY + 214);
+
+    ctx.strokeStyle = '#E3E7F0';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([8, 8]);
+    ctx.beginPath();
+    ctx.moveTo(panelX + 24, panelY + 265);
+    ctx.lineTo(panelX + panelW - 24, panelY + 265);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#7a8499';
+    ctx.font = '600 17px "DM Sans", sans-serif';
+    ctx.fillText('Válido durante ' + cycleLabel(currentCycleKey), panelX + 40, panelY + 305);
+    ctx.fillText('Cupones válidos solo en el local', panelX + 40, panelY + 332);
+
+    cb(canvas);
+  }
+
+  function startDraw() {
+    if (b.logoUrl) {
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function() { draw(img); };
+      img.onerror = function() { draw(null); };
+      img.src = b.logoUrl;
+    } else {
+      draw(null);
+    }
+  }
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(startDraw, startDraw);
+  } else {
+    startDraw();
+  }
 }
 
 // No hay verificación automática con la marca todavía: el canje real pasa
