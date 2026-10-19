@@ -4341,7 +4341,7 @@ window.onload = function() {
 
 function syncAllFirebaseData() {
     // Sync all data from Firebase first, then show dashboard
-    var totalRequests = 11;
+    var totalRequests = 12;
     var completedRequests = 0;
 
     function onFirebaseReady() {
@@ -4413,6 +4413,22 @@ function syncAllFirebaseData() {
         var local = localStorage.getItem('fa_client_payments');
         if (local) { try { var d = JSON.parse(local); if (Object.keys(d).length > 0) fbSet('client_payments', d); } catch(e){} }
       }
+      onFirebaseReady();
+    });
+
+    // Asistencia de clientas presenciales: antes solo se traía por clienta al
+    // abrir su detalle (renderAsistencia), así que en un navegador/dispositivo
+    // nuevo countSessionsInCycle() podía leer datos vacíos de localStorage y
+    // mostrar mal si una clienta ya agotó sus sesiones del ciclo. La traemos
+    // completa acá, igual que el resto de los datos, para que esté lista
+    // desde el primer render de la lista.
+    fbGet('asistencia', function(asistData) {
+      if (asistData) {
+        Object.keys(asistData).forEach(function(id) {
+          localStorage.setItem('fa_asist_' + id, JSON.stringify(asistData[id] || {}));
+        });
+      }
+      renderClientsList();
       onFirebaseReady();
     });
 
