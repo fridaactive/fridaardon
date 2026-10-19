@@ -117,6 +117,7 @@
   .ex-prescribed { font-size:0.7rem; color:var(--muted); margin-bottom:0.5rem; }
   .ex-inputs { display:flex; gap:0.5rem; }
   .ex-input-group { flex:1; min-width:0; }
+  .ex-input-group-fixed { flex:0 0 auto; }
   .ex-input-label { font-size:0.62rem; color:var(--muted); font-weight:600; margin-bottom:0.25rem; display:block; }
   .ex-inputs input { width:100%; min-width:0; border:1.5px solid var(--border); border-radius:8px; padding:0.5rem 0.6rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; outline:none; }
   .ex-inputs input:focus { border-color:var(--blue); }
@@ -2064,19 +2065,21 @@ function renderEtmTimerUI() {
   applyExTimerDom(t, 'etm-num', 'etm-ring', EX_TIMER_RING_CIRC, 'etm-btn');
 }
 
-// ── Esfuerzo percibido (1-10) por ejercicio: controlador compacto −/+ en
-// una sola línea (ocupa lo mismo que un campo normal), en vez de una fila
-// de 10 chips que se comía mucho espacio horizontal o un teclado numérico.
-function renderEsfuerzoRowHtml(exId, exKey, lastEsfuerzo) {
+// ── Esfuerzo percibido (1-10) por ejercicio: controlador compacto −/+,
+// a la par de Carga/Reps (o Segundos) en la misma fila — los cuadros de
+// carga y reps son más anchos de lo que necesitan, así que de ese ancho
+// sobrante sale el lugar para este.
+function renderEsfuerzoGroupHtml(exId, exKey, lastEsfuerzo) {
   var val = lastEsfuerzo ? escapeHtml(String(lastEsfuerzo)) : '–';
-  var html = '<div style="display:flex;align-items:center;gap:0.6rem;margin-top:0.6rem;">';
-  html += '<label class="ex-input-label" style="margin-bottom:0;">Esfuerzo (1-10)</label>';
+  var html = '<div class="ex-input-group ex-input-group-fixed">';
+  html += '<label class="ex-input-label">Esfuerzo</label>';
   html += '<div class="ex-stepper">';
   html += '<button type="button" class="ex-stepper-btn" onclick="stepEsfuerzo(\'' + exKey + '\',-1)">−</button>';
   html += '<div class="ex-stepper-val" id="esfuerzo-val-' + exKey + '">' + val + '</div>';
   html += '<button type="button" class="ex-stepper-btn" onclick="stepEsfuerzo(\'' + exKey + '\',1)">+</button>';
-  html += '</div></div>';
+  html += '</div>';
   html += '<input type="hidden" data-ex="' + exId + '" data-field="esfuerzo" id="esfuerzo-input-' + exKey + '" value="' + (lastEsfuerzo ? escapeHtml(String(lastEsfuerzo)) : '') + '">';
+  html += '</div>';
   return html;
 }
 
@@ -2160,8 +2163,8 @@ function renderExerciseBlocksHtml(day) {
         var lastSegs = lastLogT && lastLogT.segundos ? escapeHtml(String(lastLogT.segundos)) : '';
         html += '<div class="ex-inputs">';
         html += '<div class="ex-input-group"><label class="ex-input-label">Segundos logrados</label><input type="number" step="1" placeholder="' + totalSecs + '" value="' + lastSegs + '" data-ex="' + ex.id + '" data-field="segundos" id="segundos-input-' + exTimerKey + '"></div>';
+        html += renderEsfuerzoGroupHtml(ex.id, exTimerKey, lastLogT && lastLogT.esfuerzo);
         html += '</div>';
-        html += renderEsfuerzoRowHtml(ex.id, exTimerKey, lastLogT && lastLogT.esfuerzo);
       } else {
         if (prescribed.length) html += '<div class="ex-prescribed">Repeticiones: ' + prescribed.join(' · ') + '</div>';
         var lastLog = findLastExerciseLog(day.id, ex.id);
@@ -2170,8 +2173,8 @@ function renderExerciseBlocksHtml(day) {
         html += '<div class="ex-inputs">';
         html += '<div class="ex-input-group"><label class="ex-input-label">Carga (lbs)</label><input type="number" step="0.5" placeholder="0" value="' + lastCarga + '" data-ex="' + ex.id + '" data-field="carga"></div>';
         html += '<div class="ex-input-group"><label class="ex-input-label">Reps hechas</label><input type="text" placeholder="0" value="' + lastReps + '" data-ex="' + ex.id + '" data-field="reps"></div>';
+        html += renderEsfuerzoGroupHtml(ex.id, exTimerKey, lastLog && lastLog.esfuerzo);
         html += '</div>';
-        html += renderEsfuerzoRowHtml(ex.id, exTimerKey, lastLog && lastLog.esfuerzo);
       }
       html += '</div></div>';
     });
