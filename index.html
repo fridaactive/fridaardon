@@ -109,9 +109,10 @@
   .ex-name { font-size:0.82rem; font-weight:700; margin-bottom:0.2rem; }
   .ex-prescribed { font-size:0.7rem; color:var(--muted); margin-bottom:0.5rem; }
   .ex-inputs { display:flex; gap:0.5rem; }
-  .ex-inputs input { flex:1; min-width:0; border:1.5px solid var(--border); border-radius:8px; padding:0.5rem 0.6rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; outline:none; }
+  .ex-input-group { flex:1; min-width:0; }
+  .ex-input-label { font-size:0.62rem; color:var(--muted); font-weight:600; margin-bottom:0.25rem; display:block; }
+  .ex-inputs input { width:100%; min-width:0; border:1.5px solid var(--border); border-radius:8px; padding:0.5rem 0.6rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; outline:none; }
   .ex-inputs input:focus { border-color:var(--blue); }
-  .ex-progress-btn { display:flex; align-items:center; justify-content:center; gap:0.4rem; width:100%; margin-top:0.5rem; background:#F5ECCB; color:#7A5C00; border:1.5px solid #E8D8A0; border-radius:10px; padding:0.5rem; font-size:0.72rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; }
 
   /* ── RUTINA: mensaje + días desplegables ── */
   .rt-msg-card { background:var(--grad); border:1.5px solid var(--border); border-radius:16px; padding:1.15rem 1.25rem; margin-bottom:1.1rem; position:relative; overflow:hidden; }
@@ -1925,12 +1926,13 @@ function renderExerciseBlocksHtml(day) {
       var videoUrl = bankItem && bankItem.video;
       var nota = bankItem && bankItem.descripcion;
 
+      var hasHistorial = tipo !== 'tiempo';
       html += '<div class="rt-blq-item">';
       html += '<div class="rt-ex-num">' + label + '</div>';
       html += '<div style="flex:1;min-width:0;">';
       html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;flex-wrap:wrap;">';
       html += '<div class="ex-name">' + escapeHtml(ex.name) + '</div>';
-      html += '<div style="display:flex;gap:0.4rem;flex-shrink:0;">';
+      html += '<div style="display:flex;gap:0.4rem;flex-shrink:0;flex-wrap:wrap;">';
       if (videoUrl || nota) {
         // Minimalista, en línea con los íconos de la barra de pestañas —
         // sin emojis en la interfaz.
@@ -1939,6 +1941,12 @@ function renderExerciseBlocksHtml(day) {
           : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M7 3.5h7l4 4v13H7Z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></svg>';
         var exBtnLabel = videoUrl ? 'Ver ejercicio' : 'Ver nota';
         html += '<button type="button" onclick="showExerciseVideo(\'' + jsAttrEscape(videoUrl || '') + '\', \'' + jsAttrEscape(nota || '') + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">' + exBtnIcon + exBtnLabel + '</button>';
+      }
+      if (hasHistorial) {
+        // Mismo estilo de pill que "Ver ejercicio"/"Ver nota", en vez del
+        // botón ancho y amarillo de antes que le daba demasiado peso visual
+        // a algo que es solo un plus (ver el historial de cargas).
+        html += '<button type="button" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:#F5ECCB;color:#7A5C00;border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Historial</button>';
       }
       html += '</div></div>';
       if (tipo === 'tiempo') {
@@ -1949,10 +1957,9 @@ function renderExerciseBlocksHtml(day) {
         var lastCarga = lastLog && lastLog.carga ? escapeHtml(String(lastLog.carga)) : '';
         var lastReps = lastLog && lastLog.reps ? escapeHtml(String(lastLog.reps)) : '';
         html += '<div class="ex-inputs">';
-        html += '<input type="number" step="0.5" placeholder="Carga (lbs)" value="' + lastCarga + '" data-ex="' + ex.id + '" data-field="carga">';
-        html += '<input type="text" placeholder="Reps hechas" value="' + lastReps + '" data-ex="' + ex.id + '" data-field="reps">';
+        html += '<div class="ex-input-group"><label class="ex-input-label">Carga (lbs)</label><input type="number" step="0.5" placeholder="0" value="' + lastCarga + '" data-ex="' + ex.id + '" data-field="carga"></div>';
+        html += '<div class="ex-input-group"><label class="ex-input-label">Reps hechas</label><input type="text" placeholder="0" value="' + lastReps + '" data-ex="' + ex.id + '" data-field="reps"></div>';
         html += '</div>';
-        html += '<button type="button" class="ex-progress-btn" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Progresión de mis cargas</button>';
       }
       html += '</div></div>';
     });
