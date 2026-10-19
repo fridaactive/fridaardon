@@ -132,15 +132,6 @@
   .ex-timer-controls-label { font-size:0.68rem; color:var(--muted); }
   .ex-timer-btn { border:none; border-radius:8px; padding:0.5rem; font-size:0.72rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; background:var(--blue); color:#fff; }
   .ex-timer-btn.running { background:#c44; }
-  .vmt-overlay-btn { display:none; position:absolute; left:50%; bottom:10px; transform:translateX(-50%); background:rgba(0,0,0,0.6); border:none; border-radius:100px; padding:0.3rem 0.9rem 0.3rem 0.3rem; align-items:center; gap:0.5rem; cursor:pointer; z-index:2; }
-  .vmt-overlay-btn.active { display:flex; }
-  .vmt-ring-wrap { position:relative; width:38px; height:38px; flex-shrink:0; }
-  .vmt-ring-wrap svg { width:38px; height:38px; transform:rotate(-90deg); }
-  .vmt-ring-bg { fill:none; stroke:rgba(255,255,255,0.25); stroke-width:4; }
-  .vmt-ring-progress { fill:none; stroke:#F6D16A; stroke-width:4; stroke-linecap:round; stroke-dasharray:94.25; stroke-dashoffset:0; transition:stroke-dashoffset 1s linear; }
-  .vmt-ring-progress.done { stroke:#8fd98f; }
-  .vmt-num { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:800; color:#fff; }
-  .vmt-overlay-label { color:#fff; font-size:0.68rem; font-weight:700; white-space:nowrap; }
 
   /* ── RUTINA: mensaje + días desplegables ── */
   .rt-msg-card { background:var(--grad); border:1.5px solid var(--border); border-radius:16px; padding:1.15rem 1.25rem; margin-bottom:1.1rem; position:relative; overflow:hidden; }
@@ -1196,10 +1187,13 @@
     </div>
     <div id="video-modal-frame-wrap" style="position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;background:#000;">
       <iframe id="video-modal-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-      <button type="button" id="video-modal-timer-overlay" onclick="startStopVideoModalTimer()" class="vmt-overlay-btn">
-        <div class="vmt-ring-wrap"><svg viewBox="0 0 40 40"><circle class="vmt-ring-bg" cx="20" cy="20" r="15"/><circle class="vmt-ring-progress" id="video-modal-timer-ring" cx="20" cy="20" r="15"/></svg><div class="vmt-num" id="video-modal-timer-num"></div></div>
-        <span class="vmt-overlay-label" id="video-modal-timer-label"></span>
-      </button>
+    </div>
+    <div id="video-modal-timer" style="display:none;align-items:center;gap:0.9rem;margin-top:0.85rem;background:rgba(255,255,255,0.08);border-radius:12px;padding:0.9rem 1rem;">
+      <div class="ex-timer-ring-wrap"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="5"/><circle class="ex-timer-ring-progress" id="video-modal-timer-ring" cx="32" cy="32" r="28"/></svg><div class="ex-timer-num" id="video-modal-timer-num" style="color:#fff;"></div></div>
+      <div class="ex-timer-controls">
+        <div class="ex-timer-controls-label" id="video-modal-timer-sub" style="color:rgba(255,255,255,0.65);"></div>
+        <button type="button" class="ex-timer-btn" id="video-modal-timer-btn" onclick="startStopVideoModalTimer()">Iniciar</button>
+      </div>
     </div>
     <div id="video-modal-nota" style="display:none;margin-top:0.85rem;background:rgba(255,255,255,0.08);border-radius:12px;padding:0.9rem 1rem;color:#fff;font-size:0.8rem;line-height:1.5;white-space:pre-line;"></div>
   </div>
@@ -1947,8 +1941,7 @@ function closeExProgressModal() {
 
 // ── Cronómetro circular para ejercicios por tiempo (plancha, etc.) ──
 var EX_TIMERS = {};
-var EX_TIMER_RING_CIRC = 175.93; // 2 * PI * 28 (radio del anillo de la tarjeta)
-var VMT_RING_CIRC = 94.25; // 2 * PI * 15 (radio del anillo chico sobre el video)
+var EX_TIMER_RING_CIRC = 175.93; // 2 * PI * 28 (mismo anillo en la tarjeta y en el modal de video)
 var videoModalTimerDayId = null;
 var videoModalTimerExId = null;
 
@@ -2041,16 +2034,15 @@ function applyExTimerDom(t, numId, ringId, circumference, btnId) {
   }
 }
 
-// El overlay sobre el video reutiliza el mismo estado (EX_TIMERS) que el
-// widget de la tarjeta — solo cambia dónde se dibuja.
+// El widget dentro del modal de video reutiliza el mismo estado (EX_TIMERS)
+// que el de la tarjeta — solo cambia dónde se dibuja. Va debajo del video,
+// no encima, para no perderse contra la imagen del video.
 function renderVideoModalTimerUI() {
   if (!videoModalTimerDayId || !videoModalTimerExId) return;
   var key = exTimerKeyOf(videoModalTimerDayId, videoModalTimerExId);
   var t = EX_TIMERS[key];
   if (!t) return;
-  var labelEl = document.getElementById('video-modal-timer-label');
-  if (labelEl) labelEl.textContent = t.running ? 'Detener' : (t.remaining === 0 ? 'Reiniciar' : (t.remaining < t.total ? 'Continuar' : 'Iniciar'));
-  applyExTimerDom(t, 'video-modal-timer-num', 'video-modal-timer-ring', VMT_RING_CIRC, null);
+  applyExTimerDom(t, 'video-modal-timer-num', 'video-modal-timer-ring', EX_TIMER_RING_CIRC, 'video-modal-timer-btn');
 }
 
 function startStopVideoModalTimer() {
@@ -2212,8 +2204,8 @@ function getYouTubeEmbedUrl(url) {
 
 // dayId/exId/totalSecs son opcionales: solo se pasan cuando el ejercicio
 // es por tiempo y tiene video, para que el cronómetro circular aparezca
-// encima del video (mismo widget que el de la tarjeta, ver EX_TIMERS) en
-// vez de sumar un botón aparte.
+// como una fila debajo del video (mismo widget y tamaño que el de la
+// tarjeta, ver EX_TIMERS) en vez de sumar un botón aparte en la rutina.
 function showExerciseVideo(url, nota, dayId, exId, totalSecs) {
   var wrap = document.getElementById('video-modal-frame-wrap');
   var frame = document.getElementById('video-modal-frame');
@@ -2232,18 +2224,19 @@ function showExerciseVideo(url, nota, dayId, exId, totalSecs) {
     notaEl.textContent = '';
     notaEl.style.display = 'none';
   }
-  var overlay = document.getElementById('video-modal-timer-overlay');
+  var timerWrap = document.getElementById('video-modal-timer');
   if (dayId && exId && totalSecs) {
     videoModalTimerDayId = dayId;
     videoModalTimerExId = exId;
     var key = exTimerKeyOf(dayId, exId);
     if (!EX_TIMERS[key]) EX_TIMERS[key] = { remaining: totalSecs, total: totalSecs, running: false, interval: null };
-    overlay.classList.add('active');
+    timerWrap.style.display = 'flex';
+    document.getElementById('video-modal-timer-sub').textContent = totalSecs + ' seg de meta';
     renderVideoModalTimerUI();
   } else {
     videoModalTimerDayId = null;
     videoModalTimerExId = null;
-    overlay.classList.remove('active');
+    timerWrap.style.display = 'none';
   }
   document.getElementById('video-modal').style.display = 'flex';
 }
