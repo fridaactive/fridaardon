@@ -113,6 +113,18 @@
   .ex-input-label { font-size:0.62rem; color:var(--muted); font-weight:600; margin-bottom:0.25rem; display:block; }
   .ex-inputs input { width:100%; min-width:0; border:1.5px solid var(--border); border-radius:8px; padding:0.5rem 0.6rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; outline:none; }
   .ex-inputs input:focus { border-color:var(--blue); }
+  .ex-timer-widget { display:none; align-items:center; gap:0.9rem; margin-top:0.6rem; background:#F7F8FB; border:1px solid var(--border); border-radius:12px; padding:0.8rem 0.9rem; }
+  .ex-timer-widget.active { display:flex; }
+  .ex-timer-ring-wrap { position:relative; width:58px; height:58px; flex-shrink:0; }
+  .ex-timer-ring-wrap svg { width:58px; height:58px; transform:rotate(-90deg); }
+  .ex-timer-ring-bg { fill:none; stroke:var(--border); stroke-width:5; }
+  .ex-timer-ring-progress { fill:none; stroke:var(--blue); stroke-width:5; stroke-linecap:round; stroke-dasharray:175.93; stroke-dashoffset:0; transition:stroke-dashoffset 1s linear; }
+  .ex-timer-ring-progress.done { stroke:#2a7a2a; }
+  .ex-timer-num { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:800; color:var(--text); }
+  .ex-timer-controls { flex:1; min-width:0; display:flex; flex-direction:column; gap:0.4rem; }
+  .ex-timer-controls-label { font-size:0.68rem; color:var(--muted); }
+  .ex-timer-btn { border:none; border-radius:8px; padding:0.5rem; font-size:0.72rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; background:var(--blue); color:#fff; }
+  .ex-timer-btn.running { background:#c44; }
 
   /* ── RUTINA: mensaje + días desplegables ── */
   .rt-msg-card { background:var(--grad); border:1.5px solid var(--border); border-radius:16px; padding:1.15rem 1.25rem; margin-bottom:1.1rem; position:relative; overflow:hidden; }
@@ -1884,6 +1896,7 @@ function openExProgressModal(dayId, exId, exName) {
       var parts = [];
       if (log.carga) parts.push(escapeHtml(String(log.carga)) + ' lbs');
       if (log.reps) parts.push(escapeHtml(String(log.reps)) + ' reps');
+      if (log.segundos) parts.push(escapeHtml(String(log.segundos)) + ' seg');
       html += '<div class="entry-row"><div>' + (parts.length ? parts.join(' · ') : '—') + '</div><div class="entry-date">' + escapeHtml(en.fecha || '') + '</div></div>';
     });
     listEl.innerHTML = html;
@@ -1893,6 +1906,92 @@ function openExProgressModal(dayId, exId, exName) {
 
 function closeExProgressModal() {
   document.getElementById('ex-progress-modal').style.display = 'none';
+}
+
+// ── Cronómetro circular para ejercicios por tiempo (plancha, etc.) ──
+var EX_TIMERS = {};
+var EX_TIMER_RING_CIRC = 175.93; // 2 * PI * 28 (radio del anillo)
+
+function exTimerKeyOf(dayId, exId) { return dayId + '__' + exId; }
+
+function toggleExTimer(dayId, exId, totalSecs) {
+  var key = exTimerKeyOf(dayId, exId);
+  var widget = document.getElementById('timer-widget-' + key);
+  if (!widget) return;
+  if (widget.classList.contains('active')) {
+    widget.classList.remove('active');
+  } else {
+    widget.classList.add('active');
+    if (!EX_TIMERS[key]) {
+      EX_TIMERS[key] = { remaining: totalSecs, total: totalSecs, running: false, interval: null };
+      renderExTimerUI(key);
+    }
+  }
+}
+
+function startStopExTimer(dayId, exId, totalSecs) {
+  var key = exTimerKeyOf(dayId, exId);
+  if (!EX_TIMERS[key]) EX_TIMERS[key] = { remaining: totalSecs, total: totalSecs, running: false, interval: null };
+  var t = EX_TIMERS[key];
+  if (t.running) {
+    t.running = false;
+    clearInterval(t.interval);
+    t.interval = null;
+    fillExTimerInput(dayId, exId, t.total - t.remaining);
+  } else {
+    if (t.remaining <= 0) t.remaining = t.total;
+    t.running = true;
+    t.interval = setInterval(function() {
+      t.remaining--;
+      if (t.remaining <= 0) {
+        t.remaining = 0;
+        t.running = false;
+        clearInterval(t.interval);
+        t.interval = null;
+        fillExTimerInput(dayId, exId, t.total);
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        playExTimerBeep();
+      }
+      renderExTimerUI(key);
+    }, 1000);
+  }
+  renderExTimerUI(key);
+}
+
+function fillExTimerInput(dayId, exId, secs) {
+  var input = document.getElementById('segundos-input-' + exTimerKeyOf(dayId, exId));
+  if (input) input.value = secs;
+}
+
+function playExTimerBeep() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var o = ctx.createOscillator();
+    var g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = 880;
+    g.gain.setValueAtTime(0.2, ctx.currentTime);
+    o.start();
+    o.stop(ctx.currentTime + 0.3);
+  } catch (e) {}
+}
+
+function renderExTimerUI(key) {
+  var t = EX_TIMERS[key];
+  if (!t) return;
+  var numEl = document.getElementById('timer-num-' + key);
+  var ringEl = document.getElementById('timer-ring-' + key);
+  var btnEl = document.getElementById('timer-btn-' + key);
+  if (numEl) numEl.textContent = t.remaining;
+  if (ringEl) {
+    var pct = t.total > 0 ? t.remaining / t.total : 0;
+    ringEl.style.strokeDashoffset = EX_TIMER_RING_CIRC * (1 - pct);
+    ringEl.classList.toggle('done', t.remaining === 0);
+  }
+  if (btnEl) {
+    btnEl.classList.toggle('running', t.running);
+    btnEl.textContent = t.running ? 'Detener' : (t.remaining === 0 ? 'Reiniciar' : (t.remaining < t.total ? 'Continuar' : 'Iniciar'));
+  }
 }
 
 function renderExerciseBlocksHtml(day) {
@@ -1926,7 +2025,9 @@ function renderExerciseBlocksHtml(day) {
       var videoUrl = bankItem && bankItem.video;
       var nota = bankItem && bankItem.descripcion;
 
-      var hasHistorial = tipo !== 'tiempo';
+      var hasHistorial = true;
+      var hasTimer = tipo === 'tiempo';
+      var exTimerKey = day.id + '__' + ex.id;
       html += '<div class="rt-blq-item">';
       html += '<div class="rt-ex-num">' + label + '</div>';
       html += '<div style="flex:1;min-width:0;">';
@@ -1948,9 +2049,22 @@ function renderExerciseBlocksHtml(day) {
         // a algo que es solo un plus (ver el historial de cargas).
         html += '<button type="button" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:#F5ECCB;color:#7A5C00;border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Historial</button>';
       }
+      if (hasTimer) {
+        html += '<button type="button" onclick="toggleExTimer(\'' + day.id + '\',\'' + ex.id + '\',' + exSegundos(block, ex) + ')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Cronómetro</button>';
+      }
       html += '</div></div>';
       if (tipo === 'tiempo') {
         if (prescribed.length) html += '<div class="ex-prescribed">Duración: ' + prescribed.join(' · ') + '</div>';
+        var totalSecs = exSegundos(block, ex);
+        var lastLogT = findLastExerciseLog(day.id, ex.id);
+        var lastSegs = lastLogT && lastLogT.segundos ? escapeHtml(String(lastLogT.segundos)) : '';
+        html += '<div class="ex-inputs">';
+        html += '<div class="ex-input-group"><label class="ex-input-label">Segundos logrados</label><input type="number" step="1" placeholder="' + totalSecs + '" value="' + lastSegs + '" data-ex="' + ex.id + '" data-field="segundos" id="segundos-input-' + exTimerKey + '"></div>';
+        html += '</div>';
+        html += '<div class="ex-timer-widget" id="timer-widget-' + exTimerKey + '">';
+        html += '<div class="ex-timer-ring-wrap"><svg viewBox="0 0 64 64"><circle class="ex-timer-ring-bg" cx="32" cy="32" r="28"/><circle class="ex-timer-ring-progress" id="timer-ring-' + exTimerKey + '" cx="32" cy="32" r="28"/></svg><div class="ex-timer-num" id="timer-num-' + exTimerKey + '">' + totalSecs + '</div></div>';
+        html += '<div class="ex-timer-controls"><div class="ex-timer-controls-label">' + totalSecs + ' seg de meta</div><button type="button" class="ex-timer-btn" id="timer-btn-' + exTimerKey + '" onclick="startStopExTimer(\'' + day.id + '\',\'' + ex.id + '\',' + totalSecs + ')">Iniciar</button></div>';
+        html += '</div>';
       } else {
         if (prescribed.length) html += '<div class="ex-prescribed">Repeticiones: ' + prescribed.join(' · ') + '</div>';
         var lastLog = findLastExerciseLog(day.id, ex.id);
