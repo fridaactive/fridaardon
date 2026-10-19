@@ -120,9 +120,10 @@
   .ex-input-label { font-size:0.62rem; color:var(--muted); font-weight:600; margin-bottom:0.25rem; display:block; }
   .ex-inputs input { width:100%; min-width:0; border:1.5px solid var(--border); border-radius:8px; padding:0.5rem 0.6rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; outline:none; }
   .ex-inputs input:focus { border-color:var(--blue); }
-  .ex-effort-row { display:flex; gap:0.35rem; overflow-x:auto; padding-bottom:0.15rem; margin-top:0.35rem; }
-  .ex-effort-chip { flex-shrink:0; width:1.9rem; height:1.9rem; border-radius:50%; border:1.5px solid var(--border); background:#fff; color:var(--muted); font-size:0.72rem; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none; }
-  .ex-effort-chip.selected { background:var(--blue); border-color:var(--blue); color:#fff; }
+  .ex-stepper { display:flex; align-items:center; border:1.5px solid var(--border); border-radius:8px; overflow:hidden; flex-shrink:0; }
+  .ex-stepper-btn { width:1.7rem; height:1.7rem; border:none; background:var(--blue-lt); color:var(--blue); font-size:1rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; -webkit-tap-highlight-color:transparent; }
+  .ex-stepper-btn:active { background:#DCE6FC; }
+  .ex-stepper-val { width:1.9rem; text-align:center; font-size:0.82rem; font-weight:700; color:var(--text); }
   .ex-timer-ring-progress { fill:none; stroke:#F6D16A; stroke-width:5; stroke-linecap:round; stroke-dasharray:175.93; stroke-dashoffset:0; transition:stroke-dashoffset 1s linear; }
   .ex-timer-ring-progress.done { stroke:#6fd66f; }
   .ex-timer-btn { border:none; border-radius:10px; padding:0.5rem; font-size:0.72rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; background:var(--blue); color:#fff; }
@@ -2063,27 +2064,31 @@ function renderEtmTimerUI() {
   applyExTimerDom(t, 'etm-num', 'etm-ring', EX_TIMER_RING_CIRC, 'etm-btn');
 }
 
-// ── Esfuerzo percibido (1-10) por ejercicio: fila de chips tocables en vez
-// de un slider arrastrable (más preciso y rápido en celular) o un teclado
-// numérico (más lento para un dato de un solo dígito).
+// ── Esfuerzo percibido (1-10) por ejercicio: controlador compacto −/+ en
+// una sola línea (ocupa lo mismo que un campo normal), en vez de una fila
+// de 10 chips que se comía mucho espacio horizontal o un teclado numérico.
 function renderEsfuerzoRowHtml(exId, exKey, lastEsfuerzo) {
-  var html = '<label class="ex-input-label" style="margin-top:0.6rem;display:block;">Esfuerzo (1 a 10)</label>';
-  html += '<div class="ex-effort-row" id="esfuerzo-row-' + exKey + '">';
-  for (var n = 1; n <= 10; n++) {
-    var sel = String(lastEsfuerzo || '') === String(n) ? ' selected' : '';
-    html += '<div class="ex-effort-chip' + sel + '" onclick="selectEsfuerzoChip(\'' + exKey + '\',' + n + ',this)">' + n + '</div>';
-  }
-  html += '</div>';
+  var val = lastEsfuerzo ? escapeHtml(String(lastEsfuerzo)) : '–';
+  var html = '<div style="display:flex;align-items:center;gap:0.6rem;margin-top:0.6rem;">';
+  html += '<label class="ex-input-label" style="margin-bottom:0;">Esfuerzo (1-10)</label>';
+  html += '<div class="ex-stepper">';
+  html += '<button type="button" class="ex-stepper-btn" onclick="stepEsfuerzo(\'' + exKey + '\',-1)">−</button>';
+  html += '<div class="ex-stepper-val" id="esfuerzo-val-' + exKey + '">' + val + '</div>';
+  html += '<button type="button" class="ex-stepper-btn" onclick="stepEsfuerzo(\'' + exKey + '\',1)">+</button>';
+  html += '</div></div>';
   html += '<input type="hidden" data-ex="' + exId + '" data-field="esfuerzo" id="esfuerzo-input-' + exKey + '" value="' + (lastEsfuerzo ? escapeHtml(String(lastEsfuerzo)) : '') + '">';
   return html;
 }
 
-function selectEsfuerzoChip(exKey, value, chipEl) {
-  var row = document.getElementById('esfuerzo-row-' + exKey);
-  if (row) row.querySelectorAll('.ex-effort-chip').forEach(function(c) { c.classList.remove('selected'); });
-  chipEl.classList.add('selected');
+function stepEsfuerzo(exKey, delta) {
   var input = document.getElementById('esfuerzo-input-' + exKey);
-  if (input) input.value = value;
+  var valEl = document.getElementById('esfuerzo-val-' + exKey);
+  if (!input || !valEl) return;
+  var next = (parseInt(input.value, 10) || 0) + delta;
+  if (next < 1) next = 1;
+  if (next > 10) next = 10;
+  input.value = next;
+  valEl.textContent = next;
 }
 
 function renderExerciseBlocksHtml(day) {
