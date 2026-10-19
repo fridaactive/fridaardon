@@ -327,8 +327,13 @@
   .bp-ig-btn { display:inline-flex; align-items:center; gap:0.4rem; margin-top:0.9rem; background:var(--blue-lt); color:var(--blue); text-decoration:none; font-size:0.78rem; font-weight:700; padding:0.55rem 0.9rem; border-radius:100px; }
   .bp-coupon { margin-top:1.5rem; border:2px dashed var(--blue); border-radius:14px; padding:1.1rem; text-align:center; background:var(--blue-lt); }
   .bp-coupon-label { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--blue); }
-  .bp-coupon-code { font-size:1.6rem; font-weight:800; color:var(--blue); letter-spacing:0.12em; margin:0.3rem 0; }
   .bp-coupon-sub { font-size:0.68rem; color:var(--muted); }
+  .bp-coupon-voucher { background:#fff; border-radius:12px; padding:1.1rem 1rem; margin:0.5rem 0 0.7rem; }
+  .bp-coupon-voucher-logo { width:2.6rem; height:2.6rem; border-radius:50%; object-fit:cover; display:block; margin:0 auto 0.55rem; border:1px solid var(--border); }
+  .bp-coupon-voucher-alliance { font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:0.45rem; }
+  .bp-coupon-voucher-name { font-size:1.05rem; font-weight:800; color:var(--text); }
+  .bp-coupon-voucher-discount { font-size:0.85rem; color:#2a7a2a; font-weight:700; margin-top:0.3rem; }
+  .bp-coupon-voucher-tag { display:inline-block; margin-top:0.6rem; font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); background:var(--blue-lt); padding:0.22rem 0.65rem; border-radius:100px; }
 
   /* ── LANDING DE SERVICIOS (para leads sin cuenta vinculada) ── */
   #screen-services-landing { background:#F7F9FF; color:var(--ls-text); }
@@ -984,10 +989,10 @@
           <span class="track-summary-right"><span class="track-summary-chevron">▾</span></span>
         </summary>
         <div class="track-body">
-          <div class="rt-acl-item"><div class="rt-acl-num">1</div><div class="rt-acl-text">Elegí la marca aliada que te interese y entrá a su perfil.</div></div>
-          <div class="rt-acl-item"><div class="rt-acl-num">2</div><div class="rt-acl-text">Tocá "Generar mi cupón" para obtener tu código único.</div></div>
-          <div class="rt-acl-item"><div class="rt-acl-num">3</div><div class="rt-acl-text">Mostrá la pantalla (o descargá el cupón en PDF) en el negocio al momento de pagar.</div></div>
-          <div class="rt-acl-item"><div class="rt-acl-num">4</div><div class="rt-acl-text">¡Listo! Se puede usar una vez por ciclo de tu plan.</div></div>
+          <div class="rt-acl-item"><div class="rt-acl-num">1</div><div class="rt-acl-text">Elegí la marca aliada que te interese y tocá "Notificar que voy a canjear".</div></div>
+          <div class="rt-acl-item"><div class="rt-acl-num">2</div><div class="rt-acl-text">Te abrimos el chat con Frida con el mensaje ya escrito — solo enviálo.</div></div>
+          <div class="rt-acl-item"><div class="rt-acl-num">3</div><div class="rt-acl-text">Frida le avisa a la marca que vas a pasar a canjear tu cupón.</div></div>
+          <div class="rt-acl-item"><div class="rt-acl-num">4</div><div class="rt-acl-text">Mostrá tu cupón (pantalla o PDF) con tu nombre en el negocio · 1 vez por ciclo de tu plan.</div></div>
         </div>
       </details>
       <div class="card">
@@ -2780,13 +2785,6 @@ function toggleDiaEntrenado(key) {
 }
 
 // ── BENEFICIOS / SERVICIOS ──
-function generateShortCode() {
-  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  var code = '';
-  for (var i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
-  return code;
-}
-
 var LOADED_BENEFICIOS = {};
 var MESES_LARGOS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
@@ -3002,20 +3000,32 @@ function renderBenefProfileHtml(b) {
     html += '<div class="bp-coupon-label">Alianza finalizada</div>';
     html += '<div class="bp-coupon-sub" style="margin-top:0.4rem;">Esta marca ya no forma parte de los beneficios activos.</div>';
   } else if (miCanje) {
+    // Sin código de verificación: el cupón es un comprobante de la alianza
+    // FridaActive × marca, y es Frida quien le avisa antes a la marca que
+    // esta clienta va a pasar — por eso no hace falta un código acá.
     html += '<div class="bp-coupon-label">Tu cupón · ' + escapeHtml(cycleLabel(currentCycleKey)) + '</div>';
-    html += '<div class="bp-coupon-code">' + escapeHtml(miCanje.code) + '</div>';
-    html += '<div class="bp-coupon-sub">Mostrá esta pantalla (podés sacarle captura) en el negocio · ' + escapeHtml(currentClientName || '') + '</div>';
+    html += '<div class="bp-coupon-voucher">';
+    if (b.logoUrl) html += '<img class="bp-coupon-voucher-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
+    html += '<div class="bp-coupon-voucher-alliance">FridaActive × ' + escapeHtml(b.marca || '') + '</div>';
+    html += '<div class="bp-coupon-voucher-name">' + escapeHtml(currentClientName || '') + '</div>';
+    if (b.descuento) html += '<div class="bp-coupon-voucher-discount">' + escapeHtml(b.descuento) + '</div>';
+    html += '<div class="bp-coupon-voucher-tag">Cupón único</div>';
+    html += '</div>';
+    html += '<div class="bp-coupon-sub">Ya le avisamos a Frida — ella coordina con la marca para que puedas pasar a canjearlo.</div>';
     html += '<button class="btn-secondary" style="margin-top:0.7rem;" onclick="descargarVoucher(\'' + b.id + '\')">⬇️ Descargar cupón en PDF</button>';
   } else {
     html += '<div class="bp-coupon-label">Cupón disponible</div>';
     html += '<div class="bp-coupon-sub" style="margin:0.4rem 0 0.8rem;">Se puede usar 1 vez por ciclo de tu plan · se renueva cuando renovás</div>';
-    html += '<button class="save-btn" onclick="canjearBeneficio(\'' + b.id + '\')">🎁 Generar mi cupón</button>';
+    html += '<button class="save-btn" onclick="canjearBeneficio(\'' + b.id + '\')">📣 Notificar que voy a canjear</button>';
   }
   html += '</div>';
 
   return html;
 }
 
+// Sin código: Frida le avisa antes a la marca que esta clienta va a pasar
+// (ver canjearBeneficio), así que el comprobante de identidad acá es el
+// nombre de la clienta, no un código que la marca tendría que verificar.
 function descargarVoucher(beneficioId) {
   var b = LOADED_BENEFICIOS[beneficioId];
   var miCanje = b && b.canjes && b.canjes[currentUid] && b.canjes[currentUid][currentCycleKey];
@@ -3024,41 +3034,33 @@ function descargarVoucher(beneficioId) {
   doc.setFillColor(28, 85, 229);
   doc.rect(0, 0, 100, 74, 'F');
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(8);
-  doc.text('FRIDAACTIVE · BENEFICIO', 8, 10);
-  doc.setFontSize(15);
-  doc.text(b.marca || '', 8, 20);
+  doc.setFontSize(7);
+  doc.text('ALIANZA FRIDAACTIVE × ' + (b.marca || '').toUpperCase(), 8, 10);
   if (b.descuento) {
-    doc.setFontSize(10);
-    doc.text(b.descuento, 8, 27);
+    doc.setFontSize(11);
+    doc.text(b.descuento, 8, 19);
   }
   doc.setFillColor(255, 255, 255);
-  doc.roundedRect(8, 33, 84, 19, 3, 3, 'F');
+  doc.roundedRect(8, 26, 84, 22, 3, 3, 'F');
   doc.setTextColor(28, 85, 229);
   doc.setFontSize(7);
-  doc.text('TU CÓDIGO', 12, 40);
-  doc.setFontSize(17);
-  doc.text(miCanje.code, 12, 48);
+  doc.text('CUPÓN ÚNICO · CLIENTA', 12, 34);
+  doc.setFontSize(16);
+  doc.text(currentClientName || '', 12, 44);
 
-  // Clienta + código de acceso — para que Frida valide contra su lista de
-  // clientas activas que le comparte a las marcas.
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(7);
-  doc.text('CLIENTA', 8, 59);
-  doc.setFontSize(10);
-  doc.text(currentClientName || '', 8, 64);
-  doc.setFontSize(7);
-  doc.text('CÓDIGO DE ACCESO', 55, 59);
-  doc.setFontSize(10);
-  doc.text(currentClientId || '', 55, 64);
-
   doc.setFontSize(6.5);
-  doc.text('Válido durante ' + cycleLabel(currentCycleKey), 8, 71);
+  doc.text('Presentá este cupón en el negocio — Frida ya avisó que ibas a pasar.', 8, 56);
+  doc.text('Válido durante ' + cycleLabel(currentCycleKey), 8, 62);
   doc.save('beneficio-' + (b.marca || 'fridaactive').toLowerCase().replace(/\s+/g, '-') + '-' + currentCycleKey + '.pdf');
 }
 
+// No hay verificación automática con la marca todavía: el canje real pasa
+// por avisarle a Frida (por chat) para que ella coordine directo con la
+// marca. Por eso acá, además de guardar el canje, se abre el chat con un
+// mensaje ya escrito — la clienta solo tiene que enviarlo.
 function canjearBeneficio(beneficioId) {
-  var entry = { code: generateShortCode(), canjeadoEn: Date.now() };
+  var entry = { canjeadoEn: Date.now() };
   db().ref('beneficios/' + beneficioId + '/canjes/' + currentUid + '/' + currentCycleKey).set(entry).then(function() {
     var b = LOADED_BENEFICIOS[beneficioId];
     if (b) {
@@ -3070,6 +3072,9 @@ function canjearBeneficio(beneficioId) {
     if (currentBenefProfileId === beneficioId && b) {
       document.getElementById('bp-content').innerHTML = renderBenefProfileHtml(b);
     }
+    var chatInput = document.getElementById('chat-input');
+    if (chatInput) chatInput.value = 'Hola! Quiero canjear mi cupón de ' + ((b && b.marca) || 'una marca aliada') + ' 🎁';
+    openChatModal();
   }).catch(function(e) { alert('No se pudo canjear: ' + e.message); });
 }
 
