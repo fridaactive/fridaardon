@@ -120,17 +120,9 @@
   .ex-input-label { font-size:0.62rem; color:var(--muted); font-weight:600; margin-bottom:0.25rem; display:block; }
   .ex-inputs input { width:100%; min-width:0; border:1.5px solid var(--border); border-radius:8px; padding:0.5rem 0.6rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; outline:none; }
   .ex-inputs input:focus { border-color:var(--blue); }
-  .ex-timer-widget { display:none; align-items:center; gap:0.9rem; margin-top:0.6rem; background:#F7F8FB; border:1px solid var(--border); border-radius:12px; padding:0.8rem 0.9rem; }
-  .ex-timer-widget.active { display:flex; }
-  .ex-timer-ring-wrap { position:relative; width:58px; height:58px; flex-shrink:0; }
-  .ex-timer-ring-wrap svg { width:58px; height:58px; transform:rotate(-90deg); }
-  .ex-timer-ring-bg { fill:none; stroke:var(--border); stroke-width:5; }
-  .ex-timer-ring-progress { fill:none; stroke:var(--blue); stroke-width:5; stroke-linecap:round; stroke-dasharray:175.93; stroke-dashoffset:0; transition:stroke-dashoffset 1s linear; }
-  .ex-timer-ring-progress.done { stroke:#2a7a2a; }
-  .ex-timer-num { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:800; color:var(--text); }
-  .ex-timer-controls { flex:1; min-width:0; display:flex; flex-direction:column; gap:0.4rem; }
-  .ex-timer-controls-label { font-size:0.68rem; color:var(--muted); }
-  .ex-timer-btn { border:none; border-radius:8px; padding:0.5rem; font-size:0.72rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; background:var(--blue); color:#fff; }
+  .ex-timer-ring-progress { fill:none; stroke:#F6D16A; stroke-width:5; stroke-linecap:round; stroke-dasharray:175.93; stroke-dashoffset:0; transition:stroke-dashoffset 1s linear; }
+  .ex-timer-ring-progress.done { stroke:#6fd66f; }
+  .ex-timer-btn { border:none; border-radius:10px; padding:0.5rem; font-size:0.72rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; background:var(--blue); color:#fff; }
   .ex-timer-btn.running { background:#c44; }
 
   /* ── RUTINA: mensaje + días desplegables ── */
@@ -1188,14 +1180,26 @@
     <div id="video-modal-frame-wrap" style="position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;background:#000;">
       <iframe id="video-modal-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
-    <div id="video-modal-timer" style="display:none;align-items:center;gap:0.9rem;margin-top:0.85rem;background:rgba(255,255,255,0.08);border-radius:12px;padding:0.9rem 1rem;">
-      <div class="ex-timer-ring-wrap"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="5"/><circle class="ex-timer-ring-progress" id="video-modal-timer-ring" cx="32" cy="32" r="28"/></svg><div class="ex-timer-num" id="video-modal-timer-num" style="color:#fff;"></div></div>
-      <div class="ex-timer-controls">
-        <div class="ex-timer-controls-label" id="video-modal-timer-sub" style="color:rgba(255,255,255,0.65);"></div>
-        <button type="button" class="ex-timer-btn" id="video-modal-timer-btn" onclick="startStopVideoModalTimer()">Iniciar</button>
-      </div>
-    </div>
     <div id="video-modal-nota" style="display:none;margin-top:0.85rem;background:rgba(255,255,255,0.08);border-radius:12px;padding:0.9rem 1rem;color:#fff;font-size:0.8rem;line-height:1.5;white-space:pre-line;"></div>
+  </div>
+</div>
+
+<!-- ══════════ CRONÓMETRO (aparte del video) ══════════ -->
+<div id="ex-timer-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9999;align-items:center;justify-content:center;padding:1rem;">
+  <div style="width:100%;max-width:340px;text-align:center;">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:0.5rem;">
+      <button onclick="closeExTimerModal()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1rem;width:2.2rem;height:2.2rem;border-radius:50%;cursor:pointer;">✕</button>
+    </div>
+    <div id="etm-ex-name" style="color:#fff;font-size:0.95rem;font-weight:700;margin-bottom:1.75rem;"></div>
+    <div style="position:relative;width:220px;height:220px;margin:0 auto;">
+      <svg viewBox="0 0 64 64" style="width:220px;height:220px;transform:rotate(-90deg);">
+        <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="3.5"/>
+        <circle class="ex-timer-ring-progress" id="etm-ring" cx="32" cy="32" r="28" stroke-width="3.5"/>
+      </svg>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3.2rem;font-weight:800;color:#fff;" id="etm-num"></div>
+    </div>
+    <div style="color:rgba(255,255,255,0.65);font-size:0.8rem;margin-top:1.1rem;" id="etm-sub"></div>
+    <button type="button" class="ex-timer-btn" id="etm-btn" onclick="startStopEtmTimer()" style="margin-top:1.5rem;width:100%;padding:0.9rem;font-size:0.9rem;">Iniciar</button>
   </div>
 </div>
 
@@ -1940,26 +1944,35 @@ function closeExProgressModal() {
 }
 
 // ── Cronómetro circular para ejercicios por tiempo (plancha, etc.) ──
+// Siempre abre su propia ventana aparte (ex-timer-modal) — separado del
+// video, para no competir visualmente con él ni esconderse encima suyo.
 var EX_TIMERS = {};
-var EX_TIMER_RING_CIRC = 175.93; // 2 * PI * 28 (mismo anillo en la tarjeta y en el modal de video)
-var videoModalTimerDayId = null;
-var videoModalTimerExId = null;
+var EX_TIMER_RING_CIRC = 175.93; // 2 * PI * 28
+var etmTimerDayId = null;
+var etmTimerExId = null;
 
 function exTimerKeyOf(dayId, exId) { return dayId + '__' + exId; }
 
-function toggleExTimer(dayId, exId, totalSecs) {
+function openExTimerModal(dayId, exId, totalSecs, exName) {
+  etmTimerDayId = dayId;
+  etmTimerExId = exId;
   var key = exTimerKeyOf(dayId, exId);
-  var widget = document.getElementById('timer-widget-' + key);
-  if (!widget) return;
-  if (widget.classList.contains('active')) {
-    widget.classList.remove('active');
-  } else {
-    widget.classList.add('active');
-    if (!EX_TIMERS[key]) {
-      EX_TIMERS[key] = { remaining: totalSecs, total: totalSecs, running: false, interval: null };
-      renderExTimerUI(key);
-    }
-  }
+  if (!EX_TIMERS[key]) EX_TIMERS[key] = { remaining: totalSecs, total: totalSecs, running: false, interval: null };
+  document.getElementById('etm-ex-name').textContent = exName || '';
+  document.getElementById('etm-sub').textContent = totalSecs + ' seg de meta';
+  renderEtmTimerUI();
+  document.getElementById('ex-timer-modal').style.display = 'flex';
+}
+
+function closeExTimerModal() {
+  document.getElementById('ex-timer-modal').style.display = 'none';
+}
+
+function startStopEtmTimer() {
+  if (!etmTimerDayId || !etmTimerExId) return;
+  var key = exTimerKeyOf(etmTimerDayId, etmTimerExId);
+  var t = EX_TIMERS[key];
+  startStopExTimer(etmTimerDayId, etmTimerExId, t ? t.total : 0);
 }
 
 function startStopExTimer(dayId, exId, totalSecs) {
@@ -2012,9 +2025,8 @@ function playExTimerBeep() {
 function renderExTimerUI(key) {
   var t = EX_TIMERS[key];
   if (!t) return;
-  applyExTimerDom(t, 'timer-num-' + key, 'timer-ring-' + key, EX_TIMER_RING_CIRC, 'timer-btn-' + key);
-  if (videoModalTimerDayId && exTimerKeyOf(videoModalTimerDayId, videoModalTimerExId) === key) {
-    renderVideoModalTimerUI();
+  if (etmTimerDayId && exTimerKeyOf(etmTimerDayId, etmTimerExId) === key) {
+    renderEtmTimerUI();
   }
 }
 
@@ -2030,26 +2042,16 @@ function applyExTimerDom(t, numId, ringId, circumference, btnId) {
   }
   if (btnEl) {
     btnEl.classList.toggle('running', t.running);
-    btnEl.textContent = t.running ? 'Detener' : (t.remaining === 0 ? 'Reiniciar' : (t.remaining < t.total ? 'Continuar' : 'Iniciar'));
+    btnEl.textContent = t.running ? 'Pausar' : (t.remaining === 0 ? 'Reiniciar' : (t.remaining < t.total ? 'Reanudar' : 'Iniciar'));
   }
 }
 
-// El widget dentro del modal de video reutiliza el mismo estado (EX_TIMERS)
-// que el de la tarjeta — solo cambia dónde se dibuja. Va debajo del video,
-// no encima, para no perderse contra la imagen del video.
-function renderVideoModalTimerUI() {
-  if (!videoModalTimerDayId || !videoModalTimerExId) return;
-  var key = exTimerKeyOf(videoModalTimerDayId, videoModalTimerExId);
+function renderEtmTimerUI() {
+  if (!etmTimerDayId || !etmTimerExId) return;
+  var key = exTimerKeyOf(etmTimerDayId, etmTimerExId);
   var t = EX_TIMERS[key];
   if (!t) return;
-  applyExTimerDom(t, 'video-modal-timer-num', 'video-modal-timer-ring', EX_TIMER_RING_CIRC, 'video-modal-timer-btn');
-}
-
-function startStopVideoModalTimer() {
-  if (!videoModalTimerDayId || !videoModalTimerExId) return;
-  var key = exTimerKeyOf(videoModalTimerDayId, videoModalTimerExId);
-  var t = EX_TIMERS[key];
-  startStopExTimer(videoModalTimerDayId, videoModalTimerExId, t ? t.total : 0);
+  applyExTimerDom(t, 'etm-num', 'etm-ring', EX_TIMER_RING_CIRC, 'etm-btn');
 }
 
 function renderExerciseBlocksHtml(day) {
@@ -2086,10 +2088,6 @@ function renderExerciseBlocksHtml(day) {
 
       var hasHistorial = true;
       var hasTimer = tipo === 'tiempo';
-      // Si el ejercicio tiene video, el cronómetro se muestra encima del
-      // video (en showExerciseVideo), para no sumar un tercer botón acá.
-      // Si no tiene video, se queda como widget aparte (como antes).
-      var timerGoesInVideo = hasTimer && !!videoUrl;
       var exTimerKey = day.id + '__' + ex.id;
       html += '<div class="rt-blq-item">';
       html += '<div class="rt-ex-num">' + label + '</div>';
@@ -2104,10 +2102,7 @@ function renderExerciseBlocksHtml(day) {
           ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="m10.3 8.5 5 3.5-5 3.5v-7Z"/></svg>'
           : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M7 3.5h7l4 4v13H7Z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></svg>';
         var exBtnLabel = videoUrl ? 'Ver ejercicio' : 'Ver nota';
-        var videoOnclick = timerGoesInVideo
-          ? "showExerciseVideo('" + jsAttrEscape(videoUrl || '') + "', '" + jsAttrEscape(nota || '') + "', '" + day.id + "', '" + ex.id + "', " + totalSecs + ")"
-          : "showExerciseVideo('" + jsAttrEscape(videoUrl || '') + "', '" + jsAttrEscape(nota || '') + "')";
-        html += '<button type="button" onclick="' + videoOnclick + '" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">' + exBtnIcon + exBtnLabel + '</button>';
+        html += '<button type="button" onclick="showExerciseVideo(\'' + jsAttrEscape(videoUrl || '') + '\', \'' + jsAttrEscape(nota || '') + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">' + exBtnIcon + exBtnLabel + '</button>';
       }
       if (hasHistorial) {
         // Mismo estilo de pill que "Ver ejercicio"/"Ver nota", en vez del
@@ -2115,8 +2110,11 @@ function renderExerciseBlocksHtml(day) {
         // a algo que es solo un plus (ver el historial de cargas).
         html += '<button type="button" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:#F5ECCB;color:#7A5C00;border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Historial</button>';
       }
-      if (hasTimer && !timerGoesInVideo) {
-        html += '<button type="button" onclick="toggleExTimer(\'' + day.id + '\',\'' + ex.id + '\',' + totalSecs + ')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Cronómetro</button>';
+      if (hasTimer) {
+        // El cronómetro siempre abre su propia ventana aparte (no se mete
+        // con el video): fondo oscuro, aro grande centrado, igual estén o
+        // no estén viendo el video del ejercicio.
+        html += '<button type="button" onclick="openExTimerModal(\'' + day.id + '\',\'' + ex.id + '\',' + totalSecs + ',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Cronómetro</button>';
       }
       html += '</div></div>';
       if (tipo === 'tiempo') {
@@ -2126,12 +2124,6 @@ function renderExerciseBlocksHtml(day) {
         html += '<div class="ex-inputs">';
         html += '<div class="ex-input-group"><label class="ex-input-label">Segundos logrados</label><input type="number" step="1" placeholder="' + totalSecs + '" value="' + lastSegs + '" data-ex="' + ex.id + '" data-field="segundos" id="segundos-input-' + exTimerKey + '"></div>';
         html += '</div>';
-        if (!timerGoesInVideo) {
-          html += '<div class="ex-timer-widget" id="timer-widget-' + exTimerKey + '">';
-          html += '<div class="ex-timer-ring-wrap"><svg viewBox="0 0 64 64"><circle class="ex-timer-ring-bg" cx="32" cy="32" r="28"/><circle class="ex-timer-ring-progress" id="timer-ring-' + exTimerKey + '" cx="32" cy="32" r="28"/></svg><div class="ex-timer-num" id="timer-num-' + exTimerKey + '">' + totalSecs + '</div></div>';
-          html += '<div class="ex-timer-controls"><div class="ex-timer-controls-label">' + totalSecs + ' seg de meta</div><button type="button" class="ex-timer-btn" id="timer-btn-' + exTimerKey + '" onclick="startStopExTimer(\'' + day.id + '\',\'' + ex.id + '\',' + totalSecs + ')">Iniciar</button></div>';
-          html += '</div>';
-        }
       } else {
         if (prescribed.length) html += '<div class="ex-prescribed">Repeticiones: ' + prescribed.join(' · ') + '</div>';
         var lastLog = findLastExerciseLog(day.id, ex.id);
@@ -2202,11 +2194,7 @@ function getYouTubeEmbedUrl(url) {
   return id ? ('https://www.youtube.com/embed/' + id + '?autoplay=1') : url;
 }
 
-// dayId/exId/totalSecs son opcionales: solo se pasan cuando el ejercicio
-// es por tiempo y tiene video, para que el cronómetro circular aparezca
-// como una fila debajo del video (mismo widget y tamaño que el de la
-// tarjeta, ver EX_TIMERS) en vez de sumar un botón aparte en la rutina.
-function showExerciseVideo(url, nota, dayId, exId, totalSecs) {
+function showExerciseVideo(url, nota) {
   var wrap = document.getElementById('video-modal-frame-wrap');
   var frame = document.getElementById('video-modal-frame');
   if (url) {
@@ -2223,20 +2211,6 @@ function showExerciseVideo(url, nota, dayId, exId, totalSecs) {
   } else {
     notaEl.textContent = '';
     notaEl.style.display = 'none';
-  }
-  var timerWrap = document.getElementById('video-modal-timer');
-  if (dayId && exId && totalSecs) {
-    videoModalTimerDayId = dayId;
-    videoModalTimerExId = exId;
-    var key = exTimerKeyOf(dayId, exId);
-    if (!EX_TIMERS[key]) EX_TIMERS[key] = { remaining: totalSecs, total: totalSecs, running: false, interval: null };
-    timerWrap.style.display = 'flex';
-    document.getElementById('video-modal-timer-sub').textContent = totalSecs + ' seg de meta';
-    renderVideoModalTimerUI();
-  } else {
-    videoModalTimerDayId = null;
-    videoModalTimerExId = null;
-    timerWrap.style.display = 'none';
   }
   document.getElementById('video-modal').style.display = 'flex';
 }
