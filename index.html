@@ -2184,6 +2184,22 @@ function renderExerciseBlocksHtml(day) {
   return html;
 }
 
+// Preguntas para el placeholder del comentario del día — rotan al azar
+// cada vez que se abre la rutina, para invitar a escribir algo distinto
+// a que se abra más en vez de ver siempre el mismo texto fijo.
+var DAY_COMMENT_PROMPTS = [
+  '¿Cómo anduvo tu energía hoy?',
+  '¿Te gustó la rutina de hoy?',
+  '¿Cómo te sentiste con los pesos de hoy?',
+  '¿Dormiste bien anoche?',
+  '¿Cómo estuvo tu ánimo hoy?',
+  '¿Alguna duda con algún ejercicio?',
+  '¿Sentiste algún dolor o molestia?'
+];
+function randomDayCommentPrompt() {
+  return DAY_COMMENT_PROMPTS[Math.floor(Math.random() * DAY_COMMENT_PROMPTS.length)];
+}
+
 function renderRutinaTab() {
   var el = document.getElementById('rutina-content');
   var days = currentRutinaData.days;
@@ -2212,7 +2228,7 @@ function renderRutinaTab() {
     html += '<div class="rt-day-body">';
     html += renderExerciseBlocksHtml(day);
     html += '<div class="rt-day-comment-label">Comentario del día (opcional)</div>';
-    html += '<textarea class="rt-day-comment" id="day-comment-' + day.id + '" placeholder="¿Cómo te sentiste? ¿Alguna duda de algún ejercicio?"></textarea>';
+    html += '<textarea class="rt-day-comment" id="day-comment-' + day.id + '" placeholder="' + escapeHtml(randomDayCommentPrompt()) + '"></textarea>';
     html += '<button class="btn-primary rt-day-save" onclick="guardarSesion(' + i + ', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;vertical-align:-2px;margin-right:0.35rem;"><path d="M20 6 9 17l-5-5"/></svg>Guardar sesión de este día</button>';
     html += '</div></details>';
   });
