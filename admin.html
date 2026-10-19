@@ -1603,6 +1603,19 @@ function cuestionarioHtml(cuestionario) {
   return '<div style="margin-top:0.9rem;"><div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;">📋 Cuestionario inicial</div>' + rows + '</div>';
 }
 
+// Un chat queda "pendiente" solo si el último mensaje es de la clienta Y
+// llegó después de la última vez que lo abriste (chatMeta/lastReadByAdmin,
+// actualizado en openAdminChat/closeAdminChat). Antes se marcaba pendiente
+// con solo ver que el último mensaje fuera de la clienta, sin importar si
+// ya lo habías leído o respondido — por eso quedaba en rojo para siempre.
+function chatNeedsReply(chat, chatMeta) {
+  var entries = Object.keys(chat || {}).map(function(k) { return chat[k]; }).sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
+  var lastMsg = entries[0];
+  if (!lastMsg || lastMsg.from !== 'client') return false;
+  var lastRead = (chatMeta && chatMeta.lastReadByAdmin) || 0;
+  return (lastMsg.ts || 0) > lastRead;
+}
+
 function renderPortalSection(clientId) {
   var el = document.getElementById('cd-portal');
   if (!el) return;
@@ -1616,10 +1629,11 @@ function renderPortalSection(clientId) {
       var diasEntrenados = (portal && portal.diasEntrenados) || {};
       var fotosProgreso = (portal && portal.fotosProgreso) || {};
       var chat = (portal && portal.chat) || {};
+      var chatMeta = (portal && portal.chatMeta) || {};
       var entries = Object.keys(progreso).map(function(k) { return progreso[k]; }).sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
       var chatEntries = Object.keys(chat).map(function(k) { return chat[k]; }).sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
       var lastMsg = chatEntries[0];
-      var needsReply = lastMsg && lastMsg.from === 'client';
+      var needsReply = chatNeedsReply(chat, chatMeta);
 
       var html = '';
 
@@ -1764,7 +1778,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
   var fotosProgreso = portal.fotosProgreso || {};
   var chatEntries = Object.keys(portal.chat || {}).map(function(k) { return portal.chat[k]; }).sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
   var lastMsg = chatEntries[0];
-  var needsReply = lastMsg && lastMsg.from === 'client';
+  var needsReply = chatNeedsReply(portal.chat, portal.chatMeta);
   var name = perfil.nombre || c.name || 'Clienta';
 
   // ── Días entrenados este mes + meta ──
@@ -1952,10 +1966,10 @@ function renderClientsProgressOverview() {
       done();
     });
     fbGet('clientasPortal/' + uid + '/chat', function(chat) {
-      var entries = Object.keys(chat || {}).map(function(k) { return chat[k]; }).sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
-      var lastMsg = entries[0];
-      byId[clientId].needsReply = !!(lastMsg && lastMsg.from === 'client');
-      done();
+      fbGet('clientasPortal/' + uid + '/chatMeta', function(chatMeta) {
+        byId[clientId].needsReply = chatNeedsReply(chat, chatMeta);
+        done();
+      });
     });
   });
 }
@@ -2156,20 +2170,22 @@ function renderChatsInbox() {
   linkedIds.forEach(function(clientId) {
     var uid = CLIENT_LINKS[clientId];
     fbGet('clientasPortal/' + uid + '/chat', function(chat) {
-      var entries = Object.keys(chat || {}).map(function(k) { return chat[k]; }).sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
-      var lastMsg = entries[0];
-      if (lastMsg) {
-        results.push({
-          clientId: clientId,
-          uid: uid,
-          name: (CLIENTS[clientId] && CLIENTS[clientId].name) || 'Clienta',
-          text: lastMsg.text || '',
-          ts: lastMsg.ts || 0,
-          needsReply: lastMsg.from === 'client'
-        });
-      }
-      pending--;
-      if (pending === 0) renderChatsInboxResults(results);
+      fbGet('clientasPortal/' + uid + '/chatMeta', function(chatMeta) {
+        var entries = Object.keys(chat || {}).map(function(k) { return chat[k]; }).sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
+        var lastMsg = entries[0];
+        if (lastMsg) {
+          results.push({
+            clientId: clientId,
+            uid: uid,
+            name: (CLIENTS[clientId] && CLIENTS[clientId].name) || 'Clienta',
+            text: lastMsg.text || '',
+            ts: lastMsg.ts || 0,
+            needsReply: chatNeedsReply(chat, chatMeta)
+          });
+        }
+        pending--;
+        if (pending === 0) renderChatsInboxResults(results);
+      });
     });
   });
 }
@@ -2470,10 +2486,12 @@ function deleteBeneficio(id) {
 // ── CHAT CON LA CLIENTA ──
 var adminChatUid = null;
 var adminChatRef = null;
+var adminChatClientId = null;
 
 function openAdminChat(clientId, uid) {
   if (!uid) { alert('Esta clienta todavía no vinculó su cuenta.'); return; }
   adminChatUid = uid;
+  adminChatClientId = clientId;
   document.getElementById('ac-title').textContent = (CLIENTS[clientId] && CLIENTS[clientId].name) || 'Chat';
   document.getElementById('admin-chat-modal').style.display = 'flex';
   if (adminChatRef) adminChatRef.off();
@@ -2487,9 +2505,18 @@ function openAdminChat(clientId, uid) {
 function closeAdminChat() {
   document.getElementById('admin-chat-modal').style.display = 'none';
   if (adminChatRef) { adminChatRef.off(); adminChatRef = null; }
+  // Marcar como leído también al cerrar, no solo al abrir, para que los
+  // mensajes que llegaron mientras tenías el chat abierto (vía el listener
+  // en vivo) también cuenten como vistos.
+  if (adminChatUid) getDB().ref('clientasPortal/' + adminChatUid + '/chatMeta/lastReadByAdmin').set(Date.now());
   adminChatUid = null;
   renderPortalSection(currentClient);
   renderChatsInbox();
+  renderClientsProgressOverview();
+  if (adminChatClientId && document.getElementById('acp-overlay').style.display !== 'none') {
+    openAdminClientProfile(adminChatClientId);
+  }
+  adminChatClientId = null;
 }
 
 function renderAdminChatMessages(messages) {
