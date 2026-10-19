@@ -1922,8 +1922,22 @@ function renderClientsProgressOverview() {
     return;
   }
   el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Cargando…</div>';
-  var results = [];
-  var pending = allLinked.length;
+  var byId = {};
+  allLinked.forEach(function(clientId) {
+    byId[clientId] = {
+      clientId: clientId,
+      name: CLIENTS[clientId].name,
+      lastFecha: null,
+      thisWeekCount: 0,
+      payment: getPaymentStatus(clientId, CLIENTS[clientId]),
+      needsReply: false
+    };
+  });
+  var pending = allLinked.length * 2;
+  function done() {
+    pending--;
+    if (pending === 0) renderProgressResults(Object.keys(byId).map(function(id) { return byId[id]; }));
+  }
   allLinked.forEach(function(clientId) {
     var uid = CLIENT_LINKS[clientId];
     fbGet('clientasPortal/' + uid + '/diasEntrenados', function(dias) {
@@ -1931,19 +1945,35 @@ function renderClientsProgressOverview() {
       var weekAgo = new Date();
       weekAgo.setDate(weekAgo.getDate() - 7);
       var entries = Object.keys(dias).filter(function(k) { return dias[k]; }).sort().reverse();
-      var thisWeekCount = entries.filter(function(k) {
+      byId[clientId].lastFecha = entries[0] || null;
+      byId[clientId].thisWeekCount = entries.filter(function(k) {
         return new Date(k + 'T00:00:00') >= weekAgo;
       }).length;
-      results.push({
-        clientId: clientId,
-        name: CLIENTS[clientId].name,
-        lastFecha: entries[0] || null,
-        thisWeekCount: thisWeekCount
-      });
-      pending--;
-      if (pending === 0) renderProgressResults(results);
+      done();
+    });
+    fbGet('clientasPortal/' + uid + '/chat', function(chat) {
+      var entries = Object.keys(chat || {}).map(function(k) { return chat[k]; }).sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
+      var lastMsg = entries[0];
+      byId[clientId].needsReply = !!(lastMsg && lastMsg.from === 'client');
+      done();
     });
   });
+}
+
+// Estado de pago/programa de una clienta, para mostrar de un vistazo en las
+// listas del admin sin tener que entrar a su perfil. Misma lógica que la
+// alerta de pago dentro de renderAdminClientProfile.
+function getPaymentStatus(clientId, c) {
+  if (!c || !c.initDate) return null;
+  var start = new Date(c.initDate + 'T00:00:00');
+  var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
+  if (!c.endDate) end.setMonth(end.getMonth() + 1);
+  var today0 = new Date(); today0.setHours(0, 0, 0, 0);
+  var daysLeft = Math.ceil((end - today0) / 86400000);
+  var paid = isCurrentCyclePaid(clientId, c);
+  if (daysLeft <= 0) return { level: 'danger', label: '🔴 Programa inactivo' };
+  if (!paid) return { level: 'warn', label: '🟡 Pago pendiente' };
+  return { level: 'ok', label: null };
 }
 
 function renderProgressResults(results) {
@@ -1964,9 +1994,18 @@ function renderProgressResults(results) {
       ? '<img src="' + photo + '" alt="" style="width:2.1rem;height:2.1rem;border-radius:50%;object-fit:cover;flex-shrink:0;">'
       : '<div style="width:2.1rem;height:2.1rem;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;">' + initials(r.name) + '</div>';
     html += '<div onclick="openAdminClientProfile(\'' + r.clientId + '\')" style="cursor:pointer;border:1px solid var(--border);border-radius:10px;padding:0.75rem 0.9rem;margin-bottom:0.6rem;display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
-    html += '<div style="display:flex;align-items:center;gap:0.6rem;">' + avatarHtml + '<div><div style="font-weight:700;font-size:0.82rem;">' + r.name + '</div>';
+    html += '<div style="display:flex;align-items:center;gap:0.6rem;min-width:0;">' + avatarHtml + '<div style="min-width:0;"><div style="font-weight:700;font-size:0.82rem;display:flex;align-items:center;gap:0.35rem;">' + r.name;
+    if (r.needsReply) html += '<span style="width:9px;height:9px;border-radius:50%;background:#e5486b;flex-shrink:0;" title="Chat sin responder"></span>';
+    html += '</div>';
     html += '<div style="font-size:0.7rem;color:var(--muted);margin-top:0.15rem;">' + r.thisWeekCount + (r.thisWeekCount !== 1 ? ' sesiones' : ' sesión') + ' esta semana</div></div></div>';
+    html += '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.3rem;flex-shrink:0;">';
     html += '<span style="font-size:0.65rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:100px;background:' + statusBg + ';color:' + statusColor + ';white-space:nowrap;">' + statusText + '</span>';
+    if (r.payment && r.payment.label) {
+      var payBg = r.payment.level === 'danger' ? '#fff0f0' : '#fff8e0';
+      var payColor = r.payment.level === 'danger' ? '#c44' : '#9A7700';
+      html += '<span style="font-size:0.65rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:100px;background:' + payBg + ';color:' + payColor + ';white-space:nowrap;">' + r.payment.label + '</span>';
+    }
+    html += '</div>';
     html += '</div>';
   });
   el.innerHTML = html;
