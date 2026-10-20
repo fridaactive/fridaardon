@@ -6192,6 +6192,12 @@ function saveRutinaData(clientId, data) {
 function openRutinaEditor(clientId) {
   var c = CLIENTS[clientId];
   if (!c) return;
+  // El editor de rutina es una pantalla normal (sin position:fixed propio),
+  // así que si se abre desde dentro del perfil de clienta (acp-overlay, que
+  // sí es fixed y queda encima de todo) hay que cerrar ese overlay primero
+  // o la pantalla de rutina carga detrás, invisible, y el botón parece que
+  // no hace nada hasta cerrar el perfil manualmente.
+  closeAdminClientProfile();
   rutinaClientId = clientId;
   rutinaCurrentDay = 0;
 
@@ -6233,7 +6239,8 @@ function openRutinaEditor(clientId) {
 
     document.getElementById('rutina-editor-title').textContent = c.name;
     document.getElementById('rutina-back-btn').onclick = function() {
-      showScreen('client-detail');
+      showScreen('clientes');
+      openAdminClientProfile(clientId);
     };
     var msgInicialEl = document.getElementById('rutina-msg-inicial');
     var aclaracionesEl = document.getElementById('rutina-aclaraciones');
