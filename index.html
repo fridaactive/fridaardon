@@ -2070,7 +2070,9 @@ function renderEtmTimerUI() {
 // carga y reps son más anchos de lo que necesitan, así que de ese ancho
 // sobrante sale el lugar para este.
 function renderEsfuerzoGroupHtml(exId, exKey, lastEsfuerzo) {
-  var val = lastEsfuerzo ? escapeHtml(String(lastEsfuerzo)) : '–';
+  // "0" en vez de un guión como placeholder: un guión se confundía
+  // visualmente con el botón de "−" al lado, parecía un segundo botón.
+  var val = lastEsfuerzo ? escapeHtml(String(lastEsfuerzo)) : '0';
   var html = '<div class="ex-input-group ex-input-group-fixed">';
   html += '<label class="ex-input-label">Esfuerzo</label>';
   html += '<div class="ex-stepper">';
@@ -2188,7 +2190,12 @@ function renderExerciseBlocksHtml(day) {
 // cada vez que se abre la rutina, para invitar a escribir algo distinto
 // a que se abra más en vez de ver siempre el mismo texto fijo.
 var DAY_COMMENT_PROMPTS = [
+  '¿Cómo anduvo tu energía hoy?',
+  '¿Te gustó la rutina de hoy?',
+  '¿Cómo te sentiste con los pesos de hoy?',
+  '¿Dormiste bien anoche?',
   '¿Cómo estuvo tu ánimo hoy?',
+  '¿Alguna duda con algún ejercicio?',
   '¿Sentiste algún dolor o molestia?'
 ];
 function randomDayCommentPrompt() {
