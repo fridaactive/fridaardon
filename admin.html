@@ -523,7 +523,7 @@
   .acp-overlay { display:none; position:fixed; inset:0; background:#f7f8fb; z-index:9996; overflow-y:auto; }
   .acp-header { position:sticky; top:0; background:#fff; padding:1rem 1.1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:0.75rem; z-index:2; }
   .acp-back-btn { background:none; border:none; font-size:1.3rem; cursor:pointer; color:var(--text); line-height:1; padding:0.2rem; }
-  .acp-header-title { font-weight:700; font-size:0.95rem; }
+  .acp-header-title { font-weight:700; font-size:0.95rem; flex:1; }
   .acp-content { padding:1.1rem 1.1rem 3rem; max-width:480px; margin:0 auto; }
 
   .card { background:#fff; border:1.5px solid var(--border); border-radius:16px; padding:1.1rem 1.25rem; margin-bottom:1.1rem; box-shadow:0 2px 14px rgba(15,63,168,0.05); }
@@ -1346,6 +1346,7 @@
   <div class="acp-header">
     <button class="acp-back-btn" onclick="closeAdminClientProfile()">←</button>
     <div class="acp-header-title">Perfil de clienta</div>
+    <button class="acp-back-btn" onclick="if(acpState.clientId) openClientProfile(acpState.clientId);" title="Editar datos de la clienta">⋮</button>
   </div>
   <div class="acp-content" id="acp-content"></div>
 </div>
@@ -1751,18 +1752,24 @@ function renderPortalSection(clientId) {
 // ── PERFIL DE CLIENTA, vista completa (mismo diseño que ella ve en su app) ──
 var MESES_LARGOS_ADMIN = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
+// Pantalla única de clienta: antes "Ver perfil completo" (acp-overlay) y
+// "Gestionar clienta" (client-detail, otra pantalla aparte) eran dos
+// lugares distintos sin forma clara de volver del uno al otro. Ahora todo
+// vive acá adentro, con pestañas, y "← Volver" siempre regresa a la lista.
+var acpState = { clientId: null, uid: null, portal: {}, tab: 'resumen' };
+
 function openAdminClientProfile(clientId) {
   var overlay = document.getElementById('acp-overlay');
   var content = document.getElementById('acp-content');
   overlay.style.display = 'block';
   content.innerHTML = '<div style="padding:2rem 0;text-align:center;color:var(--muted);font-size:0.8rem;">Cargando…</div>';
+  currentClient = clientId;
   var uid = CLIENT_LINKS[clientId];
-  if (!uid) {
-    content.innerHTML = '<div style="padding:2rem 0;text-align:center;color:var(--muted);font-size:0.8rem;">Esta clienta todavía no vinculó su cuenta.</div>';
-    return;
-  }
+  acpState = { clientId: clientId, uid: uid || null, portal: {}, tab: 'resumen' };
+  if (!uid) { acpRenderShell(); return; }
   fbGet('clientasPortal/' + uid, function(portal) {
-    renderAdminClientProfile(clientId, uid, portal || {});
+    acpState.portal = portal || {};
+    acpRenderShell();
   });
 }
 
@@ -1770,8 +1777,78 @@ function closeAdminClientProfile() {
   document.getElementById('acp-overlay').style.display = 'none';
 }
 
-function renderAdminClientProfile(clientId, uid, portal) {
+function acpSwitchTab(tab) {
+  acpState.tab = tab;
+  acpRenderShell();
+}
+
+function acpTabBtnHtml(tab, label) {
+  return '<button type="button" class="pc-tab-btn' + (acpState.tab === tab ? ' active' : '') + '" onclick="acpSwitchTab(\'' + tab + '\')">' + label + '</button>';
+}
+
+function acpRenderShell() {
   var content = document.getElementById('acp-content');
+  var clientId = acpState.clientId;
+  var c = CLIENTS[clientId] || {};
+
+  var html = '<div class="pc-tabs" style="margin-bottom:1rem;">';
+  html += acpTabBtnHtml('resumen', 'Resumen');
+  html += acpTabBtnHtml('rutina', '📋 Rutina');
+  html += acpTabBtnHtml('pagos', '💳 Pagos');
+  html += '</div>';
+
+  if (acpState.tab === 'rutina') html += renderAcpRutinaHtml(clientId, c);
+  else if (acpState.tab === 'pagos') html += renderAcpPagosHtml(clientId, c);
+  else html += renderAdminClientProfile(clientId, acpState.uid, acpState.portal);
+
+  content.innerHTML = html;
+  if (acpState.tab === 'pagos') renderQuotation(clientId, c, 'acp-quotation');
+}
+
+// ── Pestaña Rutina: acá sí interesa ver el objetivo, a diferencia del
+// resumen general donde solo se quiere ver actividad/estado de un vistazo.
+function renderAcpRutinaHtml(clientId, c) {
+  var html = '<div class="card">';
+  html += '<div class="card-label">🎯 Objetivo</div>';
+  html += '<div style="font-size:0.85rem;color:var(--text);line-height:1.5;">' + (c.meta ? escapeHtmlAdmin(c.meta) : '<span style="color:var(--muted);">Sin objetivo definido todavía.</span>') + '</div>';
+  html += '</div>';
+  if (clientId === 'saca' && c.rutina) {
+    // Caso especial heredado: Herberth tiene su rutina como HTML aparte.
+    html += '<a href="' + escapeHtmlAdmin(c.rutina) + '" target="_blank" style="display:block;text-align:center;background:var(--blue);color:#fff;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;text-decoration:none;">📋 Ver rutina →</a>';
+  } else {
+    html += '<button type="button" onclick="openRutinaEditor(\'' + clientId + '\')" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">📋 Ver / Editar rutina</button>';
+  }
+  return html;
+}
+
+// ── Pestaña Pagos: estado del ciclo actual + activar uno nuevo + cotización.
+function renderAcpPagosHtml(clientId, c) {
+  var html = '';
+  if (c.initDate) {
+    var mesActual = (getClientPayments()[clientId] || []).length + 1;
+    var start = new Date(c.initDate + 'T00:00:00');
+    var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
+    if (!c.endDate) end.setMonth(end.getMonth() + 1);
+    var today0 = new Date(); today0.setHours(0, 0, 0, 0);
+    var daysLeft = Math.ceil((end - today0) / 86400000);
+    var paid = isCurrentCyclePaid(clientId, c);
+    var statusColor = daysLeft <= 0 ? '#A62B2B' : !paid ? '#8A6D14' : '#2a7a2a';
+    var statusBg = daysLeft <= 0 ? '#FDEAEA' : !paid ? '#FFF6E0' : '#F0FFF0';
+    var statusBorder = daysLeft <= 0 ? '#F3C6C6' : !paid ? '#F0DFA0' : '#cde8cd';
+    html += '<div class="card" style="background:' + statusBg + ';border-color:' + statusBorder + ';">';
+    html += '<div class="card-label" style="color:' + statusColor + ';">Mes ' + mesActual + (mesActual <= 3 ? ' de 3' : '') + ' · ' + (daysLeft <= 0 ? 'Ciclo vencido' : 'Quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días')) + '</div>';
+    html += '<div style="font-size:0.8rem;color:var(--text);">' + (paid ? '✅ Pagó este ciclo' : '⏳ Pendiente de pago') + (c.cuota ? ' · $' + c.cuota : '') + '</div>';
+    if (!paid && c.cuota) {
+      html += '<button type="button" onclick="markClientAsPaid(\'' + clientId + '\');acpSwitchTab(\'pagos\');" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Marcar como pagado</button>';
+    }
+    html += '</div>';
+  }
+  html += '<button type="button" onclick="openCycleModal(\'' + clientId + '\')" style="width:100%;background:#2a7a2a;color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;margin-bottom:1rem;">🟢 Activar nuevo ciclo / mes</button>';
+  html += '<div id="acp-quotation"></div>';
+  return html;
+}
+
+function renderAdminClientProfile(clientId, uid, portal) {
   var c = CLIENTS[clientId] || {};
   var perfil = portal.perfil || {};
   var diasEntrenados = portal.diasEntrenados || {};
@@ -1906,7 +1983,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
   html += lastMsg
     ? '<div style="font-size:0.78rem;color:var(--muted);">' + (lastMsg.from === 'admin' ? 'Vos: ' : '') + escapeHtmlAdmin(lastMsg.text || '') + '</div>'
     : '<div style="font-size:0.78rem;color:var(--muted);">Todavía no hay mensajes.</div>';
-  html += '<button onclick="openAdminChat(\'' + clientId + '\',\'' + uid + '\')" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Abrir chat</button>';
+  html += '<button onclick="openAdminChat(\'' + clientId + '\',\'' + (uid || '') + '\')" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Abrir chat</button>';
   html += '</div>';
 
   // ── Calendario ──
@@ -1918,10 +1995,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
   html += transfHtml;
   html += '</div>';
 
-  // ── Ir a gestión completa ──
-  html += '<button onclick="closeAdminClientProfile();openClientDetail(\'' + clientId + '\')" style="width:100%;background:#f2f4f9;color:var(--text);border:1.5px solid var(--border);border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Gestionar clienta (rutina, pagos, plan) →</button>';
-
-  content.innerHTML = html;
+  return html;
 }
 
 // ── PORTAL DE CLIENTAS: lista de todas las clientas vinculadas, con su actividad real ──
@@ -3320,8 +3394,8 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-function renderQuotation(id, c) {
-  var container = document.getElementById('cd-quotation');
+function renderQuotation(id, c, containerId) {
+  var container = document.getElementById(containerId || 'cd-quotation');
   if (!container) return;
 
   var cycle = getCycleConfig(id);
@@ -3606,8 +3680,9 @@ function saveCycle() {
   renderPaymentStatus(id, c);
   renderQuotation(id, c);
 
-  // Re-open client detail to show updated state
-  openClientDetail(id);
+  // Refresca la pantalla de la clienta sin perder la pestaña en la que
+  // estaba (normalmente Pagos, de donde se activa un ciclo nuevo).
+  if (acpState.clientId === id) acpRenderShell();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -4017,7 +4092,7 @@ function renderClientsList() {
   container.innerHTML = html;
   container.querySelectorAll('.client-card').forEach(function(card) {
     card.addEventListener('click', function() {
-      openClientDetail(this.getAttribute('data-cid'));
+      openAdminClientProfile(this.getAttribute('data-cid'));
     });
   });
 }
