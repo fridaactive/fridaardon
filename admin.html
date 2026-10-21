@@ -2905,6 +2905,11 @@ loadCustomClients();
 var CLIENT_LINKS = JSON.parse(localStorage.getItem('fa_client_links') || '{}');
 var CLIENT_PHOTOS = {};
 var EXERCISE_BANK = JSON.parse(localStorage.getItem('fa_exercise_bank') || '{}');
+// Lista fija de grupos musculares — antes "grupo" era texto libre, lo que
+// hacía imposible filtrar de forma confiable (cada quien lo escribía
+// distinto). Con una lista fija, filtrar "Espalda" siempre encuentra todo
+// lo de espalda, sin importar cómo se haya escrito antes.
+var EXERCISE_GROUPS = ['Pierna', 'Glúteos', 'Espalda', 'Pecho', 'Hombros', 'Brazos', 'Core/Abdomen', 'Cardio', 'Full body', 'Otro'];
 var currentClient = null;
 
 function countSessionsInCycle(id, c) {
@@ -4425,6 +4430,8 @@ function showScreen(name) {
   if (adminChatModal && adminChatModal.style.display !== 'none') { adminChatModal.style.display = 'none'; if (adminChatRef) { adminChatRef.off(); adminChatRef = null; } adminChatUid = null; }
   var exerciseBankModal = document.getElementById('exercise-bank-modal');
   if (exerciseBankModal) exerciseBankModal.style.display = 'none';
+  var exercisePickerModal = document.getElementById('exercise-picker-modal');
+  if (exercisePickerModal) exercisePickerModal.style.display = 'none';
   var templateModal = document.getElementById('template-modal');
   if (templateModal) templateModal.style.display = 'none';
 
@@ -6356,6 +6363,89 @@ function renderExerciseBankList() {
   });
   el.innerHTML = html;
 }
+
+// ── SELECTOR DE EJERCICIOS DEL BANCO (desde un bloque de la rutina) ──
+// En vez de escribir el nombre y confiar en el autocompletar nativo, esto
+// deja filtrar por grupo muscular y tocar para agregar directo al bloque
+// que se está armando — pensado para cuando Frida quiere ver "todo lo que
+// tengo de espalda" y elegir de ahí, no recordar el nombre exacto.
+var exercisePickerBlockId = null;
+var epSelectedGroup = 'Todos';
+
+function openExercisePicker(blockId) {
+  exercisePickerBlockId = blockId;
+  epSelectedGroup = 'Todos';
+  document.getElementById('ep-search').value = '';
+  renderExercisePickerChips();
+  renderExercisePickerResults();
+  document.getElementById('exercise-picker-modal').style.display = 'flex';
+}
+
+function hideExercisePicker() {
+  document.getElementById('exercise-picker-modal').style.display = 'none';
+  exercisePickerBlockId = null;
+}
+
+function epSelectGroup(g) {
+  epSelectedGroup = g;
+  renderExercisePickerChips();
+  renderExercisePickerResults();
+}
+
+function renderExercisePickerChips() {
+  var groups = ['Todos'].concat(EXERCISE_GROUPS);
+  var html = groups.map(function(g) {
+    var active = g === epSelectedGroup;
+    return '<button type="button" onclick="epSelectGroup(\'' + g.replace(/'/g, "\\'") + '\')" style="flex-shrink:0;padding:0.4rem 0.75rem;border-radius:100px;border:1.5px solid ' + (active ? 'var(--blue)' : 'var(--border)') + ';background:' + (active ? 'var(--blue)' : '#fff') + ';color:' + (active ? '#fff' : 'var(--muted)') + ';font-size:0.72rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;white-space:nowrap;">' + g + '</button>';
+  }).join('');
+  document.getElementById('ep-group-chips').innerHTML = html;
+}
+
+function renderExercisePickerResults() {
+  var search = document.getElementById('ep-search').value.trim().toLowerCase();
+  var items = Object.keys(EXERCISE_BANK).map(function(k) { return { id: k, data: EXERCISE_BANK[k] }; });
+  items = items.filter(function(it) {
+    var matchesGroup = epSelectedGroup === 'Todos' || (it.data.grupo || '') === epSelectedGroup;
+    var matchesSearch = !search || (it.data.nombre || '').toLowerCase().indexOf(search) !== -1;
+    return matchesGroup && matchesSearch;
+  });
+  items.sort(function(a, b) { return (a.data.nombre || '').localeCompare(b.data.nombre || ''); });
+  var el = document.getElementById('ep-results');
+  if (items.length === 0) {
+    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:1rem 0;text-align:center;">Sin ejercicios en esta categoría todavía.</div>';
+    return;
+  }
+  var html = '';
+  items.forEach(function(it) {
+    var sub = [];
+    if (it.data.grupo) sub.push(it.data.grupo);
+    if (it.data.video) sub.push('🎥 con video');
+    html += '<div onclick="pickExerciseFromBank(\'' + it.id + '\')" style="display:flex;justify-content:space-between;align-items:center;padding:0.65rem 0.5rem;border-bottom:1px solid var(--border);cursor:pointer;">';
+    html += '<div><div style="font-weight:600;font-size:0.82rem;">' + escHtml(it.data.nombre) + '</div>';
+    if (sub.length) html += '<div style="font-size:0.68rem;color:var(--muted);">' + sub.join(' · ') + '</div>';
+    html += '</div>';
+    html += '<span style="color:var(--blue);font-size:1rem;font-weight:700;">+</span>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function pickExerciseFromBank(bankId) {
+  var item = EXERCISE_BANK[bankId];
+  if (!item || !exercisePickerBlockId) return;
+  var block = rutinaData.days[rutinaCurrentDay].blocks.find(function(b) { return b.id === exercisePickerBlockId; });
+  if (!block) return;
+  var lastEx = block.exercises[block.exercises.length - 1];
+  var defaultTipo = lastEx ? exTipo(block, lastEx) : (block.mode === 'tiempo' ? 'tiempo' : 'reps');
+  var newEx = makeNewExercise(defaultTipo);
+  if (defaultTipo === 'tiempo') newEx.segundos = block.workSecs || 40;
+  newEx.name = item.nombre;
+  block.exercises.push(newEx);
+  saveRutinaData(rutinaClientId, rutinaData);
+  renderRutinaEditor();
+  hideExercisePicker();
+}
+
 function saveExerciseBankItem() {
   var nombre = document.getElementById('eb-nombre').value.trim();
   if (!nombre) { alert('Ingresá el nombre del ejercicio.'); return; }
@@ -6426,6 +6516,9 @@ function openExerciseVideoModal(name) {
   document.getElementById('ev-video').value = existing;
   document.getElementById('ev-descripcion').value = (item && item.descripcion) || '';
   document.getElementById('ev-vertical').checked = !!(item && item.vertical);
+  var grupoSel = document.getElementById('ev-grupo');
+  var existingGrupo = (item && item.grupo) || '';
+  grupoSel.value = EXERCISE_GROUPS.indexOf(existingGrupo) !== -1 ? existingGrupo : '';
   var frame = document.getElementById('ev-preview-frame');
   if (existing) {
     frame.src = getYouTubeEmbedUrl(existing);
@@ -6476,6 +6569,7 @@ function saveExerciseVideoModal() {
   var video = document.getElementById('ev-video').value.trim();
   var descripcion = document.getElementById('ev-descripcion').value.trim();
   var vertical = document.getElementById('ev-vertical').checked;
+  var grupo = document.getElementById('ev-grupo').value;
   var normalized = name.trim().toLowerCase();
   var existingId = Object.keys(EXERCISE_BANK).find(function(k) {
     var n = EXERCISE_BANK[k].nombre;
@@ -6486,16 +6580,18 @@ function saveExerciseVideoModal() {
     if (!db) { alert('No se pudo conectar con Firebase.'); return; }
     var promise;
     if (existingId) {
-      promise = db.ref('exerciseBank/' + existingId).update({ video: video || null, descripcion: descripcion || null, vertical: vertical || null }).then(function() {
+      promise = db.ref('exerciseBank/' + existingId).update({ video: video || null, descripcion: descripcion || null, vertical: vertical || null, grupo: grupo || null }).then(function() {
         if (video) EXERCISE_BANK[existingId].video = video; else delete EXERCISE_BANK[existingId].video;
         if (descripcion) EXERCISE_BANK[existingId].descripcion = descripcion; else delete EXERCISE_BANK[existingId].descripcion;
         if (vertical) EXERCISE_BANK[existingId].vertical = true; else delete EXERCISE_BANK[existingId].vertical;
+        if (grupo) EXERCISE_BANK[existingId].grupo = grupo; else delete EXERCISE_BANK[existingId].grupo;
       });
     } else {
       var item = { nombre: name };
       if (video) item.video = video;
       if (descripcion) item.descripcion = descripcion;
       if (vertical) item.vertical = true;
+      if (grupo) item.grupo = grupo;
       promise = db.ref('exerciseBank').push(item).then(function(ref) { EXERCISE_BANK[ref.key] = item; });
     }
     promise.then(function() {
@@ -6702,7 +6798,10 @@ function renderRutinaEditor() {
       }
     });
 
-    html += '<button class="rutina-add-ex-btn" data-blockid="'+block.id+'">+ Agregar ejercicio</button>';
+    html += '<div style="display:flex;gap:0.5rem;margin:0.5rem 0.75rem;">';
+    html += '<button class="rutina-add-ex-btn" data-blockid="'+block.id+'" style="margin:0;flex:1;">+ Agregar ejercicio</button>';
+    html += '<button type="button" class="rutina-pick-bank-btn" data-blockid="'+block.id+'" style="flex:1;background:var(--blue-lt);border:1.5px dashed var(--blue);border-radius:8px;padding:0.5rem;color:var(--blue);font-size:0.7rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;touch-action:manipulation;">🔍 Elegir del banco</button>';
+    html += '</div>';
     html += '</div>';
   });
 
@@ -6880,6 +6979,13 @@ function renderRutinaEditor() {
         saveRutinaData(rutinaClientId, rutinaData);
         renderRutinaEditor();
       }
+    });
+  });
+
+  // Event: elegir ejercicio del banco (filtrado por grupo muscular)
+  contentEl.querySelectorAll('.rutina-pick-bank-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      openExercisePicker(this.getAttribute('data-blockid'));
     });
   });
 
@@ -7352,11 +7458,24 @@ function renderAhorrosMes() {
     </div>
     <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;">Los ejercicios que agregués acá aparecen como sugerencia al escribir el nombre en cualquier rutina.</div>
     <div class="fin-form-row"><div class="fin-form-label">Nombre del ejercicio</div><input class="fin-form-input" id="eb-nombre" type="text" placeholder="Ej: Sentadilla búlgara"></div>
-    <div class="fin-form-row"><div class="fin-form-label">Grupo muscular (opcional)</div><input class="fin-form-input" id="eb-grupo" type="text" placeholder="Ej: Pierna"></div>
+    <div class="fin-form-row"><div class="fin-form-label">Grupo muscular (opcional)</div><select class="fin-form-input" id="eb-grupo"><option value="">— Elegí un grupo —</option><option>Pierna</option><option>Glúteos</option><option>Espalda</option><option>Pecho</option><option>Hombros</option><option>Brazos</option><option>Core/Abdomen</option><option>Cardio</option><option>Full body</option><option>Otro</option></select></div>
     <div class="fin-form-row"><div class="fin-form-label">Video de YouTube (opcional)</div><input class="fin-form-input" id="eb-video" type="text" placeholder="Pegá el link — subilo como 'No listado' en YouTube"></div>
     <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--text);margin:-0.4rem 0 1rem;cursor:pointer;"><input type="checkbox" id="eb-vertical" style="width:1.1rem;height:1.1rem;"> Video vertical (grabado con el celular)</label>
     <button onclick="saveExerciseBankItem()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;">+ Agregar al banco</button>
     <div id="exercise-bank-list"></div>
+  </div>
+</div>
+
+<!-- Selector de ejercicios del banco por grupo muscular, al armar una rutina -->
+<div id="exercise-picker-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-size:1rem;font-weight:700;color:var(--text);">🔍 Elegir del banco</div>
+      <button onclick="hideExercisePicker()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
+    </div>
+    <input class="fin-form-input" id="ep-search" type="text" placeholder="Buscar por nombre..." oninput="renderExercisePickerResults()" style="width:100%;margin-bottom:0.75rem;">
+    <div id="ep-group-chips" style="display:flex;gap:0.4rem;overflow-x:auto;padding-bottom:0.3rem;margin-bottom:1rem;"></div>
+    <div id="ep-results"></div>
   </div>
 </div>
 
@@ -7370,6 +7489,7 @@ function renderAhorrosMes() {
     <div id="ev-preview-wrap" style="display:none;position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;background:#000;margin-bottom:1rem;">
       <iframe id="ev-preview-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
+    <div class="fin-form-row"><div class="fin-form-label">Grupo muscular (opcional)</div><select class="fin-form-input" id="ev-grupo"><option value="">— Elegí un grupo —</option><option>Pierna</option><option>Glúteos</option><option>Espalda</option><option>Pecho</option><option>Hombros</option><option>Brazos</option><option>Core/Abdomen</option><option>Cardio</option><option>Full body</option><option>Otro</option></select></div>
     <div class="fin-form-row"><div class="fin-form-label">Video de YouTube</div><input class="fin-form-input" id="ev-video" type="text" placeholder="Pegá el link — subilo como 'No listado' en YouTube"></div>
     <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--text);margin:-0.4rem 0 1rem;cursor:pointer;"><input type="checkbox" id="ev-vertical" onchange="evUpdatePreviewOrientation()" style="width:1.1rem;height:1.1rem;"> Video vertical (grabado con el celular)</label>
     <div class="fin-form-row"><div class="fin-form-label">Nota / descripción (opcional)</div><textarea class="fin-form-input" id="ev-descripcion" rows="3" placeholder="Ej: Espalda pegada al respaldo, no bloquear la rodilla arriba..." style="resize:vertical;"></textarea></div>
