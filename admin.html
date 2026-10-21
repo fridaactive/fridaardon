@@ -1774,7 +1774,13 @@ function openAdminClientProfile(clientId) {
 }
 
 function closeAdminClientProfile() {
-  document.getElementById('acp-overlay').style.display = 'none';
+  var overlay = document.getElementById('acp-overlay');
+  overlay.style.display = 'none';
+  // Safari de iPhone a veces no repinta al instante un elemento
+  // position:fixed al cambiarle display — se queda pegado en pantalla
+  // hasta el próximo toque, aunque la pantalla de atrás (ej. rutina) ya
+  // esté activa. Forzar un reflow evita que se quede "fantasma" así.
+  void overlay.offsetHeight;
 }
 
 function acpSwitchTab(tab) {
