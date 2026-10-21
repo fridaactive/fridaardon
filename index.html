@@ -2144,7 +2144,7 @@ function renderExerciseBlocksHtml(day) {
           ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="m10.3 8.5 5 3.5-5 3.5v-7Z"/></svg>'
           : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M7 3.5h7l4 4v13H7Z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></svg>';
         var exBtnLabel = videoUrl ? 'Ver ejercicio' : 'Ver nota';
-        html += '<button type="button" onclick="showExerciseVideo(\'' + jsAttrEscape(videoUrl || '') + '\', \'' + jsAttrEscape(nota || '') + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">' + exBtnIcon + exBtnLabel + '</button>';
+        html += '<button type="button" onclick="showExerciseVideo(\'' + jsAttrEscape(videoUrl || '') + '\', \'' + jsAttrEscape(nota || '') + '\', ' + (bankItem && bankItem.vertical ? 'true' : 'false') + ')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">' + exBtnIcon + exBtnLabel + '</button>';
       }
       if (hasHistorial) {
         // Mismo estilo de pill que "Ver ejercicio"/"Ver nota", en vez del
@@ -2245,12 +2245,33 @@ function getYouTubeEmbedUrl(url) {
   return id ? ('https://www.youtube.com/embed/' + id + '?autoplay=1') : url;
 }
 
-function showExerciseVideo(url, nota) {
+function showExerciseVideo(url, nota, vertical) {
   var wrap = document.getElementById('video-modal-frame-wrap');
   var frame = document.getElementById('video-modal-frame');
   if (url) {
     frame.src = getYouTubeEmbedUrl(url);
     wrap.style.display = 'block';
+    if (vertical) {
+      // Video grabado vertical (celular): en vez de forzar un recuadro
+      // horizontal 16:9 con barras negras a los costados, se arma como
+      // 9:16 real, alto, casi pantalla completa — como se grabó.
+      wrap.style.padding = '0';
+      wrap.style.height = '80vh';
+      wrap.style.maxHeight = '700px';
+      wrap.style.aspectRatio = '9 / 16';
+      wrap.style.width = 'auto';
+      wrap.style.maxWidth = '100%';
+      wrap.style.margin = '0 auto';
+    } else {
+      wrap.style.padding = '';
+      wrap.style.paddingBottom = '56.25%';
+      wrap.style.height = '0';
+      wrap.style.maxHeight = '';
+      wrap.style.aspectRatio = '';
+      wrap.style.width = '100%';
+      wrap.style.maxWidth = '';
+      wrap.style.margin = '0';
+    }
   } else {
     frame.src = '';
     wrap.style.display = 'none';

@@ -6362,6 +6362,7 @@ function saveExerciseBankItem() {
   var item = { nombre: nombre, grupo: document.getElementById('eb-grupo').value.trim() };
   var video = document.getElementById('eb-video').value.trim();
   if (video) item.video = video;
+  if (document.getElementById('eb-vertical').checked) item.vertical = true;
   withAdminAuth(function() {
     var db = getDB();
     if (!db) { alert('No se pudo conectar con Firebase.'); return; }
@@ -6373,6 +6374,7 @@ function saveExerciseBankItem() {
       document.getElementById('eb-nombre').value = '';
       document.getElementById('eb-grupo').value = '';
       document.getElementById('eb-video').value = '';
+      document.getElementById('eb-vertical').checked = false;
     }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
   });
 }
@@ -6423,16 +6425,43 @@ function openExerciseVideoModal(name) {
   var existing = (item && item.video) || '';
   document.getElementById('ev-video').value = existing;
   document.getElementById('ev-descripcion').value = (item && item.descripcion) || '';
-  var wrap = document.getElementById('ev-preview-wrap');
+  document.getElementById('ev-vertical').checked = !!(item && item.vertical);
   var frame = document.getElementById('ev-preview-frame');
   if (existing) {
     frame.src = getYouTubeEmbedUrl(existing);
-    wrap.style.display = 'block';
   } else {
     frame.src = '';
-    wrap.style.display = 'none';
   }
+  evUpdatePreviewOrientation();
   document.getElementById('exercise-video-modal').style.display = 'flex';
+}
+
+// El preview dentro del modal usa el mismo truco de alto/aspect-ratio que
+// el reproductor real que ve la clienta, para que Frida vea exactamente
+// cómo va a quedar antes de guardar.
+function evUpdatePreviewOrientation() {
+  var wrap = document.getElementById('ev-preview-wrap');
+  var hasVideo = !!document.getElementById('ev-video').value.trim();
+  if (!hasVideo) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  if (document.getElementById('ev-vertical').checked) {
+    wrap.style.padding = '0';
+    wrap.style.height = '55vh';
+    wrap.style.maxHeight = '420px';
+    wrap.style.aspectRatio = '9 / 16';
+    wrap.style.width = 'auto';
+    wrap.style.maxWidth = '100%';
+    wrap.style.margin = '0 auto 1rem';
+  } else {
+    wrap.style.padding = '';
+    wrap.style.paddingBottom = '56.25%';
+    wrap.style.height = '0';
+    wrap.style.maxHeight = '';
+    wrap.style.aspectRatio = '';
+    wrap.style.width = '100%';
+    wrap.style.maxWidth = '';
+    wrap.style.margin = '0 0 1rem';
+  }
 }
 
 function hideExerciseVideoModal() {
@@ -6446,6 +6475,7 @@ function saveExerciseVideoModal() {
   if (!name) return;
   var video = document.getElementById('ev-video').value.trim();
   var descripcion = document.getElementById('ev-descripcion').value.trim();
+  var vertical = document.getElementById('ev-vertical').checked;
   var normalized = name.trim().toLowerCase();
   var existingId = Object.keys(EXERCISE_BANK).find(function(k) {
     var n = EXERCISE_BANK[k].nombre;
@@ -6456,14 +6486,16 @@ function saveExerciseVideoModal() {
     if (!db) { alert('No se pudo conectar con Firebase.'); return; }
     var promise;
     if (existingId) {
-      promise = db.ref('exerciseBank/' + existingId).update({ video: video || null, descripcion: descripcion || null }).then(function() {
+      promise = db.ref('exerciseBank/' + existingId).update({ video: video || null, descripcion: descripcion || null, vertical: vertical || null }).then(function() {
         if (video) EXERCISE_BANK[existingId].video = video; else delete EXERCISE_BANK[existingId].video;
         if (descripcion) EXERCISE_BANK[existingId].descripcion = descripcion; else delete EXERCISE_BANK[existingId].descripcion;
+        if (vertical) EXERCISE_BANK[existingId].vertical = true; else delete EXERCISE_BANK[existingId].vertical;
       });
     } else {
       var item = { nombre: name };
       if (video) item.video = video;
       if (descripcion) item.descripcion = descripcion;
+      if (vertical) item.vertical = true;
       promise = db.ref('exerciseBank').push(item).then(function(ref) { EXERCISE_BANK[ref.key] = item; });
     }
     promise.then(function() {
@@ -7322,6 +7354,7 @@ function renderAhorrosMes() {
     <div class="fin-form-row"><div class="fin-form-label">Nombre del ejercicio</div><input class="fin-form-input" id="eb-nombre" type="text" placeholder="Ej: Sentadilla búlgara"></div>
     <div class="fin-form-row"><div class="fin-form-label">Grupo muscular (opcional)</div><input class="fin-form-input" id="eb-grupo" type="text" placeholder="Ej: Pierna"></div>
     <div class="fin-form-row"><div class="fin-form-label">Video de YouTube (opcional)</div><input class="fin-form-input" id="eb-video" type="text" placeholder="Pegá el link — subilo como 'No listado' en YouTube"></div>
+    <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--text);margin:-0.4rem 0 1rem;cursor:pointer;"><input type="checkbox" id="eb-vertical" style="width:1.1rem;height:1.1rem;"> Video vertical (grabado con el celular)</label>
     <button onclick="saveExerciseBankItem()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;">+ Agregar al banco</button>
     <div id="exercise-bank-list"></div>
   </div>
@@ -7338,6 +7371,7 @@ function renderAhorrosMes() {
       <iframe id="ev-preview-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
     <div class="fin-form-row"><div class="fin-form-label">Video de YouTube</div><input class="fin-form-input" id="ev-video" type="text" placeholder="Pegá el link — subilo como 'No listado' en YouTube"></div>
+    <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--text);margin:-0.4rem 0 1rem;cursor:pointer;"><input type="checkbox" id="ev-vertical" onchange="evUpdatePreviewOrientation()" style="width:1.1rem;height:1.1rem;"> Video vertical (grabado con el celular)</label>
     <div class="fin-form-row"><div class="fin-form-label">Nota / descripción (opcional)</div><textarea class="fin-form-input" id="ev-descripcion" rows="3" placeholder="Ej: Espalda pegada al respaldo, no bloquear la rodilla arriba..." style="resize:vertical;"></textarea></div>
     <div style="font-size:0.68rem;color:var(--muted);margin-bottom:1rem;">Esto queda guardado en el banco de ejercicios y se muestra automáticamente a tus clientas cuando vean "<span id="ev-modal-name-inline"></span>" en su rutina.</div>
     <button onclick="saveExerciseVideoModal()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;">Guardar</button>
