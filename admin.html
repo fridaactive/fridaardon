@@ -2909,7 +2909,7 @@ var EXERCISE_BANK = JSON.parse(localStorage.getItem('fa_exercise_bank') || '{}')
 // hacía imposible filtrar de forma confiable (cada quien lo escribía
 // distinto). Con una lista fija, filtrar "Espalda" siempre encuentra todo
 // lo de espalda, sin importar cómo se haya escrito antes.
-var EXERCISE_GROUPS = ['Pierna', 'Glúteos', 'Espalda', 'Pecho', 'Hombros', 'Brazos', 'Core/Abdomen', 'Cardio', 'Full body', 'Otro'];
+var EXERCISE_GROUPS = ['Pierna', 'Glúteos', 'Espalda', 'Pecho', 'Hombros', 'Brazos', 'Bíceps', 'Tríceps', 'Isquiotibiales', 'Core/Abdomen', 'Cardio', 'Full body', 'Otro'];
 var currentClient = null;
 
 function countSessionsInCycle(id, c) {
@@ -7458,7 +7458,7 @@ function renderAhorrosMes() {
     </div>
     <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;">Los ejercicios que agregués acá aparecen como sugerencia al escribir el nombre en cualquier rutina.</div>
     <div class="fin-form-row"><div class="fin-form-label">Nombre del ejercicio</div><input class="fin-form-input" id="eb-nombre" type="text" placeholder="Ej: Sentadilla búlgara"></div>
-    <div class="fin-form-row"><div class="fin-form-label">Grupo muscular (opcional)</div><select class="fin-form-input" id="eb-grupo"><option value="">— Elegí un grupo —</option><option>Pierna</option><option>Glúteos</option><option>Espalda</option><option>Pecho</option><option>Hombros</option><option>Brazos</option><option>Core/Abdomen</option><option>Cardio</option><option>Full body</option><option>Otro</option></select></div>
+    <div class="fin-form-row"><div class="fin-form-label">Grupo muscular (opcional)</div><select class="fin-form-input" id="eb-grupo"><option value="">— Elegí un grupo —</option><option>Pierna</option><option>Glúteos</option><option>Espalda</option><option>Pecho</option><option>Hombros</option><option>Brazos</option><option>Bíceps</option><option>Tríceps</option><option>Isquiotibiales</option><option>Core/Abdomen</option><option>Cardio</option><option>Full body</option><option>Otro</option></select></div>
     <div class="fin-form-row"><div class="fin-form-label">Video de YouTube (opcional)</div><input class="fin-form-input" id="eb-video" type="text" placeholder="Pegá el link — subilo como 'No listado' en YouTube"></div>
     <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--text);margin:-0.4rem 0 1rem;cursor:pointer;"><input type="checkbox" id="eb-vertical" style="width:1.1rem;height:1.1rem;"> Video vertical (grabado con el celular)</label>
     <button onclick="saveExerciseBankItem()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;">+ Agregar al banco</button>
@@ -7489,7 +7489,7 @@ function renderAhorrosMes() {
     <div id="ev-preview-wrap" style="display:none;position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;background:#000;margin-bottom:1rem;">
       <iframe id="ev-preview-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
-    <div class="fin-form-row"><div class="fin-form-label">Grupo muscular (opcional)</div><select class="fin-form-input" id="ev-grupo"><option value="">— Elegí un grupo —</option><option>Pierna</option><option>Glúteos</option><option>Espalda</option><option>Pecho</option><option>Hombros</option><option>Brazos</option><option>Core/Abdomen</option><option>Cardio</option><option>Full body</option><option>Otro</option></select></div>
+    <div class="fin-form-row"><div class="fin-form-label">Grupo muscular (opcional)</div><select class="fin-form-input" id="ev-grupo"><option value="">— Elegí un grupo —</option><option>Pierna</option><option>Glúteos</option><option>Espalda</option><option>Pecho</option><option>Hombros</option><option>Brazos</option><option>Bíceps</option><option>Tríceps</option><option>Isquiotibiales</option><option>Core/Abdomen</option><option>Cardio</option><option>Full body</option><option>Otro</option></select></div>
     <div class="fin-form-row"><div class="fin-form-label">Video de YouTube</div><input class="fin-form-input" id="ev-video" type="text" placeholder="Pegá el link — subilo como 'No listado' en YouTube"></div>
     <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--text);margin:-0.4rem 0 1rem;cursor:pointer;"><input type="checkbox" id="ev-vertical" onchange="evUpdatePreviewOrientation()" style="width:1.1rem;height:1.1rem;"> Video vertical (grabado con el celular)</label>
     <div class="fin-form-row"><div class="fin-form-label">Nota / descripción (opcional)</div><textarea class="fin-form-input" id="ev-descripcion" rows="3" placeholder="Ej: Espalda pegada al respaldo, no bloquear la rodilla arriba..." style="resize:vertical;"></textarea></div>
