@@ -304,6 +304,12 @@
   .chat-input-row input:focus { border-color:var(--blue); }
   .chat-send-btn { flex-shrink:0; width:2.6rem; height:2.6rem; border-radius:50%; background:var(--blue); color:#fff; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; }
   .chat-send-btn svg { width:16px; height:16px; }
+  .chat-media-btn { flex-shrink:0; width:2.6rem; height:2.6rem; border-radius:50%; background:var(--blue-lt); color:var(--blue); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .chat-media-btn svg { width:17px; height:17px; }
+  .chat-media-btn:disabled { opacity:0.5; }
+  .chat-bubble-media { max-width:70%; border-radius:14px; overflow:hidden; }
+  .chat-bubble-media.mine { margin-left:auto; }
+  .chat-bubble-media img, .chat-bubble-media video { display:block; width:100%; max-height:280px; object-fit:cover; cursor:pointer; background:#000; }
 
   /* ── MARCAS POR CATEGORÍA / PERFIL DE MARCA ── */
   #benef-category-modal { display:none; position:fixed; inset:0; background:#fff; z-index:9997; overflow-y:auto; }
@@ -1221,6 +1227,8 @@
   </div>
   <div id="chat-messages" class="chat-messages"></div>
   <div class="chat-input-row">
+    <input type="file" id="chat-media-input" accept="image/*,video/*" style="display:none;" onchange="handleChatMediaSelect(this)">
+    <button type="button" class="chat-media-btn" onclick="document.getElementById('chat-media-input').click()" title="Adjuntar foto o video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-2h6l2 2h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.5"/></svg></button>
     <input type="text" id="chat-input" placeholder="Escribí tu mensaje..." onkeypress="if(event.key==='Enter'){sendChatMessage();}">
     <button onclick="sendChatMessage()" class="chat-send-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 20 18-8L3 4v7l12 1-12 1v7Z"/></svg></button>
   </div>
@@ -3421,7 +3429,16 @@ function renderChatMessages() {
   var html = '';
   entries.forEach(function(m) {
     var mine = m.from === 'client';
-    html += '<div class="chat-bubble-row' + (mine ? ' mine' : '') + '"><div class="chat-bubble' + (mine ? ' mine' : '') + '">' + escapeHtml(m.text || '') + '</div></div>';
+    html += '<div class="chat-bubble-row' + (mine ? ' mine' : '') + '">';
+    if (m.mediaUrl) {
+      var mediaTag = m.mediaType === 'video'
+        ? '<video src="' + escapeHtml(m.mediaUrl) + '" controls playsinline></video>'
+        : '<img src="' + escapeHtml(m.mediaUrl) + '" alt="" onclick="window.open(\'' + escapeHtml(m.mediaUrl) + '\',\'_blank\')">';
+      html += '<div class="chat-bubble-media' + (mine ? ' mine' : '') + '">' + mediaTag + '</div>';
+    } else {
+      html += '<div class="chat-bubble' + (mine ? ' mine' : '') + '">' + escapeHtml(m.text || '') + '</div>';
+    }
+    html += '</div>';
   });
   el.innerHTML = html;
   el.scrollTop = el.scrollHeight;
@@ -3434,6 +3451,34 @@ function sendChatMessage() {
   input.value = '';
   db().ref('clientasPortal/' + currentUid + '/chat').push({ from: 'client', text: text, ts: Date.now() })
     .catch(function(e) { alert('No se pudo enviar: ' + e.message); });
+}
+
+// Fotos/videos del chat van al mismo bucket que las demás fotos de la
+// clienta, bajo su propio uid — mismo patrón que la foto de perfil.
+function handleChatMediaSelect(input) {
+  var file = input.files && input.files[0];
+  input.value = '';
+  if (!file || !currentUid) return;
+  var isImage = file.type.startsWith('image/');
+  var isVideo = file.type.startsWith('video/');
+  if (!isImage && !isVideo) { alert('Elegí una foto o un video.'); return; }
+  var maxMB = isVideo ? 60 : 15;
+  if (file.size > maxMB * 1024 * 1024) {
+    alert('El archivo es muy pesado (máx ' + maxMB + ' MB). Probá con uno más liviano.');
+    return;
+  }
+  var btn = document.querySelector('.chat-media-btn');
+  if (btn) btn.disabled = true;
+  var path = 'chat-media/' + currentUid + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+  firebase.storage().ref(path).put(file).then(function(snap) {
+    return snap.ref.getDownloadURL();
+  }).then(function(url) {
+    return db().ref('clientasPortal/' + currentUid + '/chat').push({ from: 'client', ts: Date.now(), mediaUrl: url, mediaType: isImage ? 'image' : 'video' });
+  }).catch(function(e) {
+    alert('No se pudo enviar: ' + e.message);
+  }).finally(function() {
+    if (btn) btn.disabled = false;
+  });
 }
 
 // ── SESSION PERSISTENCE ──
