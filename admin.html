@@ -1359,6 +1359,8 @@
   </div>
   <div id="ac-messages" style="flex:1;overflow-y:auto;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:0.5rem;"></div>
   <div style="display:flex;gap:0.5rem;padding:0.75rem 1rem;border-top:1px solid var(--border);">
+    <input type="file" id="ac-media-input" accept="image/*,video/*" style="display:none;" onchange="handleAdminChatMediaSelect(this)">
+    <button type="button" id="ac-media-btn" onclick="document.getElementById('ac-media-input').click()" title="Adjuntar foto o video" style="flex-shrink:0;width:2.6rem;height:2.6rem;border-radius:50%;background:var(--blue-lt);color:var(--blue);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;"><path d="M4 7h3l2-2h6l2 2h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.5"/></svg></button>
     <input type="text" id="ac-input" placeholder="Escribí tu mensaje..." onkeypress="if(event.key==='Enter'){sendAdminChatMessage();}" style="flex:1;border:1px solid var(--border);border-radius:100px;padding:0.6rem 1rem;font-size:0.82rem;font-family:'DM Sans',sans-serif;outline:none;">
     <button onclick="sendAdminChatMessage()" style="flex-shrink:0;width:2.6rem;height:2.6rem;border-radius:50%;background:var(--blue);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="m3 20 18-8L3 4v7l12 1-12 1v7Z"/></svg></button>
   </div>
@@ -1617,6 +1619,14 @@ function chatNeedsReply(chat, chatMeta) {
   return (lastMsg.ts || 0) > lastRead;
 }
 
+// Un mensaje con foto/video no tiene texto — esto evita que la vista
+// previa del último mensaje se vea vacía en las listas de chat.
+function chatPreviewText(m) {
+  if (!m) return '';
+  if (m.mediaUrl) return m.mediaType === 'video' ? '🎥 Video' : '📷 Foto';
+  return m.text || '';
+}
+
 function renderPortalSection(clientId) {
   var el = document.getElementById('cd-portal');
   if (!el) return;
@@ -1655,7 +1665,7 @@ function renderPortalSection(clientId) {
       html += '<div style="font-weight:700;font-size:0.76rem;color:' + (needsReply ? 'var(--blue)' : 'var(--text)') + ';">' + (needsReply ? '🔴 Esperando tu respuesta' : '💬 Chat') + '</div>';
       html += '</div>';
       if (lastMsg) {
-        html += '<div style="font-size:0.75rem;color:var(--muted);">' + (lastMsg.from === 'admin' ? 'Vos: ' : '') + escapeHtmlAdmin(lastMsg.text || '') + '</div>';
+        html += '<div style="font-size:0.75rem;color:var(--muted);">' + (lastMsg.from === 'admin' ? 'Vos: ' : '') + escapeHtmlAdmin(chatPreviewText(lastMsg)) + '</div>';
       } else {
         html += '<div style="font-size:0.75rem;color:var(--muted);">Todavía no hay mensajes.</div>';
       }
@@ -1987,7 +1997,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
   html += '<div class="card" style="' + (needsReply ? 'background:var(--blue-lt);border-color:#C9D9F5;' : '') + '">';
   html += '<div class="card-label">' + (needsReply ? '🔴 Esperando tu respuesta' : '💬 Chat') + '</div>';
   html += lastMsg
-    ? '<div style="font-size:0.78rem;color:var(--muted);">' + (lastMsg.from === 'admin' ? 'Vos: ' : '') + escapeHtmlAdmin(lastMsg.text || '') + '</div>'
+    ? '<div style="font-size:0.78rem;color:var(--muted);">' + (lastMsg.from === 'admin' ? 'Vos: ' : '') + escapeHtmlAdmin(chatPreviewText(lastMsg)) + '</div>'
     : '<div style="font-size:0.78rem;color:var(--muted);">Todavía no hay mensajes.</div>';
   html += '<button onclick="openAdminChat(\'' + clientId + '\',\'' + (uid || '') + '\')" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Abrir chat</button>';
   html += '</div>';
@@ -2258,7 +2268,7 @@ function renderChatsInbox() {
             clientId: clientId,
             uid: uid,
             name: (CLIENTS[clientId] && CLIENTS[clientId].name) || 'Clienta',
-            text: lastMsg.text || '',
+            text: chatPreviewText(lastMsg),
             ts: lastMsg.ts || 0,
             needsReply: chatNeedsReply(chat, chatMeta)
           });
@@ -2610,8 +2620,16 @@ function renderAdminChatMessages(messages) {
   var html = '';
   entries.forEach(function(m) {
     var mine = m.from === 'admin';
-    html += '<div style="display:flex;' + (mine ? 'justify-content:flex-end;' : '') + '">'
-      + '<div style="max-width:75%;padding:0.55rem 0.8rem;border-radius:' + (mine ? '14px 14px 4px 14px' : '14px 14px 14px 4px') + ';font-size:0.82rem;line-height:1.4;white-space:pre-wrap;word-break:break-word;background:' + (mine ? 'var(--blue)' : '#f2f4f9') + ';color:' + (mine ? '#fff' : 'var(--text)') + ';">' + escapeHtmlAdmin(m.text || '') + '</div></div>';
+    html += '<div style="display:flex;' + (mine ? 'justify-content:flex-end;' : '') + '">';
+    if (m.mediaUrl) {
+      var mediaTag = m.mediaType === 'video'
+        ? '<video src="' + escapeHtmlAdmin(m.mediaUrl) + '" controls playsinline style="display:block;width:100%;max-height:280px;object-fit:cover;background:#000;"></video>'
+        : '<img src="' + escapeHtmlAdmin(m.mediaUrl) + '" alt="" onclick="window.open(\'' + escapeHtmlAdmin(m.mediaUrl) + '\',\'_blank\')" style="display:block;width:100%;max-height:280px;object-fit:cover;cursor:pointer;">';
+      html += '<div style="max-width:70%;border-radius:14px;overflow:hidden;">' + mediaTag + '</div>';
+    } else {
+      html += '<div style="max-width:75%;padding:0.55rem 0.8rem;border-radius:' + (mine ? '14px 14px 4px 14px' : '14px 14px 14px 4px') + ';font-size:0.82rem;line-height:1.4;white-space:pre-wrap;word-break:break-word;background:' + (mine ? 'var(--blue)' : '#f2f4f9') + ';color:' + (mine ? '#fff' : 'var(--text)') + ';">' + escapeHtmlAdmin(m.text || '') + '</div>';
+    }
+    html += '</div>';
   });
   el.innerHTML = html;
   el.scrollTop = el.scrollHeight;
@@ -2627,6 +2645,38 @@ function sendAdminChatMessage() {
     if (!db) return;
     db.ref('clientasPortal/' + adminChatUid + '/chat').push({ from: 'admin', text: text, ts: Date.now() })
       .catch(function(e) { alert('No se pudo enviar: ' + e.message); });
+  });
+}
+
+// Mismo bucket que usan las fotos de la clienta, bajo su uid — así tanto
+// lo que manda ella como lo que le mandás vos queda junto en la carpeta
+// de chat de esa clienta.
+function handleAdminChatMediaSelect(input) {
+  var file = input.files && input.files[0];
+  input.value = '';
+  if (!file || !adminChatUid) return;
+  var isImage = file.type.startsWith('image/');
+  var isVideo = file.type.startsWith('video/');
+  if (!isImage && !isVideo) { alert('Elegí una foto o un video.'); return; }
+  var maxMB = isVideo ? 60 : 15;
+  if (file.size > maxMB * 1024 * 1024) {
+    alert('El archivo es muy pesado (máx ' + maxMB + ' MB). Probá con uno más liviano.');
+    return;
+  }
+  var btn = document.getElementById('ac-media-btn');
+  if (btn) btn.disabled = true;
+  var uid = adminChatUid;
+  withAdminAuth(function() {
+    var path = 'chat-media/' + uid + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+    firebase.storage().ref(path).put(file).then(function(snap) {
+      return snap.ref.getDownloadURL();
+    }).then(function(url) {
+      return getDB().ref('clientasPortal/' + uid + '/chat').push({ from: 'admin', ts: Date.now(), mediaUrl: url, mediaType: isImage ? 'image' : 'video' });
+    }).catch(function(e) {
+      alert('No se pudo enviar: ' + e.message);
+    }).finally(function() {
+      if (btn) btn.disabled = false;
+    });
   });
 }
 
@@ -6154,7 +6204,9 @@ function renderRutinaView() {
     });
   });
 
-  // Load saved session notes
+  // Load saved session notes — localStorage primero (instantáneo), después
+  // se refrescan con Firebase, que es la fuente real (localStorage es solo
+  // caché y puede borrarse o no existir en otro dispositivo/navegador).
   var savedNotes = JSON.parse(localStorage.getItem('fa_notas_' + rutinaClientId) || '{}');
   viewEl.querySelectorAll('.rv-notas-ta').forEach(function(ta) {
     var dayId = ta.getAttribute('data-dayid');
@@ -6164,6 +6216,18 @@ function renderRutinaView() {
       notes[dayId] = this.value;
       localStorage.setItem('fa_notas_' + rutinaClientId, JSON.stringify(notes));
       fbSet('notas/' + rutinaClientId, notes);
+    });
+  });
+
+  var rvNotasClientId = rutinaClientId;
+  fbGet('notas/' + rvNotasClientId, function(remoteNotes) {
+    if (!remoteNotes || rutinaClientId !== rvNotasClientId) return;
+    localStorage.setItem('fa_notas_' + rvNotasClientId, JSON.stringify(remoteNotes));
+    viewEl.querySelectorAll('.rv-notas-ta').forEach(function(ta) {
+      var dayId = ta.getAttribute('data-dayid');
+      if (remoteNotes[dayId] !== undefined && document.activeElement !== ta) {
+        ta.value = remoteNotes[dayId];
+      }
     });
   });
 }
