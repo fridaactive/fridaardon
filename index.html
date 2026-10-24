@@ -1972,15 +1972,24 @@ var etmTimerExId = null;
 
 function exTimerKeyOf(dayId, exId) { return dayId + '__' + exId; }
 
-function openExTimerModal(dayId, exId, totalSecs, exName) {
+function openExTimerModal(dayId, exId, totalSecs, exName, subLabel) {
   etmTimerDayId = dayId;
   etmTimerExId = exId;
   var key = exTimerKeyOf(dayId, exId);
   if (!EX_TIMERS[key]) EX_TIMERS[key] = { remaining: totalSecs, total: totalSecs, running: false, interval: null };
   document.getElementById('etm-ex-name').textContent = exName || '';
-  document.getElementById('etm-sub').textContent = totalSecs + ' seg de meta';
+  document.getElementById('etm-sub').textContent = subLabel || (totalSecs + ' seg de meta');
   renderEtmTimerUI();
   document.getElementById('ex-timer-modal').style.display = 'flex';
+}
+
+// Cronómetro de descanso: mismo modal que el de tiempo de trabajo, pero
+// con una clave aparte (exId + '-rest') para no pisar el timer del
+// ejercicio cuando es de tipo "tiempo" — y disponible para CUALQUIER
+// ejercicio, sea por reps o por tiempo, que es lo que de verdad hace
+// falta cuando se entrena por repeticiones.
+function openExRestTimer(dayId, exId, restSecs, exName) {
+  openExTimerModal(dayId, exId + '-rest', restSecs, 'Descanso', restSecs + ' seg · ' + (exName || ''));
 }
 
 function closeExTimerModal() {
@@ -2172,6 +2181,10 @@ function renderExerciseBlocksHtml(day) {
         // no estén viendo el video del ejercicio.
         html += '<button type="button" onclick="openExTimerModal(\'' + day.id + '\',\'' + ex.id + '\',' + totalSecs + ',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Cronómetro</button>';
       }
+      // Descanso: para CUALQUIER ejercicio (reps o tiempo) — Frida trabaja
+      // sobre todo por repeticiones, así que lo único que de verdad se
+      // cronometra es el descanso entre series, no el ejercicio en sí.
+      html += '<button type="button" onclick="openExRestTimer(\'' + day.id + '\',\'' + ex.id + '\',' + (block.restSecs || 20) + ',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:#e8f7ee;color:#2a7a2a;border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Descanso</button>';
       html += '</div></div>';
       if (tipo === 'tiempo') {
         if (prescribed.length) html += '<div class="ex-prescribed">Duración: ' + prescribed.join(' · ') + '</div>';
