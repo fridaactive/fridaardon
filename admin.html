@@ -6204,7 +6204,9 @@ function renderRutinaView() {
     });
   });
 
-  // Load saved session notes
+  // Load saved session notes — localStorage primero (instantáneo), después
+  // se refrescan con Firebase, que es la fuente real (localStorage es solo
+  // caché y puede borrarse o no existir en otro dispositivo/navegador).
   var savedNotes = JSON.parse(localStorage.getItem('fa_notas_' + rutinaClientId) || '{}');
   viewEl.querySelectorAll('.rv-notas-ta').forEach(function(ta) {
     var dayId = ta.getAttribute('data-dayid');
@@ -6214,6 +6216,18 @@ function renderRutinaView() {
       notes[dayId] = this.value;
       localStorage.setItem('fa_notas_' + rutinaClientId, JSON.stringify(notes));
       fbSet('notas/' + rutinaClientId, notes);
+    });
+  });
+
+  var rvNotasClientId = rutinaClientId;
+  fbGet('notas/' + rvNotasClientId, function(remoteNotes) {
+    if (!remoteNotes || rutinaClientId !== rvNotasClientId) return;
+    localStorage.setItem('fa_notas_' + rvNotasClientId, JSON.stringify(remoteNotes));
+    viewEl.querySelectorAll('.rv-notas-ta').forEach(function(ta) {
+      var dayId = ta.getAttribute('data-dayid');
+      if (remoteNotes[dayId] !== undefined && document.activeElement !== ta) {
+        ta.value = remoteNotes[dayId];
+      }
     });
   });
 }
