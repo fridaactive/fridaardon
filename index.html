@@ -1197,9 +1197,12 @@
       <iframe id="video-modal-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
     <div id="video-modal-rest-row" style="display:none;margin-top:0.85rem;">
-      <button type="button" onclick="startVideoModalRest()" style="width:100%;background:#2a7a2a;color:#fff;border:none;border-radius:12px;padding:0.8rem;font-weight:700;font-size:0.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.4rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Descanso</button>
+      <button type="button" onclick="startVideoModalRest()" style="width:100%;background:linear-gradient(135deg,#FFC94A,#F3932B);color:#fff;border:none;border-radius:12px;padding:0.8rem;font-weight:700;font-size:0.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.4rem;box-shadow:0 6px 18px rgba(243,147,43,0.4);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Descanso</button>
     </div>
-    <div id="video-modal-nota" style="display:none;margin-top:0.85rem;background:rgba(255,255,255,0.08);border-radius:12px;padding:0.9rem 1rem;color:#fff;font-size:0.8rem;line-height:1.5;white-space:pre-line;"></div>
+    <div id="video-modal-nota" style="display:none;margin-top:0.85rem;background:rgba(255,255,255,0.1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.18);border-radius:16px;padding:1.1rem 1.2rem;box-shadow:0 0 0 1px rgba(255,255,255,0.06), 0 10px 30px rgba(0,0,0,0.35), 0 0 24px rgba(255,255,255,0.1);">
+      <div style="display:flex;align-items:center;gap:0.45rem;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.15em;color:#8FB3FF;font-weight:700;margin-bottom:0.6rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7v.5h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/></svg>Tip técnico</div>
+      <div id="video-modal-nota-text" style="color:rgba(255,255,255,0.92);font-size:0.85rem;line-height:1.6;white-space:pre-line;"></div>
+    </div>
   </div>
 </div>
 
@@ -2335,11 +2338,12 @@ function showExerciseVideo(url, nota, vertical, restSecs, exName, dayId, exId) {
     wrap.style.display = 'none';
   }
   var notaEl = document.getElementById('video-modal-nota');
+  var notaTextEl = document.getElementById('video-modal-nota-text');
   if (nota) {
-    notaEl.textContent = nota;
+    notaTextEl.textContent = nota;
     notaEl.style.display = 'block';
   } else {
-    notaEl.textContent = '';
+    notaTextEl.textContent = '';
     notaEl.style.display = 'none';
   }
   document.getElementById('video-modal').style.display = 'flex';
