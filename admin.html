@@ -1856,13 +1856,16 @@ function renderAcpRutinaHtml(clientId, c) {
 function renderAcpPagosHtml(clientId, c) {
   var html = '';
   if (c.initDate) {
-    var mesActual = (getClientPayments()[clientId] || []).length + 1;
     var start = new Date(c.initDate + 'T00:00:00');
     var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
     if (!c.endDate) end.setMonth(end.getMonth() + 1);
     var today0 = new Date(); today0.setHours(0, 0, 0, 0);
     var daysLeft = Math.ceil((end - today0) / 86400000);
     var paid = isCurrentCyclePaid(clientId, c);
+    // Los pagos ya hechos cuentan los meses que quedaron atrás — si el
+    // ciclo actual todavía no se pagó, hay que sumarle 1 para contarlo
+    // también (si no, "pagó 1 vez" mostraba "Mes 2" en vez de "Mes 1").
+    var mesActual = (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
     var statusColor = daysLeft <= 0 ? '#A62B2B' : !paid ? '#8A6D14' : '#2a7a2a';
     var statusBg = daysLeft <= 0 ? '#FDEAEA' : !paid ? '#FFF6E0' : '#F0FFF0';
     var statusBorder = daysLeft <= 0 ? '#F3C6C6' : !paid ? '#F0DFA0' : '#cde8cd';
@@ -1912,6 +1915,7 @@ function saveAcpPlanMeses(clientId) {
   }
   saveCustomClient(clientId, c);
   acpRenderShell();
+  alert('✓ Duración guardada.');
 }
 
 function renderAdminClientProfile(clientId, uid, portal) {
@@ -1940,7 +1944,6 @@ function renderAdminClientProfile(clientId, uid, portal) {
   var programHtml = '';
   var alertHtml = '';
   if (c.initDate) {
-    var mesActual = (getClientPayments()[clientId] || []).length + 1;
     var start = new Date(c.initDate + 'T00:00:00');
     var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
     if (!c.endDate) end.setMonth(end.getMonth() + 1);
@@ -1950,6 +1953,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
     var elapsed = Math.min(totalDays, Math.max(0, totalDays - daysLeft));
     var progPct = Math.min(100, Math.round((elapsed / totalDays) * 100));
     var paid = isCurrentCyclePaid(clientId, c);
+    var mesActual = (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
     var progFillH = 64 * (progPct / 100);
 
     programHtml = '<div class="pf-ring-wrap"><div class="pf-ring-liquid"><svg viewBox="0 0 64 64">'
