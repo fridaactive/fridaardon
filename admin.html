@@ -6045,7 +6045,7 @@ var DEFAULT_RUTINAS = {
 var BLOCK_TYPES = null; // No longer used - blocks have free names now
 
 function makeNewBlock(name) {
-  return { id: 'blk-' + Date.now() + '-' + Math.random().toString(36).substr(2,4), name: name || 'Bloque nuevo', mode: 'reps', workSecs: 40, restSecs: 20, exercises: [] };
+  return { id: 'blk-' + Date.now() + '-' + Math.random().toString(36).substr(2,4), name: name || 'Bloque nuevo', mode: 'reps', workSecs: 40, restSecs: 40, exercises: [] };
 }
 
 function renderRutinaView() {
@@ -6177,14 +6177,14 @@ function renderRutinaView() {
       var label = block.name || block.type || 'Bloque';
       var hasTiempo = block.exercises.some(function(e){ return exTipo(block, e) === 'tiempo'; });
       var hasReps = block.exercises.some(function(e){ return exTipo(block, e) === 'reps'; });
-      var sub = hasTiempo && hasReps ? 'Reps + tiempo · descanso ' + (block.restSecs || 20) + '"'
-        : hasTiempo ? 'Por tiempo · descanso ' + (block.restSecs || 20) + '"'
+      var sub = hasTiempo && hasReps ? 'Reps + tiempo · descanso ' + (block.restSecs || 40) + '"'
+        : hasTiempo ? 'Por tiempo · descanso ' + (block.restSecs || 40) + '"'
         : 'Por repeticiones';
 
       html += '<div class="rv-blq">';
       var firstTiempoEx = block.exercises.find(function(e){ return exTipo(block, e) === 'tiempo'; });
       var ws = firstTiempoEx ? exSegundos(block, firstTiempoEx) : 40;
-      var rs = block.restSecs || 20;
+      var rs = block.restSecs || 40;
       var bid = escHtml(block.id);
       html += '<div class="rv-blq-hdr" style="display:flex;justify-content:space-between;align-items:center;">';
       html += '<div><div class="rv-blq-title">' + label + '</div><div class="rv-blq-sub">' + sub + '</div></div>';
@@ -6208,7 +6208,7 @@ function renderRutinaView() {
         var badge = '';
         if (exTipoVal === 'tiempo') {
           var segs = exSegundos(block, ex);
-          badge = '<div class="rv-ex-tm" data-blockid="'+escHtml(block.id)+'" data-work="'+segs+'" data-rest="'+(block.restSecs||20)+'">'+segs+'"</div>';
+          badge = '<div class="rv-ex-tm" data-blockid="'+escHtml(block.id)+'" data-work="'+segs+'" data-rest="'+(block.restSecs||40)+'">'+segs+'"</div>';
         } else {
           var info = [];
           if (ex.series && ex.reps) info.push(ex.series+' × '+ex.reps);
@@ -6418,7 +6418,7 @@ function makeNewBlock(name) {
     name: name || 'Bloque nuevo',
     mode: 'reps',
     workSecs: 40,
-    restSecs: 20,
+    restSecs: 40,
     exercises: []
   };
 }
@@ -6871,8 +6871,7 @@ function renderRutinaEditor() {
   (day.blocks || []).forEach(function(block) {
     if (!block.exercises) block.exercises = [];
     var blockName = block.name || block.type || 'Bloque';
-    var restSecs = block.restSecs || 20;
-    var hasTiempoEx = block.exercises.some(function(e){ return exTipo(block, e) === 'tiempo'; });
+    var restSecs = block.restSecs || 40;
     var allReps = block.exercises.length > 0 && block.exercises.every(function(e){ return exTipo(block, e) === 'reps'; });
 
     html += '<div class="rutina-block">';
@@ -6884,14 +6883,15 @@ function renderRutinaEditor() {
     html += '<button class="rutina-del-block" data-blockid="'+block.id+'" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:6px;padding:0.2rem 0.5rem;font-size:0.7rem;cursor:pointer;">🗑️</button>';
     html += '</div>';
 
-    // Descanso general entre ejercicios de tiempo de este bloque
-    if (hasTiempoEx) {
-      html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:#f0f4ff;border-bottom:1px solid var(--border);flex-wrap:wrap;">';
-      html += '<div style="font-size:0.62rem;color:var(--muted);font-weight:700;">⏱️ Descanso entre ejercicios de tiempo:</div>';
-      html += '<input class="fin-form-input rutina-rest-input" data-blockid="'+block.id+'" type="number" value="'+restSecs+'" style="width:4.5rem;text-align:center;padding:0.3rem;">';
-      html += '<div style="font-size:0.6rem;color:var(--muted);">seg</div>';
-      html += '</div>';
-    }
+    // Descanso de este bloque — antes solo aparecía si el bloque tenía
+    // ejercicios de tiempo, pero también se usa para el cronómetro de
+    // descanso entre series en bloques de puras repeticiones (el caso
+    // más común), así que ahora se muestra siempre.
+    html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:#f0f4ff;border-bottom:1px solid var(--border);flex-wrap:wrap;">';
+    html += '<div style="font-size:0.62rem;color:var(--muted);font-weight:700;">⏱️ Descanso de este bloque:</div>';
+    html += '<input class="fin-form-input rutina-rest-input" data-blockid="'+block.id+'" type="number" value="'+restSecs+'" style="width:4.5rem;text-align:center;padding:0.3rem;">';
+    html += '<div style="font-size:0.6rem;color:var(--muted);">seg</div>';
+    html += '</div>';
 
     // Column headers — solo cuando todo el bloque es de reps; si hay ejercicios
     // de tiempo mezclados, cada fila trae su propio campo con su propia etiqueta.
@@ -7074,7 +7074,7 @@ function renderRutinaEditor() {
       var block = rutinaData.days[rutinaCurrentDay].blocks.find(function(b){ return b.id === blockId; });
       if (block) {
         var rs = parseInt(this.value);
-        block.restSecs = isNaN(rs) || rs < 0 ? 20 : rs;
+        block.restSecs = isNaN(rs) || rs < 0 ? 40 : rs;
         saveRutinaData(rutinaClientId, rutinaData);
       }
     });
