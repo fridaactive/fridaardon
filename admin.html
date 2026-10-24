@@ -1783,6 +1783,10 @@ function openAdminClientProfile(clientId) {
   content.innerHTML = '<div style="padding:2rem 0;text-align:center;color:var(--muted);font-size:0.8rem;">Cargando…</div>';
   currentClient = clientId;
   var uid = CLIENT_LINKS[clientId];
+  // Auto-reparo: por si esta clienta quedó creada antes de que
+  // empezáramos a espejar estos campos a clients/{id}, se sincroniza
+  // sola cada vez que abrís su perfil — no hace falta hacer nada.
+  if (CLIENTS[clientId]) syncClientPublicFields(clientId, CLIENTS[clientId]);
   // Presencial no usa el portal/perfil de la clienta (eso es para
   // online y rutina personalizada) — entra directo a la rutina.
   var defaultTab = (CLIENTS[clientId] && CLIENTS[clientId].type === 'presencial') ? 'rutina' : 'resumen';
@@ -1856,13 +1860,16 @@ function renderAcpRutinaHtml(clientId, c) {
 function renderAcpPagosHtml(clientId, c) {
   var html = '';
   if (c.initDate) {
-    var mesActual = (getClientPayments()[clientId] || []).length + 1;
     var start = new Date(c.initDate + 'T00:00:00');
     var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
     if (!c.endDate) end.setMonth(end.getMonth() + 1);
     var today0 = new Date(); today0.setHours(0, 0, 0, 0);
     var daysLeft = Math.ceil((end - today0) / 86400000);
     var paid = isCurrentCyclePaid(clientId, c);
+    // Los pagos ya hechos cuentan los meses que quedaron atrás — si el
+    // ciclo actual todavía no se pagó, hay que sumarle 1 para contarlo
+    // también (si no, "pagó 1 vez" mostraba "Mes 2" en vez de "Mes 1").
+    var mesActual = (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
     var statusColor = daysLeft <= 0 ? '#A62B2B' : !paid ? '#8A6D14' : '#2a7a2a';
     var statusBg = daysLeft <= 0 ? '#FDEAEA' : !paid ? '#FFF6E0' : '#F0FFF0';
     var statusBorder = daysLeft <= 0 ? '#F3C6C6' : !paid ? '#F0DFA0' : '#cde8cd';
@@ -1911,7 +1918,9 @@ function saveAcpPlanMeses(clientId) {
     c.planMeses = null;
   }
   saveCustomClient(clientId, c);
+  syncClientPublicFields(clientId, c);
   acpRenderShell();
+  alert('✓ Duración guardada.');
 }
 
 function renderAdminClientProfile(clientId, uid, portal) {
@@ -1940,7 +1949,6 @@ function renderAdminClientProfile(clientId, uid, portal) {
   var programHtml = '';
   var alertHtml = '';
   if (c.initDate) {
-    var mesActual = (getClientPayments()[clientId] || []).length + 1;
     var start = new Date(c.initDate + 'T00:00:00');
     var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
     if (!c.endDate) end.setMonth(end.getMonth() + 1);
@@ -1950,6 +1958,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
     var elapsed = Math.min(totalDays, Math.max(0, totalDays - daysLeft));
     var progPct = Math.min(100, Math.round((elapsed / totalDays) * 100));
     var paid = isCurrentCyclePaid(clientId, c);
+    var mesActual = (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
     var progFillH = 64 * (progPct / 100);
 
     programHtml = '<div class="pf-ring-wrap"><div class="pf-ring-liquid"><svg viewBox="0 0 64 64">'
@@ -2959,6 +2968,22 @@ function saveCustomClient(id, clientData) {
   fbSet('clients_custom/' + id, clientData);
 }
 
+// El panel de admin guarda el detalle completo de la clienta en
+// clients_custom/{id} (o en el CLIENTS hardcodeado), pero la clienta desde
+// su celular lee únicamente clients/{id} — son nodos distintos en Firebase.
+// Sin espejar estos campos ahí, cosas como "Mes X de Y", la barra de días
+// restantes o el bloqueo por plan vencido nunca le llegan a la clienta,
+// aunque en el panel de admin se vean perfectas.
+function syncClientPublicFields(id, c) {
+  if (!id || !c) return;
+  fbSet('clients/' + id + '/name', c.name || null);
+  fbSet('clients/' + id + '/initDate', c.initDate || null);
+  fbSet('clients/' + id + '/endDate', c.endDate || null);
+  fbSet('clients/' + id + '/cuota', c.cuota || null);
+  fbSet('clients/' + id + '/sessions', c.sessions || null);
+  fbSet('clients/' + id + '/planMeses', c.planMeses || null);
+}
+
 // Same dual-write pattern as saveCycle(): a per-field override for clientas
 // whose base data still lives in the hardcoded CLIENTS seed, plus the full
 // merged object under clients_custom so it's what actually loads next time.
@@ -3112,6 +3137,7 @@ function markClientAsPaid(id) {
   // perfil, sin necesitar acceso al historial de pagos de las demás.
   c.pagosCount = payments[id].length;
   fbSet('clients/' + id + '/pagosCount', c.pagosCount);
+  fbSet('clients/' + id + '/cicloPagado', true);
 
   // Register income in Finanzas for the current calendar month
   var today = new Date();
@@ -3762,6 +3788,10 @@ function saveCycle() {
   fbSet('clients/'+id+'/endDate', c.endDate);
   fbSet('clients/'+id+'/sessions', c.sessions);
   fbSet('clients/'+id+'/cuota', c.cuota);
+  fbSet('clients/'+id+'/planMeses', c.planMeses || null);
+  // Ciclo nuevo arranca sin pagar — hasta que no se marque pagado, se
+  // considera el mes actual como pendiente para "Mes X de Y" y el aviso.
+  fbSet('clients/'+id+'/cicloPagado', false);
 
   // Persist updated client — always save to clients_custom so it loads on next session
   var custom = JSON.parse(localStorage.getItem('fa_custom_clients') || '{}');
@@ -4393,6 +4423,7 @@ function handleSaveNewClient() {
 
     CLIENTS[id] = rutinaClientData;
     saveCustomClient(id, rutinaClientData);
+    syncClientPublicFields(id, rutinaClientData);
     linkPendingLead(id);
     closeNewClientModal();
     renderClientsList();
@@ -4449,6 +4480,7 @@ function handleSaveNewClient() {
 
   CLIENTS[id] = clientData;
   saveCustomClient(id, clientData);
+  syncClientPublicFields(id, clientData);
 
   // Save cycle config
   saveCycleConfig(id, {

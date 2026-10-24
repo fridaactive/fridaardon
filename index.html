@@ -291,6 +291,18 @@
   .pf-program-alert svg { width:17px; height:17px; flex-shrink:0; margin-top:0.05rem; }
   .pf-program-alert.warn { background:#FFF6E0; color:#8A6D14; border:1px solid #F0DFA0; }
   .pf-program-alert.danger { background:#FDEAEA; color:#A62B2B; border:1px solid #F3C6C6; }
+  .pf-locked-card { background:#fff; border:1.5px solid var(--border); border-radius:18px; padding:1.75rem 1.5rem; text-align:center; }
+  .pf-locked-icon { width:3rem; height:3rem; border-radius:50%; background:#FDEAEA; color:#A62B2B; display:flex; align-items:center; justify-content:center; margin:0 auto 0.9rem; }
+  .pf-locked-icon svg { width:22px; height:22px; }
+  .pf-locked-title { font-size:1.05rem; font-weight:800; color:var(--text); margin-bottom:0.4rem; }
+  .pf-locked-text { font-size:0.82rem; color:var(--muted); line-height:1.5; margin-bottom:1.1rem; }
+  .pf-locked-pricing { text-align:left; background:var(--blue-lt); border-radius:12px; padding:0.2rem 0.9rem; }
+  .pf-locked-pricing summary { font-size:0.75rem; font-weight:700; color:var(--blue); padding:0.7rem 0; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; }
+  .pf-locked-pricing summary::-webkit-details-marker { display:none; }
+  .pf-locked-price-row { display:flex; justify-content:space-between; align-items:baseline; padding:0.55rem 0; border-top:1px solid #DCE6FA; font-size:0.78rem; }
+  .pf-locked-price-row .plan-name { color:var(--text); font-weight:700; }
+  .pf-locked-price-row .plan-price { color:var(--blue); font-weight:800; }
+  .pf-locked-price-row .plan-sub { display:block; color:var(--muted); font-weight:400; font-size:0.68rem; margin-top:0.1rem; }
 
   /* ── CHAT ── */
   .chat-messages { flex:1; overflow-y:auto; padding:1rem 1.1rem; display:flex; flex-direction:column; gap:0.5rem; }
@@ -953,57 +965,64 @@
         </div>
       </div>
 
-      <details class="track-card" open>
-        <summary class="track-summary">
-          <span class="track-summary-label">Historial de entrenos</span>
-          <span class="track-summary-right">
-            <span class="track-summary-count" id="track-summary-count" style="display:none;">0 este mes</span>
-            <span class="track-summary-chevron">▾</span>
-          </span>
-        </summary>
-        <div class="track-body">
-          <div class="track-stat" style="display:none;">
-            <div class="track-stat-box"><div class="track-stat-num" id="track-mes">0</div><div class="track-stat-label">Este mes</div></div>
-            <div class="track-stat-box"><div class="track-stat-num" id="track-meta">-</div><div class="track-stat-label">Meta del mes</div></div>
+      <div id="perfil-unlocked-content">
+        <details class="track-card" open>
+          <summary class="track-summary">
+            <span class="track-summary-label">Historial de entrenos</span>
+            <span class="track-summary-right">
+              <span class="track-summary-count" id="track-summary-count" style="display:none;">0 este mes</span>
+              <span class="track-summary-chevron">▾</span>
+            </span>
+          </summary>
+          <div class="track-body">
+            <div class="track-stat" style="display:none;">
+              <div class="track-stat-box"><div class="track-stat-num" id="track-mes">0</div><div class="track-stat-label">Este mes</div></div>
+              <div class="track-stat-box"><div class="track-stat-num" id="track-meta">-</div><div class="track-stat-label">Meta del mes</div></div>
+            </div>
+            <div class="track-days" id="track-days"></div>
+            <div style="font-size:0.65rem;color:var(--muted);margin-top:0.6rem;line-height:1.4;">Tocá un día para marcarlo como entrenado. El puntito azul es un comentario — tocalo para verlo.</div>
+            <div id="track-day-comment" style="display:none;margin-top:0.6rem;background:var(--blue-lt);border-radius:10px;padding:0.7rem 0.85rem;"></div>
           </div>
-          <div class="track-days" id="track-days"></div>
-          <div style="font-size:0.65rem;color:var(--muted);margin-top:0.6rem;line-height:1.4;">Tocá un día para marcarlo como entrenado. El puntito azul es un comentario — tocalo para verlo.</div>
-          <div id="track-day-comment" style="display:none;margin-top:0.6rem;background:var(--blue-lt);border-radius:10px;padding:0.7rem 0.85rem;"></div>
-        </div>
-      </details>
+        </details>
 
-      <div class="pf-program-alert" id="pf-program-alert" style="display:none;"></div>
+        <div class="pf-program-alert" id="pf-program-alert" style="display:none;"></div>
 
-      <div class="card transf-card">
-        <div class="transf-hdr">
-          <div class="card-label" style="margin-bottom:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M4 8h2.5l1.8-2h7.4l1.8 2H20v11H4Z"/><circle cx="12" cy="13.5" r="3.2"/></svg> Tu transformación</div>
-          <div class="transf-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="5" y="10" width="14" height="9" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Solo vos y Frida</div>
+        <div class="card transf-card">
+          <div class="transf-hdr">
+            <div class="card-label" style="margin-bottom:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M4 8h2.5l1.8-2h7.4l1.8 2H20v11H4Z"/><circle cx="12" cy="13.5" r="3.2"/></svg> Tu transformación</div>
+            <div class="transf-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="5" y="10" width="14" height="9" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Solo vos y Frida</div>
+          </div>
+          <div id="transformacion-list"><div class="empty-note">Cargando…</div></div>
         </div>
-        <div id="transformacion-list"><div class="empty-note">Cargando…</div></div>
+
+        <div class="pf-plan-mini" id="pf-plan-mini" style="display:none;"></div>
       </div>
 
-      <div class="pf-plan-mini" id="pf-plan-mini" style="display:none;"></div>
+      <div id="perfil-locked-card"></div>
 
     </div>
 
     <!-- BENEFICIOS -->
     <div class="tab-panel" id="tab-beneficios">
-      <details class="benef-faq">
-        <summary class="benef-faq-summary">
-          <span class="benef-faq-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex-shrink:0;"><circle cx="12" cy="12" r="9.5"/><path d="M9.5 9.2a2.5 2.5 0 0 1 4.8.8c0 1.6-2.3 1.8-2.3 3.5"/><path d="M12 17.2v.1"/></svg>¿Cómo canjear tu cupón?</span>
-          <span class="benef-faq-chevron">▾</span>
-        </summary>
-        <div class="benef-faq-body">
-          <div class="rt-acl-item"><div class="rt-acl-num">1</div><div class="rt-acl-text">Tocá el botón "Canjear cupón".</div></div>
-          <div class="rt-acl-item"><div class="rt-acl-num">2</div><div class="rt-acl-text">Enviá el mensaje para canjear tu cupón por el chat.</div></div>
-          <div class="rt-acl-item"><div class="rt-acl-num">3</div><div class="rt-acl-text">Esperá la confirmación por mensaje.</div></div>
-          <div class="rt-acl-item"><div class="rt-acl-num">4</div><div class="rt-acl-text">Mostrá tu cupón en el negocio (los cupones solo son válidos en el local).</div></div>
+      <div id="beneficios-unlocked-content">
+        <details class="benef-faq">
+          <summary class="benef-faq-summary">
+            <span class="benef-faq-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex-shrink:0;"><circle cx="12" cy="12" r="9.5"/><path d="M9.5 9.2a2.5 2.5 0 0 1 4.8.8c0 1.6-2.3 1.8-2.3 3.5"/><path d="M12 17.2v.1"/></svg>¿Cómo canjear tu cupón?</span>
+            <span class="benef-faq-chevron">▾</span>
+          </summary>
+          <div class="benef-faq-body">
+            <div class="rt-acl-item"><div class="rt-acl-num">1</div><div class="rt-acl-text">Tocá el botón "Canjear cupón".</div></div>
+            <div class="rt-acl-item"><div class="rt-acl-num">2</div><div class="rt-acl-text">Enviá el mensaje para canjear tu cupón por el chat.</div></div>
+            <div class="rt-acl-item"><div class="rt-acl-num">3</div><div class="rt-acl-text">Esperá la confirmación por mensaje.</div></div>
+            <div class="rt-acl-item"><div class="rt-acl-num">4</div><div class="rt-acl-text">Mostrá tu cupón en el negocio (los cupones solo son válidos en el local).</div></div>
+          </div>
+        </details>
+        <div class="card">
+          <div class="card-label">Descuentos de marcas aliadas</div>
+          <div id="beneficios-list"><div class="empty-note">Cargando…</div></div>
         </div>
-      </details>
-      <div class="card">
-        <div class="card-label">Descuentos de marcas aliadas</div>
-        <div id="beneficios-list"><div class="empty-note">Cargando…</div></div>
       </div>
+      <div id="beneficios-locked-card"></div>
     </div>
 
   </div>
@@ -1949,10 +1968,15 @@ function findLastExerciseLog(dayId, exId) {
 // historial completo, semana a semana, para un ejercicio puntual.
 function openExProgressModal(dayId, exId, exName) {
   document.getElementById('ex-progress-title').textContent = exName;
+  var listEl = document.getElementById('ex-progress-list');
+  if (PLAN_LOCKED) {
+    listEl.innerHTML = renderPlanLockedCard();
+    document.getElementById('ex-progress-modal').style.display = 'flex';
+    return;
+  }
   var entries = Object.keys(CURRENT_ENTRENO_LOGS).map(function(k) { return CURRENT_ENTRENO_LOGS[k]; })
     .filter(function(en) { return en.dayId === dayId && en.ejercicios && en.ejercicios[exId]; })
     .sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
-  var listEl = document.getElementById('ex-progress-list');
   if (entries.length === 0) {
     listEl.innerHTML = '<div class="empty-note">Todavía no registraste este ejercicio.</div>';
   } else {
@@ -2112,9 +2136,9 @@ function renderEsfuerzoGroupHtml(exId, exKey, lastEsfuerzo) {
   var html = '<div class="ex-input-group ex-input-group-fixed">';
   html += '<label class="ex-input-label">Esfuerzo</label>';
   html += '<div class="ex-stepper">';
-  html += '<button type="button" class="ex-stepper-btn" onclick="stepEsfuerzo(\'' + exKey + '\',-1)">−</button>';
+  html += '<button type="button" class="ex-stepper-btn" onclick="stepEsfuerzo(\'' + exKey + '\',-1)"' + (PLAN_LOCKED ? ' disabled' : '') + '>−</button>';
   html += '<div class="ex-stepper-val" id="esfuerzo-val-' + exKey + '">' + val + '</div>';
-  html += '<button type="button" class="ex-stepper-btn" onclick="stepEsfuerzo(\'' + exKey + '\',1)">+</button>';
+  html += '<button type="button" class="ex-stepper-btn" onclick="stepEsfuerzo(\'' + exKey + '\',1)"' + (PLAN_LOCKED ? ' disabled' : '') + '>+</button>';
   html += '</div>';
   html += '<input type="hidden" data-ex="' + exId + '" data-field="esfuerzo" id="esfuerzo-input-' + exKey + '" value="' + (lastEsfuerzo ? escapeHtml(String(lastEsfuerzo)) : '') + '">';
   html += '</div>';
@@ -2122,6 +2146,7 @@ function renderEsfuerzoGroupHtml(exId, exKey, lastEsfuerzo) {
 }
 
 function stepEsfuerzo(exKey, delta) {
+  if (PLAN_LOCKED) return;
   var input = document.getElementById('esfuerzo-input-' + exKey);
   var valEl = document.getElementById('esfuerzo-val-' + exKey);
   if (!input || !valEl) return;
@@ -2202,7 +2227,7 @@ function renderExerciseBlocksHtml(day) {
         var lastLogT = findLastExerciseLog(day.id, ex.id);
         var lastSegs = lastLogT && lastLogT.segundos ? escapeHtml(String(lastLogT.segundos)) : '';
         html += '<div class="ex-inputs">';
-        html += '<div class="ex-input-group"><label class="ex-input-label">Segundos logrados</label><input type="number" step="1" placeholder="' + totalSecs + '" value="' + lastSegs + '" data-ex="' + ex.id + '" data-field="segundos" id="segundos-input-' + exTimerKey + '"></div>';
+        html += '<div class="ex-input-group"><label class="ex-input-label">Segundos logrados</label><input type="number" step="1" placeholder="' + totalSecs + '" value="' + lastSegs + '" data-ex="' + ex.id + '" data-field="segundos" id="segundos-input-' + exTimerKey + '"' + (PLAN_LOCKED ? ' disabled' : '') + '></div>';
         html += renderEsfuerzoGroupHtml(ex.id, exTimerKey, lastLogT && lastLogT.esfuerzo);
         html += '</div>';
       } else {
@@ -2211,8 +2236,8 @@ function renderExerciseBlocksHtml(day) {
         var lastCarga = lastLog && lastLog.carga ? escapeHtml(String(lastLog.carga)) : '';
         var lastReps = lastLog && lastLog.reps ? escapeHtml(String(lastLog.reps)) : '';
         html += '<div class="ex-inputs">';
-        html += '<div class="ex-input-group"><label class="ex-input-label">Carga (lbs)</label><input type="number" step="0.5" placeholder="0" value="' + lastCarga + '" data-ex="' + ex.id + '" data-field="carga"></div>';
-        html += '<div class="ex-input-group"><label class="ex-input-label">Reps hechas</label><input type="text" placeholder="0" value="' + lastReps + '" data-ex="' + ex.id + '" data-field="reps"></div>';
+        html += '<div class="ex-input-group"><label class="ex-input-label">Carga (lbs)</label><input type="number" step="0.5" placeholder="0" value="' + lastCarga + '" data-ex="' + ex.id + '" data-field="carga"' + (PLAN_LOCKED ? ' disabled' : '') + '></div>';
+        html += '<div class="ex-input-group"><label class="ex-input-label">Reps hechas</label><input type="text" placeholder="0" value="' + lastReps + '" data-ex="' + ex.id + '" data-field="reps"' + (PLAN_LOCKED ? ' disabled' : '') + '></div>';
         html += renderEsfuerzoGroupHtml(ex.id, exTimerKey, lastLog && lastLog.esfuerzo);
         html += '</div>';
       }
@@ -2257,8 +2282,8 @@ function renderRutinaTab() {
     html += '<div class="rt-day-body">';
     html += renderExerciseBlocksHtml(day);
     html += '<div class="rt-day-comment-label">Comentario del día (opcional)</div>';
-    html += '<textarea class="rt-day-comment" id="day-comment-' + day.id + '" placeholder="' + escapeHtml(DAY_COMMENT_PLACEHOLDER) + '"></textarea>';
-    html += '<button class="btn-primary rt-day-save" onclick="guardarSesion(' + i + ', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;vertical-align:-2px;margin-right:0.35rem;"><path d="M20 6 9 17l-5-5"/></svg>Guardar sesión de este día</button>';
+    html += '<textarea class="rt-day-comment" id="day-comment-' + day.id + '" placeholder="' + escapeHtml(DAY_COMMENT_PLACEHOLDER) + '"' + (PLAN_LOCKED ? ' disabled' : '') + '></textarea>';
+    html += '<button class="btn-primary rt-day-save" onclick="guardarSesion(' + i + ', this)"' + (PLAN_LOCKED ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : '') + '><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;vertical-align:-2px;margin-right:0.35rem;"><path d="M20 6 9 17l-5-5"/></svg>Guardar sesión de este día</button>';
     html += '</div></details>';
   });
 
@@ -2304,6 +2329,23 @@ var videoModalExId = null;
 
 function showExerciseVideo(url, nota, vertical, restSecs, exName, dayId, exId) {
   var wrap = document.getElementById('video-modal-frame-wrap');
+  // Con el plan vencido se puede seguir viendo el nombre/nota del
+  // ejercicio, pero el video en sí no se reproduce.
+  if (PLAN_LOCKED && url) {
+    wrap.style.display = 'block';
+    wrap.style.padding = '0'; wrap.style.height = 'auto'; wrap.style.maxHeight = '';
+    wrap.style.aspectRatio = ''; wrap.style.width = '100%'; wrap.style.maxWidth = ''; wrap.style.margin = '0';
+    wrap.innerHTML = renderPlanLockedCard();
+    var restRowL = document.getElementById('video-modal-rest-row');
+    if (restRowL) restRowL.style.display = 'none';
+    var notaElL = document.getElementById('video-modal-nota');
+    if (notaElL) notaElL.style.display = 'none';
+    document.getElementById('video-modal').style.display = 'flex';
+    return;
+  }
+  // El contenido real del reproductor pudo quedar pisado por la tarjeta de
+  // bloqueo en un video anterior — se restaura antes de usarlo de nuevo.
+  if (!wrap.querySelector('#video-modal-frame')) wrap.innerHTML = '<iframe id="video-modal-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
   var frame = document.getElementById('video-modal-frame');
   videoModalRestSecs = restSecs || null;
   videoModalExName = exName || '';
@@ -2378,6 +2420,7 @@ function startVideoModalRest() {
 }
 
 function guardarSesion(dayIndex, btnEl) {
+  if (PLAN_LOCKED) { alert('Tu programa caducó. Adquirí un nuevo plan para seguir registrando tus sesiones.'); return; }
   var day = currentRutinaData.days[dayIndex];
   var dayEl = btnEl ? btnEl.closest('.rt-day') : document.getElementById('rutina-content');
   var ejercicios = {};
@@ -3364,6 +3407,47 @@ function loadPlanInfo() {
   }).catch(function() { renderPlanCountdown(null); });
 }
 
+// Días de gracia después de vencido el ciclo antes de bloquear la cuenta.
+var PLAN_GRACE_DAYS = 5;
+var PLAN_LOCKED = false;
+
+function renderPlanLockedCard() {
+  return '<div class="pf-locked-card">'
+    + '<div class="pf-locked-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>'
+    + '<div class="pf-locked-title">Tu programa caducó</div>'
+    + '<div class="pf-locked-text">Adquirí un nuevo plan para seguir viendo esta sección.</div>'
+    + '<details class="pf-locked-pricing">'
+    + '<summary>Ver planes y precios</summary>'
+    + '<div class="pf-locked-price-row"><span class="plan-name">1 mes</span><span class="plan-price">$40</span></div>'
+    + '<div class="pf-locked-price-row"><span class="plan-name">3 meses<span class="plan-sub">Pago único de $105</span></span><span class="plan-price">$35/mes</span></div>'
+    + '<div class="pf-locked-price-row"><span class="plan-name">6 meses<span class="plan-sub">Pago único de $180</span></span><span class="plan-price">$30/mes</span></div>'
+    + '</details>'
+    + '</div>';
+}
+
+// La rutina no se esconde entera (sigue viendo nombres de ejercicios y
+// días) — solo video, historial, cronómetro de descanso y el registro de
+// la sesión se bloquean puntualmente ahí mismo. Perfil y Beneficios sí
+// se reemplazan enteros por esta tarjeta.
+function applyPlanLockUI() {
+  var perfilUnlocked = document.getElementById('perfil-unlocked-content');
+  var perfilLocked = document.getElementById('perfil-locked-card');
+  if (perfilUnlocked && perfilLocked) {
+    perfilUnlocked.style.display = PLAN_LOCKED ? 'none' : '';
+    perfilLocked.innerHTML = PLAN_LOCKED ? renderPlanLockedCard() : '';
+  }
+  var benefUnlocked = document.getElementById('beneficios-unlocked-content');
+  var benefLocked = document.getElementById('beneficios-locked-card');
+  if (benefUnlocked && benefLocked) {
+    benefUnlocked.style.display = PLAN_LOCKED ? 'none' : '';
+    benefLocked.innerHTML = PLAN_LOCKED ? renderPlanLockedCard() : '';
+  }
+  // La info de plan puede llegar antes o después de que la rutina ya esté
+  // dibujada — se vuelve a pintar para que los botones de video/historial
+  // queden bloqueados (o no) de una, sin esperar a que toque otra acción.
+  if (currentRutinaData && currentRutinaData.days) renderRutinaTab();
+}
+
 function renderPlanCountdown(c) {
   var el = document.getElementById('pf-plan-mini');
   var ringFill = document.getElementById('pf-ring-programa-fill');
@@ -3372,6 +3456,8 @@ function renderPlanCountdown(c) {
   if (!c || !c.initDate) {
     el.style.display = 'none';
     if (ringPct) ringPct.closest('.pf-ring-wrap').style.display = 'none';
+    PLAN_LOCKED = false;
+    applyPlanLockUI();
     return;
   }
   var start = new Date(c.initDate + 'T00:00:00');
@@ -3381,6 +3467,7 @@ function renderPlanCountdown(c) {
   today.setHours(0, 0, 0, 0);
   var msPerDay = 86400000;
   var daysLeft = Math.ceil((end - today) / msPerDay);
+  var daysOverdue = daysLeft < 0 ? -daysLeft : 0;
   var totalDays = Math.max(1, Math.round((end - start) / msPerDay));
   var elapsed = Math.min(totalDays, Math.max(0, totalDays - daysLeft));
   var pct = Math.min(100, Math.round((elapsed / totalDays) * 100));
@@ -3398,15 +3485,25 @@ function renderPlanCountdown(c) {
   }
 
   CURRENT_PAGOS_COUNT = c.pagosCount || 0;
+  CURRENT_PLAN_MESES = c.planMeses || null;
+  CURRENT_CICLO_PAGADO = !!c.cicloPagado;
   renderPerfilRoleLine();
+
+  PLAN_LOCKED = daysOverdue >= PLAN_GRACE_DAYS;
+  applyPlanLockUI();
 
   var alertEl = document.getElementById('pf-program-alert');
   if (alertEl) {
-    if (daysLeft <= 0) {
+    if (PLAN_LOCKED) {
+      // El aviso grande de "programa caducado" ya lo dicen las secciones
+      // bloqueadas — no hace falta duplicarlo acá arriba también.
+      alertEl.style.display = 'none';
+    } else if (daysLeft <= 0) {
       alertEl.style.display = '';
       alertEl.className = 'pf-program-alert danger';
+      var diasRestantesGracia = PLAN_GRACE_DAYS - daysOverdue;
       alertEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'
-        + '<span>Tu programa está inactivo. Escribile a Frida para reactivarlo con tu pago mensual.</span>';
+        + '<span>Tu plan venció. Se bloqueará tu cuenta en ' + diasRestantesGracia + (diasRestantesGracia === 1 ? ' día' : ' días') + ' si no renovás.</span>';
     } else if (daysLeft <= 5) {
       alertEl.style.display = '';
       alertEl.className = 'pf-program-alert warn';
@@ -3419,13 +3516,15 @@ function renderPlanCountdown(c) {
 }
 
 var CURRENT_PAGOS_COUNT = null;
+var CURRENT_PLAN_MESES = null;
+var CURRENT_CICLO_PAGADO = false;
 function renderPerfilRoleLine() {
   var el = document.getElementById('perfil-role');
   if (!el) return;
   var parts = [];
   if (CURRENT_PAGOS_COUNT !== null) {
-    var mes = CURRENT_PAGOS_COUNT + 1;
-    parts.push('Mes ' + mes + (mes <= 3 ? ' de 3' : ''));
+    var mes = CURRENT_PAGOS_COUNT + (CURRENT_CICLO_PAGADO ? 0 : 1);
+    parts.push('Mes ' + mes + (CURRENT_PLAN_MESES ? ' de ' + CURRENT_PLAN_MESES : ''));
   }
   if (CURRENT_PERFIL_DATA.fechaRegistro) {
     var d = new Date(CURRENT_PERFIL_DATA.fechaRegistro);
