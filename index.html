@@ -1911,6 +1911,14 @@ function exSegundos(block, ex) {
   return (block && block.workSecs) || 40;
 }
 
+// Series/reps son campos de texto libre — si Frida ya escribió la unidad
+// ahí ("10 reps", "3 series") no hay que agregarla de nuevo, si no queda
+// duplicado ("10 reps reps").
+function appendUnitIfMissing(value, unit) {
+  var str = String(value);
+  return new RegExp(unit, 'i').test(str) ? str : (str + ' ' + unit);
+}
+
 function findExerciseBankItem(name) {
   if (!name) return null;
   var normalized = name.trim().toLowerCase();
@@ -2144,8 +2152,8 @@ function renderExerciseBlocksHtml(day) {
       if (tipo === 'tiempo') {
         prescribed.push(totalSecs + ' seg');
       } else {
-        if (ex.series) prescribed.push(ex.series + ' series');
-        if (ex.reps) prescribed.push(ex.reps + ' reps');
+        if (ex.series) prescribed.push(appendUnitIfMissing(ex.series, 'series'));
+        if (ex.reps) prescribed.push(appendUnitIfMissing(ex.reps, 'reps'));
         if (ex.rpe) prescribed.push('RPE ' + ex.rpe);
       }
       var bankItem = findExerciseBankItem(ex.name);
@@ -2500,8 +2508,8 @@ function descargarRutinaPDF() {
         if (exTipo(block, ex) === 'tiempo') {
           prescribed.push(exSegundos(block, ex) + ' seg');
         } else {
-          if (ex.series) prescribed.push(ex.series + ' series');
-          if (ex.reps) prescribed.push(ex.reps + ' reps');
+          if (ex.series) prescribed.push(appendUnitIfMissing(ex.series, 'series'));
+          if (ex.reps) prescribed.push(appendUnitIfMissing(ex.reps, 'reps'));
           if (ex.carga) prescribed.push('carga: ' + ex.carga + ' lbs');
           if (ex.rpe) prescribed.push('RPE ' + ex.rpe);
         }
