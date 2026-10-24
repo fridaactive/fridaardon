@@ -1874,9 +1874,44 @@ function renderAcpPagosHtml(clientId, c) {
     }
     html += '</div>';
   }
+
+  // Duración del plan — editable acá para corregir clientas ya cargadas
+  // (nuevas clientas ya lo piden al crearlas, ver handleSaveNewClient).
+  html += '<div class="card" style="margin-bottom:1rem;">';
+  html += '<div class="card-label">📅 Duración del plan</div>';
+  html += '<select id="acp-plan-tipo" onchange="acpTogglePlanMesesInput()" style="width:100%;padding:0.6rem;border-radius:10px;border:1.5px solid var(--border);font-size:0.8rem;font-family:\'DM Sans\',sans-serif;margin-bottom:0.5rem;">';
+  html += '<option value=""' + (!c.planMeses ? ' selected' : '') + '>Mes a mes (sin fin fijo)</option>';
+  html += '<option value="fijo"' + (c.planMeses ? ' selected' : '') + '>Plan con duración fija</option>';
+  html += '</select>';
+  html += '<div id="acp-plan-meses-row" style="display:' + (c.planMeses ? 'block' : 'none') + ';margin-bottom:0.5rem;">';
+  html += '<input id="acp-plan-meses-input" type="number" min="1" value="' + (c.planMeses || '') + '" placeholder="¿De cuántos meses?" style="width:100%;padding:0.6rem;border-radius:10px;border:1.5px solid var(--border);font-size:0.8rem;font-family:\'DM Sans\',sans-serif;">';
+  html += '</div>';
+  html += '<button type="button" onclick="saveAcpPlanMeses(\'' + clientId + '\')" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Guardar duración</button>';
+  html += '</div>';
+
   html += '<button type="button" onclick="openCycleModal(\'' + clientId + '\')" style="width:100%;background:#2a7a2a;color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;margin-bottom:1rem;">🟢 Activar nuevo ciclo / mes</button>';
   html += '<div id="acp-quotation"></div>';
   return html;
+}
+
+function acpTogglePlanMesesInput() {
+  var isFijo = document.getElementById('acp-plan-tipo').value === 'fijo';
+  document.getElementById('acp-plan-meses-row').style.display = isFijo ? 'block' : 'none';
+}
+
+function saveAcpPlanMeses(clientId) {
+  var c = CLIENTS[clientId];
+  if (!c) return;
+  var tipo = document.getElementById('acp-plan-tipo').value;
+  if (tipo === 'fijo') {
+    var meses = parseInt(document.getElementById('acp-plan-meses-input').value) || null;
+    if (!meses) { alert('Indicá de cuántos meses es el plan.'); return; }
+    c.planMeses = meses;
+  } else {
+    c.planMeses = null;
+  }
+  saveCustomClient(clientId, c);
+  acpRenderShell();
 }
 
 function renderAdminClientProfile(clientId, uid, portal) {
