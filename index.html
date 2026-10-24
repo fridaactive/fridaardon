@@ -112,7 +112,6 @@
   .rt-blq-sub { font-size:0.62rem; color:rgba(255,255,255,0.75); margin-top:0.1rem; }
   .rt-blq-item { display:flex; align-items:flex-start; gap:0.65rem; background:#fff; padding:0.75rem 0.9rem; border-top:1px solid var(--border); }
   .rt-blq-item:first-of-type { border-top:none; }
-  .rt-ex-num { width:1.6rem; height:1.6rem; border-radius:50%; background:var(--blue-lt); color:var(--blue); font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .ex-name { font-size:0.82rem; font-weight:700; margin-bottom:0.2rem; }
   .ex-prescribed { font-size:0.7rem; color:var(--muted); margin-bottom:0.5rem; }
   .ex-inputs { display:flex; gap:0.5rem; }
@@ -2129,9 +2128,6 @@ function renderExerciseBlocksHtml(day) {
   var html = '';
   (day.blocks || []).forEach(function(block) {
     if (!block.exercises || block.exercises.length === 0) return;
-    var blockNameLower = (block.name || '').toLowerCase();
-    var isBiserie = blockNameLower.indexOf('biserie') !== -1 || blockNameLower.indexOf('superserie') !== -1;
-    var letters = ['A', 'B', 'C', 'D', 'E', 'F'];
     var hasTiempoEx = block.exercises.some(function(e){ return exTipo(block, e) === 'tiempo'; });
     var hasRepsEx = block.exercises.some(function(e){ return exTipo(block, e) === 'reps'; });
     var sub = hasTiempoEx && hasRepsEx ? 'Reps + tiempo · descanso ' + (block.restSecs || 40) + '"'
@@ -2141,8 +2137,7 @@ function renderExerciseBlocksHtml(day) {
     html += '<div class="rt-blq">';
     html += '<div class="rt-blq-hdr"><div class="rt-blq-title">' + escapeHtml(block.name) + '</div><div class="rt-blq-sub">' + sub + '</div></div>';
 
-    block.exercises.forEach(function(ex, i) {
-      var label = isBiserie ? (letters[i] || String(i + 1)) : String(i + 1);
+    block.exercises.forEach(function(ex) {
       var tipo = exTipo(block, ex);
       var prescribed = [];
       var totalSecs = tipo === 'tiempo' ? exSegundos(block, ex) : 0;
@@ -2162,7 +2157,6 @@ function renderExerciseBlocksHtml(day) {
       var hasTimer = tipo === 'tiempo';
       var exTimerKey = day.id + '__' + ex.id;
       html += '<div class="rt-blq-item">';
-      html += '<div class="rt-ex-num">' + label + '</div>';
       if (thumbUrl) {
         // Miniatura real del video (no el botón "Ver ejercicio" de antes) —
         // tocarla abre el mismo modal de siempre. El descanso ahora vive
