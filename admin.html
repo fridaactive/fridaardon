@@ -6629,7 +6629,11 @@ function getYouTubeEmbedUrl(url) {
   var id = null;
   var m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{6,})/);
   if (m) id = m[1];
-  return id ? ('https://www.youtube.com/embed/' + id + '?autoplay=1') : url;
+  // Sin autoplay: Chrome de escritorio bloquea el autoplay con sonido salvo
+  // que el sitio ya tenga buen historial de reproducción — en el celular
+  // suele dejarlo pasar, pero en computadora se queda trabado sin sonar.
+  // Mejor que arranque igual en ambos: con el botón de play de YouTube.
+  return id ? ('https://www.youtube.com/embed/' + id) : url;
 }
 
 var evModalExerciseName = null;
