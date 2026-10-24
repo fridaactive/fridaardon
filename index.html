@@ -112,7 +112,6 @@
   .rt-blq-sub { font-size:0.62rem; color:rgba(255,255,255,0.75); margin-top:0.1rem; }
   .rt-blq-item { display:flex; align-items:flex-start; gap:0.65rem; background:#fff; padding:0.75rem 0.9rem; border-top:1px solid var(--border); }
   .rt-blq-item:first-of-type { border-top:none; }
-  .rt-ex-num { width:1.6rem; height:1.6rem; border-radius:50%; background:var(--blue-lt); color:var(--blue); font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .ex-name { font-size:0.82rem; font-weight:700; margin-bottom:0.2rem; }
   .ex-prescribed { font-size:0.7rem; color:var(--muted); margin-bottom:0.5rem; }
   .ex-inputs { display:flex; gap:0.5rem; }
@@ -1912,6 +1911,14 @@ function exSegundos(block, ex) {
   return (block && block.workSecs) || 40;
 }
 
+// Series/reps son campos de texto libre — si Frida ya escribió la unidad
+// ahí ("10 reps", "3 series") no hay que agregarla de nuevo, si no queda
+// duplicado ("10 reps reps").
+function appendUnitIfMissing(value, unit) {
+  var str = String(value);
+  return new RegExp(unit, 'i').test(str) ? str : (str + ' ' + unit);
+}
+
 function findExerciseBankItem(name) {
   if (!name) return null;
   var normalized = name.trim().toLowerCase();
@@ -2129,9 +2136,6 @@ function renderExerciseBlocksHtml(day) {
   var html = '';
   (day.blocks || []).forEach(function(block) {
     if (!block.exercises || block.exercises.length === 0) return;
-    var blockNameLower = (block.name || '').toLowerCase();
-    var isBiserie = blockNameLower.indexOf('biserie') !== -1 || blockNameLower.indexOf('superserie') !== -1;
-    var letters = ['A', 'B', 'C', 'D', 'E', 'F'];
     var hasTiempoEx = block.exercises.some(function(e){ return exTipo(block, e) === 'tiempo'; });
     var hasRepsEx = block.exercises.some(function(e){ return exTipo(block, e) === 'reps'; });
     var sub = hasTiempoEx && hasRepsEx ? 'Reps + tiempo · descanso ' + (block.restSecs || 40) + '"'
@@ -2141,16 +2145,15 @@ function renderExerciseBlocksHtml(day) {
     html += '<div class="rt-blq">';
     html += '<div class="rt-blq-hdr"><div class="rt-blq-title">' + escapeHtml(block.name) + '</div><div class="rt-blq-sub">' + sub + '</div></div>';
 
-    block.exercises.forEach(function(ex, i) {
-      var label = isBiserie ? (letters[i] || String(i + 1)) : String(i + 1);
+    block.exercises.forEach(function(ex) {
       var tipo = exTipo(block, ex);
       var prescribed = [];
       var totalSecs = tipo === 'tiempo' ? exSegundos(block, ex) : 0;
       if (tipo === 'tiempo') {
         prescribed.push(totalSecs + ' seg');
       } else {
-        if (ex.series) prescribed.push(ex.series + ' series');
-        if (ex.reps) prescribed.push(ex.reps + ' reps');
+        if (ex.series) prescribed.push(appendUnitIfMissing(ex.series, 'series'));
+        if (ex.reps) prescribed.push(appendUnitIfMissing(ex.reps, 'reps'));
         if (ex.rpe) prescribed.push('RPE ' + ex.rpe);
       }
       var bankItem = findExerciseBankItem(ex.name);
@@ -2162,7 +2165,6 @@ function renderExerciseBlocksHtml(day) {
       var hasTimer = tipo === 'tiempo';
       var exTimerKey = day.id + '__' + ex.id;
       html += '<div class="rt-blq-item">';
-      html += '<div class="rt-ex-num">' + label + '</div>';
       if (thumbUrl) {
         // Miniatura real del video (no el botón "Ver ejercicio" de antes) —
         // tocarla abre el mismo modal de siempre. El descanso ahora vive
@@ -2186,7 +2188,7 @@ function renderExerciseBlocksHtml(day) {
         // Mismo estilo de pill que "Ver ejercicio"/"Ver nota", en vez del
         // botón ancho y amarillo de antes que le daba demasiado peso visual
         // a algo que es solo un plus (ver el historial de cargas).
-        html += '<button type="button" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:#F5ECCB;color:#7A5C00;border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Historial</button>';
+        html += '<button type="button" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:#F0F1F4;color:#5A6472;border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Historial</button>';
       }
       if (hasTimer) {
         // El cronómetro siempre abre su propia ventana aparte (no se mete
@@ -2506,8 +2508,8 @@ function descargarRutinaPDF() {
         if (exTipo(block, ex) === 'tiempo') {
           prescribed.push(exSegundos(block, ex) + ' seg');
         } else {
-          if (ex.series) prescribed.push(ex.series + ' series');
-          if (ex.reps) prescribed.push(ex.reps + ' reps');
+          if (ex.series) prescribed.push(appendUnitIfMissing(ex.series, 'series'));
+          if (ex.reps) prescribed.push(appendUnitIfMissing(ex.reps, 'reps'));
           if (ex.carga) prescribed.push('carga: ' + ex.carga + ' lbs');
           if (ex.rpe) prescribed.push('RPE ' + ex.rpe);
         }
