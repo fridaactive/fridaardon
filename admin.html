@@ -818,6 +818,14 @@
       </div>
     </div>
 
+    <div class="fin-form-row"><div class="fin-form-label">Duración del plan</div>
+      <select class="fin-form-select" id="nc-plan-duracion" onchange="updateNCPlanDuracionUI()">
+        <option value="">Mes a mes (sin fin fijo)</option>
+        <option value="fijo">Plan con duración fija</option>
+      </select>
+    </div>
+    <div class="fin-form-row" id="nc-plan-meses-row" style="display:none;"><div class="fin-form-label">¿De cuántos meses?</div><input class="fin-form-input" id="nc-plan-meses" type="number" min="1" placeholder="Ej: 3"></div>
+
     <div class="fin-form-row"><div class="fin-form-label">Objetivo / Notas</div><input class="fin-form-input" id="nc-meta" type="text" placeholder="Ej: Fuerza y movilidad"></div>
 
     <div id="nc-error" style="color:#c44;font-size:0.72rem;margin-top:0.3rem;display:none;"></div>
@@ -1775,7 +1783,10 @@ function openAdminClientProfile(clientId) {
   content.innerHTML = '<div style="padding:2rem 0;text-align:center;color:var(--muted);font-size:0.8rem;">Cargando…</div>';
   currentClient = clientId;
   var uid = CLIENT_LINKS[clientId];
-  acpState = { clientId: clientId, uid: uid || null, portal: {}, tab: 'resumen' };
+  // Presencial no usa el portal/perfil de la clienta (eso es para
+  // online y rutina personalizada) — entra directo a la rutina.
+  var defaultTab = (CLIENTS[clientId] && CLIENTS[clientId].type === 'presencial') ? 'rutina' : 'resumen';
+  acpState = { clientId: clientId, uid: uid || null, portal: {}, tab: defaultTab };
   if (!uid) { acpRenderShell(); return; }
   fbGet('clientasPortal/' + uid, function(portal) {
     acpState.portal = portal || {};
@@ -1806,16 +1817,20 @@ function acpRenderShell() {
   var content = document.getElementById('acp-content');
   var clientId = acpState.clientId;
   var c = CLIENTS[clientId] || {};
+  // El Resumen (bio, fotos, racha) solo existe si la clienta vinculó el
+  // portal — sin eso no hay nada que mostrar ahí, así que ni se ofrece.
+  var hasPortal = !!acpState.uid;
+  if (!hasPortal && acpState.tab === 'resumen') acpState.tab = 'rutina';
 
   var html = '<div class="pc-tabs" style="margin-bottom:1rem;">';
-  html += acpTabBtnHtml('resumen', 'Resumen');
+  if (hasPortal) html += acpTabBtnHtml('resumen', 'Resumen');
   html += acpTabBtnHtml('rutina', '📋 Rutina');
   html += acpTabBtnHtml('pagos', '💳 Pagos');
   html += '</div>';
 
   if (acpState.tab === 'rutina') html += renderAcpRutinaHtml(clientId, c);
   else if (acpState.tab === 'pagos') html += renderAcpPagosHtml(clientId, c);
-  else html += renderAdminClientProfile(clientId, acpState.uid, acpState.portal);
+  else if (hasPortal) html += renderAdminClientProfile(clientId, acpState.uid, acpState.portal);
 
   content.innerHTML = html;
   if (acpState.tab === 'pagos') renderQuotation(clientId, c, 'acp-quotation');
@@ -1852,7 +1867,7 @@ function renderAcpPagosHtml(clientId, c) {
     var statusBg = daysLeft <= 0 ? '#FDEAEA' : !paid ? '#FFF6E0' : '#F0FFF0';
     var statusBorder = daysLeft <= 0 ? '#F3C6C6' : !paid ? '#F0DFA0' : '#cde8cd';
     html += '<div class="card" style="background:' + statusBg + ';border-color:' + statusBorder + ';">';
-    html += '<div class="card-label" style="color:' + statusColor + ';">Mes ' + mesActual + (mesActual <= 3 ? ' de 3' : '') + ' · ' + (daysLeft <= 0 ? 'Ciclo vencido' : 'Quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días')) + '</div>';
+    html += '<div class="card-label" style="color:' + statusColor + ';">Mes ' + mesActual + (c.planMeses ? ' de ' + c.planMeses : '') + ' · ' + (daysLeft <= 0 ? 'Ciclo vencido' : 'Quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días')) + '</div>';
     html += '<div style="font-size:0.8rem;color:var(--text);">' + (paid ? '✅ Pagó este ciclo' : '⏳ Pendiente de pago') + (c.cuota ? ' · $' + c.cuota : '') + '</div>';
     if (!paid && c.cuota) {
       html += '<button type="button" onclick="markClientAsPaid(\'' + clientId + '\');acpSwitchTab(\'pagos\');" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Marcar como pagado</button>';
@@ -1912,7 +1927,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
     if (daysLeft <= 0) {
       alertHtml = '<div class="pf-program-alert danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Programa inactivo — no pagó el ciclo. ' + (c.cuota ? '<button onclick="markClientAsPaid(\'' + clientId + '\');openAdminClientProfile(\'' + clientId + '\');" style="margin-left:0.3rem;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.68rem;font-weight:700;cursor:pointer;">Marcar pagado</button>' : '') + '</span></div>';
     } else if (!paid) {
-      alertHtml = '<div class="pf-program-alert warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Mes ' + mesActual + (mesActual <= 3 ? ' de 3' : '') + ' · pendiente de pago' + (c.cuota ? ' · $' + c.cuota : '') + ' · quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días') + '. ' + (c.cuota ? '<button onclick="markClientAsPaid(\'' + clientId + '\');openAdminClientProfile(\'' + clientId + '\');" style="margin-left:0.3rem;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.68rem;font-weight:700;cursor:pointer;">Marcar pagado</button>' : '') + '</span></div>';
+      alertHtml = '<div class="pf-program-alert warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Mes ' + mesActual + (c.planMeses ? ' de ' + c.planMeses : '') + ' · pendiente de pago' + (c.cuota ? ' · $' + c.cuota : '') + ' · quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días') + '. ' + (c.cuota ? '<button onclick="markClientAsPaid(\'' + clientId + '\');openAdminClientProfile(\'' + clientId + '\');" style="margin-left:0.3rem;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.68rem;font-weight:700;cursor:pointer;">Marcar pagado</button>' : '') + '</span></div>';
     }
   }
 
@@ -4179,11 +4194,19 @@ function openNewClientModal() {
   document.getElementById('nc-cuota').value = '';
   document.getElementById('nc-start-date').value = '';
   document.getElementById('nc-meta').value = '';
+  document.getElementById('nc-plan-duracion').value = '';
+  document.getElementById('nc-plan-meses').value = '';
   document.getElementById('nc-error').style.display = 'none';
   document.getElementById('nc-summary').style.display = 'none';
   document.getElementById('new-client-modal').style.display = 'flex';
   renderNCCalendar();
   updateNCTypeUI();
+  updateNCPlanDuracionUI();
+}
+
+function updateNCPlanDuracionUI() {
+  var isFijo = document.getElementById('nc-plan-duracion').value === 'fijo';
+  document.getElementById('nc-plan-meses-row').style.display = isFijo ? '' : 'none';
 }
 
 function closeNewClientModal() {
@@ -4291,6 +4314,10 @@ function handleSaveNewClient() {
   var type = document.getElementById('nc-type').value;
   var cuotaVal = document.getElementById('nc-cuota').value;
   var metaText = document.getElementById('nc-meta').value.trim();
+  // La mayoría paga mes a mes, sin fecha de fin planeada — "planMeses" solo
+  // se guarda si esta clienta puntual tiene un paquete con duración fija.
+  var planDuracion = document.getElementById('nc-plan-duracion').value;
+  var planMesesVal = planDuracion === 'fijo' ? (parseInt(document.getElementById('nc-plan-meses').value) || null) : null;
 
   if (!name) {
     errorEl.textContent = 'El nombre es obligatorio.';
@@ -4325,7 +4352,8 @@ function handleSaveNewClient() {
       days: ncRutinaDays.slice(),
       cuota: monthlyPrice || null,
       rutina: null,
-      meta: metaText || 'Rutina por agregar'
+      meta: metaText || 'Rutina por agregar',
+      planMeses: planMesesVal
     };
 
     CLIENTS[id] = rutinaClientData;
@@ -4380,7 +4408,8 @@ function handleSaveNewClient() {
       days: recurringDays,
       startHour: timeStrToDecimal(hourStartVal),
       endHour: timeStrToDecimal(hourEndVal)
-    }
+    },
+    planMeses: planMesesVal
   };
 
   CLIENTS[id] = clientData;
