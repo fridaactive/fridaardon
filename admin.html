@@ -293,6 +293,20 @@
   .week-nav-btn { background:var(--blue); color:#fff; border:none; border-radius:100px; width:2rem; height:2rem; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
   .week-label { font-size:0.82rem; font-weight:600; color:var(--blue); text-align:center; }
   .week-label-sub { font-size:0.62rem; color:var(--muted); text-align:center; margin-top:0.1rem; }
+  .plan-rem-box { background:#fff; border:1.5px solid var(--border-b,#ccdaf5); border-radius:14px; padding:0.9rem 1rem; margin-bottom:0.75rem; }
+  .plan-rem-hdr { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:0.6rem; }
+  .plan-rem-list { display:flex; flex-direction:column; gap:0.4rem; margin-bottom:0.65rem; }
+  .plan-rem-empty { font-size:0.75rem; color:var(--muted); padding:0.3rem 0; }
+  .plan-rem-item { display:flex; align-items:center; gap:0.55rem; padding:0.4rem 0.1rem; border-bottom:1px solid #f0f0f0; }
+  .plan-rem-item:last-child { border-bottom:none; }
+  .plan-rem-check { flex-shrink:0; width:1.3rem; height:1.3rem; border-radius:6px; border:1.5px solid var(--border-b,#ccdaf5); background:#fff; color:#fff; font-size:0.72rem; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .plan-rem-item.done .plan-rem-check { background:#2a7a2a; border-color:#2a7a2a; }
+  .plan-rem-text { flex:1; font-size:0.8rem; color:var(--text); word-break:break-word; }
+  .plan-rem-item.done .plan-rem-text { color:var(--muted); text-decoration:line-through; }
+  .plan-rem-del { flex-shrink:0; background:none; border:none; color:var(--muted); font-size:0.7rem; cursor:pointer; padding:0.2rem; }
+  .plan-rem-add-row { display:flex; gap:0.5rem; }
+  .plan-rem-input { flex:1; min-width:0; border:1.5px solid var(--border-b,#ccdaf5); border-radius:10px; padding:0.5rem 0.7rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; }
+  .plan-rem-add-btn { flex-shrink:0; width:2.2rem; background:var(--blue); color:#fff; border:none; border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; }
 
   /* Calendar grid */
   .cal-scroll { overflow-x:auto; overflow-y:visible; -webkit-overflow-scrolling:touch; }
@@ -1042,6 +1056,15 @@
         <div class="week-label-sub" id="week-sub"></div>
       </div>
       <button class="week-nav-btn" onclick="changeWeek(1)">›</button>
+    </div>
+
+    <div class="plan-rem-box">
+      <div class="plan-rem-hdr">📌 Recordatorios</div>
+      <div class="plan-rem-list" id="plan-reminders-list"></div>
+      <div class="plan-rem-add-row">
+        <input type="text" id="plan-reminder-input" class="plan-rem-input" placeholder="Nuevo recordatorio..." onkeydown="if(event.key==='Enter')addPlanReminder()">
+        <button class="plan-rem-add-btn" onclick="addPlanReminder()">+</button>
+      </div>
     </div>
 
     <div class="cal-scroll">
@@ -4603,6 +4626,11 @@ function showScreen(name) {
         renderCalendar();
       });
     });
+    fbGet('planReminders', function(data) {
+      PLAN_REMINDERS = (data && Array.isArray(data)) ? data : JSON.parse(localStorage.getItem('fa_plan_reminders') || '[]');
+      localStorage.setItem('fa_plan_reminders', JSON.stringify(PLAN_REMINDERS));
+      renderPlanReminders();
+    });
   }
   if (name === 'finanzas') {
     fbGet('finanzas', function(data) {
@@ -4906,6 +4934,58 @@ function getWeekDates(offset) {
 
 function dateKey(date) {
   return date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2,'0') + '-' + String(date.getDate()).padStart(2,'0');
+}
+
+// ── RECORDATORIOS DE PLANIFICACIÓN ──
+// Una sola lista (no una por semana): lo pendiente nunca se borra solo,
+// sigue apareciendo semana tras semana hasta que se marca como hecho.
+var PLAN_REMINDERS = [];
+
+function savePlanReminders() {
+  localStorage.setItem('fa_plan_reminders', JSON.stringify(PLAN_REMINDERS));
+  fbSet('planReminders', PLAN_REMINDERS);
+}
+
+function addPlanReminder() {
+  var input = document.getElementById('plan-reminder-input');
+  var text = input.value.trim();
+  if (!text) return;
+  PLAN_REMINDERS.push({ id: 'rem-' + Date.now(), text: text, done: false });
+  input.value = '';
+  savePlanReminders();
+  renderPlanReminders();
+}
+
+function togglePlanReminder(id) {
+  var r = PLAN_REMINDERS.find(function(x) { return x.id === id; });
+  if (!r) return;
+  r.done = !r.done;
+  savePlanReminders();
+  renderPlanReminders();
+}
+
+function deletePlanReminder(id) {
+  PLAN_REMINDERS = PLAN_REMINDERS.filter(function(x) { return x.id !== id; });
+  savePlanReminders();
+  renderPlanReminders();
+}
+
+function renderPlanReminders() {
+  var el = document.getElementById('plan-reminders-list');
+  if (!el) return;
+  if (PLAN_REMINDERS.length === 0) {
+    el.innerHTML = '<div class="plan-rem-empty">Sin recordatorios pendientes.</div>';
+    return;
+  }
+  // Pendientes primero, hechos al final.
+  var sorted = PLAN_REMINDERS.slice().sort(function(a, b) { return (a.done ? 1 : 0) - (b.done ? 1 : 0); });
+  el.innerHTML = sorted.map(function(r) {
+    return '<div class="plan-rem-item' + (r.done ? ' done' : '') + '">'
+      + '<button type="button" class="plan-rem-check" onclick="togglePlanReminder(\'' + r.id + '\')">' + (r.done ? '✓' : '') + '</button>'
+      + '<div class="plan-rem-text">' + escHtml(r.text) + '</div>'
+      + '<button type="button" class="plan-rem-del" onclick="deletePlanReminder(\'' + r.id + '\')">✕</button>'
+      + '</div>';
+  }).join('');
 }
 
 function isToday(date) {
