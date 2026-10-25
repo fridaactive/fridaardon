@@ -274,11 +274,11 @@
   /* En iPad/computadora hay ancho de sobra — los recordatorios pasan a un
      costado (derecha) en vez de ocupar espacio arriba del calendario,
      que es lo que más importa ver de entrada en pantallas chicas. */
-  @media (min-width: 900px) {
+  @media (min-width: 700px) {
     .plan-wrap { max-width:1150px; display:grid; grid-template-columns: 1fr 300px; grid-template-areas: "nav nav" "cal rem"; column-gap:1.5rem; }
     .week-nav { grid-area: nav; }
     .cal-scroll { grid-area: cal; min-width:0; }
-    .plan-rem-box { grid-area: rem; margin-bottom:0; align-self:start; position:sticky; top:1rem; }
+    .plan-rem-box { grid-area: rem !important; margin-bottom:0; align-self:start; position:sticky; top:1rem; }
   }
 
   /* Week nav */
