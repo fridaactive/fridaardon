@@ -3163,10 +3163,36 @@ function closeBenefProfile() {
   document.getElementById('benef-profile-modal').style.display = 'none';
 }
 
+// Las marcas sin límite nunca tienen "canjes" — las que sí tienen límite
+// (1, 2, 3... veces por mes) ahora pueden canjearse más de una vez por
+// ciclo, así que el canje pasa a ser una lista (push) en vez de un único
+// valor. Esto lee ambos formatos: el viejo (un solo canje directo) cuenta
+// como 1, y el nuevo (map de pushes) cuenta sus entradas.
+function getCanjeCount(b) {
+  var c = b.canjes && b.canjes[currentUid] && b.canjes[currentUid][currentCycleKey];
+  if (!c) return 0;
+  if (c.canjeadoEn) return 1;
+  return Object.keys(c).length;
+}
+
+// Tarjeta del cupón en sí — sin ninguna etiqueta tipo "Cupón único" o "Sin
+// límite de usos": Frida prefiere que esos detalles del mecanismo no se
+// le muestren a la clienta, el comprobante alcanza con nombre + descuento.
+function renderCouponVoucherCard(b) {
+  var html = '<div class="bp-coupon-voucher">';
+  if (b.logoUrl) html += '<img class="bp-coupon-voucher-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
+  html += '<div class="bp-coupon-voucher-alliance">FridaActive × ' + escapeHtml(b.marca || '') + '</div>';
+  html += '<div class="bp-coupon-voucher-name">' + escapeHtml(currentClientName || '') + '</div>';
+  if (b.descuento) html += '<div class="bp-coupon-voucher-discount">' + escapeHtml(b.descuento) + '</div>';
+  html += '</div>';
+  return html;
+}
+
 function renderBenefProfileHtml(b) {
   var todayStr = new Date().toISOString().slice(0, 10);
   var alianzaTerminada = b.vencimiento && b.vencimiento < todayStr;
-  var miCanje = b.canjes && b.canjes[currentUid] && b.canjes[currentUid][currentCycleKey];
+  var limite = b.limiteUsos || null; // null/0 = sin límite de usos
+  var puedeCanjear = !limite || getCanjeCount(b) < limite;
   var html = '';
 
   if (b.fotos && b.fotos.length) {
@@ -3204,38 +3230,25 @@ function renderBenefProfileHtml(b) {
   if (alianzaTerminada) {
     html += '<div class="bp-coupon-label">Alianza finalizada</div>';
     html += '<div class="bp-coupon-sub" style="margin-top:0.4rem;">Esta marca ya no forma parte de los beneficios activos.</div>';
-  } else if (b.ilimitado) {
-    // Algunas marcas (ej. Nutra) no ponen límite de usos — no tiene
-    // sentido el flujo de "canjear 1 vez" acá, el descuento está
-    // disponible siempre, se muestra directo sin tocar nada.
+  } else if (!limite) {
+    // Sin límite de usos: el descuento está siempre disponible, se
+    // muestra directo sin pasar por "canjear" ni avisarle a Frida.
     html += '<div class="bp-coupon-label">Tu descuento</div>';
-    html += '<div class="bp-coupon-voucher">';
-    if (b.logoUrl) html += '<img class="bp-coupon-voucher-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
-    html += '<div class="bp-coupon-voucher-alliance">FridaActive × ' + escapeHtml(b.marca || '') + '</div>';
-    html += '<div class="bp-coupon-voucher-name">' + escapeHtml(currentClientName || '') + '</div>';
-    if (b.descuento) html += '<div class="bp-coupon-voucher-discount">' + escapeHtml(b.descuento) + '</div>';
-    html += '<div class="bp-coupon-voucher-tag">Sin límite de usos</div>';
-    html += '</div>';
-    html += '<div class="bp-coupon-sub">Mostrá este cupón en el negocio cada vez que quieras usarlo.</div>';
+    html += renderCouponVoucherCard(b);
+    html += '<div class="bp-coupon-sub">Mostrá este cupón en el negocio para usarlo.</div>';
     html += '<button class="btn-secondary" style="margin-top:0.7rem;" onclick="descargarVoucher(\'' + b.id + '\')">⬇️ Descargar cupón en PDF</button>';
-  } else if (miCanje) {
+  } else if (puedeCanjear) {
+    html += '<div class="bp-coupon-label">Cupón disponible</div>';
+    html += '<div class="bp-coupon-sub" style="margin:0.4rem 0 0.8rem;">Se renueva cuando renovás tu plan</div>';
+    html += '<button class="save-btn" onclick="canjearBeneficio(\'' + b.id + '\')">🎁 Canjear cupón</button>';
+  } else {
     // Sin código de verificación: el cupón es un comprobante de la alianza
     // FridaActive × marca, y es Frida quien le avisa antes a la marca que
     // esta clienta va a pasar — por eso no hace falta un código acá.
     html += '<div class="bp-coupon-label">Tu cupón · ' + escapeHtml(cycleLabel(currentCycleKey)) + '</div>';
-    html += '<div class="bp-coupon-voucher">';
-    if (b.logoUrl) html += '<img class="bp-coupon-voucher-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
-    html += '<div class="bp-coupon-voucher-alliance">FridaActive × ' + escapeHtml(b.marca || '') + '</div>';
-    html += '<div class="bp-coupon-voucher-name">' + escapeHtml(currentClientName || '') + '</div>';
-    if (b.descuento) html += '<div class="bp-coupon-voucher-discount">' + escapeHtml(b.descuento) + '</div>';
-    html += '<div class="bp-coupon-voucher-tag">Cupón único</div>';
-    html += '</div>';
+    html += renderCouponVoucherCard(b);
     html += '<div class="bp-coupon-sub">Mostrá este cupón en el negocio para canjearlo.</div>';
     html += '<button class="btn-secondary" style="margin-top:0.7rem;" onclick="descargarVoucher(\'' + b.id + '\')">⬇️ Descargar cupón en PDF</button>';
-  } else {
-    html += '<div class="bp-coupon-label">Cupón disponible</div>';
-    html += '<div class="bp-coupon-sub" style="margin:0.4rem 0 0.8rem;">Se puede usar 1 vez por ciclo de tu plan · se renueva cuando renovás</div>';
-    html += '<button class="save-btn" onclick="canjearBeneficio(\'' + b.id + '\')">🎁 Canjear cupón</button>';
   }
   html += '</div>';
 
@@ -3254,8 +3267,7 @@ function renderBenefProfileHtml(b) {
 // cualquier galería o visor de imágenes.
 function descargarVoucher(beneficioId) {
   var b = LOADED_BENEFICIOS[beneficioId];
-  var miCanje = b && b.canjes && b.canjes[currentUid] && b.canjes[currentUid][currentCycleKey];
-  if (!b || (!miCanje && !b.ilimitado)) { alert('No se pudo generar el cupón, intentá de nuevo.'); return; }
+  if (!b || (b.limiteUsos && getCanjeCount(b) === 0)) { alert('No se pudo generar el cupón, intentá de nuevo.'); return; }
   generarCuponCanvas(b, function(canvas) {
     try {
       canvas.toBlob(function(blob) {
@@ -3327,14 +3339,16 @@ function generarCuponCanvas(b, cb) {
     ctx.font = '700 28px "DM Sans", sans-serif';
     ctx.fillText(b.marca || '', marcaTextX, 74);
 
-    var panelX = 48, panelY = 170, panelW = W - 96, panelH = 390;
+    var panelX = 48, panelY = 170, panelW = W - 96, panelH = 330;
     ctx.fillStyle = '#fff';
     cvRoundRect(ctx, panelX, panelY, panelW, panelH, 20);
     ctx.fill();
 
+    // Sin etiquetas de "cupón único" ni "sin límite de usos" — esos
+    // detalles del mecanismo no se le muestran a la clienta.
     ctx.fillStyle = '#1C55E5';
     ctx.font = '700 17px "DM Sans", sans-serif';
-    ctx.fillText((b.ilimitado ? 'DESCUENTO' : 'CUPÓN ÚNICO') + ' · CLIENTA', panelX + 40, panelY + 55);
+    ctx.fillText('TU CUPÓN · CLIENTA', panelX + 40, panelY + 55);
 
     ctx.fillStyle = '#131722';
     ctx.font = '800 46px "DM Sans", sans-serif';
@@ -3346,28 +3360,19 @@ function generarCuponCanvas(b, cb) {
       ctx.fillText(b.descuento, panelX + 40, panelY + 160);
     }
 
-    var pillLabel = b.ilimitado ? 'SIN LÍMITE DE USOS' : 'CUPÓN ÚNICO';
-    ctx.font = '700 15px "DM Sans", sans-serif';
-    var pillW = ctx.measureText(pillLabel).width + 40;
-    ctx.fillStyle = '#EAF0FF';
-    cvRoundRect(ctx, panelX + 40, panelY + 190, pillW, 38, 19);
-    ctx.fill();
-    ctx.fillStyle = '#1C55E5';
-    ctx.fillText(pillLabel, panelX + 60, panelY + 214);
-
     ctx.strokeStyle = '#E3E7F0';
     ctx.lineWidth = 2;
     ctx.setLineDash([8, 8]);
     ctx.beginPath();
-    ctx.moveTo(panelX + 24, panelY + 265);
-    ctx.lineTo(panelX + panelW - 24, panelY + 265);
+    ctx.moveTo(panelX + 24, panelY + 210);
+    ctx.lineTo(panelX + panelW - 24, panelY + 210);
     ctx.stroke();
     ctx.setLineDash([]);
 
     ctx.fillStyle = '#7a8499';
     ctx.font = '600 17px "DM Sans", sans-serif';
-    ctx.fillText('Válido durante ' + cycleLabel(currentCycleKey), panelX + 40, panelY + 305);
-    ctx.fillText('Cupones válidos solo en el local', panelX + 40, panelY + 332);
+    ctx.fillText('Válido durante ' + cycleLabel(currentCycleKey), panelX + 40, panelY + 250);
+    ctx.fillText('Cupones válidos solo en el local', panelX + 40, panelY + 277);
 
     cb(canvas);
   }
@@ -3393,16 +3398,22 @@ function generarCuponCanvas(b, cb) {
 
 // No hay verificación automática con la marca todavía: el canje real pasa
 // por avisarle a Frida (por chat) para que ella coordine directo con la
-// marca. Por eso acá, además de guardar el canje, se abre el chat con un
-// mensaje ya escrito — la clienta solo tiene que enviarlo.
+// marca. Push (no set) porque algunas marcas permiten más de un canje por
+// mes — cada toque de "Canjear cupón" agrega una entrada más a la lista.
 function canjearBeneficio(beneficioId) {
   var entry = { canjeadoEn: Date.now() };
-  db().ref('beneficios/' + beneficioId + '/canjes/' + currentUid + '/' + currentCycleKey).set(entry).then(function() {
+  db().ref('beneficios/' + beneficioId + '/canjes/' + currentUid + '/' + currentCycleKey).push(entry).then(function() {
     var b = LOADED_BENEFICIOS[beneficioId];
     if (b) {
       b.canjes = b.canjes || {};
       b.canjes[currentUid] = b.canjes[currentUid] || {};
-      b.canjes[currentUid][currentCycleKey] = entry;
+      var existing = b.canjes[currentUid][currentCycleKey];
+      // Si lo que había era el formato viejo (un canje directo, sin
+      // lista), se envuelve antes de agregar el nuevo — si no, el nuevo
+      // pisaría al viejo en vez de sumarse.
+      if (!existing || existing.canjeadoEn) existing = {};
+      existing['local-' + Date.now() + '-' + Math.random().toString(36).slice(2)] = entry;
+      b.canjes[currentUid][currentCycleKey] = existing;
     }
     renderBeneficiosList();
     if (currentBenefProfileId === beneficioId && b) {

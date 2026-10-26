@@ -1324,7 +1324,14 @@
     <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;" id="bn-modal-title">Nuevo beneficio</div>
     <div class="fin-form-row"><div class="fin-form-label">Marca</div><input class="fin-form-input" id="bn-marca" type="text" placeholder="Ej: Gatorade"></div>
     <div class="fin-form-row"><div class="fin-form-label">Descuento</div><input class="fin-form-input" id="bn-descuento" type="text" placeholder="Ej: 15% de descuento"></div>
-    <div class="fin-form-row"><label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;cursor:pointer;"><input type="checkbox" id="bn-ilimitado" style="width:1.1rem;height:1.1rem;"> Sin límite de usos (no solo 1 vez por mes)</label><div style="font-size:0.65rem;color:var(--muted);margin-top:0.3rem;">Marcá esto si la marca no puso restricción de cantidad de veces — la clienta puede canjearlo cuando quiera.</div></div>
+    <div class="fin-form-row">
+      <div class="fin-form-label">Veces que se puede canjear por mes</div>
+      <select class="fin-form-input" id="bn-limite-tipo" onchange="updateBnLimiteUI()">
+        <option value="limitado">Cantidad específica</option>
+        <option value="ilimitado">Sin límite</option>
+      </select>
+      <input class="fin-form-input" id="bn-limite-num" type="number" min="1" placeholder="Ej: 1" style="margin-top:0.5rem;">
+    </div>
     <div class="fin-form-row"><div class="fin-form-label">Categoría</div>
       <select class="fin-form-input" id="bn-categoria">
         <option value="Fitness y deporte">Fitness y deporte</option>
@@ -2516,13 +2523,20 @@ function deleteAnuncio(id) {
   });
 }
 
+function updateBnLimiteUI() {
+  var isLimitado = document.getElementById('bn-limite-tipo').value === 'limitado';
+  document.getElementById('bn-limite-num').style.display = isLimitado ? '' : 'none';
+}
+
 function showBeneficioModal(id) {
   editingBeneficioId = id || null;
   var data = editingBeneficioId ? (ADMIN_BENEFICIOS_CACHE[editingBeneficioId] || {}) : {};
   document.getElementById('bn-modal-title').textContent = editingBeneficioId ? 'Editar beneficio' : 'Nuevo beneficio';
   document.getElementById('bn-marca').value = data.marca || '';
   document.getElementById('bn-descuento').value = data.descuento || '';
-  document.getElementById('bn-ilimitado').checked = !!data.ilimitado;
+  document.getElementById('bn-limite-tipo').value = data.limiteUsos ? 'limitado' : 'ilimitado';
+  document.getElementById('bn-limite-num').value = data.limiteUsos || 1;
+  updateBnLimiteUI();
   document.getElementById('bn-categoria').value = data.categoria || 'Fitness y deporte';
   document.getElementById('bn-descripcion').value = data.descripcion || '';
   document.getElementById('bn-servicios').value = data.servicios || '';
@@ -2635,10 +2649,12 @@ function saveBeneficio() {
   // Writing null clears a field that had a value before (e.g. removing a
   // vencimiento date on edit) — Firebase drops null keys instead of storing
   // them, so this works the same for both create and edit.
+  var esLimitado = document.getElementById('bn-limite-tipo').value === 'limitado';
+  var limiteUsos = esLimitado ? (parseInt(document.getElementById('bn-limite-num').value) || 1) : null;
   var item = {
     marca: marca,
     descuento: document.getElementById('bn-descuento').value.trim(),
-    ilimitado: document.getElementById('bn-ilimitado').checked,
+    limiteUsos: limiteUsos,
     categoria: document.getElementById('bn-categoria').value,
     descripcion: document.getElementById('bn-descripcion').value.trim(),
     servicios: document.getElementById('bn-servicios').value.trim() || null,
