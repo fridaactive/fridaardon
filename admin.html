@@ -1324,6 +1324,7 @@
     <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;" id="bn-modal-title">Nuevo beneficio</div>
     <div class="fin-form-row"><div class="fin-form-label">Marca</div><input class="fin-form-input" id="bn-marca" type="text" placeholder="Ej: Gatorade"></div>
     <div class="fin-form-row"><div class="fin-form-label">Descuento</div><input class="fin-form-input" id="bn-descuento" type="text" placeholder="Ej: 15% de descuento"></div>
+    <div class="fin-form-row"><div class="fin-form-label">A qué aplica (opcional)</div><input class="fin-form-input" id="bn-aplica" type="text" placeholder="Ej: Todos los productos del menú"></div>
     <div class="fin-form-row"><div class="fin-form-label">Veces que se puede canjear por mes (opcional)</div><input class="fin-form-input" id="bn-limite-num" type="number" min="1" placeholder="Dejalo vacío si no hay límite"></div>
     <div class="fin-form-row"><div class="fin-form-label">Categoría</div>
       <select class="fin-form-input" id="bn-categoria">
@@ -2522,6 +2523,7 @@ function showBeneficioModal(id) {
   document.getElementById('bn-modal-title').textContent = editingBeneficioId ? 'Editar beneficio' : 'Nuevo beneficio';
   document.getElementById('bn-marca').value = data.marca || '';
   document.getElementById('bn-descuento').value = data.descuento || '';
+  document.getElementById('bn-aplica').value = data.detalleDescuento || '';
   document.getElementById('bn-limite-num').value = data.limiteUsos || '';
   document.getElementById('bn-categoria').value = data.categoria || 'Fitness y deporte';
   document.getElementById('bn-descripcion').value = data.descripcion || '';
@@ -2639,6 +2641,7 @@ function saveBeneficio() {
   var item = {
     marca: marca,
     descuento: document.getElementById('bn-descuento').value.trim(),
+    detalleDescuento: document.getElementById('bn-aplica').value.trim() || null,
     limiteUsos: limiteUsos,
     categoria: document.getElementById('bn-categoria').value,
     descripcion: document.getElementById('bn-descripcion').value.trim(),

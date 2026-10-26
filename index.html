@@ -349,6 +349,7 @@
   .bp-coupon-voucher-alliance { font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:0.45rem; }
   .bp-coupon-voucher-name { font-size:1.05rem; font-weight:800; color:var(--text); }
   .bp-coupon-voucher-discount { font-size:0.85rem; color:#2a7a2a; font-weight:700; margin-top:0.3rem; }
+  .bp-coupon-voucher-detail { font-size:0.74rem; color:var(--muted); margin-top:0.3rem; line-height:1.4; }
   .bp-coupon-voucher-tag { display:inline-block; margin-top:0.6rem; font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); background:var(--blue-lt); padding:0.22rem 0.65rem; border-radius:100px; }
 
   /* ── LANDING DE SERVICIOS (para leads sin cuenta vinculada) ── */
@@ -3184,6 +3185,7 @@ function renderCouponVoucherCard(b) {
   html += '<div class="bp-coupon-voucher-alliance">FridaActive × ' + escapeHtml(b.marca || '') + '</div>';
   html += '<div class="bp-coupon-voucher-name">' + escapeHtml(currentClientName || '') + '</div>';
   if (b.descuento) html += '<div class="bp-coupon-voucher-discount">' + escapeHtml(b.descuento) + '</div>';
+  if (b.detalleDescuento) html += '<div class="bp-coupon-voucher-detail">' + escapeHtml(b.detalleDescuento) + '</div>';
   html += '</div>';
   return html;
 }
@@ -3297,6 +3299,25 @@ function cvRoundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
+// Canvas no parte el texto solo — si "a qué aplica" es largo, hay que
+// partirlo a mano en líneas que entren en el ancho del cupón.
+function cvWrapText(ctx, text, maxWidth) {
+  var words = text.split(' ');
+  var lines = [];
+  var current = '';
+  words.forEach(function(word) {
+    var test = current ? current + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = test;
+    }
+  });
+  if (current) lines.push(current);
+  return lines;
+}
+
 function generarCuponCanvas(b, cb) {
   var W = 900, H = 620;
   var canvas = document.createElement('canvas');
@@ -3339,7 +3360,16 @@ function generarCuponCanvas(b, cb) {
     ctx.font = '700 28px "DM Sans", sans-serif';
     ctx.fillText(b.marca || '', marcaTextX, 74);
 
-    var panelX = 48, panelY = 170, panelW = W - 96, panelH = 330;
+    var panelX = 48, panelY = 170, panelW = W - 96;
+
+    // "A qué aplica" se mide antes de dibujar el panel blanco, para poder
+    // calcularle el alto según cuántas líneas termine ocupando.
+    ctx.font = '600 16px "DM Sans", sans-serif';
+    var detailLines = b.detalleDescuento ? cvWrapText(ctx, b.detalleDescuento, panelW - 80) : [];
+    var detailEndY = detailLines.length ? (188 + detailLines.length * 22) : 160;
+    var dividerYRel = Math.max(210, detailEndY + 20);
+    var panelH = dividerYRel + 67 + 53;
+
     ctx.fillStyle = '#fff';
     cvRoundRect(ctx, panelX, panelY, panelW, panelH, 20);
     ctx.fill();
@@ -3360,19 +3390,28 @@ function generarCuponCanvas(b, cb) {
       ctx.fillText(b.descuento, panelX + 40, panelY + 160);
     }
 
+    if (detailLines.length) {
+      ctx.fillStyle = '#7a8499';
+      ctx.font = '600 16px "DM Sans", sans-serif';
+      detailLines.forEach(function(line, i) {
+        ctx.fillText(line, panelX + 40, panelY + 188 + i * 22);
+      });
+    }
+
+    var dividerY = panelY + dividerYRel;
     ctx.strokeStyle = '#E3E7F0';
     ctx.lineWidth = 2;
     ctx.setLineDash([8, 8]);
     ctx.beginPath();
-    ctx.moveTo(panelX + 24, panelY + 210);
-    ctx.lineTo(panelX + panelW - 24, panelY + 210);
+    ctx.moveTo(panelX + 24, dividerY);
+    ctx.lineTo(panelX + panelW - 24, dividerY);
     ctx.stroke();
     ctx.setLineDash([]);
 
     ctx.fillStyle = '#7a8499';
     ctx.font = '600 17px "DM Sans", sans-serif';
-    ctx.fillText('Válido durante ' + cycleLabel(currentCycleKey), panelX + 40, panelY + 250);
-    ctx.fillText('Cupones válidos solo en el local', panelX + 40, panelY + 277);
+    ctx.fillText('Válido durante ' + cycleLabel(currentCycleKey), panelX + 40, dividerY + 40);
+    ctx.fillText('Cupones válidos solo en el local', panelX + 40, dividerY + 67);
 
     cb(canvas);
   }
