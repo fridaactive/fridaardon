@@ -3115,10 +3115,10 @@ function renderBenefCardsHtml(items) {
     if (b._canjeado && !b._vencida) {
       html += '<div class="benef-check-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>';
     }
+    // Sin un logo real no se muestra ningún círculo en su lugar — una
+    // inicial inventada se puede confundir con el logo real de la marca.
     if (b.logoUrl) {
-      html += '<img class="benef-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.outerHTML=\'<div class=&quot;benef-logo-fallback&quot;>' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>\'">';
-    } else {
-      html += '<div class="benef-logo-fallback">' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>';
+      html += '<img class="benef-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
     }
     html += '<div class="benef-marca"><span class="benef-marca-text">' + escapeHtml(b.marca || '') + '</span></div>';
     if (b.descuento) html += '<div class="benef-descuento-pill' + (b._vencida ? ' muted' : '') + '"><span class="benef-descuento-pill-text">' + escapeHtml(b.descuento) + '</span></div>';
