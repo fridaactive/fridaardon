@@ -3176,10 +3176,10 @@ function renderBenefProfileHtml(b) {
   }
 
   html += '<div class="bp-hero-row">';
+  // Sin un logo real no se muestra ningún círculo en su lugar — una
+  // inicial inventada se puede confundir con el logo real de la marca.
   if (b.logoUrl) {
-    html += '<img class="bp-hero-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.outerHTML=\'<div class=&quot;bp-hero-logo-fallback&quot;>' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>\'">';
-  } else {
-    html += '<div class="bp-hero-logo-fallback">' + escapeHtml((b.marca || '?').charAt(0).toUpperCase()) + '</div>';
+    html += '<img class="bp-hero-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
   }
   html += '<div><div class="bp-marca">' + escapeHtml(b.marca || '') + '</div>';
   if (b.descuento) html += '<div class="bp-descuento">' + escapeHtml(b.descuento) + '</div>';
@@ -3291,28 +3291,27 @@ function generarCuponCanvas(b, cb) {
     ctx.font = '400 28px "DM Sans", sans-serif';
     ctx.fillText('×', 300, 72);
 
+    // Sin un logo real de la marca no se dibuja nada en su lugar — un
+    // círculo con una inicial inventada se puede confundir con un logo
+    // real que no es, y eso genera roce con la marca aliada.
     var logoX = 350, logoY = 36, logoSize = 60;
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2, 0, Math.PI * 2);
-    ctx.closePath();
-    ctx.fillStyle = '#fff';
-    ctx.fill();
+    var marcaTextX = logoX;
     if (logoImg) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.fillStyle = '#fff';
+      ctx.fill();
       ctx.clip();
       ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
-    } else {
-      ctx.fillStyle = '#1C55E5';
-      ctx.font = '700 28px "DM Sans", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText((b.marca || '?').charAt(0).toUpperCase(), logoX + logoSize / 2, logoY + logoSize / 2 + 10);
-      ctx.textAlign = 'left';
+      ctx.restore();
+      marcaTextX = logoX + logoSize + 18;
     }
-    ctx.restore();
 
     ctx.fillStyle = '#fff';
     ctx.font = '700 28px "DM Sans", sans-serif';
-    ctx.fillText(b.marca || '', logoX + logoSize + 18, 74);
+    ctx.fillText(b.marca || '', marcaTextX, 74);
 
     var panelX = 48, panelY = 170, panelW = W - 96, panelH = 390;
     ctx.fillStyle = '#fff';
