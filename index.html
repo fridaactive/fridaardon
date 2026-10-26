@@ -3216,7 +3216,7 @@ function renderBenefProfileHtml(b) {
     if (b.descuento) html += '<div class="bp-coupon-voucher-discount">' + escapeHtml(b.descuento) + '</div>';
     html += '<div class="bp-coupon-voucher-tag">Cupón único</div>';
     html += '</div>';
-    html += '<div class="bp-coupon-sub">Ya le avisamos a Frida — ella coordina con la marca para que puedas pasar a canjearlo.</div>';
+    html += '<div class="bp-coupon-sub">Mostrá este cupón en el negocio para canjearlo.</div>';
     html += '<button class="btn-secondary" style="margin-top:0.7rem;" onclick="descargarVoucher(\'' + b.id + '\')">⬇️ Descargar cupón en PDF</button>';
   } else {
     html += '<div class="bp-coupon-label">Cupón disponible</div>';
@@ -3393,9 +3393,13 @@ function canjearBeneficio(beneficioId) {
     if (currentBenefProfileId === beneficioId && b) {
       document.getElementById('bp-content').innerHTML = renderBenefProfileHtml(b);
     }
-    var chatInput = document.getElementById('chat-input');
-    if (chatInput) chatInput.value = 'Hola! Quiero canjear mi cupón de ' + ((b && b.marca) || 'una marca aliada') + ' 🎁';
-    openChatModal();
+    // Aviso automático a Frida por el chat — antes dependía de que la
+    // clienta además tocara "Enviar", así que a veces nunca se enteraba.
+    db().ref('clientasPortal/' + currentUid + '/chat').push({
+      from: 'client',
+      text: 'Quiero canjear mi cupón de ' + ((b && b.marca) || 'una marca aliada') + ' 🎁',
+      ts: Date.now()
+    });
   }).catch(function(e) { alert('No se pudo canjear: ' + e.message); });
 }
 
