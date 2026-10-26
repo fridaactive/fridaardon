@@ -3204,6 +3204,20 @@ function renderBenefProfileHtml(b) {
   if (alianzaTerminada) {
     html += '<div class="bp-coupon-label">Alianza finalizada</div>';
     html += '<div class="bp-coupon-sub" style="margin-top:0.4rem;">Esta marca ya no forma parte de los beneficios activos.</div>';
+  } else if (b.ilimitado) {
+    // Algunas marcas (ej. Nutra) no ponen límite de usos — no tiene
+    // sentido el flujo de "canjear 1 vez" acá, el descuento está
+    // disponible siempre, se muestra directo sin tocar nada.
+    html += '<div class="bp-coupon-label">Tu descuento</div>';
+    html += '<div class="bp-coupon-voucher">';
+    if (b.logoUrl) html += '<img class="bp-coupon-voucher-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
+    html += '<div class="bp-coupon-voucher-alliance">FridaActive × ' + escapeHtml(b.marca || '') + '</div>';
+    html += '<div class="bp-coupon-voucher-name">' + escapeHtml(currentClientName || '') + '</div>';
+    if (b.descuento) html += '<div class="bp-coupon-voucher-discount">' + escapeHtml(b.descuento) + '</div>';
+    html += '<div class="bp-coupon-voucher-tag">Sin límite de usos</div>';
+    html += '</div>';
+    html += '<div class="bp-coupon-sub">Mostrá este cupón en el negocio cada vez que quieras usarlo.</div>';
+    html += '<button class="btn-secondary" style="margin-top:0.7rem;" onclick="descargarVoucher(\'' + b.id + '\')">⬇️ Descargar cupón en PDF</button>';
   } else if (miCanje) {
     // Sin código de verificación: el cupón es un comprobante de la alianza
     // FridaActive × marca, y es Frida quien le avisa antes a la marca que
@@ -3241,7 +3255,7 @@ function renderBenefProfileHtml(b) {
 function descargarVoucher(beneficioId) {
   var b = LOADED_BENEFICIOS[beneficioId];
   var miCanje = b && b.canjes && b.canjes[currentUid] && b.canjes[currentUid][currentCycleKey];
-  if (!b || !miCanje) { alert('No se pudo generar el cupón, intentá de nuevo.'); return; }
+  if (!b || (!miCanje && !b.ilimitado)) { alert('No se pudo generar el cupón, intentá de nuevo.'); return; }
   generarCuponCanvas(b, function(canvas) {
     try {
       canvas.toBlob(function(blob) {
@@ -3320,7 +3334,7 @@ function generarCuponCanvas(b, cb) {
 
     ctx.fillStyle = '#1C55E5';
     ctx.font = '700 17px "DM Sans", sans-serif';
-    ctx.fillText('CUPÓN ÚNICO · CLIENTA', panelX + 40, panelY + 55);
+    ctx.fillText((b.ilimitado ? 'DESCUENTO' : 'CUPÓN ÚNICO') + ' · CLIENTA', panelX + 40, panelY + 55);
 
     ctx.fillStyle = '#131722';
     ctx.font = '800 46px "DM Sans", sans-serif';
@@ -3332,12 +3346,14 @@ function generarCuponCanvas(b, cb) {
       ctx.fillText(b.descuento, panelX + 40, panelY + 160);
     }
 
+    var pillLabel = b.ilimitado ? 'SIN LÍMITE DE USOS' : 'CUPÓN ÚNICO';
+    ctx.font = '700 15px "DM Sans", sans-serif';
+    var pillW = ctx.measureText(pillLabel).width + 40;
     ctx.fillStyle = '#EAF0FF';
-    cvRoundRect(ctx, panelX + 40, panelY + 190, 160, 38, 19);
+    cvRoundRect(ctx, panelX + 40, panelY + 190, pillW, 38, 19);
     ctx.fill();
     ctx.fillStyle = '#1C55E5';
-    ctx.font = '700 15px "DM Sans", sans-serif';
-    ctx.fillText('CUPÓN ÚNICO', panelX + 60, panelY + 214);
+    ctx.fillText(pillLabel, panelX + 60, panelY + 214);
 
     ctx.strokeStyle = '#E3E7F0';
     ctx.lineWidth = 2;
