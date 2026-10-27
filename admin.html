@@ -1282,6 +1282,7 @@
       <button class="pc-tab-btn" onclick="pcSwitchTab('online',this)">Clientas</button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('beneficios',this)">Beneficios/Descuentos</button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('anuncios',this)">Anuncios</button>
+      <button class="pc-tab-btn" onclick="pcSwitchTab('comunidad',this)">Comunidad</button>
     </div>
 
     <!-- SOLICITUDES NUEVAS -->
@@ -1314,6 +1315,13 @@
       <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Promos o avisos que ven tus clientas arriba de todo en la pestaña "Perfil" de su portal, mientras estén activos.</div>
       <div id="pc-anuncios-list" style="margin-bottom:0.75rem;"></div>
       <button onclick="showAnuncioModal()" style="width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;">+ Agregar anuncio</button>
+    </div>
+
+    <!-- COMUNIDAD -->
+    <div class="pc-content" id="pc-tab-comunidad">
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Fotos y logros que todas tus clientas ven en la pestaña "Comunidad" de su portal, sin importar la modalidad.</div>
+      <div id="pc-comunidad-list" style="margin-bottom:0.75rem;"></div>
+      <button onclick="showComunidadModal()" style="width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;">+ Agregar publicación</button>
     </div>
   </div>
 </div>
@@ -1380,6 +1388,34 @@
     <div style="display:flex;gap:0.75rem;margin-top:1rem;">
       <button onclick="hideAnuncioModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
       <button onclick="saveAnuncio()" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL COMUNIDAD -->
+<div id="comunidad-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
+    <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;" id="cm-modal-title">Nueva publicación</div>
+    <div class="fin-form-row"><div class="fin-form-label">Fecha</div><input class="fin-form-input" id="cm-fecha" type="date"></div>
+    <div class="fin-form-row">
+      <div class="fin-form-label">Foto</div>
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <div id="cm-foto-preview-wrap" style="width:4rem;height:4rem;border-radius:12px;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">
+          <img id="cm-foto-preview" src="" style="width:100%;height:100%;object-fit:cover;display:none;" onload="this.style.display='block';document.getElementById('cm-foto-preview-icon').style.display='none';" onerror="this.style.display='none';document.getElementById('cm-foto-preview-icon').style.display='block';">
+          <svg id="cm-foto-preview-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;color:var(--blue);"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+        </div>
+        <div>
+          <button type="button" onclick="document.getElementById('cm-foto-file').click()" style="background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.5rem 0.85rem;font-size:0.75rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Subir foto</button>
+          <input type="file" id="cm-foto-file" accept="image/*" style="display:none;" onchange="handleComunidadFotoSelect(this)">
+          <input type="hidden" id="cm-foto-url">
+          <div id="cm-foto-status" style="font-size:0.68rem;color:var(--muted);margin-top:0.35rem;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fin-form-row"><div class="fin-form-label">Texto</div><textarea class="fin-form-input" id="cm-texto" rows="3" placeholder="Ej: ¡Logramos tanto con Luisa este mes! 💪" style="resize:vertical;"></textarea></div>
+    <div style="display:flex;gap:0.75rem;margin-top:1rem;">
+      <button onclick="hideComunidadModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
+      <button onclick="saveComunidadPost()" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Guardar</button>
     </div>
   </div>
 </div>
@@ -1997,6 +2033,19 @@ function saveAcpPlanMeses(clientId) {
   alert('✓ Duración guardada.');
 }
 
+// Marcar/desmarcar un día entrenado desde el admin — escribe en el mismo
+// nodo que lee/escribe la app de la clienta, así que queda reflejado para
+// las dos sin duplicar nada.
+function toggleAdminDiaEntrenado(uid, key, el) {
+  if (!uid) { alert('Esta clienta todavía no vinculó su portal.'); return; }
+  if (!acpState.portal) acpState.portal = {};
+  if (!acpState.portal.diasEntrenados) acpState.portal.diasEntrenados = {};
+  var newVal = !acpState.portal.diasEntrenados[key];
+  acpState.portal.diasEntrenados[key] = newVal;
+  fbSet('clientasPortal/' + uid + '/diasEntrenados/' + key, newVal);
+  acpRenderShell();
+}
+
 function renderAdminClientProfile(clientId, uid, portal) {
   var c = CLIENTS[clientId] || {};
   var perfil = portal.perfil || {};
@@ -2059,13 +2108,17 @@ function renderAdminClientProfile(clientId, uid, portal) {
   var year = now.getFullYear(), month = now.getMonth();
   var daysInMonth = new Date(year, month + 1, 0).getDate();
   var firstDay = new Date(year, month, 1).getDay();
+  // Vos también podés marcar los días entrenados acá (clic en el día) —
+  // queda guardado en el mismo lugar que usa la clienta, así que si ella
+  // también marca desde su app (rutina personalizada), quedan conectadas:
+  // lo que marca cualquiera de las dos lo ve la otra.
   var calHtml = '<div class="track-days">';
   DAY_NAMES_ADMIN.forEach(function(d) { calHtml += '<div class="track-day-header">' + d + '</div>'; });
   for (var i = 0; i < firstDay; i++) calHtml += '<div class="track-day empty"></div>';
   for (var day = 1; day <= daysInMonth; day++) {
     var key = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     var done = !!diasEntrenados[key];
-    calHtml += '<div class="track-day' + (done ? ' done' : '') + '">' + day + '</div>';
+    calHtml += '<div class="track-day' + (done ? ' done' : '') + '" style="cursor:pointer;" onclick="toggleAdminDiaEntrenado(\'' + uid + '\',\'' + key + '\',this)" title="Marcar/desmarcar como entrenado">' + day + '</div>';
   }
   calHtml += '</div>';
 
@@ -2510,6 +2563,33 @@ function renderPortalContentScreen() {
     });
     el.innerHTML = html;
   });
+  fbGet('comunidadPosts', function(data) {
+    var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
+    items.sort(function(a, b) { return (b.data.createdAt || 0) - (a.data.createdAt || 0); });
+    ADMIN_COMUNIDAD_CACHE = {};
+    items.forEach(function(it) { ADMIN_COMUNIDAD_CACHE[it.id] = it.data; });
+    var el = document.getElementById('pc-comunidad-list');
+    if (items.length === 0) {
+      el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Sin publicaciones todavía.</div>';
+      return;
+    }
+    var html = '';
+    items.forEach(function(it) {
+      html += '<div style="border:1px solid var(--border);border-radius:10px;padding:0.75rem 0.9rem;margin-bottom:0.6rem;display:flex;justify-content:space-between;align-items:flex-start;gap:0.6rem;">';
+      html += '<div style="display:flex;gap:0.6rem;align-items:flex-start;min-width:0;">';
+      if (it.data.fotoUrl) {
+        html += '<img src="' + it.data.fotoUrl + '" style="width:2.6rem;height:2.6rem;border-radius:8px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);" onerror="this.style.display=\'none\'">';
+      }
+      html += '<div style="min-width:0;"><div style="font-size:0.68rem;color:var(--muted);font-weight:700;">' + (it.data.fecha || '') + '</div>';
+      if (it.data.texto) html += '<div style="font-size:0.78rem;margin-top:0.15rem;">' + escapeHtmlAdmin(it.data.texto) + '</div>';
+      html += '</div></div>';
+      html += '<div style="display:flex;gap:0.4rem;flex-shrink:0;">';
+      html += '<button onclick="showComunidadModal(\'' + it.id + '\')" style="background:none;border:none;color:var(--blue);font-size:0.9rem;cursor:pointer;">✏️</button>';
+      html += '<button onclick="deleteComunidadPost(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.9rem;cursor:pointer;">✕</button>';
+      html += '</div></div>';
+    });
+    el.innerHTML = html;
+  });
 }
 
 var ADMIN_BENEFICIOS_CACHE = {};
@@ -2553,6 +2633,87 @@ function deleteAnuncio(id) {
     var db = getDB();
     if (!db) return;
     db.ref('anuncios/' + id).remove().then(function() { renderPortalContentScreen(); });
+  });
+}
+
+var ADMIN_COMUNIDAD_CACHE = {};
+var editingComunidadId = null;
+
+function showComunidadModal(id) {
+  editingComunidadId = id || null;
+  var data = editingComunidadId ? (ADMIN_COMUNIDAD_CACHE[editingComunidadId] || {}) : {};
+  document.getElementById('cm-modal-title').textContent = editingComunidadId ? 'Editar publicación' : 'Nueva publicación';
+  document.getElementById('cm-fecha').value = data.fecha || new Date().toISOString().slice(0, 10);
+  document.getElementById('cm-texto').value = data.texto || '';
+  document.getElementById('cm-foto-url').value = data.fotoUrl || '';
+  document.getElementById('cm-foto-preview').src = data.fotoUrl || '';
+  document.getElementById('cm-foto-file').value = '';
+  document.getElementById('cm-foto-status').textContent = '';
+  document.getElementById('comunidad-modal').style.display = 'flex';
+}
+
+function hideComunidadModal() {
+  editingComunidadId = null;
+  document.getElementById('comunidad-modal').style.display = 'none';
+}
+
+function handleComunidadFotoSelect(input) {
+  var file = input.files && input.files[0];
+  if (!file) return;
+  var statusEl = document.getElementById('cm-foto-status');
+  statusEl.style.color = 'var(--muted)';
+  statusEl.textContent = 'Subiendo...';
+  withAdminAuth(function() {
+    if (typeof firebase === 'undefined' || !firebase.storage) {
+      statusEl.style.color = '#c44';
+      statusEl.textContent = 'Storage no está disponible todavía.';
+      return;
+    }
+    var path = 'comunidad-fotos/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+    firebase.storage().ref(path).put(file).then(function(snap) {
+      return snap.ref.getDownloadURL();
+    }).then(function(url) {
+      document.getElementById('cm-foto-url').value = url;
+      document.getElementById('cm-foto-preview').src = url;
+      statusEl.style.color = '#2a7a2a';
+      statusEl.textContent = 'Foto subida ✓';
+    }).catch(function(e) {
+      statusEl.style.color = '#c44';
+      statusEl.textContent = 'No se pudo subir: ' + e.message;
+    });
+  });
+}
+
+function saveComunidadPost() {
+  var fecha = document.getElementById('cm-fecha').value;
+  var texto = document.getElementById('cm-texto').value.trim();
+  var fotoUrl = document.getElementById('cm-foto-url').value.trim();
+  if (!fecha) { alert('Elegí una fecha.'); return; }
+  if (!texto && !fotoUrl) { alert('Agregá una foto o un texto.'); return; }
+  var item = { fecha: fecha, texto: texto || null, fotoUrl: fotoUrl || null };
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) { alert('No se pudo conectar con Firebase.'); return; }
+    var promise;
+    if (editingComunidadId) {
+      promise = db.ref('comunidadPosts/' + editingComunidadId).update(item);
+    } else {
+      item.createdAt = Date.now();
+      promise = db.ref('comunidadPosts').push(item);
+    }
+    promise.then(function() {
+      hideComunidadModal();
+      renderPortalContentScreen();
+    }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
+  });
+}
+
+function deleteComunidadPost(id) {
+  if (!confirm('¿Eliminar esta publicación?')) return;
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) return;
+    db.ref('comunidadPosts/' + id).remove().then(function() { renderPortalContentScreen(); });
   });
 }
 
@@ -4652,6 +4813,8 @@ function showScreen(name) {
   if (beneficioModal) beneficioModal.style.display = 'none';
   var anuncioModal = document.getElementById('anuncio-modal');
   if (anuncioModal) anuncioModal.style.display = 'none';
+  var comunidadModal = document.getElementById('comunidad-modal');
+  if (comunidadModal) comunidadModal.style.display = 'none';
   var adminChatModal = document.getElementById('admin-chat-modal');
   if (adminChatModal && adminChatModal.style.display !== 'none') { adminChatModal.style.display = 'none'; if (adminChatRef) { adminChatRef.off(); adminChatRef = null; } adminChatUid = null; }
   var exerciseBankModal = document.getElementById('exercise-bank-modal');
