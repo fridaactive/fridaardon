@@ -1822,9 +1822,12 @@ function openAdminClientProfile(clientId) {
   // empezáramos a espejar estos campos a clients/{id}, se sincroniza
   // sola cada vez que abrís su perfil — no hace falta hacer nada.
   if (CLIENTS[clientId]) syncClientPublicFields(clientId, CLIENTS[clientId]);
-  // Presencial no usa el portal/perfil de la clienta (eso es para
-  // online y rutina personalizada) — entra directo a la rutina.
-  var defaultTab = (CLIENTS[clientId] && CLIENTS[clientId].type === 'presencial') ? 'rutina' : 'resumen';
+  // Las tres modalidades pueden tener perfil y beneficios, pero solo
+  // rutina personalizada se autogestiona la rutina — en presencial y
+  // online 1:1 la lleva Frida, así que ahí lo que más se usa es esa
+  // pestaña y arranca ahí.
+  var tipoCliente = CLIENTS[clientId] && CLIENTS[clientId].type;
+  var defaultTab = (tipoCliente && tipoCliente !== 'rutina-personalizada') ? 'rutina' : 'resumen';
   acpState = { clientId: clientId, uid: uid || null, portal: {}, tab: defaultTab };
   if (!uid) { acpRenderShell(); return; }
   fbGet('clientasPortal/' + uid, function(portal) {
@@ -1856,13 +1859,13 @@ function acpRenderShell() {
   var content = document.getElementById('acp-content');
   var clientId = acpState.clientId;
   var c = CLIENTS[clientId] || {};
-  // El Resumen (bio, fotos, racha) solo existe si la clienta vinculó el
-  // portal — sin eso no hay nada que mostrar ahí, así que ni se ofrece.
+  // Las tres modalidades pueden tener perfil/beneficios, así que el
+  // Resumen siempre se ofrece — si todavía no está vinculada, ahí mismo
+  // se muestra cómo generar su código de acceso.
   var hasPortal = !!acpState.uid;
-  if (!hasPortal && acpState.tab === 'resumen') acpState.tab = 'rutina';
 
   var html = '<div class="pc-tabs" style="margin-bottom:1rem;">';
-  if (hasPortal) html += acpTabBtnHtml('resumen', 'Resumen');
+  html += acpTabBtnHtml('resumen', 'Resumen');
   html += acpTabBtnHtml('rutina', '📋 Rutina');
   html += acpTabBtnHtml('pagos', '💳 Pagos');
   html += '</div>';
@@ -1870,9 +1873,40 @@ function acpRenderShell() {
   if (acpState.tab === 'rutina') html += renderAcpRutinaHtml(clientId, c);
   else if (acpState.tab === 'pagos') html += renderAcpPagosHtml(clientId, c);
   else if (hasPortal) html += renderAdminClientProfile(clientId, acpState.uid, acpState.portal);
+  else html += renderAcpNoPortalHtml(clientId, c);
 
   content.innerHTML = html;
   if (acpState.tab === 'pagos') renderQuotation(clientId, c, 'acp-quotation');
+}
+
+// ── Resumen sin vincular todavía: explica qué es el portal y ofrece el
+// código de acceso (mismo diseño que el link de WhatsApp de siempre).
+function renderAcpNoPortalHtml(clientId, c) {
+  var html = '<div class="card">';
+  html += '<div class="card-label">👤 Perfil y beneficios</div>';
+  html += '<div style="font-size:0.8rem;color:var(--text);line-height:1.5;margin-bottom:0.8rem;">Todavía no tiene cuenta en el portal. Generale un código para que suba su foto de perfil, chatee con vos y acceda a los beneficios.</div>';
+  html += '<button type="button" onclick="handleGenerateLinkCodeAcp(\'' + clientId + '\')" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Generar código de acceso</button>';
+  html += '<div id="acp-link-code-result" style="margin-top:0.8rem;"></div>';
+  html += '</div>';
+  return html;
+}
+
+function handleGenerateLinkCodeAcp(clientId) {
+  var el = document.getElementById('acp-link-code-result');
+  createPortalLinkCode(clientId, function(code) {
+    if (!code) { alert('No se pudo generar el código. Revisá la conexión con Firebase.'); return; }
+    var link = 'https://fridaactive.com/?code=' + code;
+    var waMsg = 'Hola! Registrate en tu portal de FridaActive con este link: ' + link;
+    el.innerHTML = '<div style="background:#eef6ff;border:1px solid #cfe3fb;border-radius:12px;padding:1rem;text-align:center;">'
+      + '<div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.4rem;">Link de acceso (un solo uso)</div>'
+      + '<div style="font-size:0.78rem;font-weight:700;word-break:break-all;color:var(--blue);margin-bottom:0.7rem;">' + link + '</div>'
+      + '<div style="display:flex;gap:0.5rem;">'
+      + '<button onclick="copyLinkCodeUrl(this,\'' + link + '\')" style="flex:1;background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Copiar link</button>'
+      + '<a href="https://wa.me/?text=' + encodeURIComponent(waMsg) + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;text-decoration:none;">WhatsApp</a>'
+      + '</div>'
+      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviaselo a la clienta — al abrirlo queda directo en el registro, vinculada a este perfil.</div>'
+      + '</div>';
+  });
 }
 
 // ── Pestaña Rutina: acá sí interesa ver el objetivo, a diferencia del
@@ -3017,6 +3051,7 @@ function saveCustomClient(id, clientData) {
 function syncClientPublicFields(id, c) {
   if (!id || !c) return;
   fbSet('clients/' + id + '/name', c.name || null);
+  fbSet('clients/' + id + '/type', c.type || null);
   fbSet('clients/' + id + '/initDate', c.initDate || null);
   fbSet('clients/' + id + '/endDate', c.endDate || null);
   fbSet('clients/' + id + '/cuota', c.cuota || null);

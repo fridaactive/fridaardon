@@ -1357,6 +1357,17 @@ function showTab(id) {
   document.querySelector('.tab-btn[data-tab="' + id + '"]').classList.add('active');
 }
 
+// Solo rutina personalizada se auto-gestiona la rutina desde la app.
+// Presencial y online 1:1 entrenan con una rutina que Frida les lleva
+// aparte (en persona o por videollamada) — no tiene sentido esa pestaña.
+function applyClientTypeUI(type) {
+  var rutinaBtn = document.querySelector('.tab-btn[data-tab="tab-rutina"]');
+  if (!rutinaBtn) return;
+  var hideRutina = !!type && type !== 'rutina-personalizada';
+  rutinaBtn.style.display = hideRutina ? 'none' : '';
+  if (hideRutina && rutinaBtn.classList.contains('active')) showTab('tab-perfil');
+}
+
 function setLoading(on) {
   document.getElementById('loading').style.display = on ? 'flex' : 'none';
 }
@@ -3522,6 +3533,7 @@ function renderPlanCountdown(c) {
   var ringFill = document.getElementById('pf-ring-programa-fill');
   var ringPct = document.getElementById('pf-ring-programa-pct');
   if (!el) return;
+  applyClientTypeUI(c && c.type);
   if (!c || !c.initDate) {
     el.style.display = 'none';
     if (ringPct) ringPct.closest('.pf-ring-wrap').style.display = 'none';
