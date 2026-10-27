@@ -1822,10 +1822,12 @@ function openAdminClientProfile(clientId) {
   // empezáramos a espejar estos campos a clients/{id}, se sincroniza
   // sola cada vez que abrís su perfil — no hace falta hacer nada.
   if (CLIENTS[clientId]) syncClientPublicFields(clientId, CLIENTS[clientId]);
-  // Las tres modalidades (presencial, online 1:1, rutina personalizada)
-  // pueden tener perfil y beneficios — pero en presencial lo que más se
-  // usa día a día es la rutina que vos manejás, así que arranca ahí.
-  var defaultTab = (CLIENTS[clientId] && CLIENTS[clientId].type === 'presencial') ? 'rutina' : 'resumen';
+  // Las tres modalidades pueden tener perfil y beneficios, pero solo
+  // rutina personalizada se autogestiona la rutina — en presencial y
+  // online 1:1 la lleva Frida, así que ahí lo que más se usa es esa
+  // pestaña y arranca ahí.
+  var tipoCliente = CLIENTS[clientId] && CLIENTS[clientId].type;
+  var defaultTab = (tipoCliente && tipoCliente !== 'rutina-personalizada') ? 'rutina' : 'resumen';
   acpState = { clientId: clientId, uid: uid || null, portal: {}, tab: defaultTab };
   if (!uid) { acpRenderShell(); return; }
   fbGet('clientasPortal/' + uid, function(portal) {

@@ -1357,13 +1357,13 @@ function showTab(id) {
   document.querySelector('.tab-btn[data-tab="' + id + '"]').classList.add('active');
 }
 
-// Presencial entrena con una rutina que Frida maneja fuera de la app —
-// no tiene sentido mostrarle esa pestaña. Online 1:1 y rutina
-// personalizada sí la ven, como siempre.
+// Solo rutina personalizada se auto-gestiona la rutina desde la app.
+// Presencial y online 1:1 entrenan con una rutina que Frida les lleva
+// aparte (en persona o por videollamada) — no tiene sentido esa pestaña.
 function applyClientTypeUI(type) {
   var rutinaBtn = document.querySelector('.tab-btn[data-tab="tab-rutina"]');
   if (!rutinaBtn) return;
-  var hideRutina = type === 'presencial';
+  var hideRutina = !!type && type !== 'rutina-personalizada';
   rutinaBtn.style.display = hideRutina ? 'none' : '';
   if (hideRutina && rutinaBtn.classList.contains('active')) showTab('tab-perfil');
 }
