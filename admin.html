@@ -1822,12 +1822,10 @@ function openAdminClientProfile(clientId) {
   // empezáramos a espejar estos campos a clients/{id}, se sincroniza
   // sola cada vez que abrís su perfil — no hace falta hacer nada.
   if (CLIENTS[clientId]) syncClientPublicFields(clientId, CLIENTS[clientId]);
-  // Las tres modalidades pueden tener perfil y beneficios, pero solo
-  // rutina personalizada se autogestiona la rutina — en presencial y
-  // online 1:1 la lleva Frida, así que ahí lo que más se usa es esa
-  // pestaña y arranca ahí.
-  var tipoCliente = CLIENTS[clientId] && CLIENTS[clientId].type;
-  var defaultTab = (tipoCliente && tipoCliente !== 'rutina-personalizada') ? 'rutina' : 'resumen';
+  // Siempre arranca en Resumen — ahí está lo que hace falta ver de
+  // entrada (estado de pago, actividad) sin importar la modalidad.
+  // Rutina queda a un click, para cuando sí hay que editarla.
+  var defaultTab = 'resumen';
   acpState = { clientId: clientId, uid: uid || null, portal: {}, tab: defaultTab };
   if (!uid) { acpRenderShell(); return; }
   fbGet('clientasPortal/' + uid, function(portal) {
@@ -1882,7 +1880,8 @@ function acpRenderShell() {
 // ── Resumen sin vincular todavía: explica qué es el portal y ofrece el
 // código de acceso (mismo diseño que el link de WhatsApp de siempre).
 function renderAcpNoPortalHtml(clientId, c) {
-  var html = '<div class="card">';
+  var html = renderAcpPaymentStatusCardHtml(clientId, c, 'resumen');
+  html += '<div class="card">';
   html += '<div class="card-label">👤 Perfil y beneficios</div>';
   html += '<div style="font-size:0.8rem;color:var(--text);line-height:1.5;margin-bottom:0.8rem;">Todavía no tiene cuenta en el portal. Generale un código para que suba su foto de perfil, chatee con vos y acceda a los beneficios.</div>';
   html += '<button type="button" onclick="handleGenerateLinkCodeAcp(\'' + clientId + '\')" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Generar código de acceso</button>';
@@ -1925,31 +1924,37 @@ function renderAcpRutinaHtml(clientId, c) {
   return html;
 }
 
+// Tarjeta de estado del ciclo (mes actual, días que quedan, si pagó) —
+// se usa en Pagos y también en el Resumen de quien todavía no vinculó
+// portal, porque esta info no depende de eso.
+function renderAcpPaymentStatusCardHtml(clientId, c, afterPaidTab) {
+  if (!c.initDate) return '';
+  var start = new Date(c.initDate + 'T00:00:00');
+  var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
+  if (!c.endDate) end.setMonth(end.getMonth() + 1);
+  var today0 = new Date(); today0.setHours(0, 0, 0, 0);
+  var daysLeft = Math.ceil((end - today0) / 86400000);
+  var paid = isCurrentCyclePaid(clientId, c);
+  // Los pagos ya hechos cuentan los meses que quedaron atrás — si el
+  // ciclo actual todavía no se pagó, hay que sumarle 1 para contarlo
+  // también (si no, "pagó 1 vez" mostraba "Mes 2" en vez de "Mes 1").
+  var mesActual = (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
+  var statusColor = daysLeft <= 0 ? '#A62B2B' : !paid ? '#8A6D14' : '#2a7a2a';
+  var statusBg = daysLeft <= 0 ? '#FDEAEA' : !paid ? '#FFF6E0' : '#F0FFF0';
+  var statusBorder = daysLeft <= 0 ? '#F3C6C6' : !paid ? '#F0DFA0' : '#cde8cd';
+  var html = '<div class="card" style="background:' + statusBg + ';border-color:' + statusBorder + ';">';
+  html += '<div class="card-label" style="color:' + statusColor + ';">Mes ' + mesActual + (c.planMeses ? ' de ' + c.planMeses : '') + ' · ' + (daysLeft <= 0 ? 'Ciclo vencido' : 'Quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días')) + '</div>';
+  html += '<div style="font-size:0.8rem;color:var(--text);">' + (paid ? '✅ Pagó este ciclo' : '⏳ Pendiente de pago') + (c.cuota ? ' · $' + c.cuota : '') + '</div>';
+  if (!paid && c.cuota) {
+    html += '<button type="button" onclick="markClientAsPaid(\'' + clientId + '\');acpSwitchTab(\'' + (afterPaidTab || 'pagos') + '\');" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Marcar como pagado</button>';
+  }
+  html += '</div>';
+  return html;
+}
+
 // ── Pestaña Pagos: estado del ciclo actual + activar uno nuevo + cotización.
 function renderAcpPagosHtml(clientId, c) {
-  var html = '';
-  if (c.initDate) {
-    var start = new Date(c.initDate + 'T00:00:00');
-    var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
-    if (!c.endDate) end.setMonth(end.getMonth() + 1);
-    var today0 = new Date(); today0.setHours(0, 0, 0, 0);
-    var daysLeft = Math.ceil((end - today0) / 86400000);
-    var paid = isCurrentCyclePaid(clientId, c);
-    // Los pagos ya hechos cuentan los meses que quedaron atrás — si el
-    // ciclo actual todavía no se pagó, hay que sumarle 1 para contarlo
-    // también (si no, "pagó 1 vez" mostraba "Mes 2" en vez de "Mes 1").
-    var mesActual = (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
-    var statusColor = daysLeft <= 0 ? '#A62B2B' : !paid ? '#8A6D14' : '#2a7a2a';
-    var statusBg = daysLeft <= 0 ? '#FDEAEA' : !paid ? '#FFF6E0' : '#F0FFF0';
-    var statusBorder = daysLeft <= 0 ? '#F3C6C6' : !paid ? '#F0DFA0' : '#cde8cd';
-    html += '<div class="card" style="background:' + statusBg + ';border-color:' + statusBorder + ';">';
-    html += '<div class="card-label" style="color:' + statusColor + ';">Mes ' + mesActual + (c.planMeses ? ' de ' + c.planMeses : '') + ' · ' + (daysLeft <= 0 ? 'Ciclo vencido' : 'Quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días')) + '</div>';
-    html += '<div style="font-size:0.8rem;color:var(--text);">' + (paid ? '✅ Pagó este ciclo' : '⏳ Pendiente de pago') + (c.cuota ? ' · $' + c.cuota : '') + '</div>';
-    if (!paid && c.cuota) {
-      html += '<button type="button" onclick="markClientAsPaid(\'' + clientId + '\');acpSwitchTab(\'pagos\');" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Marcar como pagado</button>';
-    }
-    html += '</div>';
-  }
+  var html = renderAcpPaymentStatusCardHtml(clientId, c, 'pagos');
 
   // Duración del plan — editable acá para corregir clientas ya cargadas
   // (nuevas clientas ya lo piden al crearlas, ver handleSaveNewClient).
