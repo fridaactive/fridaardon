@@ -1992,6 +1992,19 @@ function saveAcpPlanMeses(clientId) {
   alert('✓ Duración guardada.');
 }
 
+// Marcar/desmarcar un día entrenado desde el admin — escribe en el mismo
+// nodo que lee/escribe la app de la clienta, así que queda reflejado para
+// las dos sin duplicar nada.
+function toggleAdminDiaEntrenado(uid, key, el) {
+  if (!uid) { alert('Esta clienta todavía no vinculó su portal.'); return; }
+  if (!acpState.portal) acpState.portal = {};
+  if (!acpState.portal.diasEntrenados) acpState.portal.diasEntrenados = {};
+  var newVal = !acpState.portal.diasEntrenados[key];
+  acpState.portal.diasEntrenados[key] = newVal;
+  fbSet('clientasPortal/' + uid + '/diasEntrenados/' + key, newVal);
+  acpRenderShell();
+}
+
 function renderAdminClientProfile(clientId, uid, portal) {
   var c = CLIENTS[clientId] || {};
   var perfil = portal.perfil || {};
@@ -2054,13 +2067,17 @@ function renderAdminClientProfile(clientId, uid, portal) {
   var year = now.getFullYear(), month = now.getMonth();
   var daysInMonth = new Date(year, month + 1, 0).getDate();
   var firstDay = new Date(year, month, 1).getDay();
+  // Vos también podés marcar los días entrenados acá (clic en el día) —
+  // queda guardado en el mismo lugar que usa la clienta, así que si ella
+  // también marca desde su app (rutina personalizada), quedan conectadas:
+  // lo que marca cualquiera de las dos lo ve la otra.
   var calHtml = '<div class="track-days">';
   DAY_NAMES_ADMIN.forEach(function(d) { calHtml += '<div class="track-day-header">' + d + '</div>'; });
   for (var i = 0; i < firstDay; i++) calHtml += '<div class="track-day empty"></div>';
   for (var day = 1; day <= daysInMonth; day++) {
     var key = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     var done = !!diasEntrenados[key];
-    calHtml += '<div class="track-day' + (done ? ' done' : '') + '">' + day + '</div>';
+    calHtml += '<div class="track-day' + (done ? ' done' : '') + '" style="cursor:pointer;" onclick="toggleAdminDiaEntrenado(\'' + uid + '\',\'' + key + '\',this)" title="Marcar/desmarcar como entrenado">' + day + '</div>';
   }
   calHtml += '</div>';
 
