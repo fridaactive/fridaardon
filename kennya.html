@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FridaActive · Kennya Padrón · Junio 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
   :root {
     --bg:#FFFFFF; --cream:#F5ECCB; --blue:#1C55E5; --blue-dk:#0F3FA8;
@@ -250,24 +252,38 @@
 </div>
 
 <script>
+var firebaseConfig = {
+  apiKey: "AIzaSyBiOfRq28zYeP6lZ0J5iNb9v4P92INQuPk",
+  authDomain: "fridaactive.firebaseapp.com",
+  databaseURL: "https://fridaactive-default-rtdb.firebaseio.com",
+  projectId: "fridaactive",
+  storageBucket: "fridaactive.firebasestorage.app",
+  messagingSenderId: "293980063666",
+  appId: "1:293980063666:web:c43dd2dc40019c44f686ab"
+};
+try { firebase.initializeApp(firebaseConfig); } catch(e) {}
+
 var SK = 'fa_kennya_junio2026';
+// Antes esto se guardaba solo en localStorage: cada quien lo veía nada
+// más en su propio navegador. Ahora se guarda en Firebase (compartido),
+// así que lo que escribe Frida se ve también del lado de Kennya, y al revés.
 function guardar() {
-  try {
-    var els = document.querySelectorAll('textarea.notas-ta');
-    var data = {};
-    els.forEach(function(el,i){ if(el.value) data['t'+i]=el.value; });
-    localStorage.setItem(SK, JSON.stringify(data));
+  var els = document.querySelectorAll('textarea.notas-ta');
+  var data = {};
+  els.forEach(function(el,i){ data['t'+i] = el.value || null; });
+  firebase.database().ref('rutinasClasicas/' + SK).set(data).then(function() {
     toast('Guardado correctamente');
-  } catch(e){ toast('Error al guardar'); }
+  }).catch(function(e) {
+    toast('No se pudo guardar: revisá tu conexión');
+  });
 }
 function cargar() {
-  try {
-    var saved = localStorage.getItem(SK);
-    if(!saved) return;
-    var data = JSON.parse(saved);
+  firebase.database().ref('rutinasClasicas/' + SK).once('value').then(function(snap) {
+    var data = snap.val();
+    if (!data) return;
     var els = document.querySelectorAll('textarea.notas-ta');
     els.forEach(function(el,i){ if(data['t'+i]) el.value=data['t'+i]; });
-  } catch(e){}
+  }).catch(function(e) { console.warn('cargar error', e); });
 }
 function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; setTimeout(function(){t.textContent='';},2500); }
 window.onload=function(){
