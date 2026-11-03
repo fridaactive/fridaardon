@@ -2310,7 +2310,7 @@ function renderRutinaTab() {
     html += '</summary>';
     html += '<div class="rt-day-body">';
     if (day.notaAdmin) {
-      html += '<div class="rt-msg-card"><div class="rt-msg-label">Nota de Frida para hoy</div><div class="rt-msg-text">' + escapeHtml(day.notaAdmin) + '</div></div>';
+      html += '<div class="rt-msg-card"><div class="rt-msg-label">Nota del día</div><div class="rt-msg-text">' + escapeHtml(day.notaAdmin) + '</div></div>';
     }
     html += renderExerciseBlocksHtml(day);
     html += '<div class="rt-day-comment-label">Comentario del día (opcional)</div>';
