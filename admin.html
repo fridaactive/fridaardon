@@ -7202,7 +7202,7 @@ function renderRutinaEditor() {
   // Nota puntual de este día — a diferencia del "Mensaje de Frida" (que es
   // para toda la rutina), esta se guarda en el propio día y le aparece a
   // la clienta solo quien abra justo este día.
-  html += '<textarea id="rutina-day-nota" class="fin-form-input" style="width:100%;min-height:3rem;resize:vertical;font-family:\'DM Sans\',sans-serif;margin-bottom:1rem;" placeholder="Aclaración para este día en particular (opcional) — le aparece a la clienta solo en este día">'+escHtml(day.notaAdmin || '')+'</textarea>';
+  html += '<textarea id="rutina-day-nota" class="fin-form-input" style="width:100%;min-height:3rem;resize:vertical;font-family:\'DM Sans\',sans-serif;margin-bottom:1rem;" placeholder="Nota para este día en particular (opcional) — le aparece a la clienta solo en este día">'+escHtml(day.notaAdmin || '')+'</textarea>';
 
   // Blocks
   (day.blocks || []).forEach(function(block) {
