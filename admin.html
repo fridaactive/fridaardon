@@ -7048,6 +7048,11 @@ function renderRutinaEditor() {
   }
   html += '</div>';
 
+  // Nota puntual de este día — a diferencia del "Mensaje de Frida" (que es
+  // para toda la rutina), esta se guarda en el propio día y le aparece a
+  // la clienta solo quien abra justo este día.
+  html += '<textarea id="rutina-day-nota" class="fin-form-input" style="width:100%;min-height:3rem;resize:vertical;font-family:\'DM Sans\',sans-serif;margin-bottom:1rem;" placeholder="Nota para este día en particular (opcional) — le aparece a la clienta solo en este día">'+escHtml(day.notaAdmin || '')+'</textarea>';
+
   // Blocks
   (day.blocks || []).forEach(function(block) {
     if (!block.exercises) block.exercises = [];
@@ -7195,6 +7200,14 @@ function renderRutinaEditor() {
       saveRutinaData(rutinaClientId, rutinaData);
       renderRutinaEditor();
     }
+  });
+
+  // Event: save per-day note — auto-saves on blur, same pattern as el
+  // nombre del día.
+  var dayNotaInput = document.getElementById('rutina-day-nota');
+  dayNotaInput.addEventListener('blur', function() {
+    rutinaData.days[rutinaCurrentDay].notaAdmin = this.value.trim() || null;
+    saveRutinaData(rutinaClientId, rutinaData);
   });
 
   // Event: delete day

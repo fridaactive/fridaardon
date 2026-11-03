@@ -2292,6 +2292,9 @@ function renderRutinaTab() {
     html += '<div class="rt-day-chevron">▾</div>';
     html += '</summary>';
     html += '<div class="rt-day-body">';
+    if (day.notaAdmin) {
+      html += '<div class="rt-msg-card"><div class="rt-msg-label">Nota del día ' + (i + 1) + '</div><div class="rt-msg-text">' + escapeHtml(day.notaAdmin) + '</div></div>';
+    }
     html += renderExerciseBlocksHtml(day);
     html += '<div class="rt-day-comment-label">Comentario del día (opcional)</div>';
     html += '<textarea class="rt-day-comment" id="day-comment-' + day.id + '" placeholder="' + escapeHtml(DAY_COMMENT_PLACEHOLDER) + '"' + (PLAN_LOCKED ? ' disabled' : '') + '></textarea>';
