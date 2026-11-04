@@ -1875,7 +1875,13 @@ function openAdminClientProfile(clientId) {
     var portalClientId = portal && portal.perfil && portal.perfil.clientId;
     if (portalClientId && portalClientId !== clientId) {
       var otherName = (CLIENTS[portalClientId] && CLIENTS[portalClientId].name) || portalClientId;
-      alert('¡Encontrado! La app de esta clienta está vinculada a OTRO perfil distinto: "' + otherName + '" (no a "' + (CLIENTS[clientId] && CLIENTS[clientId].name) + '"). Por eso ve bloqueado aunque acá esté activo. Avisale a Claude con este mensaje.');
+      var thisName = (CLIENTS[clientId] && CLIENTS[clientId].name) || clientId;
+      var fix = confirm('¡Encontrado! La app de esta clienta está vinculada a OTRO perfil: "' + otherName + '" (no a "' + thisName + '"). Por eso ve bloqueado aunque acá esté activo.\n\n¿Vincular su app a ESTE perfil ("' + thisName + '") ahora mismo?');
+      if (fix) {
+        fbSet('clientasPortal/' + uid + '/perfil/clientId', clientId, function(e) {
+          alert('No se pudo vincular: ' + (e && e.message ? e.message : 'error desconocido'));
+        });
+      }
     }
   });
 }
