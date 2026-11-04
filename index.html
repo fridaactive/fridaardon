@@ -265,6 +265,23 @@
   .pf-bio { margin-top:0.9rem; text-align:left; }
   .pf-bio-text { font-size:0.78rem; color:var(--text); line-height:1.5; white-space:pre-wrap; }
   .pf-bio-placeholder { font-size:0.78rem; color:var(--muted); font-style:italic; line-height:1.5; }
+
+  /* ── FICHA ── */
+  .pf-ficha-card { margin-top:1rem; }
+  .pf-ficha-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; }
+  .pf-ficha-text { font-size:0.76rem; color:var(--muted); line-height:1.45; margin:0.6rem 0 0.8rem; }
+  .ficha-tabs { display:flex; gap:0.3rem; overflow-x:auto; margin-bottom:1rem; border-bottom:1px solid var(--border); -ms-overflow-style:none; scrollbar-width:none; }
+  .ficha-tabs::-webkit-scrollbar { display:none; }
+  .ficha-tab { flex-shrink:0; padding:0.6rem 0.8rem; border:none; border-bottom:2.5px solid transparent; background:none; font-size:0.72rem; font-weight:700; color:var(--muted); font-family:'DM Sans',sans-serif; cursor:pointer; white-space:nowrap; }
+  .ficha-tab.active { border-bottom-color:var(--blue); color:var(--blue); }
+  .ficha-field-row { margin-bottom:0.85rem; }
+  .ficha-field-label { font-size:0.68rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.35rem; }
+  .ficha-dias-pills { display:flex; gap:0.4rem; flex-wrap:wrap; }
+  .ficha-dia-pill { padding:0.4rem 0.7rem; border-radius:100px; border:1.5px solid var(--border); background:#fff; color:var(--text); font-size:0.72rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; }
+  .ficha-dia-pill.sel { border-color:var(--blue); background:var(--blue); color:#fff; }
+  .ficha-plan-card { background:var(--blue-lt); border-radius:12px; padding:0.9rem 1rem; margin-bottom:1rem; }
+  .ficha-plan-row { display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0; }
+  .ficha-promo-card { border:1.5px solid var(--border); border-radius:12px; padding:0.8rem 0.9rem; margin-bottom:0.6rem; }
   .pf-bio-prompt-line { font-size:0.82rem; color:var(--muted); line-height:1.9; display:flex; align-items:center; gap:0.5rem; }
   .pf-bio-prompt-line span { font-style:italic; }
   .pf-edit-btn { margin-top:0.9rem; width:100%; display:flex; align-items:center; justify-content:center; gap:0.5rem; background:#f2f4f9; color:var(--text); border:1.5px solid var(--border); border-radius:100px; padding:0.8rem 1rem; font-size:0.78rem; font-weight:800; font-family:'DM Sans',sans-serif; cursor:pointer; letter-spacing:0.02em; }
@@ -972,6 +989,19 @@
             <button class="pf-bio-save" onclick="saveBio()">Guardar</button>
           </div>
         </div>
+
+        <div class="card pf-ficha-card">
+          <div class="pf-ficha-hdr">
+            <div class="card-label" style="margin-bottom:0;">📋 Tu ficha</div>
+            <span style="font-size:0.72rem;font-weight:700;color:var(--blue);" id="pf-ficha-pct">0%</span>
+          </div>
+          <div class="pf-complete-track"><div class="pf-complete-fill" id="pf-ficha-fill" style="width:0%;"></div></div>
+          <div class="pf-ficha-text">Completala para que Frida tenga toda tu información a mano.</div>
+          <button class="pf-edit-btn" onclick="openFichaModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7v.5h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/></svg>
+            Completar mi ficha
+          </button>
+        </div>
       </div>
 
       <div id="perfil-unlocked-content">
@@ -1237,6 +1267,69 @@
     <div id="video-modal-nota" style="display:none;margin-top:0.85rem;background:rgba(255,255,255,0.1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.18);border-radius:16px;padding:1.1rem 1.2rem;box-shadow:0 0 0 1px rgba(255,255,255,0.06), 0 10px 30px rgba(0,0,0,0.35), 0 0 24px rgba(255,255,255,0.1);">
       <div style="display:flex;align-items:center;gap:0.45rem;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.15em;color:#8FB3FF;font-weight:700;margin-bottom:0.6rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7v.5h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/></svg>Tip técnico</div>
       <div id="video-modal-nota-text" style="color:rgba(255,255,255,0.92);font-size:0.85rem;line-height:1.6;white-space:pre-line;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TU FICHA (personal / salud / entreno / mi plan) ══════════ -->
+<div id="ficha-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-size:1rem;font-weight:700;color:var(--text);">Tu ficha</div>
+      <button onclick="closeFichaModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;padding:0.25rem;">✕</button>
+    </div>
+
+    <div class="ficha-tabs">
+      <button class="ficha-tab active" data-tab="ficha-personal" onclick="switchFichaTab('ficha-personal')">👤 Personal</button>
+      <button class="ficha-tab" data-tab="ficha-salud" onclick="switchFichaTab('ficha-salud')">🦴 Salud</button>
+      <button class="ficha-tab" data-tab="ficha-entreno" onclick="switchFichaTab('ficha-entreno')">💪 Entreno</button>
+      <button class="ficha-tab" data-tab="ficha-plan" onclick="switchFichaTab('ficha-plan')">💳 Mi Plan</button>
+    </div>
+
+    <div id="ficha-personal" class="ficha-content">
+      <div class="ficha-field-row"><div class="ficha-field-label">Edad</div><input class="cq-input ficha-field" data-field="edad" type="number" placeholder="Ej: 28"></div>
+      <div class="ficha-field-row"><div class="ficha-field-label">Cumpleaños</div><input class="cq-input ficha-field" data-field="cumple" type="date"></div>
+      <div class="ficha-field-row"><div class="ficha-field-label">Teléfono</div><input class="cq-input ficha-field" data-field="telefono" type="tel" placeholder="+503 0000-0000"></div>
+      <div class="ficha-field-row"><div class="ficha-field-label">Contacto de emergencia</div><input class="cq-input ficha-field" data-field="emergencia" type="text" placeholder="Nombre y teléfono"></div>
+      <div class="ficha-field-row"><div class="ficha-field-label">Ocupación</div><input class="cq-input ficha-field" data-field="ocupacion" type="text" placeholder="Ej: Diseñadora"></div>
+    </div>
+
+    <div id="ficha-salud" class="ficha-content" style="display:none;">
+      <div class="ficha-field-row"><div class="ficha-field-label">Patologías / Enfermedades</div><textarea class="cq-input ficha-field" data-field="patologias" rows="3" placeholder="Ej: Hipertensión, diabetes..." style="resize:vertical;"></textarea></div>
+      <div class="ficha-field-row"><div class="ficha-field-label">Lesiones o limitaciones físicas</div><textarea class="cq-input ficha-field" data-field="lesiones" rows="3" placeholder="Ej: LCA derecha, dolor lumbar..." style="resize:vertical;"></textarea></div>
+      <div class="ficha-field-row"><div class="ficha-field-label">Medicamentos</div><textarea class="cq-input ficha-field" data-field="medicamentos" rows="2" placeholder="Ej: Metformina..." style="resize:vertical;"></textarea></div>
+      <div class="ficha-field-row"><div class="ficha-field-label">Restricciones / Alergias</div><textarea class="cq-input ficha-field" data-field="restricciones" rows="2" placeholder="Ej: No puede hacer impacto..." style="resize:vertical;"></textarea></div>
+    </div>
+
+    <div id="ficha-entreno" class="ficha-content" style="display:none;">
+      <div class="ficha-field-row">
+        <div class="ficha-field-label">Días que pensás entrenar</div>
+        <div class="ficha-dias-pills" id="ficha-dias-pills"></div>
+      </div>
+      <div class="ficha-field-row"><div class="ficha-field-label">Objetivo principal</div><input class="cq-input ficha-field" data-field="objetivo" type="text" placeholder="Ej: Pérdida de grasa, fuerza..."></div>
+      <div class="ficha-field-row"><div class="ficha-field-label">Nivel de condición física</div>
+        <select class="cq-input ficha-field" data-field="nivel">
+          <option value="">Seleccioná</option>
+          <option value="Principiante">Principiante</option>
+          <option value="Intermedio">Intermedio</option>
+          <option value="Avanzado">Avanzado</option>
+        </select>
+      </div>
+      <div class="ficha-field-row"><div class="ficha-field-label">Notas</div><textarea class="cq-input ficha-field" data-field="notas" rows="3" placeholder="Lo que quieras contarle a Frida..." style="resize:vertical;"></textarea></div>
+    </div>
+
+    <div id="ficha-plan" class="ficha-content" style="display:none;">
+      <div id="ficha-plan-actual"></div>
+      <div id="ficha-plan-historial"></div>
+      <div style="font-size:0.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin:1rem 0 0.5rem;">Otros planes disponibles</div>
+      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">1 mes</span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$40</span></div></div>
+      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">3 meses <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Pago único de $105</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$35/mes</span></div></div>
+      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">6 meses <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Pago único de $180</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$30/mes</span></div></div>
+      <div class="ficha-promo-card" style="margin-bottom:0;"><div style="font-size:0.82rem;font-weight:700;">Online 1:1 (videollamada)</div><div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem;">Consultá precio y disponibilidad con Frida.</div></div>
+    </div>
+
+    <div id="ficha-save-wrap" style="margin-top:0.5rem;">
+      <button class="pf-edit-btn" style="background:var(--blue);color:#fff;" onclick="saveFicha()">Guardar cambios</button>
     </div>
   </div>
 </div>
@@ -1711,6 +1804,7 @@ function renderPortalScreen(portal, perfil) {
   CURRENT_PORTAL_DATA = portal;
   renderBioDisplay(perfil.bio);
   updateProfileCompletion();
+  updateFichaCompletion();
   renderPerfilRoleLine();
 
   CURRENT_ENTRENO_LOGS = portal.entrenoLogs || {};
@@ -3048,6 +3142,127 @@ function updateProfileCompletion() {
   document.getElementById('pf-complete-fill').style.width = pct + '%';
 }
 
+// ── TU FICHA: Personal/Salud/Entreno las llena la clienta; Mi Plan es
+// solo informativo. Se guarda en clientasPortal/{uid}/ficha — ahí mismo
+// la lee el admin (de solo lectura) al abrir el perfil de la clienta.
+var FICHA_DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+var fichaSelectedDias = [];
+
+function updateFichaCompletion() {
+  var pctEl = document.getElementById('pf-ficha-pct');
+  var fillEl = document.getElementById('pf-ficha-fill');
+  if (!pctEl || !fillEl) return;
+  var ficha = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ficha) || {};
+  var p = ficha.personal || {}, s = ficha.salud || {}, e = ficha.entreno || {};
+  var items = [
+    !!p.edad, !!p.cumple, !!p.telefono, !!p.ocupacion,
+    !!(s.patologias && s.patologias.trim()), !!(s.lesiones && s.lesiones.trim()),
+    !!(e.dias && e.dias.length), !!e.objetivo, !!e.nivel
+  ];
+  var done = items.filter(Boolean).length;
+  var pct = Math.round(done / items.length * 100);
+  pctEl.textContent = pct + '%';
+  fillEl.style.width = pct + '%';
+}
+
+function renderFichaDiasPills() {
+  var el = document.getElementById('ficha-dias-pills');
+  if (!el) return;
+  el.innerHTML = FICHA_DIAS.map(function(d) {
+    var sel = fichaSelectedDias.indexOf(d) !== -1;
+    return '<button type="button" class="ficha-dia-pill' + (sel ? ' sel' : '') + '" data-day="' + d + '">' + d + '</button>';
+  }).join('');
+  el.querySelectorAll('.ficha-dia-pill').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var day = this.getAttribute('data-day');
+      var idx = fichaSelectedDias.indexOf(day);
+      if (idx === -1) fichaSelectedDias.push(day); else fichaSelectedDias.splice(idx, 1);
+      renderFichaDiasPills();
+    });
+  });
+}
+
+function openFichaModal() {
+  var ficha = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ficha) || {};
+  var p = ficha.personal || {}, s = ficha.salud || {}, e = ficha.entreno || {};
+  var values = Object.assign({}, p, s, e);
+  document.querySelectorAll('#ficha-modal .ficha-field').forEach(function(el) {
+    el.value = values[el.getAttribute('data-field')] || '';
+  });
+  fichaSelectedDias = (e.dias || []).slice();
+  renderFichaDiasPills();
+  switchFichaTab('ficha-personal');
+  document.getElementById('ficha-modal').style.display = 'flex';
+}
+
+function closeFichaModal() {
+  document.getElementById('ficha-modal').style.display = 'none';
+}
+
+function switchFichaTab(tabId) {
+  document.querySelectorAll('#ficha-modal .ficha-content').forEach(function(el) { el.style.display = 'none'; });
+  document.querySelectorAll('#ficha-modal .ficha-tab').forEach(function(btn) { btn.classList.remove('active'); });
+  document.getElementById(tabId).style.display = 'block';
+  var btn = document.querySelector('#ficha-modal .ficha-tab[data-tab="' + tabId + '"]');
+  if (btn) btn.classList.add('active');
+  var saveWrap = document.getElementById('ficha-save-wrap');
+  if (saveWrap) saveWrap.style.display = tabId === 'ficha-plan' ? 'none' : 'block';
+  if (tabId === 'ficha-plan') renderFichaPlanTab();
+}
+
+// Solo informativo — acá no hay nada que la clienta pueda marcar como
+// pagado, es para que sepa qué tiene y qué otros planes existen.
+function renderFichaPlanTab() {
+  var actualEl = document.getElementById('ficha-plan-actual');
+  var histEl = document.getElementById('ficha-plan-historial');
+  if (!actualEl || !histEl) return;
+  if (!currentClientId) { actualEl.innerHTML = ''; histEl.innerHTML = ''; return; }
+  db().ref('clients/' + currentClientId).once('value').then(function(snap) {
+    var c = snap.val() || {};
+    if (!c.cuota) {
+      actualEl.innerHTML = '<div class="empty-note">Todavía no tenés un plan activo.</div>';
+      histEl.innerHTML = '';
+      return;
+    }
+    var html = '<div class="ficha-plan-card">';
+    html += '<div class="ficha-plan-row"><span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Tu plan</span><span style="font-size:0.85rem;font-weight:700;">$' + Number(c.cuota).toFixed(2) + (CURRENT_PLAN_MESES ? ' · ' + CURRENT_PLAN_MESES + ' meses' : ' · mensual') + '</span></div>';
+    html += '<div class="ficha-plan-row"><span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Este ciclo</span><span style="font-size:0.82rem;font-weight:700;color:' + (CURRENT_CICLO_PAGADO ? '#2a7a2a' : '#9a7700') + ';">' + (CURRENT_CICLO_PAGADO ? '✓ Pagado' : '⏳ Pendiente') + '</span></div>';
+    html += '</div>';
+    actualEl.innerHTML = html;
+    histEl.innerHTML = CURRENT_PAGOS_COUNT ? '<div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.5rem;">Llevás ' + CURRENT_PAGOS_COUNT + (CURRENT_PAGOS_COUNT === 1 ? ' pago registrado.' : ' pagos registrados.') + '</div>' : '';
+  }).catch(function() { actualEl.innerHTML = ''; histEl.innerHTML = ''; });
+}
+
+function saveFicha() {
+  var personal = {}, salud = {}, entreno = {};
+  var PERSONAL_FIELDS = ['edad', 'cumple', 'telefono', 'emergencia', 'ocupacion'];
+  var SALUD_FIELDS = ['patologias', 'lesiones', 'medicamentos', 'restricciones'];
+  var ENTRENO_FIELDS = ['objetivo', 'nivel', 'notas'];
+  document.querySelectorAll('#ficha-modal .ficha-field').forEach(function(el) {
+    var field = el.getAttribute('data-field');
+    var val = el.value.trim();
+    if (PERSONAL_FIELDS.indexOf(field) !== -1) personal[field] = val;
+    else if (SALUD_FIELDS.indexOf(field) !== -1) salud[field] = val;
+    else if (ENTRENO_FIELDS.indexOf(field) !== -1) entreno[field] = val;
+  });
+  entreno.dias = fichaSelectedDias.slice();
+  var ficha = { personal: personal, salud: salud, entreno: entreno };
+
+  db().ref('clientasPortal/' + currentUid + '/ficha').set(ficha).then(function() {
+    if (!CURRENT_PORTAL_DATA) CURRENT_PORTAL_DATA = {};
+    CURRENT_PORTAL_DATA.ficha = ficha;
+    updateFichaCompletion();
+    var btn = document.querySelector('#ficha-save-wrap .pf-edit-btn');
+    if (btn) {
+      var orig = btn.textContent;
+      btn.textContent = '✓ Guardado';
+      setTimeout(function() { btn.textContent = orig; }, 1500);
+    }
+  }).catch(function(e) {
+    alert('No se pudo guardar: ' + e.message);
+  });
+}
+
 function toggleDiaEntrenado(key) {
   var nowDone = !!CURRENT_DIAS_ENTRENADOS[key];
   var newVal = !nowDone;
@@ -3621,6 +3836,8 @@ function applyPlanLockUI() {
     benefUnlocked.style.display = PLAN_LOCKED ? 'none' : '';
     benefLocked.innerHTML = PLAN_LOCKED ? renderPlanLockedCard() : '';
   }
+  var fichaCard = document.querySelector('.pf-ficha-card');
+  if (fichaCard) fichaCard.style.display = PLAN_LOCKED ? 'none' : '';
   // La info de plan puede llegar antes o después de que la rutina ya esté
   // dibujada — se vuelve a pintar para que los botones de video/historial
   // queden bloqueados (o no) de una, sin esperar a que toque otra acción.
