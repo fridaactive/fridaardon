@@ -3798,9 +3798,13 @@ function openCycleModal(id) {
 
   if (isRutinaPersonalizada) {
     document.getElementById('cycle-rp-cuota').value = c.cuota || '';
-    // Si ya tenía un ciclo, el nuevo arranca el día después de que terminó
-    // el anterior; si no, arranca hoy.
-    var nextStart = c.endDate ? addDaysToDateStr(c.endDate, 1) : new Date().toISOString().slice(0, 10);
+    // Si el ciclo anterior terminó hace poco, el nuevo arranca justo al
+    // día siguiente (sin perder ni duplicar días). Pero si ya venció hace
+    // rato (o nunca tuvo uno), no tiene sentido sugerir esa fecha vieja —
+    // arranca hoy, para darle el mes completo desde ahora.
+    var todayStr = new Date().toISOString().slice(0, 10);
+    var suggestedStart = c.endDate ? addDaysToDateStr(c.endDate, 1) : todayStr;
+    var nextStart = suggestedStart < todayStr ? todayStr : suggestedStart;
     document.getElementById('cycle-rp-start').value = nextStart;
   } else {
     var existing = getCycleConfig(id);
