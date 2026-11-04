@@ -1867,6 +1867,16 @@ function openAdminClientProfile(clientId) {
   fbGet('clientasPortal/' + uid, function(portal) {
     acpState.portal = portal || {};
     acpRenderShell();
+    // Diagnóstico: si esta clienta aparece "bloqueada" del lado cliente
+    // pese a tener plan activo acá, puede ser que esta cuenta (uid) haya
+    // quedado vinculada a OTRO clientId distinto del que se está viendo
+    // en este perfil — porque vincular un código nuevo nunca borra el
+    // vínculo viejo. Esto lo detecta y avisa en vez de quedar oculto.
+    var portalClientId = portal && portal.perfil && portal.perfil.clientId;
+    if (portalClientId && portalClientId !== clientId) {
+      var otherName = (CLIENTS[portalClientId] && CLIENTS[portalClientId].name) || portalClientId;
+      alert('¡Encontrado! La app de esta clienta está vinculada a OTRO perfil distinto: "' + otherName + '" (no a "' + (CLIENTS[clientId] && CLIENTS[clientId].name) + '"). Por eso ve bloqueado aunque acá esté activo. Avisale a Claude con este mensaje.');
+    }
   });
 }
 
