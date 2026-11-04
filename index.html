@@ -3810,7 +3810,8 @@ function loadPlanInfo() {
         var val2 = snap2.val();
         renderPlanCountdown(val2);
       }).catch(function(e2) {
-        alert('Diagnóstico: error al leer el plan (tras reparar el vínculo).\nID interno: ' + currentClientId + '\nUid: ' + currentUid + '\nError: ' + (e2 && e2.message ? e2.message : e2) + '\nAvisale a Claude con este mensaje.');
+        var paso = (e2 && e2.message && e2.message.indexOf('client_links') !== -1) ? 'al escribir el vínculo' : 'al releer el plan';
+        alert('Diagnóstico: error ' + paso + ' (tras intentar reparar).\nID interno: ' + currentClientId + '\nUid: ' + currentUid + '\nError: ' + (e2 && e2.message ? e2.message : e2) + '\nAvisale a Claude con este mensaje.');
         renderPlanCountdown(null);
       });
       return;
