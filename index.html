@@ -3791,8 +3791,18 @@ function canjearBeneficio(beneficioId) {
 function loadPlanInfo() {
   if (!currentClientId) { return; }
   db().ref('clients/' + currentClientId).once('value').then(function(snap) {
-    renderPlanCountdown(snap.val());
-  }).catch(function() { renderPlanCountdown(null); });
+    var val = snap.val();
+    // Diagnóstico temporal: si no hay fecha de inicio, se avisa con el
+    // detalle exacto de lo que se leyó, para encontrar por qué se ve
+    // bloqueada una cuenta que en el admin aparece activa.
+    if (!val || !val.initDate) {
+      alert('Diagnóstico: no se encontró plan activo.\nID interno: ' + currentClientId + '\nDatos leídos: ' + JSON.stringify(val) + '\nAvisale a Claude con este mensaje.');
+    }
+    renderPlanCountdown(val);
+  }).catch(function(e) {
+    alert('Diagnóstico: error al leer el plan.\nID interno: ' + currentClientId + '\nError: ' + (e && e.message ? e.message : e) + '\nAvisale a Claude con este mensaje.');
+    renderPlanCountdown(null);
+  });
 }
 
 // Días de gracia después de vencido el ciclo antes de bloquear la cuenta.
