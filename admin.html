@@ -1566,7 +1566,11 @@ function fbGet(path, cb) {
   } catch(e) { console.warn('fbGet catch', e); cb(null); }
 }
 
-function fbSet(path, data) {
+// onError es opcional — la mayoría de los llamados son "best effort" y
+// solo dejan un console.warn si falla. Para algún punto puntual donde
+// necesitamos ENTERARNOS si falla (no solo en la consola), se le puede
+// pasar un callback que se dispara con el error real.
+function fbSet(path, data, onError) {
   try {
     var db = getDB();
     if (db) {
@@ -1577,14 +1581,18 @@ function fbSet(path, data) {
             ensureAdminAuth(function() {
               getDB().ref(path).set(data)
                 .then(function() { console.log('fbSet retry OK:', path); })
-                .catch(function(e2) { console.warn('fbSet retry error', path, e2); });
+                .catch(function(e2) { console.warn('fbSet retry error', path, e2); if (onError) onError(e2); });
             });
           } else {
             console.warn('fbSet error', path, e);
+            if (onError) onError(e);
           }
         });
-    } else { console.warn('fbSet skipped - Firebase not ready for path:', path); }
-  } catch(e) { console.warn('fbSet catch', e); }
+    } else {
+      console.warn('fbSet skipped - Firebase not ready for path:', path);
+      if (onError) onError(new Error('Firebase no está listo'));
+    }
+  } catch(e) { console.warn('fbSet catch', e); if (onError) onError(e); }
 }
 
 function fbListen(path, cb) {
@@ -1876,7 +1884,13 @@ function openAdminClientProfile(clientId) {
   // Auto-reparo: por si esta clienta quedó creada antes de que
   // empezáramos a espejar estos campos a clients/{id}, se sincroniza
   // sola cada vez que abrís su perfil — no hace falta hacer nada.
-  if (CLIENTS[clientId]) syncClientPublicFields(clientId, CLIENTS[clientId]);
+  // Si esa sincronización falla (ej. Firebase la rechaza), se avisa con
+  // una alerta en vez de quedar en silencio, porque si no nunca se nota.
+  if (CLIENTS[clientId]) {
+    syncClientPublicFields(clientId, CLIENTS[clientId], function(e) {
+      alert('No se pudo sincronizar el plan de esta clienta con su app: ' + (e && e.message ? e.message : 'error desconocido') + '. Avisale a Claude con este mensaje.');
+    });
+  }
   // Siempre arranca en Resumen — ahí está lo que hace falta ver de
   // entrada (estado de pago, actividad) sin importar la modalidad.
   // Rutina queda a un click, para cuando sí hay que editarla.
@@ -3265,11 +3279,11 @@ function saveCustomClient(id, clientData) {
 // Sin espejar estos campos ahí, cosas como "Mes X de Y", la barra de días
 // restantes o el bloqueo por plan vencido nunca le llegan a la clienta,
 // aunque en el panel de admin se vean perfectas.
-function syncClientPublicFields(id, c) {
+function syncClientPublicFields(id, c, onError) {
   if (!id || !c) return;
   fbSet('clients/' + id + '/name', c.name || null);
   fbSet('clients/' + id + '/type', c.type || null);
-  fbSet('clients/' + id + '/initDate', c.initDate || null);
+  fbSet('clients/' + id + '/initDate', c.initDate || null, onError);
   fbSet('clients/' + id + '/endDate', c.endDate || null);
   fbSet('clients/' + id + '/cuota', c.cuota || null);
   fbSet('clients/' + id + '/sessions', c.sessions || null);
