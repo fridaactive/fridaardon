@@ -3546,12 +3546,18 @@ function loadPlanInfo() {
 // Días de gracia después de vencido el ciclo antes de bloquear la cuenta.
 var PLAN_GRACE_DAYS = 5;
 var PLAN_LOCKED = false;
+// Vencido (tenía fechas y ya pasaron) y "nunca tuvo plan" se bloquean
+// igual, pero el mensaje que ve la clienta tiene que ser distinto — no
+// tiene sentido decirle "tu programa caducó" si nunca le activaron uno.
+var PLAN_NEVER_SET = false;
 
 function renderPlanLockedCard() {
+  var title = PLAN_NEVER_SET ? 'Todavía no tenés un plan activo' : 'Tu programa caducó';
+  var text = PLAN_NEVER_SET ? 'Escribile a Frida para activar tu plan y ver esta sección.' : 'Adquirí un nuevo plan para seguir viendo esta sección.';
   return '<div class="pf-locked-card">'
     + '<div class="pf-locked-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>'
-    + '<div class="pf-locked-title">Tu programa caducó</div>'
-    + '<div class="pf-locked-text">Adquirí un nuevo plan para seguir viendo esta sección.</div>'
+    + '<div class="pf-locked-title">' + title + '</div>'
+    + '<div class="pf-locked-text">' + text + '</div>'
     + '<details class="pf-locked-pricing">'
     + '<summary>Ver planes y precios</summary>'
     + '<div class="pf-locked-price-row"><span class="plan-name">1 mes</span><span class="plan-price">$40</span></div>'
@@ -3593,10 +3599,12 @@ function renderPlanCountdown(c) {
   if (!c || !c.initDate) {
     el.style.display = 'none';
     if (ringPct) ringPct.closest('.pf-ring-wrap').style.display = 'none';
-    PLAN_LOCKED = false;
+    PLAN_NEVER_SET = true;
+    PLAN_LOCKED = true;
     applyPlanLockUI();
     return;
   }
+  PLAN_NEVER_SET = false;
   var start = new Date(c.initDate + 'T00:00:00');
   var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
   if (!c.endDate) end.setMonth(end.getMonth() + 1);
