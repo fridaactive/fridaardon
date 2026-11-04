@@ -1878,7 +1878,8 @@ function openAdminClientProfile(clientId) {
   // entrada (estado de pago, actividad) sin importar la modalidad.
   // Rutina queda a un click, para cuando sí hay que editarla.
   var defaultTab = 'resumen';
-  acpState = { clientId: clientId, uid: uid || null, portal: {}, tab: defaultTab };
+  var today = new Date();
+  acpState = { clientId: clientId, uid: uid || null, portal: {}, tab: defaultTab, histYear: today.getFullYear(), histMonth: today.getMonth() };
   if (!uid) { acpRenderShell(); return; }
   fbGet('clientasPortal/' + uid, function(portal) {
     acpState.portal = portal || {};
@@ -2062,6 +2063,17 @@ function toggleAdminDiaEntrenado(uid, key, el) {
   acpRenderShell();
 }
 
+// Navegar el calendario de "Historial de entrenos" un mes hacia atrás (-1)
+// o hacia adelante (1) — los límites (hasta dónde hay registros, nunca
+// más allá del mes actual) ya los calcula renderAdminClientProfile al
+// dibujar los botones, así que acá solo hace falta mover el mes.
+function acpHistShiftMonth(delta) {
+  acpState.histMonth += delta;
+  if (acpState.histMonth < 0) { acpState.histMonth = 11; acpState.histYear--; }
+  else if (acpState.histMonth > 11) { acpState.histMonth = 0; acpState.histYear++; }
+  acpRenderShell();
+}
+
 function renderAdminClientProfile(clientId, uid, portal) {
   var c = CLIENTS[clientId] || {};
   var perfil = portal.perfil || {};
@@ -2119,16 +2131,36 @@ function renderAdminClientProfile(clientId, uid, portal) {
     ? '<div class="pf-bio-text">' + escapeHtmlAdmin(perfil.bio) + '</div>'
     : '<div class="pf-bio-placeholder">Todavía no completó su bio.</div>';
 
-  // ── Calendario del mes ──
+  // ── Calendario del mes — navegable hacia atrás, pero solo hasta el mes
+  // más viejo con algún día marcado (no tiene sentido ofrecer meses
+  // vacíos), y nunca hacia adelante del mes actual. ──
   var DAY_NAMES_ADMIN = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-  var year = now.getFullYear(), month = now.getMonth();
+  if (acpState.histYear === undefined || acpState.histYear === null) {
+    acpState.histYear = now.getFullYear();
+    acpState.histMonth = now.getMonth();
+  }
+  var year = acpState.histYear, month = acpState.histMonth;
   var daysInMonth = new Date(year, month + 1, 0).getDate();
   var firstDay = new Date(year, month, 1).getDay();
+
+  var trainedYMs = Object.keys(diasEntrenados).filter(function(k) { return diasEntrenados[k]; }).map(function(k) { return k.slice(0, 7); });
+  var earliestYM = trainedYMs.length ? trainedYMs.sort()[0] : null;
+  var viewYM = year + '-' + String(month + 1).padStart(2, '0');
+  var curYM = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+  var canGoPrev = !!earliestYM && viewYM > earliestYM;
+  var canGoNext = viewYM < curYM;
+
+  var calHtml = '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">';
+  calHtml += '<button type="button" onclick="acpHistShiftMonth(-1)"' + (canGoPrev ? '' : ' disabled') + ' style="background:none;border:none;font-size:1.1rem;color:' + (canGoPrev ? 'var(--blue)' : '#ccc') + ';cursor:' + (canGoPrev ? 'pointer' : 'default') + ';padding:0.25rem 0.5rem;">‹</button>';
+  calHtml += '<div style="font-size:0.72rem;font-weight:700;color:var(--text);text-transform:capitalize;">' + MESES_LARGOS_ADMIN[month] + ' ' + year + '</div>';
+  calHtml += '<button type="button" onclick="acpHistShiftMonth(1)"' + (canGoNext ? '' : ' disabled') + ' style="background:none;border:none;font-size:1.1rem;color:' + (canGoNext ? 'var(--blue)' : '#ccc') + ';cursor:' + (canGoNext ? 'pointer' : 'default') + ';padding:0.25rem 0.5rem;">›</button>';
+  calHtml += '</div>';
+
   // Vos también podés marcar los días entrenados acá (clic en el día) —
   // queda guardado en el mismo lugar que usa la clienta, así que si ella
   // también marca desde su app (rutina personalizada), quedan conectadas:
   // lo que marca cualquiera de las dos lo ve la otra.
-  var calHtml = '<div class="track-days">';
+  calHtml += '<div class="track-days">';
   DAY_NAMES_ADMIN.forEach(function(d) { calHtml += '<div class="track-day-header">' + d + '</div>'; });
   for (var i = 0; i < firstDay; i++) calHtml += '<div class="track-day empty"></div>';
   for (var day = 1; day <= daysInMonth; day++) {
