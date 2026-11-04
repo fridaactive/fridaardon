@@ -3792,15 +3792,30 @@ function loadPlanInfo() {
   if (!currentClientId) { return; }
   db().ref('clients/' + currentClientId).once('value').then(function(snap) {
     var val = snap.val();
-    // Diagnóstico temporal: si no hay fecha de inicio, se avisa con el
-    // detalle exacto de lo que se leyó, para encontrar por qué se ve
-    // bloqueada una cuenta que en el admin aparece activa.
     if (!val || !val.initDate) {
       alert('Diagnóstico: no se encontró plan activo.\nID interno: ' + currentClientId + '\nDatos leídos: ' + JSON.stringify(val) + '\nAvisale a Claude con este mensaje.');
     }
     renderPlanCountdown(val);
   }).catch(function(e) {
-    alert('Diagnóstico: error al leer el plan.\nID interno: ' + currentClientId + '\nError: ' + (e && e.message ? e.message : e) + '\nAvisale a Claude con este mensaje.');
+    // El permiso para leer su propio plan depende de que
+    // client_links/{clientId} apunte a este uid — si una clienta se
+    // revinculó, ese puntero pudo quedar apuntando a otra cuenta vieja.
+    // Como esta clienta sí es dueña legítima de este clientId (es lo que
+    // dice su propio perfil), se intenta auto-reparar ese puntero y
+    // reintentar antes de darse por vencido.
+    if (e && e.code === 'PERMISSION_DENIED' && currentUid) {
+      db().ref('client_links/' + currentClientId).set(currentUid).then(function() {
+        return db().ref('clients/' + currentClientId).once('value');
+      }).then(function(snap2) {
+        var val2 = snap2.val();
+        renderPlanCountdown(val2);
+      }).catch(function(e2) {
+        alert('Diagnóstico: error al leer el plan (tras reparar el vínculo).\nID interno: ' + currentClientId + '\nUid: ' + currentUid + '\nError: ' + (e2 && e2.message ? e2.message : e2) + '\nAvisale a Claude con este mensaje.');
+        renderPlanCountdown(null);
+      });
+      return;
+    }
+    alert('Diagnóstico: error al leer el plan.\nID interno: ' + currentClientId + '\nUid: ' + (currentUid || '(ninguno)') + '\nError: ' + (e && e.message ? e.message : e) + '\nAvisale a Claude con este mensaje.');
     renderPlanCountdown(null);
   });
 }
