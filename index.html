@@ -2883,13 +2883,15 @@ function renderTrainingTracker(diasEntrenados) {
   var daysInMonth = new Date(year, month + 1, 0).getDate();
   var firstDay = new Date(year, month, 1).getDay();
   var html = '';
-  // Un día puede tener comentario aunque tenga varios registros guardados
-  // ese mismo día (se queda con el más reciente para mostrar).
-  var commentsByDate = {};
+  // Un día puede tener varios registros guardados ese mismo día (se queda
+  // con el más reciente para mostrar) — el puntito ahora aparece siempre
+  // que haya algo registrado ese día, no solo cuando dejó un comentario,
+  // para que el calendario funcione como un mini diario de entrenos.
+  var logsByDate = {};
   Object.keys(CURRENT_ENTRENO_LOGS).forEach(function(k) {
     var en = CURRENT_ENTRENO_LOGS[k];
-    if (en && en.fecha && en.comentario && (!commentsByDate[en.fecha] || (en.ts || 0) > (commentsByDate[en.fecha].ts || 0))) {
-      commentsByDate[en.fecha] = en;
+    if (en && en.fecha && (!logsByDate[en.fecha] || (en.ts || 0) > (logsByDate[en.fecha].ts || 0))) {
+      logsByDate[en.fecha] = en;
     }
   });
 
@@ -2898,7 +2900,7 @@ function renderTrainingTracker(diasEntrenados) {
   for (var day = 1; day <= daysInMonth; day++) {
     var key = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     var done = !!CURRENT_DIAS_ENTRENADOS[key];
-    var dot = commentsByDate[key] ? '<span class="track-day-dot" onclick="event.stopPropagation();showDayComment(\'' + key + '\')"></span>' : '';
+    var dot = logsByDate[key] ? '<span class="track-day-dot" onclick="event.stopPropagation();showDayComment(\'' + key + '\')"></span>' : '';
     html += '<div class="track-day' + (done ? ' done' : '') + '" data-dk="' + key + '">' + day + dot + '</div>';
   }
   daysEl.innerHTML = html;
@@ -2909,14 +2911,49 @@ function renderTrainingTracker(diasEntrenados) {
   });
 }
 
+// Busca el nombre de un ejercicio a partir del día y el id con el que
+// quedó guardado el registro — los logs solo guardan el id, no el
+// nombre, así que hay que buscarlo en la rutina actual.
+function resolveExerciseName(dayId, exId) {
+  var day = (currentRutinaData && currentRutinaData.days || []).find(function(d) { return d.id === dayId; });
+  if (!day) return exId;
+  var found = null;
+  (day.blocks || []).forEach(function(b) {
+    (b.exercises || []).forEach(function(e) { if (e.id === exId) found = e.name; });
+  });
+  return found || exId;
+}
+
 function showDayComment(key) {
   var en = (Object.keys(CURRENT_ENTRENO_LOGS).map(function(k) { return CURRENT_ENTRENO_LOGS[k]; })
-    .filter(function(e) { return e.fecha === key && e.comentario; })
+    .filter(function(e) { return e.fecha === key; })
     .sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); }))[0];
   var box = document.getElementById('track-day-comment');
   if (!en) { box.style.display = 'none'; return; }
   var d = new Date(key + 'T00:00:00');
-  box.innerHTML = '<div style="font-size:0.65rem;font-weight:700;color:var(--blue);margin-bottom:0.3rem;">' + d.getDate() + ' de ' + MESES_LARGOS[d.getMonth()] + '</div><div style="font-size:0.78rem;color:var(--text);line-height:1.5;white-space:pre-wrap;">' + escapeHtml(en.comentario) + '</div>';
+  var html = '<div style="font-size:0.65rem;font-weight:700;color:var(--blue);margin-bottom:0.45rem;">' + d.getDate() + ' de ' + MESES_LARGOS[d.getMonth()] + (en.dayName ? ' · ' + escapeHtml(en.dayName) : '') + '</div>';
+
+  var exIds = Object.keys(en.ejercicios || {});
+  if (exIds.length) {
+    html += '<div style="display:flex;flex-direction:column;gap:0.3rem;' + (en.comentario ? 'margin-bottom:0.6rem;' : '') + '">';
+    exIds.forEach(function(exId) {
+      var ex = en.ejercicios[exId];
+      var name = resolveExerciseName(en.dayId, exId);
+      var parts = [];
+      if (ex.carga) parts.push(ex.carga + ' lbs');
+      if (ex.reps) parts.push(ex.reps + ' reps');
+      if (ex.segundos) parts.push(ex.segundos + ' seg');
+      if (ex.esfuerzo) parts.push('esfuerzo ' + ex.esfuerzo);
+      html += '<div style="font-size:0.76rem;color:var(--text);"><strong>' + escapeHtml(name) + ':</strong> ' + (parts.length ? escapeHtml(parts.join(' · ')) : '<span style="color:var(--muted);">sin datos</span>') + '</div>';
+    });
+    html += '</div>';
+  }
+
+  if (en.comentario) {
+    html += '<div style="font-size:0.78rem;color:var(--text);line-height:1.5;white-space:pre-wrap;">' + escapeHtml(en.comentario) + '</div>';
+  }
+
+  box.innerHTML = html;
   box.style.display = 'block';
 }
 
