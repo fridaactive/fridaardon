@@ -994,49 +994,65 @@
       <button id="cycle-modal-close" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;padding:0.25rem;">✕</button>
     </div>
 
-    <!-- Precio por sesión -->
-    <div class="fin-form-row" style="margin-bottom:0.85rem;">
-      <div class="fin-form-label">Precio por sesión ($)</div>
-      <input class="fin-form-input" id="cycle-price" type="number" placeholder="Ej: 20">
-    </div>
-
-    <!-- Horario -->
-    <div style="display:flex;gap:0.6rem;margin-bottom:0.85rem;">
-      <div style="flex:1;"><div class="fin-form-label">Hora inicio</div><input class="fin-form-input" id="cycle-hour-start" type="time"></div>
-      <div style="flex:1;"><div class="fin-form-label">Hora fin</div><input class="fin-form-input" id="cycle-hour-end" type="time"></div>
-    </div>
-
-    <!-- Selector de mes -->
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
-      <button id="cycle-prev-month" style="background:none;border:none;font-size:1.2rem;color:var(--blue);cursor:pointer;padding:0.25rem 0.5rem;">‹</button>
-      <div id="cycle-month-label" style="font-size:0.85rem;font-weight:700;color:var(--text);"></div>
-      <button id="cycle-next-month" style="background:none;border:none;font-size:1.2rem;color:var(--blue);cursor:pointer;padding:0.25rem 0.5rem;">›</button>
-    </div>
-
-    <!-- Calendario de selección -->
-    <div style="margin-bottom:1rem;">
-      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px;">
-        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Do</div>
-        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Lu</div>
-        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Ma</div>
-        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Mi</div>
-        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Ju</div>
-        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Vi</div>
-        <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Sá</div>
+    <!-- PRESENCIAL / ONLINE 1:1 — paga por sesión, con calendario de días -->
+    <div id="cycle-presencial-fields">
+      <!-- Precio por sesión -->
+      <div class="fin-form-row" style="margin-bottom:0.85rem;">
+        <div class="fin-form-label">Precio por sesión ($)</div>
+        <input class="fin-form-input" id="cycle-price" type="number" placeholder="Ej: 20">
       </div>
-      <div id="cycle-calendar-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
+
+      <!-- Horario -->
+      <div style="display:flex;gap:0.6rem;margin-bottom:0.85rem;">
+        <div style="flex:1;"><div class="fin-form-label">Hora inicio</div><input class="fin-form-input" id="cycle-hour-start" type="time"></div>
+        <div style="flex:1;"><div class="fin-form-label">Hora fin</div><input class="fin-form-input" id="cycle-hour-end" type="time"></div>
+      </div>
+
+      <!-- Selector de mes -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+        <button id="cycle-prev-month" style="background:none;border:none;font-size:1.2rem;color:var(--blue);cursor:pointer;padding:0.25rem 0.5rem;">‹</button>
+        <div id="cycle-month-label" style="font-size:0.85rem;font-weight:700;color:var(--text);"></div>
+        <button id="cycle-next-month" style="background:none;border:none;font-size:1.2rem;color:var(--blue);cursor:pointer;padding:0.25rem 0.5rem;">›</button>
+      </div>
+
+      <!-- Calendario de selección -->
+      <div style="margin-bottom:1rem;">
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px;">
+          <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Do</div>
+          <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Lu</div>
+          <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Ma</div>
+          <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Mi</div>
+          <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Ju</div>
+          <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Vi</div>
+          <div style="text-align:center;font-size:0.55rem;color:var(--muted);font-weight:700;">Sá</div>
+        </div>
+        <div id="cycle-calendar-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
+      </div>
+
+      <!-- Resumen -->
+      <div id="cycle-summary" style="background:var(--blue-lt);border-radius:10px;padding:0.85rem;margin-bottom:1rem;display:none;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;">
+          <span style="font-size:0.72rem;color:var(--muted);">Sesiones seleccionadas</span>
+          <span style="font-size:0.82rem;font-weight:700;color:var(--text);" id="cycle-count">0</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-size:0.72rem;color:var(--muted);">Total a cobrar</span>
+          <span style="font-size:0.95rem;font-weight:700;color:var(--blue);" id="cycle-total">$0.00</span>
+        </div>
+      </div>
     </div>
 
-    <!-- Resumen -->
-    <div id="cycle-summary" style="background:var(--blue-lt);border-radius:10px;padding:0.85rem;margin-bottom:1rem;display:none;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;">
-        <span style="font-size:0.72rem;color:var(--muted);">Sesiones seleccionadas</span>
-        <span style="font-size:0.82rem;font-weight:700;color:var(--text);" id="cycle-count">0</span>
+    <!-- RUTINA PERSONALIZADA — paga una cuota mensual fija, sin sesiones -->
+    <div id="cycle-rp-fields" style="display:none;">
+      <div class="fin-form-row" style="margin-bottom:0.85rem;">
+        <div class="fin-form-label">Cuota del mes ($)</div>
+        <input class="fin-form-input" id="cycle-rp-cuota" type="number" placeholder="Ej: 40">
       </div>
-      <div style="display:flex;justify-content:space-between;">
-        <span style="font-size:0.72rem;color:var(--muted);">Total a cobrar</span>
-        <span style="font-size:0.95rem;font-weight:700;color:var(--blue);" id="cycle-total">$0.00</span>
+      <div class="fin-form-row" style="margin-bottom:0.85rem;">
+        <div class="fin-form-label">Fecha de inicio del nuevo ciclo</div>
+        <input class="fin-form-input" id="cycle-rp-start" type="date">
       </div>
+      <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem;">La fecha de fin se calcula sola: un mes después.</div>
     </div>
 
     <div id="cycle-error" style="color:#c44;font-size:0.72rem;margin-bottom:0.75rem;display:none;"></div>
@@ -3733,23 +3749,38 @@ function openCycleModal(id) {
   cycleViewYear = new Date().getFullYear();
   cycleViewMonth = new Date().getMonth();
 
-  var existing = getCycleConfig(id);
-  if (existing) {
-    // Only carry over price/hours as defaults — never the old days, since this
-    // modal opens to start a NEW cycle and the previous days are already in the past.
-    if (existing.startHour !== undefined) document.getElementById('cycle-hour-start').value = decimalToTimeStr(existing.startHour);
-    if (existing.endHour !== undefined) document.getElementById('cycle-hour-end').value = decimalToTimeStr(existing.endHour);
-    if (existing.pricePerSession) document.getElementById('cycle-price').value = existing.pricePerSession;
+  // Rutina personalizada paga una cuota mensual fija, no por sesión — no
+  // tiene sentido preguntarle a Frida cuántas sesiones ni qué días, así
+  // que ese tipo de clienta usa un formulario aparte, mucho más simple.
+  var isRutinaPersonalizada = c.type === 'rutina-personalizada';
+  document.getElementById('cycle-presencial-fields').style.display = isRutinaPersonalizada ? 'none' : 'block';
+  document.getElementById('cycle-rp-fields').style.display = isRutinaPersonalizada ? 'block' : 'none';
+
+  if (isRutinaPersonalizada) {
+    document.getElementById('cycle-rp-cuota').value = c.cuota || '';
+    // Si ya tenía un ciclo, el nuevo arranca el día después de que terminó
+    // el anterior; si no, arranca hoy.
+    var nextStart = c.endDate ? addDaysToDateStr(c.endDate, 1) : new Date().toISOString().slice(0, 10);
+    document.getElementById('cycle-rp-start').value = nextStart;
   } else {
-    document.getElementById('cycle-hour-start').value = c.schedule ? decimalToTimeStr(c.schedule.startHour) : '';
-    document.getElementById('cycle-hour-end').value = c.schedule ? decimalToTimeStr(c.schedule.endHour) : '';
-    document.getElementById('cycle-price').value = c.cuota || '';
+    var existing = getCycleConfig(id);
+    if (existing) {
+      // Only carry over price/hours as defaults — never the old days, since this
+      // modal opens to start a NEW cycle and the previous days are already in the past.
+      if (existing.startHour !== undefined) document.getElementById('cycle-hour-start').value = decimalToTimeStr(existing.startHour);
+      if (existing.endHour !== undefined) document.getElementById('cycle-hour-end').value = decimalToTimeStr(existing.endHour);
+      if (existing.pricePerSession) document.getElementById('cycle-price').value = existing.pricePerSession;
+    } else {
+      document.getElementById('cycle-hour-start').value = c.schedule ? decimalToTimeStr(c.schedule.startHour) : '';
+      document.getElementById('cycle-hour-end').value = c.schedule ? decimalToTimeStr(c.schedule.endHour) : '';
+      document.getElementById('cycle-price').value = c.cuota || '';
+    }
+    renderCycleCalendar();
   }
 
   document.getElementById('cycle-modal-title').textContent = 'Ciclo de ' + c.name;
   document.getElementById('cycle-error').style.display = 'none';
   document.getElementById('cycle-modal').style.display = 'flex';
-  renderCycleCalendar();
 }
 
 function closeCycleModal() {
@@ -3918,6 +3949,57 @@ function saveCycle() {
   if (acpState.clientId === id) acpRenderShell();
 }
 
+function addDaysToDateStr(dateStr, days) {
+  var d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+// Mismo criterio que se usa en todo el resto del sistema para calcular el
+// fin de ciclo: un mes calendario después, no 30 días fijos.
+function addOneMonthToDateStr(dateStr) {
+  var d = new Date(dateStr + 'T00:00:00');
+  d.setMonth(d.getMonth() + 1);
+  return d.toISOString().slice(0, 10);
+}
+
+// Renovar ciclo para rutina personalizada: una cuota mensual fija, sin
+// sesiones ni calendario — la clienta entrena por su cuenta desde la app.
+function saveCycleRutinaPersonalizada() {
+  var id = cycleModalClientId;
+  var c = CLIENTS[id];
+  if (!c) return;
+
+  var cuota = parseFloat(document.getElementById('cycle-rp-cuota').value) || 0;
+  var startDate = document.getElementById('cycle-rp-start').value;
+
+  if (!startDate) {
+    document.getElementById('cycle-error').textContent = 'Elegí la fecha de inicio del nuevo ciclo.';
+    document.getElementById('cycle-error').style.display = 'block';
+    return;
+  }
+  if (cuota <= 0) {
+    document.getElementById('cycle-error').textContent = 'Ingresá la cuota del mes.';
+    document.getElementById('cycle-error').style.display = 'block';
+    return;
+  }
+
+  c.cuota = cuota;
+  c.initDate = startDate;
+  c.endDate = addOneMonthToDateStr(startDate);
+
+  saveCustomClient(id, c);
+  syncClientPublicFields(id, c);
+  // Ciclo nuevo arranca sin pagar, igual que en presencial — hasta que no
+  // se marque pagado, se considera el mes actual pendiente.
+  fbSet('clients/'+id+'/cicloPagado', false);
+
+  closeCycleModal();
+  renderClientsList();
+  renderQuotation(id, c);
+  if (acpState.clientId === id) acpRenderShell();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   // Cycle modal listeners
   var cycleClose = document.getElementById('cycle-modal-close');
@@ -3929,7 +4011,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (cycleClose) cycleClose.addEventListener('click', closeCycleModal);
   if (cycleCancel) cycleCancel.addEventListener('click', closeCycleModal);
-  if (cycleSave) cycleSave.addEventListener('click', saveCycle);
+  if (cycleSave) cycleSave.addEventListener('click', function() {
+    var c = CLIENTS[cycleModalClientId];
+    if (c && c.type === 'rutina-personalizada') saveCycleRutinaPersonalizada();
+    else saveCycle();
+  });
   if (cyclePrev) cyclePrev.addEventListener('click', function() {
     cycleViewMonth--;
     if (cycleViewMonth < 0) { cycleViewMonth = 11; cycleViewYear--; }
