@@ -844,7 +844,7 @@
 
     <div class="fin-form-row"><div class="fin-form-label">Duración del plan</div>
       <select class="fin-form-select" id="nc-plan-duracion" onchange="updateNCPlanDuracionUI()">
-        <option value="">Paga un mes a la vez (sin comprometerse a más)</option>
+        <option value="">Un mes</option>
         <option value="fijo">Plan con duración fija (ej: 3 o 6 meses)</option>
       </select>
     </div>
@@ -2014,7 +2014,7 @@ function renderAcpPagosHtml(clientId, c) {
   html += '<div class="card" style="margin-bottom:1rem;">';
   html += '<div class="card-label">📅 Duración del plan</div>';
   html += '<select id="acp-plan-tipo" onchange="acpTogglePlanMesesInput()" style="width:100%;padding:0.6rem;border-radius:10px;border:1.5px solid var(--border);font-size:0.8rem;font-family:\'DM Sans\',sans-serif;margin-bottom:0.5rem;">';
-  html += '<option value=""' + (!c.planMeses ? ' selected' : '') + '>Paga un mes a la vez (sin comprometerse a más)</option>';
+  html += '<option value=""' + (!c.planMeses ? ' selected' : '') + '>Un mes</option>';
   html += '<option value="fijo"' + (c.planMeses ? ' selected' : '') + '>Plan con duración fija (ej: 3 o 6 meses)</option>';
   html += '</select>';
   html += '<div id="acp-plan-meses-row" style="display:' + (c.planMeses ? 'block' : 'none') + ';margin-bottom:0.5rem;">';
