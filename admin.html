@@ -988,7 +988,7 @@
 
 <!-- ══════════ MODAL CONFIGURAR CICLO ══════════ -->
 <div id="cycle-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
-  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;">
+  <div id="cycle-modal-card" style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
       <div style="font-size:1rem;font-weight:700;color:var(--text);" id="cycle-modal-title">Configurar ciclo</div>
       <button id="cycle-modal-close" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;padding:0.25rem;">✕</button>
@@ -3936,6 +3936,14 @@ function openCycleModal(id) {
   var isRutinaPersonalizada = c.type === 'rutina-personalizada';
   document.getElementById('cycle-presencial-fields').style.display = isRutinaPersonalizada ? 'none' : 'block';
   document.getElementById('cycle-rp-fields').style.display = isRutinaPersonalizada ? 'block' : 'none';
+  // El formulario de presencial es largo (calendario, horario, etc.) y se
+  // ve bien como hoja que sube desde abajo. El de rutina personalizada es
+  // mucho más corto — pegado abajo del todo quedaba como flotando, chico
+  // y atascado en pantallas grandes, así que ese sí va centrado.
+  document.getElementById('cycle-modal').style.alignItems = isRutinaPersonalizada ? 'center' : 'flex-end';
+  var cycleCard = document.getElementById('cycle-modal-card');
+  cycleCard.style.borderRadius = isRutinaPersonalizada ? '20px' : '20px 20px 0 0';
+  cycleCard.style.margin = isRutinaPersonalizada ? '1.25rem' : '0';
 
   if (isRutinaPersonalizada) {
     document.getElementById('cycle-rp-cuota').value = c.cuota || '';
