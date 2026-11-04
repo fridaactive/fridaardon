@@ -921,6 +921,7 @@
 
       <!-- PERSONAL -->
       <div id="cp-personal" class="cp-content">
+        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa la clienta desde su ficha en la app.</div>
         <div class="fin-form-row"><div class="fin-form-label">Nombre completo</div><input class="fin-form-input cp-field" data-field="nombre" type="text" placeholder="Nombre completo"></div>
         <div style="display:flex;gap:0.6rem;">
           <div style="flex:1;" class="fin-form-row"><div class="fin-form-label">Edad</div><input class="fin-form-input cp-field" data-field="edad" type="number" placeholder="Ej: 28"></div>
@@ -933,6 +934,7 @@
 
       <!-- SALUD -->
       <div id="cp-salud" class="cp-content" style="display:none;">
+        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa la clienta desde su ficha en la app.</div>
         <div class="fin-form-row"><div class="fin-form-label">Patologías / Enfermedades</div><textarea class="fin-form-input cp-field" data-field="patologias" rows="3" placeholder="Ej: Hipertensión, diabetes..." style="resize:vertical;"></textarea></div>
         <div class="fin-form-row"><div class="fin-form-label">Lesiones o limitaciones físicas</div><textarea class="fin-form-input cp-field" data-field="lesiones" rows="3" placeholder="Ej: LCA derecha, dolor lumbar..." style="resize:vertical;"></textarea></div>
         <div class="fin-form-row"><div class="fin-form-label">Medicamentos</div><textarea class="fin-form-input cp-field" data-field="medicamentos" rows="2" placeholder="Ej: Metformina..." style="resize:vertical;"></textarea></div>
@@ -945,6 +947,7 @@
           <div class="fin-form-label">Días de entrenamiento por semana</div>
           <div id="cp-dias-pills" style="display:flex;gap:0.4rem;flex-wrap:wrap;"></div>
         </div>
+        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Lo de abajo lo completa la clienta desde su ficha en la app — los días de arriba sí los armás vos.</div>
         <div class="fin-form-row"><div class="fin-form-label">Objetivo principal</div><input class="fin-form-input cp-field" data-field="objetivo" type="text" placeholder="Ej: Pérdida de grasa, fuerza..."></div>
         <div class="fin-form-row"><div class="fin-form-label">Nivel de condición física</div>
           <select class="fin-form-select cp-field" data-field="nivel">
@@ -1405,7 +1408,7 @@
   <div class="acp-header">
     <button class="acp-back-btn" onclick="closeAdminClientProfile()">←</button>
     <div class="acp-header-title">Perfil de clienta</div>
-    <button class="acp-back-btn" onclick="if(acpState.clientId) openClientProfile(acpState.clientId);" title="Editar datos de la clienta">⋮</button>
+    <button class="acp-back-btn" onclick="if(acpState.clientId) openClientProfile(acpState.clientId);" title="Ver la ficha de la clienta" style="font-size:0.72rem;font-weight:700;white-space:nowrap;">📋 Ficha</button>
   </div>
   <div class="acp-content" id="acp-content"></div>
 </div>
@@ -3313,27 +3316,56 @@ function saveClientProfile(id, profile) {
 
 var cpSelectedDays = [];
 
+// Personal/Salud y (dentro de Entreno) objetivo/nivel/notas ahora las
+// llena la clienta desde su propia "Ficha" en la app — acá se muestran
+// de solo lectura. Lo único que seguís armando vos en esta pantalla son
+// los días de entrenamiento por semana (para el calendario) y los pagos.
+var CP_FICHA_READONLY_SELECTOR = '#cp-personal .cp-field:not([data-field="nombre"]), #cp-salud .cp-field, #cp-entrenamiento .cp-field[data-field="objetivo"], #cp-entrenamiento .cp-field[data-field="nivel"], #cp-entrenamiento .cp-field[data-field="notasEntreno"]';
+var cpIsRutinaType = false;
+
 function openClientProfile(id) {
   var c = CLIENTS[id];
   if (!c) return;
-  var profile = getClientProfile(id);
+  var uid = CLIENT_LINKS[id];
 
   document.getElementById('cp-title').textContent = c.name;
 
-  // Load fields
-  document.querySelectorAll('.cp-field').forEach(function(el) {
-    var field = el.getAttribute('data-field');
-    var val = profile[field] || '';
-    if (el.tagName === 'SELECT') {
-      el.value = val;
-    } else {
-      el.value = val;
-    }
+  var nombreEl = document.querySelector('#cp-personal .cp-field[data-field="nombre"]');
+  if (nombreEl) {
+    nombreEl.setAttribute('readonly', 'readonly');
+    nombreEl.style.background = '#f7f8fb';
+    nombreEl.style.color = 'var(--muted)';
+    nombreEl.value = c.name || '';
+  }
+
+  // Un input type="number"/"date" descarta en silencio cualquier valor que
+  // no sea válido para su tipo — así que el texto de "sin completar" va en
+  // el placeholder, nunca en el value, para que funcione en todos los campos.
+  var fichaEls = document.querySelectorAll(CP_FICHA_READONLY_SELECTOR);
+  fichaEls.forEach(function(el) {
+    if (el.tagName === 'SELECT') el.disabled = true; else el.setAttribute('readonly', 'readonly');
+    el.style.background = '#f7f8fb';
+    el.style.color = 'var(--muted)';
+    el.value = '';
+    if (el.tagName !== 'SELECT') el.placeholder = uid ? 'Sin completar todavía.' : 'Todavía no vinculó su portal.';
   });
+  if (uid) {
+    fbGet('clientasPortal/' + uid + '/ficha', function(ficha) {
+      ficha = ficha || {};
+      var values = Object.assign({}, ficha.personal || {}, ficha.salud || {}, ficha.entreno || {});
+      values.notasEntreno = (ficha.entreno || {}).notas || '';
+      fichaEls.forEach(function(el) {
+        var val = values[el.getAttribute('data-field')];
+        if (el.tagName !== 'SELECT') el.value = val || '';
+        else el.value = val || '';
+      });
+    });
+  }
 
   // Días/semana — solo aplica a "Rutina personalizada": presencial y online
   // 1:1 ya calculan esto automáticamente del calendario de sesiones.
   var isRutinaType = c.type === 'rutina-personalizada';
+  cpIsRutinaType = isRutinaType;
   document.getElementById('cp-dias-row').style.display = isRutinaType ? '' : 'none';
   if (isRutinaType) {
     cpSelectedDays = (c.days || []).slice();
@@ -3348,13 +3380,9 @@ function openClientProfile(id) {
 
   document.getElementById('client-profile-modal').style.display = 'flex';
 
-  // Save button
+  // Save button — ahora solo guarda los días de entrenamiento por semana
+  // (lo único que sigue siendo admin-editable en estas pestañas).
   document.getElementById('cp-save-btn').onclick = function() {
-    var profile = {};
-    document.querySelectorAll('.cp-field').forEach(function(el) {
-      profile[el.getAttribute('data-field')] = el.value;
-    });
-    saveClientProfile(id, profile);
     if (isRutinaType) saveClientDaysPerWeek(id, cpSelectedDays.slice());
     // Flash confirmation
     var btn = document.getElementById('cp-save-btn');
@@ -3444,9 +3472,14 @@ function switchCpTab(tabId) {
     activeBtn.style.borderBottomColor = tabId === 'cp-danger' ? '#c44' : 'var(--blue)';
     activeBtn.style.color = tabId === 'cp-danger' ? '#c44' : 'var(--blue)';
   }
-  // Hide save button on danger and pagos tabs
+  // Guardar cambios ya no aplica a Personal/Salud (de solo lectura), y en
+  // Entreno solo sirve si hay días de entrenamiento que vos administrás
+  // (rutina personalizada) — para las demás no queda nada que guardar ahí.
   var saveWrap = document.getElementById('cp-save-wrap');
-  if (saveWrap) saveWrap.style.display = (tabId === 'cp-danger' || tabId === 'cp-pagos') ? 'none' : 'block';
+  if (saveWrap) {
+    var showSave = tabId === 'cp-entrenamiento' && cpIsRutinaType;
+    saveWrap.style.display = showSave ? 'block' : 'none';
+  }
 }
 
 function deleteClient(id) {
