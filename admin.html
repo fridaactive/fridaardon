@@ -6757,6 +6757,12 @@ function openRutinaEditor(clientId) {
       showScreen('clientes');
       openAdminClientProfile(clientId);
     };
+    // Presencial y online 1:1 nunca ven la pestaña Rutina desde su app (la
+    // lleva Frida aparte), así que el mensaje de bienvenida y las
+    // aclaraciones no le sirven a nadie ahí — solo estorban al armar la
+    // rutina. Se muestran únicamente para rutina personalizada.
+    var msgWrap = document.getElementById('rutina-msg-wrap');
+    if (msgWrap) msgWrap.style.display = c.type === 'rutina-personalizada' ? '' : 'none';
     var msgInicialEl = document.getElementById('rutina-msg-inicial');
     var aclaracionesEl = document.getElementById('rutina-aclaraciones');
     msgInicialEl.value = rutinaData.mensajeInicial || '';
@@ -7953,7 +7959,7 @@ function renderAhorrosMes() {
   <!-- EDIT MODE -->
   <div id="rutina-edit-mode" style="display:none;">
     <div class="clients-wrap" style="padding-top:0;">
-      <div style="margin-bottom:1.1rem;">
+      <div style="margin-bottom:1.1rem;" id="rutina-msg-wrap">
         <div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">💬 Mensaje de bienvenida (aparece arriba de la rutina)</div>
         <textarea id="rutina-msg-inicial" class="fin-form-input" style="width:100%;min-height:3.5rem;resize:vertical;font-family:'DM Sans',sans-serif;margin-bottom:0.9rem;" placeholder="Ej: ¡Hola! Acá les dejo su nueva rutina, espero se la disfruten..."></textarea>
         <div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">⚡ Aclaraciones importantes (una por línea)</div>
