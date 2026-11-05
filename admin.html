@@ -6763,16 +6763,29 @@ function openRutinaEditor(clientId) {
     // notas internas para Frida (siguen siendo los mismos campos, solo
     // cambia para qué sirven según la modalidad).
     var esRutinaPersonalizada = c.type === 'rutina-personalizada';
+    var esPresencial = c.type === 'presencial';
     var msgLabelEl = document.getElementById('rutina-msg-label');
     var aclaracionesLabelEl = document.getElementById('rutina-aclaraciones-label');
     var msgInicialEl = document.getElementById('rutina-msg-inicial');
     var aclaracionesEl = document.getElementById('rutina-aclaraciones');
     if (esRutinaPersonalizada) {
+      msgLabelEl.style.display = '';
+      msgInicialEl.style.display = '';
       msgLabelEl.textContent = '💬 Mensaje de bienvenida (aparece arriba de la rutina)';
       msgInicialEl.placeholder = 'Ej: ¡Hola! Acá les dejo su nueva rutina, espero se la disfruten...';
       aclaracionesLabelEl.textContent = '⚡ Aclaraciones importantes (una por línea)';
       aclaracionesEl.placeholder = 'Ej: 5 días de hipertrofia + 2 días de cardio.\nCuando veas REST-PAUSE: descansá 10 segundos y continuá sin soltar el ejercicio.';
+    } else if (esPresencial) {
+      // Presencial: un solo cuadro simple de aclaraciones para Frida —
+      // nada de "mensaje de bienvenida", que no tiene sentido si la
+      // clienta nunca entra a ver la rutina.
+      msgLabelEl.style.display = 'none';
+      msgInicialEl.style.display = 'none';
+      aclaracionesLabelEl.textContent = '📝 Aclaraciones';
+      aclaracionesEl.placeholder = 'Ej: Cuidado con la rodilla derecha.\nPrefiere mancuernas a barra.';
     } else {
+      msgLabelEl.style.display = '';
+      msgInicialEl.style.display = '';
       msgLabelEl.textContent = '📝 Nota general (solo para vos, la clienta no la ve)';
       msgInicialEl.placeholder = 'Ej: Rutina de fuerza, revisar carga cada 4 semanas...';
       aclaracionesLabelEl.textContent = '📝 Aclaraciones para vos (una por línea)';
@@ -7260,10 +7273,23 @@ function renderRutinaEditor() {
   }
   html += '</div>';
 
-  // Nota puntual de este día — a diferencia del "Mensaje de Frida" (que es
-  // para toda la rutina), esta se guarda en el propio día y le aparece a
-  // la clienta solo quien abra justo este día.
-  html += '<textarea id="rutina-day-nota" class="fin-form-input" style="width:100%;min-height:3rem;resize:vertical;font-family:\'DM Sans\',sans-serif;margin-bottom:1rem;" placeholder="Nota para este día en particular (opcional) — le aparece a la clienta solo en este día">'+escHtml(day.notaAdmin || '')+'</textarea>';
+  var tipoClienteDia = (CLIENTS[rutinaClientId] || {}).type;
+  var esPresencialDia = tipoClienteDia === 'presencial';
+
+  if (esPresencialDia) {
+    // Presencial no ve la pestaña Rutina, así que acá no hace falta una
+    // nota "para la clienta" — en cambio, lo que Frida necesita de un
+    // vistazo antes de bajarse del carro es qué equipo llevar ese día.
+    html += '<div style="background:#fff9db;border:1px solid #f5d76e;border-radius:10px;padding:0.75rem;margin-bottom:1rem;">';
+    html += '<div style="font-size:0.65rem;font-weight:700;color:#8a6d00;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">🎒 Equipo a llevar este día</div>';
+    html += '<textarea id="rutina-day-equipo" class="fin-form-input" style="width:100%;min-height:2.75rem;resize:vertical;font-family:\'DM Sans\',sans-serif;background:#fffdf0;border-color:#f0d878;" placeholder="Ej: 2 mancuernas de 8kg, banda elástica, step, bosu...">'+escHtml(day.equipo || '')+'</textarea>';
+    html += '</div>';
+  } else {
+    // Nota puntual de este día — a diferencia del "Mensaje de Frida" (que es
+    // para toda la rutina), esta se guarda en el propio día y le aparece a
+    // la clienta solo quien abra justo este día.
+    html += '<textarea id="rutina-day-nota" class="fin-form-input" style="width:100%;min-height:3rem;resize:vertical;font-family:\'DM Sans\',sans-serif;margin-bottom:1rem;" placeholder="Nota para este día en particular (opcional) — le aparece a la clienta solo en este día">'+escHtml(day.notaAdmin || '')+'</textarea>';
+  }
 
   // Blocks
   (day.blocks || []).forEach(function(block) {
@@ -7417,10 +7443,19 @@ function renderRutinaEditor() {
   // Event: save per-day note — auto-saves on blur, same pattern as el
   // nombre del día.
   var dayNotaInput = document.getElementById('rutina-day-nota');
-  dayNotaInput.addEventListener('blur', function() {
-    rutinaData.days[rutinaCurrentDay].notaAdmin = this.value.trim() || null;
-    saveRutinaData(rutinaClientId, rutinaData);
-  });
+  if (dayNotaInput) {
+    dayNotaInput.addEventListener('blur', function() {
+      rutinaData.days[rutinaCurrentDay].notaAdmin = this.value.trim() || null;
+      saveRutinaData(rutinaClientId, rutinaData);
+    });
+  }
+  var dayEquipoInput = document.getElementById('rutina-day-equipo');
+  if (dayEquipoInput) {
+    dayEquipoInput.addEventListener('blur', function() {
+      rutinaData.days[rutinaCurrentDay].equipo = this.value.trim() || null;
+      saveRutinaData(rutinaClientId, rutinaData);
+    });
+  }
 
   // Event: delete day
   var delDayBtn = document.getElementById('rutina-del-day');
