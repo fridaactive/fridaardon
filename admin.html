@@ -168,6 +168,15 @@
 
   .sub-hero { background:var(--blue); padding:1.75rem 1.5rem 1.5rem; position:relative; overflow:hidden; }
   .sub-hero::before { content:''; position:absolute; top:-40px; right:-40px; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,0.05); }
+  /* En pantallas grandes (compu/iPad), el contenido de abajo (.clients-wrap)
+     ya se centra en una columna de 720px — sin esto, el encabezado azul se
+     queda estirado a todo el ancho mientras el resto de la pantalla (como
+     la tarjeta de "equipo a llevar" dentro de Rutina) queda angosta y
+     descentrada, con un "escalón" feo entre ambas. Centrarlo igual que el
+     contenido lo deja parejo. */
+  @media (min-width: 760px) {
+    .sub-hero { max-width:720px; margin:0 auto; border-radius:0 0 20px 20px; }
+  }
   .back-row { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.25rem; position:relative; z-index:1; }
   .back-btn { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:100px; padding:0.3rem 0.85rem; font-size:0.65rem; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 
