@@ -3738,11 +3738,7 @@ function canjearBeneficio(beneficioId) {
 function loadPlanInfo() {
   if (!currentClientId) { return; }
   db().ref('clients/' + currentClientId).once('value').then(function(snap) {
-    var val = snap.val();
-    if (!val || !val.initDate) {
-      alert('Diagnóstico: no se encontró plan activo.\nID interno: ' + currentClientId + '\nDatos leídos: ' + JSON.stringify(val) + '\nAvisale a Claude con este mensaje.');
-    }
-    renderPlanCountdown(val);
+    renderPlanCountdown(snap.val());
   }).catch(function(e) {
     // El permiso para leer su propio plan depende de que
     // client_links/{clientId} apunte a este uid — si una clienta se
@@ -3754,16 +3750,14 @@ function loadPlanInfo() {
       db().ref('client_links/' + currentClientId).set(currentUid).then(function() {
         return db().ref('clients/' + currentClientId).once('value');
       }).then(function(snap2) {
-        var val2 = snap2.val();
-        renderPlanCountdown(val2);
+        renderPlanCountdown(snap2.val());
       }).catch(function(e2) {
-        var paso = (e2 && e2.message && e2.message.indexOf('client_links') !== -1) ? 'al escribir el vínculo' : 'al releer el plan';
-        alert('Diagnóstico: error ' + paso + ' (tras intentar reparar).\nID interno: ' + currentClientId + '\nUid: ' + currentUid + '\nError: ' + (e2 && e2.message ? e2.message : e2) + '\nAvisale a Claude con este mensaje.');
+        console.warn('loadPlanInfo retry error', e2);
         renderPlanCountdown(null);
       });
       return;
     }
-    alert('Diagnóstico: error al leer el plan.\nID interno: ' + currentClientId + '\nUid: ' + (currentUid || '(ninguno)') + '\nError: ' + (e && e.message ? e.message : e) + '\nAvisale a Claude con este mensaje.');
+    console.warn('loadPlanInfo error', e);
     renderPlanCountdown(null);
   });
 }
