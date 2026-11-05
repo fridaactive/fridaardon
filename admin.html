@@ -6909,13 +6909,26 @@ function openRutinaEditor(clientId) {
       openAdminClientProfile(clientId);
     };
     // Presencial y online 1:1 nunca ven la pestaña Rutina desde su app (la
-    // lleva Frida aparte), así que el mensaje de bienvenida y las
-    // aclaraciones no le sirven a nadie ahí — solo estorban al armar la
-    // rutina. Se muestran únicamente para rutina personalizada.
-    var msgWrap = document.getElementById('rutina-msg-wrap');
-    if (msgWrap) msgWrap.style.display = c.type === 'rutina-personalizada' ? '' : 'none';
+    // lleva Frida aparte) — así que estos dos campos no le sirven como
+    // mensaje para la clienta. En vez de ocultarlos, se reetiquetan como
+    // notas internas para Frida (siguen siendo los mismos campos, solo
+    // cambia para qué sirven según la modalidad).
+    var esRutinaPersonalizada = c.type === 'rutina-personalizada';
+    var msgLabelEl = document.getElementById('rutina-msg-label');
+    var aclaracionesLabelEl = document.getElementById('rutina-aclaraciones-label');
     var msgInicialEl = document.getElementById('rutina-msg-inicial');
     var aclaracionesEl = document.getElementById('rutina-aclaraciones');
+    if (esRutinaPersonalizada) {
+      msgLabelEl.textContent = '💬 Mensaje de bienvenida (aparece arriba de la rutina)';
+      msgInicialEl.placeholder = 'Ej: ¡Hola! Acá les dejo su nueva rutina, espero se la disfruten...';
+      aclaracionesLabelEl.textContent = '⚡ Aclaraciones importantes (una por línea)';
+      aclaracionesEl.placeholder = 'Ej: 5 días de hipertrofia + 2 días de cardio.\nCuando veas REST-PAUSE: descansá 10 segundos y continuá sin soltar el ejercicio.';
+    } else {
+      msgLabelEl.textContent = '📝 Nota general (solo para vos, la clienta no la ve)';
+      msgInicialEl.placeholder = 'Ej: Rutina de fuerza, revisar carga cada 4 semanas...';
+      aclaracionesLabelEl.textContent = '📝 Aclaraciones para vos (una por línea)';
+      aclaracionesEl.placeholder = 'Ej: Cuidado con la rodilla derecha.\nPrefiere mancuernas a barra.';
+    }
     msgInicialEl.value = rutinaData.mensajeInicial || '';
     aclaracionesEl.value = (rutinaData.aclaraciones || []).join('\n');
     msgInicialEl.onblur = function() {
@@ -8111,10 +8124,10 @@ function renderAhorrosMes() {
   <div id="rutina-edit-mode" style="display:none;">
     <div class="clients-wrap" style="padding-top:0;">
       <div style="margin-bottom:1.1rem;" id="rutina-msg-wrap">
-        <div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">💬 Mensaje de bienvenida (aparece arriba de la rutina)</div>
-        <textarea id="rutina-msg-inicial" class="fin-form-input" style="width:100%;min-height:3.5rem;resize:vertical;font-family:'DM Sans',sans-serif;margin-bottom:0.9rem;" placeholder="Ej: ¡Hola! Acá les dejo su nueva rutina, espero se la disfruten..."></textarea>
-        <div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">⚡ Aclaraciones importantes (una por línea)</div>
-        <textarea id="rutina-aclaraciones" class="fin-form-input" style="width:100%;min-height:4.5rem;resize:vertical;font-family:'DM Sans',sans-serif;" placeholder="Ej: 5 días de hipertrofia + 2 días de cardio.&#10;Cuando veas REST-PAUSE: descansá 10 segundos y continuá sin soltar el ejercicio."></textarea>
+        <div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;" id="rutina-msg-label">💬 Mensaje de bienvenida (aparece arriba de la rutina)</div>
+        <textarea id="rutina-msg-inicial" class="fin-form-input" style="width:100%;min-height:3.5rem;resize:vertical;font-family:'DM Sans',sans-serif;margin-bottom:0.9rem;"></textarea>
+        <div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;" id="rutina-aclaraciones-label">⚡ Aclaraciones importantes (una por línea)</div>
+        <textarea id="rutina-aclaraciones" class="fin-form-input" style="width:100%;min-height:4.5rem;resize:vertical;font-family:'DM Sans',sans-serif;"></textarea>
       </div>
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center;">
         <div id="rutina-day-tabs" style="display:flex;gap:0.5rem;flex-wrap:wrap;flex:1;"></div>
