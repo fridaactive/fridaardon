@@ -6549,9 +6549,12 @@ function renderRutinaView() {
     html += '<div class="rv-ex-table">';
 
     if (esPresencialView && day.equipo) {
+      var equipoItems = day.equipo.split('\n').map(function(l) { return l.trim(); }).filter(Boolean);
       html += '<div style="background:#fff9db;border:1px solid #f5d76e;border-radius:10px;padding:0.75rem;">';
-      html += '<div style="font-size:0.6rem;font-weight:700;color:#8a6d00;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">🎒 Equipo a llevar</div>';
-      html += '<div style="font-size:0.8rem;color:#5c4a00;white-space:pre-wrap;">' + escHtml(day.equipo) + '</div>';
+      html += '<div style="font-size:0.6rem;font-weight:700;color:#8a6d00;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem;">🎒 Equipo a llevar (' + equipoItems.length + ')</div>';
+      equipoItems.forEach(function(item, i) {
+        html += '<div style="display:flex;gap:0.5rem;align-items:flex-start;font-size:0.8rem;color:#5c4a00;' + (i > 0 ? 'margin-top:0.3rem;' : '') + '"><span style="font-weight:700;flex-shrink:0;">' + (i + 1) + '.</span><span>' + escHtml(item) + '</span></div>';
+      });
       html += '</div>';
     }
 
@@ -7289,8 +7292,8 @@ function renderRutinaEditor() {
     // nota "para la clienta" — en cambio, lo que Frida necesita de un
     // vistazo antes de bajarse del carro es qué equipo llevar ese día.
     html += '<div style="background:#fff9db;border:1px solid #f5d76e;border-radius:10px;padding:0.75rem;margin-bottom:1rem;">';
-    html += '<div style="font-size:0.65rem;font-weight:700;color:#8a6d00;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">🎒 Equipo a llevar este día</div>';
-    html += '<textarea id="rutina-day-equipo" class="fin-form-input" style="width:100%;min-height:2.75rem;resize:vertical;font-family:\'DM Sans\',sans-serif;background:#fffdf0;border-color:#f0d878;" placeholder="Ej: 2 mancuernas de 8kg, banda elástica, step, bosu...">'+escHtml(day.equipo || '')+'</textarea>';
+    html += '<div style="font-size:0.65rem;font-weight:700;color:#8a6d00;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">🎒 Equipo a llevar este día (uno por línea)</div>';
+    html += '<textarea id="rutina-day-equipo" class="fin-form-input" style="width:100%;min-height:2.75rem;resize:vertical;font-family:\'DM Sans\',sans-serif;background:#fffdf0;border-color:#f0d878;" placeholder="Ej:&#10;Mancuernas de 8kg&#10;Banda elástica&#10;Step">'+escHtml(day.equipo || '')+'</textarea>';
     html += '</div>';
   } else {
     // Nota puntual de este día — a diferencia del "Mensaje de Frida" (que es
