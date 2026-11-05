@@ -168,6 +168,24 @@
 
   .sub-hero { background:var(--blue); padding:1.75rem 1.5rem 1.5rem; position:relative; overflow:hidden; }
   .sub-hero::before { content:''; position:absolute; top:-40px; right:-40px; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,0.05); }
+  /* En pantallas grandes (compu/iPad), el contenido de abajo (.clients-wrap)
+     ya se centra en una columna de 720px — sin esto, el encabezado azul se
+     queda estirado a todo el ancho mientras el resto de la pantalla (como
+     la tarjeta de "equipo a llevar" dentro de Rutina) queda angosta y
+     descentrada, con un "escalón" feo entre ambas. Centrarlo igual que el
+     contenido lo deja parejo. */
+  @media (min-width: 760px) {
+    .sub-hero { max-width:720px; margin:0 auto; border-radius:0 0 20px 20px; }
+  }
+  /* La pantalla de Rutina usa un ancho más generoso en pantallas grandes
+     (lista de días + detalle lado a lado), así que acá se pisa el límite
+     de 720px de arriba para que el encabezado azul combine con el
+     contenido en vez de quedar más angosto que él. */
+  @media (min-width: 760px) {
+    #rutina-editor .sub-hero,
+    #rutina-editor #rutina-view-mode.clients-wrap,
+    #rutina-editor #rutina-edit-mode .clients-wrap { max-width:1360px; }
+  }
   .back-row { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.25rem; position:relative; z-index:1; }
   .back-btn { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:100px; padding:0.3rem 0.85rem; font-size:0.65rem; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 
@@ -6130,6 +6148,12 @@ var rutinaClientId = null;
 var rutinaData = {};
 var rutinaCurrentDay = 0;
 var rutinaMode = 'view'; // 'view' or 'edit'
+var rvViewDay = 0; // día elegido en la vista de lista + detalle (modo view)
+
+function rvSelectDay(idx) {
+  rvViewDay = idx;
+  renderRutinaView();
+}
 
 var RUTINAS_VERSION = '3.3';
 var DEFAULT_RUTINAS = {
@@ -6494,6 +6518,36 @@ function renderRutinaView() {
   html += '.rv-notas-box{background:var(--blue-lt);border-radius:12px;border:1.5px solid var(--border-b);overflow:hidden;}';
   html += '.rv-notas-hdr{background:var(--blue);color:#fff;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;padding:0.35rem 0.9rem;}';
   html += '.rv-notas-ta{width:100%;border:none;background:transparent;padding:0.75rem 0.9rem;font-size:0.8rem;font-family:DM Sans,sans-serif;color:var(--text);resize:none;outline:none;min-height:4rem;}';
+  // Vista tipo "correo": lista de días a la izquierda, detalle del día
+  // elegido a la derecha — en celular queda apilado (lista arriba, detalle
+  // abajo); desde tablet/compu para arriba pasa a dos columnas y usa todo
+  // el ancho de la pantalla, en vez de quedar una columna angosta con
+  // espacio en blanco a los costados.
+  html += '.rv-split{display:block;}';
+  html += '.rv-days-col{border-bottom:1.5px solid var(--border);padding-bottom:1rem;margin-bottom:1rem;}';
+  html += '.rv-day-row{display:flex;align-items:center;gap:0.9rem;padding:0.85rem 0.9rem;border-radius:12px;cursor:pointer;margin-bottom:0.4rem;-webkit-tap-highlight-color:transparent;}';
+  html += '.rv-day-row.active{background:var(--blue);}';
+  html += '.rv-day-row-num{font-size:1.3rem;font-weight:700;color:var(--blue);line-height:1;min-width:2.1rem;}';
+  html += '.rv-day-row.active .rv-day-row-num{color:#F5ECCB;}';
+  html += '.rv-day-row-title{font-size:0.92rem;font-weight:700;color:var(--text);}';
+  html += '.rv-day-row.active .rv-day-row-title{color:#fff;}';
+  html += '.rv-day-row-meta{font-size:0.68rem;color:var(--muted);margin-top:0.1rem;}';
+  html += '.rv-day-row.active .rv-day-row-meta{color:rgba(255,255,255,0.7);}';
+  html += '.rv-day-panel{display:flex;flex-direction:column;gap:0.6rem;}';
+  html += '@media (min-width:760px){';
+  html += '.rv-split{display:grid;grid-template-columns:280px 1fr;gap:2.5rem;align-items:start;}';
+  html += '.rv-days-col{border-bottom:none;padding-bottom:0;margin-bottom:0;border-right:1.5px solid var(--border);padding-right:1.25rem;}';
+  html += '.rv-detail-col{max-width:1040px;}';
+  html += '.rv-day-row{padding:1.1rem 1.1rem;margin-bottom:0.5rem;}';
+  html += '.rv-day-row-num{font-size:1.5rem;}';
+  html += '.rv-day-row-title{font-size:1.05rem;}';
+  html += '.rv-day-row-meta{font-size:0.78rem;}';
+  html += '.rv-blq-title{font-size:0.8rem;}';
+  html += '.rv-blq-sub{font-size:0.68rem;}';
+  html += '.rv-blq-item{padding:0.95rem 1.1rem;}';
+  html += '.rv-ex-nm{font-size:0.92rem;}';
+  html += '.rv-ex-num{width:2.1rem;height:2.1rem;font-size:0.78rem;}';
+  html += '}';
   html += '</style>';
 
   // Hero section (blue background inside view)
@@ -6532,21 +6586,26 @@ function renderRutinaView() {
   // Plan
   html += '<div class="rv-sec-hdr"><div class="rv-sec-label">Plan de entrenamiento</div><div class="rv-sec-line"></div></div>';
 
-  // Days as collapsible details
+  // Lista de días a la izquierda (o arriba, en celular) + detalle del día
+  // elegido — en vez de un acordeón donde había que abrir cada día.
+  if (rvViewDay >= days.length) rvViewDay = 0;
+  html += '<div class="rv-split">';
+  html += '<div class="rv-days-col">';
+  days.forEach(function(day, dayIdx) {
+    var blockCount = (day.blocks || []).filter(function(b){ return b.exercises && b.exercises.length > 0; }).length;
+    var meta = blockCount + ' bloque' + (blockCount !== 1 ? 's' : '');
+    html += '<div class="rv-day-row' + (dayIdx === rvViewDay ? ' active' : '') + '" onclick="rvSelectDay(' + dayIdx + ')">';
+    html += '<div class="rv-day-row-num">' + String(dayIdx+1).padStart(2,'0') + '</div>';
+    html += '<div><div class="rv-day-row-title">' + escHtml(day.name) + '</div><div class="rv-day-row-meta">' + meta + '</div></div>';
+    html += '</div>';
+  });
+  html += '</div>'; // close rv-days-col
+  html += '<div class="rv-detail-col">';
+
   days.forEach(function(day, dayIdx) {
     var blocks = (day.blocks || []).filter(function(b){ return b.exercises && b.exercises.length > 0; });
-    var blockCount = blocks.length;
-    var meta = blockCount + ' bloque' + (blockCount !== 1 ? 's' : '');
 
-    html += '<details class="rv-details">';
-    html += '<summary class="rv-summary" style="list-style:none;">';
-    html += '<div class="rv-dia-num">' + String(dayIdx+1).padStart(2,'0') + '</div>';
-    html += '<div class="rv-dia-info"><div class="rv-dia-title">' + escHtml(day.name) + '</div>';
-    html += '<div class="rv-dia-meta"><span>' + meta + '</span></div></div>';
-    html += '<span class="rv-dia-badge">Día ' + (dayIdx+1) + '</span>';
-    html += '<span class="rv-chevron">▾</span>';
-    html += '</summary>';
-    html += '<div class="rv-ex-table">';
+    html += '<div class="rv-day-panel" style="display:' + (dayIdx === rvViewDay ? 'flex' : 'none') + ';">';
 
     if (esPresencialView && day.equipo) {
       var equipoItems = day.equipo.split('\n').map(function(l) { return l.trim(); }).filter(Boolean);
@@ -6629,8 +6688,11 @@ function renderRutinaView() {
     html += '<textarea class="rv-notas-ta" data-dayid="' + escHtml(day.id) + '" placeholder="Observaciones, ajustes, cómo se sintió ' + escHtml(nameParts[0]) + ' hoy..."></textarea>';
     html += '</div>';
 
-    html += '</div></details>'; // close ex-table + details
+    html += '</div>'; // close rv-day-panel
   });
+
+  html += '</div>'; // close rv-detail-col
+  html += '</div>'; // close rv-split
 
   viewEl.innerHTML = html;
 
@@ -6726,6 +6788,7 @@ function openRutinaEditor(clientId) {
   closeAdminClientProfile();
   rutinaClientId = clientId;
   rutinaCurrentDay = 0;
+  rvViewDay = 0;
 
   // Load from Firebase first, then localStorage, then defaults.
   // Re-authenticate right before reading — a long-idle tab can hold an
