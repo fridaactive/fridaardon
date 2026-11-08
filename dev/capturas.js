@@ -42,7 +42,9 @@ const server = http.createServer((req, res) => {
   await shot('01_pantalla_inicial');
   await page.evaluate(() => typeof showScreen === 'function' && showScreen('screen-dashboard'));
   await page.waitForTimeout(800);
-  await shot('02_rutina', true);
+  await shot('02_inicio', true);
+  await page.evaluate(() => showTab('tab-rutina')); await page.waitForTimeout(400);
+  await shot('02b_rutina', true);
   const day = await page.$('#rutina-content summary.rt-day-summary');
   if (day) { await day.click(); await page.waitForTimeout(600); await shot('03_dia', true); }
   await page.evaluate(() => showTab('tab-perfil')); await page.waitForTimeout(500); await shot('04_perfil', true);
