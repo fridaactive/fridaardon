@@ -81,9 +81,9 @@
       "idea": "Tu día real en orden: estudio y trabajo en la mañana, gym, pasas por tu almuerzo a Tu Madre y te lo comes en el carro (on the go), sesión a domicilio con tu clienta y clase en ciclo. Todo con música de fondo, y solo una toma con tu voz: la recomendación del bowl, que se siente como un consejo tuyo y no como un anuncio.",
       "tomas": [
         {
-          "graba": "HOOK (primeros 3 segundos, se arma en edición): 4 cortes muy rápidos con lo mejor del día: tu clase en ciclo, el bocado del bowl en el carro, tu equipo en el baúl y tú entrenando",
+          "graba": "HOOK (primeros 3 segundos): en la mañana, tú mirando a cámara con una sonrisa y un gesto de \"ven\" con la mano, como invitando. Debajo, en edición, pasan muy rápido 3 momentos del día (tu entreno, el bowl, tu clase) para que se sepa qué viene",
           "habla": false,
-          "dice": "Texto: \"Estudio, entreno, clientas y una clase… ¿y a qué hora **COMO**?\""
+          "dice": "Texto: \"Acompáñame a mi *día de trabajo*\""
         },
         {
           "graba": "En la mañana: tú estudiando con tu café, con luz natural",
@@ -152,7 +152,7 @@
         }
       ],
       "notas": [
-        "El hook no se graba aparte: se arma en edición con las mejores tomas del día. Por eso, graba cada momento con ganas: tu clase, el bocado y el baúl pueden terminar en los primeros 3 segundos.",
+        "El hook es tu invitación: tu cara y tu gesto de \"ven\" en la mañana, con un adelanto muy rápido de 3 momentos del día que se arma en edición. Graba cada momento con ganas, porque cualquiera puede salir en ese adelanto.",
         "Los textos son sugerencias: cámbialos con tus palabras en ✏️ Editar guion.",
         "El orden del video no tiene que ser el orden real del día: se presenta como si el gym fuera en la mañana y Tu Madre justo después.",
         "Música de fondo en todo el video; solo en la toma 6 se escucha tu voz. Para que la música baje solo ahí, avísale al Estudio de video.",
