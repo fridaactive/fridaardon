@@ -67,9 +67,9 @@
     },
     {
       "id": "v2026-11-13-tumadre",
-      "titulo": "Un martes conmigo (con Tu Madre)",
+      "titulo": "Mi día on the go (con Tu Madre)",
       "pilar": "Lifestyle y alimentación (colaboración)",
-      "formato": "Reel tipo mini vlog de un día",
+      "formato": "Reel tipo mini vlog con música y una toma hablando",
       "duracion": "25 a 30 s",
       "publicar": {
         "fecha": "2026-11-13",
@@ -78,76 +78,84 @@
       "grabar": "2026-11-10",
       "editar": "2026-11-11",
       "borrador": false,
-      "idea": "Un día real de entrenadora: estudio, trabajo, entreno, clienta a domicilio y clase en ciclo. En medio, pasas por Tu Madre por tu almuerzo y te lo comes después de entrenar. El producto aparece como lo que te resuelve un día largo. Pedido: Sivar Bowl + shake.",
+      "idea": "Tu día real en orden: estudio y trabajo en la mañana, gym, pasas por tu almuerzo a Tu Madre y te lo comes en el carro (on the go), sesión a domicilio con tu clienta y clase en ciclo. Todo con música de fondo, y solo una toma con tu voz: la recomendación del bowl, que se siente como un consejo tuyo y no como un anuncio.",
       "tomas": [
         {
-          "graba": "Hook: en la mañana, tú estudiando con tu café (libros o laptop), luz natural",
+          "graba": "En la mañana: tú estudiando con tu café, con luz natural",
           "habla": false,
-          "dice": "Texto: \"Un *martes* en mi vida de entrenadora\""
+          "dice": "Texto sugerido: \"café y un ratito de *estudio*\""
         },
         {
-          "graba": "Trabajando: planificando rutinas en la laptop o el iPad (1 o 2 tomas cortas)",
+          "graba": "Planificando las rutinas de tus clientas en la laptop o el iPad",
           "habla": false,
-          "dice": "Texto: \"empiezo estudiando y trabajando\""
+          "dice": "Texto sugerido: \"armando las rutinas de mis chicas\""
         },
         {
-          "graba": "En el carro: bajas la ventana y aparece la fachada de Tu Madre",
+          "graba": "En el gym: tu entrenamiento (3 tomas cortas)",
           "habla": false,
-          "dice": "Texto: \"en días así necesito comer algo *saludable*, pero que de verdad **ME NUTRA**\""
+          "dice": "Texto sugerido: \"después, mi **ENTRENO**\""
         },
         {
-          "graba": "En el mostrador: pides el Sivar Bowl y el shake, y sales con la bolsa",
+          "graba": "Saliendo del gym: llegas a Tu Madre (la ventana del carro bajando y la fachada) y sales con tu bolsa",
           "habla": false,
-          "dice": "Texto: \"así que paso por mi almuerzo a *Productos Tu Madre*\""
+          "dice": "Texto sugerido: \"y de pasada, mi almuerzo en *Productos Tu Madre*\""
         },
         {
-          "graba": "En el gym: tu entrenamiento (3 tomas cortas de ejercicios)",
+          "graba": "En el carro: destapas el bowl, le pones el aderezo y das el primer bocado (muy de cerca)",
           "habla": false,
-          "dice": "Texto: \"primero **ENTRENO**\""
+          "dice": "Sin texto"
         },
         {
-          "graba": "Después de entrenar: el bowl desde arriba, destapas y pones el aderezo, muy de cerca",
-          "habla": false,
-          "dice": "Texto: \"y después, a *comer*\""
-        },
-        {
-          "graba": "Tu review a cámara, en selfie con luz de frente",
+          "graba": "En el carro, tú a cámara con el bowl en la mano (la única toma con tu voz; la música baja aquí)",
           "habla": true,
-          "dice": "\"Me pedí el Sivar Bowl… la cantidad de carne que trae, ¡increíble!\" (con tus palabras)"
+          "dice": "\"Si pasas por Tu Madre, pide el [nombre del bowl]: trae [X] gramos de proteína. Y después me contás.\" (Completa el nombre y la proteína ese día)"
         },
         {
-          "graba": "El shake: lo acercas a la cámara y das un sorbo",
+          "graba": "Llegando donde tu clienta: abres el baúl y bajas u ordenas tu equipo (que se vea todo)",
           "habla": false,
-          "dice": "Texto: \"y para acompañar, *mi shake*\""
+          "dice": "Texto sugerido: \"y llevo el gym hasta su *casa*\""
         },
         {
-          "graba": "Llegando a la casa de tu clienta con tu equipo, o preparando el material (sin mostrarla si no da permiso)",
+          "graba": "Opcional, 2 segundos: tú coacheando a tu clienta, corrigiéndola o dándole un abrazo",
           "habla": false,
-          "dice": "Texto: \"después, sesión a domicilio\""
+          "dice": "Sin texto"
         },
         {
-          "graba": "6:00 p. m., clase grupal en ciclo: 2 o 3 tomas con energía",
+          "graba": "En el carro: el Waze o el buscador con \"Ciclo Estudio\" o \"Epic Plaza\" (3 segundos máximo)",
           "habla": false,
-          "dice": "Texto: \"y cierro el día con mi clase en **CICLO**\""
+          "dice": "Texto sugerido: \"última parada del día\""
         },
         {
-          "graba": "Cierre: tú a cámara, o la foto con el grupo",
-          "habla": true,
-          "dice": "\"Si pasas por Tu Madre, pide el Sivar Bowl y después me cuentas\" (si prefieres, va como texto sobre la foto del grupo)"
+          "graba": "En ciclo: tú poniéndote el micrófono",
+          "habla": false,
+          "dice": "Sin texto"
+        },
+        {
+          "graba": "Tú dando la clase, con energía",
+          "habla": false,
+          "dice": "Texto sugerido: \"mi clase de las **6**\""
+        },
+        {
+          "graba": "Cierre: video de todo el grupo",
+          "habla": false,
+          "dice": "Sin texto (o tu frase de cierre)"
         }
       ],
       "notas": [
-        "Transiciones para grabar a propósito: la ventana del carro bajando en la toma 3; tapar y destapar el lente entre las tomas 5 y 6.",
-        "Graba cada momento apenas pase: es más fácil que recordarlo al final del día.",
-        "Pide permiso a tu clienta si sale en el video.",
+        "Los textos son sugerencias: cámbialos con tus palabras en ✏️ Editar guion.",
+        "El orden del video no tiene que ser el orden real del día: se presenta como si el gym fuera en la mañana y Tu Madre justo después.",
+        "Música de fondo en todo el video; solo en la toma 6 se escucha tu voz. Para que la música baje solo ahí, avísale al Estudio de video.",
+        "El bowl de carne ya salió: esta vez pide el de salmón, el de pollo o el Mediterráneo, y anota su proteína.",
+        "Transición para grabar a propósito: la ventana del carro bajando en la toma 4.",
         "Al publicar: invita a @productostumadre como colaboradora y activa la etiqueta de colaboración pagada."
       ],
-      "caption": "Un martes de entrenadora: estudio, trabajo, entreno, clienta a domicilio y clase en ciclo. En días así necesito comer algo saludable, pero que de verdad me nutra. Hoy mi almuerzo fue el Sivar Bowl de @productostumadre, después de entrenar. ¿Ya lo probaste? 💙",
+      "caption": "Un día normal para mí: estudio, trabajo, entreno, clientas y clase en ciclo. En días así como on the go, pero sin descuidar la proteína. Hoy mi almuerzo fue el [nombre del bowl] de @productostumadre, con [X] g de proteína. ¿Ya lo probaste? 💙",
       "checklist": [
         "Video HDR apagado",
         "Lente limpio",
-        "Batería cargada (es un día largo: lleva cargador o batería portátil)",
-        "Pedido: Sivar Bowl + shake",
+        "Batería cargada (lleva cargador o batería portátil)",
+        "Pedir el bowl de salmón, pollo o Mediterráneo y anotar sus gramos de proteína",
+        "Permiso de tu clienta (si sale)",
         "Grabar en vertical, cada toma 3 a 5 segundos más larga y 2 o 3 veces",
         "Subir todos los clips a la carpeta de Drive"
       ]
