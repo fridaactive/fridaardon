@@ -7,19 +7,50 @@
       "pilar": "Fitness",
       "formato": "Reel con 2 tomas a cámara",
       "duracion": "25 s",
-      "publicar": { "fecha": "2026-11-10", "hora": "18:00" },
+      "publicar": {
+        "fecha": "2026-11-10",
+        "hora": "18:00"
+      },
       "grabar": "2026-11-08",
       "editar": "2026-11-09",
       "borrador": false,
       "idea": "El cardio no es malo, pero si quieres verte con forma y estructura, primero necesitas construir músculo. Solo hablas a cámara en las tomas 2 y 6; el resto es imagen con texto.",
       "tomas": [
-        { "graba": "Tú en la caminadora, con cara de aburrida (hook)", "habla": false, "dice": "Texto: \"Me pasé años en la *caminadora*… esperando un cuerpo que **NUNCA LLEGÓ**\"" },
-        { "graba": "Tú a cámara, en el gym", "habla": true, "dice": "\"Y ojo, el cardio no es malo. Es buenísimo para tu corazón.\"" },
-        { "graba": "Primer plano de tu dedo presionando STOP y tú bajándote", "habla": false, "dice": "Texto: \"pero si quieres bajar de peso y solo haces cardio, puedes perder grasa… y también **MÚSCULO**\"" },
-        { "graba": "Tus manos cargando los discos en la barra", "habla": false, "dice": "Texto: \"y sin músculo, no hay forma que *definir*\"" },
-        { "graba": "Sentadilla, peso muerto y hip thrust (1 a 2 segundos cada uno)", "habla": false, "dice": "Texto: \"la base de un cuerpo con estructura es la **MASA MUSCULAR**, y se construye levantando peso, *pesado para ti*\"" },
-        { "graba": "Tú a cámara, sudada después de entrenar", "habla": true, "dice": "\"Primero construye la base y usa el cardio como complemento. Si no, vas a terminar cansada, sin energía y con más hambre. A mí me pasaba.\"" },
-        { "graba": "Una toma bonita tuya entrenando, con buena luz (cierre)", "habla": false, "dice": "Texto: \"Pesas como base, cardio como **COMPLEMENTO**\"" }
+        {
+          "graba": "Tú en la caminadora, con cara de aburrida (hook)",
+          "habla": false,
+          "dice": "Texto: \"Me pasé años en la *caminadora*… esperando un cuerpo que **NUNCA LLEGÓ**\""
+        },
+        {
+          "graba": "Tú a cámara, en el gym",
+          "habla": true,
+          "dice": "\"Y ojo, el cardio no es malo. Es buenísimo para tu corazón.\""
+        },
+        {
+          "graba": "Primer plano de tu dedo presionando STOP y tú bajándote",
+          "habla": false,
+          "dice": "Texto: \"pero si quieres bajar de peso y solo haces cardio, puedes perder grasa… y también **MÚSCULO**\""
+        },
+        {
+          "graba": "Tus manos cargando los discos en la barra",
+          "habla": false,
+          "dice": "Texto: \"y sin músculo, no hay forma que *definir*\""
+        },
+        {
+          "graba": "Sentadilla, peso muerto y hip thrust (1 a 2 segundos cada uno)",
+          "habla": false,
+          "dice": "Texto: \"la base de un cuerpo con estructura es la **MASA MUSCULAR**, y se construye levantando peso, *pesado para ti*\""
+        },
+        {
+          "graba": "Tú a cámara, sudada después de entrenar",
+          "habla": true,
+          "dice": "\"Primero construye la base y usa el cardio como complemento. Si no, vas a terminar cansada, sin energía y con más hambre. A mí me pasaba.\""
+        },
+        {
+          "graba": "Una toma bonita tuya entrenando, con buena luz (cierre)",
+          "habla": false,
+          "dice": "Texto: \"Pesas como base, cardio como **COMPLEMENTO**\""
+        }
       ],
       "notas": [
         "Las frases a cámara son la idea: dilas con tus palabras.",
@@ -36,37 +67,86 @@
     },
     {
       "id": "v2026-11-13-tumadre",
-      "titulo": "Mi almuerzo con Tu Madre",
+      "titulo": "Un martes conmigo (con Tu Madre)",
       "pilar": "Lifestyle y alimentación (colaboración)",
-      "formato": "Reel tipo mini vlog",
-      "duracion": "20 a 25 s",
-      "publicar": { "fecha": "2026-11-13", "hora": "12:30" },
-      "grabar": "2026-11-11",
-      "editar": "2026-11-12",
+      "formato": "Reel tipo mini vlog de un día",
+      "duracion": "25 a 30 s",
+      "publicar": {
+        "fecha": "2026-11-13",
+        "hora": "12:30"
+      },
+      "grabar": "2026-11-10",
+      "editar": "2026-11-11",
       "borrador": false,
-      "idea": "Después de un día largo pasas por tu Sivar Bowl antes de tu última clase. Empieza con algo cotidiano y termina recomendando el bowl como un consejo a una amiga. Pedido: Sivar Bowl + shake.",
+      "idea": "Un día real de entrenadora: estudio, trabajo, entreno, clienta a domicilio y clase en ciclo. En medio, pasas por Tu Madre por tu almuerzo y te lo comes después de entrenar. El producto aparece como lo que te resuelve un día largo. Pedido: Sivar Bowl + shake.",
       "tomas": [
-        { "graba": "Hook: llegas agotada al carro, te dejas caer en el asiento y levantas la bolsa de Tu Madre a la cámara sonriendo. (Otras opciones: la salsa cayendo en cámara lenta, o tapar el lente y revelar el bowl)", "habla": false, "dice": "Texto: \"Después de un *día largo*…\"" },
-        { "graba": "Final de tu clase: grupo entrenando, tú secándote el sudor, la hora en tu reloj (3 tomas cortas)", "habla": false, "dice": "Texto: \"…a veces solo quiero algo *saludable*, pero que de verdad **ME NUTRA**\"" },
-        { "graba": "Bajas la ventana del carro y aparece la fachada de Tu Madre, o caminas hacia la entrada", "habla": false, "dice": "Texto: \"Me quedaba de paso *Productos Tu Madre*\"" },
-        { "graba": "En el mostrador: señalas el Sivar Bowl en el menú y te entregan la bandeja", "habla": false, "dice": "Texto: \"y pasé por mi almuerzo antes de mi **ÚLTIMA CLASE**\"" },
-        { "graba": "El bowl desde arriba, en la mesa con luz natural", "habla": false, "dice": "Sin texto" },
-        { "graba": "Destapas y pones el aderezo, muy de cerca (cámara lenta si puedes)", "habla": false, "dice": "Sin texto" },
-        { "graba": "Llevas un bocado hacia la cámara, muy de cerca", "habla": false, "dice": "Sin texto" },
-        { "graba": "Tu review a cámara, en selfie con luz de frente", "habla": true, "dice": "\"Yo me pedí el Sivar Bowl… la cantidad de carne que trae, increíble\" (con tus palabras)" },
-        { "graba": "El shake: lo acercas a la cámara y das un sorbo", "habla": false, "dice": "Texto: \"Y para acompañar, *mi shake*\"" },
-        { "graba": "De vuelta al estudio: entras con energía y empiezas la clase (2 o 3 tomas)", "habla": false, "dice": "Texto: \"Lista para mi **ÚLTIMA CLASE**\"" },
-        { "graba": "Cierre: tú a cámara o la foto con el grupo", "habla": false, "dice": "Texto: \"Si pasas por Tu Madre, pide el *Sivar Bowl* y después me cuentas\"" }
+        {
+          "graba": "Hook: en la mañana, tú estudiando con tu café (libros o laptop), luz natural",
+          "habla": false,
+          "dice": "Texto: \"Un *martes* en mi vida de entrenadora\""
+        },
+        {
+          "graba": "Trabajando: planificando rutinas en la laptop o el iPad (1 o 2 tomas cortas)",
+          "habla": false,
+          "dice": "Texto: \"empiezo estudiando y trabajando\""
+        },
+        {
+          "graba": "En el carro: bajas la ventana y aparece la fachada de Tu Madre",
+          "habla": false,
+          "dice": "Texto: \"en días así necesito comer algo *saludable*, pero que de verdad **ME NUTRA**\""
+        },
+        {
+          "graba": "En el mostrador: pides el Sivar Bowl y el shake, y sales con la bolsa",
+          "habla": false,
+          "dice": "Texto: \"así que paso por mi almuerzo a *Productos Tu Madre*\""
+        },
+        {
+          "graba": "En el gym: tu entrenamiento (3 tomas cortas de ejercicios)",
+          "habla": false,
+          "dice": "Texto: \"primero **ENTRENO**\""
+        },
+        {
+          "graba": "Después de entrenar: el bowl desde arriba, destapas y pones el aderezo, muy de cerca",
+          "habla": false,
+          "dice": "Texto: \"y después, a *comer*\""
+        },
+        {
+          "graba": "Tu review a cámara, en selfie con luz de frente",
+          "habla": true,
+          "dice": "\"Me pedí el Sivar Bowl… la cantidad de carne que trae, ¡increíble!\" (con tus palabras)"
+        },
+        {
+          "graba": "El shake: lo acercas a la cámara y das un sorbo",
+          "habla": false,
+          "dice": "Texto: \"y para acompañar, *mi shake*\""
+        },
+        {
+          "graba": "Llegando a la casa de tu clienta con tu equipo, o preparando el material (sin mostrarla si no da permiso)",
+          "habla": false,
+          "dice": "Texto: \"después, sesión a domicilio\""
+        },
+        {
+          "graba": "6:00 p. m., clase grupal en ciclo: 2 o 3 tomas con energía",
+          "habla": false,
+          "dice": "Texto: \"y cierro el día con mi clase en **CICLO**\""
+        },
+        {
+          "graba": "Cierre: tú a cámara, o la foto con el grupo",
+          "habla": true,
+          "dice": "\"Si pasas por Tu Madre, pide el Sivar Bowl y después me cuentas\" (si prefieres, va como texto sobre la foto del grupo)"
+        }
       ],
       "notas": [
-        "Transiciones para grabar a propósito: barrido rápido del celular entre las tomas 2 y 3; ventana del carro que baja en la toma 3; tapar y destapar el lente entre las tomas 4 y 5.",
-        "Pide mesa junto a una ventana o come afuera.",
+        "Transiciones para grabar a propósito: la ventana del carro bajando en la toma 3; tapar y destapar el lente entre las tomas 5 y 6.",
+        "Graba cada momento apenas pase: es más fácil que recordarlo al final del día.",
+        "Pide permiso a tu clienta si sale en el video.",
         "Al publicar: invita a @productostumadre como colaboradora y activa la etiqueta de colaboración pagada."
       ],
-      "caption": "Después de un día largo, a veces solo quiero algo saludable que de verdad me nutra. Hoy pasé por mi Sivar Bowl de @productostumadre antes de mi última clase. ¿Ya lo probaste? 💙",
+      "caption": "Un martes de entrenadora: estudio, trabajo, entreno, clienta a domicilio y clase en ciclo. En días así necesito comer algo saludable, pero que de verdad me nutra. Hoy mi almuerzo fue el Sivar Bowl de @productostumadre, después de entrenar. ¿Ya lo probaste? 💙",
       "checklist": [
         "Video HDR apagado",
         "Lente limpio",
+        "Batería cargada (es un día largo: lleva cargador o batería portátil)",
         "Pedido: Sivar Bowl + shake",
         "Grabar en vertical, cada toma 3 a 5 segundos más larga y 2 o 3 veces",
         "Subir todos los clips a la carpeta de Drive"
@@ -78,18 +158,45 @@
       "pilar": "Alimentación",
       "formato": "Reel con voz en off",
       "duracion": "25 a 30 s",
-      "publicar": { "fecha": "2026-11-17", "hora": "18:00" },
+      "publicar": {
+        "fecha": "2026-11-17",
+        "hora": "18:00"
+      },
       "grabar": "2026-11-15",
       "editar": "2026-11-16",
       "borrador": true,
       "idea": "Mostrar tus comidas de un día real y por qué eliges cada una, sin números de calorías ni de peso. Comer bien no es comer poco.",
       "tomas": [
-        { "graba": "Hook: tu primera comida del día, muy de cerca", "habla": false, "dice": "Texto: \"No cuento calorías, y así me *alimento*\"" },
-        { "graba": "Desayuno: preparándolo y el plato listo", "habla": true, "dice": "Voz: por qué lo elegiste (energía para entrenar)" },
-        { "graba": "Snack o comida antes o después de entrenar", "habla": true, "dice": "Voz: \"Antes contaba todo, y eso me hacía mucho daño\"" },
-        { "graba": "Almuerzo", "habla": true, "dice": "Voz: proteína para recuperarme" },
-        { "graba": "Algo rico \"porque sí\" (un antojo)", "habla": true, "dice": "Voz: también hay espacio para disfrutar" },
-        { "graba": "Cena y cierre", "habla": false, "dice": "Texto: \"Comer bien no es comer **POCO**\"" }
+        {
+          "graba": "Hook: tu primera comida del día, muy de cerca",
+          "habla": false,
+          "dice": "Texto: \"No cuento calorías, y así me *alimento*\""
+        },
+        {
+          "graba": "Desayuno: preparándolo y el plato listo",
+          "habla": true,
+          "dice": "Voz: por qué lo elegiste (energía para entrenar)"
+        },
+        {
+          "graba": "Snack o comida antes o después de entrenar",
+          "habla": true,
+          "dice": "Voz: \"Antes contaba todo, y eso me hacía mucho daño\""
+        },
+        {
+          "graba": "Almuerzo",
+          "habla": true,
+          "dice": "Voz: proteína para recuperarme"
+        },
+        {
+          "graba": "Algo rico \"porque sí\" (un antojo)",
+          "habla": true,
+          "dice": "Voz: también hay espacio para disfrutar"
+        },
+        {
+          "graba": "Cena y cierre",
+          "habla": false,
+          "dice": "Texto: \"Comer bien no es comer **POCO**\""
+        }
       ],
       "notas": [
         "Borrador: lo revisamos juntas antes de grabar.",
@@ -108,16 +215,35 @@
       "pilar": "Coach life",
       "formato": "Reel detrás de cámaras con el iPad",
       "duracion": "20 a 25 s",
-      "publicar": { "fecha": "2026-11-20", "hora": "12:30" },
+      "publicar": {
+        "fecha": "2026-11-20",
+        "hora": "12:30"
+      },
       "grabar": "2026-11-18",
       "editar": "2026-11-19",
       "borrador": true,
       "idea": "Mostrar que ninguna rutina es igual: objetivo, nivel y lugar de entrenamiento de cada clienta, visto en tu plataforma fridaactive.com. Cierra invitando a comentar RETO para el reto de diciembre.",
       "tomas": [
-        { "graba": "Hook: tú con el iPad mostrando tu plataforma", "habla": true, "dice": "\"Ninguna de mis clientas tiene la misma rutina. Te muestro por qué.\"" },
-        { "graba": "Pantalla de la rutina de una clienta (sin nombres ni datos visibles)", "habla": false, "dice": "Texto: su *objetivo*, su *nivel* y dónde entrena" },
-        { "graba": "Una clienta haciendo el ejercicio (con su permiso) o tú demostrándolo", "habla": false, "dice": "Texto: \"una rutina hecha para **TI**\"" },
-        { "graba": "Cierre a cámara", "habla": true, "dice": "\"Por eso no te doy una rutina de internet. Te doy la tuya.\"" }
+        {
+          "graba": "Hook: tú con el iPad mostrando tu plataforma",
+          "habla": true,
+          "dice": "\"Ninguna de mis clientas tiene la misma rutina. Te muestro por qué.\""
+        },
+        {
+          "graba": "Pantalla de la rutina de una clienta (sin nombres ni datos visibles)",
+          "habla": false,
+          "dice": "Texto: su *objetivo*, su *nivel* y dónde entrena"
+        },
+        {
+          "graba": "Una clienta haciendo el ejercicio (con su permiso) o tú demostrándolo",
+          "habla": false,
+          "dice": "Texto: \"una rutina hecha para **TI**\""
+        },
+        {
+          "graba": "Cierre a cámara",
+          "habla": true,
+          "dice": "\"Por eso no te doy una rutina de internet. Te doy la tuya.\""
+        }
       ],
       "notas": [
         "Borrador: lo revisamos juntas antes de grabar.",
