@@ -754,6 +754,50 @@
   .in-link-title { font-family:'Archivo Black','DM Sans',sans-serif; font-size:0.95rem; letter-spacing:0.01em; }
   .in-link-sub { font-size:0.72rem; color:var(--muted); }
 
+  /* ── Movimiento: transiciones de app ── */
+  @keyframes faInRight { from { opacity:0; transform:translateX(28px); } to { opacity:1; transform:none; } }
+  @keyframes faInLeft { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:none; } }
+  @keyframes faUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+  @keyframes faSheetUp { from { transform:translateY(100%); } to { transform:none; } }
+  @keyframes faSlideIn { from { transform:translateX(100%); } to { transform:none; } }
+  @keyframes faFade { from { opacity:0; } to { opacity:1; } }
+  @keyframes faExpand { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:none; } }
+  @keyframes faRipple { from { transform:scale(0); opacity:0.35; } to { transform:scale(1); opacity:0; } }
+  body.portal-dark .tab-panel.active { animation:none; }
+  body.portal-dark .tab-panel.tab-in-right { animation:faInRight 0.32s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  body.portal-dark .tab-panel.tab-in-left { animation:faInLeft 0.32s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  /* Las tarjetas de Inicio entran una tras otra */
+  body.portal-dark #tab-inicio.active #inicio-content > *,
+  body.portal-dark #tab-inicio.active .in-links > * { animation:faUp 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  body.portal-dark #inicio-content > *:nth-child(2) { animation-delay:0.06s !important; }
+  body.portal-dark #inicio-content > *:nth-child(3) { animation-delay:0.12s !important; }
+  body.portal-dark #inicio-content > *:nth-child(4) { animation-delay:0.18s !important; }
+  body.portal-dark #inicio-content > *:nth-child(5) { animation-delay:0.22s !important; }
+  body.portal-dark .in-links > *:nth-child(2) { animation-delay:0.28s !important; }
+  body.portal-dark .in-links > *:nth-child(3) { animation-delay:0.32s !important; }
+  body.portal-dark .in-links > *:nth-child(4) { animation-delay:0.36s !important; }
+  /* Botones: se hunden un poquito al tocarlos + onda */
+  body.portal-dark .in-hero, body.portal-dark .in-link, body.portal-dark .in-stat, body.portal-dark .bnav-btn,
+  body.portal-dark .rt-day-summary, body.portal-dark .btn-secondary, body.portal-dark .pf-edit-btn,
+  body.portal-dark .benef-cat-tile, body.portal-dark .benef-card, body.portal-dark .pf-logout { position:relative; overflow:hidden; transition:transform 0.18s ease, background 0.25s ease, color 0.25s ease, padding 0.25s ease; }
+  body.portal-dark .in-hero:active, body.portal-dark .in-link:active, body.portal-dark .in-stat:active,
+  body.portal-dark .btn-secondary:active, body.portal-dark .pf-edit-btn:active, body.portal-dark .pf-logout:active { transform:scale(0.97); }
+  body.portal-dark .bnav-btn:active { transform:scale(0.92); }
+  .fa-ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,0.5); pointer-events:none; animation:faRipple 0.6s ease-out forwards; }
+  /* Días de la rutina: se abren con suavidad */
+  body.portal-dark .rt-day[open] .rt-day-body { animation:faExpand 0.3s ease; }
+  body.portal-dark .rt-day-summary { transition:background 0.25s ease; }
+  /* Ventanas: las de abajo suben como hoja; las de pantalla completa entran desde el lado */
+  body.portal-dark #ficha-modal, body.portal-dark #ex-progress-modal, body.portal-dark #transf-caption-modal,
+  body.portal-dark #video-modal, body.portal-dark #ex-timer-modal { animation:faFade 0.25s ease; }
+  body.portal-dark #ficha-modal > div, body.portal-dark #ex-progress-modal > div,
+  body.portal-dark #transf-caption-modal > div { animation:faSheetUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  body.portal-dark #video-modal > div, body.portal-dark #ex-timer-modal > div { animation:faUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  body.portal-dark #chat-modal, body.portal-dark #benef-category-modal, body.portal-dark #benef-profile-modal { animation:faSlideIn 0.34s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  @media (prefers-reduced-motion: reduce) {
+    body.portal-dark *, body.portal-dark *::before { animation:none !important; transition:none !important; }
+  }
+
   /* Chat */
   body.portal-dark #chat-modal { background:var(--night) !important; color:var(--text); }
   body.portal-dark .chat-bubble { background:var(--surface); color:var(--text); }
@@ -1643,7 +1687,7 @@ function portalGreeting(firstName) {
   var name = firstName ? ', ' + firstName : '';
   if (h >= 5 && h < 12) return { top: 'Buenos días' + name, main: '¿Lista para moverte?' };
   if (h >= 12 && h < 19) return { top: 'Buenas tardes' + name, main: 'Tu hora para ti' };
-  return { top: 'Buenas noches' + name, main: 'Un ratito para ti' };
+  return { top: 'Buenas noches' + name, main: '¿Ya entrenaste hoy?' };
 }
 
 // ── INICIO: entrenamiento de hoy, progreso y accesos rápidos ──
@@ -1729,6 +1773,7 @@ function renderInicioTab() {
     + '<button type="button" class="in-link" onclick="openChatModal()"><span class="in-link-title">HABLAR CON FRIDA</span><span class="in-link-sub">Escríbeme tus dudas</span></button>'
     + '</div>';
   el.innerHTML = h;
+  if (currentTabId === 'tab-inicio') animateInicioNumbers();
 }
 
 function goToRutinaDay(index) {
@@ -1741,7 +1786,55 @@ function goToRutinaDay(index) {
   setTimeout(function() { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
 }
 
+// Los números de progreso cuentan hacia arriba al mostrarse
+function animateInicioNumbers() {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('#inicio-content .in-stat-num').forEach(function(el) {
+    var target = el.getAttribute('data-final') || el.textContent;
+    el.setAttribute('data-final', target);
+    var m = String(target).match(/^(\d+)(.*)$/);
+    if (!m) return;
+    var end = parseInt(m[1], 10), suffix = m[2], start = performance.now(), dur = 700;
+    (function tick(now) {
+      var p = Math.min(1, (now - start) / dur);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(end * eased) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    })(start);
+  });
+}
+
+// Efecto de toque (onda) en los botones principales del portal
+var RIPPLE_SELECTOR = '.in-hero, .in-link, .in-stat, .bnav-btn, .rt-day-summary, .btn-secondary, .pf-edit-btn, .benef-cat-tile, .benef-card, .chat-fab, .pf-logout';
+document.addEventListener('pointerdown', function(e) {
+  if (!document.body.classList.contains('portal-dark')) return;
+  var el = e.target.closest && e.target.closest(RIPPLE_SELECTOR);
+  if (!el) return;
+  var r = el.getBoundingClientRect();
+  var size = Math.max(r.width, r.height) * 1.4;
+  var dot = document.createElement('span');
+  dot.className = 'fa-ripple';
+  dot.style.width = dot.style.height = size + 'px';
+  dot.style.left = (e.clientX - r.left - size / 2) + 'px';
+  dot.style.top = (e.clientY - r.top - size / 2) + 'px';
+  el.appendChild(dot);
+  setTimeout(function() { dot.remove(); }, 600);
+}, { passive: true });
+
+var TAB_ORDER = ['tab-inicio', 'tab-rutina', 'tab-perfil', 'tab-beneficios'];
+var currentTabId = 'tab-inicio';
 function showTab(id) {
+  // Dirección de la animación: hacia la izquierda si la pestaña nueva está a la derecha en el menú
+  var dir = TAB_ORDER.indexOf(id) >= TAB_ORDER.indexOf(currentTabId) ? 'right' : 'left';
+  var panel = document.getElementById(id);
+  if (panel) {
+    panel.classList.remove('tab-in-right', 'tab-in-left');
+    void panel.offsetWidth;
+    if (id !== currentTabId) panel.classList.add('tab-in-' + dir);
+  }
+  currentTabId = id;
+  if (navigator.vibrate) { try { navigator.vibrate(8); } catch (e) {} }
+  if (id === 'tab-inicio') setTimeout(animateInicioNumbers, 60);
   document.querySelectorAll('.tab-panel').forEach(function(el) { el.classList.remove('active'); });
   document.querySelectorAll('.tab-btn, .bnav-btn').forEach(function(el) { el.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
