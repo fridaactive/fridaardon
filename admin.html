@@ -1194,7 +1194,7 @@
 
     <div class="plan-side">
       <div class="plan-week-content">
-        <div class="plan-rem-hdr">🎬 Contenido de la semana</div>
+        <div class="plan-rem-hdr">📲 Publicaciones de la semana</div>
         <div id="plan-week-content-list"><div class="plan-week-empty">Cargando…</div></div>
       </div>
       <div class="plan-rem-box">
@@ -5629,31 +5629,22 @@ function closeContentPop() {
   window.removeEventListener('scroll', closeContentPop, true);
 }
 
-// Cuadro "Contenido de la semana" en la columna lateral (lunes a domingo)
+// Cuadro "Publicaciones de la semana" en la columna lateral (lunes a domingo).
+// Solo muestra lo que se publica; grabar y editar se ven en el circulito de cada día.
 function renderWeekContentBox() {
   var el = document.getElementById('plan-week-content-list');
   if (!el) return;
   var monday = getWeekDates(weekOffset)[0];
-  var todayKey = dateKey(new Date());
-  var html = '', upcoming = 0, extras = 0;
+  var html = '';
   for (var i = 0; i < 7; i++) {
     var d = new Date(monday);
     d.setDate(monday.getDate() + i);
     var dk = dateKey(d);
     contentTasksFor(dk).forEach(function(t) {
-      // En el celular solo se ven las próximas 3 tareas; el resto con "Ver toda la semana"
-      var isExtra = dk < todayKey || upcoming >= 3;
-      if (dk >= todayKey) upcoming++;
-      if (isExtra) extras++;
-      html += '<div class="' + (isExtra ? 'pwc-extra' : '') + '">' + contentTaskButton(t, dk, true) + '</div>';
+      if (t.kind === 'publicar') html += contentTaskButton(t, dk, true);
     });
   }
-  if (!html) {
-    el.innerHTML = '<div class="plan-week-empty">' + (contentPlanLoaded ? 'Sin videos esta semana.' : 'Cargando…') + '</div>';
-    return;
-  }
-  if (extras) html += '<button type="button" class="pwc-toggle" onclick="this.closest(\'.plan-week-content\').classList.toggle(\'expanded\');this.textContent=this.closest(\'.plan-week-content\').classList.contains(\'expanded\')?\'Ver menos\':\'Ver toda la semana\'">Ver toda la semana</button>';
-  el.innerHTML = html;
+  el.innerHTML = html || '<div class="plan-week-empty">' + (contentPlanLoaded ? 'Sin publicaciones esta semana.' : 'Cargando…') + '</div>';
 }
 
 function changeWeek(dir) { weekOffset += dir; renderCalendar(); }
