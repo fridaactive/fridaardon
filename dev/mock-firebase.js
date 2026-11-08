@@ -13,7 +13,7 @@
     var d = new Date(today); d.setDate(d.getDate() - offset);
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
-  var dias = {}; [1, 2, 4, 6, 8, 9, 11].forEach(function (o) { dias[dk(o)] = true; });
+  var dias = {}; [0, 1, 2, 4, 6, 8, 9, 11].forEach(function (o) { dias[dk(o)] = true; });
 
   var DATA = {
     clientasPortal: {}, rutinas: {}, clients: {},

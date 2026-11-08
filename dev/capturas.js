@@ -30,6 +30,8 @@ const server = http.createServer((req, res) => {
   page.on('pageerror', e => errors.push(e.message));
   page.on('dialog', d => d.dismiss());
   await page.route(/gstatic\.com|firebaseio\.com|googleapis\.com\/identitytoolkit|emailjs/, r => r.abort());
+  // Google Fonts está bloqueado en este entorno: se sirve la Archivo Black local para ver la letra real.
+  await page.route(/fonts\.googleapis\.com/, r => r.fulfill({ contentType: 'text/css', body: "@font-face{font-family:'Archivo Black';src:url(http://localhost:8766/dev/ArchivoBlack.ttf) format('truetype');}" }));
   await page.addInitScript(mock);
   await page.addInitScript(() => {
     // El mock define window.firebase; evita que los <script> de Firebase lo pisen.

@@ -689,13 +689,24 @@
 
   /* ── Estructura nueva: menú inferior en lugar de las pestañas de arriba ── */
   body.portal-dark .tab-bar { display:none; }
-  body.portal-dark .dash-hero { padding-bottom:1.4rem; }
+  body.portal-dark .dash-hero { padding-bottom:1.4rem; border-bottom:none; }
+  body.portal-dark .dash-hero-row { align-items:flex-start; }
+  body.portal-dark .dash-hero-id { flex-direction:row-reverse; justify-content:space-between; width:100%; gap:1rem; }
+  body.portal-dark .dash-hero-id .avatar-wrap,
+  body.portal-dark .dash-hero-id .avatar-circle { width:52px; height:52px; }
+  body.portal-dark .dash-hero-id .avatar-circle { border-radius:16px; border:2px solid var(--blue); }
+  body.portal-dark .dash-hero .greeting { font-size:1.45rem; }
+  body.portal-dark .logout-icon-btn { display:none; }
+  .pf-logout { display:none; }
+  body.portal-dark .pf-logout { display:block; width:100%; margin:0.5rem 0 1rem; background:none; border:1px solid var(--border); color:var(--muted); border-radius:999px; padding:0.75rem; font-size:0.78rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; }
   body.portal-dark .dash-body { padding-bottom:7rem; }
   .bnav { display:none; }
   body.portal-dark .bnav { display:flex; position:fixed; left:50%; transform:translateX(-50%); bottom:calc(0.9rem + env(safe-area-inset-bottom, 0px)); width:calc(100% - 2rem); max-width:488px; height:4rem; background:rgba(17,26,54,0.96); border:1px solid var(--border); border-radius:999px; align-items:center; justify-content:space-around; z-index:45; box-shadow:0 10px 30px rgba(0,0,0,0.45); backdrop-filter:blur(8px); }
   .bnav-btn { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.15rem; min-width:3.6rem; height:3.2rem; padding:0 0.6rem; border:none; border-radius:999px; background:none; color:var(--muted); font-family:'DM Sans',sans-serif; font-size:0.6rem; font-weight:700; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
   .bnav-btn svg { width:21px; height:21px; }
-  .bnav-btn.active { background:var(--blue); color:#fff; flex-direction:row; gap:0.4rem; padding:0 1rem; font-size:0.75rem; }
+  .bnav-btn span { display:none; }
+  .bnav-btn.active { background:var(--blue); color:#fff; flex-direction:row; gap:0.4rem; padding:0 1.1rem; font-size:0.8rem; }
+  .bnav-btn.active span { display:inline; }
   body.portal-dark .chat-fab { bottom:calc(5.9rem + env(safe-area-inset-bottom, 0px)); }
 
   /* ── Rutina: tarjetas de día más grandes, número en crema ── */
@@ -1209,6 +1220,7 @@
       </div>
 
       <div id="perfil-locked-card"></div>
+      <button type="button" class="pf-logout" onclick="doLogout()">Cerrar sesión</button>
 
     </div>
 
@@ -1663,7 +1675,12 @@ function inicioCounts() {
     if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) mes++;
     if (d >= monday) semana++;
   });
-  return { mes: mes, semana: semana };
+  // Días seguidos: racha que termina hoy (o ayer, si hoy todavía no entrenó)
+  var racha = 0, cur = new Date(now); cur.setHours(0, 0, 0, 0);
+  var key = function(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  if (!dias[key(cur)]) cur.setDate(cur.getDate() - 1);
+  while (dias[key(cur)]) { racha++; cur.setDate(cur.getDate() - 1); }
+  return { mes: mes, semana: semana, racha: racha };
 }
 
 function renderInicioTab() {
@@ -1693,7 +1710,9 @@ function renderInicioTab() {
   }
 
   h += '<div class="in-stats">'
-    + '<div class="in-stat in-stat-hl"><span class="in-stat-num">' + c.mes + '</span><span class="in-stat-lbl">días este mes</span></div>'
+    + (c.racha >= 2
+        ? '<div class="in-stat in-stat-hl"><span class="in-stat-num">' + c.racha + '</span><span class="in-stat-lbl">días seguidos</span></div>'
+        : '<div class="in-stat in-stat-hl"><span class="in-stat-num">' + c.mes + '</span><span class="in-stat-lbl">días este mes</span></div>')
     + '<div class="in-stat"><span class="in-stat-num">' + c.semana + '</span><span class="in-stat-lbl">esta semana</span></div>'
     + (prog ? '<div class="in-stat"><span class="in-stat-num in-cream">' + escapeHtml(prog) + '</span><span class="in-stat-lbl">del programa</span></div>'
             : '<div class="in-stat"><span class="in-stat-num in-cream">' + escapeHtml(meta || '-') + '</span><span class="in-stat-lbl">meta del mes</span></div>')
