@@ -297,6 +297,8 @@
     .week-nav { grid-area: nav; }
     .cal-scroll { grid-area: cal; min-width:0; }
     .plan-rem-box { grid-area: rem !important; margin-bottom:0; align-self:start; position:sticky; top:1rem; }
+    .plan-side { grid-area: rem; align-self:start; position:sticky; top:1rem; }
+    .plan-side .plan-rem-box { grid-area:auto !important; position:static; }
   }
 
   /* Week nav */
@@ -423,7 +425,29 @@
   .plan-tabs { display:flex; gap:0.5rem; max-width:1150px; margin:1rem auto 0; padding:0 1.25rem; }
   .plan-tab { flex:1; border:1.5px solid var(--border-b,#ccdaf5); background:#fff; color:var(--muted); border-radius:12px; padding:0.65rem 0.5rem; font-size:0.78rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; }
   .plan-tab.active { background:var(--blue); color:#fff; border-color:var(--blue); }
-  .cal-day-chip { display:block; margin-top:0.25rem; background:#F5ECCB; color:#0D1B3E; border:none; border-radius:6px; padding:0.15rem 0.25rem; font-size:0.52rem; font-weight:700; line-height:1.2; cursor:pointer; width:100%; font-family:'DM Sans',sans-serif; }
+  .cal-day-header { position:relative; }
+  .cal-day-badge { position:absolute; top:4px; right:4px; min-width:1.25rem; height:1.25rem; padding:0 0.3rem; border-radius:100px; border:2px solid var(--blue); background:#F5ECCB; color:#0D1B3E; font-size:0.62rem; font-weight:800; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; font-family:'DM Sans',sans-serif; box-shadow:0 2px 6px rgba(0,0,0,0.18); touch-action:manipulation; }
+  .cal-day-badge.today { animation: badgePulse 1.8s ease-in-out infinite; }
+  @keyframes badgePulse { 0%,100% { box-shadow:0 0 0 0 rgba(245,236,203,0.9); } 50% { box-shadow:0 0 0 6px rgba(245,236,203,0); } }
+  .content-pop { position:fixed; z-index:998; width:260px; background:#fff; border-radius:16px; box-shadow:0 12px 32px rgba(13,27,62,0.22); padding:0.85rem; border:1.5px solid var(--border-b,#ccdaf5); }
+  .content-pop::before { content:''; position:absolute; top:-8px; left:var(--arrow-x, 50%); width:14px; height:14px; background:#fff; border-left:1.5px solid var(--border-b,#ccdaf5); border-top:1.5px solid var(--border-b,#ccdaf5); transform:translateX(-50%) rotate(45deg); }
+  .content-pop-day { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:0.5rem; }
+  .content-task { display:flex; align-items:center; gap:0.6rem; width:100%; text-align:left; background:#f7f9ff; border:none; border-radius:12px; padding:0.6rem 0.7rem; margin-bottom:0.4rem; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .content-task:last-child { margin-bottom:0; }
+  .content-task-icon { font-size:1.1rem; flex-shrink:0; }
+  .content-task-kind { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--blue); }
+  .content-task-title { font-size:0.82rem; font-weight:700; color:var(--text); line-height:1.3; }
+  .content-task-when { font-size:0.68rem; color:var(--muted); }
+  .content-task.today { background:#FFF7DC; box-shadow:inset 0 0 0 1.5px #E2C870; }
+  .plan-week-content { background:#fff; border:1.5px solid var(--border-b,#ccdaf5); border-radius:14px; padding:0.9rem 1rem; margin-bottom:0.75rem; }
+  .plan-week-content .plan-rem-hdr { display:flex; justify-content:space-between; align-items:center; }
+  .plan-week-empty { font-size:0.75rem; color:var(--muted); }
+  .plan-week-content .content-task { margin-bottom:0.4rem; }
+  .pwc-toggle { display:none; width:100%; background:none; border:none; color:var(--blue); font-weight:700; font-size:0.75rem; font-family:'DM Sans',sans-serif; padding:0.4rem; cursor:pointer; }
+  @media (max-width: 699px) {
+    .plan-week-content:not(.expanded) .pwc-extra { display:none; }
+    .pwc-toggle { display:block; }
+  }
   .content-wrap { padding:1rem 1.25rem 5rem; max-width:900px; margin:0 auto; }
   .content-intro { font-size:0.75rem; color:var(--muted); margin-bottom:0.9rem; line-height:1.5; }
   .content-week-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:1.1rem 0 0.5rem; }
@@ -1168,12 +1192,18 @@
       <button class="week-nav-btn" onclick="changeWeek(1)">›</button>
     </div>
 
-    <div class="plan-rem-box">
-      <div class="plan-rem-hdr">📌 Recordatorios</div>
-      <div class="plan-rem-list" id="plan-reminders-list"></div>
-      <div class="plan-rem-add-row">
-        <input type="text" id="plan-reminder-input" class="plan-rem-input" placeholder="Nuevo recordatorio..." onkeydown="if(event.key==='Enter')addPlanReminder()">
-        <button class="plan-rem-add-btn" onclick="addPlanReminder()">+</button>
+    <div class="plan-side">
+      <div class="plan-week-content">
+        <div class="plan-rem-hdr">🎬 Contenido de la semana</div>
+        <div id="plan-week-content-list"><div class="plan-week-empty">Cargando…</div></div>
+      </div>
+      <div class="plan-rem-box">
+        <div class="plan-rem-hdr">📌 Recordatorios</div>
+        <div class="plan-rem-list" id="plan-reminders-list"></div>
+        <div class="plan-rem-add-row">
+          <input type="text" id="plan-reminder-input" class="plan-rem-input" placeholder="Nuevo recordatorio..." onkeydown="if(event.key==='Enter')addPlanReminder()">
+          <button class="plan-rem-add-btn" onclick="addPlanReminder()">+</button>
+        </div>
       </div>
     </div>
 
@@ -4936,6 +4966,7 @@ function showScreen(name) {
   var eventModal = document.getElementById('event-modal');
   if (eventModal) eventModal.classList.remove('open');
   closeContentModal();
+  closeContentPop();
   var newClientModal = document.getElementById('new-client-modal');
   if (newClientModal) newClientModal.style.display = 'none';
   var fijoModal = document.getElementById('fin-fijo-modal');
@@ -5544,6 +5575,87 @@ function fallbackCopy(text) {
   ta.remove();
 }
 
+var CONTENT_TASK_INFO = {
+  grabar: { icon: '🎥', kind: 'Grabar' },
+  editar: { icon: '✂️', kind: 'Editar' },
+  publicar: { icon: '📲', kind: 'Publicar' }
+};
+
+function contentTaskButton(t, dk, showDay) {
+  var info = CONTENT_TASK_INFO[t.kind];
+  var when = showDay ? contentDateLabel(dk) : '';
+  if (t.kind === 'publicar') when = (when ? when + ' · ' : '') + contentTimeLabel(t.video.publicar.hora);
+  var today = dk === dateKey(new Date());
+  return '<button type="button" class="content-task' + (today ? ' today' : '') + '" onclick="closeContentPop();openContentModal(\'' + t.video.id + '\')">'
+    + '<span class="content-task-icon">' + info.icon + '</span>'
+    + '<span><span class="content-task-kind">' + info.kind + (today ? ' · hoy' : '') + '</span>'
+    + '<span class="content-task-title" style="display:block">' + escHtml(t.video.titulo) + '</span>'
+    + (when ? '<span class="content-task-when">' + when + '</span>' : '') + '</span></button>';
+}
+
+// Burbuja que sale del día al tocar el circulito de notificación
+function showContentPop(btn, dk) {
+  closeContentPop();
+  var tasks = contentTasksFor(dk);
+  if (!tasks.length) return;
+  var pop = document.createElement('div');
+  pop.className = 'content-pop';
+  pop.id = 'content-pop';
+  pop.innerHTML = '<div class="content-pop-day">' + contentDateLabel(dk) + '</div>'
+    + tasks.map(function(t) { return contentTaskButton(t, dk, false); }).join('');
+  document.body.appendChild(pop);
+  var r = btn.getBoundingClientRect();
+  var w = pop.offsetWidth;
+  var center = r.left + r.width / 2;
+  var left = Math.max(8, Math.min(window.innerWidth - w - 8, center - w / 2));
+  pop.style.left = left + 'px';
+  pop.style.top = (r.bottom + 10) + 'px';
+  pop.style.setProperty('--arrow-x', (center - left) + 'px');
+  setTimeout(function() {
+    document.addEventListener('click', contentPopOutside, true);
+    window.addEventListener('scroll', closeContentPop, true);
+  }, 0);
+}
+
+function contentPopOutside(e) {
+  var pop = document.getElementById('content-pop');
+  if (pop && !pop.contains(e.target)) closeContentPop();
+}
+
+function closeContentPop() {
+  var pop = document.getElementById('content-pop');
+  if (pop) pop.remove();
+  document.removeEventListener('click', contentPopOutside, true);
+  window.removeEventListener('scroll', closeContentPop, true);
+}
+
+// Cuadro "Contenido de la semana" en la columna lateral (lunes a domingo)
+function renderWeekContentBox() {
+  var el = document.getElementById('plan-week-content-list');
+  if (!el) return;
+  var monday = getWeekDates(weekOffset)[0];
+  var todayKey = dateKey(new Date());
+  var html = '', upcoming = 0, extras = 0;
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    var dk = dateKey(d);
+    contentTasksFor(dk).forEach(function(t) {
+      // En el celular solo se ven las próximas 3 tareas; el resto con "Ver toda la semana"
+      var isExtra = dk < todayKey || upcoming >= 3;
+      if (dk >= todayKey) upcoming++;
+      if (isExtra) extras++;
+      html += '<div class="' + (isExtra ? 'pwc-extra' : '') + '">' + contentTaskButton(t, dk, true) + '</div>';
+    });
+  }
+  if (!html) {
+    el.innerHTML = '<div class="plan-week-empty">' + (contentPlanLoaded ? 'Sin videos esta semana.' : 'Cargando…') + '</div>';
+    return;
+  }
+  if (extras) html += '<button type="button" class="pwc-toggle" onclick="this.closest(\'.plan-week-content\').classList.toggle(\'expanded\');this.textContent=this.closest(\'.plan-week-content\').classList.contains(\'expanded\')?\'Ver menos\':\'Ver toda la semana\'">Ver toda la semana</button>';
+  el.innerHTML = html;
+}
+
 function changeWeek(dir) { weekOffset += dir; renderCalendar(); }
 
 function renderCalendar() {
@@ -5566,10 +5678,9 @@ function renderCalendar() {
   html += '<div class="cal-time-header"></div>';
   days.forEach(function(d) {
     var todayClass = isToday(d) ? ' today' : '';
-    var chips = contentTasksFor(dateKey(d)).filter(function(t) { return t.kind !== 'publicar'; }).map(function(t) {
-      return '<button type="button" class="cal-day-chip" onclick="event.stopPropagation();openContentModal(\'' + t.video.id + '\')">' + escHtml(t.label) + '</button>';
-    }).join('');
-    html += '<div class="cal-day-header' + todayClass + '">' + DAYS[days.indexOf(d)] + '<br>' + d.getDate() + chips + '</div>';
+    var nTasks = contentTasksFor(dateKey(d)).length;
+    var badge = nTasks ? '<button type="button" class="cal-day-badge' + (isToday(d) ? ' today' : '') + '" aria-label="Contenido de este día: ' + nTasks + '" onclick="event.stopPropagation();showContentPop(this,\'' + dateKey(d) + '\')">' + nTasks + '</button>' : '';
+    html += '<div class="cal-day-header' + todayClass + '">' + DAYS[days.indexOf(d)] + '<br>' + d.getDate() + badge + '</div>';
   });
 
   // Rows — empty cells only, no events drawn inside individual cells anymore
@@ -5687,6 +5798,9 @@ function renderCalendar() {
       openModal(dk, null, eid);
     });
   });
+
+  closeContentPop();
+  renderWeekContentBox();
 }
 
 function decimalToTimeStr(dec) {
