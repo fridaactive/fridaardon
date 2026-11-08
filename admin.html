@@ -5584,7 +5584,7 @@ var CONTENT_TASK_INFO = {
 function contentTaskButton(t, dk, showDay) {
   var info = CONTENT_TASK_INFO[t.kind];
   var when = showDay ? contentDateLabel(dk) : '';
-  if (t.kind === 'publicar') when = (when ? when + ' · ' : '') + contentTimeLabel(t.video.publicar.hora);
+  if (t.kind === 'publicar') when = (when ? when + ' · ' : '') + 'hora sugerida: ' + contentTimeLabel(t.video.publicar.hora);
   var today = dk === dateKey(new Date());
   return '<button type="button" class="content-task' + (today ? ' today' : '') + '" onclick="closeContentPop();openContentModal(\'' + t.video.id + '\')">'
     + '<span class="content-task-icon">' + info.icon + '</span>'
@@ -5714,8 +5714,7 @@ function renderCalendar() {
   days.forEach(function(d, dayIdx) {
     var dk = dateKey(d);
     var dayEvs = calEvents[dk] || [];
-    var dayPubs = contentTasksFor(dk).filter(function(t) { return t.kind === 'publicar'; });
-    if (dayEvs.length === 0 && dayPubs.length === 0) return;
+    if (dayEvs.length === 0) return;
 
     var overlay = document.createElement('div');
     overlay.className = 'cal-day-col-overlay';
@@ -5749,18 +5748,9 @@ function renderCalendar() {
       overlay.appendChild(evDiv);
     });
 
-    // Publicaciones de Instagram del plan de contenido (30 min, color crema)
-    dayPubs.forEach(function(t) {
-      var p = String(t.video.publicar.hora || '12:00').split(':');
-      var startDec = (+p[0]) + (+(p[1] || 0)) / 60;
-      var pubDiv = document.createElement('div');
-      pubDiv.className = 'cal-event type-contenido';
-      pubDiv.setAttribute('data-cid', t.video.id);
-      pubDiv.style.top = ((startDec - firstHour) * 3 * remPx + 2) + 'px';
-      pubDiv.style.height = (0.5 * 3 * remPx - 4) + 'px';
-      pubDiv.textContent = '📲 ' + t.video.titulo + ' · ' + fmtTime(startDec);
-      overlay.appendChild(pubDiv);
-    });
+    // Las publicaciones del plan de contenido NO se dibujan en las horas del
+    // calendario: chocaban con clases ya agendadas. Se ven en el circulito
+    // del día y en "Contenido de la semana"; Frida agenda la hora a mano.
 
     wrap.appendChild(overlay);
   });
