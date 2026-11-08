@@ -494,6 +494,22 @@
   .cm-status-row { display:flex; gap:0.4rem; flex-wrap:wrap; }
   .cm-status-btn { border:1.5px solid var(--border); background:#fff; border-radius:100px; padding:0.35rem 0.75rem; font-size:0.7rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; color:var(--muted); }
   .cm-status-btn.active { background:var(--blue); border-color:var(--blue); color:#fff; }
+  .ce-bar { display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-top:1rem; }
+  .ce-edited { font-size:0.72rem; color:#7a5a00; background:#FFF7DC; border-radius:100px; padding:0.3rem 0.7rem; }
+  .ce-edited button { background:none; border:none; color:var(--blue); font-weight:700; font-size:0.72rem; cursor:pointer; padding:0; font-family:'DM Sans',sans-serif; text-decoration:underline; }
+  .ce-hint { font-size:0.74rem; color:var(--muted); background:#f7f9ff; border-radius:10px; padding:0.6rem 0.75rem; margin-top:0.9rem; line-height:1.5; }
+  .ce-toma { border:1.5px solid var(--border); border-radius:12px; padding:0.75rem; margin-bottom:0.6rem; }
+  .ce-toma.talk { background:#FFFBEA; border-color:#E2C870; }
+  .ce-toma-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; font-size:0.8rem; color:var(--blue); }
+  .ce-actions { display:flex; gap:0.3rem; }
+  .ce-actions button { width:2.2rem; height:2.2rem; border-radius:8px; border:1.5px solid var(--border); background:#fff; cursor:pointer; font-size:0.85rem; }
+  .ce-actions button:disabled { opacity:0.35; cursor:default; }
+  .ce-label { display:block; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); margin:0.45rem 0 0.2rem; }
+  .ce-input { width:100%; box-sizing:border-box; border:1.5px solid var(--border); border-radius:10px; padding:0.55rem 0.65rem; font-size:0.85rem; font-family:'DM Sans',sans-serif; line-height:1.45; resize:vertical; background:#fff; color:var(--text); }
+  .ce-input:focus { outline:none; border-color:var(--blue); }
+  .ce-check { display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; font-weight:600; color:var(--text); margin-top:0.45rem; cursor:pointer; }
+  .ce-check input { width:1.1rem; height:1.1rem; accent-color:var(--blue); }
+  .ce-save-row { display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1rem; position:sticky; bottom:-2rem; background:#fff; padding:0.75rem 0; }
 
   /* Modal */
   .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:999; display:none; align-items:flex-end; justify-content:center; }
@@ -5388,6 +5404,11 @@ var CONTENT_STATES = ['Por grabar', 'Grabado', 'Editado', 'Publicado'];
 var CONTENT_DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 var CONTENT_MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 var contentPlanLoaded = false;
+// Cambios que Frida hace al guion y al caption desde el portal. Se guardan
+// aparte (Firebase "contentEdits") y se aplican encima del plan, así no se
+// pierden cuando Claude actualiza contenido/plan.json.
+var CONTENT_EDITS = JSON.parse(localStorage.getItem('fa_content_edits') || '{}');
+var contentDraft = null; // { id, tomas, caption } mientras se edita
 
 function loadContentPlan(cb) {
   fetch('contenido/plan.json?v=' + Date.now(), { cache: 'no-store' })
@@ -5400,7 +5421,13 @@ function loadContentPlan(cb) {
           CONTENT_STATUS = st;
           localStorage.setItem('fa_content_status', JSON.stringify(st));
         }
-        if (cb) cb();
+        fbGet('contentEdits', function(ed) {
+          if (ed) {
+            CONTENT_EDITS = ed;
+            localStorage.setItem('fa_content_edits', JSON.stringify(ed));
+          }
+          if (cb) cb();
+        });
       });
     });
 }
@@ -5492,8 +5519,122 @@ function renderContentList() {
   el.innerHTML = html;
 }
 
+// El video con los cambios de Frida aplicados encima del plan
+function contentVideoMerged(id) {
+  var base = findContentVideo(id);
+  if (!base) return null;
+  var e = CONTENT_EDITS[id];
+  if (!e) return base;
+  var v = Object.assign({}, base);
+  if (Array.isArray(e.tomas)) v.tomas = e.tomas;
+  if (typeof e.caption === 'string') v.caption = e.caption;
+  v.editadoPorTi = true;
+  return v;
+}
+
+function startContentEdit(id) {
+  var v = contentVideoMerged(id);
+  if (!v) return;
+  contentDraft = {
+    id: id,
+    tomas: (v.tomas || []).map(function(t) { return { graba: t.graba || '', habla: !!t.habla, dice: t.dice || '' }; }),
+    caption: v.caption || ''
+  };
+  renderContentEditor();
+}
+
+function contentDraftSet(i, field, value) {
+  if (!contentDraft) return;
+  if (i === -1) { contentDraft.caption = value; return; }
+  contentDraft.tomas[i][field] = value;
+}
+
+function contentDraftAdd() {
+  contentDraft.tomas.push({ graba: '', habla: false, dice: '' });
+  renderContentEditor();
+  var areas = document.querySelectorAll('#content-modal-body .ce-graba');
+  if (areas.length) areas[areas.length - 1].focus();
+}
+
+function contentDraftRemove(i) {
+  if (!confirm('¿Quitar la toma ' + (i + 1) + '?')) return;
+  contentDraft.tomas.splice(i, 1);
+  renderContentEditor();
+}
+
+function contentDraftMove(i, dir) {
+  var j = i + dir;
+  if (j < 0 || j >= contentDraft.tomas.length) return;
+  var t = contentDraft.tomas[i];
+  contentDraft.tomas[i] = contentDraft.tomas[j];
+  contentDraft.tomas[j] = t;
+  renderContentEditor();
+}
+
+function renderContentEditor() {
+  var d = contentDraft;
+  var v = findContentVideo(d.id);
+  var h = '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.75rem">'
+    + '<div><div class="content-card-date">Editando el guion</div><div class="modal-title" style="margin:0.2rem 0 0">' + escHtml(v.titulo) + '</div></div>'
+    + '<button type="button" class="cm-btn ghost" onclick="cancelContentEdit()" aria-label="Cancelar">✕</button></div>';
+  h += '<div class="ce-hint">Escribe <b>**así**</b> para que salga en <b style="color:var(--blue)">MAYÚSCULAS AZULES</b> y <b>*así*</b> para que salga en <i style="background:#F5ECCB;border-radius:4px;padding:0 0.2rem">cursiva crema</i>.</div>';
+  h += '<div class="cm-section">Guion de grabación</div>';
+  d.tomas.forEach(function(t, i) {
+    h += '<div class="ce-toma' + (t.habla ? ' talk' : '') + '">'
+      + '<div class="ce-toma-top"><b>Toma ' + (i + 1) + '</b><span class="ce-actions">'
+      + '<button type="button" onclick="contentDraftMove(' + i + ',-1)" aria-label="Subir toma"' + (i === 0 ? ' disabled' : '') + '>↑</button>'
+      + '<button type="button" onclick="contentDraftMove(' + i + ',1)" aria-label="Bajar toma"' + (i === d.tomas.length - 1 ? ' disabled' : '') + '>↓</button>'
+      + '<button type="button" onclick="contentDraftRemove(' + i + ')" aria-label="Quitar toma">✕</button></span></div>'
+      + '<label class="ce-label" for="ce-g-' + i + '">Qué grabas</label>'
+      + '<textarea id="ce-g-' + i + '" class="ce-input ce-graba" rows="2" oninput="contentDraftSet(' + i + ',\'graba\',this.value)">' + escHtml(t.graba) + '</textarea>'
+      + '<label class="ce-check"><input type="checkbox"' + (t.habla ? ' checked' : '') + ' onchange="contentDraftSet(' + i + ',\'habla\',this.checked);this.closest(\'.ce-toma\').classList.toggle(\'talk\',this.checked)"> 🎤 Hablo a cámara en esta toma</label>'
+      + '<label class="ce-label" for="ce-d-' + i + '">Qué dices o qué texto aparece</label>'
+      + '<textarea id="ce-d-' + i + '" class="ce-input" rows="3" oninput="contentDraftSet(' + i + ',\'dice\',this.value)">' + escHtml(t.dice) + '</textarea>'
+      + '</div>';
+  });
+  h += '<button type="button" class="cm-btn ghost" style="width:100%" onclick="contentDraftAdd()">+ Agregar toma</button>';
+  h += '<div class="cm-section">Caption</div>'
+    + '<textarea class="ce-input" rows="7" aria-label="Caption" oninput="contentDraftSet(-1,\'caption\',this.value)">' + escHtml(d.caption) + '</textarea>';
+  h += '<div class="ce-save-row"><button type="button" class="cm-btn ghost" onclick="cancelContentEdit()">Cancelar</button>'
+    + '<button type="button" class="cm-btn primary" onclick="saveContentEdit()">Guardar cambios</button></div>';
+  document.getElementById('content-modal-body').innerHTML = h;
+  document.getElementById('content-modal').classList.add('open');
+}
+
+function saveContentEdit() {
+  var d = contentDraft;
+  if (!d) return;
+  CONTENT_EDITS[d.id] = {
+    tomas: d.tomas.filter(function(t) { return t.graba.trim() || t.dice.trim(); }),
+    caption: d.caption,
+    editado: new Date().toISOString()
+  };
+  localStorage.setItem('fa_content_edits', JSON.stringify(CONTENT_EDITS));
+  fbSet('contentEdits', CONTENT_EDITS, function() {
+    alert('Tus cambios se guardaron en este dispositivo, pero no se pudieron subir a la nube. Revisa tu conexión.');
+  });
+  var id = d.id;
+  contentDraft = null;
+  openContentModal(id);
+}
+
+function cancelContentEdit() {
+  var id = contentDraft && contentDraft.id;
+  contentDraft = null;
+  if (id) openContentModal(id); else closeContentModal();
+}
+
+function restoreContentOriginal(id) {
+  if (!confirm('¿Volver al guion original? Se borrarán tus cambios a este video.')) return;
+  delete CONTENT_EDITS[id];
+  localStorage.setItem('fa_content_edits', JSON.stringify(CONTENT_EDITS));
+  fbSet('contentEdits', CONTENT_EDITS);
+  openContentModal(id);
+}
+
 function openContentModal(id) {
-  var v = findContentVideo(id);
+  contentDraft = null;
+  var v = contentVideoMerged(id);
   if (!v) return;
   var st = contentStatusIdx(id);
   var h = '';
@@ -5515,6 +5656,10 @@ function openContentModal(id) {
     + '</div>';
 
   if (v.idea) h += '<div class="cm-section">La idea</div><div class="cm-idea">' + contentMarks(v.idea) + '</div>';
+
+  h += '<div class="ce-bar"><button type="button" class="cm-btn primary" onclick="startContentEdit(\'' + id + '\')">✏️ Editar guion y caption</button>'
+    + (v.editadoPorTi ? '<span class="ce-edited">Tiene tus cambios · <button type="button" onclick="restoreContentOriginal(\'' + id + '\')">volver al original</button></span>' : '')
+    + '</div>';
 
   if (v.tomas && v.tomas.length) {
     h += '<div class="cm-section">Guion de grabación</div><div class="cm-table-wrap"><table class="cm-table"><thead><tr><th>#</th><th>Qué grabas</th><th>¿Hablas?</th><th>Qué dices o qué texto aparece</th></tr></thead><tbody>';
@@ -5538,7 +5683,9 @@ function openContentModal(id) {
     h += '<div class="cm-section">Antes de grabar</div><ul class="cm-list">' + v.checklist.map(function(n) { return '<li>' + escHtml(n) + '</li>'; }).join('') + '</ul>';
   }
 
-  document.getElementById('content-modal-body').innerHTML = h;
+  var body = document.getElementById('content-modal-body');
+  body.innerHTML = h;
+  body.scrollTop = 0;
   document.getElementById('content-modal').classList.add('open');
 }
 
@@ -5556,7 +5703,7 @@ function setContentStatus(id, idx) {
 }
 
 function copyContentCaption(id, btn) {
-  var v = findContentVideo(id);
+  var v = contentVideoMerged(id);
   if (!v) return;
   var done = function() { btn.textContent = '¡Copiado!'; setTimeout(function() { btn.textContent = 'Copiar caption'; }, 1800); };
   if (navigator.clipboard && navigator.clipboard.writeText) {
