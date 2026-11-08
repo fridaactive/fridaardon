@@ -340,10 +340,10 @@
 
   /* Calendar grid */
   .cal-scroll { overflow-x:auto; overflow-y:visible; -webkit-overflow-scrolling:touch; }
-  .cal-grid-wrap { position:relative; border-radius:14px; border:1.5px solid var(--border); overflow:hidden; min-width:580px; }
+  .cal-grid-wrap { position:relative; border-radius:14px; border:1.5px solid var(--border); overflow:hidden; min-width:660px; }
   .cal-grid {
     display:grid;
-    grid-template-columns: 3.5rem repeat(6,1fr);
+    grid-template-columns: 3.5rem repeat(7,1fr);
   }
 
   /* Header row */
@@ -751,7 +751,7 @@
         <div class="menu-icon cream"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/><path d="M8 14h1M12 14h1M16 14h1M8 17.5h1M12 17.5h1"/></svg></div>
         <div class="menu-info">
           <div class="menu-title">Planificación Semanal</div>
-          <div class="menu-desc">Calendario Lun–Sáb · 5 am – 7 pm</div>
+          <div class="menu-desc">Calendario Lun–Dom · 5 am – 7 pm</div>
         </div>
         <div class="menu-arrow">›</div>
       </div>
@@ -5205,7 +5205,7 @@ function syncAllFirebaseData() {
 // ══════════════════════════════
 // CALENDAR
 // ══════════════════════════════
-var DAYS = ['Lun','Mar','Mié','Jue','Vie','Sáb'];
+var DAYS = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
 var HOURS = [];
 for (var h = 5; h <= 19; h++) { HOURS.push(h); }
 
@@ -5309,7 +5309,7 @@ function getWeekDates(offset) {
   var diff = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
   monday.setDate(now.getDate() + diff + (offset * 7));
   var days = [];
-  for (var i = 0; i < 6; i++) {
+  for (var i = 0; i < 7; i++) {
     var d = new Date(monday);
     d.setDate(monday.getDate() + i);
     days.push(d);
@@ -5665,7 +5665,7 @@ function renderCalendar() {
   var now = new Date();
 
   // Week label
-  var first = days[0], last = days[5];
+  var first = days[0], last = days[6];
   var months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   document.getElementById('week-label').textContent =
     first.getDate() + ' ' + months[first.getMonth()] + ' — ' + last.getDate() + ' ' + months[last.getMonth()] + ' ' + last.getFullYear();
@@ -5706,10 +5706,10 @@ function renderCalendar() {
   var oldOverlays = wrap.querySelectorAll('.cal-day-col-overlay');
   oldOverlays.forEach(function(o) { o.remove(); });
 
-  // Column geometry: first column is 3.5rem (time labels), then 6 equal columns
+  // Column geometry: first column is 3.5rem (time labels), then 7 equal columns
   var gridWidth = grid.offsetWidth;
   var timeColWidth = 3.5 * remPx;
-  var dayColWidth = (gridWidth - timeColWidth) / 6;
+  var dayColWidth = (gridWidth - timeColWidth) / 7;
 
   days.forEach(function(d, dayIdx) {
     var dk = dateKey(d);
