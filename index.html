@@ -798,6 +798,23 @@
     body.portal-dark *, body.portal-dark *::before { animation:none !important; transition:none !important; }
   }
 
+  /* ── Detalles con personalidad: stickers, marcador, etiquetas y botones con relieve ── */
+  .fa-sticker { position:absolute; fill:var(--cream); pointer-events:none; filter:drop-shadow(0 3px 6px rgba(0,0,0,0.35)); }
+  .fa-sticker-spark { width:36px; height:36px; top:12px; right:16px; animation:faTwinkle 2.6s ease-in-out infinite; }
+  .fa-sticker-bolt { width:22px; height:22px; top:-8px; right:-6px; fill:var(--cream); transform:rotate(12deg); }
+  .fa-sticker-star { position:relative; display:inline-block; width:18px; height:18px; margin-left:0.35rem; vertical-align:-2px; transform:rotate(-12deg); }
+  @keyframes faTwinkle { 0%,100% { transform:scale(1) rotate(0deg); opacity:1; } 50% { transform:scale(0.75) rotate(20deg); opacity:0.75; } }
+  .in-stat-hl { position:relative; overflow:visible !important; }
+  .fa-marker { position:relative; z-index:0; }
+  .fa-marker::after { content:''; position:absolute; left:-4px; right:-4px; bottom:1px; height:0.55em; background:var(--blue); border-radius:3px; z-index:-1; transform:skew(-8deg); }
+  .fa-tag { display:inline-block; font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.66rem; letter-spacing:0.04em; text-transform:none; background:var(--cream); color:#0D1B3E; padding:0.25rem 0.7rem; border-radius:999px; transform:rotate(-2deg); }
+  body.portal-dark .in-msg { position:relative; }
+  /* Botones principales con relieve que se "aprietan" */
+  body.portal-dark .in-link-blue { box-shadow:0 5px 0 #0F3FA8; margin-bottom:5px; }
+  body.portal-dark .in-link-blue:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+  body.portal-dark .in-stat-hl { box-shadow:0 5px 0 #0F3FA8; }
+  body.portal-dark .in-hero-play { box-shadow:0 0 0 6px rgba(28,85,229,0.3), 0 5px 0 #0F3FA8; }
+
   /* Chat */
   body.portal-dark #chat-modal { background:var(--night) !important; color:var(--text); }
   body.portal-dark .chat-bubble { background:var(--surface); color:var(--text); }
@@ -1743,7 +1760,7 @@ function renderInicioTab() {
     var blocks = (sug.day.blocks || []).filter(function(b) { return b.exercises && b.exercises.length; });
     var nEx = blocks.reduce(function(n, b) { return n + b.exercises.length; }, 0);
     h += '<button type="button" class="in-hero" onclick="goToRutinaDay(' + sug.index + ')">'
-      + '<span class="in-hero-tag">HOY · DÍA ' + (sug.index + 1) + '</span>'
+      + '<svg class="fa-sticker fa-sticker-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 5.6 2.4 8 8 9-5.6 1-7.4 3.4-8 9-.6-5.6-2.4-8-8-9 5.6-1 7.4-3.4 8-9z"/></svg><span class="in-hero-tag">HOY · DÍA ' + (sug.index + 1) + '</span>'
       + '<span class="in-hero-bottom"><span><span class="in-hero-title">' + escapeHtml(sug.day.name || ('Día ' + (sug.index + 1))) + '</span>'
       + '<span class="in-hero-meta">' + nEx + ' ejercicio' + (nEx !== 1 ? 's' : '') + ' · ' + blocks.length + ' bloque' + (blocks.length !== 1 ? 's' : '') + '</span></span>'
       + '<span class="in-hero-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></span>'
@@ -1755,7 +1772,7 @@ function renderInicioTab() {
 
   h += '<div class="in-stats">'
     + (c.racha >= 2
-        ? '<div class="in-stat in-stat-hl"><span class="in-stat-num">' + c.racha + '</span><span class="in-stat-lbl">días seguidos</span></div>'
+        ? '<div class="in-stat in-stat-hl"><svg class="fa-sticker fa-sticker-bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1L4 14h6.5L9 23l10-13.5h-6.6z"/></svg><span class="in-stat-num">' + c.racha + '</span><span class="in-stat-lbl">días seguidos</span></div>'
         : '<div class="in-stat in-stat-hl"><span class="in-stat-num">' + c.mes + '</span><span class="in-stat-lbl">días este mes</span></div>')
     + '<div class="in-stat"><span class="in-stat-num">' + c.semana + '</span><span class="in-stat-lbl">esta semana</span></div>'
     + (prog ? '<div class="in-stat"><span class="in-stat-num in-cream">' + escapeHtml(prog) + '</span><span class="in-stat-lbl">del programa</span></div>'
@@ -1763,10 +1780,10 @@ function renderInicioTab() {
     + '</div>';
 
   if (currentRutinaData && currentRutinaData.mensajeInicial) {
-    h += '<div class="in-msg"><span class="in-msg-lbl">MENSAJE DE FRIDA</span><span class="in-msg-txt">' + escapeHtml(currentRutinaData.mensajeInicial) + '</span></div>';
+    h += '<div class="in-msg"><span class="in-msg-lbl"><span class="fa-tag">de Frida para ti</span></span><span class="in-msg-txt">' + escapeHtml(currentRutinaData.mensajeInicial) + '</span></div>';
   }
 
-  h += '<div class="in-section">ACCESOS RÁPIDOS</div><div class="in-links">';
+  h += '<div class="in-section"><span class="fa-marker">ACCESOS</span> RÁPIDOS<svg class="fa-sticker fa-sticker-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 8.7l7.1-.6z"/></svg></div><div class="in-links">';
   if (sug) h += '<button type="button" class="in-link in-link-blue" onclick="showTab(\'tab-rutina\')"><span class="in-link-title">MI RUTINA</span><span class="in-link-sub">Todos tus días</span></button>';
   h += '<button type="button" class="in-link" onclick="showTab(\'tab-perfil\')"><span class="in-link-title">MI PROGRESO</span><span class="in-link-sub">Historial y transformación</span></button>'
     + '<button type="button" class="in-link" onclick="showTab(\'tab-beneficios\')"><span class="in-link-title">BENEFICIOS</span><span class="in-link-sub">Descuentos de marcas aliadas</span></button>'
