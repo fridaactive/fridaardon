@@ -417,6 +417,59 @@
   .cal-event.type-otro { background:#7a2a6a; color:#fff; }
   .cal-event.type-libre { background:#e8f7ee; color:#2a7a2a; border:1.5px solid #a8ddb8; font-style:italic; }
   .cal-event.type-nodisponible { background:#fff0f0; color:#c44; border:1.5px dashed #fcc; font-style:italic; }
+  .cal-event.type-contenido { background:#F5ECCB; color:#0D1B3E; border:1.5px solid #E2C870; }
+
+  /* ── CONTENIDO (plan de redes sociales) ── */
+  .plan-tabs { display:flex; gap:0.5rem; max-width:1150px; margin:1rem auto 0; padding:0 1.25rem; }
+  .plan-tab { flex:1; border:1.5px solid var(--border-b,#ccdaf5); background:#fff; color:var(--muted); border-radius:12px; padding:0.65rem 0.5rem; font-size:0.78rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; }
+  .plan-tab.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+  .cal-day-chip { display:block; margin-top:0.25rem; background:#F5ECCB; color:#0D1B3E; border:none; border-radius:6px; padding:0.15rem 0.25rem; font-size:0.52rem; font-weight:700; line-height:1.2; cursor:pointer; width:100%; font-family:'DM Sans',sans-serif; }
+  .content-wrap { padding:1rem 1.25rem 5rem; max-width:900px; margin:0 auto; }
+  .content-intro { font-size:0.75rem; color:var(--muted); margin-bottom:0.9rem; line-height:1.5; }
+  .content-week-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:1.1rem 0 0.5rem; }
+  .content-card { display:block; width:100%; text-align:left; background:#fff; border:1.5px solid var(--border-b,#ccdaf5); border-radius:14px; padding:0.9rem 1rem; margin-bottom:0.6rem; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .content-card.next { border-color:var(--blue); box-shadow:0 0 0 3px #EBF0FF; }
+  .content-card-top { display:flex; justify-content:space-between; gap:0.5rem; align-items:center; margin-bottom:0.3rem; }
+  .content-card-date { font-size:0.68rem; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:0.05em; }
+  .content-card-title { font-size:0.95rem; font-weight:700; color:var(--text); }
+  .content-card-meta { font-size:0.7rem; color:var(--muted); margin-top:0.2rem; }
+  .content-status { font-size:0.62rem; font-weight:700; border-radius:100px; padding:0.2rem 0.55rem; white-space:nowrap; }
+  .content-status.s0 { background:#f0f2f7; color:#4a5878; }
+  .content-status.s1 { background:#FFF4D6; color:#7a5a00; }
+  .content-status.s2 { background:#EBF0FF; color:var(--blue); }
+  .content-status.s3 { background:#e5f4e4; color:#2a7a2a; }
+  .content-draft { font-size:0.6rem; font-weight:700; background:#fff0f0; color:#c44; border-radius:100px; padding:0.15rem 0.5rem; margin-left:0.35rem; }
+  #content-modal .modal { max-width:720px; max-height:90vh; overflow-y:auto; }
+  @media (min-width: 700px) { #content-modal { align-items:center; } #content-modal .modal { border-radius:20px; } }
+  .cm-section { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:1.1rem 0 0.45rem; }
+  .cm-dates { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:0.4rem; }
+  .cm-date { background:#f7f9ff; border-radius:10px; padding:0.5rem; font-size:0.68rem; color:var(--muted); }
+  .cm-date b { display:block; color:var(--text); font-size:0.78rem; margin-top:0.1rem; }
+  .cm-idea { font-size:0.82rem; line-height:1.5; color:var(--text); }
+  .cm-table-wrap { overflow-x:auto; border:1.5px solid var(--border); border-radius:12px; }
+  .cm-table { width:100%; border-collapse:collapse; font-size:0.74rem; min-width:520px; }
+  .cm-table th { background:var(--blue); color:#fff; text-align:left; padding:0.5rem; font-weight:700; }
+  .cm-table td { padding:0.55rem 0.5rem; border-top:1px solid var(--border); vertical-align:top; line-height:1.45; }
+  .cm-table tr.talk td { background:#FFFBEA; }
+  .cm-talk { font-weight:700; color:var(--blue); white-space:nowrap; }
+  /* En el celular cada toma se ve como una tarjeta (sin desplazamiento lateral) */
+  @media (max-width: 600px) {
+    .cm-table { min-width:0; }
+    .cm-table thead { display:none; }
+    .cm-table tr { display:block; border-top:1px solid var(--border); padding:0.4rem 0; }
+    .cm-table tr:first-child { border-top:none; }
+    .cm-table td { display:block; border-top:none; padding:0.2rem 0.6rem; }
+    .cm-table td[data-label]::before { content:attr(data-label); display:block; font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+    .cm-table td.cm-num { font-weight:700; color:var(--blue); }
+  }
+  .cm-list { margin:0; padding-left:1.1rem; font-size:0.78rem; line-height:1.6; color:var(--text); }
+  .cm-caption { white-space:pre-line; background:#f7f9ff; border-radius:12px; padding:0.75rem; font-size:0.8rem; line-height:1.55; color:var(--text); }
+  .cm-btn { border:none; border-radius:10px; padding:0.6rem 0.9rem; font-weight:700; font-size:0.75rem; font-family:'DM Sans',sans-serif; cursor:pointer; }
+  .cm-btn.primary { background:var(--blue); color:#fff; }
+  .cm-btn.ghost { background:var(--blue-lt); color:var(--blue); }
+  .cm-status-row { display:flex; gap:0.4rem; flex-wrap:wrap; }
+  .cm-status-btn { border:1.5px solid var(--border); background:#fff; border-radius:100px; padding:0.35rem 0.75rem; font-size:0.7rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; color:var(--muted); }
+  .cm-status-btn.active { background:var(--blue); border-color:var(--blue); color:#fff; }
 
   /* Modal */
   .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:999; display:none; align-items:flex-end; justify-content:center; }
@@ -1095,7 +1148,17 @@
     <div class="sub-title">Planificación<br><span>Semanal</span></div>
   </div>
 
-  <div class="plan-wrap">
+  <div class="plan-tabs">
+    <button type="button" class="plan-tab active" id="plan-tab-cal" onclick="switchPlanTab('cal')">📅 Calendario</button>
+    <button type="button" class="plan-tab" id="plan-tab-content" onclick="switchPlanTab('content')">🎬 Contenido</button>
+  </div>
+
+  <div class="content-wrap" id="content-view" style="display:none">
+    <div class="content-intro">Tus videos de Instagram: cuándo grabar, editar y publicar cada uno. Toca un video para ver el guion completo.</div>
+    <div id="content-list"><div class="content-intro">Cargando…</div></div>
+  </div>
+
+  <div class="plan-wrap" id="plan-cal-view">
     <div class="week-nav">
       <button class="week-nav-btn" onclick="changeWeek(-1)">‹</button>
       <div>
@@ -1444,6 +1507,11 @@
     <input type="text" id="ac-input" placeholder="Escribí tu mensaje..." onkeypress="if(event.key==='Enter'){sendAdminChatMessage();}" style="flex:1;border:1px solid var(--border);border-radius:100px;padding:0.6rem 1rem;font-size:0.82rem;font-family:'DM Sans',sans-serif;outline:none;">
     <button onclick="sendAdminChatMessage()" style="flex-shrink:0;width:2.6rem;height:2.6rem;border-radius:50%;background:var(--blue);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="m3 20 18-8L3 4v7l12 1-12 1v7Z"/></svg></button>
   </div>
+</div>
+
+<!-- ══════════ MODAL CONTENIDO (guion de cada video) ══════════ -->
+<div class="modal-overlay" id="content-modal" onclick="if(event.target===this)closeContentModal()">
+  <div class="modal" id="content-modal-body"></div>
 </div>
 
 <!-- ══════════ MODAL EVENTO ══════════ -->
@@ -4867,6 +4935,7 @@ function showScreen(name) {
   if (cpModal) cpModal.style.display = 'none';
   var eventModal = document.getElementById('event-modal');
   if (eventModal) eventModal.classList.remove('open');
+  closeContentModal();
   var newClientModal = document.getElementById('new-client-modal');
   if (newClientModal) newClientModal.style.display = 'none';
   var fijoModal = document.getElementById('fin-fijo-modal');
@@ -4895,6 +4964,11 @@ function showScreen(name) {
   if (name === 'clientes') updateClientBadges();
   if (name === 'portal-content') renderPortalContentScreen();
   if (name === 'planificacion') {
+    // Plan de contenido (videos de Instagram): se dibuja en el calendario y en la pestaña Contenido
+    loadContentPlan(function() {
+      if (document.getElementById('content-view').style.display === 'none') renderCalendar();
+      else renderContentList();
+    });
     // Load from Firebase first, then render
     fbGet('cal/events', function(data) {
       calEvents = (data && Object.keys(data).length > 0) ? data : JSON.parse(localStorage.getItem('fa_cal_events') || '{}');
@@ -5273,6 +5347,203 @@ function isToday(date) {
   return date.toDateString() === now.toDateString();
 }
 
+// ── CONTENIDO: plan de videos de Instagram ──
+// El plan (guiones, fechas, captions) vive en contenido/plan.json y lo
+// actualiza Claude. El estado de cada video (Por grabar → Publicado) lo
+// marca Frida desde aquí y se guarda en Firebase.
+var CONTENT_PLAN = [];
+var CONTENT_STATUS = JSON.parse(localStorage.getItem('fa_content_status') || '{}');
+var CONTENT_STATES = ['Por grabar', 'Grabado', 'Editado', 'Publicado'];
+var CONTENT_DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+var CONTENT_MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+var contentPlanLoaded = false;
+
+function loadContentPlan(cb) {
+  fetch('contenido/plan.json?v=' + Date.now(), { cache: 'no-store' })
+    .then(function(r) { return r.ok ? r.json() : { videos: [] }; })
+    .then(function(data) { CONTENT_PLAN = (data && data.videos) || []; contentPlanLoaded = true; })
+    .catch(function(e) { console.warn('No se pudo cargar el plan de contenido', e); })
+    .then(function() {
+      fbGet('contentStatus', function(st) {
+        if (st) {
+          CONTENT_STATUS = st;
+          localStorage.setItem('fa_content_status', JSON.stringify(st));
+        }
+        if (cb) cb();
+      });
+    });
+}
+
+function contentDate(iso) {
+  var p = String(iso).split('-');
+  return new Date(+p[0], +p[1] - 1, +p[2]);
+}
+
+function contentDateLabel(iso, short) {
+  var d = contentDate(iso);
+  var day = CONTENT_DAY_NAMES[d.getDay()];
+  if (short) day = day.slice(0, 3).toLowerCase();
+  return day + ' ' + d.getDate() + ' ' + CONTENT_MONTHS[d.getMonth()];
+}
+
+function contentTimeLabel(hhmm) {
+  var p = String(hhmm || '').split(':');
+  var h = +p[0], m = p[1] || '00';
+  if (isNaN(h)) return '';
+  var suffix = h < 12 ? 'a. m.' : 'p. m.';
+  var h12 = h === 0 ? 12 : (h > 12 ? h - 12 : h);
+  return h12 + ':' + m + ' ' + suffix;
+}
+
+function contentStatusIdx(id) {
+  var s = CONTENT_STATUS[id];
+  return (typeof s === 'number' && s >= 0 && s < CONTENT_STATES.length) ? s : 0;
+}
+
+// Formato de los textos del guion: **así** = palabra en mayúsculas azules, *así* = cursiva crema.
+function contentMarks(text) {
+  return escHtml(text)
+    .replace(/\*\*(.+?)\*\*/g, '<b style="color:var(--blue)">$1</b>')
+    .replace(/\*(.+?)\*/g, '<i style="background:#F5ECCB;border-radius:4px;padding:0 0.2rem">$1</i>');
+}
+
+function findContentVideo(id) {
+  return CONTENT_PLAN.find(function(v) { return v.id === id; });
+}
+
+// Tareas de contenido de un día: grabar, editar o publicar.
+function contentTasksFor(dk) {
+  var out = [];
+  CONTENT_PLAN.forEach(function(v) {
+    if (v.grabar === dk) out.push({ video: v, kind: 'grabar', label: '🎥 Grabar: ' + v.titulo });
+    if (v.editar === dk) out.push({ video: v, kind: 'editar', label: '✂️ Editar: ' + v.titulo });
+    if (v.publicar && v.publicar.fecha === dk) out.push({ video: v, kind: 'publicar', label: '📲 Publicar: ' + v.titulo });
+  });
+  return out;
+}
+
+function switchPlanTab(tab) {
+  document.getElementById('plan-tab-cal').classList.toggle('active', tab === 'cal');
+  document.getElementById('plan-tab-content').classList.toggle('active', tab === 'content');
+  document.getElementById('plan-cal-view').style.display = tab === 'cal' ? '' : 'none';
+  document.getElementById('content-view').style.display = tab === 'content' ? '' : 'none';
+  if (tab === 'content') renderContentList();
+  else renderCalendar();
+}
+
+function renderContentList() {
+  var el = document.getElementById('content-list');
+  if (!el) return;
+  if (!CONTENT_PLAN.length) {
+    el.innerHTML = '<div class="content-intro">' + (contentPlanLoaded ? 'Todavía no hay videos planificados.' : 'Cargando…') + '</div>';
+    return;
+  }
+  var videos = CONTENT_PLAN.slice().sort(function(a, b) { return a.publicar.fecha < b.publicar.fecha ? -1 : 1; });
+  var todayKey = dateKey(new Date());
+  var next = videos.find(function(v) { return v.publicar.fecha >= todayKey && contentStatusIdx(v.id) < 3; });
+  var html = '', lastWeek = '';
+  videos.forEach(function(v) {
+    var d = contentDate(v.publicar.fecha);
+    var monday = new Date(d);
+    monday.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    var sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    var weekLabel = 'Semana del ' + monday.getDate() + ' ' + CONTENT_MONTHS[monday.getMonth()] + ' al ' + sunday.getDate() + ' ' + CONTENT_MONTHS[sunday.getMonth()];
+    if (weekLabel !== lastWeek) { html += '<div class="content-week-label">' + weekLabel + '</div>'; lastWeek = weekLabel; }
+    var st = contentStatusIdx(v.id);
+    html += '<button type="button" class="content-card' + (next && next.id === v.id ? ' next' : '') + '" onclick="openContentModal(\'' + v.id + '\')">'
+      + '<div class="content-card-top"><div class="content-card-date">Publica: ' + contentDateLabel(v.publicar.fecha) + ' · ' + contentTimeLabel(v.publicar.hora) + '</div>'
+      + '<span class="content-status s' + st + '">' + CONTENT_STATES[st] + '</span></div>'
+      + '<div class="content-card-title">' + escHtml(v.titulo) + (v.borrador ? '<span class="content-draft">Borrador</span>' : '') + '</div>'
+      + '<div class="content-card-meta">' + escHtml(v.pilar) + ' · Graba: ' + contentDateLabel(v.grabar, true) + ' · Edita: ' + contentDateLabel(v.editar, true) + '</div>'
+      + '</button>';
+  });
+  el.innerHTML = html;
+}
+
+function openContentModal(id) {
+  var v = findContentVideo(id);
+  if (!v) return;
+  var st = contentStatusIdx(id);
+  var h = '';
+  h += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.75rem">'
+    + '<div><div class="content-card-date">' + escHtml(v.pilar) + ' · ' + escHtml(v.formato) + ' · ' + escHtml(v.duracion) + '</div>'
+    + '<div class="modal-title" style="margin:0.2rem 0 0">' + escHtml(v.titulo) + (v.borrador ? '<span class="content-draft">Borrador</span>' : '') + '</div></div>'
+    + '<button type="button" class="cm-btn ghost" onclick="closeContentModal()" aria-label="Cerrar">✕</button></div>';
+
+  h += '<div class="cm-section">Estado</div><div class="cm-status-row">';
+  CONTENT_STATES.forEach(function(name, i) {
+    h += '<button type="button" class="cm-status-btn' + (i === st ? ' active' : '') + '" onclick="setContentStatus(\'' + id + '\',' + i + ')">' + name + '</button>';
+  });
+  h += '</div>';
+
+  h += '<div class="cm-section">Fechas</div><div class="cm-dates">'
+    + '<div class="cm-date">🎥 Grabar<b>' + contentDateLabel(v.grabar) + '</b></div>'
+    + '<div class="cm-date">✂️ Editar<b>' + contentDateLabel(v.editar) + '</b></div>'
+    + '<div class="cm-date">📲 Publicar<b>' + contentDateLabel(v.publicar.fecha) + ', ' + contentTimeLabel(v.publicar.hora) + '</b></div>'
+    + '</div>';
+
+  if (v.idea) h += '<div class="cm-section">La idea</div><div class="cm-idea">' + contentMarks(v.idea) + '</div>';
+
+  if (v.tomas && v.tomas.length) {
+    h += '<div class="cm-section">Guion de grabación</div><div class="cm-table-wrap"><table class="cm-table"><thead><tr><th>#</th><th>Qué grabas</th><th>¿Hablas?</th><th>Qué dices o qué texto aparece</th></tr></thead><tbody>';
+    v.tomas.forEach(function(t, i) {
+      h += '<tr' + (t.habla ? ' class="talk"' : '') + '><td class="cm-num">Toma ' + (i + 1) + '</td><td data-label="Qué grabas">' + contentMarks(t.graba) + '</td>'
+        + '<td data-label="¿Hablas?">' + (t.habla ? '<span class="cm-talk">🎤 Sí, a cámara</span>' : 'No') + '</td><td data-label="Qué dices o qué texto aparece">' + contentMarks(t.dice) + '</td></tr>';
+    });
+    h += '</tbody></table></div>';
+  }
+
+  if (v.notas && v.notas.length) {
+    h += '<div class="cm-section">Notas</div><ul class="cm-list">' + v.notas.map(function(n) { return '<li>' + contentMarks(n) + '</li>'; }).join('') + '</ul>';
+  }
+
+  if (v.caption) {
+    h += '<div class="cm-section">Caption</div><div class="cm-caption">' + escHtml(v.caption) + '</div>'
+      + '<button type="button" class="cm-btn primary" style="margin-top:0.5rem" onclick="copyContentCaption(\'' + id + '\', this)">Copiar caption</button>';
+  }
+
+  if (v.checklist && v.checklist.length) {
+    h += '<div class="cm-section">Antes de grabar</div><ul class="cm-list">' + v.checklist.map(function(n) { return '<li>' + escHtml(n) + '</li>'; }).join('') + '</ul>';
+  }
+
+  document.getElementById('content-modal-body').innerHTML = h;
+  document.getElementById('content-modal').classList.add('open');
+}
+
+function closeContentModal() {
+  var m = document.getElementById('content-modal');
+  if (m) m.classList.remove('open');
+}
+
+function setContentStatus(id, idx) {
+  CONTENT_STATUS[id] = idx;
+  localStorage.setItem('fa_content_status', JSON.stringify(CONTENT_STATUS));
+  fbSet('contentStatus', CONTENT_STATUS);
+  openContentModal(id);
+  renderContentList();
+}
+
+function copyContentCaption(id, btn) {
+  var v = findContentVideo(id);
+  if (!v) return;
+  var done = function() { btn.textContent = '¡Copiado!'; setTimeout(function() { btn.textContent = 'Copiar caption'; }, 1800); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(v.caption).then(done).catch(function() { fallbackCopy(v.caption); done(); });
+  } else { fallbackCopy(v.caption); done(); }
+}
+
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  ta.remove();
+}
+
 function changeWeek(dir) { weekOffset += dir; renderCalendar(); }
 
 function renderCalendar() {
@@ -5295,7 +5566,10 @@ function renderCalendar() {
   html += '<div class="cal-time-header"></div>';
   days.forEach(function(d) {
     var todayClass = isToday(d) ? ' today' : '';
-    html += '<div class="cal-day-header' + todayClass + '">' + DAYS[days.indexOf(d)] + '<br>' + d.getDate() + '</div>';
+    var chips = contentTasksFor(dateKey(d)).filter(function(t) { return t.kind !== 'publicar'; }).map(function(t) {
+      return '<button type="button" class="cal-day-chip" onclick="event.stopPropagation();openContentModal(\'' + t.video.id + '\')">' + escHtml(t.label) + '</button>';
+    }).join('');
+    html += '<div class="cal-day-header' + todayClass + '">' + DAYS[days.indexOf(d)] + '<br>' + d.getDate() + chips + '</div>';
   });
 
   // Rows — empty cells only, no events drawn inside individual cells anymore
@@ -5329,7 +5603,8 @@ function renderCalendar() {
   days.forEach(function(d, dayIdx) {
     var dk = dateKey(d);
     var dayEvs = calEvents[dk] || [];
-    if (dayEvs.length === 0) return;
+    var dayPubs = contentTasksFor(dk).filter(function(t) { return t.kind === 'publicar'; });
+    if (dayEvs.length === 0 && dayPubs.length === 0) return;
 
     var overlay = document.createElement('div');
     overlay.className = 'cal-day-col-overlay';
@@ -5363,6 +5638,19 @@ function renderCalendar() {
       overlay.appendChild(evDiv);
     });
 
+    // Publicaciones de Instagram del plan de contenido (30 min, color crema)
+    dayPubs.forEach(function(t) {
+      var p = String(t.video.publicar.hora || '12:00').split(':');
+      var startDec = (+p[0]) + (+(p[1] || 0)) / 60;
+      var pubDiv = document.createElement('div');
+      pubDiv.className = 'cal-event type-contenido';
+      pubDiv.setAttribute('data-cid', t.video.id);
+      pubDiv.style.top = ((startDec - firstHour) * 3 * remPx + 2) + 'px';
+      pubDiv.style.height = (0.5 * 3 * remPx - 4) + 'px';
+      pubDiv.textContent = '📲 ' + t.video.titulo + ' · ' + fmtTime(startDec);
+      overlay.appendChild(pubDiv);
+    });
+
     wrap.appendChild(overlay);
   });
 
@@ -5392,6 +5680,8 @@ function renderCalendar() {
   document.querySelectorAll('.cal-event').forEach(function(ev) {
     ev.addEventListener('click', function(e) {
       e.stopPropagation();
+      var cid = this.getAttribute('data-cid');
+      if (cid) { openContentModal(cid); return; }
       var dk = this.getAttribute('data-dk');
       var eid = this.getAttribute('data-eid');
       openModal(dk, null, eid);
