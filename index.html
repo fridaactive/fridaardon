@@ -1374,7 +1374,7 @@
 
     <!-- VINCULAR CON CÓDIGO (para cuentas ya existentes sin perfil de clienta) -->
     <div style="background:#fff;border:1.5px solid var(--ls-border);border-radius:16px;padding:1rem 1.1rem;margin-bottom:1.25rem;">
-      <div style="font-size:0.78rem;font-weight:700;color:var(--ls-text);margin-bottom:0.5rem;">¿Tu entrenadora ya te armó un plan?</div>
+      <div style="font-size:0.78rem;font-weight:700;color:var(--ls-text);margin-bottom:0.5rem;">¿Tu coach ya te armó un plan?</div>
       <div style="font-size:0.72rem;color:var(--ls-muted);margin-bottom:0.7rem;line-height:1.4;">Ingresá tu nombre y el código de acceso que te compartió para ver tu rutina con esta misma cuenta.</div>
       <div style="display:flex;flex-direction:column;gap:0.5rem;">
         <input id="ls-linkcode-name" type="text" placeholder="Tu nombre" style="border:1.5px solid var(--ls-border);border-radius:10px;padding:0.6rem 0.75rem;font-size:0.85rem;font-family:'DM Sans',sans-serif;">
@@ -2464,7 +2464,7 @@ function handleAvatarFileSelect(input) {
 // ── RUTINA TAB ──
 function loadRutinaTab(clientId) {
   var el = document.getElementById('rutina-content');
-  if (!clientId) { el.innerHTML = '<div class="empty-note">Tu entrenadora todavía no vinculó tu rutina.</div>'; return; }
+  if (!clientId) { el.innerHTML = '<div class="empty-note">Tu coach todavía no vinculó tu rutina.</div>'; return; }
   db().ref('exerciseBank').once('value').then(function(snap) {
     EXERCISE_BANK = snap.val() || {};
   }).catch(function() {}).then(function() {
@@ -2472,7 +2472,7 @@ function loadRutinaTab(clientId) {
   }).then(function(snap) {
     var data = snap.val();
     if (!data || !data.days || data.days.length === 0) {
-      el.innerHTML = '<div class="empty-note">Tu entrenadora todavía no asignó tu rutina.</div>';
+      el.innerHTML = '<div class="empty-note">Tu coach todavía no asignó tu rutina.</div>';
       return;
     }
     currentRutinaData = data;
