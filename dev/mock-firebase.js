@@ -27,7 +27,11 @@
       be2: { marca: 'Gym Wear SV', descuento: '10% en ropa deportiva', descripcion: 'Leggings y tops.', categoria: 'Ropa', logo: '' }
     },
     anuncios: { an1: { texto: '¡Nuevo programa Core en 15 días muy pronto!', activo: true } },
-    linkCodes: {}, client_links: {}, landingLeads: {}
+    linkCodes: {}, client_links: {}, landingLeads: {},
+    cal: { events: (function () { var e = {}; var t = new Date(); var k = function (o) { var d = new Date(t); d.setDate(d.getDate() + o); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+      e[k(0)] = [{ id: 'ev1', title: 'Sesión presencial', note: 'Sara S.', hour: 6, hourEnd: 7, type: 'cliente' }, { id: 'ev2', title: 'Grabar video 1', hour: 11, hourEnd: 12, type: 'tarea' }, { id: 'ev3', title: 'CICLO', hour: 18, hourEnd: 19, type: 'otro' }];
+      e[k(1)] = [{ id: 'ev4', title: 'Sara S.', note: 'Sesión presencial', hour: 15, hourEnd: 16, type: 'cliente' }];
+      return e; })() }
   };
   DATA.clientasPortal[UID] = {
     perfil: { nombre: 'Andrea Martínez', clientId: CLIENT, bio: 'Quiero sentirme fuerte y con energía.', fotoPerfil: '' },
@@ -96,7 +100,7 @@
   };
   window.firebase = {
     apps: [],
-    initializeApp: function () { this.apps.push({}); return {}; },
+    initializeApp: function () { var app = { database: function () { return { ref: ref }; }, auth: function () { return auth; } }; this.apps.push(app); return app; },
     auth: Object.assign(function () { return auth; }, { Auth: { Persistence: { LOCAL: 'local' } } }),
     database: Object.assign(function () { return { ref: ref }; }, { ServerValue: { TIMESTAMP: Date.now() } }),
     storage: function () { return { ref: function () { return { put: function () { return Promise.resolve({ ref: { getDownloadURL: function () { return Promise.resolve(''); } } }); } }; } }; }

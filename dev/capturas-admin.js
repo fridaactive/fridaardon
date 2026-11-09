@@ -21,6 +21,7 @@ const server = http.createServer((req, res) => {
   await page.route(/fonts\.googleapis\.com/, r => r.fulfill({ contentType: 'text/css', body: "@font-face{font-family:'Archivo Black';src:url(http://localhost:8768/dev/ArchivoBlack.ttf) format('truetype');}" }));
   await page.addInitScript(fs.readFileSync(path.join(__dirname, 'mock-firebase.js'), 'utf8'));
   await page.addInitScript(() => { Object.defineProperty(window, 'firebase', { value: window.firebase, writable: false }); });
+  if (process.env.FAKE_TIME && page.clock) await page.clock.install({ time: new Date(process.env.FAKE_TIME) });
   await page.goto('http://localhost:8768/admin.html'); await page.waitForTimeout(2500);
   const shot = async (n, full) => page.screenshot({ path: path.join(OUT, `${PREFIX}_${n}.png`), fullPage: !!full });
   await shot('00_login');

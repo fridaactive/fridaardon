@@ -754,6 +754,17 @@
   body.admin-v2 .cal-grid-wrap { border-radius:22px; border-color:var(--line); }
   body.admin-v2 .fin-card { background:#fff; border:1px solid var(--line); border-radius:20px; box-shadow:0 5px 0 var(--line); }
 
+  /* Planificación: línea de ahora, botón volver a hoy y eventos más finos */
+  .cal-now { position:absolute; height:0; border-top:2px solid #E5484D; z-index:6; pointer-events:none; }
+  .cal-now-dot { position:absolute; left:-5px; top:-6px; width:10px; height:10px; border-radius:50%; background:#E5484D; box-shadow:0 0 0 3px rgba(229,72,77,0.25); }
+  .cal-now-time { position:absolute; right:3px; top:-17px; font-size:0.55rem; font-weight:700; color:#fff; background:#E5484D; padding:0.05rem 0.3rem; border-radius:6px; }
+  .week-today-btn { margin-top:0.35rem; background:var(--cream); color:#0D1B3E; border:none; border-radius:999px; padding:0.25rem 0.75rem; font-size:0.66rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; box-shadow:0 3px 0 #C9B57A; }
+  .week-today-btn:active { transform:translateY(2px); box-shadow:0 1px 0 #C9B57A; }
+  body.admin-v2 .cal-event { border-radius:10px; box-shadow:0 2px 0 rgba(13,27,62,0.18); transition:transform 0.12s ease; }
+  body.admin-v2 .cal-event:active { transform:scale(0.97); }
+  body.admin-v2 .cal-day-header.today { background:var(--cream); color:#0D1B3E; }
+  body.admin-v2 .cal-cell.today-col { background:#FFFDF4; }
+
   /* Botones principales con relieve */
   body.admin-v2 .week-nav-btn, body.admin-v2 .plan-rem-add-btn, body.admin-v2 .fin-add-btn,
   body.admin-v2 button[style*="background:var(--blue)"] { box-shadow:0 4px 0 var(--relief); transition:transform 0.12s ease, box-shadow 0.12s ease; }
@@ -1270,6 +1281,7 @@
       <div>
         <div class="week-label" id="week-label">Cargando...</div>
         <div class="week-label-sub" id="week-sub"></div>
+        <button type="button" class="week-today-btn" id="week-today-btn" onclick="weekOffset = 0; renderCalendar();" style="display:none">Volver a hoy</button>
       </div>
       <button class="week-nav-btn" onclick="changeWeek(1)">›</button>
     </div>
@@ -6025,7 +6037,42 @@ function renderCalendar() {
 
   closeContentPop();
   renderWeekContentBox();
+  var todayBtn = document.getElementById('week-today-btn');
+  if (todayBtn) todayBtn.style.display = weekOffset === 0 ? 'none' : '';
+  drawNowLine();
 }
+
+// Línea de "ahora": marca la hora actual en la columna de hoy
+function drawNowLine() {
+  var wrap = document.getElementById('cal-grid-wrap');
+  var grid = document.getElementById('cal-grid');
+  if (!wrap || !grid) return;
+  var old = wrap.querySelector('.cal-now');
+  if (old) old.remove();
+  if (weekOffset !== 0) return;
+  var days = getWeekDates(0);
+  var idx = days.findIndex(function(d) { return isToday(d); });
+  var now = new Date();
+  var dec = now.getHours() + now.getMinutes() / 60;
+  if (idx < 0 || dec < HOURS[0] || dec > HOURS[HOURS.length - 1] + 1) return;
+  var remPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+  var header = document.querySelector('.cal-day-header');
+  var headerH = header ? header.offsetHeight : 0;
+  var timeCol = 3.5 * remPx;
+  var colW = (grid.offsetWidth - timeCol) / 7;
+  var line = document.createElement('div');
+  line.className = 'cal-now';
+  line.style.left = (timeCol + idx * colW) + 'px';
+  line.style.width = colW + 'px';
+  line.style.top = (headerH + (dec - HOURS[0]) * 3 * remPx) + 'px';
+  var hh = now.getHours(), mm = String(now.getMinutes()).padStart(2, '0');
+  line.innerHTML = '<span class="cal-now-dot"></span><span class="cal-now-time">' + (hh % 12 || 12) + ':' + mm + '</span>';
+  wrap.appendChild(line);
+}
+setInterval(function() {
+  var plan = document.getElementById('planificacion');
+  if (plan && plan.classList.contains('active')) drawNowLine();
+}, 60000);
 
 function decimalToTimeStr(dec) {
   var h = Math.floor(dec);
