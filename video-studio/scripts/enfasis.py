@@ -1,4 +1,4 @@
-"""Frase de énfasis: combinación de serifa gruesa (DM Serif Display) + cursiva de pincel (Mr Dafoe).
+"""Frase de énfasis: combinación de serifa gruesa y suave (Fraunces) + cursiva de pincel (Mr Dafoe).
 
 Inspirada en la referencia "Make fitness Reels that everyone Copies" que le encantó a Frida.
 Se usa para frases importantes: portada, gancho, cierre y fotos.
@@ -22,24 +22,36 @@ import tempfile
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-SERIF = os.path.join(AQUI, "..", "fonts", "DMSerifDisplay.ttf")
+SERIF = os.path.join(AQUI, "..", "fonts", "Fraunces.ttf")
 SCRIPT = os.path.join(AQUI, "..", "fonts", "MrDafoe.ttf")
 W, H, FPS = 1080, 1920, 30
 
 CREMA, BLANCO, AMARILLO, AZUL = (245, 236, 203), (255, 255, 255), (247, 214, 77), (28, 85, 229)
 COLORES = {
-    "crema": (CREMA, CREMA, None),
+    "crema": ((240, 233, 215), (240, 233, 215), None),
     "amarillo": (BLANCO, AMARILLO, None),
     "azul": (CREMA, AZUL, BLANCO),
 }
 
 # Reglas de diseño sacadas de la referencia:
-TAM_SERIF = 150        # serifa grande, minúsculas con la primera en mayúscula
-TAM_SCRIPT = 270       # la cursiva se ve del mismo alto que la serifa aunque el número es mayor
-ANCHO_MAX = 900        # nunca tocar los bordes (deja margen para la interfaz de Instagram)
-PASO_SERIF = 140       # interlineado muy apretado: las líneas casi se tocan
-PASO_SCRIPT = 150
-GIRO_SCRIPT = 5        # la cursiva sube un poco hacia la derecha y se monta sobre la serifa
+TAM_SERIF = 165        # serifa grande, minúsculas con la primera en mayúscula
+EJES_SERIF = [48, 720, 100, 0]  # Fraunces: tamaño óptico 48, peso 720, suavidad 100 (puntas redondas), sin "wonky"
+TRACKING = -5          # letras de la serifa un poco más juntas
+TAM_SCRIPT = 245       # la cursiva queda del alto de la serifa; sin engrosar, fina y elegante
+ANCHO_MAX = 920        # nunca tocar los bordes (deja margen para la interfaz de Instagram)
+PASO_SERIF = 128       # interlineado muy apretado: las líneas casi se tocan
+PASO_SCRIPT = 128
+GIRO_SCRIPT = 3        # la cursiva sube apenas hacia la derecha y sus trazos se cruzan con la serifa
+
+
+def serif(tam):
+    f = ImageFont.truetype(SERIF, tam)
+    f.set_variation_by_axes(EJES_SERIF)
+    return f
+
+
+def ancho_serif(texto, f):
+    return sum(f.getlength(c) for c in texto) + TRACKING * (len(texto) - 1)
 
 
 def capa_linea(texto, es_script, color_s, color_c, borde):
@@ -51,21 +63,28 @@ def capa_linea(texto, es_script, color_s, color_c, borde):
         fuente, color = ImageFont.truetype(SCRIPT, tam), color_c
     else:
         tam = TAM_SERIF
-        while ImageFont.truetype(SERIF, tam).getlength(texto) > ANCHO_MAX:
+        while ancho_serif(texto, serif(tam)) > ANCHO_MAX:
             tam -= 6
-        fuente, color = ImageFont.truetype(SERIF, tam), color_s
-    w, h = int(fuente.getlength(texto)) + 120, 420
+        fuente, color = serif(tam), color_s
+    w, h = int(fuente.getlength(texto)) + 160, 420
     capa = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    extra = {"stroke_width": 5, "stroke_fill": borde} if (es_script and borde) else {}
-    ImageDraw.Draw(capa).text((w // 2, h // 2), texto, font=fuente, fill=color, anchor="mm", **extra)
-    alfa = capa.split()[3].filter(ImageFilter.GaussianBlur(10)).point(lambda a: int(a * 0.55))
+    d = ImageDraw.Draw(capa)
+    if es_script:
+        extra = {"stroke_width": 5, "stroke_fill": borde} if borde else {}
+        d.text((w // 2, h // 2), texto, font=fuente, fill=color, anchor="mm", **extra)
+    else:
+        x = w / 2 - ancho_serif(texto, fuente) / 2
+        for letra in texto:                       # letra por letra para juntar el espaciado
+            d.text((x, h // 2), letra, font=fuente, fill=color, anchor="lm")
+            x += fuente.getlength(letra) + TRACKING
+    alfa = capa.split()[3].filter(ImageFilter.GaussianBlur(8)).point(lambda a: int(a * 0.45))
     sombra = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     sombra.putalpha(alfa)
     if es_script:
         capa = capa.rotate(GIRO_SCRIPT, resample=Image.BICUBIC)
         sombra = sombra.rotate(GIRO_SCRIPT, resample=Image.BICUBIC)
     final = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    final.alpha_composite(sombra, (4, 8))
+    final.alpha_composite(sombra, (3, 6))
     final.alpha_composite(capa)
     return final
 

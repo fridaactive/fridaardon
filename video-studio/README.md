@@ -27,7 +27,7 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 
 **Frases de énfasis (agregado el 9 de noviembre de 2026):** a Frida le encantó la combinación de serifa gruesa + cursiva de pincel (referencia "Make fitness Reels that everyone Copies"). Se usa para frases importantes en videos y fotos: portada, gancho, cierre y la frase clave del video. No reemplaza a las frases cortas del medio, que siguen en Archivo Black.
 
-- Serifa: DM Serif Display (minúsculas, la primera en mayúscula). Cursiva: Mr Dafoe, solo para las palabras con emoción.
+- Serifa: Fraunces (peso 720, puntas suaves, letras un poco juntas; minúsculas con la primera en mayúscula). Cursiva: Mr Dafoe sin engrosar, solo para las palabras con emoción.
 - Líneas apiladas y centradas, alternando serifa y cursiva, con interlineado muy apretado. La cursiva va un poco girada hacia arriba y sus trazos se montan sobre la serifa.
 - Colores: todo crema (como la referencia), blanco + amarillo, o crema + azul con borde blanco. Nada de rosado.
 - Mejor sobre una zona oscura o lisa de la toma. Sombra suave, sin recuadros.
@@ -47,7 +47,7 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 - `scripts/transcribir.py`: transcribe la voz en español con tiempos por palabra (Vosk), para sincronizar subtítulos.
 - `scripts/ejemplo_tumadre.sh`: edición completa del reel de Tu Madre, como plantilla: cortes, transiciones, textos, sonidos y voz.
 - `scripts/enfasis.py`: frase de énfasis con serifa + cursiva de pincel, en imagen, sobre foto o animada (`.mov` con transparencia para encimar en el video).
-- `fonts/`: Archivo Black, Instrument Serif Italic, DM Serif Display y Mr Dafoe (licencia SIL Open Font License, de Google Fonts).
+- `fonts/`: Archivo Black, Instrument Serif Italic, Fraunces, DM Serif Display y Mr Dafoe (licencia SIL Open Font License, de Google Fonts).
 - `inspiraciones.md`: ideas y referencias que Frida quiere llegar a hacer.
 
 ## Preparar una sesión nueva
