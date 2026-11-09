@@ -52,6 +52,18 @@ const server = http.createServer((req, res) => {
   await page.evaluate(() => showTab('tab-perfil')); await page.waitForTimeout(500); await shot('04_perfil', true);
   await page.evaluate(() => showTab('tab-beneficios')); await page.waitForTimeout(500); await shot('05_beneficios', true);
   await page.evaluate(() => typeof openChatModal === 'function' && openChatModal()); await page.waitForTimeout(500); await shot('06_chat');
+  await page.evaluate(() => typeof closeChatModal === 'function' && closeChatModal());
+  // Ventanas: categoría y perfil de beneficio, ficha, historial de un ejercicio, video y temporizador
+  const tile = await page.$('.benef-cat-tile:not(.hero)');
+  if (tile) { await tile.click(); await page.waitForTimeout(600); await shot('07_beneficio_categoria'); }
+  const card = await page.$('#benef-category-modal .benef-card');
+  if (card) { await card.click(); await page.waitForTimeout(600); await shot('08_beneficio_detalle', true); }
+  await page.evaluate(() => { ['benef-profile-modal', 'benef-category-modal'].forEach(id => { const m = document.getElementById(id); if (m) m.style.display = 'none'; }); });
+  await page.evaluate(() => typeof openFichaModal === 'function' && openFichaModal()); await page.waitForTimeout(600); await shot('09_ficha');
+  await page.evaluate(() => { const m = document.getElementById('ficha-modal'); if (m) m.style.display = 'none'; });
+  await page.evaluate(() => typeof openExProgressModal === 'function' && openExProgressModal('d1', 'e1', 'Sentadilla búlgara')); await page.waitForTimeout(600); await shot('10_historial');
+  await page.evaluate(() => { const m = document.getElementById('ex-progress-modal'); if (m) m.style.display = 'none'; });
+  await page.evaluate(() => typeof showExerciseVideo === 'function' && showExerciseVideo('', 'Baja controlado, rodilla alineada con el pie.', false, 60, 'Sentadilla búlgara', 'd1', 'e1')); await page.waitForTimeout(600); await shot('11_video');
   console.log('errores:', JSON.stringify(errors.slice(0, 10)));
   await browser.close();
   server.close();

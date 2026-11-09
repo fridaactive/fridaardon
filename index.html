@@ -815,6 +815,51 @@
   body.portal-dark .in-stat-hl { box-shadow:0 5px 0 #0F3FA8; }
   body.portal-dark .in-hero-play { box-shadow:0 0 0 6px rgba(28,85,229,0.3), 0 5px 0 #0F3FA8; }
 
+  /* ── Perfil ── */
+  body.portal-dark .pf-hero { position:relative; overflow:visible; }
+  .fa-sticker-corner { width:30px; height:30px; top:14px; right:16px; transform:rotate(14deg); animation:faTwinkle 3s ease-in-out infinite; }
+  body.portal-dark .pf-avatar-wrap .pf-avatar { border-radius:28px; border:3px solid var(--blue); }
+  body.portal-dark .pf-name { font-size:1.35rem; margin-top:0.9rem; }
+  body.portal-dark .pf-role:not(:empty) { display:inline-block; margin-top:0.4rem; background:var(--cream); color:#0D1B3E; font-weight:700; font-size:0.68rem; padding:0.22rem 0.75rem; border-radius:999px; transform:rotate(-2deg); }
+  body.portal-dark .pf-ring-progress circle[stroke="#EEF2FA"] { stroke:#22305C; }
+  body.portal-dark .pf-ring-liquid circle[fill="#E6EEFC"] { fill:#16224A; }
+  body.portal-dark .pf-ring-label { color:var(--muted); }
+  body.portal-dark .card-label, body.portal-dark .track-summary-label { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; font-size:0.78rem; letter-spacing:0.04em; color:var(--text); }
+  body.portal-dark .card-label::after { background:var(--border); }
+  body.portal-dark .pf-ficha-card .pf-edit-btn { background:var(--blue); color:#fff; border-color:var(--blue); box-shadow:0 5px 0 #0F3FA8; margin-bottom:5px; }
+  body.portal-dark .pf-ficha-card .pf-edit-btn:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+  body.portal-dark .track-day { border-radius:10px; transition:transform 0.15s ease, background 0.2s ease; }
+  body.portal-dark .track-day:not(.empty):active { transform:scale(0.9); }
+  body.portal-dark .track-day.done { background:var(--blue); border-color:var(--blue); color:#fff; box-shadow:0 3px 0 #0F3FA8; }
+  body.portal-dark .track-day.today { border:2px solid var(--cream); color:var(--cream); }
+  body.portal-dark .track-day.done.today { color:#fff; }
+  body.portal-dark .track-day-dot { background:var(--cream); }
+  body.portal-dark .transf-slot { border-color:rgba(245,236,203,0.35); }
+  body.portal-dark .transf-month.current { border-color:var(--blue); box-shadow:none; }
+
+  /* ── Beneficios ── */
+  body.portal-dark .benef-cat-tile { border-radius:22px; }
+  body.portal-dark .benef-cat-tile.hero { box-shadow:0 5px 0 #0F3FA8; }
+  body.portal-dark .benef-cat-tile-name { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; font-size:0.78rem; letter-spacing:0.01em; text-transform:uppercase; }
+  body.portal-dark .benef-card { background:var(--surface); border-color:var(--border); border-radius:22px; padding:1.2rem 0.8rem 1rem; }
+  body.portal-dark .benef-logo-fallback, body.portal-dark .bp-hero-logo-fallback { background:var(--cream); color:#0D1B3E; }
+  body.portal-dark .bp-marca { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; }
+  body.portal-dark .bp-coupon { border-color:var(--cream); background:var(--surface); }
+
+  /* ── Botones principales con relieve en todo el portal ── */
+  body.portal-dark .btn-primary, body.portal-dark .pf-bio-save,
+  body.portal-dark [id$="-modal"] button[style*="background:var(--blue)"] { box-shadow:0 5px 0 #0F3FA8; border-radius:999px; }
+  body.portal-dark .btn-primary { margin-bottom:5px; }
+  body.portal-dark .btn-primary:active, body.portal-dark .pf-bio-save:active,
+  body.portal-dark [id$="-modal"] button[style*="background:var(--blue)"]:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+  /* Descanso del video: del naranja a tu azul con relieve */
+  body.portal-dark button[style*="#FFC94A,#F3932B"] { background:var(--blue) !important; box-shadow:0 5px 0 #0F3FA8; border-radius:999px !important; }
+  body.portal-dark button[style*="#FFC94A,#F3932B"]:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+  /* Ventanas: esquinas redondeadas y título con fuerza */
+  body.portal-dark #ficha-modal > div, body.portal-dark #ex-progress-modal > div, body.portal-dark #transf-caption-modal > div { border-radius:26px 26px 0 0 !important; border-top:1px solid var(--border); }
+  body.portal-dark #ex-progress-title, body.portal-dark .bp-header-title { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.01em; }
+  body.portal-dark .ficha-tab.active { color:var(--cream); border-bottom-color:var(--cream); }
+
   /* Chat */
   body.portal-dark #chat-modal { background:var(--night) !important; color:var(--text); }
   body.portal-dark .chat-bubble { background:var(--surface); color:var(--text); }
@@ -1163,6 +1208,7 @@
       </div>
 
       <div class="pf-hero">
+        <svg class="fa-sticker fa-sticker-corner" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 8.7l7.1-.6z"/></svg>
         <div class="avatar-wrap pf-avatar-wrap" onclick="document.getElementById('avatar-file-input').click()">
           <div class="avatar-circle pf-avatar js-avatar-circle" id="perfil-avatar-circle"></div>
           <div class="avatar-edit-badge pf-avatar-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg></div>
@@ -3410,7 +3456,8 @@ function renderTrainingTracker(diasEntrenados) {
     var key = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     var done = !!CURRENT_DIAS_ENTRENADOS[key];
     var dot = logsByDate[key] ? '<span class="track-day-dot" onclick="event.stopPropagation();showDayComment(\'' + key + '\')"></span>' : '';
-    html += '<div class="track-day' + (done ? ' done' : '') + '" data-dk="' + key + '">' + day + dot + '</div>';
+    var isTodayCell = day === now.getDate();
+    html += '<div class="track-day' + (done ? ' done' : '') + (isTodayCell ? ' today' : '') + '" data-dk="' + key + '">' + day + dot + '</div>';
   }
   daysEl.innerHTML = html;
   daysEl.querySelectorAll('.track-day:not(.empty)').forEach(function(cell) {
