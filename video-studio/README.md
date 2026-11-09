@@ -33,6 +33,8 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 - Mejor sobre una zona oscura o lisa de la toma. Sombra suave, sin recuadros.
 - Se genera con `scripts/enfasis.py` (imagen fija, sobre foto, o animación con transparencia).
 
+**Palabras de Frida:** ella es **fitness coach**. Nunca escribir "entrenadora" en textos, frases ni captions.
+
 **Lo que no (probado y descartado):**
 
 - Recuadros de color detrás del texto.
