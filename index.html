@@ -860,6 +860,46 @@
   body.portal-dark #ex-progress-title, body.portal-dark .bp-header-title { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.01em; }
   body.portal-dark .ficha-tab.active { color:var(--cream); border-bottom-color:var(--cream); }
 
+  /* ── Cupón de regalo ── */
+  body.portal-dark .bp-coupon { border:none; background:none; padding:0; text-align:left; }
+  body.portal-dark .bp-coupon-label { font-family:'Archivo Black','DM Sans',sans-serif; font-size:0.85rem; letter-spacing:0.02em; color:var(--text); text-align:left; }
+  body.portal-dark .bp-coupon-sub { text-align:center; }
+  .fa-gift-wrap { position:relative; margin:0.7rem 0 0.8rem; }
+  .fa-gift { position:relative; height:150px; display:flex; align-items:flex-end; justify-content:center; animation:faGiftGone 0.35s ease 1.25s forwards; }
+  .fa-gift-box { width:110px; height:84px; border-radius:12px; background:linear-gradient(90deg, transparent 44%, var(--cream) 44%, var(--cream) 56%, transparent 56%), var(--blue); box-shadow:0 6px 0 #0F3FA8; animation:faGiftShake 0.6s ease 0.15s 1; }
+  .fa-gift-lid { position:absolute; bottom:80px; left:50%; width:126px; height:28px; margin-left:-63px; border-radius:9px; background:linear-gradient(90deg, transparent 44%, var(--cream) 44%, var(--cream) 56%, transparent 56%), #3A6CF0; z-index:2; animation:faGiftShake 0.6s ease 0.15s 1, faLidOff 0.5s cubic-bezier(0.3, 1.4, 0.5, 1) 0.8s forwards; }
+  .fa-gift-lid::before, .fa-gift-lid::after { content:''; position:absolute; top:-20px; width:30px; height:22px; border:5px solid var(--cream); border-radius:50% 50% 0 50%; }
+  .fa-gift-lid::before { left:30px; transform:rotate(-20deg); }
+  .fa-gift-lid::after { right:30px; transform:scaleX(-1) rotate(-20deg); }
+  .fa-confetti { position:absolute; left:50%; bottom:90px; width:8px; height:12px; border-radius:2px; opacity:0; animation:faConfetti 0.9s ease-out 0.9s forwards; }
+  .fa-c0 { background:var(--cream); } .fa-c1 { background:#3A6CF0; } .fa-c2 { background:#fff; } .fa-c3 { background:#F6D16A; } .fa-c4 { background:#8FB0FF; } .fa-c5 { background:var(--cream); } .fa-c6 { background:#1C55E5; }
+  @keyframes faGiftShake { 0%,100% { transform:rotate(0); } 20% { transform:rotate(-7deg); } 40% { transform:rotate(6deg); } 60% { transform:rotate(-4deg); } 80% { transform:rotate(3deg); } }
+  @keyframes faLidOff { to { transform:translate(70px, -70px) rotate(35deg); opacity:0; } }
+  @keyframes faConfetti { 0% { opacity:1; transform:translate(-50%, 0) rotate(var(--a)) translateY(0); } 100% { opacity:0; transform:translate(-50%, 0) rotate(var(--a)) translateY(calc(var(--d) * -1.6)) rotate(220deg); } }
+  @keyframes faGiftGone { to { height:0; opacity:0; } }
+  .fa-gift-wrap:not(.seen) .fa-ticket { opacity:0; animation:faTicketIn 0.55s cubic-bezier(0.3, 1.4, 0.5, 1) 1.35s forwards; }
+  @keyframes faTicketIn { from { opacity:0; transform:translateY(30px) scale(0.85); } to { opacity:1; transform:none; } }
+  .fa-ticket { position:relative; display:flex; min-height:190px; background:var(--cream); color:#0D1B3E; border-radius:20px; box-shadow:0 14px 30px rgba(0,0,0,0.4);
+    -webkit-mask:radial-gradient(circle 13px at 78px 0, transparent 97%, #000) top/100% 51% no-repeat, radial-gradient(circle 13px at 78px 100%, transparent 97%, #000) bottom/100% 51% no-repeat;
+    mask:radial-gradient(circle 13px at 78px 0, transparent 97%, #000) top/100% 51% no-repeat, radial-gradient(circle 13px at 78px 100%, transparent 97%, #000) bottom/100% 51% no-repeat; }
+  .fa-ticket-stub { width:78px; flex-shrink:0; background:var(--blue); color:var(--cream); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.6rem; border-right:3px dashed rgba(245,236,203,0.6); }
+  .fa-ticket-stub svg { width:34px; height:34px; }
+  .fa-ticket-stub span { writing-mode:vertical-rl; transform:rotate(180deg); font-family:'Archivo Black','DM Sans',sans-serif; font-size:0.8rem; letter-spacing:0.25em; }
+  .fa-ticket-main { position:relative; flex:1; display:flex; flex-direction:column; padding:1rem 1rem 0.9rem 1.1rem; }
+  .fa-ticket-logo { position:absolute; top:0.8rem; right:0.8rem; width:2.6rem; height:2.6rem; border-radius:50%; object-fit:cover; border:2px solid #fff; }
+  .fa-ticket-tag { align-self:flex-start; font-size:0.66rem; font-weight:700; background:var(--blue); color:#fff; padding:0.2rem 0.65rem; border-radius:999px; transform:rotate(-2deg); margin-bottom:0.35rem; }
+  .fa-ticket-big { font-family:'Archivo Black','DM Sans',sans-serif; font-size:3rem; line-height:0.95; color:var(--blue); }
+  .fa-ticket-big-text { font-size:1.5rem; line-height:1.1; }
+  .fa-ticket-rest { font-family:'Archivo Black','DM Sans',sans-serif; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.02em; }
+  .fa-ticket-brand { font-size:0.82rem; font-weight:700; margin-top:0.1rem; }
+  .fa-ticket-detail { font-size:0.72rem; color:#4A5878; margin-top:0.25rem; line-height:1.35; }
+  .fa-ticket-perf { display:block; border-top:2px dashed rgba(13,27,62,0.25); margin:0.7rem 0 0.55rem; }
+  .fa-ticket-for { font-size:0.78rem; }
+  .fa-ticket-alliance { font-size:0.6rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B7A99; margin-top:0.15rem; }
+  /* Botón de canjear: grande, azul, con relieve */
+  body.portal-dark .bp-coupon .save-btn { width:100%; background:var(--blue); color:#fff; border:none; border-radius:999px; padding:0.95rem; font-family:'Archivo Black','DM Sans',sans-serif; font-size:0.95rem; letter-spacing:0.02em; box-shadow:0 5px 0 #0F3FA8; cursor:pointer; }
+  body.portal-dark .bp-coupon .save-btn:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+
   /* Chat */
   body.portal-dark #chat-modal { background:var(--night) !important; color:var(--text); }
   body.portal-dark .chat-bubble { background:var(--surface); color:var(--text); }
@@ -3908,7 +3948,40 @@ function getCanjeCount(b) {
 // Tarjeta del cupón en sí — sin ninguna etiqueta tipo "Cupón único" o "Sin
 // límite de usos": Frida prefiere que esos detalles del mecanismo no se
 // le muestren a la clienta, el comprobante alcanza con nombre + descuento.
+// Cupón con forma de ticket de regalo. La primera vez que se abre en la
+// sesión aparece una cajita de regalo que se abre con confeti.
+function renderGiftTicket(b) {
+  var desc = String(b.descuento || '');
+  var m = desc.match(/(\d+\s?%|\$\s?\d+(?:[.,]\d+)?|2\s?x\s?1)/i);
+  var big = m ? m[1].replace(/\s/g, '') : '';
+  var rest = m ? desc.replace(m[1], '').replace(/^\s*(de\s+)?/i, '').trim() : desc;
+  var seenKey = 'fa_gift_seen_' + (b.id || b.marca || '');
+  var seen = false;
+  try { seen = sessionStorage.getItem(seenKey) === '1'; sessionStorage.setItem(seenKey, '1'); } catch (e) {}
+  var html = '<div class="fa-gift-wrap' + (seen ? ' seen' : '') + '">';
+  if (!seen) {
+    html += '<div class="fa-gift" aria-hidden="true"><div class="fa-gift-lid"></div><div class="fa-gift-box"></div>';
+    for (var i = 0; i < 14; i++) html += '<span class="fa-confetti fa-c' + (i % 7) + '" style="--a:' + (i * 26) + 'deg;--d:' + (60 + (i % 4) * 18) + 'px"></span>';
+    html += '</div>';
+  }
+  html += '<div class="fa-ticket">'
+    + '<div class="fa-ticket-stub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/><path d="M12 9c-1-2.2-2.6-3.5-4-3.5S6 6.5 6.3 8 8.5 9 12 9Z"/><path d="M12 9c1-2.2 2.6-3.5 4-3.5S18 6.5 17.7 8 15.5 9 12 9Z"/></svg><span>REGALO</span></div>'
+    + '<div class="fa-ticket-main">'
+    + (b.logoUrl ? '<img class="fa-ticket-logo" src="' + escapeHtml(b.logoUrl) + '" alt="" onerror="this.style.display=\'none\'">' : '')
+    + '<span class="fa-ticket-tag">un regalo para ti</span>'
+    + (big ? '<span class="fa-ticket-big">' + escapeHtml(big) + '</span><span class="fa-ticket-rest">' + escapeHtml(rest || 'de descuento') + '</span>'
+           : '<span class="fa-ticket-big fa-ticket-big-text">' + escapeHtml(desc || 'Beneficio exclusivo') + '</span>')
+    + '<span class="fa-ticket-brand">en ' + escapeHtml(b.marca || '') + '</span>'
+    + (b.detalleDescuento ? '<span class="fa-ticket-detail">' + escapeHtml(b.detalleDescuento) + '</span>' : '')
+    + '<span class="fa-ticket-perf"></span>'
+    + '<span class="fa-ticket-for">Para: <b>' + escapeHtml(currentClientName || '') + '</b></span>'
+    + '<span class="fa-ticket-alliance">FridaActive × ' + escapeHtml(b.marca || '') + '</span>'
+    + '</div></div></div>';
+  return html;
+}
+
 function renderCouponVoucherCard(b) {
+  if (document.body.classList.contains('portal-dark')) return renderGiftTicket(b);
   var html = '<div class="bp-coupon-voucher">';
   if (b.logoUrl) html += '<img class="bp-coupon-voucher-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
   html += '<div class="bp-coupon-voucher-alliance">FridaActive × ' + escapeHtml(b.marca || '') + '</div>';

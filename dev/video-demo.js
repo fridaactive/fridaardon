@@ -26,6 +26,11 @@ const server = http.createServer((req, res) => {
   await page.evaluate(() => { showScreen('screen-dashboard'); showTab('tab-rutina'); showTab('tab-inicio'); });
   await page.waitForTimeout(1600);
   const wait = ms => page.waitForTimeout(ms);
+  if (process.argv[3] === 'cupon') {
+    await page.click('.bnav-btn[data-tab="tab-beneficios"]'); await wait(900);
+    await page.click('.benef-cat-tile:not(.hero)'); await wait(900);
+    await page.click('#benef-category-modal .benef-card'); await wait(3600);
+  } else {
   await page.click('.in-hero'); await wait(1500);
   await page.mouse.wheel(0, -2000); await wait(300);
   await page.click('.bnav-btn[data-tab="tab-perfil"]'); await wait(1300);
@@ -34,5 +39,6 @@ const server = http.createServer((req, res) => {
   await page.evaluate(() => { var b = document.querySelector('#benef-category-modal .bp-back-btn'); if (b) b.click(); }); await wait(800);
   await page.click('.bnav-btn[data-tab="tab-inicio"]'); await wait(1600);
   await page.click('.chat-fab'); await wait(1400);
+  }
   await ctx.close(); await browser.close(); server.close();
 })();

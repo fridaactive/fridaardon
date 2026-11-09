@@ -57,7 +57,7 @@ const server = http.createServer((req, res) => {
   const tile = await page.$('.benef-cat-tile:not(.hero)');
   if (tile) { await tile.click(); await page.waitForTimeout(600); await shot('07_beneficio_categoria'); }
   const card = await page.$('#benef-category-modal .benef-card');
-  if (card) { await card.click(); await page.waitForTimeout(600); await shot('08_beneficio_detalle', true); }
+  if (card) { await card.click(); await page.waitForTimeout(250); await shot('08a_regalo_caja'); await page.waitForTimeout(800); await shot('08b_regalo_confeti'); await page.waitForTimeout(1400); await shot('08_beneficio_detalle', true); }
   await page.evaluate(() => { ['benef-profile-modal', 'benef-category-modal'].forEach(id => { const m = document.getElementById(id); if (m) m.style.display = 'none'; }); });
   await page.evaluate(() => typeof openFichaModal === 'function' && openFichaModal()); await page.waitForTimeout(600); await shot('09_ficha');
   await page.evaluate(() => { const m = document.getElementById('ficha-modal'); if (m) m.style.display = 'none'; });
