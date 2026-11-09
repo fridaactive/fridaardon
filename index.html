@@ -946,7 +946,8 @@
 .in-med-count{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:0.72rem;opacity:0.7;}
 .in-medals{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:0.3rem;padding:0.9rem 0.6rem 0.8rem;border-radius:20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);}
 .in-med-path{position:absolute;left:12%;right:12%;top:2.55rem;height:4px;border-radius:100px;background:rgba(255,255,255,0.1);}
-.in-med-path span{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,#D98A4E,#CDD5E0,#F4C542,#9EDFF5);}
+.in-med-path span{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,#D98A4E,#CDD5E0,#F4C542,#F4C542,#9EDFF5);}
+.in-medal.gem .medal-svg{width:60px;height:62px;margin-top:-4px;}
 .in-medal{position:relative;display:flex;flex-direction:column;align-items:center;gap:0.25rem;background:none;border:none;cursor:pointer;padding:0;color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;}
 .medal-svg{width:54px;height:56px;display:block;filter:drop-shadow(0 3px 0 rgba(0,0,0,0.3));transition:transform 0.2s;}
 .in-medal.ok{color:#fff;}
@@ -1995,16 +1996,20 @@ function medallasEstado() {
   var portal = CURRENT_PORTAL_DATA || {}, perfil = CURRENT_PERFIL_DATA || {};
   var anyDia = Object.keys(dias).some(function(k) { return dias[k]; });
   var fotos = portal.fotosProgreso && Object.keys(portal.fotosProgreso).length > 0;
-  var perfilOk = !!perfil.fotoPerfil && !!(perfil.bio && perfil.bio.trim()) && !!portal.ficha;
+  var perfilOk = !!perfil.fotoPerfil && !!(perfil.bio && perfil.bio.trim()) && !!portal.ficha && !!fotos;
+  // Meses en que cumplió su meta (para el diamante: 3 metas del mes)
+  var porMes = {};
+  Object.keys(dias).forEach(function(k) { if (dias[k]) porMes[k.slice(0, 7)] = (porMes[k.slice(0, 7)] || 0) + 1; });
+  var metasCumplidas = Object.keys(porMes).filter(function(mk) { return porMes[mk] >= metaDelMes(); }).length;
   var now = new Date();
   var mesNombre = MESES_LARGOS[now.getMonth()];
   var c = inicioCounts(), meta = metaDelMes();
   return [
     { id: 'primer', kind: 'bronce', tier: 'Bronce', name: 'Primer paso', how: 'Marca tu primer día entrenado.', ok: anyDia },
-    { id: 'perfil', kind: 'plata', tier: 'Plata', name: 'Perfil completo', how: 'Pon tu foto, cuéntanos de ti y llena tu ficha.', ok: perfilOk },
+    { id: 'perfil', kind: 'plata', tier: 'Plata', name: 'Perfil completo', how: 'Pon tu foto, cuéntanos de ti, llena tu ficha y sube tu primera foto de progreso (solo la ven Frida y tú).', ok: perfilOk },
     { id: 'racha3', kind: 'oro', tier: 'Oro', name: 'En racha', how: 'Entrena 3 días seguidos.', ok: maxRacha(dias) >= 3 },
-    { id: 'foto', kind: 'diamante', tier: 'Diamante', name: 'Valiente', how: 'Sube tu primera foto de progreso. Solo la ven Frida y tú.', ok: !!fotos },
-    { id: 'meta-' + localKey(now).slice(0, 7), kind: 'trofeo', tier: 'Trofeo', name: 'Meta de ' + mesNombre, how: 'Llega a ' + meta + ' entrenos este mes' + (PREMIO_MES && PREMIO_MES.texto ? ' y gana: ' + PREMIO_MES.texto : '') + '.', ok: c.mes >= meta }
+    { id: 'meta-' + localKey(now).slice(0, 7), kind: 'trofeo', tier: 'Trofeo', name: 'Meta de ' + mesNombre, how: 'Llega a ' + meta + ' entrenos este mes' + (PREMIO_MES && PREMIO_MES.texto ? ' y gana: ' + PREMIO_MES.texto : '') + '.', ok: c.mes >= meta },
+    { id: 'diamante', kind: 'diamante', tier: 'Diamante', name: 'Constancia', how: 'Cumple tu meta del mes 3 veces. Llevas ' + Math.min(metasCumplidas, 3) + ' de 3. ¡La más difícil de todas!', ok: metasCumplidas >= 3 }
   ];
 }
 
@@ -2030,10 +2035,10 @@ function rewardsInicioHtml(c) {
     + '</div>';
   // 3. Medallas
   var meds = medallasEstado(), nOk = meds.filter(function(m) { return m.ok; }).length;
-  h += '<div class="in-section"><span class="fa-marker">CAMINO</span> AL TROFEO <span class="in-med-count">' + nOk + '/' + meds.length + '</span></div>';
+  h += '<div class="in-section"><span class="fa-marker">TUS</span> MEDALLAS <span class="in-med-count">' + nOk + '/' + meds.length + '</span></div>';
   h += '<div class="in-medals"><div class="in-med-path"><span style="width:' + Math.round(nOk / meds.length * 100) + '%"></span></div>';
   meds.forEach(function(m, i) {
-    h += '<button type="button" class="in-medal' + (m.ok ? ' ok' : '') + (m.kind === 'trofeo' ? ' trophy' : '') + '" onclick="showMedal(' + i + ')" aria-label="' + escapeHtml(m.tier + ': ' + m.name + (m.ok ? ' (lograda)' : ' (por lograr)')) + '">' + medalSvg(m.kind, m.ok) + '<span class="in-medal-name">' + escapeHtml(m.name) + '</span></button>';
+    h += '<button type="button" class="in-medal' + (m.ok ? ' ok' : '') + (m.kind === 'trofeo' ? ' trophy' : '') + (m.kind === 'diamante' ? ' gem' : '') + '" onclick="showMedal(' + i + ')" aria-label="' + escapeHtml(m.tier + ': ' + m.name + (m.ok ? ' (lograda)' : ' (por lograr)')) + '">' + medalSvg(m.kind, m.ok) + '<span class="in-medal-name">' + escapeHtml(m.name) + '</span></button>';
   });
   h += '</div>';
   // 4. Recordatorio de foto (primera semana del mes, si no ha subido la de este mes)
@@ -2044,10 +2049,10 @@ function rewardsInicioHtml(c) {
   }
   // 5. Perfil incompleto
   var perfil = CURRENT_PERFIL_DATA || {}, portal = CURRENT_PORTAL_DATA || {};
-  var items = [!!perfil.fotoPerfil, !!(perfil.bio && perfil.bio.trim()), !!portal.ficha];
+  var items = [!!perfil.fotoPerfil, !!(perfil.bio && perfil.bio.trim()), !!portal.ficha, !!(portal.fotosProgreso && Object.keys(portal.fotosProgreso).length)];
   var done = items.filter(Boolean).length;
   if (done < items.length) {
-    h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\')"><span>💙</span><span><b>Tu perfil va al ' + Math.round(done / items.length * 100) + '%</b><small>Complétalo y desbloquea la medalla “Perfil completo”.</small><span class="in-nudge-bar"><span style="width:' + Math.round(done / items.length * 100) + '%"></span></span></span></button>';
+    h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\')"><span>💙</span><span><b>Tu perfil va al ' + Math.round(done / items.length * 100) + '%</b><small>Complétalo y gana la medalla de plata.</small><span class="in-nudge-bar"><span style="width:' + Math.round(done / items.length * 100) + '%"></span></span></span></button>';
   }
   return h;
 }
@@ -2087,8 +2092,6 @@ var MEDAL_ICON = {
   plata: '<path d="M32 51.5s-9.5-5.6-9.5-12.1c0-3.2 2.4-5.4 5.1-5.4 2 0 3.5 1.1 4.4 2.6.9-1.5 2.4-2.6 4.4-2.6 2.7 0 5.1 2.2 5.1 5.4 0 6.5-9.5 12.1-9.5 12.1z"/>',
   // llama
   oro: '<path d="M32.6 31.5c.6 4 4.3 5.6 5.6 9.4 1.6 4.8-1.6 10-6.4 10-4.4 0-7.4-3.7-6.6-8 .5-2.6 2.2-4 3-6 .6 1.8 1.5 2.8 2.7 3.2-.6-3.3-.2-6 1.7-8.6z"/>',
-  // cámara
-  diamante: '<path d="M23 37.5h4.2l1.9-2.6h5.8l1.9 2.6H41a1.6 1.6 0 0 1 1.6 1.6v9.3A1.6 1.6 0 0 1 41 50H23a1.6 1.6 0 0 1-1.6-1.6v-9.3a1.6 1.6 0 0 1 1.6-1.6z"/><circle cx="32" cy="43.4" r="3.6" fill="currentColor" stroke="none" class="mi-cut"/>'
 };
 function medalSvg(kind, ok) {
   var n = ++MEDAL_N, m = MEDAL_METAL[kind] || MEDAL_METAL.oro;
@@ -2098,7 +2101,19 @@ function medalSvg(kind, ok) {
     + '<linearGradient id="' + r + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + m[1] + '"/><stop offset="1" stop-color="' + m[3] + '"/></linearGradient></defs>';
   var lock = ok ? '' : '<g class="m-lock"><circle cx="49" cy="57" r="8" fill="#0B1B3F" stroke="#F5ECCB" stroke-width="1.5"/><rect x="45.2" y="56" width="7.6" height="5.6" rx="1.2" fill="#F5ECCB"/><path d="M46.6 56v-1.8a2.4 2.4 0 0 1 4.8 0V56" fill="none" stroke="#F5ECCB" stroke-width="1.4"/></g>';
   var svg;
-  if (kind === 'trofeo') {
+  if (kind === 'diamante') {
+    // Diamante de verdad: piedra tallada con facetas y destellos
+    var f = ok ? ['#FFFFFF', '#D6F4FF', '#9EDFF5', '#5FB6E0', '#2F80B8', '#1D5E8E'] : ['#6A7694', '#56617F', '#48536F', '#3C4766', '#2E3858', '#232C48'];
+    svg = '<g stroke="' + f[5] + '" stroke-width=".8" stroke-linejoin="round">'
+      + '<path d="M18 24h28l8 9-22 27-22-27z" fill="' + f[3] + '"/>'
+      + '<path d="M18 24l6 9h16l6-9z" fill="' + f[1] + '"/>'
+      + '<path d="M10 33l8-9 6 9z" fill="' + f[2] + '"/><path d="M54 33l-8-9-6 9z" fill="' + f[2] + '"/>'
+      + '<path d="M10 33h14l8 27z" fill="' + f[2] + '"/><path d="M24 33h16l-8 27z" fill="' + f[1] + '"/><path d="M40 33h14L32 60z" fill="' + f[4] + '"/>'
+      + '</g>'
+      + (ok ? '<path d="M21 26.5l4 5.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".9"/>'
+            + '<path d="M49 10l1.2 3.3 3.3 1.2-3.3 1.2L49 19l-1.2-3.3-3.3-1.2 3.3-1.2z" fill="#fff"/>'
+            + '<path d="M14 13l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" fill="#F5ECCB"/>' : '');
+  } else if (kind === 'trofeo') {
     svg = defs
       + '<path d="M22 14h20v4c0 9-4.5 15-10 15s-10-6-10-15z" fill="url(#' + g + ')" stroke="' + m[3] + '" stroke-width="1.2"/>'
       + '<path d="M22 17h-5c0 6 2.5 9.5 7 10.5M42 17h5c0 6-2.5 9.5-7 10.5" fill="none" stroke="url(#' + r + ')" stroke-width="2.6" stroke-linecap="round"/>'
