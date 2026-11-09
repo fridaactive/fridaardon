@@ -779,6 +779,49 @@
   .ad-ripple { position:absolute; border-radius:50%; background:rgba(28,85,229,0.18); pointer-events:none; transform:scale(0); animation:adRipple 0.6s ease-out forwards; }
   @keyframes adRipple { to { transform:scale(1); opacity:0; } }
   @media (prefers-reduced-motion: reduce) { body.admin-v2 *, body.admin-v2 *::after { animation:none !important; transition:none !important; } }
+
+/* ── Mis clientas: buscador, estado de un vistazo y perfil ── */
+.clients-search{width:100%;box-sizing:border-box;border:1.5px solid var(--border);border-radius:12px;padding:0.75rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;background:#fff;color:var(--text);margin-bottom:0.9rem;outline:none;}
+.clients-search:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,82,232,0.12);}
+.cst-row{display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:0.35rem;}
+.cst-chip{font-size:0.62rem;font-weight:700;padding:0.18rem 0.55rem;border-radius:100px;white-space:nowrap;}
+.cst-chip.warn{background:#FFF6D9;color:#8A6A00;}
+.cst-chip.msg{background:#EBF0FF;color:var(--blue);}
+.cst-chip.ok{background:#EAF8EA;color:#2a7a2a;}
+.cst-chip.idle{background:#F3F3F5;color:#777;}
+.acp-header-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.acp-type-tag{display:inline-block;vertical-align:middle;margin-left:0.4rem;font-size:0.6rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;background:#F5ECCB;color:#5a4a10;padding:0.18rem 0.55rem;border-radius:100px;}
+.acp-basic{text-align:center;}
+.acp-basic-av{width:64px;height:64px;border-radius:50%;margin:0.2rem auto 0.6rem;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.3rem;}
+.acp-basic-name{font-weight:700;font-size:1.05rem;color:var(--text);}
+.acp-basic-meta{font-size:0.78rem;color:var(--muted);margin-top:0.15rem;}
+.acp-basic-facts{display:flex;flex-wrap:wrap;justify-content:center;gap:0.4rem;margin-top:0.8rem;}
+.acp-basic-facts span{font-size:0.7rem;background:#F4F7FF;border:1px solid var(--border);border-radius:100px;padding:0.3rem 0.7rem;color:var(--text);}
+.acp-rday{display:flex;align-items:center;gap:0.7rem;padding:0.7rem 0.2rem;border-top:1px solid var(--border);cursor:pointer;}
+.acp-rday:first-of-type{border-top:none;}
+.acp-rday:hover .acp-rday-t{color:var(--blue);}
+.acp-rday-n{font-weight:700;color:var(--blue);font-size:1rem;min-width:1.8rem;}
+.acp-rday-t{flex:1;font-weight:700;font-size:0.85rem;color:var(--text);}
+.acp-rday-m{font-size:0.7rem;color:var(--muted);white-space:nowrap;}
+.rv-hero-box{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:1.1rem 1.1rem 1.1rem;margin-top:1rem;box-shadow:0 3px 0 rgba(29,82,232,0.08);}
+.rv-hero-box .rv-hero-tag{background:#F5ECCB;color:#5a4a10;border:none;}
+.rv-hero-box .rv-hero-sub{color:var(--muted);margin-bottom:0.9rem!important;}
+.rv-hero-box .rv-stats{margin:0;}
+.rv-hero-box .rv-stat{background:#F4F7FF;border:1px solid var(--border);}
+.rv-hero-box .rv-stat-val{color:var(--blue);}
+.rv-hero-box .rv-stat-label{color:var(--muted);}
+.client-type-inline{display:none;font-weight:700;}
+@media (max-width:560px){
+  .client-card .client-badge{display:none;}
+  .client-type-inline{display:inline;}
+  .acp-header-title{white-space:normal;line-height:1.2;}
+  .acp-type-tag{display:block;width:fit-content;margin:0.2rem 0 0;}
+  #rutina-editor .back-row .sub-brand{display:none;}
+  #rutina-editor .back-row .back-btn{margin-right:auto;}
+}
+#rutina-editor .back-row{flex-wrap:wrap;gap:0.4rem;}
+#rutina-editor .back-row .sub-brand{margin-right:auto;}
+#rutina-editor .back-row .rv-edit-btn{margin-right:0!important;}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
@@ -948,10 +991,7 @@
   </div>
 
   <div class="clients-wrap">
-    <div class="legend">
-      <div class="legend-item"><div class="legend-badge badge-online" style="background:#F0FFF0;color:#2a7a2a;font-size:0.58rem;font-weight:700;padding:0.18rem 0.55rem;border-radius:100px;">Online</div><span style="font-size:0.65rem;color:var(--muted);">Rutina mensual</span></div>
-      <div class="legend-item"><div class="legend-badge" style="background:#EBF0FF;color:var(--blue);font-size:0.58rem;font-weight:700;padding:0.18rem 0.55rem;border-radius:100px;">Presencial</div><span style="font-size:0.65rem;color:var(--muted);">Entrenamiento personal</span></div>
-    </div>
+    <input type="search" id="clients-search" class="clients-search" placeholder="🔍 Buscar clienta…" oninput="renderClientsList()" autocomplete="off">
 
     <button id="btn-new-client" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;touch-action:manipulation;">+ Nueva clienta</button>
 
@@ -1612,7 +1652,7 @@
 <div id="acp-overlay" class="acp-overlay">
   <div class="acp-header">
     <button class="acp-back-btn" onclick="closeAdminClientProfile()">←</button>
-    <div class="acp-header-title">Perfil de clienta</div>
+    <div class="acp-header-title" id="acp-header-title">Perfil de clienta</div>
     <button class="acp-back-btn" onclick="if(acpState.clientId) openClientProfile(acpState.clientId);" title="Ver la ficha de la clienta" style="font-size:0.72rem;font-weight:700;white-space:nowrap;">📋 Ficha</button>
   </div>
   <div class="acp-content" id="acp-content"></div>
@@ -2054,6 +2094,11 @@ function openAdminClientProfile(clientId) {
   overlay.style.display = 'block';
   content.innerHTML = '<div style="padding:2rem 0;text-align:center;color:var(--muted);font-size:0.8rem;">Cargando…</div>';
   currentClient = clientId;
+  var acpTitle = document.getElementById('acp-header-title');
+  if (acpTitle) {
+    var cc = CLIENTS[clientId] || {};
+    acpTitle.innerHTML = escapeHtmlAdmin(cc.name || 'Perfil de clienta') + (cc.type ? ' <span class="acp-type-tag">' + escapeHtmlAdmin(TYPE_LABELS[cc.type] || cc.type) + '</span>' : '');
+  }
   var uid = CLIENT_LINKS[clientId];
   // Auto-reparo: por si esta clienta quedó creada antes de que
   // empezáramos a espejar estos campos a clients/{id}, se sincroniza
@@ -2142,7 +2187,21 @@ function acpRenderShell() {
 // ── Resumen sin vincular todavía: explica qué es el portal y ofrece el
 // código de acceso (mismo diseño que el link de WhatsApp de siempre).
 function renderAcpNoPortalHtml(clientId, c) {
-  var html = '<div class="card">';
+  var mn = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var html = '<div class="card acp-basic">';
+  html += '<div class="acp-basic-av">' + initials(c.name || '?') + '</div>';
+  html += '<div class="acp-basic-name">' + escapeHtmlAdmin(c.name || '') + '</div>';
+  if (c.meta) html += '<div class="acp-basic-meta">' + escapeHtmlAdmin(c.meta) + '</div>';
+  var facts = [];
+  if (c.schedule && c.schedule.days && c.schedule.days.length) {
+    var fh = function(h) { var hh = Math.floor(h), mm = Math.round((h - hh) * 60); return (hh % 12 || 12) + (mm ? ':' + String(mm).padStart(2, '0') : '') + (hh < 12 ? 'am' : 'pm'); };
+    facts.push('🗓️ ' + c.schedule.days.join(' / ') + (c.schedule.startHour != null ? ' · ' + fh(c.schedule.startHour) + (c.schedule.endHour != null ? '–' + fh(c.schedule.endHour) : '') : ''));
+  } else if (c.days && c.days.length) facts.push('🗓️ ' + c.days.join(' / '));
+  if (c.sessions > 0) facts.push('✅ ' + countSessionsInCycle(clientId, c) + ' de ' + c.sessions + ' sesiones');
+  if (c.firstEverDate) { var fd = new Date(c.firstEverDate + 'T00:00:00'); facts.push('💙 Contigo desde ' + mn[fd.getMonth()] + ' ' + fd.getFullYear()); }
+  if (facts.length) html += '<div class="acp-basic-facts">' + facts.map(function(f) { return '<span>' + f + '</span>'; }).join('') + '</div>';
+  html += '</div>';
+  html += '<div class="card">';
   html += '<div class="card-label">👤 Perfil y beneficios</div>';
   html += '<div style="font-size:0.8rem;color:var(--text);line-height:1.5;margin-bottom:0.8rem;">Todavía no tiene cuenta en el portal. Generale un código para que suba su foto de perfil, chatee con vos y acceda a los beneficios.</div>';
   html += '<button type="button" onclick="handleGenerateLinkCodeAcp(\'' + clientId + '\')" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Generar código de acceso</button>';
@@ -2180,6 +2239,18 @@ function renderAcpRutinaHtml(clientId, c) {
     // Caso especial heredado: Herberth tiene su rutina como HTML aparte.
     html += '<a href="' + escapeHtmlAdmin(c.rutina) + '" target="_blank" style="display:block;text-align:center;background:var(--blue);color:#fff;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;text-decoration:none;">📋 Ver rutina →</a>';
   } else {
+    var rd = (JSON.parse(localStorage.getItem('fa_rutinas') || '{}')[clientId]) || null;
+    var rdays = (rd && rd.days) || [];
+    if (rdays.length) {
+      html += '<div class="card"><div class="card-label">🏋️ Su rutina · ' + rdays.length + (rdays.length === 1 ? ' día' : ' días') + '</div>';
+      rdays.forEach(function(d, i) {
+        var nEx = 0; (d.blocks || []).forEach(function(b) { nEx += (b.exercises || []).length; });
+        html += '<div class="acp-rday" onclick="window._rvStartDay=' + i + ';openRutinaEditor(\'' + clientId + '\')"><span class="acp-rday-n">' + String(i + 1).padStart(2, '0') + '</span><span class="acp-rday-t">' + escapeHtmlAdmin(d.name || ('Día ' + (i + 1))) + '</span><span class="acp-rday-m">' + nEx + ' ejercicios ›</span></div>';
+      });
+      html += '</div>';
+    } else {
+      html += '<div class="card" style="text-align:center;color:var(--muted);font-size:0.8rem;">Todavía no tiene rutina armada.</div>';
+    }
     html += '<button type="button" onclick="openRutinaEditor(\'' + clientId + '\')" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">📋 Ver / Editar rutina</button>';
   }
   return html;
@@ -4671,10 +4742,17 @@ function renderClientsList() {
   var container = document.getElementById('clients-list-container');
   if (!container) return;
 
+  var q = ((document.getElementById('clients-search') || {}).value || '').trim().toLowerCase();
+  var nAct = 0, nInact = 0;
   var ids = Object.keys(CLIENTS).filter(function(id) {
     var active = isActive(CLIENTS[id], id);
+    if (active) nAct++; else nInact++;
+    if (q && String(CLIENTS[id].name || '').toLowerCase().indexOf(q) === -1) return false;
     return clientsTab === 'activas' ? active : !active;
   });
+  var tA = document.getElementById('tab-activas'), tI = document.getElementById('tab-inactivas');
+  if (tA) tA.textContent = '🟢 Activas · ' + nAct;
+  if (tI) tI.textContent = '🔴 Inactivas · ' + nInact;
 
   var onlineIds = ids.filter(function(id){ return isOnlineType(CLIENTS[id].type); });
   var presIds = ids.filter(function(id){ return !isOnlineType(CLIENTS[id].type); });
@@ -4682,7 +4760,7 @@ function renderClientsList() {
   var html = '';
 
   if (ids.length === 0) {
-    html = '<div style="text-align:center;color:var(--muted);font-size:0.8rem;padding:2rem 0;">'+(clientsTab === 'activas' ? 'No tenés clientas activas en este momento.' : 'No tenés clientas inactivas. 🎉')+'</div>';
+    html = '<div style="text-align:center;color:var(--muted);font-size:0.8rem;padding:2rem 0;">'+(q ? 'Ninguna clienta coincide con “' + escapeHtmlAdmin(q) + '”.' : clientsTab === 'activas' ? 'No tenés clientas activas en este momento.' : 'No tenés clientas inactivas. 🎉')+'</div>';
   }
 
   function buildCard(id) {
@@ -4710,7 +4788,7 @@ function renderClientsList() {
       : '<div class="client-avatar" style="background:'+avatarColor+';">'+initials(c.name)+'</div>';
     return '<div class="client-card" data-cid="'+id+'">'
       + avatarHtml
-      + '<div class="client-info"><div class="client-name">'+c.name+'</div><div class="client-meta">'+metaText+'</div></div>'
+      + '<div class="client-info"><div class="client-name">'+c.name+'</div><div class="client-meta"><span class="client-type-inline" style="color:'+badgeColor+'">'+badgeText+' · </span>'+metaText+'</div>'+clientStatusChipsHtml(id, c)+'</div>'
       + '<div class="client-badge" style="background:'+badgeBg+';color:'+badgeColor+';">'+badgeText+'</div>'
       + '<div class="client-arrow">›</div>'
       + '</div>';
@@ -4729,6 +4807,42 @@ function renderClientsList() {
   container.querySelectorAll('.client-card').forEach(function(card) {
     card.addEventListener('click', function() {
       openAdminClientProfile(this.getAttribute('data-cid'));
+    });
+  });
+  fillClientActivity(ids);
+}
+
+// Estado de un vistazo en cada tarjeta de "Mis clientas": pago pendiente
+// (al instante) y, si tiene la app, si te escribió y cuándo entrenó por
+// última vez (se completa solo cuando llegan los datos de Firebase).
+function clientStatusChipsHtml(id, c) {
+  var chips = '';
+  var pay = isActive(c, id) ? getPaymentStatus(id, c) : null;
+  if (pay && pay.level === 'warn') chips += '<span class="cst-chip warn">💳 Pago pendiente</span>';
+  if (CLIENT_LINKS[id]) chips += '<span class="cst-slot" data-cst="' + id + '"></span>';
+  return chips ? '<div class="cst-row">' + chips + '</div>' : '';
+}
+
+function fillClientActivity(ids) {
+  ids.forEach(function(id) {
+    var uid = CLIENT_LINKS[id];
+    if (!uid) return;
+    fbGet('clientasPortal/' + uid, function(portal) {
+      var slot = document.querySelector('.cst-slot[data-cst="' + id + '"]');
+      if (!slot || !portal) return;
+      var out = '';
+      if (chatNeedsReply(portal.chat, portal.chatMeta)) out += '<span class="cst-chip msg">💬 Te escribió</span>';
+      var dias = portal.diasEntrenados || {};
+      var last = Object.keys(dias).filter(function(k) { return dias[k]; }).sort().pop();
+      if (last) {
+        var t0 = new Date(); t0.setHours(0, 0, 0, 0);
+        var ago = Math.round((t0 - new Date(last + 'T00:00:00')) / 86400000);
+        var txt = ago <= 0 ? 'Entrenó hoy' : ago === 1 ? 'Entrenó ayer' : 'Entrenó hace ' + ago + ' días';
+        out += '<span class="cst-chip ' + (ago <= 7 ? 'ok' : 'idle') + '">🏋️ ' + txt + '</span>';
+      } else {
+        out += '<span class="cst-chip idle">🏋️ Aún no marca entrenos</span>';
+      }
+      slot.outerHTML = out;
     });
   });
 }
@@ -7226,14 +7340,23 @@ function renderRutinaView() {
   html += '</style>';
 
   // Hero section (blue background inside view)
-  html += '<div style="background:var(--blue);padding:1.5rem 1.25rem 0;margin:-1.5rem -1.25rem 0;position:relative;">';
-  html += '<div class="rv-hero-tag">Entrenamiento Presencial</div>';
+  html += '<div class="rv-hero-box">';
+  html += '<div class="rv-hero-tag">' + escHtml(TYPE_LABELS[c.type] || 'Entrenamiento presencial') + '</div>';
   var nameParts = c.name ? c.name.split(' ') : ['Clienta',''];
   html += '<div class="rv-hero-sub" style="margin-bottom:1.5rem;">'+(c.meta || '')+'</div>';
   // Stats
   html += '<div class="rv-stats">';
-  html += '<div class="rv-stat"><div class="rv-stat-val">'+(c.days ? c.days.length : '-')+'</div><div class="rv-stat-label">Días/semana</div></div>';
-  html += '<div class="rv-stat"><div class="rv-stat-val">'+(c.sessions || '-')+'</div><div class="rv-stat-label">Sesiones</div></div>';
+  // Presencial: días por semana y sesiones del ciclo. Online / rutina
+  // personalizada: no tienen horario fijo, así que se muestran los días de
+  // su rutina y el total de ejercicios.
+  if (isOnlineType(c.type)) {
+    var totalEx = 0; days.forEach(function(d) { (d.blocks || []).forEach(function(b) { totalEx += (b.exercises || []).length; }); });
+    html += '<div class="rv-stat"><div class="rv-stat-val">'+days.length+'</div><div class="rv-stat-label">Días en su rutina</div></div>';
+    html += '<div class="rv-stat"><div class="rv-stat-val">'+totalEx+'</div><div class="rv-stat-label">Ejercicios</div></div>';
+  } else {
+    html += '<div class="rv-stat"><div class="rv-stat-val">'+(c.days && c.days.length ? c.days.length : '-')+'</div><div class="rv-stat-label">Días/semana</div></div>';
+    html += '<div class="rv-stat"><div class="rv-stat-val">'+(c.sessions ? countSessionsInCycle(rutinaClientId, c) + '/' + c.sessions : '-')+'</div><div class="rv-stat-label">Sesiones del ciclo</div></div>';
+  }
   html += '</div></div>'; // close stats + hero
 
   html += '<div style="height:1.5rem;"></div>';
@@ -7254,7 +7377,8 @@ function renderRutinaView() {
 
   // Objetivo
   var objetivo = profile.objetivo || c.meta || '';
-  if (objetivo) {
+  // El objetivo ya aparece arriba (debajo del nombre); solo se repite si es distinto.
+  if (objetivo && objetivo !== c.meta) {
     html += '<div class="rv-objetivo"><div class="rv-objetivo-label">Objetivo</div><div class="rv-objetivo-text">'+escHtml(objetivo)+'</div></div>';
   }
 
@@ -7462,8 +7586,9 @@ function openRutinaEditor(clientId) {
   // no hace nada hasta cerrar el perfil manualmente.
   closeAdminClientProfile();
   rutinaClientId = clientId;
-  rutinaCurrentDay = 0;
-  rvViewDay = 0;
+  rvViewDay = window._rvStartDay || 0;
+  rutinaCurrentDay = rvViewDay;
+  window._rvStartDay = 0;
 
   // Load from Firebase first, then localStorage, then defaults.
   // Re-authenticate right before reading — a long-idle tab can hold an

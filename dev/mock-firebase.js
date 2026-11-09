@@ -43,6 +43,12 @@
   DATA.clients[CLIENT] = {
     name: 'Andrea Martínez', type: 'rutina-personalizada', initDate: dk(20), days: 4, sesionesMes: 12, status: 'activa'
   };
+  // Clientas inventadas para el panel de administradora (clients_custom + vínculo con la app)
+  DATA.clients_custom = {};
+  DATA.clients_custom[CLIENT] = { name: 'Andrea Martínez', firstEverDate: dk(80), initDate: dk(20), type: 'rutina-personalizada', sessions: 0, days: [], cuota: 35, meta: 'Fuerza y energía' };
+  DATA.clients_custom['demo-lucia'] = { name: 'Lucía Hernández', firstEverDate: dk(120), initDate: dk(10), type: 'presencial', sessions: 12, days: ['Lun', 'Mié', 'Vie'], schedule: { days: ['Lun', 'Mié', 'Vie'], startHour: 6, endHour: 7 }, cuota: 120, meta: 'Full body · glúteo' };
+  DATA.clients_custom['demo-sofia'] = { name: 'Sofía Rivas', firstEverDate: dk(40), initDate: dk(5), type: 'online', sessions: 0, days: [], cuota: 60, meta: 'Online 1:1 · principiante' };
+  DATA.client_links[CLIENT] = UID;
   function ex(id, name, series, reps, extra) { return Object.assign({ id: id, name: name, series: series, reps: reps }, extra || {}); }
   DATA.rutinas[CLIENT] = {
     mensajeInicial: '¡Bienvenida a tu rutina de noviembre! Vamos con todo 💪',
