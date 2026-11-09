@@ -25,6 +25,14 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 - Colores naturales. Los clips del iPhone en HDR (HLG) se corrigen con `eq=contrast=1.1:saturation=1.15:gamma=0.92`; `zscale` + `tonemap` los dejaba sobresaturados.
 - Video sin música: Frida agrega la canción en Instagram, al 20 o 30% cuando hay voz.
 
+**Frases de énfasis (agregado el 9 de noviembre de 2026):** a Frida le encantó la combinación de serifa gruesa + cursiva de pincel (referencia "Make fitness Reels that everyone Copies"). Se usa para frases importantes en videos y fotos: portada, gancho, cierre y la frase clave del video. No reemplaza a las frases cortas del medio, que siguen en Archivo Black.
+
+- Serifa: DM Serif Display (minúsculas, la primera en mayúscula). Cursiva: Mr Dafoe, solo para las palabras con emoción.
+- Líneas apiladas y centradas, alternando serifa y cursiva, con interlineado muy apretado. La cursiva va un poco girada hacia arriba y sus trazos se montan sobre la serifa.
+- Colores: todo crema (como la referencia), blanco + amarillo, o crema + azul con borde blanco. Nada de rosado.
+- Mejor sobre una zona oscura o lisa de la toma. Sombra suave, sin recuadros.
+- Se genera con `scripts/enfasis.py` (imagen fija, sobre foto, o animación con transparencia).
+
 **Lo que no (probado y descartado):**
 
 - Recuadros de color detrás del texto.
@@ -38,7 +46,9 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 - `scripts/textos.py`: genera la capa de textos animados (frase base + palabra clave marcada) y la lista de momentos para los sonidos.
 - `scripts/transcribir.py`: transcribe la voz en español con tiempos por palabra (Vosk), para sincronizar subtítulos.
 - `scripts/ejemplo_tumadre.sh`: edición completa del reel de Tu Madre, como plantilla: cortes, transiciones, textos, sonidos y voz.
-- `fonts/`: Archivo Black e Instrument Serif Italic (licencia SIL Open Font License, de Google Fonts).
+- `scripts/enfasis.py`: frase de énfasis con serifa + cursiva de pincel, en imagen, sobre foto o animada (`.mov` con transparencia para encimar en el video).
+- `fonts/`: Archivo Black, Instrument Serif Italic, DM Serif Display y Mr Dafoe (licencia SIL Open Font License, de Google Fonts).
+- `inspiraciones.md`: ideas y referencias que Frida quiere llegar a hacer.
 
 ## Preparar una sesión nueva
 
