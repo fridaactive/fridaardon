@@ -698,6 +698,8 @@
   body.portal-dark .dash-hero .greeting { font-size:1.45rem; }
   body.portal-dark .logout-icon-btn { display:none; }
   .pf-logout { display:none; }
+  .dash-date { display:none; }
+  body.portal-dark .dash-date { display:inline-block; font-size:0.66rem; font-weight:700; letter-spacing:0.04em; background:rgba(245,236,203,0.14); color:var(--cream); border:1px solid rgba(245,236,203,0.3); padding:0.2rem 0.65rem; border-radius:999px; margin-bottom:0.45rem; }
   body.portal-dark .pf-logout { display:block; width:100%; margin:0.5rem 0 1rem; background:none; border:1px solid var(--border); color:var(--muted); border-radius:999px; padding:0.75rem; font-size:0.78rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; }
   body.portal-dark .dash-body { padding-bottom:7rem; }
   .bnav { display:none; }
@@ -1213,6 +1215,7 @@
         </div>
         <input type="file" id="avatar-file-input" accept="image/*" style="display:none;" onchange="handleAvatarFileSelect(this)">
         <div>
+          <div class="dash-date" id="dash-date"></div>
           <div class="brand" id="dash-greeting-top">fridaactive</div>
           <div class="greeting" id="dash-greeting">Hola</div>
         </div>
@@ -1795,6 +1798,13 @@ function showScreen(id) {
   document.body.classList.toggle('portal-dark', id === 'screen-dashboard');
 }
 
+function faTodayLabel() {
+  var d = new Date();
+  var dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  var meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  return dias[d.getDay()] + ' ' + d.getDate() + ' de ' + meses[d.getMonth()];
+}
+
 // Saludo con conexión según la hora: arriba "Buenos días, Andrea" y en
 // grande una frase con la voz de Frida.
 function portalGreeting(firstName) {
@@ -2290,6 +2300,8 @@ function renderPortalScreen(portal, perfil) {
     return;
   }
 
+  var dateEl = document.getElementById('dash-date');
+  if (dateEl) dateEl.textContent = faTodayLabel();
   var greet = portalGreeting(firstName);
   document.getElementById('dash-greeting-top').textContent = greet.top;
   document.getElementById('dash-greeting').textContent = greet.main;

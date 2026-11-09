@@ -717,6 +717,7 @@
   /* Encabezados */
   body.admin-v2 .dash-hero, body.admin-v2 .sub-hero { background:radial-gradient(120% 100% at 92% 0%, #3A6CF0 0%, rgba(58,108,240,0) 55%), linear-gradient(160deg, #0F3FA8 0%, #1C55E5 100%); border-radius:0 0 28px 28px; }
   body.admin-v2 .dash-hero::after { content:''; position:absolute; right:1.6rem; bottom:1.4rem; width:34px; height:34px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23F5ECCB' d='M12 0c.6 5.6 2.4 8 8 9-5.6 1-7.4 3.4-8 9-.6-5.6-2.4-8-8-9 5.6-1 7.4-3.4 8-9z'/%3E%3C/svg%3E") center/contain no-repeat; animation:adTwinkle 2.8s ease-in-out infinite; }
+  .ad-date { position:relative; z-index:1; display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.04em; background:var(--cream); color:#0D1B3E; padding:0.25rem 0.75rem; border-radius:999px; margin-bottom:0.7rem; box-shadow:0 3px 0 #C9B57A; transform:rotate(-2deg); }
   body.admin-v2 .dash-greeting { text-transform:uppercase; letter-spacing:0.01em; line-height:1; }
   body.admin-v2 .dash-sub { color:var(--cream); opacity:0.9; font-weight:500; font-size:0.85rem; }
   body.admin-v2 .sub-title { text-transform:uppercase; letter-spacing:0.01em; line-height:1; }
@@ -809,6 +810,7 @@
       </div>
       <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
     </div>
+    <div class="ad-date" id="ad-date"></div>
     <div class="dash-greeting">Hola,<br><span>Frida</span></div>
     <div class="dash-sub">¿Qué vas a hacer hoy?</div>
   </div>
@@ -5030,6 +5032,17 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.target === modalOverlay) closeNewClientModal();
     });
   }
+});
+
+function faTodayLabel() {
+  var d = new Date();
+  var dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  var meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  return dias[d.getDay()] + ' ' + d.getDate() + ' de ' + meses[d.getMonth()];
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('ad-date');
+  if (el) el.textContent = faTodayLabel();
 });
 
 // Onda al tocar las tarjetas y botones principales del panel
