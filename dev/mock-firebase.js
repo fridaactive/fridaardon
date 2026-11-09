@@ -23,7 +23,7 @@
       b3: { nombre: 'Peso muerto rumano', video: '', descripcion: 'Espalda neutra, cadera atrás.' }
     },
     beneficios: {
-      be1: { marca: 'Productos Tu Madre', descuento: '15% de descuento', descripcion: 'En bowls y shakes.', categoria: 'Comida saludable', logo: '' },
+      be1: { marca: 'Productos Tu Madre', descuento: '15% de descuento', descripcion: 'En bowls y shakes.', categoria: 'Comida saludable', logoUrl: 'FA_logozul-07.png', fotos: ['hero-frida.jpg'] },
       be2: { marca: 'Gym Wear SV', descuento: '10% en ropa deportiva', descripcion: 'Leggings y tops.', categoria: 'Ropa', logo: '' }
     },
     anuncios: { an1: { texto: '¡Nuevo programa Core en 15 días muy pronto!', activo: true } },
