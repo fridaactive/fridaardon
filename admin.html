@@ -819,6 +819,19 @@
   #rutina-editor .back-row .sub-brand{display:none;}
   #rutina-editor .back-row .back-btn{margin-right:auto;}
 }
+/* ── Mis finanzas ── */
+#finanzas .fin-cards-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;overflow:visible;padding-top:1rem;}
+#finanzas .fin-card{min-width:0;}
+#finanzas .fin-card-value{font-size:1.05rem;word-break:break-word;}
+#finanzas .fin-month-nav{margin-top:1rem;}
+#finanzas .fin-body{background:transparent;min-height:0;max-width:720px;margin:0 auto;}
+.fin-cobrar{margin:0 1.25rem 1rem;background:#FFFBEA;border:1px solid #F0DFA0;border-radius:16px;padding:0.8rem 1rem;}
+.fin-cobrar.ok{background:#EFF9EF;border-color:#CBE8CB;color:#2a7a2a;font-size:0.8rem;font-weight:600;}
+.fin-cobrar-hdr{display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;font-weight:700;color:#8A6A00;margin-bottom:0.3rem;}
+.fin-cobrar-hdr b{font-size:1rem;color:#8A6A00;}
+.fin-cobrar-row{display:flex;justify-content:space-between;padding:0.55rem 0;border-top:1px solid #F0E3B5;font-size:0.82rem;color:var(--text);cursor:pointer;}
+.fin-cobrar-row:hover{color:var(--blue);}
+@media (max-width:420px){ #finanzas .fin-card{padding:0.7rem 0.55rem;} #finanzas .fin-card-value{font-size:0.9rem;} #finanzas .fin-card-sub{font-size:0.55rem;} }
 #rutina-editor .back-row{flex-wrap:wrap;gap:0.4rem;}
 #rutina-editor .back-row .sub-brand{margin-right:auto;}
 #rutina-editor .back-row .rv-edit-btn{margin-right:0!important;}
@@ -1351,16 +1364,14 @@
 
 <!-- ══════════ FINANZAS ══════════ -->
 <div id="finanzas">
+  <div class="sub-hero">
+    <div class="back-row">
+      <button class="back-btn" onclick="showScreen('dashboard')">← Volver</button>
+      <div class="sub-brand">fridaactive</div>
+    </div>
+    <div class="sub-title">Mis<br><span>Finanzas</span></div>
+  </div>
   <div class="fin-body">
-    <div class="fin-topbar">
-      <div class="fin-logo"><span>fa</span> fridaactive</div>
-      <button class="fin-back" onclick="showScreen('dashboard')">← Dashboard</button>
-    </div>
-    <div class="fin-page-header">
-      <div class="fin-eyebrow">Mi Diario Financiero</div>
-      <div class="fin-h1">Mis Finanzas ✦</div>
-      <div class="fin-date" id="fin-today-date"></div>
-    </div>
     <div class="fin-month-nav">
       <button class="fin-nav-btn" onclick="finChangeMonth(-1)">‹</button>
       <div class="fin-month-label">
@@ -1370,6 +1381,7 @@
       <button class="fin-nav-btn" onclick="finChangeMonth(1)">›</button>
     </div>
     <div class="fin-cards-row" id="fin-summary-cards"></div>
+    <div id="fin-por-cobrar"></div>
 
     <!-- GASTOS FIJOS -->
     <div style="margin:0 1.25rem 0.85rem;">
@@ -5302,6 +5314,15 @@ function syncAllFirebaseData() {
       }
     }
 
+    // Inversiones guardadas (no cuenta para la pantalla de carga)
+    fbGet('inversiones_v2', function(data) {
+      if (data && Object.keys(data).length > 0) {
+        var arr = Array.isArray(data) ? data.filter(Boolean) : Object.values(data);
+        localStorage.setItem('fa_inversiones_v2', JSON.stringify(arr));
+        if (typeof renderInversiones === 'function' && document.getElementById('fin-inv-list')) renderInversiones();
+      }
+    });
+
     fbGet('rutinas', function(data) {
       if (data && Object.keys(data).length > 0) {
         localStorage.setItem('fa_rutinas', JSON.stringify(data));
@@ -6335,9 +6356,12 @@ function initDefaults() {
     localStorage.setItem('fa_ahorros', JSON.stringify(DEFAULT_AHORROS));
     fbSet('ahorros', DEFAULT_AHORROS);
   }
-  // Always reset inversiones to correct list
-  localStorage.setItem('fa_inversiones_v2', JSON.stringify(DEFAULT_INVERSIONES));
-  fbSet('inversiones_v2', DEFAULT_INVERSIONES);
+  // Inversiones: antes se reiniciaban a la lista fija en cada carga y se
+  // perdía lo que Frida agregaba o borraba. Ahora solo se siembran la
+  // primera vez; lo guardado se trae de Firebase en syncAllFirebaseData.
+  if (!localStorage.getItem('fa_inversiones_v2')) {
+    localStorage.setItem('fa_inversiones_v2', JSON.stringify(DEFAULT_INVERSIONES));
+  }
   // Remove obsolete autogen flag from older version (now we check actual events instead)
   localStorage.removeItem('fa_autogen_clients');
 }
@@ -6409,15 +6433,26 @@ function finRender() {
     var el = document.getElementById(id); if(el) el.textContent = chipText;
   });
 
-  // Summary cards
+  // Summary cards: ingresos (con comparación vs el mes anterior), gastos y lo que te queda
+  var prevD = new Date(finViewYear, finViewMonth - 1, 1);
+  var prevKey = finMonthKey(prevD.getFullYear(), prevD.getMonth());
+  var prevInc = finAllData[prevKey] ? finMonthTotals(finAllData[prevKey]).inc : null;
+  var incSub = 'este mes';
+  if (prevInc) {
+    var diff = t.inc - prevInc;
+    incSub = (diff >= 0 ? '▲ ' : '▼ ') + finFmt(Math.abs(diff)) + ' vs ' + FIN_MONTHS[prevD.getMonth()].slice(0, 3).toLowerCase();
+  }
+  var queda = t.inc - t.exp;
   var cards = [
-    {label:'Ingresos', value:finFmt(t.inc), color:'#2a7a2a', icon:'↑'},
-    {label:'Gastos', value:finFmt(t.exp), color:'#c44', icon:'↓'},
+    {label:'Ingresos', value:finFmt(t.inc), color:'#2a7a2a', icon:'↑', sub:incSub},
+    {label:'Gastos', value:finFmt(t.exp), color:'#c44', icon:'↓', sub:'este mes'},
+    {label:'Te queda', value:(queda < 0 ? '-' : '') + finFmt(Math.abs(queda)), color:queda < 0 ? '#c44' : 'var(--blue)', icon:'=', sub:'ingresos − gastos'},
   ];
   var cardsHtml = '';
   cards.forEach(function(c) {
-    cardsHtml += '<div class="fin-card"><div class="fin-icon" style="color:'+c.color+'">'+c.icon+'</div><div class="fin-card-label">'+c.label+'</div><div class="fin-card-value" style="color:'+c.color+'">'+c.value+'</div><div class="fin-card-sub">este mes</div></div>';
+    cardsHtml += '<div class="fin-card"><div class="fin-icon" style="color:'+c.color+'">'+c.icon+'</div><div class="fin-card-label">'+c.label+'</div><div class="fin-card-value" style="color:'+c.color+'">'+c.value+'</div><div class="fin-card-sub">'+c.sub+'</div></div>';
   });
+  renderPorCobrar();
   var cardsEl = document.getElementById('fin-summary-cards');
   if (cardsEl) cardsEl.innerHTML = cardsHtml;
 
@@ -6492,6 +6527,30 @@ function finRender() {
   }
 }
 
+
+// "Por cobrar": clientas activas con el pago del ciclo pendiente, para no
+// tener que entrar una por una. Solo se muestra en el mes actual.
+function renderPorCobrar() {
+  var el = document.getElementById('fin-por-cobrar');
+  if (!el) return;
+  var now = new Date();
+  if (finViewYear !== now.getFullYear() || finViewMonth !== now.getMonth()) { el.innerHTML = ''; return; }
+  var rows = Object.keys(CLIENTS).filter(function(id) {
+    var c = CLIENTS[id];
+    if (!isActive(c, id)) return false;
+    var st = getPaymentStatus(id, c);
+    return st && st.level === 'warn';
+  });
+  if (!rows.length) { el.innerHTML = '<div class="fin-cobrar ok">✅ Todas tus clientas activas están al día con su pago.</div>'; return; }
+  var total = rows.reduce(function(s, id) { return s + (Number(CLIENTS[id].cuota) || 0); }, 0);
+  var html = '<div class="fin-cobrar"><div class="fin-cobrar-hdr"><span>💳 Por cobrar · ' + rows.length + (rows.length === 1 ? ' clienta' : ' clientas') + '</span><b>' + finFmt(total) + '</b></div>';
+  rows.forEach(function(id) {
+    var c = CLIENTS[id];
+    html += '<div class="fin-cobrar-row" onclick="openAdminClientProfile(\'' + id + '\');acpSwitchTab(\'pagos\')"><span>' + escapeHtmlAdmin(c.name) + '</span><span>' + (c.cuota ? finFmt(c.cuota) : 'sin cuota') + ' ›</span></div>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
 
 function finChangeMonth(dir) {
   finViewMonth+=dir;

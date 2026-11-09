@@ -49,6 +49,12 @@
   DATA.clients_custom['demo-lucia'] = { name: 'Lucía Hernández', firstEverDate: dk(120), initDate: dk(10), type: 'presencial', sessions: 12, days: ['Lun', 'Mié', 'Vie'], schedule: { days: ['Lun', 'Mié', 'Vie'], startHour: 6, endHour: 7 }, cuota: 120, meta: 'Full body · glúteo' };
   DATA.clients_custom['demo-sofia'] = { name: 'Sofía Rivas', firstEverDate: dk(40), initDate: dk(5), type: 'online', sessions: 0, days: [], cuota: 60, meta: 'Online 1:1 · principiante' };
   DATA.client_links[CLIENT] = UID;
+  // Finanzas inventadas (mes actual y anterior) para probar "Mis finanzas"
+  var prevKey = (function () { var d = new Date(today.getFullYear(), today.getMonth() - 1, 1); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); })();
+  DATA.finanzas = {};
+  DATA.finanzas[monthKey] = { incomes: [{ id: 'i1', amount: 120, note: 'Lucía H. · mensualidad' }, { id: 'i2', amount: 35, note: 'Andrea M. · rutina' }, { id: 'i3', amount: 60, note: 'Sofía R. · online' }], expenses: [{ id: 'x1', amount: 25, note: 'Bandas elásticas' }, { id: 'x2', amount: 12.5, note: 'Canva' }], goalSavings: { casa: 20, carro: 0 }, shortSavings: {} };
+  DATA.finanzas[prevKey] = { incomes: [{ id: 'i4', amount: 300, note: 'Grupo 6am' }, { id: 'i5', amount: 180, note: 'Presenciales' }], expenses: [{ id: 'x3', amount: 40, note: 'Gasolina' }], goalSavings: { casa: 30, carro: 10 }, shortSavings: {} };
+  DATA.fijos = [{ id: 'f1', name: 'Celular', amount: 20 }, { id: 'f2', name: 'Gimnasio', amount: 35 }];
   function ex(id, name, series, reps, extra) { return Object.assign({ id: id, name: name, series: series, reps: reps }, extra || {}); }
   DATA.rutinas[CLIENT] = {
     mensajeInicial: '¡Bienvenida a tu rutina de noviembre! Vamos con todo 💪',
