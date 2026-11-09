@@ -27,7 +27,7 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 
 **Frases de énfasis (agregado el 9 de noviembre de 2026):** a Frida le encantó la combinación de serifa gruesa + cursiva de pincel (referencia "Make fitness Reels that everyone Copies"). Se usa para frases importantes en videos y fotos: portada, gancho, cierre y la frase clave del video. No reemplaza a las frases cortas del medio, que siguen en Archivo Black.
 
-- Serifa: Fraunces (peso 720, puntas suaves, letras un poco juntas; minúsculas con la primera en mayúscula). Cursiva: Norican o Playball (las que eligió Frida), solo para las palabras con emoción. Mr Dafoe descartada: "parece escrita de carta".
+- Serifa: Fraunces (peso 720, puntas suaves, letras un poco juntas; minúsculas con la primera en mayúscula). Cursiva: **Norican** (la elegida por Frida), solo para las palabras con emoción. Playball queda como alternativa más fina. Mr Dafoe descartada: "parece escrita de carta".
 - Líneas apiladas y centradas, alternando serifa y cursiva, con interlineado muy apretado. La cursiva va un poco girada hacia arriba y sus trazos se montan sobre la serifa.
 - Colores: todo crema (como la referencia), blanco + amarillo, o crema + azul con borde blanco. Nada de rosado.
 - Mejor sobre una zona oscura o lisa de la toma. Sombra suave, sin recuadros.
