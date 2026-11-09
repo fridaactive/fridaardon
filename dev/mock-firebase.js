@@ -41,7 +41,7 @@
     entrenoLogs: {}, progreso: {}, ficha: { edad: 31 }
   };
   DATA.clients[CLIENT] = {
-    name: 'Andrea Martínez', type: 'rutina-personalizada', initDate: dk(20), days: 4, sesionesMes: 12, status: 'activa'
+    name: 'Andrea Martínez', type: 'rutina-personalizada', initDate: dk(20), days: ['Lun', 'Mié', 'Vie'], sesionesMes: 12, status: 'activa', premioMes: { texto: 'Un producto de Tu Madre', meta: 12 }
   };
   // Clientas inventadas para el panel de administradora (clients_custom + vínculo con la app)
   DATA.clients_custom = {};
@@ -49,6 +49,7 @@
   DATA.clients_custom['demo-lucia'] = { name: 'Lucía Hernández', firstEverDate: dk(120), initDate: dk(10), type: 'presencial', sessions: 12, days: ['Lun', 'Mié', 'Vie'], schedule: { days: ['Lun', 'Mié', 'Vie'], startHour: 6, endHour: 7 }, cuota: 120, meta: 'Full body · glúteo' };
   DATA.clients_custom['demo-sofia'] = { name: 'Sofía Rivas', firstEverDate: dk(40), initDate: dk(5), type: 'online', sessions: 0, days: [], cuota: 60, meta: 'Online 1:1 · principiante' };
   DATA.client_links[CLIENT] = UID;
+  DATA.recompensas = { config: { texto: 'Un producto de Tu Madre', meta: 12 } };
   // Finanzas inventadas (mes actual y anterior) para probar "Mis finanzas"
   var prevKey = (function () { var d = new Date(today.getFullYear(), today.getMonth() - 1, 1); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); })();
   DATA.finanzas = {};

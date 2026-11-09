@@ -832,6 +832,17 @@
 .fin-cobrar-row{display:flex;justify-content:space-between;padding:0.55rem 0;border-top:1px solid #F0E3B5;font-size:0.82rem;color:var(--text);cursor:pointer;}
 .fin-cobrar-row:hover{color:var(--blue);}
 @media (max-width:420px){ #finanzas .fin-card{padding:0.7rem 0.55rem;} #finanzas .fin-card-value{font-size:0.9rem;} #finanzas .fin-card-sub{font-size:0.55rem;} }
+.cst-chip.prize{background:#F5ECCB;color:#5a4a10;}
+.cst-chip.cheer{border:1.5px solid var(--blue);background:#fff;color:var(--blue);cursor:pointer;font-family:'DM Sans',sans-serif;}
+.cst-chip.cheer.sent{border-color:#2a7a2a;color:#2a7a2a;cursor:default;}
+.premio-card{background:#FFFDF4;border:1.5px solid #EADFB4;border-radius:18px;padding:0.9rem 1rem;margin-bottom:1rem;box-shadow:0 4px 0 #EFE6C4;}
+.premio-top{display:flex;align-items:center;gap:0.7rem;}
+.premio-ico{font-size:1.6rem;}
+.premio-lbl{font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#8A6A00;}
+.premio-txt{font-weight:700;font-size:0.92rem;color:var(--text);margin-top:0.1rem;}
+.premio-edit{background:var(--blue);color:#fff;border:none;border-radius:100px;padding:0.45rem 0.9rem;font-size:0.72rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;box-shadow:0 3px 0 #0F3FA8;}
+.premio-sub{font-size:0.68rem;color:var(--muted);margin-top:0.5rem;line-height:1.4;}
+.premio-win{margin-top:0.6rem;padding-top:0.6rem;border-top:1px dashed #EADFB4;font-size:0.78rem;color:var(--text);}
 #rutina-editor .back-row{flex-wrap:wrap;gap:0.4rem;}
 #rutina-editor .back-row .sub-brand{margin-right:auto;}
 #rutina-editor .back-row .rv-edit-btn{margin-right:0!important;}
@@ -1007,6 +1018,8 @@
     <input type="search" id="clients-search" class="clients-search" placeholder="🔍 Buscar clienta…" oninput="renderClientsList()" autocomplete="off">
 
     <button id="btn-new-client" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;touch-action:manipulation;">+ Nueva clienta</button>
+
+    <div id="premio-card"></div>
 
     <div class="clients-status-tabs">
       <button class="clients-status-tab active" id="tab-activas" onclick="switchClientsTab('activas')">🟢 Activas</button>
@@ -3448,6 +3461,7 @@ function syncClientPublicFields(id, c, onError) {
   fbSet('clients/' + id + '/cuota', c.cuota || null);
   fbSet('clients/' + id + '/sessions', c.sessions || null);
   fbSet('clients/' + id + '/planMeses', c.planMeses || null);
+  if (PREMIO_CFG && PREMIO_CFG.texto) fbSet('clients/' + id + '/premioMes', { texto: PREMIO_CFG.texto, meta: clientMetaMes(c) });
 }
 
 // Same dual-write pattern as saveCycle(): a per-field override for clientas
@@ -4821,6 +4835,7 @@ function renderClientsList() {
       openAdminClientProfile(this.getAttribute('data-cid'));
     });
   });
+  renderPremioCard();
   fillClientActivity(ids);
 }
 
@@ -4845,18 +4860,87 @@ function fillClientActivity(ids) {
       var out = '';
       if (chatNeedsReply(portal.chat, portal.chatMeta)) out += '<span class="cst-chip msg">💬 Te escribió</span>';
       var dias = portal.diasEntrenados || {};
+      var mk = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
+      var mesN = Object.keys(dias).filter(function(k) { return dias[k] && k.indexOf(mk) === 0; }).length;
+      CLIENT_MES_COUNT[id] = mesN;
+      if (mesN >= clientMetaMes(CLIENTS[id])) out += '<span class="cst-chip prize">🏆 Meta cumplida</span>';
       var last = Object.keys(dias).filter(function(k) { return dias[k]; }).sort().pop();
       if (last) {
         var t0 = new Date(); t0.setHours(0, 0, 0, 0);
         var ago = Math.round((t0 - new Date(last + 'T00:00:00')) / 86400000);
         var txt = ago <= 0 ? 'Entrenó hoy' : ago === 1 ? 'Entrenó ayer' : 'Entrenó hace ' + ago + ' días';
         out += '<span class="cst-chip ' + (ago <= 7 ? 'ok' : 'idle') + '">🏋️ ' + txt + '</span>';
+        if (ago <= 2) out += '<button type="button" class="cst-chip cheer" onclick="event.stopPropagation();felicitarClienta(\'' + id + '\', this)">👏 Felicitar</button>';
       } else {
         out += '<span class="cst-chip idle">🏋️ Aún no marca entrenos</span>';
       }
       slot.outerHTML = out;
+      renderPremioCard();
     });
   });
+}
+
+// ══════════ RECOMPENSAS: premio del mes, quién lo logró y felicitar ══════════
+var PREMIO_CFG = null;        // { texto, meta } — recompensas/config
+var CLIENT_MES_COUNT = {};    // entrenos marcados este mes por clienta (de su app)
+
+// Meta del mes de cada clienta: sus sesiones del plan, o días/semana × 4,
+// o la meta general del premio. La app de la clienta usa este mismo número.
+function clientMetaMes(c) {
+  c = c || {};
+  if (c.sessions > 0) return Number(c.sessions);
+  if (c.days && c.days.length) return c.days.length * 4;
+  return (PREMIO_CFG && Number(PREMIO_CFG.meta)) || 12;
+}
+
+function renderPremioCard() {
+  var el = document.getElementById('premio-card');
+  if (!el) return;
+  var cfg = PREMIO_CFG || {};
+  var mes = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'][new Date().getMonth()];
+  var winners = Object.keys(CLIENT_MES_COUNT).filter(function(id) { return CLIENTS[id] && CLIENT_MES_COUNT[id] >= clientMetaMes(CLIENTS[id]); });
+  var html = '<div class="premio-card">';
+  html += '<div class="premio-top"><span class="premio-ico">🎁</span><div style="flex:1;min-width:0;"><div class="premio-lbl">Premio de ' + mes + '</div>';
+  html += '<div class="premio-txt">' + (cfg.texto ? escapeHtmlAdmin(cfg.texto) : '<span style="color:var(--muted);font-weight:400;">Sin premio todavía. Tus clientas verán “Frida te tiene una sorpresa”.</span>') + '</div></div>';
+  html += '<button type="button" class="premio-edit" onclick="editPremio()">' + (cfg.texto ? 'Cambiar' : 'Poner premio') + '</button></div>';
+  html += '<div class="premio-sub">Se gana al cumplir su meta del mes en la app (sus sesiones del plan, o días por semana × 4).</div>';
+  if (winners.length) {
+    html += '<div class="premio-win">🏆 <b>Lo lograron:</b> ' + winners.map(function(id) { return escapeHtmlAdmin(CLIENTS[id].name); }).join(', ') + '</div>';
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function editPremio() {
+  var cfg = PREMIO_CFG || {};
+  var texto = prompt('¿Qué premio ganan este mes las clientas que cumplan su meta?\n(Ej: Un producto de Tu Madre, una gorra FridaActive…)\nDéjalo vacío para quitarlo.', cfg.texto || '');
+  if (texto === null) return;
+  texto = texto.trim();
+  var meta = Number(cfg.meta) || 12;
+  PREMIO_CFG = texto ? { texto: texto, meta: meta } : null;
+  fbSet('recompensas/config', PREMIO_CFG);
+  // Se copia a cada clienta (con su propia meta) porque su app solo puede leer clients/{id}.
+  Object.keys(CLIENTS).forEach(function(id) {
+    fbSet('clients/' + id + '/premioMes', texto ? { texto: texto, meta: clientMetaMes(CLIENTS[id]) } : null);
+  });
+  renderPremioCard();
+}
+
+var FELICITAR_MSGS = [
+  '¡Vi que entrenaste! 👏 Me encanta verte constante, sigue así 💙',
+  '¡Eso! Otro día que cuenta 💪 Estoy muy orgullosa de ti.',
+  '¡Qué bien que entrenaste! 🙌 Cada día suma, de verdad.',
+  '¡Vas increíble! 🔥 Gracias por darte este tiempo para ti.'
+];
+function felicitarClienta(id, btn) {
+  var uid = CLIENT_LINKS[id];
+  if (!uid) return;
+  var c = CLIENTS[id] || {};
+  var msg = FELICITAR_MSGS[Math.floor(Math.random() * FELICITAR_MSGS.length)];
+  if (!confirm('Enviarle a ' + (c.name || 'tu clienta') + ' este mensaje en el chat:\n\n“' + msg + '”')) return;
+  getDB().ref('clientasPortal/' + uid + '/chat').push({ from: 'admin', text: msg, ts: Date.now() }).then(function() {
+    if (btn) { btn.textContent = '✓ Enviado'; btn.disabled = true; btn.classList.add('sent'); }
+  }).catch(function(e) { alert('No se pudo enviar: ' + (e && e.message ? e.message : 'error')); });
 }
 
 function updateClientBadges() {
@@ -5313,6 +5397,12 @@ function syncAllFirebaseData() {
         showScreen('dashboard');
       }
     }
+
+    // Premio del mes (recompensas para clientas que usan la app)
+    fbGet('recompensas/config', function(data) {
+      PREMIO_CFG = data || null;
+      if (document.getElementById('premio-card')) renderPremioCard();
+    });
 
     // Inversiones guardadas (no cuenta para la pantalla de carga)
     fbGet('inversiones_v2', function(data) {

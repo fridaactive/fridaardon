@@ -923,7 +923,52 @@
   body.portal-dark [id$="-modal"] [style*="background:#fff"],
   body.portal-dark [id$="-modal"] [style*="background: #fff"],
   body.portal-dark [id$="-modal"] [style*="background:white"] { background:var(--surface) !important; color:var(--text); }
- </style>
+ 
+/* ══ Recompensas (check-in, meta del mes, medallas, festejo) ══ */
+.in-checkin{display:flex;align-items:center;gap:0.8rem;width:100%;text-align:left;border:none;cursor:pointer;margin:0.9rem 0 0;padding:0.95rem 1rem;border-radius:20px;background:#F5ECCB;color:#0B1B3F;font-family:'DM Sans',sans-serif;box-shadow:0 5px 0 #D9C98E;position:relative;overflow:hidden;}
+.in-checkin:active{transform:translateY(3px);box-shadow:0 2px 0 #D9C98E;}
+.in-checkin-ico{font-size:1.6rem;line-height:1;}
+.in-checkin-txt{flex:1;display:flex;flex-direction:column;gap:0.1rem;}
+.in-checkin-txt b{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;font-size:0.95rem;text-transform:uppercase;letter-spacing:0.01em;}
+.in-checkin-txt span{font-size:0.75rem;opacity:0.75;}
+.in-checkin-btn{background:#1C55E5;color:#fff;font-weight:700;font-size:0.85rem;padding:0.55rem 0.95rem;border-radius:100px;white-space:nowrap;}
+.in-checkin.done{background:rgba(255,255,255,0.08);color:#fff;box-shadow:none;border:1px solid rgba(255,255,255,0.14);cursor:default;}
+.in-checkin-undo{background:none;border:none;color:rgba(255,255,255,0.6);font-size:0.7rem;text-decoration:underline;cursor:pointer;font-family:inherit;}
+.in-goal{margin-top:0.9rem;padding:1rem;border-radius:20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;}
+.in-goal.won{background:linear-gradient(135deg,rgba(245,236,203,0.18),rgba(28,85,229,0.25));border-color:rgba(245,236,203,0.5);}
+.in-goal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;}
+.in-goal-num{font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.5rem;line-height:1;}
+.in-goal-num small{font-size:0.85rem;opacity:0.6;}
+.in-goal-track{height:10px;border-radius:100px;background:rgba(255,255,255,0.12);overflow:hidden;}
+.in-goal-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#5b8bf5,#F5ECCB);transition:width 0.8s cubic-bezier(.2,.8,.2,1);}
+.in-goal-prize{font-size:0.78rem;margin-top:0.6rem;line-height:1.45;color:rgba(255,255,255,0.85);}
+.in-goal-prize b{color:#F5ECCB;}
+.in-med-count{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:0.72rem;opacity:0.7;}
+.in-medals{display:grid;grid-template-columns:repeat(5,1fr);gap:0.45rem;}
+.in-medal{display:flex;flex-direction:column;align-items:center;gap:0.3rem;background:none;border:none;cursor:pointer;padding:0;color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;}
+.in-medal-ico{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;background:rgba(255,255,255,0.06);border:1.5px dashed rgba(255,255,255,0.2);filter:grayscale(1);}
+.in-medal.ok{color:#fff;}
+.in-medal.ok .in-medal-ico{filter:none;background:radial-gradient(circle at 35% 30%,#FFF6D6,#F5ECCB 60%,#D9C98E);border:2px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,0.25),0 0 18px rgba(245,236,203,0.35);}
+.in-medal-name{font-size:0.6rem;font-weight:700;text-align:center;line-height:1.15;}
+.in-nudge{display:flex;gap:0.75rem;align-items:flex-start;width:100%;text-align:left;margin-top:0.7rem;padding:0.85rem 1rem;border-radius:18px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.05);color:#fff;font-family:'DM Sans',sans-serif;cursor:pointer;}
+.in-nudge>span:first-child{font-size:1.3rem;}
+.in-nudge b{display:block;font-size:0.85rem;}
+.in-nudge small{display:block;font-size:0.72rem;opacity:0.75;margin-top:0.15rem;line-height:1.4;}
+.in-nudge-bar{display:block;height:6px;border-radius:100px;background:rgba(255,255,255,0.12);margin-top:0.5rem;overflow:hidden;}
+.in-nudge-bar span{display:block;height:100%;background:#F5ECCB;border-radius:100px;}
+.fa-celebrate{position:fixed;inset:0;z-index:9999;background:rgba(5,14,40,0.55);display:flex;align-items:center;justify-content:center;padding:1.5rem;animation:faCelIn 0.25s ease;overflow:hidden;}
+.fa-celebrate.out{opacity:0;transition:opacity 0.25s;}
+.fa-cel-card{background:#fff;color:#0B1B3F;border-radius:26px;padding:1.6rem 1.4rem 1.2rem;max-width:320px;width:100%;text-align:center;box-shadow:0 8px 0 #D9C98E;animation:faCelPop 0.45s cubic-bezier(.2,1.4,.4,1);}
+.fa-cel-ico{font-size:3rem;line-height:1;margin-bottom:0.5rem;}
+.fa-cel-title{font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.25rem;text-transform:uppercase;color:#1C55E5;}
+.fa-cel-text{font-size:0.88rem;margin-top:0.4rem;line-height:1.45;color:#33405e;}
+.fa-cel-btn{margin-top:1rem;background:#1C55E5;color:#fff;border:none;border-radius:100px;padding:0.7rem 1.6rem;font-weight:700;font-family:'DM Sans',sans-serif;font-size:0.9rem;box-shadow:0 4px 0 #0F3FA8;cursor:pointer;}
+.fa-cel-bit{position:absolute;top:-20px;left:var(--x);width:9px;height:14px;border-radius:2px;animation:faCelFall var(--t) ease-in var(--dl) forwards;}
+@keyframes faCelIn{from{opacity:0}to{opacity:1}}
+@keyframes faCelPop{from{transform:scale(0.6);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes faCelFall{to{transform:translateY(105vh) rotate(var(--r));}}
+@media (prefers-reduced-motion: reduce){.fa-cel-bit{display:none;}.fa-cel-card{animation:none;}}
+</style>
 </head>
 <body>
 
@@ -1373,7 +1418,7 @@
         <div class="card transf-card">
           <div class="transf-hdr">
             <div class="card-label" style="margin-bottom:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M4 8h2.5l1.8-2h7.4l1.8 2H20v11H4Z"/><circle cx="12" cy="13.5" r="3.2"/></svg> Tu transformación</div>
-            <div class="transf-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="5" y="10" width="14" height="9" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Solo vos y Frida</div>
+            <div class="transf-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="5" y="10" width="14" height="9" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Privadas · solo Frida y tú</div>
           </div>
           <div id="transformacion-list"><div class="empty-note">Cargando…</div></div>
         </div>
@@ -1878,6 +1923,8 @@ function renderInicioTab() {
       + '<span class="in-hero-title">Tu hora para ti</span><span class="in-hero-meta">Tus sesiones con Frida y tu progreso, en un solo lugar.</span></span></span></div>';
   }
 
+  h += rewardsInicioHtml(c);
+
   h += '<div class="in-stats">'
     + (c.racha >= 2
         ? '<div class="in-stat in-stat-hl"><svg class="fa-sticker fa-sticker-bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1L4 14h6.5L9 23l10-13.5h-6.6z"/></svg><span class="in-stat-num">' + c.racha + '</span><span class="in-stat-lbl">días seguidos</span></div>'
@@ -1899,6 +1946,157 @@ function renderInicioTab() {
     + '</div>';
   el.innerHTML = h;
   if (currentTabId === 'tab-inicio') animateInicioNumbers();
+  checkNewMedals();
+}
+
+// ══════════ RECOMPENSAS: check-in de un toque, meta del mes, medallas ══════════
+// Todo se calcula con lo que la clienta ya registra (días entrenados, fotos,
+// perfil, ficha); no se guarda nada nuevo salvo los días que marca.
+// El premio del mes lo define Frida en su panel y llega en clients/{id}/premioMes.
+var PREMIO_MES = null;   // { texto, meta }
+var CLIENT_META = null;  // días/semana × 4 del plan de la clienta, si lo tiene
+
+function localKey(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+
+function loadPremioMes() {
+  if (!currentClientId) return;
+  db().ref('clients/' + currentClientId + '/premioMes').once('value').then(function(snap) {
+    PREMIO_MES = snap.val() || null;
+    renderInicioTab();
+  }).catch(function() {});
+}
+
+function metaDelMes() {
+  // La meta la calcula el panel de Frida para cada clienta (sus sesiones o días × 4).
+  return (PREMIO_MES && Number(PREMIO_MES.meta)) || CLIENT_META || 12;
+}
+
+function maxRacha(dias) {
+  var keys = Object.keys(dias || {}).filter(function(k) { return dias[k]; }).sort();
+  var best = 0, run = 0, prev = null;
+  keys.forEach(function(k) {
+    var d = new Date(k + 'T00:00:00');
+    run = (prev && Math.round((d - prev) / 86400000) === 1) ? run + 1 : 1;
+    if (run > best) best = run;
+    prev = d;
+  });
+  return best;
+}
+
+function medallasEstado() {
+  var dias = CURRENT_DIAS_ENTRENADOS || {};
+  var portal = CURRENT_PORTAL_DATA || {}, perfil = CURRENT_PERFIL_DATA || {};
+  var anyDia = Object.keys(dias).some(function(k) { return dias[k]; });
+  var fotos = portal.fotosProgreso && Object.keys(portal.fotosProgreso).length > 0;
+  var perfilOk = !!perfil.fotoPerfil && !!(perfil.bio && perfil.bio.trim()) && !!portal.ficha;
+  var now = new Date();
+  var mesNombre = MESES_LARGOS[now.getMonth()];
+  var c = inicioCounts(), meta = metaDelMes();
+  return [
+    { id: 'primer', icon: '🌱', name: 'Primer paso', how: 'Marca tu primer día entrenado.', ok: anyDia },
+    { id: 'racha3', icon: '🔥', name: 'En racha', how: 'Entrena 3 días seguidos.', ok: maxRacha(dias) >= 3 },
+    { id: 'foto', icon: '📸', name: 'Valiente', how: 'Sube tu primera foto de progreso. Solo la ven Frida y tú.', ok: !!fotos },
+    { id: 'perfil', icon: '💙', name: 'Perfil completo', how: 'Pon tu foto, cuéntanos de ti y llena tu ficha.', ok: perfilOk },
+    { id: 'meta-' + localKey(now).slice(0, 7), icon: '🏆', name: 'Meta de ' + mesNombre, how: 'Llega a ' + meta + ' entrenos este mes' + (PREMIO_MES && PREMIO_MES.texto ? ' y gana: ' + PREMIO_MES.texto : '') + '.', ok: c.mes >= meta }
+  ];
+}
+
+function rewardsInicioHtml(c) {
+  var h = '';
+  var today = localKey(new Date());
+  var hoy = !!(CURRENT_DIAS_ENTRENADOS || {})[today];
+  // 1. Check-in de un toque
+  if (hoy) {
+    h += '<div class="in-checkin done"><span class="in-checkin-ico">✅</span><span class="in-checkin-txt"><b>¡Hoy cuenta!</b><span>Tu entreno de hoy ya está marcado 💪</span></span><button type="button" class="in-checkin-undo" onclick="checkInHoy(false)">Deshacer</button></div>';
+  } else {
+    h += '<button type="button" class="in-checkin" onclick="checkInHoy(true)"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>¿Entrenaste hoy?</b><span>Tócalo y suma a tu meta del mes</span></span><span class="in-checkin-btn">Sí ✓</span></button>';
+  }
+  // 2. Meta del mes (con el premio que puso Frida)
+  var meta = metaDelMes(), pct = Math.min(100, Math.round(c.mes / meta * 100));
+  var premio = PREMIO_MES && PREMIO_MES.texto ? escapeHtml(PREMIO_MES.texto) : '';
+  h += '<div class="in-goal' + (c.mes >= meta ? ' won' : '') + '">'
+    + '<div class="in-goal-top"><span class="fa-tag">META DE ' + MESES_LARGOS[new Date().getMonth()].toUpperCase() + '</span><span class="in-goal-num">' + c.mes + '<small>/' + meta + '</small></span></div>'
+    + '<div class="in-goal-track"><div class="in-goal-fill" style="width:' + pct + '%"></div></div>'
+    + (c.mes >= meta
+        ? '<div class="in-goal-prize">🎉 <b>¡Lo lograste!</b> ' + (premio ? 'Tu premio: ' + premio + '. Frida te escribirá para entregártelo.' : 'Frida te tiene una sorpresa.') + '</div>'
+        : '<div class="in-goal-prize">🎁 ' + (premio ? 'Al llegar ganas: <b>' + premio + '</b>' : 'Al llegar, Frida te tiene una sorpresa') + ' · te faltan ' + (meta - c.mes) + '</div>')
+    + '</div>';
+  // 3. Medallas
+  var meds = medallasEstado(), nOk = meds.filter(function(m) { return m.ok; }).length;
+  h += '<div class="in-section"><span class="fa-marker">TUS</span> MEDALLAS <span class="in-med-count">' + nOk + '/' + meds.length + '</span></div><div class="in-medals">';
+  meds.forEach(function(m, i) {
+    h += '<button type="button" class="in-medal' + (m.ok ? ' ok' : '') + '" onclick="showMedal(' + i + ')"><span class="in-medal-ico">' + (m.ok ? m.icon : '🔒') + '</span><span class="in-medal-name">' + escapeHtml(m.name) + '</span></button>';
+  });
+  h += '</div>';
+  // 4. Recordatorio de foto (primera semana del mes, si no ha subido la de este mes)
+  var now = new Date(), mk = localKey(now).slice(0, 7);
+  var fotosMes = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.fotosProgreso || {})[mk];
+  if (now.getDate() <= 7 && !(fotosMes && fotosMes.inicio)) {
+    h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\');setTimeout(function(){var t=document.querySelector(\'.transf-card\');if(t)t.scrollIntoView({behavior:\'smooth\',block:\'start\'});},350)"><span>📸</span><span><b>Esta semana es día de foto</b><small>🔒 Tus fotos son privadas: solo las ven Frida y tú. Sirven para ver cuánto has avanzado.</small></span></button>';
+  }
+  // 5. Perfil incompleto
+  var perfil = CURRENT_PERFIL_DATA || {}, portal = CURRENT_PORTAL_DATA || {};
+  var items = [!!perfil.fotoPerfil, !!(perfil.bio && perfil.bio.trim()), !!portal.ficha];
+  var done = items.filter(Boolean).length;
+  if (done < items.length) {
+    h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\')"><span>💙</span><span><b>Tu perfil va al ' + Math.round(done / items.length * 100) + '%</b><small>Complétalo y desbloquea la medalla “Perfil completo”.</small><span class="in-nudge-bar"><span style="width:' + Math.round(done / items.length * 100) + '%"></span></span></span></button>';
+  }
+  return h;
+}
+
+function checkInHoy(on) {
+  var key = localKey(new Date());
+  if (!!CURRENT_DIAS_ENTRENADOS[key] === on) return;
+  toggleDiaEntrenado(key);
+  if (on) {
+    if (navigator.vibrate) try { navigator.vibrate([20, 40, 30]); } catch (e) {}
+    var c = inicioCounts();
+    celebrate('💪', '¡Hoy cuenta!', c.racha >= 2 ? 'Llevas ' + c.racha + ' días seguidos.' : 'Ya sumas ' + c.mes + ' este mes. ¡Sigue así!');
+  }
+}
+
+function showMedal(i) {
+  var m = medallasEstado()[i];
+  if (!m) return;
+  celebrate(m.ok ? m.icon : '🔒', m.name, m.ok ? '¡Ya la tienes! ' + m.how.replace(/\.$/, '') + ' ✓' : m.how, !m.ok);
+}
+
+// Medallas nuevas: se festejan una sola vez (se recuerdan en este celular).
+function checkNewMedals() {
+  if (!currentUid || !CURRENT_DIAS_ENTRENADOS) return;
+  var storeKey = 'fa_medals_' + currentUid, seen = null;
+  try { seen = JSON.parse(localStorage.getItem(storeKey) || 'null'); } catch (e) {}
+  var okIds = medallasEstado().filter(function(m) { return m.ok; });
+  if (seen === null) { try { localStorage.setItem(storeKey, JSON.stringify(okIds.map(function(m) { return m.id; }))); } catch (e) {} return; }
+  var nueva = okIds.filter(function(m) { return seen.indexOf(m.id) === -1; })[0];
+  if (!nueva) return;
+  seen.push(nueva.id);
+  try { localStorage.setItem(storeKey, JSON.stringify(seen)); } catch (e) {}
+  setTimeout(function() {
+    var premio = nueva.id.indexOf('meta-') === 0 && PREMIO_MES && PREMIO_MES.texto ? ' Ganaste: ' + PREMIO_MES.texto + '. Frida te escribirá 💙' : '';
+    celebrate(nueva.icon, '¡Medalla nueva!', nueva.name + '.' + premio);
+  }, 1400);
+}
+
+// Festejo a pantalla completa: confeti + tarjeta. Se cierra al tocar.
+var CELEBRATE_QUEUE = [];
+function celebrate(icon, title, text, quiet, fromQueue) {
+  // Si ya hay un festejo abierto, el nuevo espera su turno (uno a la vez).
+  if (!fromQueue && document.getElementById('fa-celebrate')) { CELEBRATE_QUEUE.push([icon, title, text, quiet]); return; }
+  var wrap = document.createElement('div');
+  wrap.id = 'fa-celebrate'; wrap.className = 'fa-celebrate' + (quiet ? ' quiet' : '');
+  var conf = '';
+  if (!quiet) for (var i = 0; i < 26; i++) conf += '<span class="fa-cel-bit fa-c' + (i % 7) + '" style="--x:' + (Math.round(Math.random() * 100)) + 'vw;--r:' + (Math.round(Math.random() * 720) - 360) + 'deg;--t:' + (0.9 + Math.random() * 0.9).toFixed(2) + 's;--dl:' + (Math.random() * 0.3).toFixed(2) + 's"></span>';
+  wrap.innerHTML = conf + '<div class="fa-cel-card" role="dialog" aria-live="polite"><div class="fa-cel-ico">' + icon + '</div><div class="fa-cel-title">' + escapeHtml(title) + '</div><div class="fa-cel-text">' + escapeHtml(text) + '</div><button type="button" class="fa-cel-btn">' + (quiet ? 'Entendido' : '¡Genial!') + '</button></div>';
+  wrap.addEventListener('click', function() {
+    wrap.classList.add('out');
+    setTimeout(function() {
+      wrap.remove();
+      var next = CELEBRATE_QUEUE.shift();
+      if (next) celebrate(next[0], next[1], next[2], next[3], true);
+    }, 250);
+  });
+  document.body.appendChild(wrap);
 }
 
 function goToRutinaDay(index) {
@@ -2320,6 +2518,7 @@ function renderPortalScreen(portal, perfil) {
   renderTransformacion(portal.fotosProgreso || {});
   renderTrainingTracker(portal.diasEntrenados || {});
   loadPlanInfo();
+  loadPremioMes();
   loadAnuncios();
   initChatListener();
   loadBeneficios();
@@ -3082,7 +3281,11 @@ function guardarSesion(dayIndex, btnEl) {
   if (comentario) entry.comentario = comentario;
 
   db().ref('clientasPortal/' + currentUid + '/entrenoLogs').push(entry).then(function() {
-    alert('¡Sesión guardada! 💪');
+    // Guardar la sesión también marca hoy como día entrenado (un paso menos).
+    var hoyKey = localKey(new Date());
+    var yaEstaba = !!CURRENT_DIAS_ENTRENADOS[hoyKey];
+    if (!yaEstaba) toggleDiaEntrenado(hoyKey);
+    celebrate('💪', '¡Sesión guardada!', yaEstaba ? 'Excelente trabajo hoy.' : 'Marcamos hoy como día entrenado. Ya sumas ' + inicioCounts().mes + ' este mes.');
     if (commentEl) commentEl.value = '';
     db().ref('clientasPortal/' + currentUid + '/entrenoLogs').once('value').then(function(snap) {
       CURRENT_ENTRENO_LOGS = snap.val() || {};
@@ -3477,6 +3680,7 @@ function renderTrainingTracker(diasEntrenados) {
     db().ref('clients/' + currentClientId + '/days').once('value').then(function(snap) {
       var days = snap.val();
       var meta = (days && days.length) ? days.length * 4 : null;
+      if (meta !== CLIENT_META) { CLIENT_META = meta; setTimeout(renderInicioTab, 0); }
       document.getElementById('track-meta').textContent = meta !== null ? meta : '-';
       var ringMetaNum = document.getElementById('pf-ring-meta-num');
       if (ringMetaNum) ringMetaNum.textContent = meta !== null ? meta : '-';
