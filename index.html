@@ -1960,7 +1960,7 @@ function renderInicioTab() {
 // perfil, ficha); no se guarda nada nuevo salvo los días que marca.
 // El premio del mes lo define Frida en su panel y llega en clients/{id}/premioMes.
 var PREMIO_MES = null;   // { texto, meta }
-var CLIENT_META = null;  // días/semana × 4 del plan de el cliente, si lo tiene
+var CLIENT_META = null;  // días/semana × 4 del plan del cliente, si lo tiene
 
 function localKey(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 
@@ -3780,7 +3780,7 @@ function renderTrainingTracker(diasEntrenados) {
   }
 
   // Meta del mes: días/semana × 4 semanas — mismo criterio que ya usa el
-  // admin para calcular "Sesiones" al armar el plan de el cliente.
+  // admin para calcular "Sesiones" al armar el plan del cliente.
   if (currentClientId) {
     db().ref('clients/' + currentClientId + '/days').once('value').then(function(snap) {
       var days = snap.val();
@@ -3963,7 +3963,7 @@ function updateProfileCompletion() {
 
 // ── TU FICHA: Personal/Salud/Entreno las llena el cliente; Mi Plan es
 // solo informativo. Se guarda en clientasPortal/{uid}/ficha — ahí mismo
-// la lee el admin (de solo lectura) al abrir el perfil de el cliente.
+// la lee el admin (de solo lectura) al abrir el perfil del cliente.
 var FICHA_DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 var fichaSelectedDias = [];
 
@@ -4103,7 +4103,7 @@ function getInstagramUrl(handle) {
 }
 
 // Beneficios se canjean 1 vez por ciclo — no es un código de por vida.
-// El "ciclo" es el período de plan activo de el cliente (su initDate en el
+// El "ciclo" es el período de plan activo del cliente (su initDate en el
 // panel de admin), así que el cupo se renueva justo cuando Frida le activa
 // un nuevo mes, no el día 1 de cada mes calendario. Si por algún motivo no
 // se puede leer su ciclo (cliente sin registro de plan todavía), se usa el
@@ -4285,7 +4285,7 @@ function getCanjeCount(b) {
 
 // Tarjeta del cupón en sí — sin ninguna etiqueta tipo "Cupón único" o "Sin
 // límite de usos": Frida prefiere que esos detalles del mecanismo no se
-// le muestren a el cliente, el comprobante alcanza con nombre + descuento.
+// le muestren al cliente, el comprobante alcanza con nombre + descuento.
 // Cupón con forma de ticket de regalo. La primera vez que se abre en la
 // sesión aparece una cajita de regalo que se abre con confeti.
 function renderGiftTicket(b) {
@@ -4399,7 +4399,7 @@ function renderBenefProfileHtml(b) {
 
 // Sin código: Frida le avisa antes a la marca que este cliente va a pasar
 // (ver canjearBeneficio), así que el comprobante de identidad acá es el
-// nombre de el cliente, no un código que la marca tendría que verificar.
+// nombre del cliente, no un código que la marca tendría que verificar.
 //
 // Antes esto generaba un PDF con un formato de vale chico (100x74mm), pero
 // muchos visores de PDF de celular lo abrían como una página enorme en
@@ -4515,7 +4515,7 @@ function generarCuponCanvas(b, cb) {
     ctx.fill();
 
     // Sin etiquetas de "cupón único" ni "sin límite de usos" — esos
-    // detalles del mecanismo no se le muestran a el cliente.
+    // detalles del mecanismo no se le muestran al cliente.
     ctx.fillStyle = '#1C55E5';
     ctx.font = '700 17px "DM Sans", sans-serif';
     ctx.fillText('TU CUPÓN · CLIENTA', panelX + 40, panelY + 55);

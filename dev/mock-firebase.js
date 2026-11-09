@@ -36,7 +36,7 @@
   DATA.clientasPortal[UID] = {
     perfil: { nombre: 'Andrea Martínez', clientId: CLIENT, bio: 'Quiero sentirme fuerte y con energía.', fotoPerfil: '' },
     diasEntrenados: dias,
-    chat: { m1: { from: 'admin', text: '¡Hola Andrea! ¿Cómo te sentiste con la rutina?', ts: Date.now() - 86400000 } },
+    chat: { m1: { from: 'admin', text: '¡Hola Andrea! ¿Cómo te sentiste con la rutina?', ts: Date.now() - 86400000 }, m2: { from: 'client', text: '¡Muy bien! Me costó la plancha jaja', ts: Date.now() - 3600000 } },
     chatMeta: { lastReadByClient: 0 },
     entrenoLogs: {}, progreso: {}, ficha: { edad: 31 }
   };
@@ -49,6 +49,7 @@
   DATA.clients_custom['demo-lucia'] = { name: 'Lucía Hernández', firstEverDate: dk(120), initDate: dk(10), type: 'presencial', sessions: 12, days: ['Lun', 'Mié', 'Vie'], schedule: { days: ['Lun', 'Mié', 'Vie'], startHour: 6, endHour: 7 }, cuota: 120, meta: 'Full body · glúteo' };
   DATA.clients_custom['demo-sofia'] = { name: 'Sofía Rivas', firstEverDate: dk(40), initDate: dk(5), type: 'online', sessions: 0, days: [], cuota: 60, meta: 'Online 1:1 · principiante' };
   DATA.client_links[CLIENT] = UID;
+  DATA.landingLeads = { l1: { nombre: 'Carlos Pérez', whatsapp: '7000 0000', instagram: 'carlos.demo', ts: Date.now() - 7200000 } };
   DATA.recompensas = { config: { texto: 'Un producto de Tu Madre', meta: 12 } };
   // Finanzas inventadas (mes actual y anterior) para probar "Mis finanzas"
   var prevKey = (function () { var d = new Date(today.getFullYear(), today.getMonth() - 1, 1); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); })();

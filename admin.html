@@ -843,6 +843,22 @@
 .premio-edit{background:var(--blue);color:#fff;border:none;border-radius:100px;padding:0.45rem 0.9rem;font-size:0.72rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;box-shadow:0 3px 0 #0F3FA8;}
 .premio-sub{font-size:0.68rem;color:var(--muted);margin-top:0.5rem;line-height:1.4;}
 .premio-win{margin-top:0.6rem;padding-top:0.6rem;border-top:1px dashed #EADFB4;font-size:0.78rem;color:var(--text);}
+/* ── Portal de clientes: menú de tarjetas ── */
+.pc-hub-intro{font-size:0.78rem;color:var(--muted);margin-bottom:0.4rem;}
+.pc-hub-lbl{font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin:1rem 0 0.5rem;}
+.pc-hub-card{display:flex;align-items:center;gap:0.8rem;width:100%;text-align:left;background:#fff;border:1px solid var(--border);border-radius:18px;padding:0.95rem 1rem;margin-bottom:0.6rem;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 0 #E4EAF7;transition:transform .12s;}
+.pc-hub-card:active{transform:translateY(3px);box-shadow:0 1px 0 #E4EAF7;}
+.pc-hub-ico{width:2.6rem;height:2.6rem;border-radius:14px;background:#EEF3FF;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;}
+.pc-hub-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:0.1rem;}
+.pc-hub-txt b{font-size:0.92rem;color:var(--text);}
+.pc-hub-txt small{font-size:0.72rem;color:var(--muted);}
+.pc-hub-arrow{color:var(--blue);font-size:1.2rem;font-weight:700;}
+.pc-hub-card .pc-tab-badge{background:#E5484D;color:#fff;font-size:0.68rem;font-weight:700;min-width:1.3rem;height:1.3rem;border-radius:100px;display:inline-flex;align-items:center;justify-content:center;padding:0 0.35rem;}
+.pc-hub-link{display:block;width:100%;margin-top:0.8rem;background:none;border:1px dashed var(--border);border-radius:14px;padding:0.75rem;font-size:0.75rem;color:var(--muted);font-family:'DM Sans',sans-serif;cursor:pointer;}
+.pc-hub-link b{color:var(--blue);}
+.pc-back{background:#F5ECCB;color:#3d330c;border:none;border-radius:100px;padding:0.45rem 0.95rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;box-shadow:0 3px 0 #D9C98E;margin-bottom:0.7rem;}
+.pc-sec-title{font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.1rem;text-transform:uppercase;color:var(--text);margin-bottom:0.6rem;}
+.dash-pc-alert{margin-top:0.4rem;display:inline-block;background:#FFECEC;color:#C8282E;font-size:0.68rem;font-weight:700;padding:0.3rem 0.6rem;border-radius:10px;line-height:1.5;}
 #rutina-editor .back-row{flex-wrap:wrap;gap:0.4rem;}
 #rutina-editor .back-row .sub-brand{margin-right:auto;}
 #rutina-editor .back-row .rv-edit-btn{margin-right:0!important;}
@@ -933,7 +949,8 @@
         <div class="menu-icon cream"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/><path d="M12 9c-1-2.2-2.6-3.5-4-3.5S6 6.5 6.3 8 8.5 9 12 9Z"/><path d="M12 9c1-2.2 2.6-3.5 4-3.5S18 6.5 17.7 8 15.5 9 12 9Z"/></svg></div>
         <div class="menu-info">
           <div class="menu-title">Portal de Clientes</div>
-          <div class="menu-desc">Beneficios</div>
+          <div class="menu-desc">Mensajes · Solicitudes · Beneficios · Anuncios</div>
+          <div class="dash-pc-alert" id="dash-pc-alert" style="display:none;"></div>
         </div>
         <div class="menu-arrow">›</div>
       </div>
@@ -1565,13 +1582,20 @@
     <div class="sub-title">Portal de<br><span>Clientes</span></div>
   </div>
   <div class="clients-wrap">
-    <div class="pc-tabs">
-      <button class="pc-tab-btn active" onclick="pcSwitchTab('solicitudes',this)">Solicitudes nuevas</button>
-      <button class="pc-tab-btn" onclick="pcSwitchTab('chats',this)">Chats <span class="pc-tab-badge" id="pc-chats-badge" style="display:none;"></span></button>
-      <button class="pc-tab-btn" onclick="pcSwitchTab('online',this)">Clientes</button>
-      <button class="pc-tab-btn" onclick="pcSwitchTab('beneficios',this)">Beneficios/Descuentos</button>
-      <button class="pc-tab-btn" onclick="pcSwitchTab('anuncios',this)">Anuncios</button>
+    <!-- MENÚ DEL PORTAL: tarjetas grandes en vez de pestañas (antes se cortaban en el celular) -->
+    <div id="pc-hub">
+      <div class="pc-hub-intro">Todo lo que tus clientes ven y hacen en su app.</div>
+      <div class="pc-hub-lbl">Atender</div>
+      <button type="button" class="pc-hub-card" onclick="pcOpen('chats')"><span class="pc-hub-ico">💬</span><span class="pc-hub-txt"><b>Mensajes</b><small id="pc-hub-chats-sub">Chats con tus clientes</small></span><span class="pc-tab-badge" id="pc-chats-badge" style="display:none;"></span><span class="pc-hub-arrow">›</span></button>
+      <button type="button" class="pc-hub-card" onclick="pcOpen('solicitudes')"><span class="pc-hub-ico">🙋</span><span class="pc-hub-txt"><b>Solicitudes nuevas</b><small id="pc-hub-leads-sub">Personas que se registraron desde tu link</small></span><span class="pc-tab-badge" id="pc-leads-badge" style="display:none;"></span><span class="pc-hub-arrow">›</span></button>
+      <div class="pc-hub-lbl">Lo que ven en su app</div>
+      <button type="button" class="pc-hub-card" onclick="pcOpen('beneficios')"><span class="pc-hub-ico">🎁</span><span class="pc-hub-txt"><b>Beneficios de marcas</b><small id="pc-hub-benef-sub">Descuentos en la pestaña Beneficios</small></span><span class="pc-hub-arrow">›</span></button>
+      <button type="button" class="pc-hub-card" onclick="pcOpen('anuncios')"><span class="pc-hub-ico">📣</span><span class="pc-hub-txt"><b>Anuncios</b><small id="pc-hub-anun-sub">Avisos arriba de su perfil</small></span><span class="pc-hub-arrow">›</span></button>
+      <button type="button" class="pc-hub-card" onclick="editPremio();renderPcHubPremio();"><span class="pc-hub-ico">🏆</span><span class="pc-hub-txt"><b>Premio del mes</b><small id="pc-hub-premio-sub">Lo ganan al completar su meta</small></span><span class="pc-hub-arrow">✎</span></button>
+      <button type="button" class="pc-hub-link" onclick="showScreen('clientes')">¿Buscas la actividad o la rutina de alguien? Está en <b>Mis clientes ›</b></button>
     </div>
+    <button type="button" class="pc-back" id="pc-back" onclick="pcOpen(null)" style="display:none;">← Portal</button>
+    <div class="pc-sec-title" id="pc-sec-title" style="display:none;"></div>
 
     <!-- SOLICITUDES NUEVAS -->
     <div class="pc-content active" id="pc-tab-solicitudes">
@@ -1586,7 +1610,7 @@
     </div>
 
     <!-- CLIENTAS ONLINE -->
-    <div class="pc-content" id="pc-tab-online">
+    <div class="pc-content" id="pc-tab-online" style="display:none!important;">
       <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Todos tus clientes vinculados al portal. Tocá un nombre para ver su perfil completo.</div>
       <div id="pc-progress-list"></div>
     </div>
@@ -1678,7 +1702,7 @@
   <div class="acp-header">
     <button class="acp-back-btn" onclick="closeAdminClientProfile()">←</button>
     <div class="acp-header-title" id="acp-header-title">Perfil de cliente</div>
-    <button class="acp-back-btn" onclick="if(acpState.clientId) openClientProfile(acpState.clientId);" title="Ver la ficha de el cliente" style="font-size:0.72rem;font-weight:700;white-space:nowrap;">📋 Ficha</button>
+    <button class="acp-back-btn" onclick="if(acpState.clientId) openClientProfile(acpState.clientId);" title="Ver la ficha del cliente" style="font-size:0.72rem;font-weight:700;white-space:nowrap;">📋 Ficha</button>
   </div>
   <div class="acp-content" id="acp-content"></div>
 </div>
@@ -1909,7 +1933,7 @@ function createPortalLinkCode(clientId, cb) {
   });
 }
 
-// ── CUESTIONARIO INICIAL (respuestas de onboarding de el cliente) ──
+// ── CUESTIONARIO INICIAL (respuestas de onboarding del cliente) ──
 var CQ_LABELS = {
   fechaNacimiento: 'Fecha de nacimiento', genero: 'Género', peso: 'Peso actual', estatura: 'Estatura',
   objetivo: 'Objetivo principal', nutricionista: 'Nutricionista', experiencia: '¿Entrena actualmente?',
@@ -1951,10 +1975,10 @@ function cuestionarioHtml(cuestionario) {
   return '<div style="margin-top:0.9rem;"><div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;">📋 Cuestionario inicial</div>' + rows + '</div>';
 }
 
-// Un chat queda "pendiente" solo si el último mensaje es de el cliente Y
+// Un chat queda "pendiente" solo si el último mensaje es del cliente Y
 // llegó después de la última vez que lo abriste (chatMeta/lastReadByAdmin,
 // actualizado en openAdminChat/closeAdminChat). Antes se marcaba pendiente
-// con solo ver que el último mensaje fuera de el cliente, sin importar si
+// con solo ver que el último mensaje fuera del cliente, sin importar si
 // ya lo habías leído o respondido — por eso quedaba en rojo para siempre.
 function chatNeedsReply(chat, chatMeta) {
   var entries = Object.keys(chat || {}).map(function(k) { return chat[k]; }).sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
@@ -2156,7 +2180,7 @@ function openAdminClientProfile(clientId) {
     if (portalClientId && portalClientId !== clientId) {
       var otherName = (CLIENTS[portalClientId] && CLIENTS[portalClientId].name) || portalClientId;
       var thisName = (CLIENTS[clientId] && CLIENTS[clientId].name) || clientId;
-      var fix = confirm('¡Encontrado! La app de este cliente está vinculado a OTRO perfil: "' + otherName + '" (no a "' + thisName + '"). Por eso ve bloqueado aunque acá esté activo.\n\n¿Vincular su app a ESTE perfil ("' + thisName + '") ahora mismo?');
+      var fix = confirm('¡Encontrado! La app de este cliente está vinculada a OTRO perfil: "' + otherName + '" (no a "' + thisName + '"). Por eso ve bloqueado aunque acá esté activo.\n\n¿Vincular su app a ESTE perfil ("' + thisName + '") ahora mismo?');
       if (fix) {
         fbSet('clientasPortal/' + uid + '/perfil/clientId', clientId, function(e) {
           alert('No se pudo vincular: ' + (e && e.message ? e.message : 'error desconocido'));
@@ -2248,7 +2272,7 @@ function handleGenerateLinkCodeAcp(clientId) {
       + '<button onclick="copyLinkCodeUrl(this,\'' + link + '\')" style="flex:1;background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Copiar link</button>'
       + '<a href="https://wa.me/?text=' + encodeURIComponent(waMsg) + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;text-decoration:none;">WhatsApp</a>'
       + '</div>'
-      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviaselo a el cliente — al abrirlo queda directo en el registro, vinculada a este perfil.</div>'
+      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviáselo al cliente — al abrirlo queda directo en el registro, vinculado a este perfil.</div>'
       + '</div>';
   });
 }
@@ -2349,7 +2373,7 @@ function saveAcpPlanMeses(clientId) {
 }
 
 // Marcar/desmarcar un día entrenado desde el admin — escribe en el mismo
-// nodo que lee/escribe la app de el cliente, así que queda reflejado para
+// nodo que lee/escribe la app del cliente, así que queda reflejado para
 // las dos sin duplicar nada.
 function toggleAdminDiaEntrenado(uid, key, el) {
   if (!uid) { alert('Este cliente todavía no vinculó su portal.'); return; }
@@ -2624,7 +2648,7 @@ function renderProgressResults(results) {
   results.forEach(function(r) {
     var statusColor = r.thisWeekCount > 0 ? '#2a7a2a' : (r.lastFecha ? '#9A7700' : '#c44');
     var statusBg = r.thisWeekCount > 0 ? '#F0FFF0' : (r.lastFecha ? '#fff8e0' : '#fff0f0');
-    var statusText = r.thisWeekCount > 0 ? '🟢 Activa esta semana' : (r.lastFecha ? '🟡 Última: ' + r.lastFecha : '🔴 Sin sesiones registradas');
+    var statusText = r.thisWeekCount > 0 ? '🟢 Entrenó esta semana' : (r.lastFecha ? '🟡 Última: ' + r.lastFecha : '🔴 Sin sesiones registradas');
     var photo = CLIENT_PHOTOS[r.clientId];
     var avatarHtml = photo
       ? '<img src="' + photo + '" alt="" style="width:2.1rem;height:2.1rem;border-radius:50%;object-fit:cover;flex-shrink:0;">'
@@ -2683,6 +2707,10 @@ function renderLeadsSection() {
       leads.push({ type: 'landing', id: id, nombre: l.nombre, whatsapp: l.whatsapp, instagram: l.instagram, ts: l.ts, sortTs: l.ts || 0 });
     });
     leads.sort(function(a, b) { return b.sortTs - a.sortTs; });
+    updateDashPcAlert('leads', leads.length);
+    var lb = document.getElementById('pc-leads-badge'), ls = document.getElementById('pc-hub-leads-sub');
+    if (lb) { lb.textContent = String(leads.length); lb.style.display = leads.length ? '' : 'none'; }
+    if (ls) ls.textContent = leads.length ? leads.length + (leads.length === 1 ? ' persona nueva por contactar' : ' personas nuevas por contactar') : 'Ninguna por ahora';
     if (leads.length === 0) {
       el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Sin solicitudes nuevas.</div>';
       return;
@@ -2696,7 +2724,7 @@ function renderLeadsSection() {
         html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">';
         html += '<div><div style="font-weight:700;font-size:0.85rem;">' + (l.perfil.nombre || '') + '</div>';
         html += '<div style="color:var(--muted);font-size:0.72rem;margin-top:0.15rem;">' + (l.perfil.email || '') + (l.perfil.telefono ? ' · ' + l.perfil.telefono : '') + '</div>';
-        if (l.perfil.fechaRegistro) html += '<div style="color:var(--muted);font-size:0.68rem;margin-top:0.15rem;display:flex;align-items:center;gap:0.3rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Registrada el ' + formatFechaHora(l.perfil.fechaRegistro) + '</div>';
+        if (l.perfil.fechaRegistro) html += '<div style="color:var(--muted);font-size:0.68rem;margin-top:0.15rem;display:flex;align-items:center;gap:0.3rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Registro: ' + formatFechaHora(l.perfil.fechaRegistro) + '</div>';
         html += '</div>';
         html += '<button onclick="deleteLead(\'' + l.uid + '\',\'' + safeName + '\')" style="background:none;border:none;color:#c44;font-size:0.9rem;cursor:pointer;flex-shrink:0;padding:0.1rem;">✕</button>';
         html += '</div>';
@@ -2767,6 +2795,35 @@ function deleteLandingLead(id, name) {
 }
 
 // ── PORTAL DE CLIENTES: contenido global (beneficios / servicios) ──
+// Abre una sección del portal (o vuelve al menú con null).
+var PC_TITLES = { chats: '💬 Mensajes', solicitudes: '🙋 Solicitudes nuevas', beneficios: '🎁 Beneficios de marcas', anuncios: '📣 Anuncios' };
+function pcOpen(id) {
+  document.querySelectorAll('.pc-content').forEach(function(c) { c.classList.remove('active'); });
+  var hub = document.getElementById('pc-hub'), back = document.getElementById('pc-back'), title = document.getElementById('pc-sec-title');
+  if (!id) { hub.style.display = ''; back.style.display = 'none'; title.style.display = 'none'; renderPcHubPremio(); window.scrollTo(0, 0); return; }
+  hub.style.display = 'none'; back.style.display = ''; title.style.display = ''; title.textContent = PC_TITLES[id] || '';
+  var sec = document.getElementById('pc-tab-' + id); if (sec) sec.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// Aviso en la tarjeta del Portal en el inicio: mensajes sin responder y solicitudes nuevas.
+var DASH_PC = { chats: 0, leads: 0 };
+function updateDashPcAlert(kind, n) {
+  DASH_PC[kind] = n;
+  var el = document.getElementById('dash-pc-alert');
+  if (!el) return;
+  var parts = [];
+  if (DASH_PC.chats) parts.push('💬 ' + DASH_PC.chats + (DASH_PC.chats === 1 ? ' mensaje sin responder' : ' mensajes sin responder'));
+  if (DASH_PC.leads) parts.push('🙋 ' + DASH_PC.leads + (DASH_PC.leads === 1 ? ' solicitud nueva' : ' solicitudes nuevas'));
+  el.innerHTML = parts.join('<br>');
+  el.style.display = parts.length ? '' : 'none';
+}
+
+function renderPcHubPremio() {
+  var el = document.getElementById('pc-hub-premio-sub');
+  if (el) el.textContent = PREMIO_CFG && PREMIO_CFG.texto ? 'Este mes: ' + PREMIO_CFG.texto : 'Sin premio todavía · tócalo para ponerlo';
+}
+
 function pcSwitchTab(id, btn) {
   document.querySelectorAll('.pc-content').forEach(function(c) { c.classList.remove('active'); });
   document.querySelectorAll('.pc-tab-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -2822,6 +2879,9 @@ function renderChatsInboxResults(results) {
     if (unreadCount > 0) { badge.textContent = String(unreadCount); badge.style.display = ''; }
     else badge.style.display = 'none';
   }
+  updateDashPcAlert('chats', unreadCount);
+  var hubChats = document.getElementById('pc-hub-chats-sub');
+  if (hubChats) hubChats.textContent = unreadCount > 0 ? unreadCount + (unreadCount === 1 ? ' persona espera' : ' personas esperan') + ' tu respuesta' : (results.length ? 'Todo respondido ✓' : 'Todavía no hay chats');
   if (results.length === 0) {
     el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no hay chats.</div>';
     return;
@@ -2843,12 +2903,14 @@ function renderChatsInboxResults(results) {
 }
 
 function renderPortalContentScreen() {
-  pcSwitchTab('solicitudes');
+  pcOpen(null);
   renderClientsProgressOverview();
   renderChatsInbox();
   renderLeadsSection();
   fbGet('beneficios', function(data) {
     var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
+    var bs = document.getElementById('pc-hub-benef-sub');
+    if (bs) { var hoyB = new Date().toISOString().slice(0, 10); var vig = items.filter(function(it) { return !it.data.vencimiento || it.data.vencimiento >= hoyB; }).length; bs.textContent = items.length ? vig + (vig === 1 ? ' marca vigente' : ' marcas vigentes') : 'Ninguna todavía · agrega la primera'; }
     ADMIN_BENEFICIOS_CACHE = {};
     items.forEach(function(it) { ADMIN_BENEFICIOS_CACHE[it.id] = it.data; });
     var el = document.getElementById('pc-beneficios-list');
@@ -2890,6 +2952,8 @@ function renderPortalContentScreen() {
   });
   fbGet('anuncios', function(data) {
     var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
+    var as = document.getElementById('pc-hub-anun-sub');
+    if (as) { var act = items.filter(function(it) { return it.data.activo; }).length; as.textContent = act ? act + (act === 1 ? ' anuncio visible ahora' : ' anuncios visibles ahora') : 'Ninguno visible ahora'; }
     ADMIN_ANUNCIOS_CACHE = {};
     items.forEach(function(it) { ADMIN_ANUNCIOS_CACHE[it.id] = it.data; });
     var el = document.getElementById('pc-anuncios-list');
@@ -3185,7 +3249,7 @@ function sendAdminChatMessage() {
   });
 }
 
-// Mismo bucket que usan las fotos de el cliente, bajo su uid — así tanto
+// Mismo bucket que usan las fotos del cliente, bajo su uid — así tanto
 // lo que manda ella como lo que le mandás vos queda junto en la carpeta
 // de chat de esa cliente.
 function handleAdminChatMediaSelect(input) {
@@ -3230,7 +3294,7 @@ function handleGenerateLinkCode(clientId) {
       + '<button onclick="copyLinkCodeUrl(this,\'' + link + '\')" style="flex:1;background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Copiar link</button>'
       + '<a href="https://wa.me/?text=' + encodeURIComponent(waMsg) + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;text-decoration:none;">WhatsApp</a>'
       + '</div>'
-      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviaselo a el cliente — al abrirlo queda directo en el registro, vinculada a este perfil.</div>'
+      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviáselo al cliente — al abrirlo queda directo en el registro, vinculado a este perfil.</div>'
       + '</div>';
   });
 }
@@ -3446,11 +3510,11 @@ function saveCustomClient(id, clientData) {
   fbSet('clients_custom/' + id, clientData);
 }
 
-// El panel de admin guarda el detalle completo de el cliente en
+// El panel de admin guarda el detalle completo del cliente en
 // clients_custom/{id} (o en el CLIENTS hardcodeado), pero el cliente desde
 // su celular lee únicamente clients/{id} — son nodos distintos en Firebase.
 // Sin espejar estos campos ahí, cosas como "Mes X de Y", la barra de días
-// restantes o el bloqueo por plan vencido nunca le llegan a el cliente,
+// restantes o el bloqueo por plan vencido nunca le llegan al cliente,
 // aunque en el panel de admin se vean perfectas.
 function syncClientPublicFields(id, c, onError) {
   if (!id || !c) return;
@@ -4358,7 +4422,7 @@ function saveCycle() {
   renderPaymentStatus(id, c);
   renderQuotation(id, c);
 
-  // Refresca la pantalla de el cliente sin perder la pestaña en la que
+  // Refresca la pantalla del cliente sin perder la pestaña en la que
   // estaba (normalmente Pagos, de donde se activa un ciclo nuevo).
   if (acpState.clientId === id) acpRenderShell();
 }
@@ -4885,7 +4949,7 @@ var PREMIO_CFG = null;        // { texto, meta } — recompensas/config
 var CLIENT_MES_COUNT = {};    // entrenos marcados este mes por cliente (de su app)
 
 // Meta del mes de cada cliente: sus sesiones del plan, o días/semana × 4,
-// o la meta general del premio. La app de el cliente usa este mismo número.
+// o la meta general del premio. La app del cliente usa este mismo número.
 function clientMetaMes(c) {
   c = c || {};
   if (c.sessions > 0) return Number(c.sessions);
@@ -5328,6 +5392,7 @@ function showScreen(name) {
   currentScreen = name;
   if (name === 'clientes') updateClientBadges();
   if (name === 'portal-content') renderPortalContentScreen();
+  if (name === 'dashboard') { try { renderChatsInbox(); renderLeadsSection(); } catch (e) {} }
   if (name === 'planificacion') {
     // Plan de contenido (videos de Instagram): se dibuja en el calendario y en la pestaña Contenido
     loadContentPlan(function() {
@@ -8311,7 +8376,7 @@ function renderRutinaEditor() {
     // Nota puntual de este día — a diferencia del "Mensaje de Frida" (que es
     // para toda la rutina), esta se guarda en el propio día y le aparece a
     // el cliente solo quien abra justo este día.
-    html += '<textarea id="rutina-day-nota" class="fin-form-input" style="width:100%;min-height:3rem;resize:vertical;font-family:\'DM Sans\',sans-serif;margin-bottom:1rem;" placeholder="Nota para este día en particular (opcional) — le aparece a el cliente solo en este día">'+escHtml(day.notaAdmin || '')+'</textarea>';
+    html += '<textarea id="rutina-day-nota" class="fin-form-input" style="width:100%;min-height:3rem;resize:vertical;font-family:\'DM Sans\',sans-serif;margin-bottom:1rem;" placeholder="Nota para este día en particular (opcional) — le aparece al cliente solo en este día">'+escHtml(day.notaAdmin || '')+'</textarea>';
   }
 
   // Blocks
