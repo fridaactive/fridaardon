@@ -23,7 +23,12 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 SERIF = os.path.join(AQUI, "..", "fonts", "Fraunces.ttf")
-SCRIPT = os.path.join(AQUI, "..", "fonts", "MrDafoe.ttf")
+# Cursivas que le gustaron a Frida (nombre: archivo, tamaño). Mr Dafoe la descartó: "parece escrita de carta".
+CURSIVAS = {
+    "norican": ("Norican.ttf", 205),
+    "playball": ("Playball.ttf", 205),
+}
+SCRIPT = os.path.join(AQUI, "..", "fonts", "Norican.ttf")
 W, H, FPS = 1080, 1920, 30
 
 CREMA, BLANCO, AMARILLO, AZUL = (245, 236, 203), (255, 255, 255), (247, 214, 77), (28, 85, 229)
@@ -37,7 +42,7 @@ COLORES = {
 TAM_SERIF = 165        # serifa grande, minúsculas con la primera en mayúscula
 EJES_SERIF = [48, 720, 100, 0]  # Fraunces: tamaño óptico 48, peso 720, suavidad 100 (puntas redondas), sin "wonky"
 TRACKING = -5          # letras de la serifa un poco más juntas
-TAM_SCRIPT = 245       # la cursiva queda del alto de la serifa; sin engrosar, fina y elegante
+TAM_SCRIPT = 175       # la cursiva queda del alto de la serifa
 ANCHO_MAX = 920        # nunca tocar los bordes (deja margen para la interfaz de Instagram)
 PASO_SERIF = 128       # interlineado muy apretado: las líneas casi se tocan
 PASO_SCRIPT = 128
@@ -128,9 +133,13 @@ def main():
     ap.add_argument("frase")
     ap.add_argument("salida")
     ap.add_argument("--colores", default="crema", choices=COLORES)
+    ap.add_argument("--cursiva", default="norican", choices=CURSIVAS)
     ap.add_argument("--foto", help="foto de fondo (se recorta a 1080x1920)")
     ap.add_argument("--video", type=float, help="duración en segundos: genera .mov con transparencia")
     a = ap.parse_args()
+    global SCRIPT, TAM_SCRIPT
+    archivo, TAM_SCRIPT = CURSIVAS[a.cursiva]
+    SCRIPT = os.path.join(AQUI, "..", "fonts", archivo)
     lineas, pos = preparar(a.frase, a.colores)
 
     if a.video:
