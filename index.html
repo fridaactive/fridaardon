@@ -588,7 +588,7 @@
   .pl-footer-tagline a { color:rgba(255,255,255,0.75); font-weight:700; cursor:pointer; }
 
   /* ════════════════════════════════════════════════════════════
-     ESTILO "ENERGÍA AZUL" — PORTAL DE CLIENTAS (por dentro)
+     ESTILO "ENERGÍA AZUL" — PORTAL DE CLIENTES (por dentro)
      Se activa con body.portal-dark solo en el dashboard; la página
      pública sigue clara. Casi todo el portal usa las variables de
      color, así que redefinirlas aquí oscurece todo de una vez; lo de
@@ -944,12 +944,19 @@
 .in-goal-prize{font-size:0.78rem;margin-top:0.6rem;line-height:1.45;color:rgba(255,255,255,0.85);}
 .in-goal-prize b{color:#F5ECCB;}
 .in-med-count{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:0.72rem;opacity:0.7;}
-.in-medals{display:grid;grid-template-columns:repeat(5,1fr);gap:0.45rem;}
-.in-medal{display:flex;flex-direction:column;align-items:center;gap:0.3rem;background:none;border:none;cursor:pointer;padding:0;color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;}
-.in-medal-ico{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;background:rgba(255,255,255,0.06);border:1.5px dashed rgba(255,255,255,0.2);filter:grayscale(1);}
+.in-medals{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:0.3rem;padding:0.9rem 0.6rem 0.8rem;border-radius:20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);}
+.in-med-path{position:absolute;left:12%;right:12%;top:2.55rem;height:4px;border-radius:100px;background:rgba(255,255,255,0.1);}
+.in-med-path span{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,#D98A4E,#CDD5E0,#F4C542,#9EDFF5);}
+.in-medal{position:relative;display:flex;flex-direction:column;align-items:center;gap:0.25rem;background:none;border:none;cursor:pointer;padding:0;color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;}
+.medal-svg{width:54px;height:56px;display:block;filter:drop-shadow(0 3px 0 rgba(0,0,0,0.3));transition:transform 0.2s;}
 .in-medal.ok{color:#fff;}
-.in-medal.ok .in-medal-ico{filter:none;background:radial-gradient(circle at 35% 30%,#FFF6D6,#F5ECCB 60%,#D9C98E);border:2px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,0.25),0 0 18px rgba(245,236,203,0.35);}
+.in-medal.ok .medal-svg{filter:drop-shadow(0 3px 0 rgba(0,0,0,0.3)) drop-shadow(0 0 10px rgba(245,236,203,0.35));animation:medalShine 3.5s ease-in-out infinite;}
+.in-medal.trophy .medal-svg{width:60px;height:62px;margin-top:-4px;}
+.in-medal:active .medal-svg{transform:scale(0.92);}
 .in-medal-name{font-size:0.6rem;font-weight:700;text-align:center;line-height:1.15;}
+@keyframes medalShine{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.fa-cel-medal .medal-svg{width:96px;height:100px;margin:0 auto;filter:drop-shadow(0 4px 0 rgba(0,0,0,0.18));}
+@media (prefers-reduced-motion: reduce){.in-medal.ok .medal-svg{animation:none;}}
 .in-nudge{display:flex;gap:0.75rem;align-items:flex-start;width:100%;text-align:left;margin-top:0.7rem;padding:0.85rem 1rem;border-radius:18px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.05);color:#fff;font-family:'DM Sans',sans-serif;cursor:pointer;}
 .in-nudge>span:first-child{font-size:1.3rem;}
 .in-nudge b{display:block;font-size:0.85rem;}
@@ -1167,7 +1174,7 @@
  
   <footer class="pl-footer">
     <div class="pl-footer-brand">fridaactive</div>
-    <div class="pl-footer-tagline">Fitness Club · <a onclick="showScreen('screen-login')">¿Ya sos mi clienta? Iniciá sesión</a> · © 2026</div>
+    <div class="pl-footer-tagline">Fitness Club · <a onclick="showScreen('screen-login')">¿Ya sos cliente? Iniciá sesión</a> · © 2026</div>
   </footer>
 </div>
  
@@ -1176,7 +1183,7 @@
     <div class="login-logo">fa</div>
     <div class="login-brand">fridaactive · fitness club</div>
     <div class="auth-card">
-      <div class="auth-title">Bienvenida</div>
+      <div class="auth-title">¡Hola!</div>
       <div class="auth-sub">Ingresá con tu cuenta para ver tu rutina y tu progreso.</div>
       <label class="auth-label">Email</label>
       <input class="auth-input" type="email" id="login-email" placeholder="tu@email.com">
@@ -1472,7 +1479,7 @@
 
   <div class="ls-content">
 
-    <!-- VINCULAR CON CÓDIGO (para cuentas ya existentes sin perfil de clienta) -->
+    <!-- VINCULAR CON CÓDIGO (para cuentas ya existentes sin perfil de cliente) -->
     <div style="background:#fff;border:1.5px solid var(--ls-border);border-radius:16px;padding:1rem 1.1rem;margin-bottom:1.25rem;">
       <div style="font-size:0.78rem;font-weight:700;color:var(--ls-text);margin-bottom:0.5rem;">¿Tu coach ya te armó un plan?</div>
       <div style="font-size:0.72rem;color:var(--ls-muted);margin-bottom:0.7rem;line-height:1.4;">Ingresá tu nombre y el código de acceso que te compartió para ver tu rutina con esta misma cuenta.</div>
@@ -1830,7 +1837,7 @@ function notifyNewRegistration(nombre, email, telefono) {
   } catch (e) { console.warn('notifyNewRegistration error', e); }
 }
 
-// Personalized invite links (?code=XXXX) let Frida link a clienta to an
+// Personalized invite links (?code=XXXX) let Frida link a cliente to an
 // already-existing client profile without showing a confusing "código de
 // acceso" field on the registration form — the code travels in the URL.
 var pendingRegCode = (new URLSearchParams(window.location.search).get('code') || '').trim().toUpperCase();
@@ -1855,13 +1862,13 @@ function faTodayLabel() {
 function portalGreeting(firstName) {
   var h = new Date().getHours();
   var name = firstName ? ', ' + firstName : '';
-  if (h >= 5 && h < 12) return { top: 'Buenos días' + name, main: '¿Lista para moverte?' };
+  if (h >= 5 && h < 12) return { top: 'Buenos días' + name, main: '¿Con ganas de moverte?' };
   if (h >= 12 && h < 19) return { top: 'Buenas tardes' + name, main: 'Tu hora para ti' };
   return { top: 'Buenas noches' + name, main: '¿Ya entrenaste hoy?' };
 }
 
 // ── INICIO: entrenamiento de hoy, progreso y accesos rápidos ──
-// Día sugerido: el siguiente al último que la clienta registró; si no hay
+// Día sugerido: el siguiente al último que el cliente registró; si no hay
 // registros, el día 1.
 function inicioSuggestedDay() {
   var days = (currentRutinaData && currentRutinaData.days) || [];
@@ -1950,11 +1957,11 @@ function renderInicioTab() {
 }
 
 // ══════════ RECOMPENSAS: check-in de un toque, meta del mes, medallas ══════════
-// Todo se calcula con lo que la clienta ya registra (días entrenados, fotos,
+// Todo se calcula con lo que el cliente ya registra (días entrenados, fotos,
 // perfil, ficha); no se guarda nada nuevo salvo los días que marca.
 // El premio del mes lo define Frida en su panel y llega en clients/{id}/premioMes.
 var PREMIO_MES = null;   // { texto, meta }
-var CLIENT_META = null;  // días/semana × 4 del plan de la clienta, si lo tiene
+var CLIENT_META = null;  // días/semana × 4 del plan de el cliente, si lo tiene
 
 function localKey(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 
@@ -1967,7 +1974,7 @@ function loadPremioMes() {
 }
 
 function metaDelMes() {
-  // La meta la calcula el panel de Frida para cada clienta (sus sesiones o días × 4).
+  // La meta la calcula el panel de Frida para cada cliente (sus sesiones o días × 4).
   return (PREMIO_MES && Number(PREMIO_MES.meta)) || CLIENT_META || 12;
 }
 
@@ -1993,11 +2000,11 @@ function medallasEstado() {
   var mesNombre = MESES_LARGOS[now.getMonth()];
   var c = inicioCounts(), meta = metaDelMes();
   return [
-    { id: 'primer', icon: '🌱', name: 'Primer paso', how: 'Marca tu primer día entrenado.', ok: anyDia },
-    { id: 'racha3', icon: '🔥', name: 'En racha', how: 'Entrena 3 días seguidos.', ok: maxRacha(dias) >= 3 },
-    { id: 'foto', icon: '📸', name: 'Valiente', how: 'Sube tu primera foto de progreso. Solo la ven Frida y tú.', ok: !!fotos },
-    { id: 'perfil', icon: '💙', name: 'Perfil completo', how: 'Pon tu foto, cuéntanos de ti y llena tu ficha.', ok: perfilOk },
-    { id: 'meta-' + localKey(now).slice(0, 7), icon: '🏆', name: 'Meta de ' + mesNombre, how: 'Llega a ' + meta + ' entrenos este mes' + (PREMIO_MES && PREMIO_MES.texto ? ' y gana: ' + PREMIO_MES.texto : '') + '.', ok: c.mes >= meta }
+    { id: 'primer', kind: 'bronce', tier: 'Bronce', name: 'Primer paso', how: 'Marca tu primer día entrenado.', ok: anyDia },
+    { id: 'perfil', kind: 'plata', tier: 'Plata', name: 'Perfil completo', how: 'Pon tu foto, cuéntanos de ti y llena tu ficha.', ok: perfilOk },
+    { id: 'racha3', kind: 'oro', tier: 'Oro', name: 'En racha', how: 'Entrena 3 días seguidos.', ok: maxRacha(dias) >= 3 },
+    { id: 'foto', kind: 'diamante', tier: 'Diamante', name: 'Valiente', how: 'Sube tu primera foto de progreso. Solo la ven Frida y tú.', ok: !!fotos },
+    { id: 'meta-' + localKey(now).slice(0, 7), kind: 'trofeo', tier: 'Trofeo', name: 'Meta de ' + mesNombre, how: 'Llega a ' + meta + ' entrenos este mes' + (PREMIO_MES && PREMIO_MES.texto ? ' y gana: ' + PREMIO_MES.texto : '') + '.', ok: c.mes >= meta }
   ];
 }
 
@@ -2023,9 +2030,10 @@ function rewardsInicioHtml(c) {
     + '</div>';
   // 3. Medallas
   var meds = medallasEstado(), nOk = meds.filter(function(m) { return m.ok; }).length;
-  h += '<div class="in-section"><span class="fa-marker">TUS</span> MEDALLAS <span class="in-med-count">' + nOk + '/' + meds.length + '</span></div><div class="in-medals">';
+  h += '<div class="in-section"><span class="fa-marker">CAMINO</span> AL TROFEO <span class="in-med-count">' + nOk + '/' + meds.length + '</span></div>';
+  h += '<div class="in-medals"><div class="in-med-path"><span style="width:' + Math.round(nOk / meds.length * 100) + '%"></span></div>';
   meds.forEach(function(m, i) {
-    h += '<button type="button" class="in-medal' + (m.ok ? ' ok' : '') + '" onclick="showMedal(' + i + ')"><span class="in-medal-ico">' + (m.ok ? m.icon : '🔒') + '</span><span class="in-medal-name">' + escapeHtml(m.name) + '</span></button>';
+    h += '<button type="button" class="in-medal' + (m.ok ? ' ok' : '') + (m.kind === 'trofeo' ? ' trophy' : '') + '" onclick="showMedal(' + i + ')" aria-label="' + escapeHtml(m.tier + ': ' + m.name + (m.ok ? ' (lograda)' : ' (por lograr)')) + '">' + medalSvg(m.kind, m.ok) + '<span class="in-medal-name">' + escapeHtml(m.name) + '</span></button>';
   });
   h += '</div>';
   // 4. Recordatorio de foto (primera semana del mes, si no ha subido la de este mes)
@@ -2058,7 +2066,58 @@ function checkInHoy(on) {
 function showMedal(i) {
   var m = medallasEstado()[i];
   if (!m) return;
-  celebrate(m.ok ? m.icon : '🔒', m.name, m.ok ? '¡Ya la tienes! ' + m.how.replace(/\.$/, '') + ' ✓' : m.how, !m.ok);
+  celebrate('<div class="fa-cel-medal">' + medalSvg(m.kind, m.ok) + '</div>', m.tier + ' · ' + m.name, m.ok ? '¡Ya la tienes! ' + m.how.replace(/\.$/, '') + ' ✓' : m.how, !m.ok);
+}
+
+// ── Medallas dibujadas (SVG propio): disco metálico con cinta y un ícono
+// grabado. Bronce → Plata → Oro → Diamante → Trofeo, para que se note que
+// cada una acerca más al trofeo. Bloqueadas: en gris con candado.
+var MEDAL_N = 0;
+var MEDAL_METAL = {
+  bronce:   ['#FBD9B6', '#D98A4E', '#8A4A1F', '#6B3614'],
+  plata:    ['#FFFFFF', '#CDD5E0', '#8794A6', '#5F6B7C'],
+  oro:      ['#FFF6C9', '#F4C542', '#B07D10', '#8A5F05'],
+  diamante: ['#F1FCFF', '#9EDFF5', '#3E8DC0', '#23628F'],
+  trofeo:   ['#FFF6C9', '#F4C542', '#B07D10', '#8A5F05']
+};
+var MEDAL_ICON = {
+  // pisadas
+  bronce: '<path d="M26.5 35.5c2.2-.3 3.6 1.8 3.4 4.6-.2 2.6-1.4 4.2-3 4.4-1.7.2-2.9-1.4-3-4-.1-2.8.6-4.8 2.6-5z"/><circle cx="27.6" cy="47.2" r="1.9"/><path d="M37.5 39.5c2-.2 2.9 1.9 2.7 4.4-.2 2.4-1.3 3.9-2.8 4-1.6.1-2.6-1.5-2.6-3.9 0-2.6.8-4.3 2.7-4.5z"/><circle cx="37.9" cy="50.9" r="1.7"/>',
+  // corazón
+  plata: '<path d="M32 51.5s-9.5-5.6-9.5-12.1c0-3.2 2.4-5.4 5.1-5.4 2 0 3.5 1.1 4.4 2.6.9-1.5 2.4-2.6 4.4-2.6 2.7 0 5.1 2.2 5.1 5.4 0 6.5-9.5 12.1-9.5 12.1z"/>',
+  // llama
+  oro: '<path d="M32.6 31.5c.6 4 4.3 5.6 5.6 9.4 1.6 4.8-1.6 10-6.4 10-4.4 0-7.4-3.7-6.6-8 .5-2.6 2.2-4 3-6 .6 1.8 1.5 2.8 2.7 3.2-.6-3.3-.2-6 1.7-8.6z"/>',
+  // cámara
+  diamante: '<path d="M23 37.5h4.2l1.9-2.6h5.8l1.9 2.6H41a1.6 1.6 0 0 1 1.6 1.6v9.3A1.6 1.6 0 0 1 41 50H23a1.6 1.6 0 0 1-1.6-1.6v-9.3a1.6 1.6 0 0 1 1.6-1.6z"/><circle cx="32" cy="43.4" r="3.6" fill="currentColor" stroke="none" class="mi-cut"/>'
+};
+function medalSvg(kind, ok) {
+  var n = ++MEDAL_N, m = MEDAL_METAL[kind] || MEDAL_METAL.oro;
+  if (!ok) m = ['#5A6684', '#3C4766', '#283150', '#1E2640'];
+  var g = 'mg' + n, r = 'mr' + n;
+  var defs = '<defs><radialGradient id="' + g + '" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="' + m[0] + '"/><stop offset=".55" stop-color="' + m[1] + '"/><stop offset="1" stop-color="' + m[2] + '"/></radialGradient>'
+    + '<linearGradient id="' + r + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + m[1] + '"/><stop offset="1" stop-color="' + m[3] + '"/></linearGradient></defs>';
+  var lock = ok ? '' : '<g class="m-lock"><circle cx="49" cy="57" r="8" fill="#0B1B3F" stroke="#F5ECCB" stroke-width="1.5"/><rect x="45.2" y="56" width="7.6" height="5.6" rx="1.2" fill="#F5ECCB"/><path d="M46.6 56v-1.8a2.4 2.4 0 0 1 4.8 0V56" fill="none" stroke="#F5ECCB" stroke-width="1.4"/></g>';
+  var svg;
+  if (kind === 'trofeo') {
+    svg = defs
+      + '<path d="M22 14h20v4c0 9-4.5 15-10 15s-10-6-10-15z" fill="url(#' + g + ')" stroke="' + m[3] + '" stroke-width="1.2"/>'
+      + '<path d="M22 17h-5c0 6 2.5 9.5 7 10.5M42 17h5c0 6-2.5 9.5-7 10.5" fill="none" stroke="url(#' + r + ')" stroke-width="2.6" stroke-linecap="round"/>'
+      + '<rect x="29.5" y="32.5" width="5" height="9" fill="url(#' + r + ')"/>'
+      + '<path d="M24 41.5h16l2.5 7h-21z" fill="url(#' + g + ')" stroke="' + m[3] + '" stroke-width="1"/>'
+      + '<rect x="20" y="48.5" width="24" height="6" rx="1.5" fill="url(#' + r + ')"/>'
+      + '<path d="M32 18.5l1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5z" fill="' + (ok ? '#FFFBEA' : '#7C88A6') + '"/>'
+      + (ok ? '<path d="M25 17.5c.3 4.5 1.4 8 3.4 10.4" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.6" stroke-linecap="round"/>' : '');
+  } else {
+    var ribbonA = ok ? '#1C55E5' : '#2E3A5C', ribbonB = ok ? '#F5ECCB' : '#3E4A6C';
+    svg = defs
+      + '<path d="M20 4h9l7 22h-9z" fill="' + ribbonA + '"/><path d="M44 4h-9l-7 22h9z" fill="' + ribbonB + '"/>'
+      + '<circle cx="32" cy="43" r="19" fill="url(#' + r + ')"/>'
+      + '<circle cx="32" cy="43" r="16.2" fill="url(#' + g + ')"/>'
+      + '<circle cx="32" cy="43" r="13.4" fill="none" stroke="' + m[3] + '" stroke-opacity=".45" stroke-width="1" stroke-dasharray="1.6 2.2"/>'
+      + '<g fill="' + m[3] + '" stroke="' + m[3] + '" stroke-width=".6" stroke-linejoin="round" style="color:' + m[1] + '" opacity="' + (ok ? '.9' : '.75') + '">' + (MEDAL_ICON[kind] || '') + '</g>'
+      + (ok ? '<path d="M21.5 37.5a12 12 0 0 1 8-8" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.8" stroke-linecap="round"/>' : '');
+  }
+  return '<svg class="medal-svg" viewBox="0 0 64 66" aria-hidden="true">' + svg + lock + '</svg>';
 }
 
 // Medallas nuevas: se festejan una sola vez (se recuerdan en este celular).
@@ -2074,7 +2133,7 @@ function checkNewMedals() {
   try { localStorage.setItem(storeKey, JSON.stringify(seen)); } catch (e) {}
   setTimeout(function() {
     var premio = nueva.id.indexOf('meta-') === 0 && PREMIO_MES && PREMIO_MES.texto ? ' Ganaste: ' + PREMIO_MES.texto + '. Frida te escribirá 💙' : '';
-    celebrate(nueva.icon, '¡Medalla nueva!', nueva.name + '.' + premio);
+    celebrate('<div class="fa-cel-medal">' + medalSvg(nueva.kind, true) + '</div>', '¡Medalla de ' + nueva.tier.toLowerCase() + '!', nueva.name + '.' + premio);
   }, 1400);
 }
 
@@ -2264,7 +2323,7 @@ function doRegister() {
 }
 
 // ── VINCULAR CUENTA EXISTENTE CON CÓDIGO ──
-// Para una cuenta ya autenticada que quedó sin perfil de clienta vinculado
+// Para una cuenta ya autenticada que quedó sin perfil de cliente vinculado
 // (por ejemplo si Frida borró por error su solicitud en "Leads", o si se
 // registró como lead antes de tener un plan) — evita tener que crear una
 // cuenta nueva para volver a vincularla.
@@ -2409,8 +2468,8 @@ var WHATSAPP_MESSAGE = 'Hola Frida, estoy interesada en tomar un plan de entrena
 
 // admin.html signs into this fixed account behind the scenes (so its Storage/
 // DB writes pass auth-based rules) — Firebase persists that session on this
-// same domain, so it can leak into the clienta portal on shared devices.
-// Never treat it as a clienta session.
+// same domain, so it can leak into the cliente portal on shared devices.
+// Never treat it as a cliente session.
 var ADMIN_EMAIL = 'admin@fridaactive.app';
 
 var currentUid = null;
@@ -2430,7 +2489,7 @@ function loadDashboard(uid) {
 
 // A tab left open for hours can hold a stale Firebase Auth token — the read
 // below then comes back without perfil.clientId even for an already-linked
-// clienta, which used to bump her straight to the leads landing screen.
+// cliente, which used to bump her straight to the leads landing screen.
 // Force-refresh the ID token and retry once before trusting a "no client
 // linked" result, and fall back to the last confirmed clientId if it's
 // still empty after that.
@@ -2488,7 +2547,7 @@ function fetchPortalAndRender(uid, isRetry) {
 function renderPortalScreen(portal, perfil) {
   var firstName = perfil.nombre ? perfil.nombre.split(' ')[0] : '';
 
-  // No linked client record yet — she's a lead, not an active clienta.
+  // No linked client record yet — she's a lead, not an active cliente.
   // Show the services landing instead of an empty dashboard.
   if (!currentClientId) {
     document.getElementById('ls-greeting').textContent = firstName ? ('¡Hola, ' + firstName + '!') : '';
@@ -3478,7 +3537,7 @@ function descargarRutinaPDF() {
 
 // ── TRANSFORMACIÓN (ANTES/DESPUÉS) ──
 // Privado: estas fotos viven bajo clientasPortal/{uid}, la misma rama que ya
-// solo lee la clienta dueña de la cuenta y Frida desde el admin — nadie más
+// solo lee el cliente dueña de la cuenta y Frida desde el admin — nadie más
 // tiene forma de llegar a ellas.
 var TRANSF_DATA = {};
 
@@ -3651,7 +3710,7 @@ function saveTransfCaption() {
   }
 }
 
-// Marcado manual — la clienta toca el día directamente al entrenar, en vez
+// Marcado manual — el cliente toca el día directamente al entrenar, en vez
 // de depender de que haya guardado una sesión completa con carga/reps.
 var CURRENT_DIAS_ENTRENADOS = {};
 
@@ -3675,7 +3734,7 @@ function renderTrainingTracker(diasEntrenados) {
   }
 
   // Meta del mes: días/semana × 4 semanas — mismo criterio que ya usa el
-  // admin para calcular "Sesiones" al armar el plan de la clienta.
+  // admin para calcular "Sesiones" al armar el plan de el cliente.
   if (currentClientId) {
     db().ref('clients/' + currentClientId + '/days').once('value').then(function(snap) {
       var days = snap.val();
@@ -3856,9 +3915,9 @@ function updateProfileCompletion() {
   document.getElementById('pf-complete-fill').style.width = pct + '%';
 }
 
-// ── TU FICHA: Personal/Salud/Entreno las llena la clienta; Mi Plan es
+// ── TU FICHA: Personal/Salud/Entreno las llena el cliente; Mi Plan es
 // solo informativo. Se guarda en clientasPortal/{uid}/ficha — ahí mismo
-// la lee el admin (de solo lectura) al abrir el perfil de la clienta.
+// la lee el admin (de solo lectura) al abrir el perfil de el cliente.
 var FICHA_DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 var fichaSelectedDias = [];
 
@@ -3924,7 +3983,7 @@ function switchFichaTab(tabId) {
   if (tabId === 'ficha-plan') renderFichaPlanTab();
 }
 
-// Solo informativo — acá no hay nada que la clienta pueda marcar como
+// Solo informativo — acá no hay nada que el cliente pueda marcar como
 // pagado, es para que sepa qué tiene y qué otros planes existen.
 function renderFichaPlanTab() {
   var actualEl = document.getElementById('ficha-plan-actual');
@@ -3998,10 +4057,10 @@ function getInstagramUrl(handle) {
 }
 
 // Beneficios se canjean 1 vez por ciclo — no es un código de por vida.
-// El "ciclo" es el período de plan activo de la clienta (su initDate en el
+// El "ciclo" es el período de plan activo de el cliente (su initDate en el
 // panel de admin), así que el cupo se renueva justo cuando Frida le activa
 // un nuevo mes, no el día 1 de cada mes calendario. Si por algún motivo no
-// se puede leer su ciclo (clienta sin registro de plan todavía), se usa el
+// se puede leer su ciclo (cliente sin registro de plan todavía), se usa el
 // mes calendario como respaldo.
 function getCurrentMonthKey() {
   var d = new Date();
@@ -4180,7 +4239,7 @@ function getCanjeCount(b) {
 
 // Tarjeta del cupón en sí — sin ninguna etiqueta tipo "Cupón único" o "Sin
 // límite de usos": Frida prefiere que esos detalles del mecanismo no se
-// le muestren a la clienta, el comprobante alcanza con nombre + descuento.
+// le muestren a el cliente, el comprobante alcanza con nombre + descuento.
 // Cupón con forma de ticket de regalo. La primera vez que se abre en la
 // sesión aparece una cajita de regalo que se abre con confeti.
 function renderGiftTicket(b) {
@@ -4281,7 +4340,7 @@ function renderBenefProfileHtml(b) {
   } else {
     // Sin código de verificación: el cupón es un comprobante de la alianza
     // FridaActive × marca, y es Frida quien le avisa antes a la marca que
-    // esta clienta va a pasar — por eso no hace falta un código acá.
+    // este cliente va a pasar — por eso no hace falta un código acá.
     html += '<div class="bp-coupon-label">Tu cupón · ' + escapeHtml(cycleLabel(currentCycleKey)) + '</div>';
     html += renderCouponVoucherCard(b);
     html += '<div class="bp-coupon-sub">Mostrá este cupón en el negocio para canjearlo.</div>';
@@ -4292,9 +4351,9 @@ function renderBenefProfileHtml(b) {
   return html;
 }
 
-// Sin código: Frida le avisa antes a la marca que esta clienta va a pasar
+// Sin código: Frida le avisa antes a la marca que este cliente va a pasar
 // (ver canjearBeneficio), así que el comprobante de identidad acá es el
-// nombre de la clienta, no un código que la marca tendría que verificar.
+// nombre de el cliente, no un código que la marca tendría que verificar.
 //
 // Antes esto generaba un PDF con un formato de vale chico (100x74mm), pero
 // muchos visores de PDF de celular lo abrían como una página enorme en
@@ -4410,7 +4469,7 @@ function generarCuponCanvas(b, cb) {
     ctx.fill();
 
     // Sin etiquetas de "cupón único" ni "sin límite de usos" — esos
-    // detalles del mecanismo no se le muestran a la clienta.
+    // detalles del mecanismo no se le muestran a el cliente.
     ctx.fillStyle = '#1C55E5';
     ctx.font = '700 17px "DM Sans", sans-serif';
     ctx.fillText('TU CUPÓN · CLIENTA', panelX + 40, panelY + 55);
@@ -4494,7 +4553,7 @@ function canjearBeneficio(beneficioId) {
       document.getElementById('bp-content').innerHTML = renderBenefProfileHtml(b);
     }
     // Aviso automático a Frida por el chat — antes dependía de que la
-    // clienta además tocara "Enviar", así que a veces nunca se enteraba.
+    // cliente además tocara "Enviar", así que a veces nunca se enteraba.
     db().ref('clientasPortal/' + currentUid + '/chat').push({
       from: 'client',
       text: 'Quiero canjear mi cupón de ' + ((b && b.marca) || 'una marca aliada') + ' 🎁',
@@ -4510,9 +4569,9 @@ function loadPlanInfo() {
     renderPlanCountdown(snap.val());
   }).catch(function(e) {
     // El permiso para leer su propio plan depende de que
-    // client_links/{clientId} apunte a este uid — si una clienta se
+    // client_links/{clientId} apunte a este uid — si un cliente se
     // revinculó, ese puntero pudo quedar apuntando a otra cuenta vieja.
-    // Como esta clienta sí es dueña legítima de este clientId (es lo que
+    // Como este cliente sí es dueña legítima de este clientId (es lo que
     // dice su propio perfil), se intenta auto-reparar ese puntero y
     // reintentar antes de darse por vencido.
     if (e && e.code === 'PERMISSION_DENIED' && currentUid) {
@@ -4535,7 +4594,7 @@ function loadPlanInfo() {
 var PLAN_GRACE_DAYS = 5;
 var PLAN_LOCKED = false;
 // Vencido (tenía fechas y ya pasaron) y "nunca tuvo plan" se bloquean
-// igual, pero el mensaje que ve la clienta tiene que ser distinto — no
+// igual, pero el mensaje que ve el cliente tiene que ser distinto — no
 // tiene sentido decirle "tu programa caducó" si nunca le activaron uno.
 var PLAN_NEVER_SET = false;
 
@@ -4765,7 +4824,7 @@ function sendChatMessage() {
 }
 
 // Fotos/videos del chat van al mismo bucket que las demás fotos de la
-// clienta, bajo su propio uid — mismo patrón que la foto de perfil.
+// cliente, bajo su propio uid — mismo patrón que la foto de perfil.
 function handleChatMediaSelect(input) {
   var file = input.files && input.files[0];
   input.value = '';
@@ -4852,7 +4911,7 @@ function plSubmitContact(e) {
   var btn = document.querySelector('#pl-contact-form .pl-contact-submit');
   if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
 
-  // Va a "Solicitudes nuevas" en el Portal de Clientas del admin, en vez de
+  // Va a "Solicitudes nuevas" en el Portal de Clientes del admin, en vez de
   // abrirle WhatsApp a la visitante — Frida ve todas las solicitudes desde
   // un solo lugar y decide cómo y cuándo responder.
   db().ref('landingLeads').push({

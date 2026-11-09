@@ -574,7 +574,7 @@
   .fin-tab-btn { flex-shrink:0; padding:0.4rem 0.9rem; background:#fff; border:1.5px solid var(--border); color:var(--muted); border-radius:100px; font-size:0.68rem; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.2s; touch-action:manipulation; }
   .fin-tab-btn.active { background:var(--blue); color:#fff; border-color:var(--blue); font-weight:700; }
 
-  /* ── PORTAL DE CLIENTAS: pestañas ── */
+  /* ── PORTAL DE CLIENTES: pestañas ── */
   .pc-tabs { display:flex; gap:0.4rem; overflow-x:auto; margin-bottom:1.25rem; scrollbar-width:none; -ms-overflow-style:none; }
   .pc-tabs::-webkit-scrollbar { display:none; }
   .pc-tab-btn { flex-shrink:0; padding:0.55rem 0.95rem; background:#fff; border:1.5px solid var(--border); color:var(--muted); border-radius:100px; font-size:0.7rem; font-weight:600; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.2s; touch-action:manipulation; white-space:nowrap; }
@@ -706,7 +706,7 @@
 
   /* ════════════════════════════════════════════════════════════
      ESTILO "ENERGÍA AZUL" EN VERSIÓN CLARA — PANEL DE FRIDA
-     Mismo diseño del portal de clientas (letras gruesas, azul con
+     Mismo diseño del portal de clientes (letras gruesas, azul con
      relieve, detalles crema, animaciones) sobre fondo claro, para
      trabajar de día en la tablet.
      ════════════════════════════════════════════════════════════ */
@@ -780,7 +780,7 @@
   @keyframes adRipple { to { transform:scale(1); opacity:0; } }
   @media (prefers-reduced-motion: reduce) { body.admin-v2 *, body.admin-v2 *::after { animation:none !important; transition:none !important; } }
 
-/* ── Mis clientas: buscador, estado de un vistazo y perfil ── */
+/* ── Mis clientes: buscador, estado de un vistazo y perfil ── */
 .clients-search{width:100%;box-sizing:border-box;border:1.5px solid var(--border);border-radius:12px;padding:0.75rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;background:#fff;color:var(--text);margin-bottom:0.9rem;outline:none;}
 .clients-search:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,82,232,0.12);}
 .cst-row{display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:0.35rem;}
@@ -899,7 +899,7 @@
       <div class="menu-card-header">
         <div class="menu-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5"/><circle cx="17" cy="9" r="2.4"/><path d="M20.5 20c0-2.6-1.7-4.6-3.8-5.1"/></svg></div>
         <div class="menu-info">
-          <div class="menu-title">Mis Clientas</div>
+          <div class="menu-title">Mis Clientes</div>
           <div class="menu-desc">Presenciales · Online · Rutinas</div>
         </div>
         <div class="menu-arrow">›</div>
@@ -932,7 +932,7 @@
       <div class="menu-card-header">
         <div class="menu-icon cream"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/><path d="M12 9c-1-2.2-2.6-3.5-4-3.5S6 6.5 6.3 8 8.5 9 12 9Z"/><path d="M12 9c1-2.2 2.6-3.5 4-3.5S18 6.5 17.7 8 15.5 9 12 9Z"/></svg></div>
         <div class="menu-info">
-          <div class="menu-title">Portal de Clientas</div>
+          <div class="menu-title">Portal de Clientes</div>
           <div class="menu-desc">Beneficios</div>
         </div>
         <div class="menu-arrow">›</div>
@@ -1011,19 +1011,19 @@
       <button class="back-btn" onclick="showScreen('dashboard')">← Volver</button>
       <div class="sub-brand">fridaactive</div>
     </div>
-    <div class="sub-title">Mis<br><span>Clientas</span></div>
+    <div class="sub-title">Mis<br><span>Clientes</span></div>
   </div>
 
   <div class="clients-wrap">
-    <input type="search" id="clients-search" class="clients-search" placeholder="🔍 Buscar clienta…" oninput="renderClientsList()" autocomplete="off">
+    <input type="search" id="clients-search" class="clients-search" placeholder="🔍 Buscar cliente…" oninput="renderClientsList()" autocomplete="off">
 
-    <button id="btn-new-client" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;touch-action:manipulation;">+ Nueva clienta</button>
+    <button id="btn-new-client" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;touch-action:manipulation;">+ Nuevo cliente</button>
 
     <div id="premio-card"></div>
 
     <div class="clients-status-tabs">
-      <button class="clients-status-tab active" id="tab-activas" onclick="switchClientsTab('activas')">🟢 Activas</button>
-      <button class="clients-status-tab" id="tab-inactivas" onclick="switchClientsTab('inactivas')">🔴 Inactivas</button>
+      <button class="clients-status-tab active" id="tab-activas" onclick="switchClientsTab('activas')">🟢 Activos</button>
+      <button class="clients-status-tab" id="tab-inactivas" onclick="switchClientsTab('inactivas')">🔴 Inactivos</button>
     </div>
 
     <div id="clients-list-container"></div>
@@ -1035,7 +1035,7 @@
 <div id="new-client-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
-      <div style="font-size:1rem;font-weight:700;color:var(--text);">Nueva clienta</div>
+      <div style="font-size:1rem;font-weight:700;color:var(--text);">Nuevo cliente</div>
       <button id="nc-modal-close" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
     </div>
 
@@ -1110,7 +1110,7 @@
 
     <div style="display:flex;gap:0.75rem;margin-top:1.25rem;">
       <button id="nc-cancel" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.85rem;font-size:0.82rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Cancelar</button>
-      <button id="nc-save" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.85rem;font-size:0.82rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Guardar clienta</button>
+      <button id="nc-save" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.85rem;font-size:0.82rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Guardar cliente</button>
     </div>
   </div>
 </div>
@@ -1123,7 +1123,7 @@
       <div class="sub-brand">fridaactive</div>
       <button id="cd-menu-btn" style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.3rem;width:2.2rem;height:2.2rem;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;flex-shrink:0;">⋮</button>
     </div>
-    <div class="sub-title" id="cd-name">Clienta</div>
+    <div class="sub-title" id="cd-name">Cliente</div>
   </div>
   <div class="clients-wrap">
     <button id="cd-photos-btn" onclick="openClientPhotosModal(currentClient)" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:12px;padding:0.7rem;font-weight:700;font-size:0.8rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1rem;">📸 Ir a perfil (antes/después) →</button>
@@ -1175,7 +1175,7 @@
 
       <!-- PERSONAL -->
       <div id="cp-personal" class="cp-content">
-        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa la clienta desde su ficha en la app.</div>
+        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa el cliente desde su ficha en la app.</div>
         <div class="fin-form-row"><div class="fin-form-label">Nombre completo</div><input class="fin-form-input cp-field" data-field="nombre" type="text" placeholder="Nombre completo"></div>
         <div style="display:flex;gap:0.6rem;">
           <div style="flex:1;" class="fin-form-row"><div class="fin-form-label">Edad</div><input class="fin-form-input cp-field" data-field="edad" type="number" placeholder="Ej: 28"></div>
@@ -1188,7 +1188,7 @@
 
       <!-- SALUD -->
       <div id="cp-salud" class="cp-content" style="display:none;">
-        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa la clienta desde su ficha en la app.</div>
+        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa el cliente desde su ficha en la app.</div>
         <div class="fin-form-row"><div class="fin-form-label">Patologías / Enfermedades</div><textarea class="fin-form-input cp-field" data-field="patologias" rows="3" placeholder="Ej: Hipertensión, diabetes..." style="resize:vertical;"></textarea></div>
         <div class="fin-form-row"><div class="fin-form-label">Lesiones o limitaciones físicas</div><textarea class="fin-form-input cp-field" data-field="lesiones" rows="3" placeholder="Ej: LCA derecha, dolor lumbar..." style="resize:vertical;"></textarea></div>
         <div class="fin-form-row"><div class="fin-form-label">Medicamentos</div><textarea class="fin-form-input cp-field" data-field="medicamentos" rows="2" placeholder="Ej: Metformina..." style="resize:vertical;"></textarea></div>
@@ -1201,7 +1201,7 @@
           <div class="fin-form-label">Días de entrenamiento por semana</div>
           <div id="cp-dias-pills" style="display:flex;gap:0.4rem;flex-wrap:wrap;"></div>
         </div>
-        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Lo de abajo lo completa la clienta desde su ficha en la app — los días de arriba sí los armás vos.</div>
+        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Lo de abajo lo completa el cliente desde su ficha en la app — los días de arriba sí los armás vos.</div>
         <div class="fin-form-row"><div class="fin-form-label">Objetivo principal</div><input class="fin-form-input cp-field" data-field="objetivo" type="text" placeholder="Ej: Pérdida de grasa, fuerza..."></div>
         <div class="fin-form-row"><div class="fin-form-label">Nivel de condición física</div>
           <select class="fin-form-select cp-field" data-field="nivel">
@@ -1227,8 +1227,8 @@
       <div id="cp-danger" class="cp-content" style="display:none;">
         <div style="text-align:center;padding:1rem 0;">
           <div style="font-size:2rem;margin-bottom:0.5rem;">⚠️</div>
-          <div style="font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:0.35rem;">Eliminar clienta</div>
-          <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1.5rem;">Esta acción es permanente. Se eliminará toda la información, historial y eventos del calendario de esta clienta.</div>
+          <div style="font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:0.35rem;">Eliminar cliente</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1.5rem;">Esta acción es permanente. Se eliminará toda la información, historial y eventos del calendario de este cliente.</div>
           <button id="cp-delete-btn" style="background:#c44;color:#fff;border:none;border-radius:12px;padding:0.85rem 2rem;font-weight:700;font-size:0.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;touch-action:manipulation;">Eliminar permanentemente</button>
         </div>
       </div>
@@ -1555,52 +1555,52 @@
   </div>
 </div>
 
-<!-- ══════════ PORTAL DE CLIENTAS (CONTENIDO) ══════════ -->
+<!-- ══════════ PORTAL DE CLIENTES (CONTENIDO) ══════════ -->
 <div id="portal-content">
   <div class="sub-hero">
     <div class="back-row">
       <button class="back-btn" onclick="showScreen('dashboard')">← Volver</button>
       <div class="sub-brand">fridaactive</div>
     </div>
-    <div class="sub-title">Portal de<br><span>Clientas</span></div>
+    <div class="sub-title">Portal de<br><span>Clientes</span></div>
   </div>
   <div class="clients-wrap">
     <div class="pc-tabs">
       <button class="pc-tab-btn active" onclick="pcSwitchTab('solicitudes',this)">Solicitudes nuevas</button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('chats',this)">Chats <span class="pc-tab-badge" id="pc-chats-badge" style="display:none;"></span></button>
-      <button class="pc-tab-btn" onclick="pcSwitchTab('online',this)">Clientas</button>
+      <button class="pc-tab-btn" onclick="pcSwitchTab('online',this)">Clientes</button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('beneficios',this)">Beneficios/Descuentos</button>
       <button class="pc-tab-btn" onclick="pcSwitchTab('anuncios',this)">Anuncios</button>
     </div>
 
     <!-- SOLICITUDES NUEVAS -->
     <div class="pc-content active" id="pc-tab-solicitudes">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Personas que se registraron solas desde tu link (ej. Instagram) y todavía no son clientas activas.</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Personas que se registraron solas desde tu link (ej. Instagram) y todavía no son clientes activos.</div>
       <div id="pc-leads-list"></div>
     </div>
 
     <!-- CHATS -->
     <div class="pc-content" id="pc-tab-chats">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Todos los chats con tus clientas, en un solo lugar.</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Todos los chats con tus clientes, en un solo lugar.</div>
       <div id="pc-chats-list"></div>
     </div>
 
     <!-- CLIENTAS ONLINE -->
     <div class="pc-content" id="pc-tab-online">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Todas tus clientas vinculadas al portal. Tocá un nombre para ver su perfil completo.</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Todos tus clientes vinculados al portal. Tocá un nombre para ver su perfil completo.</div>
       <div id="pc-progress-list"></div>
     </div>
 
     <!-- BENEFICIOS / DESCUENTOS -->
     <div class="pc-content" id="pc-tab-beneficios">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Esta lista la ven todas tus clientas online en la pestaña "Beneficios" de su portal.</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Esta lista la ven todos tus clientes online en la pestaña "Beneficios" de su portal.</div>
       <div id="pc-beneficios-list" style="margin-bottom:0.75rem;"></div>
       <button onclick="showBeneficioModal()" style="width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;">+ Agregar beneficio</button>
     </div>
 
     <!-- ANUNCIOS -->
     <div class="pc-content" id="pc-tab-anuncios">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Promos o avisos que ven tus clientas arriba de todo en la pestaña "Perfil" de su portal, mientras estén activos.</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Promos o avisos que ven tus clientes arriba de todo en la pestaña "Perfil" de su portal, mientras estén activos.</div>
       <div id="pc-anuncios-list" style="margin-bottom:0.75rem;"></div>
       <button onclick="showAnuncioModal()" style="width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;">+ Agregar anuncio</button>
     </div>
@@ -1648,7 +1648,7 @@
       <button type="button" onclick="document.getElementById('bn-fotos-file').click()" style="background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.5rem 0.85rem;font-size:0.75rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">+ Agregar fotos</button>
       <input type="file" id="bn-fotos-file" accept="image/*" multiple style="display:none;" onchange="handleFotosFileSelect(this)">
       <div id="bn-fotos-status" style="font-size:0.68rem;color:var(--muted);margin-top:0.35rem;"></div>
-      <div style="font-size:0.65rem;color:var(--muted);margin-top:0.3rem;">Estas fotos se muestran en el perfil de la marca que ven tus clientas.</div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-top:0.3rem;">Estas fotos se muestran en el perfil de la marca que ven tus clientes.</div>
     </div>
     <div class="fin-form-row"><div class="fin-form-label">Ubicación (opcional)</div><input class="fin-form-input" id="bn-ubicacion" type="text" placeholder="Ej: San Salvador, Metrocentro"></div>
     <div class="fin-form-row"><div class="fin-form-label">Instagram (opcional)</div><input class="fin-form-input" id="bn-instagram" type="text" placeholder="Ej: @gatorade_sv"></div>
@@ -1665,7 +1665,7 @@
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
     <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;" id="an-modal-title">Nuevo anuncio</div>
     <div class="fin-form-row"><div class="fin-form-label">Texto</div><textarea class="fin-form-input" id="an-texto" rows="2" placeholder="Ej: 2x1 en tu marca aliada favorita este mes 💛" style="resize:vertical;"></textarea></div>
-    <div class="fin-form-row"><label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;cursor:pointer;"><input type="checkbox" id="an-activo" style="width:1.1rem;height:1.1rem;"> Activo (visible para las clientas)</label></div>
+    <div class="fin-form-row"><label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;cursor:pointer;"><input type="checkbox" id="an-activo" style="width:1.1rem;height:1.1rem;"> Activo (visible para los clientes)</label></div>
     <div style="display:flex;gap:0.75rem;margin-top:1rem;">
       <button onclick="hideAnuncioModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
       <button onclick="saveAnuncio()" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Guardar</button>
@@ -1677,8 +1677,8 @@
 <div id="acp-overlay" class="acp-overlay">
   <div class="acp-header">
     <button class="acp-back-btn" onclick="closeAdminClientProfile()">←</button>
-    <div class="acp-header-title" id="acp-header-title">Perfil de clienta</div>
-    <button class="acp-back-btn" onclick="if(acpState.clientId) openClientProfile(acpState.clientId);" title="Ver la ficha de la clienta" style="font-size:0.72rem;font-weight:700;white-space:nowrap;">📋 Ficha</button>
+    <div class="acp-header-title" id="acp-header-title">Perfil de cliente</div>
+    <button class="acp-back-btn" onclick="if(acpState.clientId) openClientProfile(acpState.clientId);" title="Ver la ficha de el cliente" style="font-size:0.72rem;font-weight:700;white-space:nowrap;">📋 Ficha</button>
   </div>
   <div class="acp-content" id="acp-content"></div>
 </div>
@@ -1710,7 +1710,7 @@
     <div class="modal-field">
       <label class="modal-label">Tipo</label>
       <div class="type-pills">
-        <button class="type-pill cliente selected" onclick="selectType('cliente',this)">Clienta</button>
+        <button class="type-pill cliente selected" onclick="selectType('cliente',this)">Cliente</button>
         <button class="type-pill tarea" onclick="selectType('tarea',this)">Tarea</button>
         <button class="type-pill personal" onclick="selectType('personal',this)">Personal</button>
         <button class="type-pill otro" onclick="selectType('otro',this)">Otro</button>
@@ -1862,7 +1862,7 @@ function ensureAdminAuth(cb) {
     if (typeof firebase === 'undefined' || !firebase.auth) { if (cb) cb(); return; }
     getDB();
     // Session-scoped persistence keeps this account out of the browser's
-    // shared (cross-tab) auth storage, so it can't leak into a clienta
+    // shared (cross-tab) auth storage, so it can't leak into a cliente
     // portal tab opened on the same device — see index.html's ADMIN_EMAIL
     // guard for the other half of this fix.
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function() {
@@ -1890,7 +1890,7 @@ function withAdminAuth(fn) {
   ensureAdminAuth(fn);
 }
 
-// ── PORTAL DE CLIENTAS: códigos de vinculación de un solo uso ──
+// ── PORTAL DE CLIENTES: códigos de vinculación de un solo uso ──
 function generateLinkCode() {
   var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   var code = '';
@@ -1909,7 +1909,7 @@ function createPortalLinkCode(clientId, cb) {
   });
 }
 
-// ── CUESTIONARIO INICIAL (respuestas de onboarding de la clienta) ──
+// ── CUESTIONARIO INICIAL (respuestas de onboarding de el cliente) ──
 var CQ_LABELS = {
   fechaNacimiento: 'Fecha de nacimiento', genero: 'Género', peso: 'Peso actual', estatura: 'Estatura',
   objetivo: 'Objetivo principal', nutricionista: 'Nutricionista', experiencia: '¿Entrena actualmente?',
@@ -1951,10 +1951,10 @@ function cuestionarioHtml(cuestionario) {
   return '<div style="margin-top:0.9rem;"><div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;">📋 Cuestionario inicial</div>' + rows + '</div>';
 }
 
-// Un chat queda "pendiente" solo si el último mensaje es de la clienta Y
+// Un chat queda "pendiente" solo si el último mensaje es de el cliente Y
 // llegó después de la última vez que lo abriste (chatMeta/lastReadByAdmin,
 // actualizado en openAdminChat/closeAdminChat). Antes se marcaba pendiente
-// con solo ver que el último mensaje fuera de la clienta, sin importar si
+// con solo ver que el último mensaje fuera de el cliente, sin importar si
 // ya lo habías leído o respondido — por eso quedaba en rojo para siempre.
 function chatNeedsReply(chat, chatMeta) {
   var entries = Object.keys(chat || {}).map(function(k) { return chat[k]; }).sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
@@ -2098,7 +2098,7 @@ function renderPortalSection(clientId) {
     });
   } else {
     el.innerHTML = '<div style="background:#fff8ee;border:1px solid #f0dca0;border-radius:12px;padding:0.9rem 1rem;font-size:0.78rem;color:var(--text);">'
-      + '<div style="margin-bottom:0.6rem;">Esta clienta aún no se registró en el portal.</div>'
+      + '<div style="margin-bottom:0.6rem;">Este cliente aún no se registró en el portal.</div>'
       + '<button onclick="handleGenerateLinkCode(\'' + clientId + '\')" style="background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.6rem 1rem;font-weight:700;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Generar código de acceso</button>'
       + '</div>';
   }
@@ -2107,8 +2107,8 @@ function renderPortalSection(clientId) {
 // ── PERFIL DE CLIENTA, vista completa (mismo diseño que ella ve en su app) ──
 var MESES_LARGOS_ADMIN = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
-// Pantalla única de clienta: antes "Ver perfil completo" (acp-overlay) y
-// "Gestionar clienta" (client-detail, otra pantalla aparte) eran dos
+// Pantalla única de cliente: antes "Ver perfil completo" (acp-overlay) y
+// "Gestionar cliente" (client-detail, otra pantalla aparte) eran dos
 // lugares distintos sin forma clara de volver del uno al otro. Ahora todo
 // vive acá adentro, con pestañas, y "← Volver" siempre regresa a la lista.
 var acpState = { clientId: null, uid: null, portal: {}, tab: 'resumen' };
@@ -2122,17 +2122,17 @@ function openAdminClientProfile(clientId) {
   var acpTitle = document.getElementById('acp-header-title');
   if (acpTitle) {
     var cc = CLIENTS[clientId] || {};
-    acpTitle.innerHTML = escapeHtmlAdmin(cc.name || 'Perfil de clienta') + (cc.type ? ' <span class="acp-type-tag">' + escapeHtmlAdmin(TYPE_LABELS[cc.type] || cc.type) + '</span>' : '');
+    acpTitle.innerHTML = escapeHtmlAdmin(cc.name || 'Perfil de cliente') + (cc.type ? ' <span class="acp-type-tag">' + escapeHtmlAdmin(TYPE_LABELS[cc.type] || cc.type) + '</span>' : '');
   }
   var uid = CLIENT_LINKS[clientId];
-  // Auto-reparo: por si esta clienta quedó creada antes de que
+  // Auto-reparo: por si este cliente quedó creada antes de que
   // empezáramos a espejar estos campos a clients/{id}, se sincroniza
   // sola cada vez que abrís su perfil — no hace falta hacer nada.
   // Si esa sincronización falla (ej. Firebase la rechaza), se avisa con
   // una alerta en vez de quedar en silencio, porque si no nunca se nota.
   if (CLIENTS[clientId]) {
     syncClientPublicFields(clientId, CLIENTS[clientId], function(e) {
-      alert('No se pudo sincronizar el plan de esta clienta con su app: ' + (e && e.message ? e.message : 'error desconocido') + '. Avisale a Claude con este mensaje.');
+      alert('No se pudo sincronizar el plan de este cliente con su app: ' + (e && e.message ? e.message : 'error desconocido') + '. Avisale a Claude con este mensaje.');
     });
   }
   // Las tres modalidades pueden tener perfil y beneficios, pero solo
@@ -2147,7 +2147,7 @@ function openAdminClientProfile(clientId) {
   fbGet('clientasPortal/' + uid, function(portal) {
     acpState.portal = portal || {};
     acpRenderShell();
-    // Diagnóstico: si esta clienta aparece "bloqueada" del lado cliente
+    // Diagnóstico: si este cliente aparece "bloqueada" del lado cliente
     // pese a tener plan activo acá, puede ser que esta cuenta (uid) haya
     // quedado vinculada a OTRO clientId distinto del que se está viendo
     // en este perfil — porque vincular un código nuevo nunca borra el
@@ -2156,7 +2156,7 @@ function openAdminClientProfile(clientId) {
     if (portalClientId && portalClientId !== clientId) {
       var otherName = (CLIENTS[portalClientId] && CLIENTS[portalClientId].name) || portalClientId;
       var thisName = (CLIENTS[clientId] && CLIENTS[clientId].name) || clientId;
-      var fix = confirm('¡Encontrado! La app de esta clienta está vinculada a OTRO perfil: "' + otherName + '" (no a "' + thisName + '"). Por eso ve bloqueado aunque acá esté activo.\n\n¿Vincular su app a ESTE perfil ("' + thisName + '") ahora mismo?');
+      var fix = confirm('¡Encontrado! La app de este cliente está vinculado a OTRO perfil: "' + otherName + '" (no a "' + thisName + '"). Por eso ve bloqueado aunque acá esté activo.\n\n¿Vincular su app a ESTE perfil ("' + thisName + '") ahora mismo?');
       if (fix) {
         fbSet('clientasPortal/' + uid + '/perfil/clientId', clientId, function(e) {
           alert('No se pudo vincular: ' + (e && e.message ? e.message : 'error desconocido'));
@@ -2248,7 +2248,7 @@ function handleGenerateLinkCodeAcp(clientId) {
       + '<button onclick="copyLinkCodeUrl(this,\'' + link + '\')" style="flex:1;background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Copiar link</button>'
       + '<a href="https://wa.me/?text=' + encodeURIComponent(waMsg) + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;text-decoration:none;">WhatsApp</a>'
       + '</div>'
-      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviaselo a la clienta — al abrirlo queda directo en el registro, vinculada a este perfil.</div>'
+      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviaselo a el cliente — al abrirlo queda directo en el registro, vinculada a este perfil.</div>'
       + '</div>';
   });
 }
@@ -2307,8 +2307,8 @@ function renderAcpPagosHtml(clientId, c) {
     html += '</div>';
   }
 
-  // Duración del plan — editable acá para corregir clientas ya cargadas
-  // (nuevas clientas ya lo piden al crearlas, ver handleSaveNewClient).
+  // Duración del plan — editable acá para corregir clientes ya cargadas
+  // (nuevas clientes ya lo piden al crearlas, ver handleSaveNewClient).
   html += '<div class="card" style="margin-bottom:1rem;">';
   html += '<div class="card-label">📅 Duración del plan</div>';
   html += '<select id="acp-plan-tipo" onchange="acpTogglePlanMesesInput()" style="width:100%;padding:0.6rem;border-radius:10px;border:1.5px solid var(--border);font-size:0.8rem;font-family:\'DM Sans\',sans-serif;margin-bottom:0.5rem;">';
@@ -2349,10 +2349,10 @@ function saveAcpPlanMeses(clientId) {
 }
 
 // Marcar/desmarcar un día entrenado desde el admin — escribe en el mismo
-// nodo que lee/escribe la app de la clienta, así que queda reflejado para
+// nodo que lee/escribe la app de el cliente, así que queda reflejado para
 // las dos sin duplicar nada.
 function toggleAdminDiaEntrenado(uid, key, el) {
-  if (!uid) { alert('Esta clienta todavía no vinculó su portal.'); return; }
+  if (!uid) { alert('Este cliente todavía no vinculó su portal.'); return; }
   if (!acpState.portal) acpState.portal = {};
   if (!acpState.portal.diasEntrenados) acpState.portal.diasEntrenados = {};
   var newVal = !acpState.portal.diasEntrenados[key];
@@ -2380,7 +2380,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
   var chatEntries = Object.keys(portal.chat || {}).map(function(k) { return portal.chat[k]; }).sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
   var lastMsg = chatEntries[0];
   var needsReply = chatNeedsReply(portal.chat, portal.chatMeta);
-  var name = perfil.nombre || c.name || 'Clienta';
+  var name = perfil.nombre || c.name || 'Cliente';
 
   // ── Días entrenados este mes + meta ──
   var now = new Date();
@@ -2455,7 +2455,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
   calHtml += '</div>';
 
   // Vos también podés marcar los días entrenados acá (clic en el día) —
-  // queda guardado en el mismo lugar que usa la clienta, así que si ella
+  // queda guardado en el mismo lugar que usa el cliente, así que si ella
   // también marca desde su app (rutina personalizada), quedan conectadas:
   // lo que marca cualquiera de las dos lo ve la otra.
   calHtml += '<div class="track-days">';
@@ -2546,7 +2546,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
   return html;
 }
 
-// ── PORTAL DE CLIENTAS: lista de todas las clientas vinculadas, con su actividad real ──
+// ── PORTAL DE CLIENTES: lista de todos los clientes vinculados, con su actividad real ──
 function renderClientsProgressOverview() {
   var el = document.getElementById('pc-progress-list');
   if (!el) return;
@@ -2554,7 +2554,7 @@ function renderClientsProgressOverview() {
     return CLIENT_LINKS[id];
   });
   if (allLinked.length === 0) {
-    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientas vinculadas al portal.</div>';
+    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientes vinculados al portal.</div>';
     return;
   }
   el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Cargando…</div>';
@@ -2596,7 +2596,7 @@ function renderClientsProgressOverview() {
   });
 }
 
-// Estado de pago/programa de una clienta, para mostrar de un vistazo en las
+// Estado de pago/programa de un cliente, para mostrar de un vistazo en las
 // listas del admin sin tener que entrar a su perfil. Misma lógica que la
 // alerta de pago dentro de renderAdminClientProfile.
 function getPaymentStatus(clientId, c) {
@@ -2647,7 +2647,7 @@ function renderProgressResults(results) {
   el.innerHTML = html;
 }
 
-// ── PORTAL DE CLIENTAS: solicitudes nuevas (leads sin ficha vinculada) ──
+// ── PORTAL DE CLIENTES: solicitudes nuevas (leads sin ficha vinculada) ──
 var pendingLeadUid = null;
 
 function formatFechaHora(isoString) {
@@ -2702,7 +2702,7 @@ function renderLeadsSection() {
         html += '</div>';
         html += '<div style="display:flex;gap:0.5rem;margin-top:0.6rem;">';
         if (waNum) html += '<a href="https://wa.me/' + waNum + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;text-decoration:none;">💬 WhatsApp</a>';
-        html += '<button onclick="convertLeadToClient(\'' + l.uid + '\',\'' + safeName + '\')" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">✅ Convertir en clienta</button>';
+        html += '<button onclick="convertLeadToClient(\'' + l.uid + '\',\'' + safeName + '\')" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">✅ Convertir en cliente</button>';
         html += '</div>';
         if (l.cuestionario) {
           html += '<details style="margin-top:0.6rem;"><summary style="font-size:0.72rem;font-weight:700;color:var(--blue);cursor:pointer;">📋 Ver cuestionario inicial</summary>' + cuestionarioHtml(l.cuestionario) + '</details>';
@@ -2723,7 +2723,7 @@ function renderLeadsSection() {
         html += '</div>';
         html += '<div style="display:flex;gap:0.5rem;margin-top:0.6rem;">';
         if (waNum2) html += '<a href="https://wa.me/' + waNum2 + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;text-decoration:none;">💬 WhatsApp</a>';
-        html += '<button onclick="convertLandingLead(\'' + l.id + '\',\'' + safeName2 + '\')" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">✅ Convertir en clienta</button>';
+        html += '<button onclick="convertLandingLead(\'' + l.id + '\',\'' + safeName2 + '\')" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">✅ Convertir en cliente</button>';
         html += '</div>';
         html += '</div>';
       }
@@ -2766,7 +2766,7 @@ function deleteLandingLead(id, name) {
   });
 }
 
-// ── PORTAL DE CLIENTAS: contenido global (beneficios / servicios) ──
+// ── PORTAL DE CLIENTES: contenido global (beneficios / servicios) ──
 function pcSwitchTab(id, btn) {
   document.querySelectorAll('.pc-content').forEach(function(c) { c.classList.remove('active'); });
   document.querySelectorAll('.pc-tab-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -2775,13 +2775,13 @@ function pcSwitchTab(id, btn) {
   else { var firstBtn = document.querySelector('.pc-tab-btn'); if (firstBtn) firstBtn.classList.add('active'); }
 }
 
-// ── CHATS: bandeja con todos los chats de clientas, estilo DM ──
+// ── CHATS: bandeja con todos los chats de clientes, estilo DM ──
 function renderChatsInbox() {
   var el = document.getElementById('pc-chats-list');
   if (!el) return;
   var linkedIds = Object.keys(CLIENT_LINKS).filter(function(id) { return CLIENTS[id]; });
   if (linkedIds.length === 0) {
-    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientas vinculadas al portal.</div>';
+    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientes vinculados al portal.</div>';
     var badgeEmpty = document.getElementById('pc-chats-badge');
     if (badgeEmpty) badgeEmpty.style.display = 'none';
     return;
@@ -2799,7 +2799,7 @@ function renderChatsInbox() {
           results.push({
             clientId: clientId,
             uid: uid,
-            name: (CLIENTS[clientId] && CLIENTS[clientId].name) || 'Clienta',
+            name: (CLIENTS[clientId] && CLIENTS[clientId].name) || 'Cliente',
             text: chatPreviewText(lastMsg),
             ts: lastMsg.ts || 0,
             needsReply: chatNeedsReply(chat, chatMeta)
@@ -3116,7 +3116,7 @@ var adminChatRef = null;
 var adminChatClientId = null;
 
 function openAdminChat(clientId, uid) {
-  if (!uid) { alert('Esta clienta todavía no vinculó su cuenta.'); return; }
+  if (!uid) { alert('Este cliente todavía no vinculó su cuenta.'); return; }
   adminChatUid = uid;
   adminChatClientId = clientId;
   document.getElementById('ac-title').textContent = (CLIENTS[clientId] && CLIENTS[clientId].name) || 'Chat';
@@ -3185,9 +3185,9 @@ function sendAdminChatMessage() {
   });
 }
 
-// Mismo bucket que usan las fotos de la clienta, bajo su uid — así tanto
+// Mismo bucket que usan las fotos de el cliente, bajo su uid — así tanto
 // lo que manda ella como lo que le mandás vos queda junto en la carpeta
-// de chat de esa clienta.
+// de chat de esa cliente.
 function handleAdminChatMediaSelect(input) {
   var file = input.files && input.files[0];
   input.value = '';
@@ -3230,7 +3230,7 @@ function handleGenerateLinkCode(clientId) {
       + '<button onclick="copyLinkCodeUrl(this,\'' + link + '\')" style="flex:1;background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Copiar link</button>'
       + '<a href="https://wa.me/?text=' + encodeURIComponent(waMsg) + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;text-decoration:none;">WhatsApp</a>'
       + '</div>'
-      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviaselo a la clienta — al abrirlo queda directo en el registro, vinculada a este perfil.</div>'
+      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviaselo a el cliente — al abrirlo queda directo en el registro, vinculada a este perfil.</div>'
       + '</div>';
   });
 }
@@ -3446,11 +3446,11 @@ function saveCustomClient(id, clientData) {
   fbSet('clients_custom/' + id, clientData);
 }
 
-// El panel de admin guarda el detalle completo de la clienta en
-// clients_custom/{id} (o en el CLIENTS hardcodeado), pero la clienta desde
+// El panel de admin guarda el detalle completo de el cliente en
+// clients_custom/{id} (o en el CLIENTS hardcodeado), pero el cliente desde
 // su celular lee únicamente clients/{id} — son nodos distintos en Firebase.
 // Sin espejar estos campos ahí, cosas como "Mes X de Y", la barra de días
-// restantes o el bloqueo por plan vencido nunca le llegan a la clienta,
+// restantes o el bloqueo por plan vencido nunca le llegan a el cliente,
 // aunque en el panel de admin se vean perfectas.
 function syncClientPublicFields(id, c, onError) {
   if (!id || !c) return;
@@ -3464,7 +3464,7 @@ function syncClientPublicFields(id, c, onError) {
   if (PREMIO_CFG && PREMIO_CFG.texto) fbSet('clients/' + id + '/premioMes', { texto: PREMIO_CFG.texto, meta: clientMetaMes(c) });
 }
 
-// Same dual-write pattern as saveCycle(): a per-field override for clientas
+// Same dual-write pattern as saveCycle(): a per-field override for clientes
 // whose base data still lives in the hardcoded CLIENTS seed, plus the full
 // merged object under clients_custom so it's what actually loads next time.
 // Sessions/mes se recalcula sola a partir de los días — no hay un calendario
@@ -3495,7 +3495,7 @@ function slugify(name) {
     .split(/\s+/)
     .slice(0, 2)
     .join('-');
-  var slug = base || 'clienta';
+  var slug = base || 'cliente';
   var unique = slug;
   var n = 2;
   while (CLIENTS[unique]) {
@@ -3613,7 +3613,7 @@ function markClientAsPaid(id) {
   fbSet('client_payments', payments);
 
   // Reflejado en clients/{id} (no en el nodo compartido client_payments) para
-  // que la clienta pueda leer cuántos ciclos lleva pagados desde su propio
+  // que el cliente pueda leer cuántos ciclos lleva pagados desde su propio
   // perfil, sin necesitar acceso al historial de pagos de las demás.
   c.pagosCount = payments[id].length;
   fbSet('clients/' + id + '/pagosCount', c.pagosCount);
@@ -3654,7 +3654,7 @@ function saveClientProfile(id, profile) {
 var cpSelectedDays = [];
 
 // Personal/Salud y (dentro de Entreno) objetivo/nivel/notas ahora las
-// llena la clienta desde su propia "Ficha" en la app — acá se muestran
+// llena el cliente desde su propia "Ficha" en la app — acá se muestran
 // de solo lectura. Lo único que seguís armando vos en esta pantalla son
 // los días de entrenamiento por semana (para el calendario) y los pagos.
 var CP_FICHA_READONLY_SELECTOR = '#cp-personal .cp-field:not([data-field="nombre"]), #cp-salud .cp-field, #cp-entrenamiento .cp-field[data-field="objetivo"], #cp-entrenamiento .cp-field[data-field="nivel"], #cp-entrenamiento .cp-field[data-field="notasEntreno"]';
@@ -4153,7 +4153,7 @@ function openCycleModal(id) {
 
   // Rutina personalizada paga una cuota mensual fija, no por sesión — no
   // tiene sentido preguntarle a Frida cuántas sesiones ni qué días, así
-  // que ese tipo de clienta usa un formulario aparte, mucho más simple.
+  // que ese tipo de cliente usa un formulario aparte, mucho más simple.
   var isRutinaPersonalizada = c.type === 'rutina-personalizada';
   document.getElementById('cycle-presencial-fields').style.display = isRutinaPersonalizada ? 'none' : 'block';
   document.getElementById('cycle-rp-fields').style.display = isRutinaPersonalizada ? 'block' : 'none';
@@ -4358,7 +4358,7 @@ function saveCycle() {
   renderPaymentStatus(id, c);
   renderQuotation(id, c);
 
-  // Refresca la pantalla de la clienta sin perder la pestaña en la que
+  // Refresca la pantalla de el cliente sin perder la pestaña en la que
   // estaba (normalmente Pagos, de donde se activa un ciclo nuevo).
   if (acpState.clientId === id) acpRenderShell();
 }
@@ -4378,7 +4378,7 @@ function addOneMonthToDateStr(dateStr) {
 }
 
 // Renovar ciclo para rutina personalizada: una cuota mensual fija, sin
-// sesiones ni calendario — la clienta entrena por su cuenta desde la app.
+// sesiones ni calendario — el cliente entrena por su cuenta desde la app.
 function saveCycleRutinaPersonalizada() {
   var id = cycleModalClientId;
   var c = CLIENTS[id];
@@ -4513,7 +4513,7 @@ function openClientDetail(id) {
   // Asistencia
   renderAsistencia(id, c);
 
-  // Portal de clienta — solo aplica a clientas online
+  // Portal de cliente — solo aplica a clientes online
   var portalSectionEl = document.getElementById('cd-portal-section');
   if (portalSectionEl) {
     if (isOnlineType(c.type)) {
@@ -4528,7 +4528,7 @@ function openClientDetail(id) {
 }
 
 // ── PERFIL DE FOTOS (ANTES/DESPUÉS) — solo lectura desde el admin ──
-// La clienta sube estas fotos desde su portal (clientasPortal/{uid}/fotosProgreso);
+// El cliente sube estas fotos desde su portal (clientasPortal/{uid}/fotosProgreso);
 // acá solo se muestran, no se suben ni editan desde este lado.
 function openClientPhotosModal(clientId) {
   var c = CLIENTS[clientId];
@@ -4589,7 +4589,7 @@ function renderClientPhotoSlot(entry, label) {
 
 function renderAsistencia(id, c) {
   if (isOnlineType(c.type)) {
-    document.getElementById('cd-asistencia').innerHTML = '<div style="text-align:center;color:var(--muted);font-size:0.78rem;padding:1rem 0;">Las clientas online no tienen cuadro de asistencia presencial.</div>';
+    document.getElementById('cd-asistencia').innerHTML = '<div style="text-align:center;color:var(--muted);font-size:0.78rem;padding:1rem 0;">Los clientes online no tienen cuadro de asistencia presencial.</div>';
     return;
   }
   var asistKey = 'fa_asist_'+id;
@@ -4777,8 +4777,8 @@ function renderClientsList() {
     return clientsTab === 'activas' ? active : !active;
   });
   var tA = document.getElementById('tab-activas'), tI = document.getElementById('tab-inactivas');
-  if (tA) tA.textContent = '🟢 Activas · ' + nAct;
-  if (tI) tI.textContent = '🔴 Inactivas · ' + nInact;
+  if (tA) tA.textContent = '🟢 Activos · ' + nAct;
+  if (tI) tI.textContent = '🔴 Inactivos · ' + nInact;
 
   var onlineIds = ids.filter(function(id){ return isOnlineType(CLIENTS[id].type); });
   var presIds = ids.filter(function(id){ return !isOnlineType(CLIENTS[id].type); });
@@ -4786,7 +4786,7 @@ function renderClientsList() {
   var html = '';
 
   if (ids.length === 0) {
-    html = '<div style="text-align:center;color:var(--muted);font-size:0.8rem;padding:2rem 0;">'+(q ? 'Ninguna clienta coincide con “' + escapeHtmlAdmin(q) + '”.' : clientsTab === 'activas' ? 'No tenés clientas activas en este momento.' : 'No tenés clientas inactivas. 🎉')+'</div>';
+    html = '<div style="text-align:center;color:var(--muted);font-size:0.8rem;padding:2rem 0;">'+(q ? 'Ningún cliente coincide con “' + escapeHtmlAdmin(q) + '”.' : clientsTab === 'activas' ? 'No tenés clientes activos en este momento.' : 'No tenés clientes inactivos. 🎉')+'</div>';
   }
 
   function buildCard(id) {
@@ -4794,11 +4794,11 @@ function renderClientsList() {
     var active = isActive(c, id);
     var badgeText, badgeBg, badgeColor;
     if (isOnlineType(c.type)) {
-      badgeText = active ? (TYPE_LABELS[c.type] || 'Online') + ' ●' : 'Inactiva';
+      badgeText = active ? (TYPE_LABELS[c.type] || 'Online') + ' ●' : 'Plan vencido';
       badgeBg = active ? '#F0FFF0' : '#fff0f0';
       badgeColor = active ? '#2a7a2a' : '#c44';
     } else {
-      badgeText = active ? 'Activa ●' : 'Inactiva';
+      badgeText = active ? 'Plan activo ●' : 'Plan vencido';
       badgeBg = active ? '#EBF0FF' : '#fff0f0';
       badgeColor = active ? 'var(--blue)' : '#c44';
     }
@@ -4839,7 +4839,7 @@ function renderClientsList() {
   fillClientActivity(ids);
 }
 
-// Estado de un vistazo en cada tarjeta de "Mis clientas": pago pendiente
+// Estado de un vistazo en cada tarjeta de "Mis clientes": pago pendiente
 // (al instante) y, si tiene la app, si te escribió y cuándo entrenó por
 // última vez (se completa solo cuando llegan los datos de Firebase).
 function clientStatusChipsHtml(id, c) {
@@ -4882,10 +4882,10 @@ function fillClientActivity(ids) {
 
 // ══════════ RECOMPENSAS: premio del mes, quién lo logró y felicitar ══════════
 var PREMIO_CFG = null;        // { texto, meta } — recompensas/config
-var CLIENT_MES_COUNT = {};    // entrenos marcados este mes por clienta (de su app)
+var CLIENT_MES_COUNT = {};    // entrenos marcados este mes por cliente (de su app)
 
-// Meta del mes de cada clienta: sus sesiones del plan, o días/semana × 4,
-// o la meta general del premio. La app de la clienta usa este mismo número.
+// Meta del mes de cada cliente: sus sesiones del plan, o días/semana × 4,
+// o la meta general del premio. La app de el cliente usa este mismo número.
 function clientMetaMes(c) {
   c = c || {};
   if (c.sessions > 0) return Number(c.sessions);
@@ -4901,7 +4901,7 @@ function renderPremioCard() {
   var winners = Object.keys(CLIENT_MES_COUNT).filter(function(id) { return CLIENTS[id] && CLIENT_MES_COUNT[id] >= clientMetaMes(CLIENTS[id]); });
   var html = '<div class="premio-card">';
   html += '<div class="premio-top"><span class="premio-ico">🎁</span><div style="flex:1;min-width:0;"><div class="premio-lbl">Premio de ' + mes + '</div>';
-  html += '<div class="premio-txt">' + (cfg.texto ? escapeHtmlAdmin(cfg.texto) : '<span style="color:var(--muted);font-weight:400;">Sin premio todavía. Tus clientas verán “Frida te tiene una sorpresa”.</span>') + '</div></div>';
+  html += '<div class="premio-txt">' + (cfg.texto ? escapeHtmlAdmin(cfg.texto) : '<span style="color:var(--muted);font-weight:400;">Sin premio todavía. Tus clientes verán “Frida te tiene una sorpresa”.</span>') + '</div></div>';
   html += '<button type="button" class="premio-edit" onclick="editPremio()">' + (cfg.texto ? 'Cambiar' : 'Poner premio') + '</button></div>';
   html += '<div class="premio-sub">Se gana al cumplir su meta del mes en la app (sus sesiones del plan, o días por semana × 4).</div>';
   if (winners.length) {
@@ -4913,13 +4913,13 @@ function renderPremioCard() {
 
 function editPremio() {
   var cfg = PREMIO_CFG || {};
-  var texto = prompt('¿Qué premio ganan este mes las clientas que cumplan su meta?\n(Ej: Un producto de Tu Madre, una gorra FridaActive…)\nDéjalo vacío para quitarlo.', cfg.texto || '');
+  var texto = prompt('¿Qué premio ganan este mes los clientes que cumplan su meta?\n(Ej: Un producto de Tu Madre, una gorra FridaActive…)\nDéjalo vacío para quitarlo.', cfg.texto || '');
   if (texto === null) return;
   texto = texto.trim();
   var meta = Number(cfg.meta) || 12;
   PREMIO_CFG = texto ? { texto: texto, meta: meta } : null;
   fbSet('recompensas/config', PREMIO_CFG);
-  // Se copia a cada clienta (con su propia meta) porque su app solo puede leer clients/{id}.
+  // Se copia a cada cliente (con su propia meta) porque su app solo puede leer clients/{id}.
   Object.keys(CLIENTS).forEach(function(id) {
     fbSet('clients/' + id + '/premioMes', texto ? { texto: texto, meta: clientMetaMes(CLIENTS[id]) } : null);
   });
@@ -4937,7 +4937,7 @@ function felicitarClienta(id, btn) {
   if (!uid) return;
   var c = CLIENTS[id] || {};
   var msg = FELICITAR_MSGS[Math.floor(Math.random() * FELICITAR_MSGS.length)];
-  if (!confirm('Enviarle a ' + (c.name || 'tu clienta') + ' este mensaje en el chat:\n\n“' + msg + '”')) return;
+  if (!confirm('Enviarle a ' + (c.name || 'tu cliente') + ' este mensaje en el chat:\n\n“' + msg + '”')) return;
   getDB().ref('clientasPortal/' + uid + '/chat').push({ from: 'admin', text: msg, ts: Date.now() }).then(function() {
     if (btn) { btn.textContent = '✓ Enviado'; btn.disabled = true; btn.classList.add('sent'); }
   }).catch(function(e) { alert('No se pudo enviar: ' + (e && e.message ? e.message : 'error')); });
@@ -4997,7 +4997,7 @@ function updateNCTypeUI() {
   renderDayPills('nc-rutina-days-pills', ncRutinaDays);
 }
 
-// ── SELECTOR DE DÍAS/SEMANA (para clientas "Rutina personalizada", que no
+// ── SELECTOR DE DÍAS/SEMANA (para clientes "Rutina personalizada", que no
 // pasan por el calendario de sesiones específicas) ──
 var WEEKDAY_NAMES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 var ncRutinaDays = [];
@@ -5085,7 +5085,7 @@ function handleSaveNewClient() {
   var cuotaVal = document.getElementById('nc-cuota').value;
   var metaText = document.getElementById('nc-meta').value.trim();
   // La mayoría paga mes a mes, sin fecha de fin planeada — "planMeses" solo
-  // se guarda si esta clienta puntual tiene un paquete con duración fija.
+  // se guarda si este cliente puntual tiene un paquete con duración fija.
   var planDuracion = document.getElementById('nc-plan-duracion').value;
   var planMesesVal = planDuracion === 'fijo' ? (parseInt(document.getElementById('nc-plan-meses').value) || null) : null;
 
@@ -5398,7 +5398,7 @@ function syncAllFirebaseData() {
       }
     }
 
-    // Premio del mes (recompensas para clientas que usan la app)
+    // Premio del mes (recompensas para clientes que usan la app)
     fbGet('recompensas/config', function(data) {
       PREMIO_CFG = data || null;
       if (document.getElementById('premio-card')) renderPremioCard();
@@ -5478,10 +5478,10 @@ function syncAllFirebaseData() {
       onFirebaseReady();
     });
 
-    // Asistencia de clientas presenciales: antes solo se traía por clienta al
+    // Asistencia de clientes presenciales: antes solo se traía por cliente al
     // abrir su detalle (renderAsistencia), así que en un navegador/dispositivo
     // nuevo countSessionsInCycle() podía leer datos vacíos de localStorage y
-    // mostrar mal si una clienta ya agotó sus sesiones del ciclo. La traemos
+    // mostrar mal si un cliente ya agotó sus sesiones del ciclo. La traemos
     // completa acá, igual que el resto de los datos, para que esté lista
     // desde el primer render de la lista.
     fbGet('asistencia', function(asistData) {
@@ -6618,7 +6618,7 @@ function finRender() {
 }
 
 
-// "Por cobrar": clientas activas con el pago del ciclo pendiente, para no
+// "Por cobrar": clientes activos con el pago del ciclo pendiente, para no
 // tener que entrar una por una. Solo se muestra en el mes actual.
 function renderPorCobrar() {
   var el = document.getElementById('fin-por-cobrar');
@@ -6631,9 +6631,9 @@ function renderPorCobrar() {
     var st = getPaymentStatus(id, c);
     return st && st.level === 'warn';
   });
-  if (!rows.length) { el.innerHTML = '<div class="fin-cobrar ok">✅ Todas tus clientas activas están al día con su pago.</div>'; return; }
+  if (!rows.length) { el.innerHTML = '<div class="fin-cobrar ok">✅ Todos tus clientes activos están al día con su pago.</div>'; return; }
   var total = rows.reduce(function(s, id) { return s + (Number(CLIENTS[id].cuota) || 0); }, 0);
-  var html = '<div class="fin-cobrar"><div class="fin-cobrar-hdr"><span>💳 Por cobrar · ' + rows.length + (rows.length === 1 ? ' clienta' : ' clientas') + '</span><b>' + finFmt(total) + '</b></div>';
+  var html = '<div class="fin-cobrar"><div class="fin-cobrar-hdr"><span>💳 Por cobrar · ' + rows.length + (rows.length === 1 ? ' cliente' : ' clientes') + '</span><b>' + finFmt(total) + '</b></div>';
   rows.forEach(function(id) {
     var c = CLIENTS[id];
     html += '<div class="fin-cobrar-row" onclick="openAdminClientProfile(\'' + id + '\');acpSwitchTab(\'pagos\')"><span>' + escapeHtmlAdmin(c.name) + '</span><span>' + (c.cuota ? finFmt(c.cuota) : 'sin cuota') + ' ›</span></div>';
@@ -7491,7 +7491,7 @@ function renderRutinaView() {
   // Hero section (blue background inside view)
   html += '<div class="rv-hero-box">';
   html += '<div class="rv-hero-tag">' + escHtml(TYPE_LABELS[c.type] || 'Entrenamiento presencial') + '</div>';
-  var nameParts = c.name ? c.name.split(' ') : ['Clienta',''];
+  var nameParts = c.name ? c.name.split(' ') : ['Cliente',''];
   html += '<div class="rv-hero-sub" style="margin-bottom:1.5rem;">'+(c.meta || '')+'</div>';
   // Stats
   html += '<div class="rv-stats">';
@@ -7510,12 +7510,12 @@ function renderRutinaView() {
 
   html += '<div style="height:1.5rem;"></div>';
 
-  // Mensaje de bienvenida (lo que verá la clienta en su portal)
+  // Mensaje de bienvenida (lo que verá el cliente en su portal)
   if (rutinaData.mensajeInicial) {
     html += '<div class="rv-objetivo" style="border-left-color:#d4c890;"><div class="rv-objetivo-label">Mensaje de bienvenida</div><div class="rv-objetivo-text" style="white-space:pre-wrap;">'+escHtml(rutinaData.mensajeInicial)+'</div></div>';
   }
 
-  // Aclaraciones importantes (lo que verá la clienta en su portal)
+  // Aclaraciones importantes (lo que verá el cliente en su portal)
   if (rutinaData.aclaraciones && rutinaData.aclaraciones.length) {
     html += '<div class="rv-objetivo" style="border-left-color:#d4c890;"><div class="rv-objetivo-label">⚡ Antes de empezar</div>';
     rutinaData.aclaraciones.forEach(function(item, i) {
@@ -7729,7 +7729,7 @@ function openRutinaEditor(clientId) {
   var c = CLIENTS[clientId];
   if (!c) return;
   // El editor de rutina es una pantalla normal (sin position:fixed propio),
-  // así que si se abre desde dentro del perfil de clienta (acp-overlay, que
+  // así que si se abre desde dentro del perfil de cliente (acp-overlay, que
   // sí es fixed y queda encima de todo) hay que cerrar ese overlay primero
   // o la pantalla de rutina carga detrás, invisible, y el botón parece que
   // no hace nada hasta cerrar el perfil manualmente.
@@ -7782,7 +7782,7 @@ function openRutinaEditor(clientId) {
     };
     // Presencial y online 1:1 nunca ven la pestaña Rutina desde su app (la
     // lleva Frida aparte) — así que estos dos campos no le sirven como
-    // mensaje para la clienta. En vez de ocultarlos, se reetiquetan como
+    // mensaje para el cliente. En vez de ocultarlos, se reetiquetan como
     // notas internas para Frida (siguen siendo los mismos campos, solo
     // cambia para qué sirven según la modalidad).
     var esRutinaPersonalizada = c.type === 'rutina-personalizada';
@@ -7801,7 +7801,7 @@ function openRutinaEditor(clientId) {
     } else if (esPresencial) {
       // Presencial: un solo cuadro simple de aclaraciones para Frida —
       // nada de "mensaje de bienvenida", que no tiene sentido si la
-      // clienta nunca entra a ver la rutina.
+      // cliente nunca entra a ver la rutina.
       msgLabelEl.style.display = 'none';
       msgInicialEl.style.display = 'none';
       aclaracionesLabelEl.textContent = '📝 Aclaraciones';
@@ -7809,7 +7809,7 @@ function openRutinaEditor(clientId) {
     } else {
       msgLabelEl.style.display = '';
       msgInicialEl.style.display = '';
-      msgLabelEl.textContent = '📝 Nota general (solo para vos, la clienta no la ve)';
+      msgLabelEl.textContent = '📝 Nota general (solo para vos, el cliente no la ve)';
       msgInicialEl.placeholder = 'Ej: Rutina de fuerza, revisar carga cada 4 semanas...';
       aclaracionesLabelEl.textContent = '📝 Aclaraciones para vos (una por línea)';
       aclaracionesEl.placeholder = 'Ej: Cuidado con la rodilla derecha.\nPrefiere mancuernas a barra.';
@@ -8039,7 +8039,7 @@ function deleteExerciseBankItem(id) {
 }
 
 // ── VIDEO/TÉCNICA POR EJERCICIO (desde la vista de rutina) ──
-// Reutiliza el mismo banco de ejercicios que ya ve la clienta en su portal:
+// Reutiliza el mismo banco de ejercicios que ya ve el cliente en su portal:
 // tocar el nombre de un ejercicio en "Ver rutina" abre este modal para ver
 // o pegar el link de YouTube, sin tener que buscarlo en el Banco aparte.
 function findExerciseBankItem(name) {
@@ -8091,7 +8091,7 @@ function openExerciseVideoModal(name) {
 }
 
 // El preview dentro del modal usa el mismo truco de alto/aspect-ratio que
-// el reproductor real que ve la clienta, para que Frida vea exactamente
+// el reproductor real que ve el cliente, para que Frida vea exactamente
 // cómo va a quedar antes de guardar.
 function evUpdatePreviewOrientation() {
   var wrap = document.getElementById('ev-preview-wrap');
@@ -8214,7 +8214,7 @@ function renderTemplatesList() {
       html += '<div style="color:var(--muted);font-size:0.7rem;margin-top:0.15rem;">' + dayCount + ' día' + (dayCount !== 1 ? 's' : '') + '</div></div>';
       html += '<button onclick="deleteTemplate(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.85rem;cursor:pointer;">✕</button>';
       html += '</div>';
-      html += '<button onclick="applyTemplate(\'' + it.id + '\')" style="width:100%;margin-top:0.6rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Usar en esta clienta</button>';
+      html += '<button onclick="applyTemplate(\'' + it.id + '\')" style="width:100%;margin-top:0.6rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Usar en este cliente</button>';
       html += '</div>';
     });
     el.innerHTML = html;
@@ -8236,7 +8236,7 @@ function saveCurrentAsTemplate() {
   });
 }
 function applyTemplate(templateId) {
-  if (!confirm('Esto reemplaza la rutina actual de esta clienta por la plantilla elegida. ¿Continuar?')) return;
+  if (!confirm('Esto reemplaza la rutina actual de este cliente por la plantilla elegida. ¿Continuar?')) return;
   fbGet('programTemplates/' + templateId, function(tpl) {
     if (!tpl) { alert('No se pudo cargar la plantilla.'); return; }
     rutinaData = { days: cloneDaysWithNewIds(tpl.days) };
@@ -8301,7 +8301,7 @@ function renderRutinaEditor() {
 
   if (esPresencialDia) {
     // Presencial no ve la pestaña Rutina, así que acá no hace falta una
-    // nota "para la clienta" — en cambio, lo que Frida necesita de un
+    // nota "para el cliente" — en cambio, lo que Frida necesita de un
     // vistazo antes de bajarse del carro es qué equipo llevar ese día.
     html += '<div style="background:#fff9db;border:1px solid #f5d76e;border-radius:10px;padding:0.75rem;margin-bottom:1rem;">';
     html += '<div style="font-size:0.65rem;font-weight:700;color:#8a6d00;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">🎒 Equipo a llevar este día (uno por línea)</div>';
@@ -8310,8 +8310,8 @@ function renderRutinaEditor() {
   } else {
     // Nota puntual de este día — a diferencia del "Mensaje de Frida" (que es
     // para toda la rutina), esta se guarda en el propio día y le aparece a
-    // la clienta solo quien abra justo este día.
-    html += '<textarea id="rutina-day-nota" class="fin-form-input" style="width:100%;min-height:3rem;resize:vertical;font-family:\'DM Sans\',sans-serif;margin-bottom:1rem;" placeholder="Nota para este día en particular (opcional) — le aparece a la clienta solo en este día">'+escHtml(day.notaAdmin || '')+'</textarea>';
+    // el cliente solo quien abra justo este día.
+    html += '<textarea id="rutina-day-nota" class="fin-form-input" style="width:100%;min-height:3rem;resize:vertical;font-family:\'DM Sans\',sans-serif;margin-bottom:1rem;" placeholder="Nota para este día en particular (opcional) — le aparece a el cliente solo en este día">'+escHtml(day.notaAdmin || '')+'</textarea>';
   }
 
   // Blocks
@@ -9089,7 +9089,7 @@ function renderAhorrosMes() {
     <div class="fin-form-row"><div class="fin-form-label">Video de YouTube</div><input class="fin-form-input" id="ev-video" type="text" placeholder="Pegá el link — subilo como 'No listado' en YouTube"></div>
     <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--text);margin:-0.4rem 0 1rem;cursor:pointer;"><input type="checkbox" id="ev-vertical" onchange="evUpdatePreviewOrientation()" style="width:1.1rem;height:1.1rem;"> Video vertical (grabado con el celular)</label>
     <div class="fin-form-row"><div class="fin-form-label">Nota / descripción (opcional)</div><textarea class="fin-form-input" id="ev-descripcion" rows="3" placeholder="Ej: Espalda pegada al respaldo, no bloquear la rodilla arriba..." style="resize:vertical;"></textarea></div>
-    <div style="font-size:0.68rem;color:var(--muted);margin-bottom:1rem;">Esto queda guardado en el banco de ejercicios y se muestra automáticamente a tus clientas cuando vean "<span id="ev-modal-name-inline"></span>" en su rutina.</div>
+    <div style="font-size:0.68rem;color:var(--muted);margin-bottom:1rem;">Esto queda guardado en el banco de ejercicios y se muestra automáticamente a tus clientes cuando vean "<span id="ev-modal-name-inline"></span>" en su rutina.</div>
     <button onclick="saveExerciseVideoModal()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;">Guardar</button>
   </div>
 </div>
@@ -9114,7 +9114,7 @@ function renderAhorrosMes() {
       <button onclick="hideTemplateModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
     </div>
 
-    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Guardá la rutina que estás viendo como plantilla para reutilizarla en otras clientas.</div>
+    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Guardá la rutina que estás viendo como plantilla para reutilizarla en otros clientes.</div>
     <div class="fin-form-row"><div class="fin-form-label">Nombre de la plantilla</div><input class="fin-form-input" id="tpl-nombre" type="text" placeholder="Ej: Full Body Principiante 4 semanas"></div>
     <button onclick="saveCurrentAsTemplate()" style="width:100%;background:#2a7a2a;color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.5rem;">💾 Guardar rutina actual como plantilla</button>
 
