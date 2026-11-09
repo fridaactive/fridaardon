@@ -2123,14 +2123,26 @@ function medalSvg(kind, ok) {
       + '<path d="M32 18.5l1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5z" fill="' + (ok ? '#FFFBEA' : '#7C88A6') + '"/>'
       + (ok ? '<path d="M25 17.5c.3 4.5 1.4 8 3.4 10.4" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.6" stroke-linecap="round"/>' : '');
   } else {
-    var ribbonA = ok ? '#1C55E5' : '#2E3A5C', ribbonB = ok ? '#F5ECCB' : '#3E4A6C';
+    // Medalla redonda sin cintas: borde festoneado (roseta) + aro + disco
+    // metálico + ícono grabado. Centro en (32,34).
+    var scallops = '';
+    for (var k = 0; k < 20; k++) {
+      var a = k / 20 * Math.PI * 2;
+      scallops += '<circle cx="' + (32 + Math.cos(a) * 26).toFixed(2) + '" cy="' + (34 + Math.sin(a) * 26).toFixed(2) + '" r="3.6"/>';
+    }
+    var ticks = '';
+    for (var t = 0; t < 40; t++) {
+      var b = t / 40 * Math.PI * 2;
+      ticks += '<path d="M' + (32 + Math.cos(b) * 22.6).toFixed(2) + ' ' + (34 + Math.sin(b) * 22.6).toFixed(2) + 'L' + (32 + Math.cos(b) * 24.2).toFixed(2) + ' ' + (34 + Math.sin(b) * 24.2).toFixed(2) + '"/>';
+    }
     svg = defs
-      + '<path d="M20 4h9l7 22h-9z" fill="' + ribbonA + '"/><path d="M44 4h-9l-7 22h9z" fill="' + ribbonB + '"/>'
-      + '<circle cx="32" cy="43" r="19" fill="url(#' + r + ')"/>'
-      + '<circle cx="32" cy="43" r="16.2" fill="url(#' + g + ')"/>'
-      + '<circle cx="32" cy="43" r="13.4" fill="none" stroke="' + m[3] + '" stroke-opacity=".45" stroke-width="1" stroke-dasharray="1.6 2.2"/>'
-      + '<g fill="' + m[3] + '" stroke="' + m[3] + '" stroke-width=".6" stroke-linejoin="round" style="color:' + m[1] + '" opacity="' + (ok ? '.9' : '.75') + '">' + (MEDAL_ICON[kind] || '') + '</g>'
-      + (ok ? '<path d="M21.5 37.5a12 12 0 0 1 8-8" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.8" stroke-linecap="round"/>' : '');
+      + '<g fill="url(#' + r + ')">' + scallops + '<circle cx="32" cy="34" r="26"/></g>'
+      + '<circle cx="32" cy="34" r="24.6" fill="none" stroke="' + m[0] + '" stroke-opacity="' + (ok ? '.55' : '.15') + '" stroke-width="1"/>'
+      + '<g stroke="' + m[3] + '" stroke-opacity=".55" stroke-width="1" stroke-linecap="round">' + ticks + '</g>'
+      + '<circle cx="32" cy="34" r="21" fill="url(#' + g + ')" stroke="' + m[3] + '" stroke-opacity=".5" stroke-width="1"/>'
+      + '<circle cx="32" cy="34" r="17" fill="none" stroke="' + m[3] + '" stroke-opacity=".45" stroke-width="1" stroke-dasharray="1.6 2.2"/>'
+      + '<g transform="translate(0,-9)" fill="' + m[3] + '" stroke="' + m[3] + '" stroke-width=".6" stroke-linejoin="round" opacity="' + (ok ? '.9' : '.75') + '">' + (MEDAL_ICON[kind] || '') + '</g>'
+      + (ok ? '<path d="M18.5 29a14.5 14.5 0 0 1 9.5-9.6" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="2" stroke-linecap="round"/>' : '');
   }
   return '<svg class="medal-svg" viewBox="0 0 64 66" aria-hidden="true">' + svg + lock + '</svg>';
 }
