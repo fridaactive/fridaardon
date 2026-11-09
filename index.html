@@ -1934,10 +1934,8 @@ function renderInicioTab() {
   h += rewardsInicioHtml(c);
 
   h += '<div class="in-stats">'
-    + (c.racha >= 2
-        ? '<div class="in-stat in-stat-hl"><svg class="fa-sticker fa-sticker-bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1L4 14h6.5L9 23l10-13.5h-6.6z"/></svg><span class="in-stat-num">' + c.racha + '</span><span class="in-stat-lbl">días seguidos</span></div>'
-        : '<div class="in-stat in-stat-hl"><span class="in-stat-num">' + c.mes + '</span><span class="in-stat-lbl">días este mes</span></div>')
-    + '<div class="in-stat"><span class="in-stat-num">' + c.semana + '</span><span class="in-stat-lbl">esta semana</span></div>'
+    + '<div class="in-stat in-stat-hl">' + (c.semana >= metaSemanal() ? '<svg class="fa-sticker fa-sticker-bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1L4 14h6.5L9 23l10-13.5h-6.6z"/></svg>' : '') + '<span class="in-stat-num">' + c.semana + '/' + metaSemanal() + '</span><span class="in-stat-lbl">esta semana</span></div>'
+    + '<div class="in-stat"><span class="in-stat-num">' + c.mes + '</span><span class="in-stat-lbl">días este mes</span></div>'
     + (prog ? '<div class="in-stat"><span class="in-stat-num in-cream">' + escapeHtml(prog) + '</span><span class="in-stat-lbl">del programa</span></div>'
             : '<div class="in-stat"><span class="in-stat-num in-cream">' + escapeHtml(meta || '-') + '</span><span class="in-stat-lbl">meta del mes</span></div>')
     + '</div>';
@@ -1979,6 +1977,26 @@ function metaDelMes() {
   return (PREMIO_MES && Number(PREMIO_MES.meta)) || CLIENT_META || 12;
 }
 
+// Entrenos por semana que le tocan (sus días del plan). Se deriva de su meta
+// del mes (días/semana × 4).
+function metaSemanal() {
+  return Math.max(1, Math.round(metaDelMes() / 4));
+}
+
+// Semanas (lunes a domingo) en que cumplió todos los entrenos que le tocan.
+function semanasCompletas(dias) {
+  var porSemana = {};
+  Object.keys(dias || {}).forEach(function(k) {
+    if (!dias[k]) return;
+    var d = new Date(k + 'T00:00:00');
+    d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    var wk = localKey(d);
+    porSemana[wk] = (porSemana[wk] || 0) + 1;
+  });
+  var ms = metaSemanal();
+  return Object.keys(porSemana).filter(function(wk) { return porSemana[wk] >= ms; }).length;
+}
+
 function maxRacha(dias) {
   var keys = Object.keys(dias || {}).filter(function(k) { return dias[k]; }).sort();
   var best = 0, run = 0, prev = null;
@@ -2007,9 +2025,9 @@ function medallasEstado() {
   return [
     { id: 'primer', kind: 'bronce', tier: 'Bronce', name: 'Primer paso', how: 'Marca tu primer día entrenado.', ok: anyDia },
     { id: 'perfil', kind: 'plata', tier: 'Plata', name: 'Perfil completo', how: 'Pon tu foto, cuéntanos de ti, llena tu ficha y sube tu primera foto de progreso (solo la ven Frida y tú).', ok: perfilOk },
-    { id: 'racha3', kind: 'oro', tier: 'Oro', name: 'En racha', how: 'Entrena 3 días seguidos.', ok: maxRacha(dias) >= 3 },
-    { id: 'meta-' + localKey(now).slice(0, 7), kind: 'trofeo', tier: 'Trofeo', name: 'Meta de ' + mesNombre, how: 'Llega a ' + meta + ' entrenos este mes' + (PREMIO_MES && PREMIO_MES.texto ? ' y gana: ' + PREMIO_MES.texto : '') + '.', ok: c.mes >= meta },
-    { id: 'diamante', kind: 'diamante', tier: 'Diamante', name: 'Constancia', how: 'Cumple tu meta del mes 3 veces. Llevas ' + Math.min(metasCumplidas, 3) + ' de 3. ¡La más difícil de todas!', ok: metasCumplidas >= 3 }
+    { id: 'semanas2', kind: 'oro', tier: 'Oro', name: 'Semanas completas', how: 'Completa tus ' + metaSemanal() + ' entrenos de la semana durante 2 semanas (no tienen que ser seguidas). Llevas ' + Math.min(semanasCompletas(dias), 2) + ' de 2.', ok: semanasCompletas(dias) >= 2 },
+    { id: 'meta-' + localKey(now).slice(0, 7), kind: 'trofeo', tier: 'Trofeo', name: 'Meta de ' + mesNombre, how: 'Completa todos tus entrenos del mes (' + meta + ')' + (PREMIO_MES && PREMIO_MES.texto ? ' y gana: ' + PREMIO_MES.texto : '') + '.', ok: c.mes >= meta },
+    { id: 'diamante', kind: 'diamante', tier: 'Diamante', name: 'Constancia', how: 'Completa tu meta del mes en 3 meses distintos (por ejemplo noviembre, diciembre y enero). Llevas ' + Math.min(metasCumplidas, 3) + ' de 3. ¡La más valiosa de todas!', ok: metasCumplidas >= 3 }
   ];
 }
 
@@ -2064,7 +2082,8 @@ function checkInHoy(on) {
   if (on) {
     if (navigator.vibrate) try { navigator.vibrate([20, 40, 30]); } catch (e) {}
     var c = inicioCounts();
-    celebrate('💪', '¡Hoy cuenta!', c.racha >= 2 ? 'Llevas ' + c.racha + ' días seguidos.' : 'Ya sumas ' + c.mes + ' este mes. ¡Sigue así!');
+    var ms = metaSemanal();
+    celebrate('💪', '¡Hoy cuenta!', c.semana >= ms ? '¡Completaste tu semana! ' + c.semana + ' de ' + ms + ' entrenos 🎉' : 'Llevas ' + c.semana + ' de ' + ms + ' entrenos esta semana. Descansa cuando lo necesites 💙');
   }
 }
 
@@ -2090,8 +2109,8 @@ var MEDAL_ICON = {
   bronce: '<path d="M26.5 35.5c2.2-.3 3.6 1.8 3.4 4.6-.2 2.6-1.4 4.2-3 4.4-1.7.2-2.9-1.4-3-4-.1-2.8.6-4.8 2.6-5z"/><circle cx="27.6" cy="47.2" r="1.9"/><path d="M37.5 39.5c2-.2 2.9 1.9 2.7 4.4-.2 2.4-1.3 3.9-2.8 4-1.6.1-2.6-1.5-2.6-3.9 0-2.6.8-4.3 2.7-4.5z"/><circle cx="37.9" cy="50.9" r="1.7"/>',
   // corazón
   plata: '<path d="M32 51.5s-9.5-5.6-9.5-12.1c0-3.2 2.4-5.4 5.1-5.4 2 0 3.5 1.1 4.4 2.6.9-1.5 2.4-2.6 4.4-2.6 2.7 0 5.1 2.2 5.1 5.4 0 6.5-9.5 12.1-9.5 12.1z"/>',
-  // llama
-  oro: '<path d="M32.6 31.5c.6 4 4.3 5.6 5.6 9.4 1.6 4.8-1.6 10-6.4 10-4.4 0-7.4-3.7-6.6-8 .5-2.6 2.2-4 3-6 .6 1.8 1.5 2.8 2.7 3.2-.6-3.3-.2-6 1.7-8.6z"/>',
+  // calendario con check (semanas completas)
+  oro: '<path d="M23 35.5h18a1.8 1.8 0 0 1 1.8 1.8v11.4a1.8 1.8 0 0 1-1.8 1.8H23a1.8 1.8 0 0 1-1.8-1.8V37.3a1.8 1.8 0 0 1 1.8-1.8z"/><rect x="26" y="32.5" width="2.4" height="5" rx="1"/><rect x="35.6" y="32.5" width="2.4" height="5" rx="1"/><path d="M26.6 44.2l3.6 3.4 7.4-7.2" fill="none" stroke="#FFF6C9" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
 };
 function medalSvg(kind, ok) {
   var n = ++MEDAL_N, m = MEDAL_METAL[kind] || MEDAL_METAL.oro;
