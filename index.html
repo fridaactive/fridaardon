@@ -945,18 +945,29 @@
 .in-goal-prize b{color:#F5ECCB;}
 .in-med-count{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:0.72rem;opacity:0.7;}
 .in-medals{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:0.3rem;padding:0.9rem 0.6rem 0.8rem;border-radius:20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);}
-.in-med-path{position:absolute;left:12%;right:12%;top:2.55rem;height:4px;border-radius:100px;background:rgba(255,255,255,0.1);}
+.in-med-path{position:absolute;left:12%;right:12%;top:2.75rem;height:4px;border-radius:100px;background:rgba(255,255,255,0.1);}
 .in-med-path span{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,#D98A4E,#CDD5E0,#F4C542,#F4C542,#9EDFF5);}
-.in-medal.gem .medal-svg{width:60px;height:62px;margin-top:-4px;}
 .in-medal{position:relative;display:flex;flex-direction:column;align-items:center;gap:0.25rem;background:none;border:none;cursor:pointer;padding:0;color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;}
-.medal-svg{width:54px;height:56px;display:block;filter:drop-shadow(0 3px 0 rgba(0,0,0,0.3));transition:transform 0.2s;}
+.medal-svg{width:58px;height:64px;display:block;overflow:visible;filter:drop-shadow(0 3px 0 rgba(0,0,0,0.35));transition:transform 0.2s;}
+.medal-svg.locked .medal-art{filter:grayscale(1) brightness(0.55);}
 .in-medal.ok{color:#fff;}
-.in-medal.ok .medal-svg{filter:drop-shadow(0 3px 0 rgba(0,0,0,0.3)) drop-shadow(0 0 10px rgba(245,236,203,0.35));animation:medalShine 3.5s ease-in-out infinite;}
-.in-medal.trophy .medal-svg{width:60px;height:62px;margin-top:-4px;}
+.in-medal.ok .medal-svg{filter:drop-shadow(0 3px 0 rgba(0,0,0,0.35)) drop-shadow(0 0 10px rgba(245,236,203,0.3));animation:medalShine 3.5s ease-in-out infinite;}
 .in-medal:active .medal-svg{transform:scale(0.92);}
 .in-medal-name{font-size:0.6rem;font-weight:700;text-align:center;line-height:1.15;}
 @keyframes medalShine{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-.fa-cel-medal .medal-svg{width:96px;height:100px;margin:0 auto;filter:drop-shadow(0 4px 0 rgba(0,0,0,0.18));}
+.fa-cel-medal .medal-svg{width:96px;height:106px;margin:0 auto;filter:drop-shadow(0 4px 0 rgba(0,0,0,0.18));}
+/* Revelación de insignia: pantalla oscura, insignia grande con brillo debajo */
+.fa-celebrate.dark{background:radial-gradient(120% 80% at 50% 35%,#0E2160 0%,#050B1F 60%);}
+.fa-celebrate.dark .fa-cel-card{background:transparent;box-shadow:none;color:#fff;max-width:340px;padding-top:0;}
+.fa-celebrate.dark .fa-cel-ico{position:relative;margin-bottom:1.4rem;}
+.fa-celebrate.dark .fa-cel-ico::after{content:'';position:absolute;left:50%;bottom:-30px;width:260px;height:120px;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(91,139,245,0.45),rgba(91,139,245,0) 70%);z-index:-1;}
+.fa-celebrate.dark .fa-cel-medal .medal-svg{width:190px;height:209px;filter:drop-shadow(0 8px 0 rgba(0,0,0,0.4));animation:medalReveal 0.7s cubic-bezier(.2,1.3,.4,1);}
+.fa-celebrate.dark.quiet .fa-cel-medal .medal-svg{width:150px;height:165px;}
+.fa-celebrate.dark .fa-cel-title{color:#fff;font-size:1.5rem;}
+.fa-celebrate.dark .fa-cel-text{color:rgba(255,255,255,0.78);white-space:pre-line;font-size:0.95rem;}
+.fa-celebrate.dark .fa-cel-btn{background:#F5ECCB;color:#0B1B3F;box-shadow:0 4px 0 #D9C98E;}
+@keyframes medalReveal{0%{transform:scale(0.3) rotate(-12deg);opacity:0}60%{transform:scale(1.08) rotate(3deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+@media (prefers-reduced-motion: reduce){.fa-celebrate.dark .fa-cel-medal .medal-svg{animation:none;}}
 @media (prefers-reduced-motion: reduce){.in-medal.ok .medal-svg{animation:none;}}
 .in-nudge{display:flex;gap:0.75rem;align-items:flex-start;width:100%;text-align:left;margin-top:0.7rem;padding:0.85rem 1rem;border-radius:18px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.05);color:#fff;font-family:'DM Sans',sans-serif;cursor:pointer;}
 .in-nudge>span:first-child{font-size:1.3rem;}
@@ -2090,80 +2101,111 @@ function checkInHoy(on) {
 function showMedal(i) {
   var m = medallasEstado()[i];
   if (!m) return;
-  celebrate('<div class="fa-cel-medal">' + medalSvg(m.kind, m.ok) + '</div>', m.tier + ' · ' + m.name, m.ok ? '¡Ya la tienes! ' + m.how.replace(/\.$/, '') + ' ✓' : m.how, !m.ok);
+  var fecha = medalDate(m.id);
+  celebrate('<div class="fa-cel-medal">' + medalSvg(m.kind, m.ok) + '</div>', m.name, m.how + (m.ok ? (fecha ? '\n\n✓ Lograda el ' + fecha : '\n\n✓ ¡Ya la tienes!') : ''), !m.ok);
 }
 
-// ── Medallas dibujadas (SVG propio): disco metálico con cinta y un ícono
-// grabado. Bronce → Plata → Oro → Diamante → Trofeo, para que se note que
-// cada una acerca más al trofeo. Bloqueadas: en gris con candado.
 var MEDAL_N = 0;
-var MEDAL_METAL = {
-  bronce:   ['#FBD9B6', '#D98A4E', '#8A4A1F', '#6B3614'],
-  plata:    ['#FFFFFF', '#CDD5E0', '#8794A6', '#5F6B7C'],
-  oro:      ['#FFF6C9', '#F4C542', '#B07D10', '#8A5F05'],
-  diamante: ['#F1FCFF', '#9EDFF5', '#3E8DC0', '#23628F'],
-  trofeo:   ['#FFF6C9', '#F4C542', '#B07D10', '#8A5F05']
+// Insignias ilustradas (diseño propio FridaActive): escudo con borde metálico
+// según el nivel, escena azul noche con arcos de luz, ilustración en crema y
+// azul, y el nombre grabado en una cinta. Bloqueadas: en gris con candado.
+var MEDAL_RIM = {
+  bronce:   ['#FBD9B6', '#D98A4E', '#7A3F18'],
+  plata:    ['#FFFFFF', '#C3CCD8', '#6F7B8C'],
+  oro:      ['#FFF6C9', '#F4C542', '#9A6A08'],
+  trofeo:   ['#FFF6C9', '#F4C542', '#9A6A08'],
+  diamante: ['#FFFFFF', '#A8E6FA', '#2F80B8']
 };
-var MEDAL_ICON = {
-  // pisadas
-  bronce: '<path d="M26.5 35.5c2.2-.3 3.6 1.8 3.4 4.6-.2 2.6-1.4 4.2-3 4.4-1.7.2-2.9-1.4-3-4-.1-2.8.6-4.8 2.6-5z"/><circle cx="27.6" cy="47.2" r="1.9"/><path d="M37.5 39.5c2-.2 2.9 1.9 2.7 4.4-.2 2.4-1.3 3.9-2.8 4-1.6.1-2.6-1.5-2.6-3.9 0-2.6.8-4.3 2.7-4.5z"/><circle cx="37.9" cy="50.9" r="1.7"/>',
-  // corazón
-  plata: '<path d="M32 51.5s-9.5-5.6-9.5-12.1c0-3.2 2.4-5.4 5.1-5.4 2 0 3.5 1.1 4.4 2.6.9-1.5 2.4-2.6 4.4-2.6 2.7 0 5.1 2.2 5.1 5.4 0 6.5-9.5 12.1-9.5 12.1z"/>',
-  // calendario con check (semanas completas)
-  oro: '<path d="M23 35.5h18a1.8 1.8 0 0 1 1.8 1.8v11.4a1.8 1.8 0 0 1-1.8 1.8H23a1.8 1.8 0 0 1-1.8-1.8V37.3a1.8 1.8 0 0 1 1.8-1.8z"/><rect x="26" y="32.5" width="2.4" height="5" rx="1"/><rect x="35.6" y="32.5" width="2.4" height="5" rx="1"/><path d="M26.6 44.2l3.6 3.4 7.4-7.2" fill="none" stroke="#FFF6C9" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
-};
-function medalSvg(kind, ok) {
-  var n = ++MEDAL_N, m = MEDAL_METAL[kind] || MEDAL_METAL.oro;
-  if (!ok) m = ['#5A6684', '#3C4766', '#283150', '#1E2640'];
-  var g = 'mg' + n, r = 'mr' + n;
-  var defs = '<defs><radialGradient id="' + g + '" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="' + m[0] + '"/><stop offset=".55" stop-color="' + m[1] + '"/><stop offset="1" stop-color="' + m[2] + '"/></radialGradient>'
-    + '<linearGradient id="' + r + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + m[1] + '"/><stop offset="1" stop-color="' + m[3] + '"/></linearGradient></defs>';
-  var lock = ok ? '' : '<g class="m-lock"><circle cx="49" cy="57" r="8" fill="#0B1B3F" stroke="#F5ECCB" stroke-width="1.5"/><rect x="45.2" y="56" width="7.6" height="5.6" rx="1.2" fill="#F5ECCB"/><path d="M46.6 56v-1.8a2.4 2.4 0 0 1 4.8 0V56" fill="none" stroke="#F5ECCB" stroke-width="1.4"/></g>';
-  var svg;
-  if (kind === 'diamante') {
-    // Diamante de verdad: piedra tallada con facetas y destellos
-    var f = ok ? ['#FFFFFF', '#D6F4FF', '#9EDFF5', '#5FB6E0', '#2F80B8', '#1D5E8E'] : ['#6A7694', '#56617F', '#48536F', '#3C4766', '#2E3858', '#232C48'];
-    svg = '<g stroke="' + f[5] + '" stroke-width=".8" stroke-linejoin="round">'
-      + '<path d="M18 24h28l8 9-22 27-22-27z" fill="' + f[3] + '"/>'
-      + '<path d="M18 24l6 9h16l6-9z" fill="' + f[1] + '"/>'
-      + '<path d="M10 33l8-9 6 9z" fill="' + f[2] + '"/><path d="M54 33l-8-9-6 9z" fill="' + f[2] + '"/>'
-      + '<path d="M10 33h14l8 27z" fill="' + f[2] + '"/><path d="M24 33h16l-8 27z" fill="' + f[1] + '"/><path d="M40 33h14L32 60z" fill="' + f[4] + '"/>'
+var MEDAL_LABEL = { bronce: 'PRIMER PASO', plata: 'MI PERFIL', oro: '2 SEMANAS', trofeo: 'META DEL MES', diamante: 'CONSTANCIA' };
+function medalScene(kind, id) {
+  var C = '#F5ECCB', B = '#1C55E5', D = '#0F3FA8';
+  if (kind === 'bronce') {
+    // Tenis dando el primer paso sobre un camino que sube hacia el sol
+    return '<circle cx="50" cy="58" r="15" fill="#F6D16A" opacity=".9"/>'
+      + '<path d="M18 92 Q40 70 50 70 Q60 70 82 92 Z" fill="' + D + '"/>'
+      + '<path d="M44 92 L48 72 L52 72 L56 92 Z" fill="' + C + '" opacity=".35"/>'
+      + '<g transform="translate(25 33) rotate(-10 24 20) scale(.92)">'
+      + '<path d="M4 30 Q6 18 16 16 L22 22 Q32 26 42 26 Q50 27 50 34 L50 37 L4 37 Z" fill="' + C + '"/>'
+      + '<path d="M4 37 H50 V40 Q50 42 48 42 H6 Q4 42 4 40 Z" fill="' + B + '"/>'
+      + '<path d="M20 22 l4 -3 M24 25 l4 -3 M28 27 l4 -3" stroke="' + B + '" stroke-width="2" stroke-linecap="round"/>'
+      + '<path d="M16 16 L22 22" stroke="' + B + '" stroke-width="2"/>'
       + '</g>'
-      + (ok ? '<path d="M21 26.5l4 5.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".9"/>'
-            + '<path d="M49 10l1.2 3.3 3.3 1.2-3.3 1.2L49 19l-1.2-3.3-3.3-1.2 3.3-1.2z" fill="#fff"/>'
-            + '<path d="M14 13l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" fill="#F5ECCB"/>' : '');
-  } else if (kind === 'trofeo') {
-    svg = defs
-      + '<path d="M22 14h20v4c0 9-4.5 15-10 15s-10-6-10-15z" fill="url(#' + g + ')" stroke="' + m[3] + '" stroke-width="1.2"/>'
-      + '<path d="M22 17h-5c0 6 2.5 9.5 7 10.5M42 17h5c0 6-2.5 9.5-7 10.5" fill="none" stroke="url(#' + r + ')" stroke-width="2.6" stroke-linecap="round"/>'
-      + '<rect x="29.5" y="32.5" width="5" height="9" fill="url(#' + r + ')"/>'
-      + '<path d="M24 41.5h16l2.5 7h-21z" fill="url(#' + g + ')" stroke="' + m[3] + '" stroke-width="1"/>'
-      + '<rect x="20" y="48.5" width="24" height="6" rx="1.5" fill="url(#' + r + ')"/>'
-      + '<path d="M32 18.5l1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5z" fill="' + (ok ? '#FFFBEA' : '#7C88A6') + '"/>'
-      + (ok ? '<path d="M25 17.5c.3 4.5 1.4 8 3.4 10.4" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.6" stroke-linecap="round"/>' : '');
-  } else {
-    // Medalla redonda sin cintas: borde festoneado (roseta) + aro + disco
-    // metálico + ícono grabado. Centro en (32,34).
-    var scallops = '';
-    for (var k = 0; k < 20; k++) {
-      var a = k / 20 * Math.PI * 2;
-      scallops += '<circle cx="' + (32 + Math.cos(a) * 26).toFixed(2) + '" cy="' + (34 + Math.sin(a) * 26).toFixed(2) + '" r="3.6"/>';
-    }
-    var ticks = '';
-    for (var t = 0; t < 40; t++) {
-      var b = t / 40 * Math.PI * 2;
-      ticks += '<path d="M' + (32 + Math.cos(b) * 22.6).toFixed(2) + ' ' + (34 + Math.sin(b) * 22.6).toFixed(2) + 'L' + (32 + Math.cos(b) * 24.2).toFixed(2) + ' ' + (34 + Math.sin(b) * 24.2).toFixed(2) + '"/>';
-    }
-    svg = defs
-      + '<g fill="url(#' + r + ')">' + scallops + '<circle cx="32" cy="34" r="26"/></g>'
-      + '<circle cx="32" cy="34" r="24.6" fill="none" stroke="' + m[0] + '" stroke-opacity="' + (ok ? '.55' : '.15') + '" stroke-width="1"/>'
-      + '<g stroke="' + m[3] + '" stroke-opacity=".55" stroke-width="1" stroke-linecap="round">' + ticks + '</g>'
-      + '<circle cx="32" cy="34" r="21" fill="url(#' + g + ')" stroke="' + m[3] + '" stroke-opacity=".5" stroke-width="1"/>'
-      + '<circle cx="32" cy="34" r="17" fill="none" stroke="' + m[3] + '" stroke-opacity=".45" stroke-width="1" stroke-dasharray="1.6 2.2"/>'
-      + '<g transform="translate(0,-9)" fill="' + m[3] + '" stroke="' + m[3] + '" stroke-width=".6" stroke-linejoin="round" opacity="' + (ok ? '.9' : '.75') + '">' + (MEDAL_ICON[kind] || '') + '</g>'
-      + (ok ? '<path d="M18.5 29a14.5 14.5 0 0 1 9.5-9.6" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="2" stroke-linecap="round"/>' : '');
+      + '<path d="M14 48 h10 M10 54 h12 M16 60 h8" stroke="' + C + '" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>';
   }
-  return '<svg class="medal-svg" viewBox="0 0 64 66" aria-hidden="true">' + svg + lock + '</svg>';
+  if (kind === 'plata') {
+    // Corazón con silueta: "así soy yo"
+    return '<path d="M50 84 C30 70 20 60 20 46 C20 37 27 31 35 31 C42 31 47 35 50 40 C53 35 58 31 65 31 C73 31 80 37 80 46 C80 60 70 70 50 84 Z" fill="' + C + '"/>'
+      + '<circle cx="50" cy="49" r="7.5" fill="' + B + '"/>'
+      + '<path d="M36 70 Q38 58 50 58 Q62 58 64 70 Q57 76 50 79 Q43 76 36 70 Z" fill="' + B + '"/>'
+      + '<path d="M27 40 Q29 35 34 34" stroke="#fff" stroke-width="2.4" stroke-linecap="round" fill="none"/>'
+      + '<path d="M78 24 l1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6 4 -1.6z M22 24 l1 2.6 2.6 1 -2.6 1 -1 2.6 -1 -2.6 -2.6 -1 2.6 -1z" fill="' + C + '"/>';
+  }
+  if (kind === 'oro') {
+    // Dos semanas completas: calendario con check y rayo de energía
+    return '<rect x="24" y="34" width="44" height="40" rx="6" fill="' + C + '"/>'
+      + '<path d="M24 40 a6 6 0 0 1 6 -6 h32 a6 6 0 0 1 6 6 v6 H24z" fill="' + B + '"/>'
+      + '<rect x="32" y="29" width="4" height="10" rx="2" fill="' + C + '"/><rect x="56" y="29" width="4" height="10" rx="2" fill="' + C + '"/>'
+      + '<path d="M33 60 l8 8 l16 -16" stroke="' + B + '" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+      + '<path d="M74 30 L64 50 h8 l-5 16 l14 -22 h-8 l6 -14 z" fill="#F6D16A" stroke="' + D + '" stroke-width="1.5" stroke-linejoin="round"/>';
+  }
+  if (kind === 'trofeo') {
+    // Copa con laureles y confeti
+    var g = 'tg' + id;
+    var leaves = '';
+    for (var i = 0; i < 5; i++) {
+      var y = 72 - i * 8, x = 24 + i * 1.6;
+      leaves += '<ellipse cx="' + x + '" cy="' + y + '" rx="3" ry="6" transform="rotate(' + (-40 + i * 12) + ' ' + x + ' ' + y + ')" fill="' + C + '"/>';
+      leaves += '<ellipse cx="' + (100 - x) + '" cy="' + y + '" rx="3" ry="6" transform="rotate(' + (40 - i * 12) + ' ' + (100 - x) + ' ' + y + ')" fill="' + C + '"/>';
+    }
+    return '<defs><linearGradient id="' + g + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF6C9"/><stop offset=".5" stop-color="#F4C542"/><stop offset="1" stop-color="#B07D10"/></linearGradient></defs>'
+      + leaves
+      + '<path d="M36 30 h28 v6 c0 13 -6 21 -14 21 s-14 -8 -14 -21 z" fill="url(#' + g + ')"/>'
+      + '<path d="M36 34 h-6 c0 8 3 12 8 13 M64 34 h6 c0 8 -3 12 -8 13" stroke="#F4C542" stroke-width="3" fill="none" stroke-linecap="round"/>'
+      + '<rect x="47" y="56" width="6" height="9" fill="#D9A520"/><path d="M39 65 h22 l3 8 h-28 z" fill="url(#' + g + ')"/>'
+      + '<path d="M50 36 l2.3 4.6 5 .7 -3.6 3.5 .9 5 -4.6 -2.4 -4.6 2.4 .9 -5 -3.6 -3.5 5 -.7z" fill="#FFFBEA"/>'
+      + '<rect x="22" y="26" width="4" height="7" rx="1" fill="' + B + '" transform="rotate(25 24 29)"/><rect x="74" y="24" width="4" height="7" rx="1" fill="#F6D16A" transform="rotate(-20 76 27)"/><circle cx="80" cy="44" r="2" fill="' + C + '"/><circle cx="19" cy="46" r="2" fill="#F6D16A"/>';
+  }
+  // diamante
+  return '<g stroke="#1D5E8E" stroke-width="1" stroke-linejoin="round">'
+    + '<path d="M30 36h40l10 12-30 34-30-34z" fill="#5FB6E0"/>'
+    + '<path d="M30 36l8 12h24l8-12z" fill="#D6F4FF"/>'
+    + '<path d="M20 48l10-12 8 12z" fill="#9EDFF5"/><path d="M80 48l-10-12-8 12z" fill="#9EDFF5"/>'
+    + '<path d="M20 48h18l12 34z" fill="#9EDFF5"/><path d="M38 48h24l-12 34z" fill="#D6F4FF"/><path d="M62 48h18L50 82z" fill="#2F80B8"/>'
+    + '</g>'
+    + '<path d="M33 39l5 7" stroke="#fff" stroke-width="2" stroke-linecap="round"/>'
+    + '<path d="M78 22l1.8 4.6 4.6 1.8-4.6 1.8L78 35l-1.8-4.6-4.6-1.8 4.6-1.8z" fill="#fff"/>'
+    + '<path d="M22 26l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z" fill="' + C + '"/>';
+}
+function medalSvg(kind, ok) {
+  var n = ++MEDAL_N, rim = MEDAL_RIM[kind] || MEDAL_RIM.oro;
+  var rg = 'mrg' + n, bg = 'mbg' + n, cp = 'mcp' + n;
+  var shield = 'M10 12 Q50 1 90 12 L88 54 Q84 86 50 106 Q16 86 12 54 Z';
+  var inner = 'M16 17 Q50 7 84 17 L82.5 54 Q79 81 50 99 Q21 81 17.5 54 Z';
+  var arcs = '';
+  for (var i = 0; i < 5; i++) arcs += '<circle cx="50" cy="96" r="' + (26 + i * 13) + '" fill="none" stroke="#fff" stroke-opacity="' + (0.13 - i * 0.02).toFixed(2) + '" stroke-width="6"/>';
+  var label = MEDAL_LABEL[kind] || '';
+  var svg = '<defs>'
+    + '<linearGradient id="' + rg + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + rim[0] + '"/><stop offset=".45" stop-color="' + rim[1] + '"/><stop offset="1" stop-color="' + rim[2] + '"/></linearGradient>'
+    + '<linearGradient id="' + bg + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E3F9E"/><stop offset="1" stop-color="#0A1638"/></linearGradient>'
+    + '<clipPath id="' + cp + '"><path d="' + inner + '"/></clipPath></defs>'
+    + '<path d="' + shield + '" fill="url(#' + rg + ')"/>'
+    + '<path d="' + shield + '" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="1"/>'
+    + '<path d="' + inner + '" fill="url(#' + bg + ')"/>'
+    + '<g clip-path="url(#' + cp + ')">' + arcs + medalScene(kind, n) + '</g>'
+    + '<path d="' + inner + '" fill="none" stroke="' + rim[2] + '" stroke-opacity=".6" stroke-width="1.2"/>'
+    + '<path d="M18 86 L82 86 L78 96 L22 96 Z" fill="url(#' + rg + ')" transform="translate(0 -6)"/>'
+    + '<text x="50" y="87" text-anchor="middle" font-family="Archivo Black, DM Sans, sans-serif" font-size="' + (label.length > 10 ? 6.3 : label.length > 8 ? 7 : 8.2) + '" fill="#0B1B3F" letter-spacing=".3">' + label + '</text>'
+    + '<path d="M22 16 Q36 10 48 9" stroke="#fff" stroke-opacity=".75" stroke-width="2" stroke-linecap="round" fill="none"/>';
+  var lock = ok ? '' : '<g><circle cx="84" cy="16" r="11" fill="#0B1B3F" stroke="#F5ECCB" stroke-width="2"/><rect x="78.5" y="14.5" width="11" height="8" rx="1.6" fill="#F5ECCB"/><path d="M80.6 14.5v-2.6a3.4 3.4 0 0 1 6.8 0v2.6" fill="none" stroke="#F5ECCB" stroke-width="2"/></g>';
+  return '<svg class="medal-svg' + (ok ? '' : ' locked') + '" viewBox="0 0 100 110" aria-hidden="true"><g class="medal-art">' + svg + '</g>' + lock + '</svg>';
+}
+
+// Fecha en que se ganó cada insignia (guardada en este celular).
+function medalDates() { try { return JSON.parse(localStorage.getItem('fa_medal_dates_' + currentUid) || '{}'); } catch (e) { return {}; } }
+function saveMedalDate(id) { var d = medalDates(); if (!d[id]) { d[id] = localKey(new Date()); try { localStorage.setItem('fa_medal_dates_' + currentUid, JSON.stringify(d)); } catch (e) {} } }
+function medalDate(id) {
+  var k = medalDates()[id]; if (!k) return '';
+  var p = k.split('-'); return parseInt(p[2], 10) + ' de ' + MESES_LARGOS[parseInt(p[1], 10) - 1] + ' ' + p[0];
 }
 
 // Medallas nuevas: se festejan una sola vez (se recuerdan en este celular).
@@ -2179,7 +2221,8 @@ function checkNewMedals() {
   try { localStorage.setItem(storeKey, JSON.stringify(seen)); } catch (e) {}
   setTimeout(function() {
     var premio = nueva.id.indexOf('meta-') === 0 && PREMIO_MES && PREMIO_MES.texto ? ' Ganaste: ' + PREMIO_MES.texto + '. Frida te escribirá 💙' : '';
-    celebrate('<div class="fa-cel-medal">' + medalSvg(nueva.kind, true) + '</div>', '¡Medalla de ' + nueva.tier.toLowerCase() + '!', nueva.name + '.' + premio);
+    saveMedalDate(nueva.id);
+    celebrate('<div class="fa-cel-medal">' + medalSvg(nueva.kind, true) + '</div>', '¡Nueva insignia!', nueva.name + ' · ' + nueva.tier + '.' + premio);
   }, 1400);
 }
 
@@ -2189,7 +2232,7 @@ function celebrate(icon, title, text, quiet, fromQueue) {
   // Si ya hay un festejo abierto, el nuevo espera su turno (uno a la vez).
   if (!fromQueue && document.getElementById('fa-celebrate')) { CELEBRATE_QUEUE.push([icon, title, text, quiet]); return; }
   var wrap = document.createElement('div');
-  wrap.id = 'fa-celebrate'; wrap.className = 'fa-celebrate' + (quiet ? ' quiet' : '');
+  wrap.id = 'fa-celebrate'; wrap.className = 'fa-celebrate' + (quiet ? ' quiet' : '') + (String(icon).indexOf('fa-cel-medal') > -1 ? ' dark' : '');
   var conf = '';
   if (!quiet) for (var i = 0; i < 26; i++) conf += '<span class="fa-cel-bit fa-c' + (i % 7) + '" style="--x:' + (Math.round(Math.random() * 100)) + 'vw;--r:' + (Math.round(Math.random() * 720) - 360) + 'deg;--t:' + (0.9 + Math.random() * 0.9).toFixed(2) + 's;--dl:' + (Math.random() * 0.3).toFixed(2) + 's"></span>';
   wrap.innerHTML = conf + '<div class="fa-cel-card" role="dialog" aria-live="polite"><div class="fa-cel-ico">' + icon + '</div><div class="fa-cel-title">' + escapeHtml(title) + '</div><div class="fa-cel-text">' + escapeHtml(text) + '</div><button type="button" class="fa-cel-btn">' + (quiet ? 'Entendido' : '¡Genial!') + '</button></div>';
