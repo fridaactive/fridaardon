@@ -845,6 +845,11 @@
   body.portal-dark .benef-logo-fallback, body.portal-dark .bp-hero-logo-fallback { background:var(--cream); color:#0D1B3E; }
   body.portal-dark .bp-marca { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; }
   body.portal-dark .bp-coupon { border-color:var(--cream); background:var(--surface); }
+  .bp-ig-btn svg { width:18px; height:18px; flex-shrink:0; }
+  body.portal-dark .bp-ig-btn { display:flex; justify-content:center; width:100%; box-sizing:border-box; background:var(--surface); border:1.5px solid var(--cream); color:var(--cream); border-radius:999px; padding:0.75rem 1rem; font-size:0.85rem; box-shadow:0 4px 0 rgba(245,236,203,0.25); }
+  body.portal-dark .bp-ig-btn:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(245,236,203,0.25); }
+  .benef-cover { width:calc(100% + 1.6rem); margin:-1.2rem -0.8rem 0.2rem; height:96px; background-size:cover; background-position:center; border-radius:22px 22px 0 0; }
+  .benef-logo.on-cover { margin-top:-1.9rem; border:3px solid var(--cream); background:#fff; position:relative; }
 
   /* ── Botones principales con relieve en todo el portal ── */
   body.portal-dark .btn-primary, body.portal-dark .pf-bio-save,
@@ -3891,10 +3896,15 @@ function renderBenefCardsHtml(items) {
     if (b._canjeado && !b._vencida) {
       html += '<div class="benef-check-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>';
     }
+    // Portada con la primera foto de la marca (si tiene), para que se vean
+    // las imágenes desde la lista y no solo al entrar al perfil.
+    if (b.fotos && b.fotos.length) {
+      html += '<div class="benef-cover" style="background-image:url(\'' + escapeHtml(b.fotos[0]).replace(/'/g, '%27') + '\')"></div>';
+    }
     // Sin un logo real no se muestra ningún círculo en su lugar — una
     // inicial inventada se puede confundir con el logo real de la marca.
     if (b.logoUrl) {
-      html += '<img class="benef-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
+      html += '<img class="benef-logo' + (b.fotos && b.fotos.length ? ' on-cover' : '') + '" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
     }
     html += '<div class="benef-marca"><span class="benef-marca-text">' + escapeHtml(b.marca || '') + '</span></div>';
     if (b.descuento) html += '<div class="benef-descuento-pill' + (b._vencida ? ' muted' : '') + '"><span class="benef-descuento-pill-text">' + escapeHtml(b.descuento) + '</span></div>';
