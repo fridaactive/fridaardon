@@ -33,10 +33,11 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 - Mejor sobre una zona oscura o lisa de la toma. Sombra suave, sin recuadros.
 - Se genera con `scripts/enfasis.py` (imagen fija, sobre foto, o animación con transparencia).
 
-**Elecciones en el Estudio (10 de noviembre de 2026):**
-- Sonidos que le gustan: whoosh grave (transiciones), pop suave (palabra en azul), brillo doble (palabra en cursiva). No: whoosh suave, whoosh rápido, pop, tic.
-- Transiciones: le gusta el zoom. No: corte seco, destello. (Deslizar, ventana y tapar el lente sin votar.)
+**Elecciones en el Estudio (actualizado el 10 de noviembre de 2026):**
+- Sonidos que le gustan: whoosh grave (transiciones), pop suave (palabra en azul), brillo doble, destello mágico y arpa que sube (brillos), subida (antes de revelar algo) y cierre (final del video). No: whoosh suave, whoosh rápido, pop, tic, tic-tac, latido, cámara, campana, golpe grave, golpe suave, pesa, aplauso.
+- Transiciones que le gustan: zoom, zoom hacia dentro, deslizar, fundido, ventana del carro, círculo, empujar hacia arriba y flash azul. No: corte seco, destello.
 - Estilos: le gustan frase + cursiva crema y énfasis amarillo. No: frase + azul con pop.
+- Quiere más sonidos en la biblioteca (Edits/CapCut no se pueden usar; opción pendiente: pedir acceso a Pixabay).
 
 **Palabras de Frida:** ella es **fitness coach**. Nunca escribir "entrenadora" en textos, frases ni captions.
 
