@@ -183,6 +183,42 @@ textarea.campo { min-height: 92px; resize: vertical; }
 .escena.go.corte .b { animation: verB 0s linear .05s both; }
 .escena.go.destello .velo { background: #fff; animation: lente .4s ease-out both; }
 .escena.go.destello .b { animation: verB 0s linear .2s both; }
+
+.escena.go.difuminar .a { animation: fuera .6s ease both; }
+.escena.go.difuminar .b { animation: dentro .6s ease both; }
+@keyframes fuera { to { opacity: 0; } }
+@keyframes dentro { from { opacity: 0; } to { opacity: 1; } }
+.escena.go.cortina .b { animation: cortina .6s cubic-bezier(.6,0,.3,1) both; }
+@keyframes cortina { from { opacity: 1; clip-path: polygon(0 0, 0 0, -40% 100%, -40% 100%); } to { opacity: 1; clip-path: polygon(0 0, 140% 0, 100% 100%, -40% 100%); } }
+.escena.go.circulo .b { animation: circulo .7s cubic-bezier(.5,0,.2,1) both; }
+@keyframes circulo { from { opacity: 1; clip-path: circle(0% at 50% 50%); } to { opacity: 1; clip-path: circle(80% at 50% 50%); } }
+.escena.go.zoom_dentro .a { animation: fuera .35s ease-in both; }
+.escena.go.zoom_dentro .b { animation: zoomDentro .5s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes zoomDentro { from { opacity: 0; transform: scale(2.2); filter: blur(8px); } to { opacity: 1; transform: none; filter: none; } }
+.escena.go.barrido .a { animation: barridoA .35s ease-in both; }
+.escena.go.barrido .b { animation: barridoB .35s ease-out .3s both; }
+@keyframes barridoA { to { transform: translateX(-60%); filter: blur(14px); opacity: .3; } }
+@keyframes barridoB { from { opacity: .3; transform: translateX(60%); filter: blur(14px); } to { opacity: 1; transform: none; filter: none; } }
+.escena.go.empuje .a { animation: empujeA .5s cubic-bezier(.7,0,.3,1) both; }
+.escena.go.empuje .b { animation: empujeB .5s cubic-bezier(.7,0,.3,1) both; }
+@keyframes empujeA { to { transform: translateY(-100%); } }
+@keyframes empujeB { from { opacity: 1; transform: translateY(100%); } to { opacity: 1; transform: none; } }
+.escena.go.giro .a { animation: giroA .4s ease-in both; }
+.escena.go.giro .b { animation: giroB .45s ease-out .35s both; }
+@keyframes giroA { to { transform: rotate(90deg) scale(.6); filter: blur(6px); opacity: 0; } }
+@keyframes giroB { from { opacity: 0; transform: rotate(-90deg) scale(.6); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+.escena.go.dividir .b { animation: dividir .6s cubic-bezier(.6,0,.3,1) both; }
+@keyframes dividir { from { opacity: 1; clip-path: inset(0 50% 0 50%); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+.escena.go.flash_azul .velo { background: #1C55E5; animation: lente .45s ease-out both; }
+.escena.go.flash_azul .b { animation: verB 0s linear .22s both; }
+.escena.go.sacudida .a { animation: sacudir .4s linear both; }
+.escena.go.sacudida .b { animation: verB 0s linear .4s both; }
+@keyframes sacudir { 0%,100% { transform: none; } 20% { transform: translate(-4cqw, 2cqw) rotate(-2deg); } 40% { transform: translate(4cqw, -2cqw) rotate(2deg); } 60% { transform: translate(-3cqw, -1cqw); } 80% { transform: translate(3cqw, 1cqw); } }
+.escena.go.rebote .b { animation: rebote .8s cubic-bezier(.3,0,.3,1) both; }
+@keyframes rebote { 0% { opacity: 1; transform: translateY(-100%); } 55% { transform: translateY(0); } 70% { transform: translateY(-12%); } 85% { transform: translateY(0); } 93% { transform: translateY(-4%); } 100% { opacity: 1; transform: none; } }
+.filtros { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+.cuenta { color: var(--ink-2); font-size: 13px; margin-left: 4px; }
+.drive { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; text-decoration: none; }
 .trans .nom { font-weight: 700; }
 .trans .desc { font-size: 13px; color: var(--ink-2); margin: 0; }
 
@@ -226,6 +262,7 @@ footer { padding-block: 40px 56px; color: var(--ink-2); font-size: 13px; }
 <header class="top wrap">
   <div class="marca"><span class="serif">Mi estudio</span><span class="script">Frida Active</span></div>
   <p class="lead">Tu biblioteca para editar reels: colores, letras, sonidos, transiciones y recursos. Prueba, escucha y marca lo que te gusta. Yo leo tus elecciones antes de editar cada video.</p>
+  <a class="boton drive" href="https://drive.google.com/drive/folders/1TzaMP-SqgZo4x7EA2FlsbY8f5oChVgJz" target="_blank" rel="noopener">Subir mis clips a Drive ↗</a>
 </header>
 
 <nav class="secciones" aria-label="Secciones">
@@ -310,13 +347,15 @@ conmigo siendo
 
   <section id="sonidos" class="wrap">
     <h2>Tus <em>sonidos</em></h2>
-    <p class="sub">Pocos y bien puestos: whoosh solo en transiciones, y un sonido solo en la palabra clave. Escúchalos y marca cuáles te gustan.</p>
+    <p class="sub">Pocos y bien puestos en cada video, pero muchos para elegir. Todos son originales, hechos para tu estudio. Escúchalos y marca cuáles te gustan.</p>
+    <div class="filtros" id="filtro-sonidos" role="group" aria-label="Filtrar sonidos"></div>
     <div class="sonidos" id="lista-sonidos"></div>
   </section>
 
   <section id="transiciones" class="wrap">
     <h2>Tus <em>transiciones</em></h2>
-    <p class="sub">Toca cada pantalla para ver el cambio de toma con su sonido.</p>
+    <p class="sub">Toca cada pantalla para ver el cambio de toma con su sonido. Cada una trae un sonido sugerido; si prefieres otro, dímelo en tus notas.</p>
+    <div class="filtros" id="filtro-trans" role="group" aria-label="Filtrar transiciones"></div>
     <div class="transiciones" id="lista-trans"></div>
   </section>
 
@@ -385,25 +424,9 @@ const COLORES = [
   { nombre: "Azul noche", hex: "#0D1B3E", uso: "Fondos oscuros y sombras de texto." }
 ];
 
-const SONIDOS = [
-  { id: "whoosh_suave", nom: "Whoosh suave", para: "Transición", desc: "El que ya usamos: aire que pasa." },
-  { id: "whoosh_rapido", nom: "Whoosh rápido", para: "Transición", desc: "Más corto y agudo, para cortes con energía." },
-  { id: "whoosh_grave", nom: "Whoosh grave", para: "Transición", desc: "Más profundo, para el gym o el carro." },
-  { id: "pop", nom: "Pop", para: "Palabra en azul", desc: "El de las mayúsculas azules." },
-  { id: "pop_suave", nom: "Pop suave", para: "Palabra en azul", desc: "Más discreto y grave." },
-  { id: "brillo", nom: "Brillo", para: "Palabra en cursiva", desc: "Campanita suave para la cursiva crema." },
-  { id: "brillo_doble", nom: "Brillo doble", para: "Palabra en cursiva", desc: "Dos notas, un poco más alegre." },
-  { id: "tic", nom: "Tic", para: "Detalles", desc: "Clic cortito para listas o números." }
-];
+const SONIDOS = [{"id": "whoosh_suave", "nom": "Whoosh suave", "para": "Transiciones", "desc": "Aire que pasa, el clásico."}, {"id": "whoosh_rapido", "nom": "Whoosh rápido", "para": "Transiciones", "desc": "Corto y agudo, con energía."}, {"id": "whoosh_grave", "nom": "Whoosh grave", "para": "Transiciones", "desc": "Profundo, para el gym o el carro."}, {"id": "whoosh_largo", "nom": "Whoosh largo", "para": "Transiciones", "desc": "Lento y elegante, para cambios de lugar."}, {"id": "whoosh_doble", "nom": "Whoosh doble", "para": "Transiciones", "desc": "Ida y vuelta, para dos cortes seguidos."}, {"id": "whoosh_eco", "nom": "Whoosh con eco", "para": "Transiciones", "desc": "Whoosh con cola espaciosa, más cinematográfico."}, {"id": "whoosh_sube", "nom": "Whoosh que sube", "para": "Transiciones", "desc": "El aire sube de tono, anticipa algo."}, {"id": "whoosh_baja", "nom": "Whoosh que baja", "para": "Transiciones", "desc": "El aire baja de tono, para cerrar una escena."}, {"id": "swipe_tela", "nom": "Swipe de tela", "para": "Transiciones", "desc": "Como mover ropa o una toalla rápido."}, {"id": "viento", "nom": "Ráfaga de viento", "para": "Transiciones", "desc": "Suave y natural, para tomas al aire libre."}, {"id": "pop", "nom": "Pop", "para": "Palabra clave", "desc": "Pop con brillo, el de las mayúsculas azules."}, {"id": "pop_suave", "nom": "Pop suave", "para": "Palabra clave", "desc": "Más discreto y grave."}, {"id": "burbuja", "nom": "Burbuja", "para": "Palabra clave", "desc": "Pop redondito que sube, tierno."}, {"id": "gota", "nom": "Gota de agua", "para": "Palabra clave", "desc": "Gota limpia, va con temas de hidratación o comida."}, {"id": "clic", "nom": "Clic", "para": "Palabra clave", "desc": "Clic seco, como tocar la pantalla."}, {"id": "chasquido", "nom": "Chasquido", "para": "Palabra clave", "desc": "Snap de dedos, para un ¡listo!"}, {"id": "tecla", "nom": "Tecla", "para": "Palabra clave", "desc": "Tecla de computadora, para escenas de trabajo."}, {"id": "boing", "nom": "Boing", "para": "Palabra clave", "desc": "Rebote divertido, para algo gracioso."}, {"id": "tic", "nom": "Tic", "para": "Palabra clave", "desc": "Clic cortito para listas o números."}, {"id": "brillo", "nom": "Brillo", "para": "Brillos", "desc": "Campanita suave para la cursiva crema."}, {"id": "brillo_doble", "nom": "Brillo doble", "para": "Brillos", "desc": "Dos notas, un poco más alegre."}, {"id": "destello_magico", "nom": "Destello mágico", "para": "Brillos", "desc": "Campanitas que suben, como polvo de estrellas."}, {"id": "estrella", "nom": "Estrella", "para": "Brillos", "desc": "Brillo que vibra, para algo especial."}, {"id": "ding", "nom": "Ding", "para": "Brillos", "desc": "Notificación limpia, para un dato importante."}, {"id": "campana", "nom": "Campana", "para": "Brillos", "desc": "Campana más grave y cálida."}, {"id": "arpa", "nom": "Arpa que sube", "para": "Brillos", "desc": "Arpegio rápido, para un antes y después."}, {"id": "golpe_grave", "nom": "Golpe grave", "para": "Impactos", "desc": "Boom profundo, para una frase fuerte."}, {"id": "golpe_suave", "nom": "Golpe suave", "para": "Impactos", "desc": "Thud apagado, sutil."}, {"id": "pesa", "nom": "Pesa metálica", "para": "Impactos", "desc": "Clank de metal, como un disco de pesas."}, {"id": "aplauso", "nom": "Aplauso", "para": "Impactos", "desc": "Una palmada, para celebrar."}, {"id": "cierre", "nom": "Cierre", "para": "Impactos", "desc": "Golpe grave con brillo, para terminar el video."}, {"id": "subida", "nom": "Subida", "para": "Tensión y ritmo", "desc": "Sube y sube antes de revelar algo."}, {"id": "latido", "nom": "Latido", "para": "Tensión y ritmo", "desc": "Dos latidos, para el cardio o un momento intenso."}, {"id": "tictac", "nom": "Tic-tac", "para": "Tensión y ritmo", "desc": "Reloj, para hablar del tiempo o la rutina."}, {"id": "camara", "nom": "Cámara de fotos", "para": "Tensión y ritmo", "desc": "Obturador, para fotos o un antes y después."}];
 
-const TRANS = [
-  { id: "desliza", nom: "Deslizar", desc: "La toma nueva entra de lado.", sfx: "whoosh_suave" },
-  { id: "zoom", nom: "Zoom", desc: "Acercamiento rápido con desenfoque.", sfx: "whoosh_rapido" },
-  { id: "ventana", nom: "Ventana del carro", desc: "La toma nueva baja como la ventana.", sfx: "whoosh_grave" },
-  { id: "lente", nom: "Tapar el lente", desc: "Tapas la cámara y destapas en otro lugar.", sfx: "whoosh_suave" },
-  { id: "destello", nom: "Destello", desc: "Un flash blanco cortito.", sfx: "brillo" },
-  { id: "corte", nom: "Corte seco", desc: "Sin efecto ni sonido.", sfx: null }
-];
+const TRANS = [{"id": "desliza", "nom": "Deslizar", "desc": "La toma nueva entra de lado.", "sfx": "whoosh_suave", "cat": "Suaves"}, {"id": "difuminar", "nom": "Fundido", "desc": "Una toma se disuelve en la otra.", "sfx": "whoosh_largo", "cat": "Suaves"}, {"id": "ventana", "nom": "Ventana del carro", "desc": "La toma nueva baja como la ventana.", "sfx": "whoosh_grave", "cat": "Suaves"}, {"id": "lente", "nom": "Tapar el lente", "desc": "Tapas la cámara y destapas en otro lugar.", "sfx": "whoosh_suave", "cat": "Suaves"}, {"id": "cortina", "nom": "Cortina", "desc": "La toma nueva entra en diagonal.", "sfx": "swipe_tela", "cat": "Suaves"}, {"id": "circulo", "nom": "Círculo", "desc": "La toma nueva se abre desde el centro.", "sfx": "destello_magico", "cat": "Suaves"}, {"id": "zoom", "nom": "Zoom", "desc": "Acercamiento rápido con desenfoque.", "sfx": "whoosh_rapido", "cat": "Con energía"}, {"id": "zoom_dentro", "nom": "Zoom hacia dentro", "desc": "La toma nueva llega desde muy cerca.", "sfx": "whoosh_baja", "cat": "Con energía"}, {"id": "barrido", "nom": "Barrido rápido", "desc": "Movimiento de cámara muy rápido de lado.", "sfx": "whoosh_rapido", "cat": "Con energía"}, {"id": "empuje", "nom": "Empujar hacia arriba", "desc": "La toma nueva empuja a la anterior.", "sfx": "whoosh_sube", "cat": "Con energía"}, {"id": "giro", "nom": "Giro", "desc": "La toma gira y aparece la siguiente.", "sfx": "whoosh_doble", "cat": "Con energía"}, {"id": "dividir", "nom": "Abrir al centro", "desc": "La toma nueva se abre como puerta.", "sfx": "whoosh_eco", "cat": "Con energía"}, {"id": "flash_azul", "nom": "Flash azul", "desc": "Un destello con tu azul de marca.", "sfx": "golpe_suave", "cat": "Con energía"}, {"id": "destello", "nom": "Destello", "desc": "Un flash blanco cortito.", "sfx": "brillo", "cat": "Con energía"}, {"id": "sacudida", "nom": "Sacudida", "desc": "La imagen tiembla antes del cambio.", "sfx": "golpe_grave", "cat": "Divertidas"}, {"id": "rebote", "nom": "Rebote", "desc": "La toma nueva cae y rebota.", "sfx": "boing", "cat": "Divertidas"}, {"id": "corte", "nom": "Corte seco", "desc": "Sin efecto ni sonido.", "sfx": null, "cat": "Divertidas"}];
 
 const MUESTRAS = [
   { id: "estilo_frase_cursiva", nom: "Frase + cursiva crema", desc: "Archivo Black blanca y la palabra clave en cursiva con brillo.", html: () => frase("así que paso por mi *almuerzo*", "cursiva"), fondo: "oscuro" },
@@ -561,12 +584,26 @@ MUESTRAS.forEach(m => {
 /* ---------- sonidos ---------- */
 const ICONO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>';
 const ls = $("#lista-sonidos");
+function filtros(contenedor, items, campo, onCambio) {
+  const cats = ["Todos"].concat([...new Set(items.map(i => i[campo]))]);
+  let actual = "Todos";
+  cats.forEach(c => {
+    const n = c === "Todos" ? items.length : items.filter(i => i[campo] === c).length;
+    const b = el("button", { class: "chip", type: "button", "aria-pressed": String(c === actual) }, [c, el("span", { class: "cuenta", text: String(n) })]);
+    b.onclick = () => { actual = c; contenedor.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); onCambio(c); };
+    contenedor.append(b);
+  });
+}
+const tarjetasSonido = [];
+filtros($("#filtro-sonidos"), SONIDOS, "para", c => tarjetasSonido.forEach(([s, n]) => n.hidden = c !== "Todos" && s.para !== c));
 SONIDOS.forEach(s => {
   const p = el("button", { class: "play", type: "button", "aria-label": "Escuchar " + s.nom });
   p.innerHTML = ICONO;
   p.onclick = () => { tocar(s.id); p.classList.remove("sonando"); void p.offsetWidth; p.classList.add("sonando"); };
-  ls.append(el("div", { class: "sonido" }, [p, el("div", {}, [el("span", { class: "para", text: s.para }), el("div", { class: "nom", text: s.nom })]),
-    el("div", { class: "desc", text: s.desc }), voto("sonido_" + s.id)]));
+  const tarjeta = el("div", { class: "sonido" }, [p, el("div", {}, [el("span", { class: "para", text: s.para }), el("div", { class: "nom", text: s.nom })]),
+    el("div", { class: "desc", text: s.desc }), voto("sonido_" + s.id)]);
+  tarjetasSonido.push([s, tarjeta]);
+  ls.append(tarjeta);
 });
 // Los votos de sonido también se usan para elegir el sonido de la animación.
 const _vp = votoPreferido;
@@ -577,6 +614,9 @@ votoPreferido = (familia) => {
 
 /* ---------- transiciones ---------- */
 const lt = $("#lista-trans");
+const tarjetasTrans = [];
+filtros($("#filtro-trans"), TRANS, "cat", c => tarjetasTrans.forEach(([x, n]) => n.hidden = c !== "Todos" && x.cat !== c));
+const nombreSonido = id => (SONIDOS.find(s => s.id === id) || {}).nom;
 TRANS.forEach(t => {
   const esc = el("button", { class: "escena " + t.id, type: "button", "aria-label": "Ver transición " + t.nom }, [
     el("div", { class: "toma a", text: "Toma 1" }), el("div", { class: "toma b", text: "Toma 2" }), el("div", { class: "velo" }), el("div", { class: "toque", text: "Toca para ver" })
@@ -586,7 +626,9 @@ TRANS.forEach(t => {
     tocar(t.sfx);
     clearTimeout(esc._t); esc._t = setTimeout(() => esc.classList.remove("go"), 2200);
   };
-  lt.append(el("div", { class: "trans" }, [esc, el("div", { class: "nom", text: t.nom }), el("p", { class: "desc", text: t.desc }), voto("trans_" + t.id)]));
+  const tarjeta = el("div", { class: "trans" }, [esc, el("span", { class: "para", text: t.cat }), el("div", { class: "nom", text: t.nom }), el("p", { class: "desc", text: t.desc + (t.sfx ? " Sonido: " + nombreSonido(t.sfx) + "." : "") }), voto("trans_" + t.id)]);
+  tarjetasTrans.push([t, tarjeta]);
+  lt.append(tarjeta);
 });
 
 /* ---------- recursos ---------- */
