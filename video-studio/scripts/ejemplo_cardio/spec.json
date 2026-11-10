@@ -1,0 +1,6 @@
+{"fonts": {"base": "/home/user/fridaardon/video-studio/fonts/ArchivoBlack.ttf", "serif": "/home/user/fridaardon/video-studio/fonts/InstrumentSerifItalic.ttf"},
+ "duration": 31.733, "blocks": [
+ {"start": 13.6, "end": 15.6, "size": 44, "lines": [[["base","SIN MÚSCULO NO HAY"]], [["base","FORMA QUE"]], [["serif","definir",0.4]]]},
+ {"start": 15.75, "end": 18.2, "size": 42, "lines": [[["base","LA BASE DE UN CUERPO"]], [["base","CON FORMA ES LA"]], [["serif","masa muscular",0.45]]]},
+ {"start": 18.35, "end": 20.3, "size": 42, "lines": [[["base","Y SE CONSTRUYE"]], [["base","LEVANTANDO PESO,"]], [["serif","pesado para ti",0.45]]]}
+]}
