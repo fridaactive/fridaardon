@@ -1,0 +1,678 @@
+<title>Estudio Frida Active</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Instrument+Serif:ital@1&family=Norican&display=swap">
+<style>
+/* Layout: estudio de trabajo — columna de controles a la izquierda y un celular de vista previa fijo a la derecha; secciones apiladas con navegación pegajosa. */
+:root {
+  --azul: #1C55E5;
+  --crema: #F5ECCB;
+  --amarillo: #F7D64D;
+  --noche: #0D1B3E;
+  --bg: #FBF7EA;
+  --panel: #FFFFFF;
+  --ink: #142247;
+  --ink-2: #4A5677;
+  --line: #E6DDC0;
+  --accent: #1C55E5;
+  --accent-ink: #FFFFFF;
+  --si: #1F8A5B;
+  --no: #C2412D;
+  --f-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --f-script: "Norican", "Brush Script MT", cursive;
+  --f-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-black: "Archivo Black", "Arial Black", Arial, sans-serif;
+  --f-cursiva: "Instrument Serif", Georgia, serif;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B1630; --panel: #12204A; --ink: #F5ECCB; --ink-2: #B9BFD3; --line: #24366B;
+    --accent: #6F94FF; --accent-ink: #0B1630; --si: #4FCB8E; --no: #FF8A75; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B1630; --panel: #12204A; --ink: #F5ECCB; --ink-2: #B9BFD3; --line: #24366B;
+  --accent: #6F94FF; --accent-ink: #0B1630; --si: #4FCB8E; --no: #FF8A75; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Encabezado */
+header.top { padding-block: 36px 18px; }
+.marca { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+.marca .serif { font-family: var(--f-display); font-variation-settings: "SOFT" 100, "opsz" 72; font-weight: 720; font-size: clamp(40px, 7vw, 64px); line-height: .9; letter-spacing: -0.02em; }
+.marca .script { font-family: var(--f-script); color: var(--accent); font-size: clamp(42px, 7.5vw, 70px); line-height: .8; transform: rotate(-3deg); display: inline-block; }
+.lead { color: var(--ink-2); max-width: 62ch; margin: 14px 0 0; }
+
+nav.secciones { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+nav.secciones .wrap { display: flex; gap: 4px; overflow-x: auto; padding-block: 10px; scrollbar-width: none; }
+nav.secciones a { white-space: nowrap; text-decoration: none; color: var(--ink-2); font-weight: 600; padding: 6px 12px; border-radius: 999px; font-size: 14px; }
+nav.secciones a:hover { color: var(--ink); background: var(--panel); }
+
+section { padding-block: 40px 8px; scroll-margin-top: 64px; }
+h2 { font-family: var(--f-display); font-variation-settings: "SOFT" 100, "opsz" 48; font-weight: 700; font-size: 30px; line-height: 1.05; margin: 0 0 6px; text-wrap: balance; letter-spacing: -0.01em; }
+h2 em { font-family: var(--f-script); font-style: normal; font-weight: 400; color: var(--accent); font-size: 1.15em; }
+.sub { color: var(--ink-2); margin: 0 0 20px; max-width: 64ch; }
+.eti { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-2); }
+
+.aviso { background: var(--panel); border: 1px dashed var(--line); border-radius: var(--r); padding: 12px 14px; color: var(--ink-2); font-size: 14px; }
+
+/* Votos */
+.voto { display: inline-flex; gap: 6px; }
+.voto button { border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 4px 11px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.voto button[aria-pressed="true"].si { background: var(--si); border-color: var(--si); color: #fff; }
+.voto button[aria-pressed="true"].no { background: var(--no); border-color: var(--no); color: #fff; }
+
+/* Colores */
+.colores { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.color { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; display: flex; flex-direction: column; }
+.color .muestra { height: 92px; }
+.color .info { padding: 12px 14px 14px; display: grid; gap: 4px; }
+.color .nombre { font-weight: 700; }
+.color .uso { color: var(--ink-2); font-size: 13px; }
+.color .hex { display: flex; justify-content: space-between; align-items: center; font-variant-numeric: tabular-nums; font-size: 13px; }
+.copiar { border: 0; background: transparent; color: var(--accent); font-weight: 700; font-size: 12px; padding: 2px 0; }
+
+/* Letras: área de trabajo */
+.taller { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; align-items: start; }
+.controles { display: grid; gap: 18px; min-width: 0; }
+.grupo { display: grid; gap: 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 7px 14px; font-weight: 600; font-size: 14px; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.campo { width: 100%; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 10px 12px; font-size: 16px; }
+textarea.campo { min-height: 92px; resize: vertical; }
+.ayuda { font-size: 13px; color: var(--ink-2); }
+.ayuda code { background: var(--panel); border: 1px solid var(--line); border-radius: 5px; padding: 0 5px; font-size: 12px; }
+.boton { border: 0; background: var(--accent); color: var(--accent-ink); font-weight: 700; border-radius: 999px; padding: 10px 18px; font-size: 15px; justify-self: start; }
+.boton.sec { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+
+.celular-col { position: sticky; top: 72px; display: grid; gap: 10px; justify-items: center; }
+.celular { width: 100%; max-width: 300px; aspect-ratio: 9 / 16; border-radius: 30px; border: 8px solid #0A0F1E; overflow: hidden; position: relative; container-type: inline-size; background: #2a211c; box-shadow: 0 18px 40px rgba(13, 27, 62, .25); }
+.celular .fondo { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.fondo.oscuro { background: radial-gradient(120% 80% at 70% 75%, #6b5543 0%, #2b211b 45%, #120d0a 100%); }
+.fondo.claro { background: radial-gradient(110% 70% at 30% 20%, #f3e3c6 0%, #c8a98a 55%, #7f6550 100%); }
+.fondo.azul { background: radial-gradient(120% 80% at 50% 10%, #3E74F2 0%, #1C55E5 45%, #0D1B3E 100%); }
+.fondo.tropical { background: radial-gradient(90% 60% at 20% 80%, #2f6b4a 0%, transparent 60%), radial-gradient(90% 70% at 85% 15%, #d9b56c 0%, transparent 55%), linear-gradient(160deg, #1f3d2e, #0f2219); }
+.celular .capa { position: absolute; inset: 0; display: grid; place-items: center; padding: 0 6cqw; text-align: center; }
+.ui-ig { position: absolute; right: 3cqw; bottom: 16cqw; display: grid; gap: 5cqw; opacity: .55; }
+.ui-ig span { width: 6.5cqw; height: 6.5cqw; border-radius: 50%; border: 0.6cqw solid #fff; display: block; }
+
+/* Estilos de texto aprobados (medidas en cqw = % del ancho del celular, igual que en la edición 1080x1920) */
+.frase { font-family: var(--f-black); color: #fff; text-transform: uppercase; font-size: 5.6cqw; line-height: 1.15; text-shadow: 0 0.6cqw 2.2cqw rgba(0,0,0,.55); }
+.frase .clave { display: inline-block; }
+.clave.cursiva { font-family: var(--f-cursiva); font-style: italic; text-transform: none; color: var(--crema); font-size: 10.5cqw; line-height: .9; text-shadow: 0 0 2.4cqw rgba(245,236,203,.55), 0 0.6cqw 2cqw rgba(0,0,0,.5); }
+.clave.pop { color: var(--azul); font-size: 8.4cqw; -webkit-text-stroke: 1.2cqw #fff; paint-order: stroke fill; text-shadow: 0 0.8cqw 2.4cqw rgba(0,0,0,.45); }
+.enfasis { display: grid; justify-items: center; }
+.enfasis .l-serif { font-family: var(--f-display); font-variation-settings: "SOFT" 100, "opsz" 48; font-weight: 720; font-size: 15.3cqw; line-height: .84; letter-spacing: -0.03em; white-space: nowrap; text-shadow: 0 0.5cqw 1.5cqw rgba(0,0,0,.45); }
+.enfasis .l-script { font-family: var(--f-script); font-size: 19cqw; line-height: .66; white-space: nowrap; transform: rotate(-3deg); text-shadow: 0 0.5cqw 1.5cqw rgba(0,0,0,.45); }
+.enfasis.crema .l-serif, .enfasis.crema .l-script { color: #F0E9D7; }
+.enfasis.amarillo .l-serif { color: #fff; }
+.enfasis.amarillo .l-script { color: var(--amarillo); }
+.enfasis.azul .l-serif { color: #F0E9D7; }
+.enfasis.azul .l-script { color: var(--azul); -webkit-text-stroke: 1.1cqw #fff; paint-order: stroke fill; }
+.subtitulo { position: absolute; left: 8cqw; right: 8cqw; bottom: 22cqw; text-align: center; font-family: var(--f-body); font-weight: 700; color: #fff; font-size: 4.6cqw; line-height: 1.25; text-shadow: 0 0.4cqw 1.6cqw rgba(0,0,0,.7); }
+
+/* Animaciones de la vista previa */
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop { 0% { transform: scale(.3); opacity: 0; } 60% { transform: scale(1.18); opacity: 1; } 100% { transform: scale(1); } }
+@keyframes brillo { 0% { opacity: 0; filter: blur(3px); transform: translateY(2cqw); } 100% { opacity: 1; filter: blur(0); transform: none; } }
+@keyframes subir { from { opacity: 0; transform: translateY(5cqw); } to { opacity: 1; transform: none; } }
+.anim .frase { animation: aparecer .3s ease-out both; }
+.anim .clave.pop { animation: pop .45s cubic-bezier(.2,.9,.3,1.3) .45s both; }
+.anim .clave.cursiva { animation: brillo .6s ease-out .45s both; }
+.anim .enfasis > div { animation: subir .45s cubic-bezier(.2,.8,.2,1) both; }
+.anim .subtitulo { animation: aparecer .25s ease-out both; }
+
+/* Tarjetas de muestra */
+.tarjetas { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; margin-top: 28px; }
+.tarjeta { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: grid; gap: 10px; align-content: start; }
+.tarjeta h3 { margin: 0; font-size: 16px; }
+.tarjeta p { margin: 0; font-size: 13px; color: var(--ink-2); }
+.mini { aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden; position: relative; container-type: inline-size; display: grid; place-items: center; text-align: center; padding: 0 6cqw; }
+.mini .frase { font-size: 6.5cqw; }
+.mini .clave.cursiva { font-size: 12cqw; }
+.mini .clave.pop { font-size: 9.5cqw; }
+.mini .enfasis .l-serif { font-size: 12.5cqw; }
+.mini .enfasis .l-script { font-size: 15cqw; }
+.pie { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+/* Sonidos */
+.sonidos { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.sonido { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; align-items: center; }
+.play { width: 46px; height: 46px; border-radius: 50%; border: 0; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; grid-row: span 2; }
+.play svg { width: 18px; height: 18px; fill: currentColor; }
+.play.sonando { animation: latido .5s ease-out; }
+@keyframes latido { 50% { transform: scale(1.12); } }
+.sonido .nom { font-weight: 700; }
+.sonido .desc { font-size: 13px; color: var(--ink-2); }
+.sonido .voto { grid-column: 1 / -1; }
+.para { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+
+/* Transiciones */
+.transiciones { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
+.trans { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 12px; display: grid; gap: 10px; align-content: start; }
+.escena { aspect-ratio: 9 / 16; border-radius: 12px; overflow: hidden; position: relative; container-type: inline-size; border: 0; padding: 0; width: 100%; display: block; }
+.toma { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--f-black); color: #fff; font-size: 11cqw; text-transform: uppercase; text-shadow: 0 1cqw 3cqw rgba(0,0,0,.4); }
+.toma.a { background: radial-gradient(100% 70% at 30% 30%, #d9b56c, #6b5543 70%, #2b211b); }
+.toma.b { background: radial-gradient(100% 70% at 70% 30%, #3E74F2, #1C55E5 50%, #0D1B3E); opacity: 0; }
+.escena .toque { position: absolute; left: 0; right: 0; bottom: 6cqw; text-align: center; font-family: var(--f-body); font-weight: 700; font-size: 7cqw; color: #fff; opacity: .9; }
+.velo { position: absolute; inset: 0; background: #050505; opacity: 0; pointer-events: none; }
+.escena.go.desliza .a { animation: salirIzq .45s ease-in both; }
+.escena.go.desliza .b { animation: entrarDer .45s ease-out both; }
+@keyframes salirIzq { to { transform: translateX(-100%); filter: blur(4px); } }
+@keyframes entrarDer { from { opacity: 1; transform: translateX(100%); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+.escena.go.zoom .a { animation: zoomOut .5s ease-in both; }
+.escena.go.zoom .b { animation: zoomIn .5s ease-out .25s both; }
+@keyframes zoomOut { to { transform: scale(1.6); filter: blur(6px); opacity: 0; } }
+@keyframes zoomIn { from { opacity: 0; transform: scale(.85); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+.escena.go.ventana .b { animation: ventana .7s cubic-bezier(.6,0,.3,1) both; }
+@keyframes ventana { from { opacity: 1; clip-path: inset(0 0 100% 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+.escena.go.lente .velo { animation: lente .8s ease-in-out both; }
+.escena.go.lente .b { animation: verB 0s linear .4s both; }
+@keyframes lente { 0% { opacity: 0; } 45%, 55% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes verB { to { opacity: 1; } }
+.escena.go.corte .b { animation: verB 0s linear .05s both; }
+.escena.go.destello .velo { background: #fff; animation: lente .4s ease-out both; }
+.escena.go.destello .b { animation: verB 0s linear .2s both; }
+.trans .nom { font-weight: 700; }
+.trans .desc { font-size: 13px; color: var(--ink-2); margin: 0; }
+
+/* Recursos */
+.subir { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; }
+.subir label.boton { cursor: pointer; }
+.subir input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 14px; }
+.recurso { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; display: grid; }
+.recurso .vista { aspect-ratio: 1; background: repeating-conic-gradient(var(--line) 0% 25%, transparent 0% 50%) 50% / 18px 18px; display: grid; place-items: center; }
+.recurso img, .recurso video { width: 100%; height: 100%; object-fit: contain; }
+.recurso .datos { padding: 8px 10px; display: grid; gap: 4px; font-size: 13px; }
+.recurso .acciones { display: flex; gap: 8px; flex-wrap: wrap; }
+.enlace { border: 0; background: transparent; padding: 0; font-weight: 700; font-size: 12px; color: var(--accent); }
+.enlace.peligro { color: var(--no); }
+.vacio { color: var(--ink-2); padding: 24px; text-align: center; border: 1px dashed var(--line); border-radius: var(--r); }
+
+/* Reglas */
+.reglas { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.lista { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; }
+.lista h3 { margin: 0 0 8px; font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: 20px; }
+.lista ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.lista.si h3 { color: var(--si); }
+.lista.no h3 { color: var(--no); }
+
+/* Notas para Claude */
+.notas { display: grid; gap: 10px; }
+.estado { font-size: 13px; color: var(--ink-2); min-height: 1.4em; }
+footer { padding-block: 40px 56px; color: var(--ink-2); font-size: 13px; }
+
+@media (max-width: 760px) {
+  .taller { grid-template-columns: minmax(0, 1fr); }
+  .celular-col { position: static; order: -1; }
+  .celular { max-width: 250px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; }
+}
+</style>
+
+<header class="top wrap">
+  <div class="marca"><span class="serif">Mi estudio</span><span class="script">Frida Active</span></div>
+  <p class="lead">Tu biblioteca para editar reels: colores, letras, sonidos, transiciones y recursos. Prueba, escucha y marca lo que te gusta. Yo leo tus elecciones antes de editar cada video.</p>
+</header>
+
+<nav class="secciones" aria-label="Secciones">
+  <div class="wrap">
+    <a href="#colores">Colores</a><a href="#letras">Letras</a><a href="#sonidos">Sonidos</a><a href="#transiciones">Transiciones</a><a href="#recursos">Recursos</a><a href="#reglas">Reglas</a><a href="#notas">Notas para Claude</a>
+  </div>
+</nav>
+
+<main>
+  <section id="colores" class="wrap">
+    <h2>Tus <em>colores</em></h2>
+    <p class="sub">Los de tu marca y para qué se usa cada uno en los videos. Nada de rosado.</p>
+    <div class="colores" id="lista-colores"></div>
+  </section>
+
+  <section id="letras" class="wrap">
+    <h2>Tus <em>letras</em></h2>
+    <p class="sub">Escribe una frase con tus palabras, elige el estilo y mira cómo se ve en el celular. Toca “Ver animación” para verla moverse con su sonido.</p>
+    <div class="taller">
+      <div class="controles">
+        <div class="grupo">
+          <span class="eti" id="eti-estilo">Estilo</span>
+          <div class="chips" role="group" aria-labelledby="eti-estilo" id="chips-estilo">
+            <button class="chip" data-estilo="frase" aria-pressed="true">Frase + palabra clave</button>
+            <button class="chip" data-estilo="enfasis" aria-pressed="false">Frase de énfasis</button>
+            <button class="chip" data-estilo="subtitulo" aria-pressed="false">Subtítulo</button>
+          </div>
+        </div>
+
+        <div class="grupo" id="g-frase">
+          <label class="eti" for="in-frase">Tu frase</label>
+          <input class="campo" id="in-frase" value="Primero *entreno*, después a comer" maxlength="90">
+          <span class="ayuda">Pon la palabra clave entre asteriscos: <code>*entreno*</code>. Solo una por frase.</span>
+          <span class="eti" id="eti-clave">Cómo se marca la palabra clave</span>
+          <div class="chips" role="group" aria-labelledby="eti-clave" id="chips-clave">
+            <button class="chip" data-clave="cursiva" aria-pressed="true">Cursiva crema · brillo</button>
+            <button class="chip" data-clave="pop" aria-pressed="false">Azul en mayúsculas · pop</button>
+          </div>
+        </div>
+
+        <div class="grupo" id="g-enfasis" hidden>
+          <label class="eti" for="in-enfasis">Tu frase de énfasis</label>
+          <textarea class="campo" id="in-enfasis" maxlength="120">Un día
+conmigo siendo
+*fitness coach*</textarea>
+          <span class="ayuda">Una línea por renglón. La línea entre asteriscos va en cursiva Norican: <code>*fitness coach*</code>. Para portada, gancho y cierre.</span>
+          <span class="eti" id="eti-color">Color</span>
+          <div class="chips" role="group" aria-labelledby="eti-color" id="chips-color">
+            <button class="chip" data-color="crema" aria-pressed="true">Crema</button>
+            <button class="chip" data-color="amarillo" aria-pressed="false">Blanco + amarillo</button>
+            <button class="chip" data-color="azul" aria-pressed="false">Crema + azul</button>
+          </div>
+        </div>
+
+        <div class="grupo" id="g-sub" hidden>
+          <label class="eti" for="in-sub">Lo que dices</label>
+          <input class="campo" id="in-sub" value="la cantidad de carne que trae, ¡increíble!" maxlength="80">
+          <span class="ayuda">Subtítulos pequeños abajo, solo cuando hablas a cámara.</span>
+        </div>
+
+        <div class="grupo">
+          <span class="eti" id="eti-fondo">Fondo de prueba</span>
+          <div class="chips" role="group" aria-labelledby="eti-fondo" id="chips-fondo"></div>
+          <span class="ayuda">Sube una foto tuya en Recursos y aparece aquí como fondo.</span>
+        </div>
+
+        <button class="boton" id="btn-animar">Ver animación</button>
+      </div>
+
+      <div class="celular-col">
+        <div class="celular" id="celular" aria-label="Vista previa en el celular">
+          <div class="fondo oscuro" id="fondo"></div>
+          <div class="capa" id="capa"></div>
+          <div class="ui-ig" aria-hidden="true"><span></span><span></span><span></span></div>
+        </div>
+        <span class="ayuda">Vista previa aproximada</span>
+      </div>
+    </div>
+
+    <div class="tarjetas" id="tarjetas-letras"></div>
+  </section>
+
+  <section id="sonidos" class="wrap">
+    <h2>Tus <em>sonidos</em></h2>
+    <p class="sub">Pocos y bien puestos: whoosh solo en transiciones, y un sonido solo en la palabra clave. Escúchalos y marca cuáles te gustan.</p>
+    <div class="sonidos" id="lista-sonidos"></div>
+  </section>
+
+  <section id="transiciones" class="wrap">
+    <h2>Tus <em>transiciones</em></h2>
+    <p class="sub">Toca cada pantalla para ver el cambio de toma con su sonido.</p>
+    <div class="transiciones" id="lista-trans"></div>
+  </section>
+
+  <section id="recursos" class="wrap">
+    <h2>Tus <em>recursos</em></h2>
+    <p class="sub">Fotos recortadas, tu logo, capturas de tu plataforma o stickers. Para recortar una foto en el iPhone: mantén presionada la persona y elige “Copiar sujeto”. Máximo 20 MB por archivo.</p>
+    <div id="recursos-ui">
+      <div class="subir">
+        <label class="boton" for="in-archivo">Subir archivo</label>
+        <input type="file" id="in-archivo" accept="image/*,video/mp4,video/quicktime">
+        <label class="eti" for="in-tipo">Tipo</label>
+        <select class="campo" id="in-tipo" style="width:auto">
+          <option>Foto recortada</option><option>Logo</option><option>Captura de mi plataforma</option><option>Sticker</option><option>Otro</option>
+        </select>
+        <span class="estado" id="estado-subir" role="status"></span>
+      </div>
+      <div class="galeria" id="galeria"></div>
+    </div>
+  </section>
+
+  <section id="reglas" class="wrap">
+    <h2>Tus <em>reglas</em></h2>
+    <p class="sub">Lo que ya decidiste. Lo sigo en cada video.</p>
+    <div class="reglas">
+      <div class="lista si"><h3>Sí</h3><ul>
+        <li>Historias con tus propias frases, como un consejo a una amiga.</li>
+        <li>Solo la palabra clave se marca, con efecto y sonido a la vez.</li>
+        <li>Frases de énfasis con Fraunces + Norican en portada, gancho y cierre.</li>
+        <li>Inicio que atrape en los primeros 2 segundos.</li>
+        <li>De 20 a 30 segundos, cortes de 1 a 2 segundos.</li>
+        <li>Colores naturales y video sin música (la pones en Instagram).</li>
+        <li>Eres <strong>fitness coach</strong>.</li>
+      </ul></div>
+      <div class="lista no"><h3>No</h3><ul>
+        <li>Recuadros de color detrás del texto.</li>
+        <li>Letras burbuja 3D.</li>
+        <li>Frases genéricas como “recargada”.</li>
+        <li>Un sonido por cada palabra.</li>
+        <li>Tiempos muertos (manejar, GPS).</li>
+        <li>La cursiva “de carta” (Mr Dafoe) y el rosado.</li>
+        <li>La palabra “entrenadora”.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="notas" class="wrap">
+    <h2>Notas para <em>Claude</em></h2>
+    <p class="sub">Escribe aquí lo que quieres que tome en cuenta: algo que viste, algo que ya no te gusta, una idea. Se guarda solo y lo leo antes de editar.</p>
+    <div class="notas">
+      <textarea class="campo" id="in-notas" rows="5" placeholder="Por ejemplo: en los videos de comida quiero el amarillo, y el whoosh grave me gusta más para el gym."></textarea>
+      <span class="estado" id="estado-notas" role="status"></span>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">Estudio de video de Frida Active · @fridaactive</footer>
+
+<script>
+const SFX = __SFX__;
+
+const COLORES = [
+  { nombre: "Azul Frida", hex: "#1C55E5", uso: "Palabra clave en mayúsculas, acentos y botones." },
+  { nombre: "Crema", hex: "#F5ECCB", uso: "Palabra clave en cursiva y frases de énfasis." },
+  { nombre: "Amarillo", hex: "#F7D64D", uso: "Cursiva de énfasis cuando el video pide energía." },
+  { nombre: "Blanco", hex: "#FFFFFF", uso: "Frases base en Archivo Black y bordes." },
+  { nombre: "Azul noche", hex: "#0D1B3E", uso: "Fondos oscuros y sombras de texto." }
+];
+
+const SONIDOS = [
+  { id: "whoosh_suave", nom: "Whoosh suave", para: "Transición", desc: "El que ya usamos: aire que pasa." },
+  { id: "whoosh_rapido", nom: "Whoosh rápido", para: "Transición", desc: "Más corto y agudo, para cortes con energía." },
+  { id: "whoosh_grave", nom: "Whoosh grave", para: "Transición", desc: "Más profundo, para el gym o el carro." },
+  { id: "pop", nom: "Pop", para: "Palabra en azul", desc: "El de las mayúsculas azules." },
+  { id: "pop_suave", nom: "Pop suave", para: "Palabra en azul", desc: "Más discreto y grave." },
+  { id: "brillo", nom: "Brillo", para: "Palabra en cursiva", desc: "Campanita suave para la cursiva crema." },
+  { id: "brillo_doble", nom: "Brillo doble", para: "Palabra en cursiva", desc: "Dos notas, un poco más alegre." },
+  { id: "tic", nom: "Tic", para: "Detalles", desc: "Clic cortito para listas o números." }
+];
+
+const TRANS = [
+  { id: "desliza", nom: "Deslizar", desc: "La toma nueva entra de lado.", sfx: "whoosh_suave" },
+  { id: "zoom", nom: "Zoom", desc: "Acercamiento rápido con desenfoque.", sfx: "whoosh_rapido" },
+  { id: "ventana", nom: "Ventana del carro", desc: "La toma nueva baja como la ventana.", sfx: "whoosh_grave" },
+  { id: "lente", nom: "Tapar el lente", desc: "Tapas la cámara y destapas en otro lugar.", sfx: "whoosh_suave" },
+  { id: "destello", nom: "Destello", desc: "Un flash blanco cortito.", sfx: "brillo" },
+  { id: "corte", nom: "Corte seco", desc: "Sin efecto ni sonido.", sfx: null }
+];
+
+const MUESTRAS = [
+  { id: "estilo_frase_cursiva", nom: "Frase + cursiva crema", desc: "Archivo Black blanca y la palabra clave en cursiva con brillo.", html: () => frase("así que paso por mi *almuerzo*", "cursiva"), fondo: "oscuro" },
+  { id: "estilo_frase_pop", nom: "Frase + azul con pop", desc: "La palabra clave en mayúsculas azules con borde blanco.", html: () => frase("primero *entreno*", "pop"), fondo: "claro" },
+  { id: "estilo_enfasis_crema", nom: "Énfasis crema", desc: "Fraunces + Norican, todo crema. Elegante.", html: () => enfasis("Pesas como\n*base*", "crema"), fondo: "oscuro" },
+  { id: "estilo_enfasis_amarillo", nom: "Énfasis amarillo", desc: "Blanco + cursiva amarilla. Con energía.", html: () => enfasis("Un día conmigo\n*fitness coach*", "amarillo"), fondo: "tropical" }
+];
+
+const FONDOS = [
+  { id: "oscuro", nom: "Gym oscuro" }, { id: "claro", nom: "Luz natural" },
+  { id: "tropical", nom: "Tropical" }, { id: "azul", nom: "Azul marca" }
+];
+
+/* ---------- utilidades ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const el = (tag, attrs = {}, kids = []) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else n.setAttribute(k, v);
+  }
+  for (const k of [].concat(kids)) if (k != null) n.append(k);
+  return n;
+};
+function tocar(id) {
+  if (!id || !SFX[id]) return;
+  try { const a = new Audio(SFX[id]); a.volume = 0.9; a.play().catch(() => {}); } catch (e) {}
+}
+function frase(texto, tipo) {
+  const box = el("div", { class: "frase" });
+  const partes = texto.split(/(\*[^*]+\*)/);
+  for (const p of partes) {
+    if (!p) continue;
+    if (p.startsWith("*") && p.endsWith("*") && p.length > 2) box.append(el("span", { class: "clave " + tipo, text: p.slice(1, -1) }));
+    else box.append(document.createTextNode(p));
+  }
+  return box;
+}
+function enfasis(texto, color) {
+  const box = el("div", { class: "enfasis " + color });
+  texto.split("\n").map(s => s.trim()).filter(Boolean).forEach((l, i) => {
+    const script = l.startsWith("*") && l.endsWith("*") && l.length > 2;
+    const d = el("div", { class: script ? "l-script" : "l-serif", text: script ? l.slice(1, -1) : l });
+    d.style.animationDelay = (i * 0.18) + "s";
+    box.append(d);
+  });
+  return box;
+}
+function ajustar(box, contenedor) {
+  // Si una línea es más ancha que el celular, se achica (como en la edición real).
+  requestAnimationFrame(() => {
+    const max = contenedor.clientWidth * 0.88;
+    box.querySelectorAll(".l-serif, .l-script").forEach(l => {
+      l.style.fontSize = "";
+      const w = l.scrollWidth;
+      if (w > max) l.style.fontSize = (parseFloat(getComputedStyle(l).fontSize) * max / w) + "px";
+    });
+  });
+}
+
+/* ---------- votos (guardados en la base de datos del estudio) ---------- */
+let db = null;
+const votos = {};
+const botonesVoto = {};
+function voto(id) {
+  const si = el("button", { class: "si", type: "button", "aria-pressed": "false", text: "Me gusta" });
+  const no = el("button", { class: "no", type: "button", "aria-pressed": "false", text: "No" });
+  const pintar = () => { si.setAttribute("aria-pressed", String(votos[id] === "si")); no.setAttribute("aria-pressed", String(votos[id] === "no")); };
+  const marcar = (v) => {
+    votos[id] = votos[id] === v ? null : v;
+    pintar();
+    if (db) db.collection("elecciones").doc(id).set({ voto: votos[id], actualizado: new Date().toISOString() }).catch(() => {});
+  };
+  si.onclick = () => marcar("si");
+  no.onclick = () => marcar("no");
+  (botonesVoto[id] = botonesVoto[id] || []).push(pintar);
+  return el("div", { class: "voto", role: "group", "aria-label": "Tu opinión" }, [si, no]);
+}
+function repintarVotos() { Object.values(botonesVoto).flat().forEach(f => f()); }
+
+/* ---------- colores ---------- */
+const lc = $("#lista-colores");
+COLORES.forEach(c => {
+  const copiar = el("button", { class: "copiar", type: "button", text: "Copiar" });
+  copiar.onclick = () => {
+    const ok = () => { copiar.textContent = "Copiado"; setTimeout(() => copiar.textContent = "Copiar", 1400); };
+    try { navigator.clipboard.writeText(c.hex).then(ok, () => { copiar.textContent = c.hex; }); } catch (e) { copiar.textContent = c.hex; }
+  };
+  const m = el("div", { class: "muestra" }); m.style.background = c.hex;
+  if (c.hex === "#FFFFFF" || c.hex === "#F5ECCB") m.style.borderBottom = "1px solid var(--line)";
+  lc.append(el("div", { class: "color" }, [m, el("div", { class: "info" }, [
+    el("span", { class: "nombre", text: c.nombre }), el("span", { class: "uso", text: c.uso }),
+    el("div", { class: "hex" }, [el("span", { text: c.hex }), copiar])
+  ])]));
+});
+
+/* ---------- taller de letras ---------- */
+const estado = { estilo: "frase", clave: "cursiva", color: "crema", fondo: "oscuro" };
+const recursosImg = [];
+function chipsGrupo(sel, clave) {
+  $(sel).addEventListener("click", e => {
+    const b = e.target.closest("button[data-" + clave + "]"); if (!b) return;
+    estado[clave] = b.dataset[clave];
+    $(sel).querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    if (clave === "estilo") { $("#g-frase").hidden = estado.estilo !== "frase"; $("#g-enfasis").hidden = estado.estilo !== "enfasis"; $("#g-sub").hidden = estado.estilo !== "subtitulo"; }
+    render(true);
+  });
+}
+chipsGrupo("#chips-estilo", "estilo");
+chipsGrupo("#chips-clave", "clave");
+chipsGrupo("#chips-color", "color");
+function pintarFondos() {
+  const c = $("#chips-fondo"); c.textContent = "";
+  FONDOS.concat(recursosImg.map(r => ({ id: "r:" + r.url, nom: r.nombre || "Mi foto" }))).forEach(f => {
+    const b = el("button", { class: "chip", type: "button", "aria-pressed": String(estado.fondo === f.id), text: f.nom });
+    b.onclick = () => { estado.fondo = f.id; pintarFondos(); render(false); };
+    c.append(b);
+  });
+}
+function render(animar) {
+  const fondo = $("#fondo");
+  fondo.className = "fondo"; fondo.style.backgroundImage = "";
+  if (estado.fondo.startsWith("r:")) fondo.style.backgroundImage = 'url("' + estado.fondo.slice(2).replace(/"/g, "") + '")';
+  else fondo.classList.add(estado.fondo);
+  const capa = $("#capa"); capa.textContent = "";
+  let box;
+  if (estado.estilo === "frase") box = frase($("#in-frase").value, estado.clave);
+  else if (estado.estilo === "enfasis") { box = enfasis($("#in-enfasis").value, estado.color); ajustar(box, $("#celular")); }
+  else box = el("div", { class: "subtitulo", text: $("#in-sub").value });
+  capa.append(box);
+  const cel = $("#celular");
+  cel.classList.remove("anim");
+  if (animar) { void cel.offsetWidth; cel.classList.add("anim"); }
+}
+["#in-frase", "#in-enfasis", "#in-sub"].forEach(s => $(s).addEventListener("input", () => render(false)));
+$("#btn-animar").onclick = () => {
+  render(true);
+  if (estado.estilo === "frase" && /\*[^*]+\*/.test($("#in-frase").value)) setTimeout(() => tocar(estado.clave === "pop" ? (votoPreferido("pop") || "pop") : (votoPreferido("brillo") || "brillo")), 450);
+};
+function votoPreferido(familia) {
+  const ids = SONIDOS.filter(s => s.id.startsWith(familia)).map(s => s.id);
+  return ids.find(i => votos[i] === "si");
+}
+pintarFondos();
+render(false);
+
+const tl = $("#tarjetas-letras");
+MUESTRAS.forEach(m => {
+  const mini = el("div", { class: "mini" }, [el("div", { class: "fondo " + m.fondo, style: "position:absolute;inset:0" })]);
+  const contenido = m.html(); contenido.style.position = "relative";
+  mini.append(contenido);
+  tl.append(el("div", { class: "tarjeta" }, [mini, el("h3", { text: m.nom }), el("p", { text: m.desc }), el("div", { class: "pie" }, [voto(m.id)])]));
+  if (contenido.classList.contains("enfasis")) ajustar(contenido, mini);
+});
+
+/* ---------- sonidos ---------- */
+const ICONO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>';
+const ls = $("#lista-sonidos");
+SONIDOS.forEach(s => {
+  const p = el("button", { class: "play", type: "button", "aria-label": "Escuchar " + s.nom });
+  p.innerHTML = ICONO;
+  p.onclick = () => { tocar(s.id); p.classList.remove("sonando"); void p.offsetWidth; p.classList.add("sonando"); };
+  ls.append(el("div", { class: "sonido" }, [p, el("div", {}, [el("span", { class: "para", text: s.para }), el("div", { class: "nom", text: s.nom })]),
+    el("div", { class: "desc", text: s.desc }), voto("sonido_" + s.id)]));
+});
+// Los votos de sonido también se usan para elegir el sonido de la animación.
+const _vp = votoPreferido;
+votoPreferido = (familia) => {
+  const ids = SONIDOS.filter(s => s.id.startsWith(familia)).map(s => s.id);
+  return ids.find(i => votos["sonido_" + i] === "si");
+};
+
+/* ---------- transiciones ---------- */
+const lt = $("#lista-trans");
+TRANS.forEach(t => {
+  const esc = el("button", { class: "escena " + t.id, type: "button", "aria-label": "Ver transición " + t.nom }, [
+    el("div", { class: "toma a", text: "Toma 1" }), el("div", { class: "toma b", text: "Toma 2" }), el("div", { class: "velo" }), el("div", { class: "toque", text: "Toca para ver" })
+  ]);
+  esc.onclick = () => {
+    esc.classList.remove("go"); void esc.offsetWidth; esc.classList.add("go");
+    tocar(t.sfx);
+    clearTimeout(esc._t); esc._t = setTimeout(() => esc.classList.remove("go"), 2200);
+  };
+  lt.append(el("div", { class: "trans" }, [esc, el("div", { class: "nom", text: t.nom }), el("p", { class: "desc", text: t.desc }), voto("trans_" + t.id)]));
+});
+
+/* ---------- recursos ---------- */
+let assets = null;
+const galeria = $("#galeria");
+let recursos = [];
+function pintarGaleria() {
+  galeria.textContent = "";
+  recursosImg.length = 0;
+  if (!recursos.length) { galeria.append(el("div", { class: "vacio", style: "grid-column:1/-1", text: "Todavía no hay recursos. Sube tu primera foto recortada o tu logo." })); pintarFondos(); return; }
+  recursos.forEach(r => {
+    const esVideo = (r.contentType || "").startsWith("video/");
+    if (!esVideo) recursosImg.push(r);
+    const media = esVideo ? el("video", { src: r.url, muted: "", playsinline: "", controls: "" }) : el("img", { src: r.url, alt: r.nombre || "Recurso" });
+    const borrar = el("button", { class: "enlace peligro", type: "button", text: "Borrar" });
+    const confirmar = el("button", { class: "enlace peligro", type: "button", text: "Sí, borrar", hidden: "" });
+    borrar.onclick = () => { confirmar.hidden = false; borrar.hidden = true; setTimeout(() => { confirmar.hidden = true; borrar.hidden = false; }, 4000); };
+    confirmar.onclick = async () => {
+      confirmar.disabled = true;
+      try { if (assets && r.assetId) await assets.delete(r.assetId); } catch (e) {}
+      try { await db.collection("recursos").doc(r.id).delete(); } catch (e) {}
+    };
+    const usar = esVideo ? null : el("button", { class: "enlace", type: "button", text: "Usar de fondo" });
+    if (usar) usar.onclick = () => { estado.fondo = "r:" + r.url; pintarFondos(); render(false); location.hash = "letras"; };
+    galeria.append(el("div", { class: "recurso" }, [el("div", { class: "vista" }, [media]),
+      el("div", { class: "datos" }, [el("strong", { text: r.nombre || "Sin nombre" }), el("span", { class: "eti", text: r.tipo || "" }), el("div", { class: "acciones" }, [usar, borrar, confirmar])])]));
+  });
+  pintarFondos();
+}
+$("#in-archivo").addEventListener("change", async (e) => {
+  const f = e.target.files && e.target.files[0]; if (!f) return;
+  const st = $("#estado-subir");
+  if (!assets || !db) { st.textContent = "Esta vista no permite subir archivos."; return; }
+  if (f.size > 20 * 1024 * 1024) { st.textContent = "El archivo pesa más de 20 MB. Para videos largos, súbelos a tu carpeta de Drive."; e.target.value = ""; return; }
+  st.textContent = "Subiendo " + f.name + "…";
+  try {
+    const up = await assets.upload(f);
+    await db.collection("recursos").add({ assetId: up.id, url: up.url, contentType: up.contentType, nombre: f.name.replace(/\.[^.]+$/, ""), tipo: $("#in-tipo").value, creado: new Date().toISOString() });
+    st.textContent = "Listo, ya está en tu biblioteca.";
+  } catch (err) {
+    st.textContent = err && err.code === "too_large" ? "El archivo es demasiado grande (máximo 20 MB)." : err && err.code === "unsupported_type" ? "Ese tipo de archivo no se puede subir. Usa una imagen (PNG, JPG) o un video MP4." : "No se pudo subir. Intenta de nuevo en un momento.";
+  }
+  e.target.value = "";
+});
+
+/* ---------- notas ---------- */
+let tNotas = null;
+$("#in-notas").addEventListener("input", () => {
+  clearTimeout(tNotas);
+  $("#estado-notas").textContent = "Escribiendo…";
+  tNotas = setTimeout(async () => {
+    if (!db) { $("#estado-notas").textContent = "Esta vista no puede guardar notas."; return; }
+    try { await db.doc("notas/general").set({ texto: $("#in-notas").value, actualizado: new Date().toISOString() }); $("#estado-notas").textContent = "Guardado"; }
+    catch (e) { $("#estado-notas").textContent = "No se pudo guardar. Revisa tu conexión."; }
+  }, 900);
+});
+
+/* ---------- conexión con la base de datos ---------- */
+(async () => {
+  if (!window.claude || !window.claude.use) { sinGuardar(); return; }
+  const timer = setTimeout(sinGuardar, 10000);
+  try {
+    db = await window.claude.use("db");
+    assets = await window.claude.use("assets");
+  } catch (e) { db = null; }
+  clearTimeout(timer);
+  if (!db) { sinGuardar(); return; }
+  if (!assets) { $("#recursos-ui .subir").hidden = true; }
+  db.collection("elecciones").onSnapshot(snap => {
+    snap.docs.forEach(d => { const v = d.data(); votos[d.id] = v ? v.voto : null; });
+    repintarVotos();
+  }, () => {});
+  db.collection("recursos").onSnapshot(snap => {
+    recursos = snap.docs.map(d => Object.assign({ id: d.id }, d.data())).sort((a, b) => String(b.creado).localeCompare(String(a.creado)));
+    pintarGaleria();
+  }, () => {});
+  db.doc("notas/general").onSnapshot(s => {
+    const v = s.exists ? s.data() : null;
+    if (v && document.activeElement !== $("#in-notas")) $("#in-notas").value = v.texto || "";
+  }, () => {});
+})();
+function sinGuardar() {
+  if (db) return;
+  const a = el("p", { class: "aviso", text: "En esta vista tus elecciones no se guardan. Abre el estudio desde tu cuenta de Claude para que se guarden." });
+  $("header.top").append(a);
+  pintarGaleria();
+}
+pintarGaleria();
+</script>

@@ -50,6 +50,7 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 - `scripts/ejemplo_tumadre.sh`: edición completa del reel de Tu Madre, como plantilla: cortes, transiciones, textos, sonidos y voz.
 - `scripts/enfasis.py`: frase de énfasis con serifa + cursiva de pincel, en imagen, sobre foto o animada (`.mov` con transparencia para encimar en el video).
 - `fonts/`: Archivo Black, Instrument Serif Italic, Fraunces, Norican, Playball, DM Serif Display y Mr Dafoe (licencia SIL Open Font License, de Google Fonts).
+- `portal/estudio.html`: el Estudio Frida Active (https://claude.ai/artifact/KeSgCgh6pLihwGCEuhgyg5), página privada con su biblioteca: colores, letras con vista previa, sonidos, transiciones, recursos subidos y notas para Claude. Sus votos están en la colección `elecciones` (ids `estilo_*`, `sonido_*`, `trans_*`), sus recursos en `recursos` y sus notas en `notas/general`: leerlos con ArtifactData antes de editar. `portal/plantilla.html` es la fuente (los sonidos se insertan en `__SFX__`).
 - `inspiraciones.md`: ideas y referencias que Frida quiere llegar a hacer.
 
 ## Preparar una sesión nueva
