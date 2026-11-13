@@ -49,11 +49,13 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 - Usó tomas en caminadora corriendo para el gancho.
 - Quiere inicios y finales con impacto. Para vlogs: ráfaga de tomas rápidas (0.35 s cada una) con el sonido "subida" y el título de golpe con destello; cierre con el producto o la recomendación y "Nos vemos ✨", no con tomas de relleno.
 
+**Pide más ayuda con efectos:** cuadros de texto que guíen el hilo de la historia, stickers y recursos visuales como en sus referencias. Cada texto debe tener que ver con lo que se ve en esa toma (no poner la frase de un producto sobre otra escena).
+
 **Palabras de Frida:** ella es **fitness coach**. Nunca escribir "entrenadora" en textos, frases ni captions.
 
 **Lo que no (probado y descartado):**
 
-- Recuadros de color detrás del texto.
+- Recuadros de color detrás de las frases (sí le gustan los cuadros-etiqueta que guían la historia: "💪 Mi entreno", "🥗 Almuerzo en Tu Madre", en azul con letra blanca).
 - Letras burbuja 3D (se ven de caricatura).
 - Textos grandes con frases genéricas ("recargada", "hora de recargar").
 - Un sonido por cada palabra: satura.

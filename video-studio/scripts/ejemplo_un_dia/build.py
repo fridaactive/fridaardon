@@ -7,7 +7,7 @@ D = S + '/ptm'; O = D + '/out'; SFX = S + '/portal/sfx2'
 W, H, FPS = 1080, 1920, 30
 TONE = "eq=contrast=1.1:saturation=1.15:gamma=0.92"
 # (inicio, fin) en la base; 'voz' conserva el audio
-CLIPS = [(79.2,79.55),(39.0,39.35),(13.2,13.55),(30.3,30.65),(76.3,76.65),(36.2,36.55),(67.1,69.6),
+CLIPS = [(79.1,79.55),(38.9,39.35),(13.1,13.55),(30.2,30.65),(76.2,76.65),(36.1,36.55),(67.1,69.6),
          (0.0,1.5),(2.75,4.2),(8.0,9.8),(12.8,14.5),(16.0,17.8),(19.8,21.6),(21.9,23.6),(24.7,26.6),(27.1,29.2),(29.7,31.8),(35.6,37.6),
          (38.6,40.6),(41.1,46.2,'voz'),(47.6,48.8,'voz'),(49.0,51.2),(58.0,59.9),(60.2,62.8),(64.0,65.8),(75.5,78.0),(78.4,80.6),
          (32.2,34.6),(70.2,72.4)]
@@ -17,10 +17,11 @@ lst = open('l.txt', 'w')
 for i, c in enumerate(CLIPS):
     a, b = c[0], c[1]; d = round(b - a, 3); starts.append(t); t += d
     out = f's{i:02d}.mov'
+    zoom = ',scale=1240:2204,crop=1080:1920' if i < 6 else ''
     if len(c) > 2:
         cmd = f'ffmpeg -nostdin -v error -y -ss {a} -t {d} -i {D}/base.mov -vf "{TONE},scale=1080:1920,fps=30,format=yuv420p" -af "highpass=f=90,afade=t=in:d=0.04,afade=t=out:st={d-0.05}:d=0.05" -ar 44100 -ac 2 -c:v libx264 -preset medium -crf 19 -c:a pcm_s16le {out}'
     else:
-        cmd = f'ffmpeg -nostdin -v error -y -ss {a} -t {d} -i {D}/base.mov -f lavfi -t {d} -i anullsrc=r=44100:cl=stereo -vf "{TONE},scale=1080:1920,fps=30,format=yuv420p" -map 0:v -map 1:a -c:v libx264 -preset medium -crf 19 -c:a pcm_s16le {out}'
+        cmd = f'ffmpeg -nostdin -v error -y -ss {a} -t {d} -i {D}/base.mov -f lavfi -t {d} -i anullsrc=r=44100:cl=stereo -vf "{TONE},scale=1080:1920{zoom},fps=30,format=yuv420p" -map 0:v -map 1:a -c:v libx264 -preset medium -crf 19 -c:a pcm_s16le {out}'
     subprocess.run(cmd, shell=True, check=True)
     lst.write(f"file '{O}/{out}'\n")
 lst.close()
@@ -96,12 +97,37 @@ for a, b, texto in SUBS:
         for p in l:
             items.append((a + k * dt, int(x) - 10, y0 + li * 78 - 20, p)); x += ancho(p) + 18; k += 1
     PLAN.append((a, b, items))
+f_card = ImageFont.truetype(FONT, 50); f_card.set_variation_by_name('ExtraBold')
+CARDS = [(st(7), st(9) - 0.1, '☀️', 'Mañana: estudio y trabajo'), (st(9), st(12) - 0.1, '💪', 'Mi entreno'),
+         (st(12), st(19) - 0.1, '🥗', 'Almuerzo en Tu Madre'), (st(21), st(24) - 0.1, '🏠', 'Clienta a domicilio'),
+         (st(24), st(27) - 0.1, '🚴', '6:00 p. m. · Clase de ciclo')]
+def card_img(emo, txt):
+    e = Image.new('RGBA', (140, 140), (0, 0, 0, 0)); ImageDraw.Draw(e).text((0, 0), emo, font=f_emo, embedded_color=True)
+    e = e.crop(e.getbbox()); sc = 50 / e.height; e = e.resize((int(e.width * sc), 50), Image.LANCZOS)
+    tw = int(f_card.getlength(txt)); w = 36 + e.width + 16 + tw + 40; h = 96
+    im = Image.new('RGBA', (w + 20, h + 24), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    sh = Image.new('RGBA', im.size, (0, 0, 0, 0)); ImageDraw.Draw(sh).rounded_rectangle((10, 16, w + 10, h + 16), radius=48, fill=(0, 0, 0, 120))
+    im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(8)))
+    d.rounded_rectangle((10, 10, w + 10, h + 10), radius=48, fill=(28, 85, 229, 255))
+    im.alpha_composite(e, (46, 10 + (h - 50) // 2))
+    d.text((46 + e.width + 16, 10 + h // 2), txt, font=f_card, fill=(255, 255, 255, 255), anchor='lm')
+    return im
+CARD_IMG = [card_img(e, t) for _, _, e, t in CARDS]
 EN = (enfasis.preparar("Un día conmigo siendo|*fitness coach*", "amarillo"), st(6) + 0.05, st(7) - 0.05)
 os.makedirs('fr', exist_ok=True)
 for fi in range(int(DUR * FPS)):
     t = fi / FPS; frame = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     (lin, pos), a, b = EN
     if a <= t < b: frame.alpha_composite(enfasis.componer(lin, pos, t - a, b - a))
+    for (a, b, _, _), im0 in zip(CARDS, CARD_IMG):
+        if not (a <= t < b): continue
+        p = (t - a) * FPS / 9; sc = 0 if p <= 0 else (0.5 + 0.7 * p / 0.6 if p < 0.6 else (1.2 - 0.2 * (p - 0.6) / 0.4 if p < 1 else 1))
+        fo = min(1, (b - t) * FPS / 5)
+        if sc <= 0: continue
+        im = im0.resize((max(1, int(im0.width * sc)), max(1, int(im0.height * sc))), Image.LANCZOS) if sc != 1 else im0.copy()
+        if fo < 1: im.putalpha(im.getchannel('A').point(lambda v: int(v * fo)))
+        cx, cy = 60 + im0.width // 2, 300 + im0.height // 2
+        frame.alpha_composite(im, (cx - im.width // 2, cy - im.height // 2))
     for a, b, items in PLAN:
         if not (a <= t < b): continue
         fo = min(1, (b - t) * FPS / 4)
@@ -116,13 +142,13 @@ for fi in range(int(DUR * FPS)):
 # sonidos (los favoritos de Frida, pocos)
 ev = [('subida', max(0, st(6) - 1.6), 0.7), ('destello_magico', st(6) + 0.08, 0.6), ('whoosh_grave', st(9) - 0.15, 0.8), ('whoosh_grave', st(12) - 0.15, 0.8),
       ('brillo_doble', t_santorini, 0.55), ('whoosh_grave', st(21) - 0.15, 0.8), ('whoosh_grave', st(24) - 0.15, 0.8),
-      ('cierre', st(28) + 0.1, 0.65)]
+      ('cierre', st(28) + 0.1, 0.65)] + [('pop_suave', a + 0.05, 0.6) for a, _, _, _ in CARDS]
 json.dump(ev, open('sfx.json', 'w'))
 ins = '-i base.mov'; fl = ''; mix = '[0:a]'
 for n, (nm, tt, vol) in enumerate(ev, 1):
     ins += f' -i {SFX}/{nm}.wav'; ms = int(tt * 1000); fl += f'[{n}:a]volume={vol},adelay={ms}|{ms},aformat=channel_layouts=stereo[s{n}];'; mix += f'[s{n}]'
 n = len(ev) + 1
 cmd = (f'ffmpeg -nostdin -v error -y {ins} -framerate 30 -i fr/f%04d.png -filter_complex "{fl}{mix}amix=inputs={n}:normalize=0:duration=first,alimiter=limit=0.9[a];[0:v][{n}:v]overlay=0:0:format=auto,format=yuv420p[v]" '
-       f'-map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 19 -r 30 -c:a aac -b:a 192k -movflags +faststart {D}/reel_un_dia_conmigo_v3.mp4')
+       f'-map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 19 -r 30 -c:a aac -b:a 192k -movflags +faststart {D}/reel_un_dia_conmigo_v4.mp4')
 subprocess.run(cmd, shell=True, check=True)
 print('duración', round(DUR, 2), 'subtítulos', len(SUBS), 'sonidos', len(ev))
