@@ -49,6 +49,8 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 - Usó tomas en caminadora corriendo para el gancho.
 - Quiere inicios y finales con impacto. Para vlogs: ráfaga de tomas rápidas (0.35 s cada una) con el sonido "subida" y el título de golpe con destello; cierre con el producto o la recomendación y "Nos vemos ✨", no con tomas de relleno.
 
+**Aprobado (13 de noviembre de 2026):** la versión 4 de "Un día conmigo" le encantó: ráfaga inicial con acercamientos + subida + título con destello, cuadros de capítulo azules con emoji y pop, frase del producto solo sobre la toma del producto, y cierre "Nos vemos ✨" en el espejo. Es la plantilla base para sus vlogs (`scripts/ejemplo_un_dia/build.py`).
+
 **Pide más ayuda con efectos:** cuadros de texto que guíen el hilo de la historia, stickers y recursos visuales como en sus referencias. Cada texto debe tener que ver con lo que se ve en esa toma (no poner la frase de un producto sobre otra escena).
 
 **Palabras de Frida:** ella es **fitness coach**. Nunca escribir "entrenadora" en textos, frases ni captions.
