@@ -7,9 +7,10 @@ D = S + '/ptm'; O = D + '/out'; SFX = S + '/portal/sfx2'
 W, H, FPS = 1080, 1920, 30
 TONE = "eq=contrast=1.1:saturation=1.15:gamma=0.92"
 # (inicio, fin) en la base; 'voz' conserva el audio
-CLIPS = [(0.0,1.5),(1.6,2.6),(2.75,4.2),(5.9,7.4),(8.0,9.8),(12.8,14.5),(16.0,17.8),(19.8,21.6),(21.9,23.6),(24.7,26.6),
-         (27.1,29.2),(29.7,31.8),(35.6,37.6),(38.6,40.6),(41.1,46.2,'voz'),(47.6,48.8,'voz'),(49.0,51.2),(55.0,56.8),(58.0,59.9),(60.2,62.8),
-         (64.0,65.8),(67.1,69.5),(75.5,78.0),(78.4,80.8),(82.7,84.95)]
+CLIPS = [(79.2,79.55),(39.0,39.35),(13.2,13.55),(30.3,30.65),(76.3,76.65),(36.2,36.55),(67.1,69.6),
+         (0.0,1.5),(2.75,4.2),(8.0,9.8),(12.8,14.5),(16.0,17.8),(19.8,21.6),(21.9,23.6),(24.7,26.6),(27.1,29.2),(29.7,31.8),(35.6,37.6),
+         (38.6,40.6),(41.1,46.2,'voz'),(47.6,48.8,'voz'),(49.0,51.2),(58.0,59.9),(60.2,62.8),(64.0,65.8),(75.5,78.0),(78.4,80.6),
+         (32.2,34.6),(70.2,72.4)]
 os.chdir(O)
 starts = []; t = 0
 lst = open('l.txt', 'w')
@@ -39,22 +40,22 @@ def tvoz(word):
         if x['word'] == word and 41 <= x['start'] <= 49:
             return x
 SUBS = [  # (inicio, fin, texto)
- (st(2)+0.05, st(4)-0.05, "Empiezo estudiando y trabajando 💻"),
- (st(4)+0.1, st(7)-0.05, "Después, a entrenar 💪"),
- (st(7)+0.05, st(9)-0.05, "En días así necesito comer algo saludable, pero que de verdad me nutra"),
- (st(9)+0.05, st(12)-0.05, "Así que paso por mi almuerzo a Productos Tu Madre"),
- (st(12)+0.05, st(13)-0.05, "Y para acompañar, mi shake 🥤"),
+ (st(7)+0.05, st(9)-0.05, "Empiezo estudiando y trabajando 💻"),
+ (st(9)+0.1, st(12)-0.05, "Después, a entrenar 💪"),
+ (st(12)+0.05, st(14)-0.05, "En días así necesito comer algo saludable, pero que de verdad me nutra"),
+ (st(14)+0.05, st(17)-0.05, "Así que paso por mi almuerzo a Productos Tu Madre"),
+ (st(17)+0.05, st(18)-0.05, "Y para acompañar, mi shake 🥤"),
 ]
-c13 = CLIPS[14][0]; c14 = CLIPS[15][0]
+c13 = CLIPS[19][0]; c14 = CLIPS[20][0]
 v = lambda w, base, s0: s0 + tvoz(w)['start'] - base
-SUBS += [(v('esta', c13, st(14)), st(15), "Esta vez me pedí el Santorini bowl 🥗"),
-         (st(15) + 0.05, st(16) - 0.05, "¡Qué rico!")]
-SUBS += [(st(16)+0.05, st(20)-0.05, "Después, sesión a domicilio con mi clienta"),
-         (st(20)+0.05, st(22)-0.05, "Y cierro el día con mi clase de ciclo 🔥"),
-         (st(22)+0.1, st(24)+0.6, "Si pasas por Tu Madre, pide el Santorini bowl y después me cuentas"),
-         (st(24)+0.75, DUR, "Nos vemos ✨")]
+SUBS += [(v('esta', c13, st(19)), st(20), "Esta vez me pedí el Santorini bowl 🥗"),
+         (st(20) + 0.05, st(21) - 0.05, "¡Qué rico!")]
+SUBS += [(st(21)+0.05, st(24)-0.05, "Después, sesión a domicilio con mi clienta"),
+         (st(24)+0.05, st(27)-0.05, "Y cierro el día con mi clase de ciclo 🔥"),
+         (st(27)+0.05, st(28)-0.05, "Si pasas por Tu Madre, pide el Santorini bowl y después me cuentas"),
+         (st(28)+0.1, DUR, "Nos vemos ✨")]
 # la palabra "Santorini" del review lleva brillo
-t_santorini = v('santorini', c13, st(14))
+t_santorini = v('santorini', c13, st(19))
 
 def es_emoji(ch): return ord(ch) > 0x2500
 def ancho(pal):
@@ -95,7 +96,7 @@ for a, b, texto in SUBS:
         for p in l:
             items.append((a + k * dt, int(x) - 10, y0 + li * 78 - 20, p)); x += ancho(p) + 18; k += 1
     PLAN.append((a, b, items))
-EN = (enfasis.preparar("Un día conmigo siendo|*fitness coach*", "amarillo"), 0.05, st(2) - 0.05)
+EN = (enfasis.preparar("Un día conmigo siendo|*fitness coach*", "amarillo"), st(6) + 0.05, st(7) - 0.05)
 os.makedirs('fr', exist_ok=True)
 for fi in range(int(DUR * FPS)):
     t = fi / FPS; frame = Image.new('RGBA', (W, H), (0, 0, 0, 0))
@@ -113,15 +114,15 @@ for fi in range(int(DUR * FPS)):
             frame.alpha_composite(im, (x, y + int((1 - pr) * 10)))
     frame.save(f'fr/f{fi:04d}.png', compress_level=1)
 # sonidos (los favoritos de Frida, pocos)
-ev = [('destello_magico', 0.45, 0.5), ('whoosh_grave', st(4) - 0.15, 0.8), ('whoosh_grave', st(7) - 0.15, 0.8),
-      ('brillo_doble', t_santorini, 0.55), ('whoosh_grave', st(16) - 0.15, 0.8), ('whoosh_grave', st(20) - 0.15, 0.8),
-      ('cierre', st(24) + 0.75, 0.6)]
+ev = [('subida', max(0, st(6) - 1.6), 0.7), ('destello_magico', st(6) + 0.08, 0.6), ('whoosh_grave', st(9) - 0.15, 0.8), ('whoosh_grave', st(12) - 0.15, 0.8),
+      ('brillo_doble', t_santorini, 0.55), ('whoosh_grave', st(21) - 0.15, 0.8), ('whoosh_grave', st(24) - 0.15, 0.8),
+      ('cierre', st(28) + 0.1, 0.65)]
 json.dump(ev, open('sfx.json', 'w'))
 ins = '-i base.mov'; fl = ''; mix = '[0:a]'
 for n, (nm, tt, vol) in enumerate(ev, 1):
     ins += f' -i {SFX}/{nm}.wav'; ms = int(tt * 1000); fl += f'[{n}:a]volume={vol},adelay={ms}|{ms},aformat=channel_layouts=stereo[s{n}];'; mix += f'[s{n}]'
 n = len(ev) + 1
 cmd = (f'ffmpeg -nostdin -v error -y {ins} -framerate 30 -i fr/f%04d.png -filter_complex "{fl}{mix}amix=inputs={n}:normalize=0:duration=first,alimiter=limit=0.9[a];[0:v][{n}:v]overlay=0:0:format=auto,format=yuv420p[v]" '
-       f'-map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 19 -r 30 -c:a aac -b:a 192k -movflags +faststart {D}/reel_un_dia_conmigo_v2.mp4')
+       f'-map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 19 -r 30 -c:a aac -b:a 192k -movflags +faststart {D}/reel_un_dia_conmigo_v3.mp4')
 subprocess.run(cmd, shell=True, check=True)
 print('duración', round(DUR, 2), 'subtítulos', len(SUBS), 'sonidos', len(ev))

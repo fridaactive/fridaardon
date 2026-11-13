@@ -47,6 +47,7 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 - Cierra con "Nos vemos" y un sticker de destellos ✨.
 - Cortes casi todos directos; duración de 36 segundos (le funciona algo más largo que 30 cuando habla). Para los vlogs de un día pidió de 45 a 50 segundos.
 - Usó tomas en caminadora corriendo para el gancho.
+- Quiere inicios y finales con impacto. Para vlogs: ráfaga de tomas rápidas (0.35 s cada una) con el sonido "subida" y el título de golpe con destello; cierre con el producto o la recomendación y "Nos vemos ✨", no con tomas de relleno.
 
 **Palabras de Frida:** ella es **fitness coach**. Nunca escribir "entrenadora" en textos, frases ni captions.
 
