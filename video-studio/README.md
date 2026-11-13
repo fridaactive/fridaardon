@@ -45,7 +45,7 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 - Al final del video solo deja en pantalla las ideas clave con emoji: "Bajar de peso ✅", "Verte más definida ✅", "MÁS PESADO" en mayúsculas.
 - Gancho con filtro de color distinto (blanco y negro, azul) para marcar "el antes"; luego vuelve el color normal.
 - Cierra con "Nos vemos" y un sticker de destellos ✨.
-- Cortes casi todos directos; duración de 36 segundos (le funciona algo más largo que 30 cuando habla).
+- Cortes casi todos directos; duración de 36 segundos (le funciona algo más largo que 30 cuando habla). Para los vlogs de un día pidió de 45 a 50 segundos.
 - Usó tomas en caminadora corriendo para el gancho.
 
 **Palabras de Frida:** ella es **fitness coach**. Nunca escribir "entrenadora" en textos, frases ni captions.
