@@ -39,6 +39,15 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 - Estilos: le gustan frase + cursiva crema y énfasis amarillo. No: frase + azul con pop.
 - Quiere más sonidos en la biblioteca (Edits/CapCut no se pueden usar; opción pendiente: pedir acceso a Pixabay).
 
+**Cómo edita Frida (aprendido de su versión de "Cardio vs pesas", 13 de noviembre de 2026):**
+- Su voz narra casi todo el video, también sobre las tomas de entreno (voz en off). El texto en pantalla no reemplaza a la voz.
+- Subtítulos pequeños, blancos, en el centro de la pantalla, que aparecen palabra por palabra mientras habla.
+- Al final del video solo deja en pantalla las ideas clave con emoji: "Bajar de peso ✅", "Verte más definida ✅", "MÁS PESADO" en mayúsculas.
+- Gancho con filtro de color distinto (blanco y negro, azul) para marcar "el antes"; luego vuelve el color normal.
+- Cierra con "Nos vemos" y un sticker de destellos ✨.
+- Cortes casi todos directos; duración de 36 segundos (le funciona algo más largo que 30 cuando habla).
+- Usó tomas en caminadora corriendo para el gancho.
+
 **Palabras de Frida:** ella es **fitness coach**. Nunca escribir "entrenadora" en textos, frases ni captions.
 
 **Lo que no (probado y descartado):**
