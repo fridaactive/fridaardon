@@ -51,6 +51,11 @@ Herramientas y guía de estilo para editar los reels de Frida Active con el mism
 
 **Aprobado (13 de noviembre de 2026):** la versión 4 de "Un día conmigo" le encantó: ráfaga inicial con acercamientos + subida + título con destello, cuadros de capítulo azules con emoji y pop, frase del producto solo sobre la toma del producto, y cierre "Nos vemos ✨" en el espejo. Es la plantilla base para sus vlogs (`scripts/ejemplo_un_dia/build.py`).
 
+**Cambios pedidos el 13 de noviembre de 2026 (versión 5):**
+- Sin emojis en los textos (no le gustan).
+- Sin cuadros azules de capítulo: repiten lo que ya dice el subtítulo.
+- Calidad: le bajaba calidad al video. Ahora los cortes intermedios se exportan casi sin pérdida (crf 8) y el final una sola vez con crf 14, preset slow (unos 20 Mbps). Recordarle subir a Instagram con "máxima calidad".
+
 **Pide más ayuda con efectos:** cuadros de texto que guíen el hilo de la historia, stickers y recursos visuales como en sus referencias. Cada texto debe tener que ver con lo que se ve en esa toma (no poner la frase de un producto sobre otra escena).
 
 **Palabras de Frida:** ella es **fitness coach**. Nunca escribir "entrenadora" en textos, frases ni captions.

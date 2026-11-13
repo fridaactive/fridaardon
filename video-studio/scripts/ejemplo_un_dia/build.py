@@ -19,9 +19,9 @@ for i, c in enumerate(CLIPS):
     out = f's{i:02d}.mov'
     zoom = ',scale=1240:2204,crop=1080:1920' if i < 6 else ''
     if len(c) > 2:
-        cmd = f'ffmpeg -nostdin -v error -y -ss {a} -t {d} -i {D}/base.mov -vf "{TONE},scale=1080:1920,fps=30,format=yuv420p" -af "highpass=f=90,afade=t=in:d=0.04,afade=t=out:st={d-0.05}:d=0.05" -ar 44100 -ac 2 -c:v libx264 -preset medium -crf 19 -c:a pcm_s16le {out}'
+        cmd = f'ffmpeg -nostdin -v error -y -ss {a} -t {d} -i {D}/base.mov -vf "{TONE},scale=1080:1920,fps=30,format=yuv420p" -af "highpass=f=90,afade=t=in:d=0.04,afade=t=out:st={d-0.05}:d=0.05" -ar 44100 -ac 2 -c:v libx264 -preset fast -crf 8 -pix_fmt yuv420p -c:a pcm_s16le {out}'
     else:
-        cmd = f'ffmpeg -nostdin -v error -y -ss {a} -t {d} -i {D}/base.mov -f lavfi -t {d} -i anullsrc=r=44100:cl=stereo -vf "{TONE},scale=1080:1920{zoom},fps=30,format=yuv420p" -map 0:v -map 1:a -c:v libx264 -preset medium -crf 19 -c:a pcm_s16le {out}'
+        cmd = f'ffmpeg -nostdin -v error -y -ss {a} -t {d} -i {D}/base.mov -f lavfi -t {d} -i anullsrc=r=44100:cl=stereo -vf "{TONE},scale=1080:1920{zoom},fps=30,format=yuv420p" -map 0:v -map 1:a -c:v libx264 -preset fast -crf 8 -pix_fmt yuv420p -c:a pcm_s16le {out}'
     subprocess.run(cmd, shell=True, check=True)
     lst.write(f"file '{O}/{out}'\n")
 lst.close()
@@ -41,20 +41,20 @@ def tvoz(word):
         if x['word'] == word and 41 <= x['start'] <= 49:
             return x
 SUBS = [  # (inicio, fin, texto)
- (st(7)+0.05, st(9)-0.05, "Empiezo estudiando y trabajando 💻"),
- (st(9)+0.1, st(12)-0.05, "Después, a entrenar 💪"),
+ (st(7)+0.05, st(9)-0.05, "Empiezo estudiando y trabajando"),
+ (st(9)+0.1, st(12)-0.05, "Después, a entrenar"),
  (st(12)+0.05, st(14)-0.05, "En días así necesito comer algo saludable, pero que de verdad me nutra"),
  (st(14)+0.05, st(17)-0.05, "Así que paso por mi almuerzo a Productos Tu Madre"),
- (st(17)+0.05, st(18)-0.05, "Y para acompañar, mi shake 🥤"),
+ (st(17)+0.05, st(18)-0.05, "Y para acompañar, mi shake"),
 ]
 c13 = CLIPS[19][0]; c14 = CLIPS[20][0]
 v = lambda w, base, s0: s0 + tvoz(w)['start'] - base
-SUBS += [(v('esta', c13, st(19)), st(20), "Esta vez me pedí el Santorini bowl 🥗"),
+SUBS += [(v('esta', c13, st(19)), st(20), "Esta vez me pedí el Santorini bowl"),
          (st(20) + 0.05, st(21) - 0.05, "¡Qué rico!")]
 SUBS += [(st(21)+0.05, st(24)-0.05, "Después, sesión a domicilio con mi clienta"),
-         (st(24)+0.05, st(27)-0.05, "Y cierro el día con mi clase de ciclo 🔥"),
+         (st(24)+0.05, st(27)-0.05, "Y cierro el día con mi clase de ciclo"),
          (st(27)+0.05, st(28)-0.05, "Si pasas por Tu Madre, pide el Santorini bowl y después me cuentas"),
-         (st(28)+0.1, DUR, "Nos vemos ✨")]
+         (st(28)+0.1, DUR, "Nos vemos")]
 # la palabra "Santorini" del review lleva brillo
 t_santorini = v('santorini', c13, st(19))
 
@@ -98,7 +98,7 @@ for a, b, texto in SUBS:
             items.append((a + k * dt, int(x) - 10, y0 + li * 78 - 20, p)); x += ancho(p) + 18; k += 1
     PLAN.append((a, b, items))
 f_card = ImageFont.truetype(FONT, 50); f_card.set_variation_by_name('ExtraBold')
-CARDS = [(st(7), st(9) - 0.1, '☀️', 'Mañana: estudio y trabajo'), (st(9), st(12) - 0.1, '💪', 'Mi entreno'),
+CARDS_OFF = [(st(7), st(9) - 0.1, '☀️', 'Mañana: estudio y trabajo'), (st(9), st(12) - 0.1, '💪', 'Mi entreno'),
          (st(12), st(19) - 0.1, '🥗', 'Almuerzo en Tu Madre'), (st(21), st(24) - 0.1, '🏠', 'Clienta a domicilio'),
          (st(24), st(27) - 0.1, '🚴', '6:00 p. m. · Clase de ciclo')]
 def card_img(emo, txt):
@@ -112,7 +112,8 @@ def card_img(emo, txt):
     im.alpha_composite(e, (46, 10 + (h - 50) // 2))
     d.text((46 + e.width + 16, 10 + h // 2), txt, font=f_card, fill=(255, 255, 255, 255), anchor='lm')
     return im
-CARD_IMG = [card_img(e, t) for _, _, e, t in CARDS]
+CARDS = []  # Frida: el cuadro azul repite lo que dice el subtítulo
+CARD_IMG = []
 EN = (enfasis.preparar("Un día conmigo siendo|*fitness coach*", "amarillo"), st(6) + 0.05, st(7) - 0.05)
 os.makedirs('fr', exist_ok=True)
 for fi in range(int(DUR * FPS)):
@@ -149,6 +150,6 @@ for n, (nm, tt, vol) in enumerate(ev, 1):
     ins += f' -i {SFX}/{nm}.wav'; ms = int(tt * 1000); fl += f'[{n}:a]volume={vol},adelay={ms}|{ms},aformat=channel_layouts=stereo[s{n}];'; mix += f'[s{n}]'
 n = len(ev) + 1
 cmd = (f'ffmpeg -nostdin -v error -y {ins} -framerate 30 -i fr/f%04d.png -filter_complex "{fl}{mix}amix=inputs={n}:normalize=0:duration=first,alimiter=limit=0.9[a];[0:v][{n}:v]overlay=0:0:format=auto,format=yuv420p[v]" '
-       f'-map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 19 -r 30 -c:a aac -b:a 192k -movflags +faststart {D}/reel_un_dia_conmigo_v4.mp4')
+       f'-map "[v]" -map "[a]" -c:v libx264 -preset slow -crf 14 -profile:v high -tune film -x264-params aq-mode=3 -r 30 -c:a aac -b:a 256k -movflags +faststart {D}/reel_un_dia_conmigo_v5.mp4')
 subprocess.run(cmd, shell=True, check=True)
 print('duración', round(DUR, 2), 'subtítulos', len(SUBS), 'sonidos', len(ev))
