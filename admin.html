@@ -4727,6 +4727,13 @@ function buildMonthBubbles(id, c, asistData) {
       showMonthDetail(id, c, asistData, parseInt(this.getAttribute('data-year')), parseInt(this.getAttribute('data-month')), parseInt(this.getAttribute('data-mnum')));
     });
   });
+  // Si se llegó acá tocando "Sesiones del ciclo" desde la vista de Rutina,
+  // abrir directo el mes actual en vez de obligar a buscarlo entre las burbujas.
+  if (rvPendingAsistenciaOpen === id && months.length) {
+    rvPendingAsistenciaOpen = null;
+    var cur = months[months.length - 1];
+    showMonthDetail(id, c, asistData, cur.year, cur.month, cur.num);
+  }
 }
 
 function showMonthDetail(id, c, asistData, year, month, mnum) {
@@ -7152,6 +7159,19 @@ var rutinaData = {};
 var rutinaCurrentDay = 0;
 var rutinaMode = 'view'; // 'view' or 'edit'
 var rvViewDay = 0; // día elegido en la vista de lista + detalle (modo view)
+// Si se toca "Sesiones del ciclo" desde la vista de Rutina, esto le avisa a
+// buildMonthBubbles que la clienta a la que acaba de navegar debe abrir el
+// mes actual directamente, en vez de mostrar la lista de meses primero.
+var rvPendingAsistenciaOpen = null;
+
+// Al tocar el recuadro de "Sesiones del ciclo" en la vista de Rutina — va a
+// la ficha de la clienta (donde ya vive el calendario de asistencia,
+// guardado por clientId así que funciona aunque la clienta no tenga cuenta
+// en el portal, como Joana) y lo abre directo en el mes actual.
+function openAsistenciaFromRutina(clientId) {
+  rvPendingAsistenciaOpen = clientId;
+  openClientDetail(clientId);
+}
 
 function rvSelectDay(idx) {
   rvViewDay = idx;
@@ -7569,7 +7589,7 @@ function renderRutinaView() {
     html += '<div class="rv-stat"><div class="rv-stat-val">'+totalEx+'</div><div class="rv-stat-label">Ejercicios</div></div>';
   } else {
     html += '<div class="rv-stat"><div class="rv-stat-val">'+(c.days && c.days.length ? c.days.length : '-')+'</div><div class="rv-stat-label">Días/semana</div></div>';
-    html += '<div class="rv-stat"><div class="rv-stat-val">'+(c.sessions ? countSessionsInCycle(rutinaClientId, c) + '/' + c.sessions : '-')+'</div><div class="rv-stat-label">Sesiones del ciclo</div></div>';
+    html += '<div class="rv-stat" style="cursor:pointer;" onclick="openAsistenciaFromRutina(\''+rutinaClientId+'\')" title="Tocá para marcar los días entrenados"><div class="rv-stat-val">'+(c.sessions ? countSessionsInCycle(rutinaClientId, c) + '/' + c.sessions : '-')+'</div><div class="rv-stat-label">🗓️ Sesiones del ciclo</div></div>';
   }
   html += '</div></div>'; // close stats + hero
 
