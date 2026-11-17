@@ -6300,6 +6300,68 @@ var rutinaData = {};
 var rutinaCurrentDay = 0;
 var rutinaMode = 'view'; // 'view' or 'edit'
 var rvViewDay = 0; // día elegido en la vista de lista + detalle (modo view)
+var rvDiasEntrenados = {}; // sesiones marcadas como entrenadas, cacheadas para la pantalla de Rutina
+
+function rvMonthSessionCount() {
+  var now = new Date();
+  var ym = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+  return Object.keys(rvDiasEntrenados).filter(function(k) { return rvDiasEntrenados[k] && k.indexOf(ym) === 0; }).length;
+}
+
+function rvSaveDiaEntrenado(key, val) {
+  rvDiasEntrenados[key] = val;
+  var uid = CLIENT_LINKS[rutinaClientId];
+  if (uid) {
+    fbSet('clientasPortal/' + uid + '/diasEntrenados/' + key, val);
+  } else {
+    fbSet('clients_custom/' + rutinaClientId + '/diasEntrenadosAdmin/' + key, val);
+    if (CLIENTS[rutinaClientId]) {
+      if (!CLIENTS[rutinaClientId].diasEntrenadosAdmin) CLIENTS[rutinaClientId].diasEntrenadosAdmin = {};
+      CLIENTS[rutinaClientId].diasEntrenadosAdmin[key] = val;
+    }
+  }
+}
+
+function toggleRvDiaEntrenado(key, el) {
+  var newVal = !rvDiasEntrenados[key];
+  rvSaveDiaEntrenado(key, newVal);
+  el.classList.toggle('done', newVal);
+  var countEl = document.getElementById('rv-sesiones-count');
+  if (countEl) countEl.textContent = rvMonthSessionCount();
+}
+
+function openRvSesionesCalendar() {
+  var now = new Date();
+  var year = now.getFullYear(), month = now.getMonth();
+  var daysInMonth = new Date(year, month + 1, 0).getDate();
+  var firstDay = new Date(year, month, 1).getDay();
+  var dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  var mesesLargos = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+  var html = '<div style="font-size:0.95rem;font-weight:700;color:var(--text);text-align:center;text-transform:capitalize;margin-bottom:1rem;">' + mesesLargos[month] + ' ' + year + '</div>';
+  html += '<div class="track-days">';
+  dayNames.forEach(function(d) { html += '<div class="track-day-header">' + d + '</div>'; });
+  for (var i = 0; i < firstDay; i++) html += '<div class="track-day empty"></div>';
+  for (var day = 1; day <= daysInMonth; day++) {
+    var key = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+    var done = !!rvDiasEntrenados[key];
+    html += '<div class="track-day' + (done ? ' done' : '') + '" style="cursor:pointer;" onclick="toggleRvDiaEntrenado(\'' + key + '\',this)" title="Marcar/desmarcar como entrenado">' + day + '</div>';
+  }
+  html += '</div>';
+
+  var modal = document.getElementById('rv-sesiones-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'rv-sesiones-modal';
+    modal.style.cssText = 'display:flex;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;';
+    modal.innerHTML = '<div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:420px;" id="rv-sesiones-modal-card"></div>';
+    modal.addEventListener('click', function(e) { if (e.target === modal) modal.style.display = 'none'; });
+    document.body.appendChild(modal);
+  }
+  html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;"><div style="font-size:1rem;font-weight:700;color:var(--text);">🗓️ Sesiones del mes</div><button onclick="document.getElementById(\'rv-sesiones-modal\').style.display=\'none\';" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button></div>' + html;
+  document.getElementById('rv-sesiones-modal-card').innerHTML = html;
+  modal.style.display = 'flex';
+}
 
 function rvSelectDay(idx) {
   rvViewDay = idx;
@@ -6709,7 +6771,7 @@ function renderRutinaView() {
   // Stats
   html += '<div class="rv-stats">';
   html += '<div class="rv-stat"><div class="rv-stat-val">'+(c.days ? c.days.length : '-')+'</div><div class="rv-stat-label">Días/semana</div></div>';
-  html += '<div class="rv-stat"><div class="rv-stat-val">'+(c.sessions || '-')+'</div><div class="rv-stat-label">Sesiones</div></div>';
+  html += '<div class="rv-stat" style="cursor:pointer;" onclick="openRvSesionesCalendar()" title="Tocá para marcar los días entrenados este mes"><div class="rv-stat-val"><span id="rv-sesiones-count">'+rvMonthSessionCount()+'</span>'+(c.sessions ? ' de '+c.sessions : '')+'</div><div class="rv-stat-label">🗓️ Sesiones</div></div>';
   html += '</div></div>'; // close stats + hero
 
   html += '<div style="height:1.5rem;"></div>';
@@ -7039,9 +7101,26 @@ function openRutinaEditor(clientId) {
         switchRutinaMode(rutinaMode === 'view' ? 'edit' : 'view');
       };
     }
-    showScreen('rutina-editor');
-    rutinaMode = 'view';
-    switchRutinaMode('view');
+    // Para poder marcar sesiones entrenadas desde la pantalla de Rutina
+    // aunque la clienta no tenga cuenta en el portal (ej. Joana) — si tiene
+    // uid vinculado se guarda en el mismo lugar que usa su app
+    // (clientasPortal/{uid}/diasEntrenados), si no, queda guardado aparte
+    // en su ficha de administradora (clients_custom/{id}/diasEntrenadosAdmin).
+    var uidForDias = CLIENT_LINKS[clientId];
+    function afterDiasEntrenados() {
+      showScreen('rutina-editor');
+      rutinaMode = 'view';
+      switchRutinaMode('view');
+    }
+    if (uidForDias) {
+      fbGet('clientasPortal/' + uidForDias + '/diasEntrenados', function(d) {
+        rvDiasEntrenados = d || {};
+        afterDiasEntrenados();
+      });
+    } else {
+      rvDiasEntrenados = c.diasEntrenadosAdmin || {};
+      afterDiasEntrenados();
+    }
   });
   });
 }
