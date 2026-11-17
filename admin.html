@@ -6902,12 +6902,19 @@ function switchRutinaMode(mode) {
   var tabsTop = document.getElementById('rutina-day-tabs-top');
 
   if (mode === 'view') {
+    // Editar y Ver rutina tienen cada uno su propio "día seleccionado"
+    // (rutinaCurrentDay / rvViewDay) — sin esto, si editás el equipo del
+    // Día 2 y tocás "Ver rutina", la vista podía quedarse mostrando el
+    // Día 1 (el que tenía guardado de antes) y parecer que el equipo que
+    // acabás de escribir no se guardó.
+    rvViewDay = rutinaCurrentDay;
     viewEl.style.display = 'block';
     editEl.style.display = 'none';
     tabsTop.style.display = 'flex';
     if (modeBtn) { modeBtn.textContent = '✏️ Editar'; modeBtn.classList.remove('editing'); }
     renderRutinaView();
   } else {
+    rutinaCurrentDay = rvViewDay;
     viewEl.style.display = 'none';
     editEl.style.display = 'block';
     tabsTop.style.display = 'none';
