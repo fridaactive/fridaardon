@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-11-17",
+ "actualizado": "2026-11-19",
  "videos": [
   {
    "id": "v2026-11-10-cardio",
@@ -185,10 +185,10 @@
    "duracion": "30 a 40 s",
    "publicar": {
     "fecha": "2026-11-20",
-    "hora": "12:30"
+    "hora": "18:00"
    },
-   "grabar": "2026-11-18",
-   "editar": "2026-11-19",
+   "grabar": "2026-11-19",
+   "editar": "2026-11-20",
    "borrador": false,
    "idea": "Responder la pregunta que te hicieron por Instagram: \"hago y hago la misma rutina de abs y no veo cambios\". Explicas por qué pasa y enseñas 3 ejercicios con una versión para empezar y otra para subir de nivel. Es un video para guardar.",
    "tomas": [
@@ -198,12 +198,12 @@
      "dice": "\"Si haces abs todos los días y no ves cambios, esto es para ti.\""
     },
     {
-     "graba": "Tú a cámara, más cerca",
+     "graba": "(Opcional) Tú a cámara, más cerca",
      "habla": true,
      "dice": "\"Una de ustedes me preguntó esto, y la respuesta es más sencilla de lo que crees.\""
     },
     {
-     "graba": "Tú haciendo la misma rutina de abs de siempre, con cara de aburrida (toma divertida de 2 segundos)",
+     "graba": "(Opcional) Tú haciendo la misma rutina de abs de siempre, con cara de aburrida (toma divertida de 2 segundos)",
      "habla": false,
      "dice": "Texto: \"error 1: siempre la *misma* rutina\""
     },
@@ -228,7 +228,7 @@
      "dice": "Texto: \"tu abdomen también trabaja en sentadillas y peso muerto\""
     },
     {
-     "graba": "Tú con tu comida o tu bowl (2 segundos)",
+     "graba": "(Opcional) Tú con tu comida o tu bowl (2 segundos)",
      "habla": false,
      "dice": "Texto: \"y que se marque depende mucho de tu *alimentación*\""
     },
@@ -239,6 +239,8 @@
     }
    ],
    "notas": [
+    "Versión exprés (15 min): graba solo las tomas 1, 4, 5, 6, 7 y 9. Las marcadas como opcionales suman, pero el video funciona sin ellas.",
+    "Graba el jueves 19 o el viernes 20 en la mañana, y sube los clips a Drive apenas termines para editarlo a tiempo.",
     "Nace de la primera pregunta que te hicieron por Instagram. No digas el nombre de quien preguntó.",
     "El hook es la frase de la toma 1: dila con energía y sin pausa al inicio.",
     "En los ejercicios no hablas: va música y el texto en pantalla. Graba cada versión (fácil y retadora) por separado, de 5 a 8 segundos.",
