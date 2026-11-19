@@ -179,10 +179,10 @@
   },
   {
    "id": "v2026-11-20-abs",
-   "titulo": "Haces abs y no ves cambios (pregunta de la comunidad)",
+   "titulo": "¿Por qué haces abdominales y no ves resultados?",
    "pilar": "Educación (pregunta de una seguidora)",
-   "formato": "Reel en el gym: tú hablando a cámara + 3 ejercicios en versión fácil y versión más retadora",
-   "duracion": "30 a 40 s",
+   "formato": "Reel hablando a cámara en el gym, con tomas de apoyo y texto en pantalla",
+   "duracion": "35 a 45 s",
    "publicar": {
     "fecha": "2026-11-20",
     "hora": "18:00"
@@ -190,71 +190,69 @@
    "grabar": "2026-11-19",
    "editar": "2026-11-20",
    "borrador": false,
-   "idea": "Responder la pregunta que te hicieron por Instagram: \"hago y hago la misma rutina de abs y no veo cambios\". Explicas por qué pasa y enseñas 3 ejercicios con una versión para empezar y otra para subir de nivel. Es un video para guardar.",
+   "idea": "Responder la pregunta que te hicieron por Instagram: \"hago y hago abdominales y no veo cambios\". No es una rutina: son las 4 razones por las que alguien no ve resultados, para que cada persona reconozca cuál le pasa a ella.",
    "tomas": [
     {
-     "graba": "HOOK (primeros 3 segundos): tú en el gym mirando a cámara, como contando un secreto. Atrás se ve el área de colchonetas",
+     "graba": "HOOK (primeros 3 segundos): tú en la colchoneta haciendo abdominales; te detienes, te sientas y miras a cámara",
      "habla": true,
-     "dice": "\"Si haces abs todos los días y no ves cambios, esto es para ti.\""
+     "dice": "\"¿Haces abdominales y no ves resultados? Puede ser por una de estas 4 razones.\""
     },
     {
-     "graba": "(Opcional) Tú a cámara, más cerca",
+     "graba": "Razón 1: tú a cámara, de pie en el gym",
      "habla": true,
-     "dice": "\"Una de ustedes me preguntó esto, y la respuesta es más sencilla de lo que crees.\""
+     "dice": "\"Uno: haces siempre la misma rutina. Tu abdomen es un músculo como cualquier otro, y si no lo retas, se acostumbra.\" · Texto: \"1. siempre la *misma* rutina\""
     },
     {
-     "graba": "(Opcional) Tú haciendo la misma rutina de abs de siempre, con cara de aburrida (toma divertida de 2 segundos)",
+     "graba": "(Opcional) Apoyo: tú haciendo el mismo abdominal de siempre, con cara de aburrida (2 segundos)",
      "habla": false,
-     "dice": "Texto: \"error 1: siempre la *misma* rutina\""
+     "dice": "Sin texto"
     },
     {
-     "graba": "Ejercicio 1, PLANCHA: primero con rodillas apoyadas (fácil) y después completa tocándote los hombros (retadora). Graba las dos de lado",
-     "habla": false,
-     "dice": "Texto: \"**PLANCHA** · empieza: con rodillas · sube: tocando hombros\""
+     "graba": "Razón 2: tú a cámara",
+     "habla": true,
+     "dice": "\"Dos: lo entrenas todos los días. También necesita descansar para crecer: con 2 o 3 veces por semana es suficiente.\" · Texto: \"2. sin *descanso*\""
     },
     {
-     "graba": "Ejercicio 2, DEAD BUG: primero con rodillas dobladas (fácil) y después con piernas estiradas o una mancuerna en las manos (retadora). Graba desde arriba o de lado",
-     "habla": false,
-     "dice": "Texto: \"**DEAD BUG** · empieza: rodillas dobladas · sube: piernas estiradas\""
+     "graba": "Razón 3: tú a cámara",
+     "habla": true,
+     "dice": "\"Tres: solo haces abdominales. Las sentadillas, el peso muerto y los remos también lo trabajan muchísimo.\" · Texto: \"3. solo haces *abs*\""
     },
     {
-     "graba": "Ejercicio 3, ELEVACIÓN DE PIERNAS: primero acostada llevando rodillas al pecho (fácil) y después piernas rectas o colgada de la barra (retadora)",
+     "graba": "Apoyo: tú haciendo sentadilla o peso muerto con peso (2 tomas cortas)",
      "habla": false,
-     "dice": "Texto: \"**ELEVACIÓN DE PIERNAS** · empieza: rodillas al pecho · sube: piernas rectas\""
+     "dice": "Sin texto"
     },
     {
-     "graba": "Tú haciendo sentadilla o peso muerto con peso (2 tomas cortas)",
-     "habla": false,
-     "dice": "Texto: \"tu abdomen también trabaja en sentadillas y peso muerto\""
+     "graba": "Razón 4: tú a cámara, más cerca (es la más importante)",
+     "habla": true,
+     "dice": "\"Y cuatro, la más importante: que tu abdomen se marque depende mucho de tu alimentación, no de cuántos abdominales hagas.\" · Texto: \"4. tu *alimentación*\""
     },
     {
-     "graba": "(Opcional) Tú con tu comida o tu bowl (2 segundos)",
+     "graba": "(Opcional) Apoyo: tú con tu comida o tu bowl (2 segundos)",
      "habla": false,
-     "dice": "Texto: \"y que se marque depende mucho de tu *alimentación*\""
+     "dice": "Sin texto"
     },
     {
      "graba": "Cierre a cámara, con una sonrisa",
      "habla": true,
-     "dice": "\"Con 2 o 3 veces por semana es suficiente. Guárdalo para tu próximo día de abs, y sígueme si vas empezando: aquí te enseño paso a paso.\""
+     "dice": "\"Guárdalo para que no se te olvide, y sígueme si vas empezando: aquí te explico todo paso a paso.\""
     }
    ],
    "notas": [
-    "Versión exprés (15 min): graba solo las tomas 1, 4, 5, 6, 7 y 9. Las marcadas como opcionales suman, pero el video funciona sin ellas.",
+    "Versión exprés (15 min): graba las tomas 1, 2, 4, 5, 6, 7 y 9. Las marcadas como opcionales suman, pero el video funciona sin ellas.",
     "Graba el jueves 19 o el viernes 20 en la mañana, y sube los clips a Drive apenas termines para editarlo a tiempo.",
+    "No es una rutina de abdominales: es la respuesta a por qué no ven resultados. No hace falta enseñar ejercicios.",
+    "Graba todas las tomas habladas seguidas en el mismo lugar, una por razón. Si te equivocas, repite solo esa frase; en la edición se corta.",
     "Nace de la primera pregunta que te hicieron por Instagram. No digas el nombre de quien preguntó.",
-    "El hook es la frase de la toma 1: dila con energía y sin pausa al inicio.",
-    "En los ejercicios no hablas: va música y el texto en pantalla. Graba cada versión (fácil y retadora) por separado, de 5 a 8 segundos.",
     "Los textos son sugerencias: cámbialos con tus palabras en ✏️ Editar guion.",
-    "Objetivo de este video: guardados y seguidores nuevos (en los videos 1 y 2 fueron lo más bajo). Por eso el cierre pide guardar y seguirte.",
-    "Ropa que se vea bien el abdomen ayuda a que se entienda cada ejercicio."
+    "Objetivo: guardados y seguidores nuevos (lo más bajo en los videos 1 y 2). Por eso el cierre pide las dos cosas."
    ],
-   "caption": "\"Hago y hago la misma rutina de abs y no veo cambios\" 👀 Me lo preguntaron por aquí y seguro a más de una le pasa.\n\nTu abdomen es un músculo como cualquier otro: si siempre haces lo mismo, se acostumbra. Ve subiendo poco a poco, dale descanso (2 o 3 veces por semana es suficiente) y recuerda que los ejercicios grandes como sentadilla y peso muerto también lo trabajan 💪\n\nGuárdalo para tu próximo día de abs 📌 y si vas empezando, sígueme: aquí te enseño paso a paso 💙",
+   "caption": "\"Hago y hago abdominales y no veo cambios\" 👀 Me lo preguntaron por aquí, y seguro a más de una le pasa.\n\nEstas son las 4 razones más comunes:\n1️⃣ Siempre haces la misma rutina\n2️⃣ Lo entrenas todos los días, sin descanso\n3️⃣ Solo haces abdominales\n4️⃣ Tu alimentación (la más importante)\n\n¿Con cuál te identificaste? Guárdalo para que no se te olvide 📌 y sígueme si vas empezando 💙",
    "checklist": [
     "Video HDR apagado",
     "Lente limpio y batería cargada",
     "Trípode o un lugar firme para el celular",
-    "Colchoneta libre para los 3 ejercicios",
-    "Grabar cada ejercicio en versión fácil y retadora, por separado",
+    "Grabar en un lugar del gym con buena luz y poco ruido (vas a hablar)",
     "Grabar en vertical, cada toma 3 a 5 segundos más larga y 2 o 3 veces",
     "Subir todos los clips a la carpeta de Drive"
    ]
