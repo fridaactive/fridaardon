@@ -190,7 +190,7 @@
    "grabar": "2026-11-19",
    "editar": "2026-11-20",
    "borrador": false,
-   "idea": "Responder la pregunta que te hicieron por Instagram: \"hago y hago abdominales y no veo cambios\". No es una rutina: son las 4 razones por las que alguien no ve resultados, para que cada persona reconozca cuál le pasa a ella.",
+   "idea": "Responder la pregunta que te hicieron por Instagram: \"hago y hago abdominales y no veo cambios\". No es una rutina: son las 4 razones por las que alguien no ve resultados (sin progresión, más no es mejor, solo hacer abs y la alimentación), para que cada persona reconozca cuál le pasa.",
    "tomas": [
     {
      "graba": "HOOK (primeros 3 segundos): tú en la colchoneta haciendo abdominales; te detienes, te sientas y miras a cámara",
@@ -200,22 +200,22 @@
     {
      "graba": "Razón 1: tú a cámara, de pie en el gym",
      "habla": true,
-     "dice": "\"Uno: haces siempre la misma rutina. Tu abdomen es un músculo como cualquier otro, y si no lo retas, se acostumbra.\" · Texto: \"1. siempre la *misma* rutina\""
+     "dice": "\"Uno: no hay progresión. No necesitas cambiar de rutina cada semana; al contrario, mantén la misma de 4 a 8 semanas y ve subiendo el peso o las repeticiones. Ahí es donde tu cuerpo cambia.\" · Texto: \"1. no hay *progresión*\""
     },
     {
-     "graba": "(Opcional) Apoyo: tú haciendo el mismo abdominal de siempre, con cara de aburrida (2 segundos)",
+     "graba": "(Opcional) Apoyo: tú haciendo un abdominal y después el mismo con una mancuerna o disco (se ve cómo subes la dificultad)",
      "habla": false,
-     "dice": "Sin texto"
+     "dice": "Texto: \"misma rutina, más *peso*\""
     },
     {
      "graba": "Razón 2: tú a cámara",
      "habla": true,
-     "dice": "\"Dos: lo entrenas todos los días. También necesita descansar para crecer: con 2 o 3 veces por semana es suficiente.\" · Texto: \"2. sin *descanso*\""
+     "dice": "\"Dos: más no es mejor. No necesitas hacer abdominales todos los días: con 2 o 3 veces por semana bien hechas es suficiente.\" · Texto: \"2. más no es *mejor*\""
     },
     {
      "graba": "Razón 3: tú a cámara",
      "habla": true,
-     "dice": "\"Tres: solo haces abdominales. Las sentadillas, el peso muerto y los remos también lo trabajan muchísimo.\" · Texto: \"3. solo haces *abs*\""
+     "dice": "\"Tres: solo haces abdominales. Las sentadillas, el peso muerto y los remos también trabajan tu abdomen, porque tiene que sostenerte en cada repetición.\" · Texto: \"3. solo haces *abs*\""
     },
     {
      "graba": "Apoyo: tú haciendo sentadilla o peso muerto con peso (2 tomas cortas)",
@@ -225,7 +225,7 @@
     {
      "graba": "Razón 4: tú a cámara, más cerca (es la más importante)",
      "habla": true,
-     "dice": "\"Y cuatro, la más importante: que tu abdomen se marque depende mucho de tu alimentación, no de cuántos abdominales hagas.\" · Texto: \"4. tu *alimentación*\""
+     "dice": "\"Y cuatro, la más importante: hacer abdominales no quema la grasa del abdomen. Que se marque depende mucho de tu alimentación, no de cuántos hagas.\" · Texto: \"4. tu *alimentación*\""
     },
     {
      "graba": "(Opcional) Apoyo: tú con tu comida o tu bowl (2 segundos)",
@@ -242,12 +242,13 @@
     "Versión exprés (15 min): graba las tomas 1, 2, 4, 5, 6, 7 y 9. Las marcadas como opcionales suman, pero el video funciona sin ellas.",
     "Graba el jueves 19 o el viernes 20 en la mañana, y sube los clips a Drive apenas termines para editarlo a tiempo.",
     "No es una rutina de abdominales: es la respuesta a por qué no ven resultados. No hace falta enseñar ejercicios.",
+    "Razón 1 bien explicada: repetir la rutina está bien; lo que frena es cambiarla todo el tiempo o no subir peso ni repeticiones en 4 a 8 semanas.",
     "Graba todas las tomas habladas seguidas en el mismo lugar, una por razón. Si te equivocas, repite solo esa frase; en la edición se corta.",
     "Nace de la primera pregunta que te hicieron por Instagram. No digas el nombre de quien preguntó.",
     "Los textos son sugerencias: cámbialos con tus palabras en ✏️ Editar guion.",
     "Objetivo: guardados y seguidores nuevos (lo más bajo en los videos 1 y 2). Por eso el cierre pide las dos cosas."
    ],
-   "caption": "\"Hago y hago abdominales y no veo cambios\" 👀 Me lo preguntaron por aquí, y seguro a más de una le pasa.\n\nEstas son las 4 razones más comunes:\n1️⃣ Siempre haces la misma rutina\n2️⃣ Lo entrenas todos los días, sin descanso\n3️⃣ Solo haces abdominales\n4️⃣ Tu alimentación (la más importante)\n\n¿Con cuál te identificaste? Guárdalo para que no se te olvide 📌 y sígueme si vas empezando 💙",
+   "caption": "\"Hago y hago abdominales y no veo cambios\" 👀 Me lo preguntaron por aquí, y seguro a más de una le pasa.\n\nEstas son las 4 razones más comunes:\n1️⃣ No hay progresión: no es cambiar de rutina, es ir subiendo peso o repeticiones\n2️⃣ Más no es mejor: 2 o 3 veces por semana es suficiente\n3️⃣ Solo haces abdominales\n4️⃣ Tu alimentación: los abdominales no queman la grasa del abdomen\n\n¿Con cuál te identificaste? Guárdalo para que no se te olvide 📌 y sígueme si vas empezando 💙",
    "checklist": [
     "Video HDR apagado",
     "Lente limpio y batería cargada",
