@@ -205,7 +205,7 @@
     {
      "graba": "Razón 1: tú a cámara, de pie en el gym",
      "habla": true,
-     "dice": "\"Uno: cada semana cambias la rutina que ves en Instagram y haces 3 o 4 ejercicios seguidos solo para cansar tu abdomen. Es decir, no estás teniendo una progresión. No necesitas tantos: con 1 o 2 ejercicios es suficiente. Mantén la misma rutina de 4 a 8 semanas e incorpórale un peso que te exija en cada repetición. Ahí vas a empezar a ver el progreso.\" · Texto: \"1. muchos ejercicios, cero *progresión*\""
+     "dice": "\"Uno: cada semana cambias la rutina que ves en Instagram y haces 3 o 4 ejercicios seguidos solo para cansar tu abdomen. Es decir, no estás teniendo una progresión. No necesitas tantos: con 1 o 2 ejercicios es suficiente. Mantén la misma rutina de 4 a 8 semanas e incorpórale un peso que te exija en cada repetición. Ahí vas a empezar a ver el progreso.\" · Texto: \"1. muchos ejercicios, cero *progresión*\" · ✂️ Versión corta (graba las dos): \"Uno: cada semana cambias la rutina que ves en Instagram y haces 3 o 4 ejercicios solo para cansarte. No necesitas tantos: con 1 o 2, la misma rutina de 4 a 8 semanas y subiéndoles peso, vas a ver el progreso.\""
     },
     {
      "graba": "(Opcional) Apoyo: tú haciendo un abdominal y después el mismo con una mancuerna o disco (se ve cómo subes la dificultad)",
@@ -238,9 +238,9 @@
      "dice": "Sin texto"
     },
     {
-     "graba": "Cierre a cámara, con una sonrisa",
+     "graba": "CIERRE: a cámara, con una sonrisa",
      "habla": true,
-     "dice": "\"Guárdalo para que no se te olvide, y sígueme si vas empezando: aquí te explico todo paso a paso.\""
+     "dice": "\"Si quieres saber qué ejercicios son para ti y tener una programación hecha a tu medida, mándame la palabra ABS por mensaje. Y guarda este video para que no se te olvide.\" · Texto: \"escríbeme **ABS** por DM 💬\""
     }
    ],
    "notas": [
@@ -252,9 +252,10 @@
     "Graba todas las tomas habladas seguidas en el mismo lugar, una por razón. Si te equivocas, repite solo esa frase; en la edición se corta.",
     "Nace de la primera pregunta que te hicieron por Instagram. No digas el nombre de quien preguntó.",
     "Los textos son sugerencias: cámbialos con tus palabras en ✏️ Editar guion.",
-    "Objetivo: guardados y seguidores nuevos (lo más bajo en los videos 1 y 2). Por eso el cierre pide las dos cosas."
+    "Objetivo: guardados y seguidores nuevos (lo más bajo en los videos 1 y 2). Por eso el cierre pide las dos cosas.",
+    "Cuando te escriban ABS por mensaje: responde con una pregunta corta (si va empezando y dónde entrena) y de ahí le cuentas cómo trabajas. Pídeme ayuda para armar esa respuesta."
    ],
-   "caption": "\"Hago y hago abdominales y no veo cambios\" 👀 Me lo preguntaron por aquí, y seguro a más de una le pasa.\n\nEstas son las 4 razones más comunes:\n1️⃣ Cambias de rutina cada semana y haces demasiados ejercicios: con 1 o 2 y subiéndoles peso es suficiente\n2️⃣ Te falta constancia: tu abdomen es un músculo como cualquier otro\n3️⃣ No levantas peso en ejercicios compuestos: tu core también tiene que ser fuerte y funcional\n4️⃣ No estás en déficit calórico: depende de un buen plan de alimentación y de una buena programación de entrenamiento\n\n¿Con cuál te identificaste? Guárdalo para que no se te olvide 📌 y sígueme si vas empezando 💙",
+   "caption": "\"Hago y hago abdominales y no veo cambios\" 👀 Me lo preguntaron por aquí, y seguro a más de una le pasa.\n\nEstas son las 4 razones más comunes:\n1️⃣ Cambias de rutina cada semana y haces demasiados ejercicios: con 1 o 2 y subiéndoles peso es suficiente\n2️⃣ Te falta constancia: tu abdomen es un músculo como cualquier otro\n3️⃣ No levantas peso en ejercicios compuestos: tu core también tiene que ser fuerte y funcional\n4️⃣ No estás en déficit calórico: depende de un buen plan de alimentación y de una buena programación de entrenamiento\n\n¿Con cuál te identificaste? Guárdalo para que no se te olvide 📌\n\nY si quieres saber qué ejercicios son para ti y tener una programación hecha a tu medida, escríbeme ABS por mensaje 💙",
    "checklist": [
     "Video HDR apagado",
     "Lente limpio y batería cargada",
