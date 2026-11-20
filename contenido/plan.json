@@ -193,9 +193,14 @@
    "idea": "Responder la pregunta que te hicieron por Instagram: \"hago y hago abdominales y no veo cambios\". No es una rutina: son las 4 razones por las que alguien no ve resultados (sin progresión, más no es mejor, solo hacer abs y la alimentación), para que cada persona reconozca cuál le pasa.",
    "tomas": [
     {
-     "graba": "HOOK (primeros 3 segundos): tú en la colchoneta haciendo abdominales; te detienes, te sientas y miras a cámara",
+     "graba": "HOOK (primeros 3 segundos): en la colchoneta haciendo abdominales; te detienes, te sientas y miras a cámara. En edición aparece encima la captura del mensaje que te enviaron (sin nombre ni foto)",
      "habla": true,
      "dice": "\"¿Estás haciendo abdominales y no ves resultados? Te dejo aquí las 4 razones del por qué.\""
+    },
+    {
+     "graba": "Tú a cámara, más cerca, como contando algo personal. En edición se queda en pantalla la captura del mensaje: \"frida tenés rutina de abs? yo siento que hago y hago la misma rutina y no veo nada de cambios\"",
+     "habla": true,
+     "dice": "\"Me escribieron esta pregunta por mensaje y quiero responderla aquí, porque seguro a más de uno le pasa lo mismo.\" · Texto: \"me preguntaron esto 👇\""
     },
     {
      "graba": "Razón 1: tú a cámara, de pie en el gym",
@@ -239,7 +244,8 @@
     }
    ],
    "notas": [
-    "Versión exprés (15 min): graba las tomas 1, 2, 4, 5, 6, 7 y 9. Las marcadas como opcionales suman, pero el video funciona sin ellas.",
+    "Versión exprés (15 min): graba las tomas 1, 2, 3, 5, 6, 7, 8 y 10. Las marcadas como opcionales suman, pero el video funciona sin ellas.",
+    "Captura del mensaje: tápale el nombre y la foto a la persona antes de mandarla al Estudio de video (o pídele permiso si quieres que se vea). Va encima del hook y de la toma 2.",
     "Graba el jueves 19 o el viernes 20 en la mañana, y sube los clips a Drive apenas termines para editarlo a tiempo.",
     "No es una rutina de abdominales: es la respuesta a por qué no ven resultados. No hace falta enseñar ejercicios.",
     "Razón 1 bien explicada: repetir la rutina está bien; lo que frena es cambiarla todo el tiempo o no subir peso ni repeticiones en 4 a 8 semanas.",
