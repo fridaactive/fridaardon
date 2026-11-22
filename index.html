@@ -1026,6 +1026,23 @@
 .cq-option.cq-multi.selected .cq-option-dot{box-shadow:none;background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/80% no-repeat}
 .cq-option.cq-none{margin-top:.9rem;border-style:dashed}
 .cq-peso-in{display:block;width:100%;box-sizing:border-box;margin:-.25rem 0 .7rem;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--blue);font-family:inherit;font-size:.85rem;background:var(--blue-lt);color:var(--text)}
+
+/* Tarjeta de plan bloqueado: planes que llevan a WhatsApp */
+.pf-locked-open{padding:.3rem .9rem .2rem}
+.pf-locked-plans-hdr{font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);padding:.55rem 0 .35rem}
+a.pf-plan-pick{text-decoration:none;color:inherit;cursor:pointer}
+a.pf-plan-pick .plan-price b{color:var(--blue);margin-left:.2rem}
+a.pf-plan-pick:active{opacity:.7}
+.pf-locked-wa{display:block;margin-top:.9rem;background:#25D366;color:#fff;font-weight:700;font-size:.85rem;text-decoration:none;border-radius:100px;padding:.8rem 1rem;box-shadow:0 4px 0 #1B9E4B}
+.pf-locked-more{font-size:.7rem;color:var(--muted);margin-top:.7rem}
+body.portal-dark .pf-locked-plans-hdr{color:var(--cream)}
+body.portal-dark a.pf-plan-pick .plan-price b{color:var(--cream)}
+body.portal-dark .pf-locked-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);box-shadow:0 6px 0 rgba(0,0,0,.25)}
+body.portal-dark .pf-locked-title{color:#fff;font-family:'Archivo Black','DM Sans',sans-serif;text-transform:uppercase;font-size:1.05rem}
+body.portal-dark .pf-locked-text{color:rgba(255,255,255,.75)}
+body.portal-dark .pf-locked-icon{background:#F5ECCB;color:#0B1B3F}
+body.portal-dark .pf-locked-more{color:rgba(255,255,255,.6)}
+body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
 </style>
 </head>
 <body>
@@ -1973,6 +1990,13 @@ function inicioCounts() {
 function renderInicioTab() {
   var el = document.getElementById('inicio-content');
   if (!el) return;
+  if (PLAN_LOCKED) {
+    el.innerHTML = '<div class="in-hero in-hero-static"><span class="in-hero-tag">' + (PLAN_NEVER_SET ? '¡HOLA! ESTO ES FRIDAACTIVE' : 'TU PLAN') + '</span><span class="in-hero-bottom"><span>'
+      + '<span class="in-hero-title">' + (PLAN_NEVER_SET ? 'Tu cuenta está lista' : 'Renueva tu plan') + '</span>'
+      + '<span class="in-hero-meta">' + (PLAN_NEVER_SET ? 'Ya tengo tus respuestas. Solo falta elegir tu plan.' : 'Tu progreso sigue guardado aquí.') + '</span></span></span></div>'
+      + '<div style="margin-top:0.9rem;">' + renderPlanLockedCard() + '</div>';
+    return;
+  }
   var c = inicioCounts();
   var metaEl = document.getElementById('pf-ring-meta-num');
   var meta = metaEl ? metaEl.textContent.trim() : '-';
@@ -2725,13 +2749,9 @@ function renderPortalScreen(portal, perfil) {
 
   // No linked client record yet — she's a lead, not an active cliente.
   // Show the services landing instead of an empty dashboard.
-  if (!currentClientId) {
-    document.getElementById('ls-greeting').textContent = firstName ? ('¡Hola, ' + firstName + '!') : '';
-    document.getElementById('ls-wa-link').href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(WHATSAPP_MESSAGE);
-    setLoading(false);
-    showScreen('screen-services-landing');
-    return;
-  }
+  // Sin plan vinculado todavía (recién registrada): entra igual a su cuenta,
+  // con las secciones bloqueadas y la invitación a elegir su plan.
+  if (!currentClientId) { PLAN_NEVER_SET = true; PLAN_LOCKED = true; }
 
   var dateEl = document.getElementById('dash-date');
   if (dateEl) dateEl.textContent = faTodayLabel();
@@ -3043,7 +3063,7 @@ function handleAvatarFileSelect(input) {
 // ── RUTINA TAB ──
 function loadRutinaTab(clientId) {
   var el = document.getElementById('rutina-content');
-  if (!clientId) { el.innerHTML = '<div class="empty-note">Tu coach todavía no vinculó tu rutina.</div>'; return; }
+  if (!clientId) { el.innerHTML = renderPlanLockedCard(); return; }
   db().ref('exerciseBank').once('value').then(function(snap) {
     EXERCISE_BANK = snap.val() || {};
   }).catch(function() {}).then(function() {
@@ -4823,7 +4843,7 @@ function canjearBeneficio(beneficioId) {
 
 // ── PLAN: cuenta regresiva de vencimiento ──
 function loadPlanInfo() {
-  if (!currentClientId) { return; }
+  if (!currentClientId) { renderPlanCountdown(null); return; }
   db().ref('clients/' + currentClientId).once('value').then(function(snap) {
     renderPlanCountdown(snap.val());
   }).catch(function(e) {
@@ -4857,19 +4877,25 @@ var PLAN_LOCKED = false;
 // tiene sentido decirle "tu programa caducó" si nunca le activaron uno.
 var PLAN_NEVER_SET = false;
 
+function planWaLink(texto) { return 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(texto); }
 function renderPlanLockedCard() {
-  var title = PLAN_NEVER_SET ? 'Todavía no tienes un plan activo' : 'Tu programa caducó';
-  var text = PLAN_NEVER_SET ? 'Escríbele a Frida para activar tu plan y ver esta sección.' : 'Adquiere un nuevo plan para seguir viendo esta sección.';
+  var title = PLAN_NEVER_SET ? 'Elige tu plan y empezamos' : 'Tu programa caducó';
+  var text = PLAN_NEVER_SET ? 'Tu cuenta ya está lista. Cuando elijas tu plan, Frida arma tu rutina y tu guía de alimentación, y aquí se desbloquea todo.' : 'Renueva tu plan para seguir viendo esta sección.';
+  var fila = function(nombre, sub, precio, msg) {
+    return '<a class="pf-locked-price-row pf-plan-pick" href="' + planWaLink(msg) + '" target="_blank" rel="noopener"><span class="plan-name">' + nombre + '<span class="plan-sub">' + sub + '</span></span><span class="plan-price">' + precio + ' <b>›</b></span></a>';
+  };
   return '<div class="pf-locked-card">'
     + '<div class="pf-locked-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>'
     + '<div class="pf-locked-title">' + title + '</div>'
     + '<div class="pf-locked-text">' + text + '</div>'
-    + '<details class="pf-locked-pricing">'
-    + '<summary>Ver planes y precios</summary>'
-    + '<div class="pf-locked-price-row"><span class="plan-name">1 mes<span class="plan-sub">Pago mensual</span></span><span class="plan-price">$50</span></div>'
-    + '<div class="pf-locked-price-row"><span class="plan-name">3 meses<span class="plan-sub">Te queda a $45 por mes</span></span><span class="plan-price">$135</span></div>'
-    + '<div class="pf-locked-price-row"><span class="plan-name">6 meses<span class="plan-sub">Te queda a $40 por mes</span></span><span class="plan-price">$240</span></div>'
-    + '</details>'
+    + '<div class="pf-locked-pricing pf-locked-open">'
+    + '<div class="pf-locked-plans-hdr">Rutina personalizada online · guía de alimentación incluida</div>'
+    + fila('1 mes', 'Pago mensual', '$50', 'Hola Frida, quiero el plan de 1 mes de rutina personalizada.')
+    + fila('3 meses', 'Te queda a $45 por mes', '$135', 'Hola Frida, quiero el plan de 3 meses de rutina personalizada.')
+    + fila('6 meses', 'Te queda a $40 por mes', '$240', 'Hola Frida, quiero el plan de 6 meses de rutina personalizada.')
+    + '</div>'
+    + '<a class="pf-locked-wa" href="' + planWaLink('Hola Frida, quiero información sobre los planes.') + '" target="_blank" rel="noopener">💬 Escribirle a Frida por WhatsApp</a>'
+    + '<div class="pf-locked-more">¿Prefieres entrenar por videollamada o a domicilio? Escríbeme y te cuento.</div>'
     + '</div>';
 }
 
@@ -4896,6 +4922,7 @@ function applyPlanLockUI() {
   // dibujada — se vuelve a pintar para que los botones de video/historial
   // queden bloqueados (o no) de una, sin esperar a que toque otra acción.
   if (currentRutinaData && currentRutinaData.days) renderRutinaTab();
+  renderInicioTab();
 }
 
 function renderPlanCountdown(c) {
