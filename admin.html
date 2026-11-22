@@ -862,14 +862,15 @@
 .pc-sec-title{font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.1rem;text-transform:uppercase;color:var(--text);margin-bottom:0.6rem;}
 .dash-pc-alert{margin-top:0.4rem;display:inline-block;background:#FFECEC;color:#C8282E;font-size:0.68rem;font-weight:700;padding:0.3rem 0.6rem;border-radius:10px;line-height:1.5;}
 .track-face{position:absolute;top:-9px;right:-7px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none}
-.track-face img{width:18px;height:18px;display:block}
+.fa-emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
+.track-face .fa-emoji{font-size:14px}
 .sentir-resumen{display:flex;align-items:center;justify-content:space-between;gap:.5rem;background:#F7F9FF;border:1px solid var(--border);border-radius:12px;padding:.5rem .7rem;margin-bottom:.7rem}
 .sentir-resumen span{font-size:.66rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 .sentir-resumen div{display:flex;gap:.45rem;flex-wrap:wrap}
 .sentir-resumen b{display:flex;align-items:center;gap:.15rem;font-size:.78rem;color:var(--text)}
 .sentir-resumen img{width:20px;height:20px}
 .cst-chip.feel{display:inline-flex;align-items:center;gap:.25rem;background:#F4F6FF;color:var(--text)}
-.cst-chip.feel img{width:14px;height:14px}
+.cst-chip.feel .fa-emoji{font-size:12px}
 .cst-chip.feel.dolor,.cst-chip.feel.nauseas{background:#FFEDEF;color:#B4233C}
 #rutina-editor .back-row{flex-wrap:wrap;gap:0.4rem;}
 #rutina-editor .back-row .sub-brand{margin-right:auto;}
@@ -2460,12 +2461,6 @@ function renderAdminClientProfile(clientId, uid, portal) {
   // lo que marca cualquiera de las dos lo ve la otra.
   // Caritas de cómo se sintió (clientasPortal/{uid}/sentir) y resumen del mes
   var sentirMap = (portal && portal.sentir) || {};
-  var cuenta = {};
-  Object.keys(sentirMap).forEach(function(k) { if (k.indexOf(viewYM) === 0 && SENTIR_LABELS[sentirMap[k]]) cuenta[sentirMap[k]] = (cuenta[sentirMap[k]] || 0) + 1; });
-  var resumen = SENTIR_ORDEN.filter(function(id) { return cuenta[id]; });
-  if (resumen.length) {
-    calHtml += '<div class="sentir-resumen"><span>Este mes</span><div>' + resumen.map(function(id) { return '<b title="' + SENTIR_LABELS[id] + '"><img src="img/caritas/' + id + '.webp" alt="">' + cuenta[id] + '</b>'; }).join('') + '</div></div>';
-  }
   calHtml += '<div class="track-days">';
   DAY_NAMES_ADMIN.forEach(function(d) { calHtml += '<div class="track-day-header">' + d + '</div>'; });
   for (var i = 0; i < firstDay; i++) calHtml += '<div class="track-day empty"></div>';
@@ -2473,7 +2468,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
     var key = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     var done = !!diasEntrenados[key];
     var cara = SENTIR_LABELS[sentirMap[key]] ? sentirMap[key] : null;
-    calHtml += '<div class="track-day' + (done ? ' done' : '') + '" style="cursor:pointer;position:relative;overflow:visible;" onclick="toggleAdminDiaEntrenado(\'' + uid + '\',\'' + key + '\',this)" title="Marcar/desmarcar como entrenado' + (cara ? ' · ' + SENTIR_LABELS[cara] : '') + '">' + day + (cara ? '<span class="track-face"><img src="img/caritas/' + cara + '.webp" alt=""></span>' : '') + '</div>';
+    calHtml += '<div class="track-day' + (done ? ' done' : '') + '" style="cursor:pointer;position:relative;overflow:visible;" onclick="toggleAdminDiaEntrenado(\'' + uid + '\',\'' + key + '\',this)" title="Marcar/desmarcar como entrenado' + (cara ? ' · ' + SENTIR_LABELS[cara] : '') + '">' + day + (cara ? '<span class="track-face"><span class="fa-emoji">' + SENTIR_EMOJI[cara] + '</span></span>' : '') + '</div>';
   }
   calHtml += '</div>';
 
@@ -4777,6 +4772,7 @@ function renderClientsList() {
 // Estado de un vistazo en cada tarjeta de "Mis clientes": pago pendiente
 // (al instante) y, si tiene la app, si te escribió y cuándo entrenó por
 // última vez (se completa solo cuando llegan los datos de Firebase).
+var SENTIR_EMOJI = { dolor: '😖', nauseas: '🤢', cansada: '🥱', bien: '😊', contodo: '🤩' };
 var SENTIR_LABELS = { dolor: 'Con dolor', nauseas: 'Con náuseas', cansada: 'Cansada', bien: 'Bien', contodo: '¡Con todo!' };
 var SENTIR_ORDEN = ['contodo', 'bien', 'cansada', 'nauseas', 'dolor'];
 
@@ -4798,7 +4794,7 @@ function fillClientActivity(ids) {
       var out = '';
       var hoyK = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()).padStart(2, '0');
       var caraHoy = portal.sentir && portal.sentir[hoyK];
-      if (SENTIR_LABELS[caraHoy]) out += '<span class="cst-chip feel ' + caraHoy + '"><img src="img/caritas/' + caraHoy + '.webp" alt="">Hoy: ' + SENTIR_LABELS[caraHoy] + '</span>';
+      if (SENTIR_LABELS[caraHoy]) out += '<span class="cst-chip feel ' + caraHoy + '"><span class="fa-emoji">' + SENTIR_EMOJI[caraHoy] + '</span>Hoy: ' + SENTIR_LABELS[caraHoy] + '</span>';
       if (chatNeedsReply(portal.chat, portal.chatMeta)) out += '<span class="cst-chip msg">💬 Te escribió</span>';
       var dias = portal.diasEntrenados || {};
       var mk = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');

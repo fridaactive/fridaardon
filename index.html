@@ -1011,13 +1011,14 @@
 .in-feel-row button span{font-size:.58rem;font-weight:700;line-height:1.1;text-align:center;opacity:.8}
 .in-feel-row button.sel{background:#F5ECCB;color:#0B1B3F;transform:translateY(-3px);box-shadow:0 3px 0 rgba(0,0,0,.3)}
 .in-feel-row button.sel span{opacity:1}
-.fa-cara{width:40px;height:40px;display:block;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3));transition:transform .25s cubic-bezier(.2,1.4,.4,1)}
+.fa-emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1;display:flex;align-items:center;justify-content:center}
+.fa-cara{width:40px;height:40px;font-size:32px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3));transition:transform .25s cubic-bezier(.2,1.4,.4,1)}
 .in-feel-row button.sel .fa-cara{transform:scale(1.15) rotate(-6deg)}
 .in-feel-tip{margin-top:.6rem;font-size:.75rem;line-height:1.45;background:rgba(255,255,255,.06);border-radius:12px;padding:.55rem .7rem}
 .in-feel-note{margin-top:.5rem;font-size:.66rem;opacity:.65}
 .track-day{overflow:visible}
 .track-face{position:absolute;top:-9px;right:-7px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none}
-.track-face-img{width:18px;height:18px;display:block}
+.track-face-img{width:18px;height:18px;font-size:14px}
 @media (prefers-reduced-motion: reduce){.fa-cara{transition:none}}
 </style>
 </head>
@@ -2134,7 +2135,7 @@ function rewardsInicioHtml(c) {
   return h;
 }
 
-// ── ¿Cómo te sientes hoy? Carita del día (Fluent Emoji 3D en img/caritas/).
+// ── ¿Cómo te sientes hoy? Carita del día (emojis del sistema).
 // Se guarda en clientasPortal/{uid}/sentir/{YYYY-MM-DD} = id; Frida la ve en su panel.
 var FA_SENTIR = [
   { id:'dolor', label:'Con dolor', tip:'Hoy prioriza moverte suave: caminar, estiramientos o movilidad. Si el dolor es fuerte, descansa y consulta a tu médico.' },
@@ -2144,7 +2145,9 @@ var FA_SENTIR = [
   { id:'contodo', label:'¡Con todo!', tip:'¡Aprovéchala! Hoy es un gran día para retarte un poquito más.' }
 ];
 function faSentirInfo(id) { for (var i = 0; i < FA_SENTIR.length; i++) if (FA_SENTIR[i].id === id) return FA_SENTIR[i]; return null; }
-function faCaraImg(id, cls) { return '<img class="' + (cls || 'fa-cara') + '" src="img/caritas/' + id + '.webp" alt="" loading="lazy">'; }
+// Emojis del sistema: en iPhone se ven como los de Apple, en Android como los de Google.
+var FA_EMOJI = { dolor:'😖', nauseas:'🤢', cansada:'🥱', bien:'😊', contodo:'🤩' };
+function faCaraImg(id, cls) { return '<span class="' + (cls || 'fa-cara') + ' fa-emoji" aria-hidden="true">' + (FA_EMOJI[id] || '🙂') + '</span>'; }
 function sentirHtml() {
   var hoy = localKey(new Date()), sel = faSentirInfo(((CURRENT_PORTAL_DATA || {}).sentir || {})[hoy]);
   var h = '<div class="in-feel"><div class="in-feel-q">¿Cómo te sientes hoy?</div><div class="in-feel-row">';

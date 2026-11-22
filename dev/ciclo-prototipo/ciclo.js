@@ -41,11 +41,9 @@ var CY_SENTIR = [
     face:'<path d="M17 15.6l1.5 3.2 3.4.4-2.5 2.3.7 3.4-3.1-1.7-3.1 1.7.7-3.4-2.5-2.3 3.4-.4z" fill="#3B2A3F"/><path d="M31 15.6l1.5 3.2 3.4.4-2.5 2.3.7 3.4-3.1-1.7-3.1 1.7.7-3.4-2.5-2.3 3.4-.4z" fill="#3B2A3F"/><path d="M15.5 28.5h17q-1 8.5-8.5 8.5t-8.5-8.5z" fill="#3B2A3F"/><path d="M19.5 34.2q4.5-3 9 0q-2 2.3-4.5 2.3t-4.5-2.3z" fill="#FF7A8A"/><path d="M41 4l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z" fill="#FFF"/><path d="M6 8l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" fill="#FFF" opacity=".85"/>',
     tip:'¡Aprovéchala! Hoy es un gran día para retarte un poquito más.' }
 ];
-// Caritas 3D (Fluent Emoji de Microsoft, licencia MIT) guardadas en img/caritas/{id}.webp
-var CY_IMG_BASE = (typeof CY_IMG_BASE !== 'undefined') ? CY_IMG_BASE : 'img/caritas/';
-function cicloCaraSvg(s) {
-  return '<img class="cy-face" src="' + CY_IMG_BASE + s.id + '.webp" alt="" width="40" height="40" loading="lazy">';
-}
+// Emojis del sistema (en iPhone se ven como los de Apple).
+var CY_EMOJI = { dolor:'😖', nauseas:'🤢', cansada:'🥱', bien:'😊', contodo:'🤩' };
+function cicloCaraSvg(s) { return '<span class="cy-face" aria-hidden="true">' + CY_EMOJI[s.id] + '</span>'; }
 function cicloSentirInfo(id) { for (var i = 0; i < CY_SENTIR.length; i++) if (CY_SENTIR[i].id === id) return CY_SENTIR[i]; return null; }
 function cicloFase(dia, largo) {
   largo = largo || 28; var ov = largo - 14;

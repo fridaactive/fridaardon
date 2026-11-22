@@ -54,4 +54,4 @@
 .cy-legend span{display:flex;align-items:center;gap:.3rem;opacity:.55}
 .cy-legend span.on{opacity:1;color:#fff}
 .cy-legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
-.cy-face{width:40px;height:40px;display:block;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
+.cy-face{width:40px;height:40px;font-size:32px;line-height:1;display:flex;align-items:center;justify-content:center;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}

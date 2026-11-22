@@ -1,3 +1,0 @@
-Caritas: Fluent Emoji 3D de Microsoft (https://github.com/microsoft/fluentui-emoji),
-distribuidas por @lobehub/fluent-emoji-3d. Licencia MIT.
-Copyright (c) Microsoft Corporation.
