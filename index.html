@@ -1021,6 +1021,50 @@
 .track-face-img{width:18px;height:18px;font-size:14px}
 @media (prefers-reduced-motion: reduce){.fa-cara{transition:none}}
 
+/* ══ MI CICLO · "Tu energía de hoy" (diseño FridaActive) ══ */
+.cy-card{position:relative;margin-top:0.9rem;padding:1.1rem 1rem 1rem;border-radius:22px;overflow:hidden;color:#fff;
+  background:radial-gradient(120% 90% at 85% 0%,var(--cy-glow) 0%,rgba(0,0,0,0) 55%),rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12);box-shadow:0 6px 0 rgba(0,0,0,0.25)}
+.cy-top{display:flex;gap:1rem;align-items:center}
+.cy-batt{position:relative;width:92px;flex-shrink:0;filter:drop-shadow(0 0 18px var(--cy-glow))}
+.cy-batt svg{display:block;width:92px;height:150px;overflow:visible}
+.cy-wave{animation:cyWave 3.2s linear infinite}
+.cy-wave2{animation:cyWave 4.6s linear infinite reverse;opacity:.55}
+@keyframes cyWave{from{transform:translateX(0)}to{transform:translateX(-60px)}}
+.cy-bub{animation:cyBub var(--t,3s) ease-in var(--d,0s) infinite;opacity:0}
+@keyframes cyBub{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.85}100%{transform:translateY(-70px) scale(1);opacity:0}}
+.cy-bolt{animation:cyBolt 1.6s ease-in-out infinite;transform-origin:47px 50px}
+@keyframes cyBolt{0%,100%{opacity:.25;transform:scale(.92)}50%{opacity:1;transform:scale(1.06)}}
+.cy-zz{animation:cyZz 3s ease-in-out infinite}
+@keyframes cyZz{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.9;transform:translateY(-6px)}}
+.cy-pct{position:absolute;left:0;right:0;top:104px;text-align:center;font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.45rem;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.cy-pct small{font-size:.7rem;opacity:.8}
+.cy-info{flex:1;min-width:0}
+.cy-tag{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:.22rem .6rem;border-radius:100px;background:var(--cy-chip);color:var(--cy-ink)}
+.cy-name{font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.25rem;line-height:1.05;text-transform:uppercase;margin:.45rem 0 .25rem}
+.cy-name span{color:var(--cy-accent)}
+.cy-day{font-size:.75rem;opacity:.75}
+.cy-edit{background:none;border:none;color:rgba(255,255,255,0.6);font-size:.68rem;font-weight:700;text-decoration:underline;font-family:'DM Sans',sans-serif;cursor:pointer;padding:0;margin-left:0.3rem;}
+.cy-msg{font-size:.82rem;line-height:1.45;margin-top:.5rem;color:rgba(255,255,255,.9)}
+.cy-wheel{position:relative;margin:1rem 0 .2rem;height:34px}
+.cy-track{position:absolute;left:0;right:0;top:12px;height:10px;border-radius:100px;overflow:hidden;display:flex;background:rgba(255,255,255,.08)}
+.cy-track i{display:block;height:100%}
+.cy-now{position:absolute;top:2px;width:30px;height:30px;margin-left:-15px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px var(--cy-glow),0 3px 0 rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:.95rem;animation:cyPulse 2.4s ease-in-out infinite}
+@keyframes cyPulse{0%,100%{box-shadow:0 0 0 4px var(--cy-glow),0 3px 0 rgba(0,0,0,.3)}50%{box-shadow:0 0 0 9px rgba(255,255,255,0),0 3px 0 rgba(0,0,0,.3)}}
+.cy-legend{display:flex;justify-content:space-between;font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.6}
+.cy-legend span{display:flex;align-items:center;gap:.3rem;opacity:.55}
+.cy-legend span.on{opacity:1;color:#fff}
+.cy-legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.cy-plan{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.85rem}
+.cy-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:.6rem .7rem}
+.cy-box b{display:block;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-bottom:.25rem}
+.cy-box span{font-size:.8rem;font-weight:700;line-height:1.3}
+.cy-dots{display:flex;gap:4px;margin-top:.35rem}
+.cy-dots i{width:16px;height:6px;border-radius:100px;background:rgba(255,255,255,.15)}
+.cy-dots i.on{background:var(--cy-accent)}
+.cy-sci{margin-top:.7rem;font-size:.68rem;line-height:1.45;opacity:.6}
+@media (prefers-reduced-motion: reduce){.cy-wave,.cy-wave2,.cy-bub,.cy-bolt,.cy-zz,.cy-now{animation:none}}
+
 /* Cuestionario: opciones múltiples (equipo) */
 .cq-option.cq-multi .cq-option-dot{border-radius:5px}
 .cq-option.cq-multi.selected .cq-option-dot{box-shadow:none;background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/80% no-repeat}
@@ -1744,6 +1788,21 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
 </div>
 
 <!-- ══════════ TU FICHA (personal / salud / entreno / mi plan) ══════════ -->
+<div id="ciclo-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;box-sizing:border-box;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-size:1rem;font-weight:700;color:var(--text);">🌸 Registrar período</div>
+      <button onclick="closeCicloModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;padding:0.25rem;">✕</button>
+    </div>
+    <div class="ficha-field-row">
+      <div class="ficha-field-label">¿Cuándo te empezó?</div>
+      <input class="cq-input" id="ciclo-fecha-input" type="date">
+    </div>
+    <button class="pf-bio-save" id="ciclo-guardar-btn" onclick="saveCicloRegistro()" style="width:100%;padding:0.8rem;border-radius:100px;font-size:0.82rem;">Guardar</button>
+    <div id="ciclo-historial" style="margin-top:1.25rem;"></div>
+  </div>
+</div>
+
 <div id="ficha-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
@@ -2131,6 +2190,8 @@ function rewardsInicioHtml(c) {
     h += '<button type="button" class="in-checkin" onclick="checkInHoy(true)"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>¿Entrenaste hoy?</b><span>Tócalo y suma a tu meta del mes</span></span><span class="in-checkin-btn">Sí ✓</span></button>';
   }
   h += sentirHtml();
+  // 1.5 Mi ciclo (batería de energía según la fase del ciclo menstrual)
+  h += cicloInicioHtml();
   // 2. Meta del mes (con el premio que puso Frida)
   var meta = metaDelMes(), pct = Math.min(100, Math.round(c.mes / meta * 100));
   var premio = PREMIO_MES && PREMIO_MES.texto ? escapeHtml(PREMIO_MES.texto) : '';
@@ -2195,6 +2256,157 @@ function guardarSentir(id) {
   if (navigator.vibrate) try { navigator.vibrate(15); } catch (e) {}
   renderTrainingTracker(CURRENT_DIAS_ENTRENADOS);
   db().ref('clientasPortal/' + currentUid + '/sentir/' + hoy).set(id).catch(function(e) { console.warn('guardarSentir', e.message); });
+}
+
+// ══════════ MI CICLO · "Tu energía de hoy" (diseño de la sesión de Estrategia de contenido) ══════════
+function cicloAvgLength(registros) {
+  if (registros.length < 2) return 28;
+  var diffs = [];
+  for (var i = 1; i < registros.length; i++) {
+    var d1 = new Date(registros[i - 1] + 'T00:00:00');
+    var d2 = new Date(registros[i] + 'T00:00:00');
+    diffs.push(Math.round((d2 - d1) / 86400000));
+  }
+  var sum = diffs.reduce(function(a, b) { return a + b; }, 0);
+  return Math.min(45, Math.max(21, Math.round(sum / diffs.length)));
+}
+
+var CY_FASES = {
+  menstrual: { tag:'Fase menstrual', name:'Modo <span>recarga</span>', icon:'🌙', base:30, intens:2,
+    glow:'rgba(255,120,130,.35)', accent:'#FF9AA5', chip:'#FFD6DA', ink:'#5A1420', fill:['#FF8F9B','#E8546A'],
+    msg:'Tu energía puede estar más baja estos días. Moverte suave también cuenta: hoy escucha a tu cuerpo.',
+    ideal:'Movilidad, caminata o fuerza ligera', cuida:'Hidrátate y descansa bien',
+    sci:'Al inicio del ciclo, estrógeno y progesterona están en su punto más bajo; muchas mujeres sienten menos energía o molestias.' },
+  folicular: { tag:'Fase folicular', name:'Energía en <span>subida</span>', icon:'🌱', base:70, intens:4,
+    glow:'rgba(91,139,245,.4)', accent:'#9DBBFF', chip:'#D8E4FF', ink:'#0F2E78', fill:['#8FB0FF','#3A6CF0'],
+    msg:'Tu cuerpo se está recargando. Es un gran momento para retarte y subirle un poquito al peso.',
+    ideal:'Fuerza y subir cargas', cuida:'Calienta bien antes de pesado',
+    sci:'El estrógeno va subiendo: muchas mujeres se sienten con más energía y se recuperan mejor entre entrenos.' },
+  ovulacion: { tag:'Ovulación', name:'Tu pico de <span>poder</span>', icon:'⚡', base:95, intens:5,
+    glow:'rgba(245,236,203,.5)', accent:'#F5ECCB', chip:'#F5ECCB', ink:'#3d330c', fill:['#FFF3C4','#F4C542'],
+    msg:'¡Batería a tope! Si te sientes así, hoy es el día para dar lo mejor de ti en el gym.',
+    ideal:'Entreno intenso o tu mejor marca', cuida:'Técnica y calentamiento',
+    sci:'Alrededor de la ovulación el estrógeno llega a su pico; es cuando muchas se sienten más fuertes y con más ánimo.' },
+  lutea: { tag:'Fase lútea', name:'Modo <span>constante</span>', icon:'🍂', base:50, intens:3,
+    glow:'rgba(214,170,120,.35)', accent:'#F0C79A', chip:'#F6DFC6', ink:'#4A2E0E', fill:['#F3CFA3','#C98A4E'],
+    msg:'La energía va bajando poco a poco. Mantén tu rutina a tu ritmo: la constancia es lo que da resultados.',
+    ideal:'Tu rutina normal, sin forzar', cuida:'Duerme bien y come suficiente',
+    sci:'La progesterona sube y puede dar más cansancio, calor o antojos; es normal y no significa que estés fallando.' }
+};
+// Cuánta energía aporta cada carita de "¿Cómo te sientes hoy?" (ver FA_SENTIR) al cálculo de la batería.
+var CY_SENTIR_VAL = { dolor:1, nauseas:1, cansada:2, bien:4, contodo:5 };
+function cicloFase(dia, largo) {
+  largo = largo || 28; var ov = largo - 14;
+  if (dia <= 5) return 'menstrual';
+  if (dia < ov - 1) return 'folicular';
+  if (dia <= ov + 1) return 'ovulacion';
+  return 'lutea';
+}
+function cicloEnergia(dia, largo, sentir) {
+  var f = CY_FASES[cicloFase(dia, largo)], e = f.base;
+  var val = CY_SENTIR_VAL[sentir];
+  if (val) e = Math.round(e * 0.4 + (val - 1) / 4 * 100 * 0.6); // lo que ella siente pesa más
+  return Math.max(8, Math.min(100, e));
+}
+function cicloBateriaSvg(pct, key, uid) {
+  var f = CY_FASES[key], top = 18 + (1 - pct / 100) * 120, g = 'cyg' + uid, c = 'cyc' + uid;
+  var wave = function(y, cls, op) {
+    return '<path class="' + cls + '" opacity="' + op + '" d="M0 ' + y + ' q15 -8 30 0 t30 0 t30 0 t30 0 t30 0 V160 H0 Z" fill="url(#' + g + ')"/>';
+  };
+  var bubbles = '';
+  for (var i = 0; i < 5; i++) bubbles += '<circle class="cy-bub" cx="' + (22 + i * 12) + '" cy="132" r="' + (2 + (i % 3)) + '" fill="#fff" style="--t:' + (2.4 + i * .5) + 's;--d:' + (i * .6) + 's"/>';
+  var extra = key === 'ovulacion' || key === 'folicular'
+    ? '<path class="cy-bolt" d="M50 30 L38 54 h9 l-5 18 l15 -25 h-9 l6 -17 z" fill="#fff" opacity=".9"/>'
+    : key === 'menstrual' ? '<text class="cy-zz" x="62" y="42" font-size="14" font-weight="800" fill="#fff">z</text><text class="cy-zz" x="70" y="30" font-size="10" font-weight="800" fill="#fff" style="animation-delay:.8s">z</text>' : '';
+  return '<svg viewBox="0 0 92 150" aria-hidden="true"><defs>'
+    + '<linearGradient id="' + g + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + f.fill[0] + '"/><stop offset="1" stop-color="' + f.fill[1] + '"/></linearGradient>'
+    + '<clipPath id="' + c + '"><rect x="9" y="14" width="74" height="130" rx="20"/></clipPath></defs>'
+    + '<rect x="32" y="2" width="28" height="12" rx="5" fill="rgba(255,255,255,.55)"/>'
+    + '<rect x="5" y="10" width="82" height="138" rx="24" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.75)" stroke-width="3"/>'
+    + '<g clip-path="url(#' + c + ')">' + wave(top + 4, 'cy-wave2', .6) + wave(top, 'cy-wave', 1) + bubbles + '</g>'
+    + '<path d="M18 30 Q16 60 18 96" stroke="#fff" stroke-opacity=".35" stroke-width="4" stroke-linecap="round" fill="none"/>'
+    + extra + '</svg>';
+}
+var CY_N = 0;
+function cicloCardHtml(o) {
+  var dia = o.dia, largo = o.largo || 28, key = cicloFase(dia, largo), f = CY_FASES[key];
+  var pct = cicloEnergia(dia, largo, o.sentir), uid = ++CY_N, falta = largo - dia + 1;
+  var ov = largo - 14, seg = function(n, col) { return '<i style="width:' + (n / largo * 100) + '%;background:' + col + '"></i>'; };
+  var h = '<div class="cy-card" style="--cy-glow:' + f.glow + ';--cy-accent:' + f.accent + ';--cy-chip:' + f.chip + ';--cy-ink:' + f.ink + '">';
+  h += '<div class="cy-top"><div class="cy-batt">' + cicloBateriaSvg(pct, key, uid) + '<div class="cy-pct">' + pct + '<small>%</small></div></div>';
+  h += '<div class="cy-info"><span class="cy-tag">' + f.icon + ' ' + f.tag + '</span><div class="cy-name">' + f.name + '</div>';
+  h += '<div class="cy-day">Día ' + dia + ' de ' + largo + ' · tu período llega en ' + falta + (falta === 1 ? ' día' : ' días') + ' <button type="button" class="cy-edit" onclick="openCicloModal()">Editar fecha</button></div>';
+  h += '<div class="cy-msg">' + f.msg + '</div></div></div>';
+  h += '<div class="cy-wheel"><div class="cy-track">' + seg(5, '#E8546A') + seg(ov - 7, '#3A6CF0') + seg(3, '#F4C542') + seg(largo - ov - 1, '#C98A4E') + '</div>';
+  h += '<div class="cy-now" style="left:' + ((dia - 0.5) / largo * 100) + '%">' + f.icon + '</div></div>';
+  var lg = function(txt, col, k) { return '<span class="' + (k === key ? 'on' : '') + '"><i style="background:' + col + '"></i>' + txt + '</span>'; };
+  h += '<div class="cy-legend">' + lg('Menstrual', '#E8546A', 'menstrual') + lg('Folicular', '#3A6CF0', 'folicular') + lg('Ovulación', '#F4C542', 'ovulacion') + lg('Lútea', '#C98A4E', 'lutea') + '</div>';
+  var dots = ''; for (var i = 1; i <= 5; i++) dots += '<i class="' + (i <= f.intens ? 'on' : '') + '"></i>';
+  h += '<div class="cy-plan"><div class="cy-box"><b>Ideal para hoy</b><span>' + f.ideal + '</span><div class="cy-dots">' + dots + '</div></div>';
+  h += '<div class="cy-box"><b>Cuida</b><span>' + f.cuida + '</span></div></div>';
+  h += '<div class="cy-sci">🔬 ' + f.sci + ' Son guías generales: si algo no se siente bien, escucha a tu cuerpo. Tu batería se ajusta con la carita que marcaste arriba 💙</div>';
+  return h + '</div>';
+}
+
+function cicloInicioHtml() {
+  var ciclo = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ciclo) || {};
+  var registros = Object.keys(ciclo.registros || {}).sort();
+  if (!registros.length) {
+    return '<button type="button" class="in-nudge" onclick="openCicloModal()"><span>🌸</span><span><b>Activa Mi ciclo</b><small>Conoce tu energía de cada día según tu ciclo.</small></span></button>';
+  }
+  var lastDate = new Date(registros[registros.length - 1] + 'T00:00:00');
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var daysSince = Math.floor((today - lastDate) / 86400000);
+  var largo = cicloAvgLength(registros);
+  var dia = (daysSince % largo) + 1;
+  var todayKey = localKey(today);
+  var sentir = ((CURRENT_PORTAL_DATA.sentir || {})[todayKey]) || null;
+  return cicloCardHtml({ dia: dia, largo: largo, sentir: sentir });
+}
+
+function openCicloModal() {
+  var ciclo = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ciclo) || {};
+  var registros = Object.keys(ciclo.registros || {}).sort().reverse();
+  document.getElementById('ciclo-fecha-input').value = new Date().toISOString().slice(0, 10);
+  var histEl = document.getElementById('ciclo-historial');
+  if (registros.length) {
+    var html = '<div class="ficha-field-label" style="margin-bottom:0.5rem;">Registros anteriores</div>';
+    registros.slice(0, 6).forEach(function(fecha) {
+      var d = new Date(fecha + 'T00:00:00');
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.8rem;color:var(--text);">'
+        + '<span>' + d.getDate() + ' de ' + MESES_LARGOS[d.getMonth()] + ' ' + d.getFullYear() + '</span>'
+        + '<button onclick="deleteCicloRegistro(\'' + fecha + '\')" style="background:none;border:none;color:var(--muted);font-size:0.9rem;cursor:pointer;">✕</button>'
+        + '</div>';
+    });
+    histEl.innerHTML = html;
+  } else {
+    histEl.innerHTML = '';
+  }
+  document.getElementById('ciclo-modal').style.display = 'flex';
+}
+
+function closeCicloModal() {
+  document.getElementById('ciclo-modal').style.display = 'none';
+}
+
+function saveCicloRegistro() {
+  var fecha = document.getElementById('ciclo-fecha-input').value;
+  if (!fecha) return;
+  if (!CURRENT_PORTAL_DATA.ciclo) CURRENT_PORTAL_DATA.ciclo = {};
+  if (!CURRENT_PORTAL_DATA.ciclo.registros) CURRENT_PORTAL_DATA.ciclo.registros = {};
+  CURRENT_PORTAL_DATA.ciclo.registros[fecha] = true;
+  db().ref('clientasPortal/' + currentUid + '/ciclo/registros/' + fecha).set(true);
+  closeCicloModal();
+  renderInicioTab();
+}
+
+function deleteCicloRegistro(fecha) {
+  if (CURRENT_PORTAL_DATA.ciclo && CURRENT_PORTAL_DATA.ciclo.registros) {
+    delete CURRENT_PORTAL_DATA.ciclo.registros[fecha];
+  }
+  db().ref('clientasPortal/' + currentUid + '/ciclo/registros/' + fecha).remove();
+  openCicloModal();
+  renderInicioTab();
 }
 
 function checkInHoy(on) {
