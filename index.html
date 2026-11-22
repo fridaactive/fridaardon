@@ -282,6 +282,20 @@
   .ficha-plan-card { background:var(--blue-lt); border-radius:12px; padding:0.9rem 1rem; margin-bottom:1rem; }
   .ficha-plan-row { display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0; }
   .ficha-promo-card { border:1.5px solid var(--border); border-radius:12px; padding:0.8rem 0.9rem; margin-bottom:0.6rem; }
+
+  /* ── CICLO ── */
+  .pf-ciclo-card { margin-top:1rem; }
+  .pf-ciclo-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; }
+  .pf-ciclo-log-btn { background:var(--blue-lt); color:var(--blue); border:none; border-radius:100px; padding:0.35rem 0.8rem; font-size:0.68rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; white-space:nowrap; }
+  .pf-ciclo-empty { font-size:0.78rem; color:var(--muted); line-height:1.5; text-align:center; padding:0.5rem 0; }
+  .pf-ciclo-main { display:flex; align-items:center; gap:1rem; margin-bottom:0.75rem; }
+  .pf-battery-wrap { flex-shrink:0; }
+  .pf-battery-pct { font-size:0.68rem; font-weight:700; text-anchor:middle; }
+  .pf-ciclo-info { flex:1; }
+  .pf-ciclo-fase { font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:0.15rem; }
+  .pf-ciclo-meta { font-size:0.72rem; color:var(--muted); }
+  .pf-ciclo-tip { font-size:0.8rem; color:var(--text); line-height:1.55; background:var(--blue-lt); border-radius:12px; padding:0.75rem 0.9rem; margin-top:0.25rem; }
+  .pf-battery-fill { transition:width 0.6s ease, fill 0.6s ease; }
   .pf-bio-prompt-line { font-size:0.82rem; color:var(--muted); line-height:1.9; display:flex; align-items:center; gap:0.5rem; }
   .pf-bio-prompt-line span { font-style:italic; }
   .pf-edit-btn { margin-top:0.9rem; width:100%; display:flex; align-items:center; justify-content:center; gap:0.5rem; background:#f2f4f9; color:var(--text); border:1.5px solid var(--border); border-radius:100px; padding:0.8rem 1rem; font-size:0.78rem; font-weight:800; font-family:'DM Sans',sans-serif; cursor:pointer; letter-spacing:0.02em; }
@@ -1002,6 +1016,14 @@
             Completar mi ficha
           </button>
         </div>
+
+        <div class="card pf-ciclo-card">
+          <div class="pf-ciclo-hdr">
+            <div class="card-label" style="margin-bottom:0;">🌸 Mi ciclo</div>
+            <button class="pf-ciclo-log-btn" onclick="openCicloModal()">+ Registrar</button>
+          </div>
+          <div id="pf-ciclo-body"></div>
+        </div>
       </div>
 
       <div id="perfil-unlocked-content">
@@ -1272,6 +1294,21 @@
 </div>
 
 <!-- ══════════ TU FICHA (personal / salud / entreno / mi plan) ══════════ -->
+<div id="ciclo-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;box-sizing:border-box;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-size:1rem;font-weight:700;color:var(--text);">🌸 Registrar período</div>
+      <button onclick="closeCicloModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;padding:0.25rem;">✕</button>
+    </div>
+    <div class="ficha-field-row">
+      <div class="ficha-field-label">¿Cuándo te empezó?</div>
+      <input class="cq-input" id="ciclo-fecha-input" type="date">
+    </div>
+    <button class="pf-bio-save" id="ciclo-guardar-btn" onclick="saveCicloRegistro()" style="width:100%;padding:0.8rem;border-radius:100px;font-size:0.82rem;">Guardar</button>
+    <div id="ciclo-historial" style="margin-top:1.25rem;"></div>
+  </div>
+</div>
+
 <div id="ficha-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
@@ -1805,6 +1842,7 @@ function renderPortalScreen(portal, perfil) {
   renderBioDisplay(perfil.bio);
   updateProfileCompletion();
   updateFichaCompletion();
+  renderCicloCard();
   renderPerfilRoleLine();
 
   CURRENT_ENTRENO_LOGS = portal.entrenoLogs || {};
@@ -3197,6 +3235,181 @@ function openFichaModal() {
 
 function closeFichaModal() {
   document.getElementById('ficha-modal').style.display = 'none';
+}
+
+// ── CICLO MENSTRUAL ──
+// Cada fase cambia los niveles de estrógeno/progesterona, y con eso la
+// energía disponible — la batería es solo una forma visual de mostrar
+// ese vaivén hormonal, no un dato médico exacto.
+var CICLO_FASES = {
+  menstrual: {
+    label: 'Fase menstrual',
+    tip: 'Tu energía está en su punto más bajo del mes — es normal. El estrógeno y la progesterona están en su nivel mínimo, así que el cuerpo tiene menos combustible disponible. Hoy no es el día para buscar récords: priorizá movimiento suave, cardio ligero o lo que el cuerpo te pida. Hidratate bien y descansá si lo necesitás.'
+  },
+  folicular: {
+    label: 'Fase folicular',
+    tip: 'Tu energía viene en subida. El estrógeno empieza a crecer, lo que mejora tu fuerza, tu ánimo y tu capacidad de recuperación. Buen momento para ir metiendo más intensidad poco a poco.'
+  },
+  ovulacion: {
+    label: 'Ovulación',
+    tip: 'Estás en tu pico de energía del mes. El estrógeno llega a su nivel más alto — es el mejor momento para entrenamientos de fuerza exigentes, cargas pesadas o buscar un récord. Aprovechalo.'
+  },
+  lutea_temprana: {
+    label: 'Fase lútea',
+    tip: 'La energía empieza a bajar de a poco. La progesterona sube y el cuerpo entra en modo más conservador. Seguís bien para entrenar fuerte, pero prestale atención a cómo te sentís.'
+  },
+  lutea_tardia: {
+    label: 'Fase lútea (pre-período)',
+    tip: 'Es normal sentirte con menos energía o más sensible estos días — el estrógeno y la progesterona caen juntos antes del período. Movete, pero sin exigirte al máximo: priorizá lo que te haga sentir bien, no lo más pesado.'
+  }
+};
+
+function cicloAvgLength(registros) {
+  if (registros.length < 2) return 28;
+  var diffs = [];
+  for (var i = 1; i < registros.length; i++) {
+    var d1 = new Date(registros[i - 1] + 'T00:00:00');
+    var d2 = new Date(registros[i] + 'T00:00:00');
+    diffs.push(Math.round((d2 - d1) / 86400000));
+  }
+  var sum = diffs.reduce(function(a, b) { return a + b; }, 0);
+  return Math.min(45, Math.max(21, Math.round(sum / diffs.length)));
+}
+
+function cicloFaseForDay(day, len) {
+  var scale = len / 28;
+  var menstrualEnd = Math.round(5 * scale);
+  var ovulStart = Math.round(14 * scale);
+  var ovulEnd = Math.round(16 * scale);
+  var luteaLateStart = len - Math.round(5 * scale);
+  if (day <= menstrualEnd) return 'menstrual';
+  if (day < ovulStart) return 'folicular';
+  if (day <= ovulEnd) return 'ovulacion';
+  if (day < luteaLateStart) return 'lutea_temprana';
+  return 'lutea_tardia';
+}
+
+// Curva aproximada de energía a lo largo del ciclo, interpolada entre
+// puntos clave (no es un dato médico exacto, es una guía visual).
+var CICLO_BATERIA_ANCLAS = [
+  { frac: 0, pct: 20 },
+  { frac: 5 / 28, pct: 30 },
+  { frac: 14 / 28, pct: 90 },
+  { frac: 16 / 28, pct: 100 },
+  { frac: 23 / 28, pct: 55 },
+  { frac: 1, pct: 15 }
+];
+
+function cicloBateriaForDay(day, len) {
+  var frac = (day - 1) / len;
+  for (var i = 1; i < CICLO_BATERIA_ANCLAS.length; i++) {
+    var a = CICLO_BATERIA_ANCLAS[i - 1], b = CICLO_BATERIA_ANCLAS[i];
+    if (frac <= b.frac) {
+      var t = (frac - a.frac) / (b.frac - a.frac || 1);
+      return Math.round(a.pct + (b.pct - a.pct) * t);
+    }
+  }
+  return 20;
+}
+
+function cicloComputeState(ciclo) {
+  var registros = Object.keys((ciclo && ciclo.registros) || {}).sort();
+  if (!registros.length) return null;
+  var lastDate = new Date(registros[registros.length - 1] + 'T00:00:00');
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var daysSince = Math.floor((today - lastDate) / 86400000);
+  var avgLen = cicloAvgLength(registros);
+  var dayInCycle = (daysSince % avgLen) + 1;
+  return {
+    dayInCycle: dayInCycle,
+    avgLen: avgLen,
+    daysUntilNext: avgLen - dayInCycle + 1,
+    fase: cicloFaseForDay(dayInCycle, avgLen),
+    bateria: cicloBateriaForDay(dayInCycle, avgLen)
+  };
+}
+
+function cicloBateriaColor(pct) {
+  if (pct >= 70) return '#2a9d5c';
+  if (pct >= 40) return '#D4A429';
+  return '#E0776B';
+}
+
+function cicloBateriaSvg(pct) {
+  var color = cicloBateriaColor(pct);
+  var innerW = 46, fillW = Math.round(innerW * (pct / 100));
+  return '<svg width="72" height="36" viewBox="0 0 72 36">'
+    + '<rect x="1" y="1" width="62" height="34" rx="7" fill="none" stroke="var(--border)" stroke-width="2.5"/>'
+    + '<rect x="64" y="11" width="6" height="14" rx="2" fill="var(--border)"/>'
+    + '<rect x="9" y="9" width="' + innerW + '" height="18" rx="3" fill="#f2f4f9"/>'
+    + '<rect class="pf-battery-fill" x="9" y="9" width="' + fillW + '" height="18" rx="3" fill="' + color + '"/>'
+    + '<text x="32" y="22" class="pf-battery-pct" fill="' + color + '">' + pct + '%</text>'
+    + '</svg>';
+}
+
+function renderCicloCard() {
+  var body = document.getElementById('pf-ciclo-body');
+  if (!body) return;
+  var ciclo = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ciclo) || {};
+  var state = cicloComputeState(ciclo);
+  if (!state) {
+    body.innerHTML = '<div class="pf-ciclo-empty">Registrá cuándo te empezó tu último período para ver tu fase y nivel de energía del mes.</div>';
+    return;
+  }
+  var fase = CICLO_FASES[state.fase];
+  var metaText = state.fase === 'menstrual'
+    ? 'Día ' + state.dayInCycle + ' de tu ciclo'
+    : 'Día ' + state.dayInCycle + ' · próximo período en ' + state.daysUntilNext + (state.daysUntilNext === 1 ? ' día' : ' días');
+  body.innerHTML = '<div class="pf-ciclo-main">'
+    + '<div class="pf-battery-wrap">' + cicloBateriaSvg(state.bateria) + '</div>'
+    + '<div class="pf-ciclo-info"><div class="pf-ciclo-fase">' + fase.label + '</div><div class="pf-ciclo-meta">' + metaText + '</div></div>'
+    + '</div>'
+    + '<div class="pf-ciclo-tip">' + fase.tip + '</div>';
+}
+
+function openCicloModal() {
+  var ciclo = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ciclo) || {};
+  var registros = Object.keys(ciclo.registros || {}).sort().reverse();
+  document.getElementById('ciclo-fecha-input').value = new Date().toISOString().slice(0, 10);
+  var histEl = document.getElementById('ciclo-historial');
+  if (registros.length) {
+    var html = '<div class="ficha-field-label" style="margin-bottom:0.5rem;">Registros anteriores</div>';
+    registros.slice(0, 6).forEach(function(fecha) {
+      var d = new Date(fecha + 'T00:00:00');
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.8rem;color:var(--text);">'
+        + '<span>' + d.getDate() + ' de ' + MESES_LARGOS[d.getMonth()] + ' ' + d.getFullYear() + '</span>'
+        + '<button onclick="deleteCicloRegistro(\'' + fecha + '\')" style="background:none;border:none;color:var(--muted);font-size:0.9rem;cursor:pointer;">✕</button>'
+        + '</div>';
+    });
+    histEl.innerHTML = html;
+  } else {
+    histEl.innerHTML = '';
+  }
+  document.getElementById('ciclo-modal').style.display = 'flex';
+}
+
+function closeCicloModal() {
+  document.getElementById('ciclo-modal').style.display = 'none';
+}
+
+function saveCicloRegistro() {
+  var fecha = document.getElementById('ciclo-fecha-input').value;
+  if (!fecha) return;
+  if (!CURRENT_PORTAL_DATA.ciclo) CURRENT_PORTAL_DATA.ciclo = {};
+  if (!CURRENT_PORTAL_DATA.ciclo.registros) CURRENT_PORTAL_DATA.ciclo.registros = {};
+  CURRENT_PORTAL_DATA.ciclo.registros[fecha] = true;
+  db().ref('clientasPortal/' + currentUid + '/ciclo/registros/' + fecha).set(true);
+  closeCicloModal();
+  renderCicloCard();
+}
+
+function deleteCicloRegistro(fecha) {
+  if (CURRENT_PORTAL_DATA.ciclo && CURRENT_PORTAL_DATA.ciclo.registros) {
+    delete CURRENT_PORTAL_DATA.ciclo.registros[fecha];
+  }
+  db().ref('clientasPortal/' + currentUid + '/ciclo/registros/' + fecha).remove();
+  openCicloModal();
+  renderCicloCard();
 }
 
 function switchFichaTab(tabId) {
