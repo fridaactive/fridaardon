@@ -1169,7 +1169,7 @@
 
       <!-- PERSONAL -->
       <div id="cp-personal" class="cp-content">
-        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa el cliente desde su ficha en la app.</div>
+        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa el cliente desde su ficha en su cuenta.</div>
         <div class="fin-form-row"><div class="fin-form-label">Nombre completo</div><input class="fin-form-input cp-field" data-field="nombre" type="text" placeholder="Nombre completo"></div>
         <div style="display:flex;gap:0.6rem;">
           <div style="flex:1;" class="fin-form-row"><div class="fin-form-label">Edad</div><input class="fin-form-input cp-field" data-field="edad" type="number" placeholder="Ej: 28"></div>
@@ -1182,7 +1182,7 @@
 
       <!-- SALUD -->
       <div id="cp-salud" class="cp-content" style="display:none;">
-        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa el cliente desde su ficha en la app.</div>
+        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa el cliente desde su ficha en su cuenta.</div>
         <div class="fin-form-row"><div class="fin-form-label">Patologías / Enfermedades</div><textarea class="fin-form-input cp-field" data-field="patologias" rows="3" placeholder="Ej: Hipertensión, diabetes..." style="resize:vertical;"></textarea></div>
         <div class="fin-form-row"><div class="fin-form-label">Lesiones o limitaciones físicas</div><textarea class="fin-form-input cp-field" data-field="lesiones" rows="3" placeholder="Ej: LCA derecha, dolor lumbar..." style="resize:vertical;"></textarea></div>
         <div class="fin-form-row"><div class="fin-form-label">Medicamentos</div><textarea class="fin-form-input cp-field" data-field="medicamentos" rows="2" placeholder="Ej: Metformina..." style="resize:vertical;"></textarea></div>
@@ -1195,7 +1195,7 @@
           <div class="fin-form-label">Días de entrenamiento por semana</div>
           <div id="cp-dias-pills" style="display:flex;gap:0.4rem;flex-wrap:wrap;"></div>
         </div>
-        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Lo de abajo lo completa el cliente desde su ficha en la app — los días de arriba sí los armás vos.</div>
+        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Lo de abajo lo completa el cliente desde su ficha en su cuenta — los días de arriba sí los armás vos.</div>
         <div class="fin-form-row"><div class="fin-form-label">Objetivo principal</div><input class="fin-form-input cp-field" data-field="objetivo" type="text" placeholder="Ej: Pérdida de grasa, fuerza..."></div>
         <div class="fin-form-row"><div class="fin-form-label">Nivel de condición física</div>
           <select class="fin-form-select cp-field" data-field="nivel">
@@ -1561,11 +1561,11 @@
   <div class="clients-wrap">
     <!-- MENÚ DEL PORTAL: tarjetas grandes en vez de pestañas (antes se cortaban en el celular) -->
     <div id="pc-hub">
-      <div class="pc-hub-intro">Todo lo que tus clientes ven y hacen en su app.</div>
+      <div class="pc-hub-intro">Todo lo que tus clientes ven y hacen en su cuenta de fridaactive.com.</div>
       <div class="pc-hub-lbl">Atender</div>
       <button type="button" class="pc-hub-card" onclick="pcOpen('chats')"><span class="pc-hub-ico">💬</span><span class="pc-hub-txt"><b>Mensajes</b><small id="pc-hub-chats-sub">Chats con tus clientes</small></span><span class="pc-tab-badge" id="pc-chats-badge" style="display:none;"></span><span class="pc-hub-arrow">›</span></button>
       <button type="button" class="pc-hub-card" onclick="pcOpen('solicitudes')"><span class="pc-hub-ico">🙋</span><span class="pc-hub-txt"><b>Solicitudes nuevas</b><small id="pc-hub-leads-sub">Personas que se registraron desde tu link</small></span><span class="pc-tab-badge" id="pc-leads-badge" style="display:none;"></span><span class="pc-hub-arrow">›</span></button>
-      <div class="pc-hub-lbl">Lo que ven en su app</div>
+      <div class="pc-hub-lbl">Lo que ven en su cuenta</div>
       <button type="button" class="pc-hub-card" onclick="pcOpen('beneficios')"><span class="pc-hub-ico">🎁</span><span class="pc-hub-txt"><b>Beneficios de marcas</b><small id="pc-hub-benef-sub">Descuentos en la pestaña Beneficios</small></span><span class="pc-hub-arrow">›</span></button>
       <button type="button" class="pc-hub-card" onclick="pcOpen('anuncios')"><span class="pc-hub-ico">📣</span><span class="pc-hub-txt"><b>Anuncios</b><small id="pc-hub-anun-sub">Avisos arriba de su perfil</small></span><span class="pc-hub-arrow">›</span></button>
       <button type="button" class="pc-hub-card" onclick="editPremio();renderPcHubPremio();"><span class="pc-hub-ico">🏆</span><span class="pc-hub-txt"><b>Premio del mes</b><small id="pc-hub-premio-sub">Lo ganan al completar su meta</small></span><span class="pc-hub-arrow">✎</span></button>
@@ -2133,7 +2133,7 @@ function openAdminClientProfile(clientId) {
   // una alerta en vez de quedar en silencio, porque si no nunca se nota.
   if (CLIENTS[clientId]) {
     syncClientPublicFields(clientId, CLIENTS[clientId], function(e) {
-      alert('No se pudo sincronizar el plan de este cliente con su app: ' + (e && e.message ? e.message : 'error desconocido') + '. Avisale a Claude con este mensaje.');
+      alert('No se pudo sincronizar el plan de este cliente con su cuenta: ' + (e && e.message ? e.message : 'error desconocido') + '. Avisale a Claude con este mensaje.');
     });
   }
   // Las tres modalidades pueden tener perfil y beneficios, pero solo
@@ -2157,7 +2157,7 @@ function openAdminClientProfile(clientId) {
     if (portalClientId && portalClientId !== clientId) {
       var otherName = (CLIENTS[portalClientId] && CLIENTS[portalClientId].name) || portalClientId;
       var thisName = (CLIENTS[clientId] && CLIENTS[clientId].name) || clientId;
-      var fix = confirm('¡Encontrado! La app de este cliente está vinculada a OTRO perfil: "' + otherName + '" (no a "' + thisName + '"). Por eso ve bloqueado aunque acá esté activo.\n\n¿Vincular su app a ESTE perfil ("' + thisName + '") ahora mismo?');
+      var fix = confirm('¡Encontrado! La cuenta de este cliente está vinculada a OTRO perfil: "' + otherName + '" (no a "' + thisName + '"). Por eso ve bloqueado aunque acá esté activo.\n\n¿Vincular su app a ESTE perfil ("' + thisName + '") ahora mismo?');
       if (fix) {
         fbSet('clientasPortal/' + uid + '/perfil/clientId', clientId, function(e) {
           alert('No se pudo vincular: ' + (e && e.message ? e.message : 'error desconocido'));
@@ -4840,7 +4840,7 @@ function renderPremioCard() {
   html += '<div class="premio-top"><span class="premio-ico">🎁</span><div style="flex:1;min-width:0;"><div class="premio-lbl">Premio de ' + mes + '</div>';
   html += '<div class="premio-txt">' + (cfg.texto ? escapeHtmlAdmin(cfg.texto) : '<span style="color:var(--muted);font-weight:400;">Sin premio todavía. Tus clientes verán “Frida te tiene una sorpresa”.</span>') + '</div></div>';
   html += '<button type="button" class="premio-edit" onclick="editPremio()">' + (cfg.texto ? 'Cambiar' : 'Poner premio') + '</button></div>';
-  html += '<div class="premio-sub">Se gana al cumplir su meta del mes en la app (sus sesiones del plan, o días por semana × 4).</div>';
+  html += '<div class="premio-sub">Se gana al cumplir su meta del mes en su cuenta (sus sesiones del plan, o días por semana × 4).</div>';
   if (winners.length) {
     html += '<div class="premio-win">🏆 <b>Lo lograron:</b> ' + winners.map(function(id) { return escapeHtmlAdmin(CLIENTS[id].name); }).join(', ') + '</div>';
   }
