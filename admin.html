@@ -879,6 +879,11 @@
 .cm-img-name{font-size:.68rem;font-weight:700;color:var(--text);margin:.4rem 0 .35rem;line-height:1.25}
 .cm-img-dl{display:block;background:var(--blue);color:#fff;border-radius:100px;padding:.4rem .5rem;font-size:.68rem;font-weight:700;text-decoration:none;box-shadow:0 3px 0 #0F3FA8}
 .cm-img-tip{font-size:.66rem;color:var(--muted);margin-bottom:.8rem}
+.leads-archivo{margin-top:1rem;border:1px dashed var(--border);border-radius:14px;padding:.7rem .9rem;background:#fff}
+.leads-archivo>summary{font-size:.78rem;font-weight:700;color:var(--muted);cursor:pointer}
+.leads-archivo-item{border-top:1px solid var(--border);padding:.6rem 0;font-size:.75rem;display:flex;flex-direction:column;gap:.15rem}
+.leads-archivo-item span{color:var(--muted);font-size:.7rem}
+.leads-archivo-item details summary{font-size:.7rem;font-weight:700;color:var(--blue);cursor:pointer;margin-top:.2rem}
 #rutina-editor .back-row{flex-wrap:wrap;gap:0.4rem;}
 #rutina-editor .back-row .sub-brand{margin-right:auto;}
 #rutina-editor .back-row .rv-edit-btn{margin-right:0!important;}
@@ -1585,6 +1590,7 @@
     <div class="pc-content active" id="pc-tab-solicitudes">
       <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Personas que se registraron solas desde tu link (ej. Instagram) y todavía no son clientes activos.</div>
       <div id="pc-leads-list"></div>
+      <div id="pc-leads-archivo"></div>
     </div>
 
     <!-- CHATS -->
@@ -1920,17 +1926,20 @@ function createPortalLinkCode(clientId, cb) {
 
 // ── CUESTIONARIO INICIAL (respuestas de onboarding del cliente) ──
 var CQ_LABELS = {
-  fechaNacimiento: 'Fecha de nacimiento', genero: 'Género', peso: 'Peso actual', estatura: 'Estatura',
-  objetivo: 'Objetivo principal', nutricionista: 'Nutricionista', experiencia: '¿Entrena actualmente?',
+  fechaNacimiento: 'Fecha de nacimiento', genero: 'Género', pesoLb: 'Peso actual', peso: 'Peso actual', estatura: 'Estatura',
+  objetivo: 'Objetivo principal', motivacion: 'Qué la motivó a empezar', experiencia: '¿Entrena actualmente?',
+  experienciaPesas: 'Experiencia con pesas', actividadDiaria: 'Su día normal', ocupacion: 'Ocupación',
   lesion: '¿Lesión o condición médica?', lesionDetalle: 'Detalle de la lesión', diasSemana: 'Días por semana',
-  lugar: '¿Dónde entrena?', equipoCasa: 'Equipo en casa'
+  tiempoSesion: 'Tiempo por entreno', lugar: '¿Dónde entrena?', equipoCasa: 'Equipo en casa', equipoComprar: 'Podría comprar',
+  guiaAlimentacion: 'Guía de alimentación', nutricionista: 'Nutricionista'
 };
-var CQ_ORDER = ['fechaNacimiento', 'genero', 'peso', 'estatura', 'objetivo', 'nutricionista', 'experiencia', 'lesion', 'lesionDetalle', 'diasSemana', 'lugar', 'equipoCasa'];
+var CQ_ORDER = ['fechaNacimiento', 'genero', 'pesoLb', 'peso', 'estatura', 'objetivo', 'motivacion', 'experiencia', 'experienciaPesas', 'actividadDiaria', 'ocupacion', 'lesion', 'lesionDetalle', 'diasSemana', 'tiempoSesion', 'lugar', 'equipoCasa', 'equipoComprar', 'guiaAlimentacion', 'nutricionista'];
 var CQ_NUTRI_LABELS = {
   si_tengo: 'Sí, ya tiene nutricionista',
   no_quiero: 'No, pero quiere el servicio de nutrición',
   no_interesada: 'No tiene y no está interesada'
 };
+var CQ_GUIA_LABELS = { si: 'Sí, la quiere', tengo_nutri: 'Ya tiene nutricionista', no: 'Por ahora no' };
 
 function escapeHtmlAdmin(s) {
   var d = document.createElement('div');
@@ -1941,6 +1950,12 @@ function escapeHtmlAdmin(s) {
 function formatCuestionarioValue(key, val) {
   if (val === undefined || val === null || val === '') return null;
   if (key === 'nutricionista') return CQ_NUTRI_LABELS[val] || val;
+  if (key === 'guiaAlimentacion') return CQ_GUIA_LABELS[val] || val;
+  if (key === 'pesoLb') return val + ' lb';
+  if ((key === 'equipoCasa' || key === 'equipoComprar') && typeof val === 'object') {
+    if (val.ninguno || !(val.items && val.items.length)) return key === 'equipoCasa' ? 'Nada' : 'Nada por ahora';
+    return val.items.map(function(it) { var p = val.pesos && val.pesos[it]; return p ? it + ' (' + p + ')' : it; }).join(', ');
+  }
   if (key === 'lesion') return val === 'si' ? 'Sí' : 'No';
   if (key === 'peso') return val + ' kg';
   if (key === 'estatura') return val + ' cm';
@@ -2745,7 +2760,27 @@ function renderLeadsSection() {
       }
     });
     el.innerHTML = html;
+    renderLeadsArchivo();
   }).catch(function(e) { console.warn('renderLeadsSection error', e.message); });
+}
+
+// Solicitudes eliminadas: su perfil y cuestionario quedan aquí para consultarlos.
+function renderLeadsArchivo() {
+  var el = document.getElementById('pc-leads-archivo');
+  var db = getDB();
+  if (!el || !db) return;
+  db.ref('solicitudesArchivadas').once('value').then(function(snap) {
+    var d = snap.val() || {}, ids = Object.keys(d);
+    if (!ids.length) { el.innerHTML = ''; return; }
+    ids.sort(function(a, b) { return String(d[b].archivadoEn || '').localeCompare(String(d[a].archivadoEn || '')); });
+    var h = '<details class="leads-archivo"><summary>🗂️ Solicitudes archivadas (' + ids.length + ')</summary>';
+    ids.forEach(function(id) {
+      var a = d[id] || {}, pf = a.perfil || {};
+      h += '<div class="leads-archivo-item"><b>' + escapeHtmlAdmin(pf.nombre || 'Sin nombre') + '</b><span>' + escapeHtmlAdmin([pf.email, pf.telefono].filter(Boolean).join(' · ')) + '</span>'
+        + (a.cuestionario ? '<details><summary>📋 Ver cuestionario</summary>' + cuestionarioHtml(a.cuestionario) + '</details>' : '<span>Sin cuestionario</span>') + '</div>';
+    });
+    el.innerHTML = h + '</details>';
+  }).catch(function() { el.innerHTML = ''; });
 }
 
 function convertLeadToClient(uid, name) {
@@ -2765,11 +2800,19 @@ function convertLandingLead(id, name) {
 }
 
 function deleteLead(uid, name) {
-  if (!confirm('¿Segura que querés eliminar la solicitud de ' + (name || 'esta persona') + '? Esta acción no se puede deshacer.')) return;
+  if (!confirm('¿Eliminar la solicitud de ' + (name || 'esta persona') + '? Se borra su cuenta, pero sus datos y su cuestionario quedan guardados en "Solicitudes archivadas" por si los necesitas.')) return;
   withAdminAuth(function() {
     var db = getDB();
     if (!db) return;
-    db.ref('clientasPortal/' + uid).remove().then(function() { renderLeadsSection(); });
+    // Antes de borrar, se archiva el perfil y el cuestionario para no perderlos.
+    db.ref('clientasPortal/' + uid).once('value').then(function(snap) {
+      var d = snap.val() || {};
+      return db.ref('solicitudesArchivadas/' + uid).set({ perfil: d.perfil || null, cuestionario: d.cuestionario || null, archivadoEn: new Date().toISOString() });
+    }).then(function() {
+      return db.ref('clientasPortal/' + uid).remove();
+    }).then(function() { renderLeadsSection(); }).catch(function(e) {
+      alert('No se pudo eliminar (no se borró nada): ' + (e && e.message ? e.message : 'error'));
+    });
   });
 }
 

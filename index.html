@@ -1020,6 +1020,12 @@
 .track-face{position:absolute;top:-9px;right:-7px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none}
 .track-face-img{width:18px;height:18px;font-size:14px}
 @media (prefers-reduced-motion: reduce){.fa-cara{transition:none}}
+
+/* Cuestionario: opciones múltiples (equipo) */
+.cq-option.cq-multi .cq-option-dot{border-radius:5px}
+.cq-option.cq-multi.selected .cq-option-dot{box-shadow:none;background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/80% no-repeat}
+.cq-option.cq-none{margin-top:.9rem;border-style:dashed}
+.cq-peso-in{display:block;width:100%;box-sizing:border-box;margin:-.25rem 0 .7rem;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--blue);font-family:inherit;font-size:.85rem;background:var(--blue-lt);color:var(--text)}
 </style>
 </head>
 <body>
@@ -1771,9 +1777,9 @@
       <div id="ficha-plan-actual"></div>
       <div id="ficha-plan-historial"></div>
       <div style="font-size:0.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin:1rem 0 0.5rem;">Otros planes disponibles</div>
-      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">1 mes</span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$40</span></div></div>
-      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">3 meses <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Pago único de $105</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$35/mes</span></div></div>
-      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">6 meses <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Pago único de $180</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$30/mes</span></div></div>
+      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">1 mes <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Pago mensual</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$50</span></div></div>
+      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">3 meses <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Te queda a $45 por mes</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$135</span></div></div>
+      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">6 meses <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Te queda a $40 por mes</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$240</span></div></div>
       <div class="ficha-promo-card" style="margin-bottom:0;"><div style="font-size:0.82rem;font-weight:700;">Online 1:1 (videollamada)</div><div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem;">Consultá precio y disponibilidad con Frida.</div></div>
     </div>
 
@@ -2760,29 +2766,46 @@ function renderPortalScreen(portal, perfil) {
 // One question per screen, Hevy-style, gated by perfil.requiereCuestionario.
 // Answers are saved once at the end to clientasPortal/{uid}/cuestionario —
 // their mere presence is what marks the questionnaire as completed.
+var CQ_EQUIPO = ['Mancuernas', 'Bandas o ligas elásticas', 'Kettlebell', 'Barra y discos', 'Banco', 'Step o cajón', 'Colchoneta', 'Barra para dominadas', 'Cuerda para saltar'];
+var CQ_CON_PESO = { 'Mancuernas': true, 'Kettlebell': true, 'Barra y discos': true };
 var CQ_QUESTIONS = [
   { key: 'fechaNacimiento', type: 'date', required: true, label: '¿Cuándo es tu cumpleaños?' },
   { key: 'genero', type: 'select', required: false, label: '¿Cuál es tu género?', options: ['Femenino', 'Masculino', 'Otro'] },
-  { key: 'peso', type: 'number', required: true, unit: 'kg', label: '¿Cuál es tu peso actual?' },
-  { key: 'estatura', type: 'number', required: true, unit: 'cm', label: '¿Cuánto medís?' },
-  { key: 'objetivo', type: 'select', required: true, label: '¿Cuál es tu objetivo principal?', options: ['Bajar grasa', 'Ganar músculo', 'Tonificar', 'Salud y bienestar'] },
-  { key: 'nutricionista', type: 'select', required: true, label: '¿Tenés nutricionista?', options: [
-      { value: 'si_tengo', label: 'Sí, ya tengo nutri' },
-      { value: 'no_quiero', label: 'No, pero quiero acompañar mi rutina de ejercicio con un plan de alimentación' },
-      { value: 'no_interesada', label: 'No tengo y no estoy interesada por el momento' }
-    ] },
-  { key: 'experiencia', type: 'select', required: true, label: '¿Entrenás actualmente?', options: [
+  { key: 'pesoLb', type: 'number', required: true, unit: 'lb', label: '¿Cuál es tu peso actual?', sub: 'En libras. Es solo para armar tu plan; nadie más lo ve.' },
+  { key: 'estatura', type: 'number', required: true, unit: 'cm', label: '¿Cuánto mides?', sub: 'En centímetros (por ejemplo, 1.62 m son 162 cm).' },
+  { key: 'objetivo', type: 'select', required: true, label: '¿Cuál es tu objetivo principal?', options: ['Bajar grasa', 'Ganar músculo', 'Tonificar', 'Mejorar mi condición física', 'Salud y bienestar'] },
+  { key: 'motivacion', type: 'text', required: false, label: '¿Qué te motivó a empezar ahora?', sub: 'Cuéntame con tus palabras. Me ayuda a acompañarte mejor.' },
+  { key: 'experiencia', type: 'select', required: true, label: '¿Entrenas actualmente?', options: [
       'Sí, de 2 a más días por semana',
       'Sí, pero de forma intermitente (1 vez por semana)',
       'Unas cuantas veces al mes',
       'Tengo meses de no hacer nada',
       'Tengo años de no hacer nada'
     ] },
-  { key: 'lesion', type: 'yesno', required: true, label: '¿Tenés alguna lesión, condición médica o restricción que debamos conocer?' },
-  { key: 'lesionDetalle', type: 'text', required: true, label: 'Contanos un poco más', sub: 'Zona, intensidad y desde cuándo, por ejemplo.', showIf: function(a) { return a.lesion === 'si'; } },
-  { key: 'diasSemana', type: 'select', required: true, label: '¿Cuántos días por semana podés entrenar realmente?', options: ['2 días', '3 días', '4 días', '5 días', '6 días o más'] },
-  { key: 'lugar', type: 'select', required: true, label: '¿Dónde entrenarás?', options: ['Casa', 'Gimnasio', 'Ambos'] },
-  { key: 'equipoCasa', type: 'text', required: true, label: '¿Con qué equipo contás en casa?', sub: "Mancuernas, bandas, banco... si no tenés nada, escribí \"ninguno\".", showIf: function(a) { return a.lugar === 'Casa' || a.lugar === 'Ambos'; } }
+  { key: 'experienciaPesas', type: 'select', required: true, label: '¿Has entrenado con pesas antes?', options: [
+      'Nunca',
+      'Un poco, pero no sé bien la técnica',
+      'Sí, conozco la técnica básica',
+      'Sí, tengo bastante experiencia'
+    ] },
+  { key: 'actividadDiaria', type: 'select', required: true, label: '¿Cómo es tu día normal?', options: [
+      'Paso sentada la mayor parte del día',
+      'Camino o estoy de pie bastante',
+      'Tengo un trabajo muy físico'
+    ] },
+  { key: 'ocupacion', type: 'text', required: false, label: '¿A qué te dedicas?', sub: 'Por ejemplo: estudiante, oficina, mamá a tiempo completo…' },
+  { key: 'lesion', type: 'yesno', required: true, label: '¿Tienes alguna lesión, condición médica o restricción que deba conocer?', sub: 'Por ejemplo: dolor de rodilla, hipertensión, diabetes, embarazo…' },
+  { key: 'lesionDetalle', type: 'text', required: true, label: 'Cuéntame un poco más', sub: 'Zona, intensidad y desde cuándo, por ejemplo.', showIf: function(a) { return a.lesion === 'si'; } },
+  { key: 'diasSemana', type: 'select', required: true, label: '¿Cuántos días por semana puedes entrenar realmente?', options: ['2 días', '3 días', '4 días', '5 días', '6 días o más'] },
+  { key: 'tiempoSesion', type: 'select', required: true, label: '¿Cuánto tiempo tienes para cada entreno?', options: ['30 minutos', '45 minutos', '1 hora', 'Más de 1 hora'] },
+  { key: 'lugar', type: 'select', required: true, label: '¿Dónde vas a entrenar?', options: ['Casa', 'Gimnasio', 'Ambos'] },
+  { key: 'equipoCasa', type: 'multi', required: true, items: CQ_EQUIPO, none: 'No tengo nada', label: '¿Qué equipo tienes en casa?', sub: 'Marca todo lo que tengas. Si tienes pesas, dime de cuántas libras.', showIf: function(a) { return a.lugar === 'Casa' || a.lugar === 'Ambos'; } },
+  { key: 'equipoComprar', type: 'multi', required: true, items: CQ_EQUIPO, none: 'Por ahora no puedo comprar nada', label: 'Si hiciera falta, ¿qué podrías comprar?', sub: 'Así armo tu rutina con lo que tienes y sé qué podríamos sumar más adelante.', skipOwned: 'equipoCasa', showIf: function(a) { return a.lugar === 'Casa' || a.lugar === 'Ambos'; } },
+  { key: 'guiaAlimentacion', type: 'select', required: true, label: '¿Te gustaría recibir una guía de alimentación?', sub: 'Viene incluida en tu plan: ideas y porciones fáciles para mejorar tu alimentación, sin dietas estrictas.', options: [
+      { value: 'si', label: '¡Sí, me encantaría!' },
+      { value: 'tengo_nutri', label: 'Ya tengo nutricionista' },
+      { value: 'no', label: 'Por ahora no' }
+    ] }
 ];
 
 var cqAnswers = {};
@@ -2799,7 +2822,9 @@ function cqFindIndex(startIndex, dir, answers) {
   return dir > 0 ? CQ_QUESTIONS.length : -1;
 }
 
+var CQ_PERFIL = {};
 function startCuestionario(perfil) {
+  CQ_PERFIL = perfil || {};
   cqAnswers = {};
   cqIndex = cqFindIndex(0, 1, cqAnswers);
   showScreen('screen-cuestionario');
@@ -2830,6 +2855,26 @@ function cqRender() {
     fieldEl.innerHTML = '<div class="cq-number-wrap"><input type="number" inputmode="decimal" class="cq-input" id="cq-input" placeholder="0" value="' + (currentVal != null ? currentVal : '') + '"><span class="cq-unit">' + (q.unit || '') + '</span></div>';
   } else if (q.type === 'text') {
     fieldEl.innerHTML = '<textarea class="cq-input cq-textarea" id="cq-input" rows="3" placeholder="Escribí acá…">' + escapeHtml(currentVal || '') + '</textarea>';
+  } else if (q.type === 'multi') {
+    var sel = (currentVal && currentVal.items) || [], pesos = (currentVal && currentVal.pesos) || {};
+    var owned = q.skipOwned && cqAnswers[q.skipOwned] ? (cqAnswers[q.skipOwned].items || []) : [];
+    var items = q.items.filter(function(it) { return owned.indexOf(it) === -1; });
+    var html = items.map(function(it) {
+      var on = sel.indexOf(it) !== -1;
+      var pesoIn = (on && CQ_CON_PESO[it] && !q.skipOwned) ? '<input type="text" class="cq-peso-in" data-peso="' + escapeHtml(it) + '" placeholder="¿De cuántas libras? Ej: 5, 10 y 15" value="' + escapeHtml(pesos[it] || '') + '">' : '';
+      return '<div class="cq-option cq-multi' + (on ? ' selected' : '') + '" data-value="' + escapeHtml(it) + '"><span class="cq-option-dot"></span><span class="cq-option-label">' + escapeHtml(it) + '</span></div>' + pesoIn;
+    }).join('');
+    var noneOn = currentVal && currentVal.ninguno;
+    html += '<div class="cq-option cq-multi cq-none' + (noneOn ? ' selected' : '') + '" data-none="1"><span class="cq-option-dot"></span><span class="cq-option-label">' + escapeHtml(q.none) + '</span></div>';
+    fieldEl.innerHTML = html;
+    fieldEl.querySelectorAll('.cq-option').forEach(function(el) {
+      el.addEventListener('click', function() { cqToggleMulti(q.key, this.getAttribute('data-value'), !!this.getAttribute('data-none')); });
+    });
+    fieldEl.querySelectorAll('.cq-peso-in').forEach(function(el) {
+      el.addEventListener('input', function() {
+        var v = cqAnswers[q.key] || { items: [] }; v.pesos = v.pesos || {}; v.pesos[this.getAttribute('data-peso')] = this.value; cqAnswers[q.key] = v;
+      });
+    });
   } else if (q.type === 'select' || q.type === 'yesno') {
     var opts = q.type === 'yesno' ? [{ value: 'si', label: 'Sí' }, { value: 'no', label: 'No' }] : q.options.map(function(o) {
       return typeof o === 'string' ? { value: o, label: o } : o;
@@ -2849,6 +2894,19 @@ function cqRender() {
 
   var isLast = cqFindIndex(cqIndex + 1, 1, cqAnswers) >= CQ_QUESTIONS.length;
   document.getElementById('cq-continue-btn').textContent = isLast ? 'Finalizar' : 'Continuar';
+}
+
+function cqToggleMulti(key, val, isNone) {
+  var v = cqAnswers[key] || { items: [] };
+  v.items = v.items || [];
+  if (isNone) { v = { items: [], ninguno: !v.ninguno }; }
+  else {
+    v.ninguno = false;
+    var i = v.items.indexOf(val);
+    if (i === -1) v.items.push(val); else v.items.splice(i, 1);
+  }
+  cqAnswers[key] = v;
+  cqRender();
 }
 
 function cqSelect(key, val) {
@@ -2871,6 +2929,7 @@ function cqValid(q) {
   var v = cqAnswers[q.key];
   if (q.type === 'number') return v !== null && v !== undefined && !isNaN(v);
   if (q.type === 'text') return !!(v && ('' + v).trim());
+  if (q.type === 'multi') return !!(v && (v.ninguno || (v.items && v.items.length)));
   return v !== undefined && v !== null && v !== '';
 }
 
@@ -2907,12 +2966,40 @@ function cqBack() {
 function cqFinish() {
   setLoading(true);
   var payload = Object.assign({}, cqAnswers, { completadoEn: new Date().toISOString() });
-  db().ref('clientasPortal/' + currentUid + '/cuestionario').set(payload).then(function() {
+  // La ficha se llena sola con lo que ya respondió (no se le vuelve a preguntar).
+  var fichaPrev = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ficha) || {};
+  var fichaNueva = fichaDesdeCuestionario(payload, Object.assign({}, CQ_PERFIL, CURRENT_PERFIL_DATA || {}), fichaPrev);
+  var upd = {};
+  upd['clientasPortal/' + currentUid + '/cuestionario'] = payload;
+  upd['clientasPortal/' + currentUid + '/ficha'] = fichaNueva;
+  db().ref().update(upd).then(function() {
     fetchPortalAndRender(currentUid, true);
   }).catch(function(e) {
     setLoading(false);
     document.getElementById('cq-error').textContent = 'No se pudo guardar: ' + e.message;
   });
+}
+
+// Arma la ficha a partir del cuestionario, sin pisar lo que ya haya escrito.
+function fichaDesdeCuestionario(c, perfil, prev) {
+  c = c || {}; prev = prev || {};
+  var p = Object.assign({}, prev.personal || {}), sa = Object.assign({}, prev.salud || {}), e = Object.assign({}, prev.entreno || {});
+  var put = function(obj, k, v) { if (v && !obj[k]) obj[k] = v; };
+  if (c.fechaNacimiento) {
+    var b = new Date(c.fechaNacimiento + 'T00:00:00'), now = new Date();
+    var edad = now.getFullYear() - b.getFullYear() - ((now.getMonth() < b.getMonth() || (now.getMonth() === b.getMonth() && now.getDate() < b.getDate())) ? 1 : 0);
+    if (edad > 0 && edad < 110) put(p, 'edad', String(edad));
+    put(p, 'cumple', c.fechaNacimiento);
+  }
+  put(p, 'telefono', perfil.telefono);
+  put(p, 'ocupacion', c.ocupacion);
+  if (c.lesion === 'si') put(sa, 'lesiones', c.lesionDetalle);
+  put(e, 'objetivo', c.objetivo);
+  var nivel = { 'Nunca': 'Principiante', 'Un poco, pero no sé bien la técnica': 'Principiante', 'Sí, conozco la técnica básica': 'Intermedio', 'Sí, tengo bastante experiencia': 'Avanzado' }[c.experienciaPesas];
+  put(e, 'nivel', nivel);
+  put(e, 'notas', c.motivacion);
+  e.dias = e.dias || [];
+  return { personal: p, salud: sa, entreno: e };
 }
 
 // ── FOTO DE PERFIL ── (dos círculos la muestran: el del header y el de Perfil)
@@ -4128,7 +4215,7 @@ function renderFichaDiasPills() {
 }
 
 function openFichaModal() {
-  var ficha = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ficha) || {};
+  var ficha = fichaDesdeCuestionario((CURRENT_PORTAL_DATA || {}).cuestionario, CURRENT_PERFIL_DATA || {}, (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ficha) || {});
   var p = ficha.personal || {}, s = ficha.salud || {}, e = ficha.entreno || {};
   var values = Object.assign({}, p, s, e);
   document.querySelectorAll('#ficha-modal .ficha-field').forEach(function(el) {
@@ -4771,17 +4858,17 @@ var PLAN_LOCKED = false;
 var PLAN_NEVER_SET = false;
 
 function renderPlanLockedCard() {
-  var title = PLAN_NEVER_SET ? 'Todavía no tenés un plan activo' : 'Tu programa caducó';
-  var text = PLAN_NEVER_SET ? 'Escribile a Frida para activar tu plan y ver esta sección.' : 'Adquirí un nuevo plan para seguir viendo esta sección.';
+  var title = PLAN_NEVER_SET ? 'Todavía no tienes un plan activo' : 'Tu programa caducó';
+  var text = PLAN_NEVER_SET ? 'Escríbele a Frida para activar tu plan y ver esta sección.' : 'Adquiere un nuevo plan para seguir viendo esta sección.';
   return '<div class="pf-locked-card">'
     + '<div class="pf-locked-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>'
     + '<div class="pf-locked-title">' + title + '</div>'
     + '<div class="pf-locked-text">' + text + '</div>'
     + '<details class="pf-locked-pricing">'
     + '<summary>Ver planes y precios</summary>'
-    + '<div class="pf-locked-price-row"><span class="plan-name">1 mes</span><span class="plan-price">$40</span></div>'
-    + '<div class="pf-locked-price-row"><span class="plan-name">3 meses<span class="plan-sub">Pago único de $105</span></span><span class="plan-price">$35/mes</span></div>'
-    + '<div class="pf-locked-price-row"><span class="plan-name">6 meses<span class="plan-sub">Pago único de $180</span></span><span class="plan-price">$30/mes</span></div>'
+    + '<div class="pf-locked-price-row"><span class="plan-name">1 mes<span class="plan-sub">Pago mensual</span></span><span class="plan-price">$50</span></div>'
+    + '<div class="pf-locked-price-row"><span class="plan-name">3 meses<span class="plan-sub">Te queda a $45 por mes</span></span><span class="plan-price">$135</span></div>'
+    + '<div class="pf-locked-price-row"><span class="plan-name">6 meses<span class="plan-sub">Te queda a $40 por mes</span></span><span class="plan-price">$240</span></div>'
     + '</details>'
     + '</div>';
 }
