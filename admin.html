@@ -5784,7 +5784,7 @@ function renderContentList() {
       + '<div class="content-card-top"><div class="content-card-date">Publica: ' + contentDateLabel(v.publicar.fecha) + ' · ' + contentTimeLabel(v.publicar.hora) + '</div>'
       + '<span class="content-status s' + st + '">' + CONTENT_STATES[st] + '</span></div>'
       + '<div class="content-card-title">' + escHtml(v.titulo) + (v.borrador ? '<span class="content-draft">Borrador</span>' : '') + '</div>'
-      + '<div class="content-card-meta">' + escHtml(v.pilar) + ' · Graba: ' + contentDateLabel(v.grabar, true) + ' · Edita: ' + contentDateLabel(v.editar, true) + '</div>'
+      + '<div class="content-card-meta">' + escHtml(v.pilar) + (v.grabar ? ' · Graba: ' + contentDateLabel(v.grabar, true) : '') + (v.editar ? ' · Edita: ' + contentDateLabel(v.editar, true) : '') + '</div>'
       + '</button>';
   });
   el.innerHTML = html;
@@ -5921,8 +5921,8 @@ function openContentModal(id) {
   h += '</div>';
 
   h += '<div class="cm-section">Fechas</div><div class="cm-dates">'
-    + '<div class="cm-date">🎥 Grabar<b>' + contentDateLabel(v.grabar) + '</b></div>'
-    + '<div class="cm-date">✂️ Editar<b>' + contentDateLabel(v.editar) + '</b></div>'
+    + (v.grabar ? '<div class="cm-date">🎥 Grabar<b>' + contentDateLabel(v.grabar) + '</b></div>' : '')
+    + (v.editar ? '<div class="cm-date">✂️ Editar<b>' + contentDateLabel(v.editar) + '</b></div>' : '')
     + '<div class="cm-date">📲 Publicar<b>' + contentDateLabel(v.publicar.fecha) + ', ' + contentTimeLabel(v.publicar.hora) + '</b></div>'
     + '</div>';
 

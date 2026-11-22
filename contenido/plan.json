@@ -266,6 +266,49 @@
    ]
   },
   {
+   "id": "h2026-11-24-planes",
+   "titulo": "Historia: mis planes de entrenamiento online",
+   "pilar": "Ventas (historia semanal)",
+   "formato": "Historia de Instagram (3 pantallas)",
+   "duracion": "3 historias seguidas",
+   "publicar": {
+    "fecha": "2026-11-24",
+    "hora": "12:30"
+   },
+   "borrador": false,
+   "idea": "Cada semana una historia que invite a entrenar contigo. La de la semana pasada (con encuesta) te trajo 3 personas interesadas, así que repetimos la fórmula: mostrar el plan, el link y una encuesta para que levanten la mano.",
+   "tomas": [
+    {
+     "graba": "HISTORIA 1: foto o video tuyo entrenando a un cliente, o tu celular mostrando la app con una rutina",
+     "habla": false,
+     "dice": "Texto: \"¿Quieres entrenar con un plan hecho *solo para ti*?\" · abajo: \"Te cuento 👉\""
+    },
+    {
+     "graba": "HISTORIA 2: tu imagen de planes online (la de tu foto con los precios de 1, 3 y 6 meses)",
+     "habla": false,
+     "dice": "Sticker de link: fridaactive.com/servicios.html con el texto \"Ver planes\" · Texto: \"Plan de alimentación incluido 🥗\""
+    },
+    {
+     "graba": "HISTORIA 3: foto tuya sonriendo o en el gym",
+     "habla": false,
+     "dice": "Encuesta: \"¿Empezamos en diciembre?\" con las opciones \"¡Sí! Quiero info 🙋‍♀️\" y \"Más adelante\". A quien vote \"Sí\", le escribes ese mismo día."
+    }
+   ],
+   "notas": [
+    "Historia semanal de ventas: súbela una vez por semana (de preferencia martes o miércoles).",
+    "La encuesta es la clave: cada voto de \"Sí\" es una persona que levantó la mano. Escríbele el mismo día con el mensaje de seguimiento.",
+    "Publícala en \"Tu historia\", no en Mejores amigos.",
+    "Cambia la foto de la historia 1 cada semana para que no se vea repetida."
+   ],
+   "caption": "(Las historias no llevan caption.)",
+   "checklist": [
+    "Imagen de planes a la mano",
+    "Sticker de link a fridaactive.com/servicios.html",
+    "Encuesta en la historia 3",
+    "Revisar quién votó y escribirle el mismo día"
+   ]
+  },
+  {
    "id": "v2026-11-17-comidas",
    "titulo": "Lo que como en un día sin contar calorías",
    "pilar": "Alimentación (educativo)",
