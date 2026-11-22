@@ -1164,11 +1164,6 @@
       </div>
       <div id="cd-portal" style="margin-bottom:1.5rem;"></div>
     </div>
-    <div class="section-hdr">
-      <div class="section-hdr-label">Cuadro de asistencia</div>
-      <div class="section-hdr-line"></div>
-    </div>
-    <div id="cd-asistencia" style="margin-bottom:1.5rem;"></div>
   </div>
 </div>
 
@@ -4578,8 +4573,9 @@ function openClientDetail(id) {
     rutinaBtn.onclick = function(e) { e.preventDefault(); openRutinaEditor(id); };
   }
 
-  // Asistencia
-  renderAsistencia(id, c);
+  // El cuadro de asistencia ahora se abre desde la pantalla de Rutina
+  // (recuadro "Sesiones del ciclo"), no acá — para que todo lo del
+  // entrenamiento quede junto en un solo lugar.
 
   // Portal de cliente — solo aplica a clientes online
   var portalSectionEl = document.getElementById('cd-portal-section');
@@ -4710,6 +4706,8 @@ function getBubbleClass(pres, aus) {
 }
 
 function buildMonthBubbles(id, c, asistData) {
+  var container = document.getElementById('cd-asistencia');
+  if (!container) return;
   var months = getMonthsRange(c.firstEverDate || c.initDate);
   var html = '<div class="month-bubbles" id="bubbles-'+id+'">';
   months.forEach(function(m) {
@@ -4725,7 +4723,7 @@ function buildMonthBubbles(id, c, asistData) {
   });
   html += '</div>';
   html += '<div id="month-detail-'+id+'" style="display:none;"></div>';
-  document.getElementById('cd-asistencia').innerHTML = html;
+  container.innerHTML = html;
   document.querySelectorAll('.month-bubble[data-id="'+id+'"]').forEach(function(b) {
     b.addEventListener('click', function() {
       showMonthDetail(id, c, asistData, parseInt(this.getAttribute('data-year')), parseInt(this.getAttribute('data-month')), parseInt(this.getAttribute('data-mnum')));
