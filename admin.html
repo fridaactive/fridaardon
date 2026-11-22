@@ -4,7 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FridaActive · Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#1C55E5">
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Archivo+Black&display=swap" rel="stylesheet">
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -295,6 +299,8 @@
     .week-nav { grid-area: nav; }
     .cal-scroll { grid-area: cal; min-width:0; }
     .plan-rem-box { grid-area: rem !important; margin-bottom:0; align-self:start; position:sticky; top:1rem; }
+    .plan-side { grid-area: rem; align-self:start; position:sticky; top:1rem; }
+    .plan-side .plan-rem-box { grid-area:auto !important; position:static; }
   }
 
   /* Week nav */
@@ -336,10 +342,10 @@
 
   /* Calendar grid */
   .cal-scroll { overflow-x:auto; overflow-y:visible; -webkit-overflow-scrolling:touch; }
-  .cal-grid-wrap { position:relative; border-radius:14px; border:1.5px solid var(--border); overflow:hidden; min-width:580px; }
+  .cal-grid-wrap { position:relative; border-radius:14px; border:1.5px solid var(--border); overflow:hidden; min-width:660px; }
   .cal-grid {
     display:grid;
-    grid-template-columns: 3.5rem repeat(6,1fr);
+    grid-template-columns: 3.5rem repeat(7,1fr);
   }
 
   /* Header row */
@@ -413,8 +419,99 @@
   .cal-event.type-tarea { background:#2a7a2a; color:#fff; }
   .cal-event.type-personal { background:#9a7700; color:#fff; }
   .cal-event.type-otro { background:#7a2a6a; color:#fff; }
+  .cal-event.type-contenido { background:linear-gradient(135deg,#F58529 0%,#DD2A7B 60%,#A13BC4 100%); color:#fff; }
   .cal-event.type-libre { background:#e8f7ee; color:#2a7a2a; border:1.5px solid #a8ddb8; font-style:italic; }
   .cal-event.type-nodisponible { background:#fff0f0; color:#c44; border:1.5px dashed #fcc; font-style:italic; }
+
+  /* ── CONTENIDO (plan de redes sociales) ── */
+  .plan-tabs { display:flex; gap:0.5rem; max-width:1150px; margin:1rem auto 0; padding:0 1.25rem; }
+  .plan-tab { flex:1; border:1.5px solid var(--border-b,#ccdaf5); background:#fff; color:var(--muted); border-radius:12px; padding:0.65rem 0.5rem; font-size:0.78rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; }
+  .plan-tab.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+  .cal-day-header { position:relative; }
+  .cal-day-badge { position:absolute; top:4px; right:4px; min-width:1.25rem; height:1.25rem; padding:0 0.3rem; border-radius:100px; border:2px solid var(--blue); background:#F5ECCB; color:#0D1B3E; font-size:0.62rem; font-weight:800; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; font-family:'DM Sans',sans-serif; box-shadow:0 2px 6px rgba(0,0,0,0.18); touch-action:manipulation; }
+  .cal-day-badge.today { animation: badgePulse 1.8s ease-in-out infinite; }
+  @keyframes badgePulse { 0%,100% { box-shadow:0 0 0 0 rgba(245,236,203,0.9); } 50% { box-shadow:0 0 0 6px rgba(245,236,203,0); } }
+  .content-pop { position:fixed; z-index:998; width:260px; background:#fff; border-radius:16px; box-shadow:0 12px 32px rgba(13,27,62,0.22); padding:0.85rem; border:1.5px solid var(--border-b,#ccdaf5); }
+  .content-pop::before { content:''; position:absolute; top:-8px; left:var(--arrow-x, 50%); width:14px; height:14px; background:#fff; border-left:1.5px solid var(--border-b,#ccdaf5); border-top:1.5px solid var(--border-b,#ccdaf5); transform:translateX(-50%) rotate(45deg); }
+  .content-pop-day { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:0.5rem; }
+  .content-task { display:flex; align-items:center; gap:0.6rem; width:100%; text-align:left; background:#f7f9ff; border:none; border-radius:12px; padding:0.6rem 0.7rem; margin-bottom:0.4rem; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .content-task:last-child { margin-bottom:0; }
+  .content-task-icon { font-size:1.1rem; flex-shrink:0; }
+  .content-task-kind { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--blue); }
+  .content-task-title { font-size:0.82rem; font-weight:700; color:var(--text); line-height:1.3; }
+  .content-task-when { font-size:0.68rem; color:var(--muted); }
+  .content-task.today { background:#FFF7DC; box-shadow:inset 0 0 0 1.5px #E2C870; }
+  .plan-week-content { background:#fff; border:1.5px solid var(--border-b,#ccdaf5); border-radius:14px; padding:0.9rem 1rem; margin-bottom:0.75rem; }
+  .plan-week-content .plan-rem-hdr { display:flex; justify-content:space-between; align-items:center; }
+  .plan-week-empty { font-size:0.75rem; color:var(--muted); }
+  .plan-week-content .content-task { margin-bottom:0.4rem; }
+  .pwc-toggle { display:none; width:100%; background:none; border:none; color:var(--blue); font-weight:700; font-size:0.75rem; font-family:'DM Sans',sans-serif; padding:0.4rem; cursor:pointer; }
+  @media (max-width: 699px) {
+    .plan-week-content:not(.expanded) .pwc-extra { display:none; }
+    .pwc-toggle { display:block; }
+  }
+  .content-wrap { padding:1rem 1.25rem 5rem; max-width:900px; margin:0 auto; }
+  .content-intro { font-size:0.75rem; color:var(--muted); margin-bottom:0.9rem; line-height:1.5; }
+  .content-week-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:1.1rem 0 0.5rem; }
+  .content-card { display:block; width:100%; text-align:left; background:#fff; border:1.5px solid var(--border-b,#ccdaf5); border-radius:14px; padding:0.9rem 1rem; margin-bottom:0.6rem; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .content-card.next { border-color:var(--blue); box-shadow:0 0 0 3px #EBF0FF; }
+  .content-card-top { display:flex; justify-content:space-between; gap:0.5rem; align-items:center; margin-bottom:0.3rem; }
+  .content-card-date { font-size:0.68rem; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:0.05em; }
+  .content-card-title { font-size:0.95rem; font-weight:700; color:var(--text); }
+  .content-card-meta { font-size:0.7rem; color:var(--muted); margin-top:0.2rem; }
+  .content-status { font-size:0.62rem; font-weight:700; border-radius:100px; padding:0.2rem 0.55rem; white-space:nowrap; }
+  .content-status.s0 { background:#f0f2f7; color:#4a5878; }
+  .content-status.s1 { background:#FFF4D6; color:#7a5a00; }
+  .content-status.s2 { background:#EBF0FF; color:var(--blue); }
+  .content-status.s3 { background:#e5f4e4; color:#2a7a2a; }
+  .content-draft { font-size:0.6rem; font-weight:700; background:#fff0f0; color:#c44; border-radius:100px; padding:0.15rem 0.5rem; margin-left:0.35rem; }
+  #content-modal .modal { max-width:720px; max-height:90vh; overflow-y:auto; }
+  @media (min-width: 700px) { #content-modal { align-items:center; } #content-modal .modal { border-radius:20px; } }
+  .cm-section { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:1.1rem 0 0.45rem; }
+  .cm-dates { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:0.4rem; }
+  .cm-date { background:#f7f9ff; border-radius:10px; padding:0.5rem; font-size:0.68rem; color:var(--muted); }
+  .cm-date b { display:block; color:var(--text); font-size:0.78rem; margin-top:0.1rem; }
+  .cm-idea { font-size:0.82rem; line-height:1.5; color:var(--text); }
+  .cm-table-wrap { overflow-x:auto; border:1.5px solid var(--border); border-radius:12px; }
+  .cm-table { width:100%; border-collapse:collapse; font-size:0.74rem; min-width:520px; }
+  .cm-table th { background:var(--blue); color:#fff; text-align:left; padding:0.5rem; font-weight:700; }
+  .cm-table td { padding:0.55rem 0.5rem; border-top:1px solid var(--border); vertical-align:top; line-height:1.45; }
+  .cm-table tr.talk td { background:#FFFBEA; }
+  .cm-talk { font-weight:700; color:var(--blue); white-space:nowrap; }
+  /* En el celular cada toma se ve como una tarjeta (sin desplazamiento lateral) */
+  @media (max-width: 600px) {
+    .cm-table { min-width:0; }
+    .cm-table thead { display:none; }
+    .cm-table tr { display:block; border-top:1px solid var(--border); padding:0.4rem 0; }
+    .cm-table tr:first-child { border-top:none; }
+    .cm-table td { display:block; border-top:none; padding:0.2rem 0.6rem; }
+    .cm-table td[data-label]::before { content:attr(data-label); display:block; font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+    .cm-table td.cm-num { font-weight:700; color:var(--blue); }
+  }
+  .cm-list { margin:0; padding-left:1.1rem; font-size:0.78rem; line-height:1.6; color:var(--text); }
+  .cm-caption { white-space:pre-line; background:#f7f9ff; border-radius:12px; padding:0.75rem; font-size:0.8rem; line-height:1.55; color:var(--text); }
+  .cm-btn { border:none; border-radius:10px; padding:0.6rem 0.9rem; font-weight:700; font-size:0.75rem; font-family:'DM Sans',sans-serif; cursor:pointer; }
+  .cm-btn.primary { background:var(--blue); color:#fff; }
+  .cm-btn.ghost { background:var(--blue-lt); color:var(--blue); }
+  .cm-status-row { display:flex; gap:0.4rem; flex-wrap:wrap; }
+  .cm-status-btn { border:1.5px solid var(--border); background:#fff; border-radius:100px; padding:0.35rem 0.75rem; font-size:0.7rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; color:var(--muted); }
+  .cm-status-btn.active { background:var(--blue); border-color:var(--blue); color:#fff; }
+  .ce-bar { display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-top:1rem; }
+  .ce-edited { font-size:0.72rem; color:#7a5a00; background:#FFF7DC; border-radius:100px; padding:0.3rem 0.7rem; }
+  .ce-edited button { background:none; border:none; color:var(--blue); font-weight:700; font-size:0.72rem; cursor:pointer; padding:0; font-family:'DM Sans',sans-serif; text-decoration:underline; }
+  .ce-hint { font-size:0.74rem; color:var(--muted); background:#f7f9ff; border-radius:10px; padding:0.6rem 0.75rem; margin-top:0.9rem; line-height:1.5; }
+  .ce-toma { border:1.5px solid var(--border); border-radius:12px; padding:0.75rem; margin-bottom:0.6rem; }
+  .ce-toma.talk { background:#FFFBEA; border-color:#E2C870; }
+  .ce-toma-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; font-size:0.8rem; color:var(--blue); }
+  .ce-actions { display:flex; gap:0.3rem; }
+  .ce-actions button { width:2.2rem; height:2.2rem; border-radius:8px; border:1.5px solid var(--border); background:#fff; cursor:pointer; font-size:0.85rem; }
+  .ce-actions button:disabled { opacity:0.35; cursor:default; }
+  .ce-label { display:block; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); margin:0.45rem 0 0.2rem; }
+  .ce-input { width:100%; box-sizing:border-box; border:1.5px solid var(--border); border-radius:10px; padding:0.55rem 0.65rem; font-size:0.85rem; font-family:'DM Sans',sans-serif; line-height:1.45; resize:vertical; background:#fff; color:var(--text); }
+  .ce-input:focus { outline:none; border-color:var(--blue); }
+  .ce-check { display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; font-weight:600; color:var(--text); margin-top:0.45rem; cursor:pointer; }
+  .ce-check input { width:1.1rem; height:1.1rem; accent-color:var(--blue); }
+  .ce-save-row { display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1rem; position:sticky; bottom:-2rem; background:#fff; padding:0.75rem 0; }
 
   /* Modal */
   .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:999; display:none; align-items:flex-end; justify-content:center; }
@@ -439,6 +536,7 @@
   .type-pill.tarea { background:#F0FFF0; color:#2a7a2a; }
   .type-pill.personal { background:#fdf8ee; color:#9a7700; }
   .type-pill.otro { background:#f5eeff; color:#7a2a6a; }
+  .type-pill.contenido { background:#FFEAF3; color:#C2185B; }
   .type-pill.libre { background:#e8f7ee; color:#2a7a2a; }
   .type-pill.nodisponible { background:#fff0f0; color:#c44; }
 
@@ -479,7 +577,7 @@
   .fin-tab-btn { flex-shrink:0; padding:0.4rem 0.9rem; background:#fff; border:1.5px solid var(--border); color:var(--muted); border-radius:100px; font-size:0.68rem; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.2s; touch-action:manipulation; }
   .fin-tab-btn.active { background:var(--blue); color:#fff; border-color:var(--blue); font-weight:700; }
 
-  /* ── PORTAL DE CLIENTAS: pestañas ── */
+  /* ── PORTAL DE CLIENTES: pestañas ── */
   .pc-tabs { display:flex; gap:0.4rem; overflow-x:auto; margin-bottom:1.25rem; scrollbar-width:none; -ms-overflow-style:none; }
   .pc-tabs::-webkit-scrollbar { display:none; }
   .pc-tab-btn { flex-shrink:0; padding:0.55rem 0.95rem; background:#fff; border:1.5px solid var(--border); color:var(--muted); border-radius:100px; font-size:0.7rem; font-weight:600; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.2s; touch-action:manipulation; white-space:nowrap; }
@@ -609,17 +707,190 @@
   .transf-captions { display:flex; gap:0.5rem; padding:0 0.9rem 0.9rem; }
   .transf-slot-empty svg { width:22px; height:22px; }
 
-  .track-day{position:relative;overflow:visible}
-  .track-face{position:absolute;top:-9px;right:-7px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none}
-  .fa-emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
-  .track-face .fa-emoji{font-size:14px}
-  .cst-chip.feel{display:inline-flex;align-items:center;gap:.25rem;background:#F4F6FF;color:var(--text)}
-  .cst-chip.feel .fa-emoji{font-size:12px}
-  .cst-chip.feel.dolor,.cst-chip.feel.nauseas{background:#FFEDEF;color:#B4233C}
+  /* ════════════════════════════════════════════════════════════
+     ESTILO "ENERGÍA AZUL" EN VERSIÓN CLARA — PANEL DE FRIDA
+     Mismo diseño del portal de clientes (letras gruesas, azul con
+     relieve, detalles crema, animaciones) sobre fondo claro, para
+     trabajar de día en la tablet.
+     ════════════════════════════════════════════════════════════ */
+  body.admin-v2 { --bg:#F4F7FF; --line:#E2E8F4; --relief:#0F3FA8; background:var(--bg); }
+  body.admin-v2 .menu-title, body.admin-v2 .dash-greeting, body.admin-v2 .sub-title, body.admin-v2 .week-label,
+  body.admin-v2 .fin-card .fin-card-value { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; }
+
+  /* Encabezados */
+  body.admin-v2 .dash-hero, body.admin-v2 .sub-hero { background:radial-gradient(120% 100% at 92% 0%, #3A6CF0 0%, rgba(58,108,240,0) 55%), linear-gradient(160deg, #0F3FA8 0%, #1C55E5 100%); border-radius:0 0 28px 28px; }
+  body.admin-v2 .dash-hero::after { content:''; position:absolute; right:1.6rem; bottom:1.4rem; width:34px; height:34px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23F5ECCB' d='M12 0c.6 5.6 2.4 8 8 9-5.6 1-7.4 3.4-8 9-.6-5.6-2.4-8-8-9 5.6-1 7.4-3.4 8-9z'/%3E%3C/svg%3E") center/contain no-repeat; animation:adTwinkle 2.8s ease-in-out infinite; }
+  .ad-date { position:relative; z-index:1; display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.04em; background:var(--cream); color:#0D1B3E; padding:0.25rem 0.75rem; border-radius:999px; margin-bottom:0.7rem; box-shadow:0 3px 0 #C9B57A; transform:rotate(-2deg); }
+  body.admin-v2 .dash-greeting { text-transform:uppercase; letter-spacing:0.01em; line-height:1; }
+  body.admin-v2 .dash-sub { color:var(--cream); opacity:0.9; font-weight:500; font-size:0.85rem; }
+  body.admin-v2 .sub-title { text-transform:uppercase; letter-spacing:0.01em; line-height:1; }
+  body.admin-v2 .back-btn { background:var(--cream); color:#0D1B3E; border:none; font-weight:700; font-size:0.72rem; padding:0.4rem 0.95rem; box-shadow:0 3px 0 #C9B57A; }
+  body.admin-v2 .back-btn:active { transform:translateY(2px); box-shadow:0 1px 0 #C9B57A; }
+  @keyframes adTwinkle { 0%,100% { transform:scale(1) rotate(0); opacity:1; } 50% { transform:scale(0.75) rotate(20deg); opacity:0.75; } }
+
+  /* Menú principal: tarjetas grandes con relieve */
+  body.admin-v2 .menu-card { background:#fff; border:1px solid var(--line); border-radius:24px; box-shadow:0 6px 0 var(--line); transition:transform 0.15s ease, box-shadow 0.15s ease; animation:adUp 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  body.admin-v2 .menu-card:nth-child(2) { animation-delay:0.05s; } body.admin-v2 .menu-card:nth-child(3) { animation-delay:0.1s; }
+  body.admin-v2 .menu-card:nth-child(4) { animation-delay:0.15s; } body.admin-v2 .menu-card:nth-child(5) { animation-delay:0.2s; }
+  body.admin-v2 .menu-card:active { transform:translateY(5px); box-shadow:0 1px 0 var(--line); border-color:var(--blue); }
+  @media (hover:hover) { body.admin-v2 .menu-card:hover { transform:translateY(-2px); box-shadow:0 8px 0 var(--line); border-color:#C9D7F7; } }
+  body.admin-v2 .menu-title { text-transform:uppercase; font-size:1.02rem; letter-spacing:0.01em; }
+  body.admin-v2 .menu-desc { font-weight:400; }
+  body.admin-v2 .menu-icon { border-radius:16px; }
+  body.admin-v2 .menu-icon.blue { background:var(--blue); color:#fff; box-shadow:0 3px 0 var(--relief); }
+  body.admin-v2 .menu-icon.cream { background:var(--cream); color:#0D1B3E; box-shadow:0 3px 0 #C9B57A; }
+  body.admin-v2 .menu-icon.green { background:#0D1B3E; color:var(--cream); box-shadow:0 3px 0 #000; }
+  body.admin-v2 .menu-arrow { color:var(--blue); font-weight:700; }
+  body.admin-v2 #btn-quick-quote { border-radius:24px !important; box-shadow:0 6px 0 var(--relief); font-family:'Archivo Black','DM Sans',sans-serif !important; text-transform:uppercase; letter-spacing:0.01em; animation:adUp 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both; }
+  body.admin-v2 #btn-quick-quote:active { transform:translateY(5px); box-shadow:0 1px 0 var(--relief); }
+
+  body.admin-v2 #btn-quick-quote [style*="font-weight:300"] { text-transform:none; font-family:'DM Sans',sans-serif; letter-spacing:0; }
+  body.admin-v2 .fin-h1 { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.01em; }
+
+  /* Tarjetas y pestañas */
+  body.admin-v2 .card, body.admin-v2 .plan-rem-box, body.admin-v2 .plan-week-content { border-radius:22px; border:1px solid var(--line); }
+  body.admin-v2 .card-label, body.admin-v2 .plan-rem-hdr { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; letter-spacing:0.04em; color:#0D1B3E; }
+  body.admin-v2 .clients-status-tab, body.admin-v2 .pc-tab-btn, body.admin-v2 .plan-tab { border-radius:999px; border:1px solid var(--line); background:#fff; }
+  body.admin-v2 .clients-status-tab.active, body.admin-v2 .pc-tab-btn.active, body.admin-v2 .plan-tab.active { background:var(--blue); border-color:var(--blue); color:#fff; box-shadow:0 4px 0 var(--relief); }
+  body.admin-v2 .week-nav { background:#fff; border:1px solid var(--line); border-radius:22px; }
+  body.admin-v2 .week-label { color:#0D1B3E; text-transform:uppercase; font-size:0.9rem; }
+  body.admin-v2 .cal-grid-wrap { border-radius:22px; border-color:var(--line); }
+  body.admin-v2 .fin-card { background:#fff; border:1px solid var(--line); border-radius:20px; box-shadow:0 5px 0 var(--line); }
+
+  /* Planificación: línea de ahora, botón volver a hoy y eventos más finos */
+  .cal-now { position:absolute; height:0; border-top:2px solid #E5484D; z-index:6; pointer-events:none; }
+  .cal-now-dot { position:absolute; left:-5px; top:-6px; width:10px; height:10px; border-radius:50%; background:#E5484D; box-shadow:0 0 0 3px rgba(229,72,77,0.25); }
+  .cal-now-time { position:absolute; right:3px; top:-17px; font-size:0.55rem; font-weight:700; color:#fff; background:#E5484D; padding:0.05rem 0.3rem; border-radius:6px; }
+  .week-today-btn { margin-top:0.35rem; background:var(--cream); color:#0D1B3E; border:none; border-radius:999px; padding:0.25rem 0.75rem; font-size:0.66rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; box-shadow:0 3px 0 #C9B57A; }
+  .week-today-btn:active { transform:translateY(2px); box-shadow:0 1px 0 #C9B57A; }
+  body.admin-v2 .cal-event { border-radius:10px; box-shadow:0 2px 0 rgba(13,27,62,0.18); transition:transform 0.12s ease; }
+  body.admin-v2 .cal-event:active { transform:scale(0.97); }
+  body.admin-v2 .cal-day-header.today { background:var(--cream); color:#0D1B3E; }
+  body.admin-v2 .cal-cell.today-col { background:#FFFDF4; }
+
+  /* Botones principales con relieve */
+  body.admin-v2 .week-nav-btn, body.admin-v2 .plan-rem-add-btn, body.admin-v2 .fin-add-btn,
+  body.admin-v2 button[style*="background:var(--blue)"] { box-shadow:0 4px 0 var(--relief); transition:transform 0.12s ease, box-shadow 0.12s ease; }
+  body.admin-v2 .fin-add-btn, body.admin-v2 button[style*="background:var(--blue)"][style*="width:100%"] { border-radius:999px !important; }
+  body.admin-v2 .week-nav-btn:active, body.admin-v2 .plan-rem-add-btn:active, body.admin-v2 .fin-add-btn:active,
+  body.admin-v2 button[style*="background:var(--blue)"]:active { transform:translateY(3px); box-shadow:0 1px 0 var(--relief); }
+
+  /* Movimiento: las pantallas entran deslizándose y los botones hacen onda */
+  @keyframes adUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+  @keyframes adIn { from { opacity:0; transform:translateX(26px); } to { opacity:1; transform:none; } }
+  body.admin-v2 .ad-screen-in { animation:adIn 0.32s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .ad-ripple { position:absolute; border-radius:50%; background:rgba(28,85,229,0.18); pointer-events:none; transform:scale(0); animation:adRipple 0.6s ease-out forwards; }
+  @keyframes adRipple { to { transform:scale(1); opacity:0; } }
+  @media (prefers-reduced-motion: reduce) { body.admin-v2 *, body.admin-v2 *::after { animation:none !important; transition:none !important; } }
+
+/* ── Mis clientes: buscador, estado de un vistazo y perfil ── */
+.clients-search{width:100%;box-sizing:border-box;border:1.5px solid var(--border);border-radius:12px;padding:0.75rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;background:#fff;color:var(--text);margin-bottom:0.9rem;outline:none;}
+.clients-search:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,82,232,0.12);}
+.cst-row{display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:0.35rem;}
+.cst-chip{font-size:0.62rem;font-weight:700;padding:0.18rem 0.55rem;border-radius:100px;white-space:nowrap;}
+.cst-chip.warn{background:#FFF6D9;color:#8A6A00;}
+.cst-chip.msg{background:#EBF0FF;color:var(--blue);}
+.cst-chip.ok{background:#EAF8EA;color:#2a7a2a;}
+.cst-chip.idle{background:#F3F3F5;color:#777;}
+.acp-header-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.acp-type-tag{display:inline-block;vertical-align:middle;margin-left:0.4rem;font-size:0.6rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;background:#F5ECCB;color:#5a4a10;padding:0.18rem 0.55rem;border-radius:100px;}
+.acp-basic{text-align:center;}
+.acp-basic-av{width:64px;height:64px;border-radius:50%;margin:0.2rem auto 0.6rem;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.3rem;}
+.acp-basic-name{font-weight:700;font-size:1.05rem;color:var(--text);}
+.acp-basic-meta{font-size:0.78rem;color:var(--muted);margin-top:0.15rem;}
+.acp-basic-facts{display:flex;flex-wrap:wrap;justify-content:center;gap:0.4rem;margin-top:0.8rem;}
+.acp-basic-facts span{font-size:0.7rem;background:#F4F7FF;border:1px solid var(--border);border-radius:100px;padding:0.3rem 0.7rem;color:var(--text);}
+.acp-rday{display:flex;align-items:center;gap:0.7rem;padding:0.7rem 0.2rem;border-top:1px solid var(--border);cursor:pointer;}
+.acp-rday:first-of-type{border-top:none;}
+.acp-rday:hover .acp-rday-t{color:var(--blue);}
+.acp-rday-n{font-weight:700;color:var(--blue);font-size:1rem;min-width:1.8rem;}
+.acp-rday-t{flex:1;font-weight:700;font-size:0.85rem;color:var(--text);}
+.acp-rday-m{font-size:0.7rem;color:var(--muted);white-space:nowrap;}
+.rv-hero-box{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:1.1rem 1.1rem 1.1rem;margin-top:1rem;box-shadow:0 3px 0 rgba(29,82,232,0.08);}
+.rv-hero-box .rv-hero-tag{background:#F5ECCB;color:#5a4a10;border:none;}
+.rv-hero-box .rv-hero-sub{color:var(--muted);margin-bottom:0.9rem!important;}
+.rv-hero-box .rv-stats{margin:0;}
+.rv-hero-box .rv-stat{background:#F4F7FF;border:1px solid var(--border);}
+.rv-hero-box .rv-stat-val{color:var(--blue);}
+.rv-hero-box .rv-stat-label{color:var(--muted);}
+.client-type-inline{display:none;font-weight:700;}
+@media (max-width:560px){
+  .client-card .client-badge{display:none;}
+  .client-type-inline{display:inline;}
+  .acp-header-title{white-space:normal;line-height:1.2;}
+  .acp-type-tag{display:block;width:fit-content;margin:0.2rem 0 0;}
+  #rutina-editor .back-row .sub-brand{display:none;}
+  #rutina-editor .back-row .back-btn{margin-right:auto;}
+}
+/* ── Mis finanzas ── */
+#finanzas .fin-cards-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;overflow:visible;padding-top:1rem;}
+#finanzas .fin-card{min-width:0;}
+#finanzas .fin-card-value{font-size:1.05rem;word-break:break-word;}
+#finanzas .fin-month-nav{margin-top:1rem;}
+#finanzas .fin-body{background:transparent;min-height:0;max-width:720px;margin:0 auto;}
+.fin-cobrar{margin:0 1.25rem 1rem;background:#FFFBEA;border:1px solid #F0DFA0;border-radius:16px;padding:0.8rem 1rem;}
+.fin-cobrar.ok{background:#EFF9EF;border-color:#CBE8CB;color:#2a7a2a;font-size:0.8rem;font-weight:600;}
+.fin-cobrar-hdr{display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;font-weight:700;color:#8A6A00;margin-bottom:0.3rem;}
+.fin-cobrar-hdr b{font-size:1rem;color:#8A6A00;}
+.fin-cobrar-row{display:flex;justify-content:space-between;padding:0.55rem 0;border-top:1px solid #F0E3B5;font-size:0.82rem;color:var(--text);cursor:pointer;}
+.fin-cobrar-row:hover{color:var(--blue);}
+@media (max-width:420px){ #finanzas .fin-card{padding:0.7rem 0.55rem;} #finanzas .fin-card-value{font-size:0.9rem;} #finanzas .fin-card-sub{font-size:0.55rem;} }
+.cst-chip.prize{background:#F5ECCB;color:#5a4a10;}
+.cst-chip.cheer{border:1.5px solid var(--blue);background:#fff;color:var(--blue);cursor:pointer;font-family:'DM Sans',sans-serif;}
+.cst-chip.cheer.sent{border-color:#2a7a2a;color:#2a7a2a;cursor:default;}
+.premio-card{background:#FFFDF4;border:1.5px solid #EADFB4;border-radius:18px;padding:0.9rem 1rem;margin-bottom:1rem;box-shadow:0 4px 0 #EFE6C4;}
+.premio-top{display:flex;align-items:center;gap:0.7rem;}
+.premio-ico{font-size:1.6rem;}
+.premio-lbl{font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#8A6A00;}
+.premio-txt{font-weight:700;font-size:0.92rem;color:var(--text);margin-top:0.1rem;}
+.premio-edit{background:var(--blue);color:#fff;border:none;border-radius:100px;padding:0.45rem 0.9rem;font-size:0.72rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;box-shadow:0 3px 0 #0F3FA8;}
+.premio-sub{font-size:0.68rem;color:var(--muted);margin-top:0.5rem;line-height:1.4;}
+.premio-win{margin-top:0.6rem;padding-top:0.6rem;border-top:1px dashed #EADFB4;font-size:0.78rem;color:var(--text);}
+/* ── Portal de clientes: menú de tarjetas ── */
+.pc-hub-intro{font-size:0.78rem;color:var(--muted);margin-bottom:0.4rem;}
+.pc-hub-lbl{font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin:1rem 0 0.5rem;}
+.pc-hub-card{display:flex;align-items:center;gap:0.8rem;width:100%;text-align:left;background:#fff;border:1px solid var(--border);border-radius:18px;padding:0.95rem 1rem;margin-bottom:0.6rem;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 0 #E4EAF7;transition:transform .12s;}
+.pc-hub-card:active{transform:translateY(3px);box-shadow:0 1px 0 #E4EAF7;}
+.pc-hub-ico{width:2.6rem;height:2.6rem;border-radius:14px;background:#EEF3FF;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;}
+.pc-hub-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:0.1rem;}
+.pc-hub-txt b{font-size:0.92rem;color:var(--text);}
+.pc-hub-txt small{font-size:0.72rem;color:var(--muted);}
+.pc-hub-arrow{color:var(--blue);font-size:1.2rem;font-weight:700;}
+.pc-hub-card .pc-tab-badge{background:#E5484D;color:#fff;font-size:0.68rem;font-weight:700;min-width:1.3rem;height:1.3rem;border-radius:100px;display:inline-flex;align-items:center;justify-content:center;padding:0 0.35rem;}
+.pc-hub-link{display:block;width:100%;margin-top:0.8rem;background:none;border:1px dashed var(--border);border-radius:14px;padding:0.75rem;font-size:0.75rem;color:var(--muted);font-family:'DM Sans',sans-serif;cursor:pointer;}
+.pc-hub-link b{color:var(--blue);}
+.pc-back{background:#F5ECCB;color:#3d330c;border:none;border-radius:100px;padding:0.45rem 0.95rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;box-shadow:0 3px 0 #D9C98E;margin-bottom:0.7rem;}
+.pc-sec-title{font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.1rem;text-transform:uppercase;color:var(--text);margin-bottom:0.6rem;}
+.dash-pc-alert{margin-top:0.4rem;display:inline-block;background:#FFECEC;color:#C8282E;font-size:0.68rem;font-weight:700;padding:0.3rem 0.6rem;border-radius:10px;line-height:1.5;}
+.track-face{position:absolute;top:-9px;right:-7px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none}
+.fa-emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
+.track-face .fa-emoji{font-size:14px}
+.sentir-resumen{display:flex;align-items:center;justify-content:space-between;gap:.5rem;background:#F7F9FF;border:1px solid var(--border);border-radius:12px;padding:.5rem .7rem;margin-bottom:.7rem}
+.sentir-resumen span{font-size:.66rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sentir-resumen div{display:flex;gap:.45rem;flex-wrap:wrap}
+.sentir-resumen b{display:flex;align-items:center;gap:.15rem;font-size:.78rem;color:var(--text)}
+.sentir-resumen img{width:20px;height:20px}
+.cst-chip.feel{display:inline-flex;align-items:center;gap:.25rem;background:#F4F6FF;color:var(--text)}
+.cst-chip.feel .fa-emoji{font-size:12px}
+.cst-chip.feel.dolor,.cst-chip.feel.nauseas{background:#FFEDEF;color:#B4233C}
+.cm-imgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.7rem;margin-bottom:.4rem}
+.cm-img{background:#F7F9FF;border:1px solid var(--border);border-radius:14px;padding:.5rem;text-align:center}
+.cm-img img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:10px;display:block}
+.cm-img-name{font-size:.68rem;font-weight:700;color:var(--text);margin:.4rem 0 .35rem;line-height:1.25}
+.cm-img-dl{display:block;background:var(--blue);color:#fff;border-radius:100px;padding:.4rem .5rem;font-size:.68rem;font-weight:700;text-decoration:none;box-shadow:0 3px 0 #0F3FA8}
+.cm-img-tip{font-size:.66rem;color:var(--muted);margin-bottom:.8rem}
+.leads-archivo{margin-top:1rem;border:1px dashed var(--border);border-radius:14px;padding:.7rem .9rem;background:#fff}
+.leads-archivo>summary{font-size:.78rem;font-weight:700;color:var(--muted);cursor:pointer}
+.leads-archivo-item{border-top:1px solid var(--border);padding:.6rem 0;font-size:.75rem;display:flex;flex-direction:column;gap:.15rem}
+.leads-archivo-item span{color:var(--muted);font-size:.7rem}
+.leads-archivo-item details summary{font-size:.7rem;font-weight:700;color:var(--blue);cursor:pointer;margin-top:.2rem}
+#rutina-editor .back-row{flex-wrap:wrap;gap:0.4rem;}
+#rutina-editor .back-row .sub-brand{margin-right:auto;}
+#rutina-editor .back-row .rv-edit-btn{margin-right:0!important;}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
-<body>
+<body class="admin-v2">
 
 <!-- ══════════ LOGIN ══════════ -->
 <!-- ══════════ LOADING ══════════ -->
@@ -658,6 +929,7 @@
       </div>
       <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
     </div>
+    <div class="ad-date" id="ad-date"></div>
     <div class="dash-greeting">Hola,<br><span>Frida</span></div>
     <div class="dash-sub">¿Qué vas a hacer hoy?</div>
   </div>
@@ -668,7 +940,7 @@
       <div class="menu-card-header">
         <div class="menu-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5"/><circle cx="17" cy="9" r="2.4"/><path d="M20.5 20c0-2.6-1.7-4.6-3.8-5.1"/></svg></div>
         <div class="menu-info">
-          <div class="menu-title">Mis Clientas</div>
+          <div class="menu-title">Mis Clientes</div>
           <div class="menu-desc">Presenciales · Online · Rutinas</div>
         </div>
         <div class="menu-arrow">›</div>
@@ -680,7 +952,7 @@
         <div class="menu-icon cream"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/><path d="M8 14h1M12 14h1M16 14h1M8 17.5h1M12 17.5h1"/></svg></div>
         <div class="menu-info">
           <div class="menu-title">Planificación Semanal</div>
-          <div class="menu-desc">Calendario Lun–Sáb · 5 am – 7 pm</div>
+          <div class="menu-desc">Calendario Lun–Dom · 5 am – 7 pm</div>
         </div>
         <div class="menu-arrow">›</div>
       </div>
@@ -701,8 +973,9 @@
       <div class="menu-card-header">
         <div class="menu-icon cream"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/><path d="M12 9c-1-2.2-2.6-3.5-4-3.5S6 6.5 6.3 8 8.5 9 12 9Z"/><path d="M12 9c1-2.2 2.6-3.5 4-3.5S18 6.5 17.7 8 15.5 9 12 9Z"/></svg></div>
         <div class="menu-info">
-          <div class="menu-title">Portal de Clientas</div>
-          <div class="menu-desc">Beneficios</div>
+          <div class="menu-title">Portal de Clientes</div>
+          <div class="menu-desc">Mensajes · Solicitudes · Beneficios · Anuncios</div>
+          <div class="dash-pc-alert" id="dash-pc-alert" style="display:none;"></div>
         </div>
         <div class="menu-arrow">›</div>
       </div>
@@ -780,20 +1053,19 @@
       <button class="back-btn" onclick="showScreen('dashboard')">← Volver</button>
       <div class="sub-brand">fridaactive</div>
     </div>
-    <div class="sub-title">Mis<br><span>Clientas</span></div>
+    <div class="sub-title">Mis<br><span>Clientes</span></div>
   </div>
 
   <div class="clients-wrap">
-    <div class="legend">
-      <div class="legend-item"><div class="legend-badge badge-online" style="background:#F0FFF0;color:#2a7a2a;font-size:0.58rem;font-weight:700;padding:0.18rem 0.55rem;border-radius:100px;">Online</div><span style="font-size:0.65rem;color:var(--muted);">Rutina mensual</span></div>
-      <div class="legend-item"><div class="legend-badge" style="background:#EBF0FF;color:var(--blue);font-size:0.58rem;font-weight:700;padding:0.18rem 0.55rem;border-radius:100px;">Presencial</div><span style="font-size:0.65rem;color:var(--muted);">Entrenamiento personal</span></div>
-    </div>
+    <input type="search" id="clients-search" class="clients-search" placeholder="🔍 Buscar cliente…" oninput="renderClientsList()" autocomplete="off">
 
-    <button id="btn-new-client" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;touch-action:manipulation;">+ Nueva clienta</button>
+    <button id="btn-new-client" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;touch-action:manipulation;">+ Nuevo cliente</button>
+
+    <div id="premio-card"></div>
 
     <div class="clients-status-tabs">
-      <button class="clients-status-tab active" id="tab-activas" onclick="switchClientsTab('activas')">🟢 Activas</button>
-      <button class="clients-status-tab" id="tab-inactivas" onclick="switchClientsTab('inactivas')">🔴 Inactivas</button>
+      <button class="clients-status-tab active" id="tab-activas" onclick="switchClientsTab('activas')">🟢 Activos</button>
+      <button class="clients-status-tab" id="tab-inactivas" onclick="switchClientsTab('inactivas')">🔴 Inactivos</button>
     </div>
 
     <div id="clients-list-container"></div>
@@ -805,7 +1077,7 @@
 <div id="new-client-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
-      <div style="font-size:1rem;font-weight:700;color:var(--text);">Nueva clienta</div>
+      <div style="font-size:1rem;font-weight:700;color:var(--text);">Nuevo cliente</div>
       <button id="nc-modal-close" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
     </div>
 
@@ -880,7 +1152,7 @@
 
     <div style="display:flex;gap:0.75rem;margin-top:1.25rem;">
       <button id="nc-cancel" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.85rem;font-size:0.82rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Cancelar</button>
-      <button id="nc-save" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.85rem;font-size:0.82rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Guardar clienta</button>
+      <button id="nc-save" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.85rem;font-size:0.82rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Guardar cliente</button>
     </div>
   </div>
 </div>
@@ -909,7 +1181,7 @@
 
       <!-- PERSONAL -->
       <div id="cp-personal" class="cp-content">
-        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa la clienta desde su ficha en la app.</div>
+        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa el cliente desde su ficha en su cuenta.</div>
         <div class="fin-form-row"><div class="fin-form-label">Nombre completo</div><input class="fin-form-input cp-field" data-field="nombre" type="text" placeholder="Nombre completo"></div>
         <div style="display:flex;gap:0.6rem;">
           <div style="flex:1;" class="fin-form-row"><div class="fin-form-label">Edad</div><input class="fin-form-input cp-field" data-field="edad" type="number" placeholder="Ej: 28"></div>
@@ -922,7 +1194,7 @@
 
       <!-- SALUD -->
       <div id="cp-salud" class="cp-content" style="display:none;">
-        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa la clienta desde su ficha en la app.</div>
+        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Esto lo completa el cliente desde su ficha en su cuenta.</div>
         <div class="fin-form-row"><div class="fin-form-label">Patologías / Enfermedades</div><textarea class="fin-form-input cp-field" data-field="patologias" rows="3" placeholder="Ej: Hipertensión, diabetes..." style="resize:vertical;"></textarea></div>
         <div class="fin-form-row"><div class="fin-form-label">Lesiones o limitaciones físicas</div><textarea class="fin-form-input cp-field" data-field="lesiones" rows="3" placeholder="Ej: LCA derecha, dolor lumbar..." style="resize:vertical;"></textarea></div>
         <div class="fin-form-row"><div class="fin-form-label">Medicamentos</div><textarea class="fin-form-input cp-field" data-field="medicamentos" rows="2" placeholder="Ej: Metformina..." style="resize:vertical;"></textarea></div>
@@ -935,7 +1207,7 @@
           <div class="fin-form-label">Días de entrenamiento por semana</div>
           <div id="cp-dias-pills" style="display:flex;gap:0.4rem;flex-wrap:wrap;"></div>
         </div>
-        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Lo de abajo lo completa la clienta desde su ficha en la app — los días de arriba sí los armás vos.</div>
+        <div style="font-size:0.7rem;color:var(--muted);background:var(--blue-lt);border-radius:8px;padding:0.5rem 0.7rem;margin-bottom:0.85rem;">📋 Lo de abajo lo completa el cliente desde su ficha en su cuenta — los días de arriba sí los armás vos.</div>
         <div class="fin-form-row"><div class="fin-form-label">Objetivo principal</div><input class="fin-form-input cp-field" data-field="objetivo" type="text" placeholder="Ej: Pérdida de grasa, fuerza..."></div>
         <div class="fin-form-row"><div class="fin-form-label">Nivel de condición física</div>
           <select class="fin-form-select cp-field" data-field="nivel">
@@ -961,8 +1233,8 @@
       <div id="cp-danger" class="cp-content" style="display:none;">
         <div style="text-align:center;padding:1rem 0;">
           <div style="font-size:2rem;margin-bottom:0.5rem;">⚠️</div>
-          <div style="font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:0.35rem;">Eliminar clienta</div>
-          <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1.5rem;">Esta acción es permanente. Se eliminará toda la información, historial y eventos del calendario de esta clienta.</div>
+          <div style="font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:0.35rem;">Eliminar cliente</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1.5rem;">Esta acción es permanente. Se eliminará toda la información, historial y eventos del calendario de este cliente.</div>
           <button id="cp-delete-btn" style="background:#c44;color:#fff;border:none;border-radius:12px;padding:0.85rem 2rem;font-weight:700;font-size:0.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;touch-action:manipulation;">Eliminar permanentemente</button>
         </div>
       </div>
@@ -1065,22 +1337,39 @@
     <div class="sub-title">Planificación<br><span>Semanal</span></div>
   </div>
 
-  <div class="plan-wrap">
+  <div class="plan-tabs">
+    <button type="button" class="plan-tab active" id="plan-tab-cal" onclick="switchPlanTab('cal')">📅 Calendario</button>
+    <button type="button" class="plan-tab" id="plan-tab-content" onclick="switchPlanTab('content')">🎬 Contenido</button>
+  </div>
+
+  <div class="content-wrap" id="content-view" style="display:none">
+    <div class="content-intro">Tus videos de Instagram: cuándo grabar, editar y publicar cada uno. Toca un video para ver el guion completo.</div>
+    <div id="content-list"><div class="content-intro">Cargando…</div></div>
+  </div>
+
+  <div class="plan-wrap" id="plan-cal-view">
     <div class="week-nav">
       <button class="week-nav-btn" onclick="changeWeek(-1)">‹</button>
       <div>
         <div class="week-label" id="week-label">Cargando...</div>
         <div class="week-label-sub" id="week-sub"></div>
+        <button type="button" class="week-today-btn" id="week-today-btn" onclick="weekOffset = 0; renderCalendar();" style="display:none">Volver a hoy</button>
       </div>
       <button class="week-nav-btn" onclick="changeWeek(1)">›</button>
     </div>
 
-    <div class="plan-rem-box">
-      <div class="plan-rem-hdr">📌 Recordatorios</div>
-      <div class="plan-rem-list" id="plan-reminders-list"></div>
-      <div class="plan-rem-add-row">
-        <input type="text" id="plan-reminder-input" class="plan-rem-input" placeholder="Nuevo recordatorio..." onkeydown="if(event.key==='Enter')addPlanReminder()">
-        <button class="plan-rem-add-btn" onclick="addPlanReminder()">+</button>
+    <div class="plan-side">
+      <div class="plan-week-content">
+        <div class="plan-rem-hdr">📲 Publicaciones de la semana</div>
+        <div id="plan-week-content-list"><div class="plan-week-empty">Cargando…</div></div>
+      </div>
+      <div class="plan-rem-box">
+        <div class="plan-rem-hdr">📌 Recordatorios</div>
+        <div class="plan-rem-list" id="plan-reminders-list"></div>
+        <div class="plan-rem-add-row">
+          <input type="text" id="plan-reminder-input" class="plan-rem-input" placeholder="Nuevo recordatorio..." onkeydown="if(event.key==='Enter')addPlanReminder()">
+          <button class="plan-rem-add-btn" onclick="addPlanReminder()">+</button>
+        </div>
       </div>
     </div>
 
@@ -1094,16 +1383,14 @@
 
 <!-- ══════════ FINANZAS ══════════ -->
 <div id="finanzas">
+  <div class="sub-hero">
+    <div class="back-row">
+      <button class="back-btn" onclick="showScreen('dashboard')">← Volver</button>
+      <div class="sub-brand">fridaactive</div>
+    </div>
+    <div class="sub-title">Mis<br><span>Finanzas</span></div>
+  </div>
   <div class="fin-body">
-    <div class="fin-topbar">
-      <div class="fin-logo"><span>fa</span> fridaactive</div>
-      <button class="fin-back" onclick="showScreen('dashboard')">← Dashboard</button>
-    </div>
-    <div class="fin-page-header">
-      <div class="fin-eyebrow">Mi Diario Financiero</div>
-      <div class="fin-h1">Mis Finanzas ✦</div>
-      <div class="fin-date" id="fin-today-date"></div>
-    </div>
     <div class="fin-month-nav">
       <button class="fin-nav-btn" onclick="finChangeMonth(-1)">‹</button>
       <div class="fin-month-label">
@@ -1113,6 +1400,7 @@
       <button class="fin-nav-btn" onclick="finChangeMonth(1)">›</button>
     </div>
     <div class="fin-cards-row" id="fin-summary-cards"></div>
+    <div id="fin-por-cobrar"></div>
 
     <!-- GASTOS FIJOS -->
     <div style="margin:0 1.25rem 0.85rem;">
@@ -1273,62 +1561,62 @@
   </div>
 </div>
 
-<!-- ══════════ PORTAL DE CLIENTAS (CONTENIDO) ══════════ -->
+<!-- ══════════ PORTAL DE CLIENTES (CONTENIDO) ══════════ -->
 <div id="portal-content">
   <div class="sub-hero">
     <div class="back-row">
       <button class="back-btn" onclick="showScreen('dashboard')">← Volver</button>
       <div class="sub-brand">fridaactive</div>
     </div>
-    <div class="sub-title">Portal de<br><span>Clientas</span></div>
+    <div class="sub-title">Portal de<br><span>Clientes</span></div>
   </div>
   <div class="clients-wrap">
-    <div class="pc-tabs">
-      <button class="pc-tab-btn active" onclick="pcSwitchTab('solicitudes',this)">Solicitudes nuevas</button>
-      <button class="pc-tab-btn" onclick="pcSwitchTab('chats',this)">Chats <span class="pc-tab-badge" id="pc-chats-badge" style="display:none;"></span></button>
-      <button class="pc-tab-btn" onclick="pcSwitchTab('online',this)">Clientas</button>
-      <button class="pc-tab-btn" onclick="pcSwitchTab('beneficios',this)">Beneficios/Descuentos</button>
-      <button class="pc-tab-btn" onclick="pcSwitchTab('anuncios',this)">Anuncios</button>
-      <button class="pc-tab-btn" onclick="pcSwitchTab('comunidad',this)">Comunidad</button>
+    <!-- MENÚ DEL PORTAL: tarjetas grandes en vez de pestañas (antes se cortaban en el celular) -->
+    <div id="pc-hub">
+      <div class="pc-hub-intro">Todo lo que tus clientes ven y hacen en su cuenta de fridaactive.com.</div>
+      <div class="pc-hub-lbl">Atender</div>
+      <button type="button" class="pc-hub-card" onclick="pcOpen('chats')"><span class="pc-hub-ico">💬</span><span class="pc-hub-txt"><b>Mensajes</b><small id="pc-hub-chats-sub">Chats con tus clientes</small></span><span class="pc-tab-badge" id="pc-chats-badge" style="display:none;"></span><span class="pc-hub-arrow">›</span></button>
+      <button type="button" class="pc-hub-card" onclick="pcOpen('solicitudes')"><span class="pc-hub-ico">🙋</span><span class="pc-hub-txt"><b>Solicitudes nuevas</b><small id="pc-hub-leads-sub">Personas que se registraron desde tu link</small></span><span class="pc-tab-badge" id="pc-leads-badge" style="display:none;"></span><span class="pc-hub-arrow">›</span></button>
+      <div class="pc-hub-lbl">Lo que ven en su cuenta</div>
+      <button type="button" class="pc-hub-card" onclick="pcOpen('beneficios')"><span class="pc-hub-ico">🎁</span><span class="pc-hub-txt"><b>Beneficios de marcas</b><small id="pc-hub-benef-sub">Descuentos en la pestaña Beneficios</small></span><span class="pc-hub-arrow">›</span></button>
+      <button type="button" class="pc-hub-card" onclick="pcOpen('anuncios')"><span class="pc-hub-ico">📣</span><span class="pc-hub-txt"><b>Anuncios</b><small id="pc-hub-anun-sub">Avisos arriba de su perfil</small></span><span class="pc-hub-arrow">›</span></button>
+      <button type="button" class="pc-hub-card" onclick="editPremio();renderPcHubPremio();"><span class="pc-hub-ico">🏆</span><span class="pc-hub-txt"><b>Premio del mes</b><small id="pc-hub-premio-sub">Lo ganan al completar su meta</small></span><span class="pc-hub-arrow">✎</span></button>
+      <button type="button" class="pc-hub-link" onclick="showScreen('clientes')">¿Buscas la actividad o la rutina de alguien? Está en <b>Mis clientes ›</b></button>
     </div>
+    <button type="button" class="pc-back" id="pc-back" onclick="pcOpen(null)" style="display:none;">← Portal</button>
+    <div class="pc-sec-title" id="pc-sec-title" style="display:none;"></div>
 
     <!-- SOLICITUDES NUEVAS -->
     <div class="pc-content active" id="pc-tab-solicitudes">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Personas que se registraron solas desde tu link (ej. Instagram) y todavía no son clientas activas.</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Personas que se registraron solas desde tu link (ej. Instagram) y todavía no son clientes activos.</div>
       <div id="pc-leads-list"></div>
+      <div id="pc-leads-archivo"></div>
     </div>
 
     <!-- CHATS -->
     <div class="pc-content" id="pc-tab-chats">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Todos los chats con tus clientas, en un solo lugar.</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Todos los chats con tus clientes, en un solo lugar.</div>
       <div id="pc-chats-list"></div>
     </div>
 
     <!-- CLIENTAS ONLINE -->
-    <div class="pc-content" id="pc-tab-online">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Todas tus clientas vinculadas al portal. Tocá un nombre para ver su perfil completo.</div>
+    <div class="pc-content" id="pc-tab-online" style="display:none!important;">
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Todos tus clientes vinculados al portal. Tocá un nombre para ver su perfil completo.</div>
       <div id="pc-progress-list"></div>
     </div>
 
     <!-- BENEFICIOS / DESCUENTOS -->
     <div class="pc-content" id="pc-tab-beneficios">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Esta lista la ven todas tus clientas online en la pestaña "Beneficios" de su portal.</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Esta lista la ven todos tus clientes online en la pestaña "Beneficios" de su portal.</div>
       <div id="pc-beneficios-list" style="margin-bottom:0.75rem;"></div>
       <button onclick="showBeneficioModal()" style="width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;">+ Agregar beneficio</button>
     </div>
 
     <!-- ANUNCIOS -->
     <div class="pc-content" id="pc-tab-anuncios">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Promos o avisos que ven tus clientas arriba de todo en la pestaña "Perfil" de su portal, mientras estén activos.</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Promos o avisos que ven tus clientes arriba de todo en la pestaña "Perfil" de su portal, mientras estén activos.</div>
       <div id="pc-anuncios-list" style="margin-bottom:0.75rem;"></div>
       <button onclick="showAnuncioModal()" style="width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;">+ Agregar anuncio</button>
-    </div>
-
-    <!-- COMUNIDAD -->
-    <div class="pc-content" id="pc-tab-comunidad">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Fotos y logros que todas tus clientas ven en la pestaña "Comunidad" de su portal, sin importar la modalidad.</div>
-      <div id="pc-comunidad-list" style="margin-bottom:0.75rem;"></div>
-      <button onclick="showComunidadModal()" style="width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;">+ Agregar publicación</button>
     </div>
   </div>
 </div>
@@ -1374,7 +1662,7 @@
       <button type="button" onclick="document.getElementById('bn-fotos-file').click()" style="background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.5rem 0.85rem;font-size:0.75rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">+ Agregar fotos</button>
       <input type="file" id="bn-fotos-file" accept="image/*" multiple style="display:none;" onchange="handleFotosFileSelect(this)">
       <div id="bn-fotos-status" style="font-size:0.68rem;color:var(--muted);margin-top:0.35rem;"></div>
-      <div style="font-size:0.65rem;color:var(--muted);margin-top:0.3rem;">Estas fotos se muestran en el perfil de la marca que ven tus clientas.</div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-top:0.3rem;">Estas fotos se muestran en el perfil de la marca que ven tus clientes.</div>
     </div>
     <div class="fin-form-row"><div class="fin-form-label">Ubicación (opcional)</div><input class="fin-form-input" id="bn-ubicacion" type="text" placeholder="Ej: San Salvador, Metrocentro"></div>
     <div class="fin-form-row"><div class="fin-form-label">Instagram (opcional)</div><input class="fin-form-input" id="bn-instagram" type="text" placeholder="Ej: @gatorade_sv"></div>
@@ -1391,38 +1679,10 @@
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
     <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;" id="an-modal-title">Nuevo anuncio</div>
     <div class="fin-form-row"><div class="fin-form-label">Texto</div><textarea class="fin-form-input" id="an-texto" rows="2" placeholder="Ej: 2x1 en tu marca aliada favorita este mes 💛" style="resize:vertical;"></textarea></div>
-    <div class="fin-form-row"><label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;cursor:pointer;"><input type="checkbox" id="an-activo" style="width:1.1rem;height:1.1rem;"> Activo (visible para las clientas)</label></div>
+    <div class="fin-form-row"><label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;cursor:pointer;"><input type="checkbox" id="an-activo" style="width:1.1rem;height:1.1rem;"> Activo (visible para los clientes)</label></div>
     <div style="display:flex;gap:0.75rem;margin-top:1rem;">
       <button onclick="hideAnuncioModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
       <button onclick="saveAnuncio()" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL COMUNIDAD -->
-<div id="comunidad-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;">
-  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
-    <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;" id="cm-modal-title">Nueva publicación</div>
-    <div class="fin-form-row"><div class="fin-form-label">Fecha</div><input class="fin-form-input" id="cm-fecha" type="date"></div>
-    <div class="fin-form-row">
-      <div class="fin-form-label">Foto</div>
-      <div style="display:flex;align-items:center;gap:0.75rem;">
-        <div id="cm-foto-preview-wrap" style="width:4rem;height:4rem;border-radius:12px;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">
-          <img id="cm-foto-preview" src="" style="width:100%;height:100%;object-fit:cover;display:none;" onload="this.style.display='block';document.getElementById('cm-foto-preview-icon').style.display='none';" onerror="this.style.display='none';document.getElementById('cm-foto-preview-icon').style.display='block';">
-          <svg id="cm-foto-preview-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;color:var(--blue);"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
-        </div>
-        <div>
-          <button type="button" onclick="document.getElementById('cm-foto-file').click()" style="background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.5rem 0.85rem;font-size:0.75rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Subir foto</button>
-          <input type="file" id="cm-foto-file" accept="image/*" style="display:none;" onchange="handleComunidadFotoSelect(this)">
-          <input type="hidden" id="cm-foto-url">
-          <div id="cm-foto-status" style="font-size:0.68rem;color:var(--muted);margin-top:0.35rem;"></div>
-        </div>
-      </div>
-    </div>
-    <div class="fin-form-row"><div class="fin-form-label">Texto</div><textarea class="fin-form-input" id="cm-texto" rows="3" placeholder="Ej: ¡Logramos tanto con Luisa este mes! 💪" style="resize:vertical;"></textarea></div>
-    <div style="display:flex;gap:0.75rem;margin-top:1rem;">
-      <button onclick="hideComunidadModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
-      <button onclick="saveComunidadPost()" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Guardar</button>
     </div>
   </div>
 </div>
@@ -1431,8 +1691,8 @@
 <div id="acp-overlay" class="acp-overlay">
   <div class="acp-header">
     <button class="acp-back-btn" onclick="closeAdminClientProfile()">←</button>
-    <div class="acp-header-title">Perfil de clienta</div>
-    <button class="acp-back-btn" onclick="if(acpState.clientId) openClientProfile(acpState.clientId);" title="Ver la ficha de la clienta" style="font-size:0.72rem;font-weight:700;white-space:nowrap;">📋 Ficha</button>
+    <div class="acp-header-title" id="acp-header-title">Perfil de cliente</div>
+    <button class="acp-back-btn" onclick="if(acpState.clientId) openClientProfile(acpState.clientId);" title="Ver la ficha del cliente" style="font-size:0.72rem;font-weight:700;white-space:nowrap;">📋 Ficha</button>
   </div>
   <div class="acp-content" id="acp-content"></div>
 </div>
@@ -1452,6 +1712,11 @@
   </div>
 </div>
 
+<!-- ══════════ MODAL CONTENIDO (guion de cada video) ══════════ -->
+<div class="modal-overlay" id="content-modal" onclick="if(event.target===this)closeContentModal()">
+  <div class="modal" id="content-modal-body"></div>
+</div>
+
 <!-- ══════════ MODAL EVENTO ══════════ -->
 <div class="modal-overlay" id="event-modal">
   <div class="modal">
@@ -1459,9 +1724,10 @@
     <div class="modal-field">
       <label class="modal-label">Tipo</label>
       <div class="type-pills">
-        <button class="type-pill cliente selected" onclick="selectType('cliente',this)">Clienta</button>
+        <button class="type-pill cliente selected" onclick="selectType('cliente',this)">Cliente</button>
         <button class="type-pill tarea" onclick="selectType('tarea',this)">Tarea</button>
         <button class="type-pill personal" onclick="selectType('personal',this)">Personal</button>
+        <button class="type-pill contenido" onclick="selectType('contenido',this)">🎬 Contenido</button>
         <button class="type-pill otro" onclick="selectType('otro',this)">Otro</button>
         <button class="type-pill libre" onclick="selectType('libre',this)">🟢 Libre</button>
         <button class="type-pill nodisponible" onclick="selectType('nodisponible',this)">🔴 No disponible</button>
@@ -1637,7 +1903,7 @@ function withAdminAuth(fn) {
   ensureAdminAuth(fn);
 }
 
-// ── PORTAL DE CLIENTAS: códigos de vinculación de un solo uso ──
+// ── PORTAL DE CLIENTES: códigos de vinculación de un solo uso ──
 function generateLinkCode() {
   var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   var code = '';
@@ -1656,19 +1922,22 @@ function createPortalLinkCode(clientId, cb) {
   });
 }
 
-// ── CUESTIONARIO INICIAL (respuestas de onboarding de la clienta) ──
+// ── CUESTIONARIO INICIAL (respuestas de onboarding del cliente) ──
 var CQ_LABELS = {
-  fechaNacimiento: 'Fecha de nacimiento', genero: 'Género', peso: 'Peso actual', estatura: 'Estatura',
-  objetivo: 'Objetivo principal', nutricionista: 'Nutricionista', experiencia: '¿Entrena actualmente?',
+  fechaNacimiento: 'Fecha de nacimiento', genero: 'Género', pesoLb: 'Peso actual', peso: 'Peso actual', estatura: 'Estatura',
+  objetivo: 'Objetivo principal', motivacion: 'Qué la motivó a empezar', experiencia: '¿Entrena actualmente?',
+  experienciaPesas: 'Experiencia con pesas', actividadDiaria: 'Su día normal', ocupacion: 'Ocupación',
   lesion: '¿Lesión o condición médica?', lesionDetalle: 'Detalle de la lesión', diasSemana: 'Días por semana',
-  lugar: '¿Dónde entrena?', equipoCasa: 'Equipo en casa'
+  tiempoSesion: 'Tiempo por entreno', lugar: '¿Dónde entrena?', equipoCasa: 'Equipo en casa', equipoComprar: 'Podría comprar',
+  guiaAlimentacion: 'Guía de alimentación', nutricionista: 'Nutricionista'
 };
-var CQ_ORDER = ['fechaNacimiento', 'genero', 'peso', 'estatura', 'objetivo', 'nutricionista', 'experiencia', 'lesion', 'lesionDetalle', 'diasSemana', 'lugar', 'equipoCasa'];
+var CQ_ORDER = ['fechaNacimiento', 'genero', 'pesoLb', 'peso', 'estatura', 'objetivo', 'motivacion', 'experiencia', 'experienciaPesas', 'actividadDiaria', 'ocupacion', 'lesion', 'lesionDetalle', 'diasSemana', 'tiempoSesion', 'lugar', 'equipoCasa', 'equipoComprar', 'guiaAlimentacion', 'nutricionista'];
 var CQ_NUTRI_LABELS = {
   si_tengo: 'Sí, ya tiene nutricionista',
   no_quiero: 'No, pero quiere el servicio de nutrición',
   no_interesada: 'No tiene y no está interesada'
 };
+var CQ_GUIA_LABELS = { si: 'Sí, la quiere', tengo_nutri: 'Ya tiene nutricionista', no: 'Por ahora no' };
 
 function escapeHtmlAdmin(s) {
   var d = document.createElement('div');
@@ -1679,6 +1948,12 @@ function escapeHtmlAdmin(s) {
 function formatCuestionarioValue(key, val) {
   if (val === undefined || val === null || val === '') return null;
   if (key === 'nutricionista') return CQ_NUTRI_LABELS[val] || val;
+  if (key === 'guiaAlimentacion') return CQ_GUIA_LABELS[val] || val;
+  if (key === 'pesoLb') return val + ' lb';
+  if ((key === 'equipoCasa' || key === 'equipoComprar') && typeof val === 'object') {
+    if (val.ninguno || !(val.items && val.items.length)) return key === 'equipoCasa' ? 'Nada' : 'Nada por ahora';
+    return val.items.map(function(it) { var p = val.pesos && val.pesos[it]; return p ? it + ' (' + p + ')' : it; }).join(', ');
+  }
   if (key === 'lesion') return val === 'si' ? 'Sí' : 'No';
   if (key === 'peso') return val + ' kg';
   if (key === 'estatura') return val + ' cm';
@@ -1698,10 +1973,10 @@ function cuestionarioHtml(cuestionario) {
   return '<div style="margin-top:0.9rem;"><div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;">📋 Cuestionario inicial</div>' + rows + '</div>';
 }
 
-// Un chat queda "pendiente" solo si el último mensaje es de la clienta Y
+// Un chat queda "pendiente" solo si el último mensaje es del cliente Y
 // llegó después de la última vez que lo abriste (chatMeta/lastReadByAdmin,
 // actualizado en openAdminChat/closeAdminChat). Antes se marcaba pendiente
-// con solo ver que el último mensaje fuera de la clienta, sin importar si
+// con solo ver que el último mensaje fuera del cliente, sin importar si
 // ya lo habías leído o respondido — por eso quedaba en rojo para siempre.
 function chatNeedsReply(chat, chatMeta) {
   var entries = Object.keys(chat || {}).map(function(k) { return chat[k]; }).sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
@@ -1845,7 +2120,7 @@ function renderPortalSection(clientId) {
     });
   } else {
     el.innerHTML = '<div style="background:#fff8ee;border:1px solid #f0dca0;border-radius:12px;padding:0.9rem 1rem;font-size:0.78rem;color:var(--text);">'
-      + '<div style="margin-bottom:0.6rem;">Esta clienta aún no se registró en el portal.</div>'
+      + '<div style="margin-bottom:0.6rem;">Este cliente aún no se registró en el portal.</div>'
       + '<button onclick="handleGenerateLinkCode(\'' + clientId + '\')" style="background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.6rem 1rem;font-weight:700;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Generar código de acceso</button>'
       + '</div>';
   }
@@ -1854,8 +2129,8 @@ function renderPortalSection(clientId) {
 // ── PERFIL DE CLIENTA, vista completa (mismo diseño que ella ve en su app) ──
 var MESES_LARGOS_ADMIN = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
-// Pantalla única de clienta: antes "Ver perfil completo" (acp-overlay) y
-// "Gestionar clienta" (client-detail, otra pantalla aparte) eran dos
+// Pantalla única de cliente: antes "Ver perfil completo" (acp-overlay) y
+// "Gestionar cliente" (client-detail, otra pantalla aparte) eran dos
 // lugares distintos sin forma clara de volver del uno al otro. Ahora todo
 // vive acá adentro, con pestañas, y "← Volver" siempre regresa a la lista.
 var acpState = { clientId: null, uid: null, portal: {}, tab: 'resumen' };
@@ -1866,28 +2141,35 @@ function openAdminClientProfile(clientId) {
   overlay.style.display = 'block';
   content.innerHTML = '<div style="padding:2rem 0;text-align:center;color:var(--muted);font-size:0.8rem;">Cargando…</div>';
   currentClient = clientId;
+  var acpTitle = document.getElementById('acp-header-title');
+  if (acpTitle) {
+    var cc = CLIENTS[clientId] || {};
+    acpTitle.innerHTML = escapeHtmlAdmin(cc.name || 'Perfil de cliente') + (cc.type ? ' <span class="acp-type-tag">' + escapeHtmlAdmin(TYPE_LABELS[cc.type] || cc.type) + '</span>' : '');
+  }
   var uid = CLIENT_LINKS[clientId];
-  // Auto-reparo: por si esta clienta quedó creada antes de que
+  // Auto-reparo: por si este cliente quedó creada antes de que
   // empezáramos a espejar estos campos a clients/{id}, se sincroniza
   // sola cada vez que abrís su perfil — no hace falta hacer nada.
   // Si esa sincronización falla (ej. Firebase la rechaza), se avisa con
   // una alerta en vez de quedar en silencio, porque si no nunca se nota.
   if (CLIENTS[clientId]) {
     syncClientPublicFields(clientId, CLIENTS[clientId], function(e) {
-      alert('No se pudo sincronizar el plan de esta clienta con su app: ' + (e && e.message ? e.message : 'error desconocido') + '. Avisale a Claude con este mensaje.');
+      alert('No se pudo sincronizar el plan de este cliente con su cuenta: ' + (e && e.message ? e.message : 'error desconocido') + '. Avisale a Claude con este mensaje.');
     });
   }
-  // Siempre arranca en Resumen — ahí está lo que hace falta ver de
-  // entrada (estado de pago, actividad) sin importar la modalidad.
-  // Rutina queda a un click, para cuando sí hay que editarla.
-  var defaultTab = 'resumen';
+  // Las tres modalidades pueden tener perfil y beneficios, pero solo
+  // rutina personalizada se autogestiona la rutina — en presencial y
+  // online 1:1 la lleva Frida, así que ahí lo que más se usa es esa
+  // pestaña y arranca ahí.
+  var tipoCliente = CLIENTS[clientId] && CLIENTS[clientId].type;
+  var defaultTab = (tipoCliente && tipoCliente !== 'rutina-personalizada') ? 'rutina' : 'resumen';
   var today = new Date();
   acpState = { clientId: clientId, uid: uid || null, portal: {}, tab: defaultTab, histYear: today.getFullYear(), histMonth: today.getMonth() };
   if (!uid) { acpRenderShell(); return; }
   fbGet('clientasPortal/' + uid, function(portal) {
     acpState.portal = portal || {};
     acpRenderShell();
-    // Diagnóstico: si esta clienta aparece "bloqueada" del lado cliente
+    // Diagnóstico: si este cliente aparece "bloqueada" del lado cliente
     // pese a tener plan activo acá, puede ser que esta cuenta (uid) haya
     // quedado vinculada a OTRO clientId distinto del que se está viendo
     // en este perfil — porque vincular un código nuevo nunca borra el
@@ -1896,7 +2178,7 @@ function openAdminClientProfile(clientId) {
     if (portalClientId && portalClientId !== clientId) {
       var otherName = (CLIENTS[portalClientId] && CLIENTS[portalClientId].name) || portalClientId;
       var thisName = (CLIENTS[clientId] && CLIENTS[clientId].name) || clientId;
-      var fix = confirm('¡Encontrado! La app de esta clienta está vinculada a OTRO perfil: "' + otherName + '" (no a "' + thisName + '"). Por eso ve bloqueado aunque acá esté activo.\n\n¿Vincular su app a ESTE perfil ("' + thisName + '") ahora mismo?');
+      var fix = confirm('¡Encontrado! La cuenta de este cliente está vinculada a OTRO perfil: "' + otherName + '" (no a "' + thisName + '"). Por eso ve bloqueado aunque acá esté activo.\n\n¿Vincular su app a ESTE perfil ("' + thisName + '") ahora mismo?');
       if (fix) {
         fbSet('clientasPortal/' + uid + '/perfil/clientId', clientId, function(e) {
           alert('No se pudo vincular: ' + (e && e.message ? e.message : 'error desconocido'));
@@ -1952,7 +2234,20 @@ function acpRenderShell() {
 // ── Resumen sin vincular todavía: explica qué es el portal y ofrece el
 // código de acceso (mismo diseño que el link de WhatsApp de siempre).
 function renderAcpNoPortalHtml(clientId, c) {
-  var html = renderAcpPaymentStatusCardHtml(clientId, c, 'resumen');
+  var mn = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var html = '<div class="card acp-basic">';
+  html += '<div class="acp-basic-av">' + initials(c.name || '?') + '</div>';
+  html += '<div class="acp-basic-name">' + escapeHtmlAdmin(c.name || '') + '</div>';
+  if (c.meta) html += '<div class="acp-basic-meta">' + escapeHtmlAdmin(c.meta) + '</div>';
+  var facts = [];
+  if (c.schedule && c.schedule.days && c.schedule.days.length) {
+    var fh = function(h) { var hh = Math.floor(h), mm = Math.round((h - hh) * 60); return (hh % 12 || 12) + (mm ? ':' + String(mm).padStart(2, '0') : '') + (hh < 12 ? 'am' : 'pm'); };
+    facts.push('🗓️ ' + c.schedule.days.join(' / ') + (c.schedule.startHour != null ? ' · ' + fh(c.schedule.startHour) + (c.schedule.endHour != null ? '–' + fh(c.schedule.endHour) : '') : ''));
+  } else if (c.days && c.days.length) facts.push('🗓️ ' + c.days.join(' / '));
+  if (c.sessions > 0) facts.push('✅ ' + countSessionsInCycle(clientId, c) + ' de ' + c.sessions + ' sesiones');
+  if (c.firstEverDate) { var fd = new Date(c.firstEverDate + 'T00:00:00'); facts.push('💙 Contigo desde ' + mn[fd.getMonth()] + ' ' + fd.getFullYear()); }
+  if (facts.length) html += '<div class="acp-basic-facts">' + facts.map(function(f) { return '<span>' + f + '</span>'; }).join('') + '</div>';
+  html += '</div>';
   html += '<div class="card">';
   html += '<div class="card-label">👤 Perfil y beneficios</div>';
   html += '<div style="font-size:0.8rem;color:var(--text);line-height:1.5;margin-bottom:0.8rem;">Todavía no tiene cuenta en el portal. Generale un código para que suba su foto de perfil, chatee con vos y acceda a los beneficios.</div>';
@@ -1975,7 +2270,7 @@ function handleGenerateLinkCodeAcp(clientId) {
       + '<button onclick="copyLinkCodeUrl(this,\'' + link + '\')" style="flex:1;background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Copiar link</button>'
       + '<a href="https://wa.me/?text=' + encodeURIComponent(waMsg) + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;text-decoration:none;">WhatsApp</a>'
       + '</div>'
-      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviaselo a la clienta — al abrirlo queda directo en el registro, vinculada a este perfil.</div>'
+      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviáselo al cliente — al abrirlo queda directo en el registro, vinculado a este perfil.</div>'
       + '</div>';
   });
 }
@@ -1991,45 +2286,51 @@ function renderAcpRutinaHtml(clientId, c) {
     // Caso especial heredado: Herberth tiene su rutina como HTML aparte.
     html += '<a href="' + escapeHtmlAdmin(c.rutina) + '" target="_blank" style="display:block;text-align:center;background:var(--blue);color:#fff;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;text-decoration:none;">📋 Ver rutina →</a>';
   } else {
+    var rd = (JSON.parse(localStorage.getItem('fa_rutinas') || '{}')[clientId]) || null;
+    var rdays = (rd && rd.days) || [];
+    if (rdays.length) {
+      html += '<div class="card"><div class="card-label">🏋️ Su rutina · ' + rdays.length + (rdays.length === 1 ? ' día' : ' días') + '</div>';
+      rdays.forEach(function(d, i) {
+        var nEx = 0; (d.blocks || []).forEach(function(b) { nEx += (b.exercises || []).length; });
+        html += '<div class="acp-rday" onclick="window._rvStartDay=' + i + ';openRutinaEditor(\'' + clientId + '\')"><span class="acp-rday-n">' + String(i + 1).padStart(2, '0') + '</span><span class="acp-rday-t">' + escapeHtmlAdmin(d.name || ('Día ' + (i + 1))) + '</span><span class="acp-rday-m">' + nEx + ' ejercicios ›</span></div>';
+      });
+      html += '</div>';
+    } else {
+      html += '<div class="card" style="text-align:center;color:var(--muted);font-size:0.8rem;">Todavía no tiene rutina armada.</div>';
+    }
     html += '<button type="button" onclick="openRutinaEditor(\'' + clientId + '\')" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">📋 Ver / Editar rutina</button>';
   }
   return html;
 }
 
-// Tarjeta de estado del ciclo (mes actual, días que quedan, si pagó) —
-// se usa en Pagos y también en el Resumen de quien todavía no vinculó
-// portal, porque esta info no depende de eso.
-function renderAcpPaymentStatusCardHtml(clientId, c, afterPaidTab) {
-  if (!c.initDate) return '';
-  var start = new Date(c.initDate + 'T00:00:00');
-  var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
-  if (!c.endDate) end.setMonth(end.getMonth() + 1);
-  var today0 = new Date(); today0.setHours(0, 0, 0, 0);
-  var daysLeft = Math.ceil((end - today0) / 86400000);
-  var paid = isCurrentCyclePaid(clientId, c);
-  // Los pagos ya hechos cuentan los meses que quedaron atrás — si el
-  // ciclo actual todavía no se pagó, hay que sumarle 1 para contarlo
-  // también (si no, "pagó 1 vez" mostraba "Mes 2" en vez de "Mes 1").
-  var mesActual = (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
-  var statusColor = daysLeft <= 0 ? '#A62B2B' : !paid ? '#8A6D14' : '#2a7a2a';
-  var statusBg = daysLeft <= 0 ? '#FDEAEA' : !paid ? '#FFF6E0' : '#F0FFF0';
-  var statusBorder = daysLeft <= 0 ? '#F3C6C6' : !paid ? '#F0DFA0' : '#cde8cd';
-  var html = '<div class="card" style="background:' + statusBg + ';border-color:' + statusBorder + ';">';
-  html += '<div class="card-label" style="color:' + statusColor + ';">Mes ' + mesActual + (c.planMeses ? ' de ' + c.planMeses : '') + ' · ' + (daysLeft <= 0 ? 'Ciclo vencido' : 'Quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días')) + '</div>';
-  html += '<div style="font-size:0.8rem;color:var(--text);">' + (paid ? '✅ Pagó este ciclo' : '⏳ Pendiente de pago') + (c.cuota ? ' · $' + c.cuota : '') + '</div>';
-  if (!paid && c.cuota) {
-    html += '<button type="button" onclick="markClientAsPaid(\'' + clientId + '\');acpSwitchTab(\'' + (afterPaidTab || 'pagos') + '\');" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Marcar como pagado</button>';
-  }
-  html += '</div>';
-  return html;
-}
-
 // ── Pestaña Pagos: estado del ciclo actual + activar uno nuevo + cotización.
 function renderAcpPagosHtml(clientId, c) {
-  var html = renderAcpPaymentStatusCardHtml(clientId, c, 'pagos');
+  var html = '';
+  if (c.initDate) {
+    var start = new Date(c.initDate + 'T00:00:00');
+    var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
+    if (!c.endDate) end.setMonth(end.getMonth() + 1);
+    var today0 = new Date(); today0.setHours(0, 0, 0, 0);
+    var daysLeft = Math.ceil((end - today0) / 86400000);
+    var paid = isCurrentCyclePaid(clientId, c);
+    // Los pagos ya hechos cuentan los meses que quedaron atrás — si el
+    // ciclo actual todavía no se pagó, hay que sumarle 1 para contarlo
+    // también (si no, "pagó 1 vez" mostraba "Mes 2" en vez de "Mes 1").
+    var mesActual = (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
+    var statusColor = daysLeft <= 0 ? '#A62B2B' : !paid ? '#8A6D14' : '#2a7a2a';
+    var statusBg = daysLeft <= 0 ? '#FDEAEA' : !paid ? '#FFF6E0' : '#F0FFF0';
+    var statusBorder = daysLeft <= 0 ? '#F3C6C6' : !paid ? '#F0DFA0' : '#cde8cd';
+    html += '<div class="card" style="background:' + statusBg + ';border-color:' + statusBorder + ';">';
+    html += '<div class="card-label" style="color:' + statusColor + ';">Mes ' + mesActual + (c.planMeses ? ' de ' + c.planMeses : '') + ' · ' + (daysLeft <= 0 ? 'Ciclo vencido' : 'Quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días')) + '</div>';
+    html += '<div style="font-size:0.8rem;color:var(--text);">' + (paid ? '✅ Pagó este ciclo' : '⏳ Pendiente de pago') + (c.cuota ? ' · $' + c.cuota : '') + '</div>';
+    if (!paid && c.cuota) {
+      html += '<button type="button" onclick="markClientAsPaid(\'' + clientId + '\');acpSwitchTab(\'pagos\');" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Marcar como pagado</button>';
+    }
+    html += '</div>';
+  }
 
-  // Duración del plan — editable acá para corregir clientas ya cargadas
-  // (nuevas clientas ya lo piden al crearlas, ver handleSaveNewClient).
+  // Duración del plan — editable acá para corregir clientes ya cargadas
+  // (nuevas clientes ya lo piden al crearlas, ver handleSaveNewClient).
   html += '<div class="card" style="margin-bottom:1rem;">';
   html += '<div class="card-label">📅 Duración del plan</div>';
   html += '<select id="acp-plan-tipo" onchange="acpTogglePlanMesesInput()" style="width:100%;padding:0.6rem;border-radius:10px;border:1.5px solid var(--border);font-size:0.8rem;font-family:\'DM Sans\',sans-serif;margin-bottom:0.5rem;">';
@@ -2070,10 +2371,10 @@ function saveAcpPlanMeses(clientId) {
 }
 
 // Marcar/desmarcar un día entrenado desde el admin — escribe en el mismo
-// nodo que lee/escribe la app de la clienta, así que queda reflejado para
+// nodo que lee/escribe la app del cliente, así que queda reflejado para
 // las dos sin duplicar nada.
 function toggleAdminDiaEntrenado(uid, key, el) {
-  if (!uid) { alert('Esta clienta todavía no vinculó su portal.'); return; }
+  if (!uid) { alert('Este cliente todavía no vinculó su portal.'); return; }
   if (!acpState.portal) acpState.portal = {};
   if (!acpState.portal.diasEntrenados) acpState.portal.diasEntrenados = {};
   var newVal = !acpState.portal.diasEntrenados[key];
@@ -2093,10 +2394,6 @@ function acpHistShiftMonth(delta) {
   acpRenderShell();
 }
 
-// Caritas de "¿Cómo te sientes hoy?" (clientasPortal/{uid}/sentir) — emojis del sistema.
-var SENTIR_EMOJI = { dolor: '😖', nauseas: '🤢', cansada: '🥱', bien: '😊', contodo: '🤩' };
-var SENTIR_LABELS = { dolor: 'Con dolor', nauseas: 'Con náuseas', cansada: 'Cansada', bien: 'Bien', contodo: '¡Con todo!' };
-
 function renderAdminClientProfile(clientId, uid, portal) {
   var c = CLIENTS[clientId] || {};
   var perfil = portal.perfil || {};
@@ -2105,7 +2402,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
   var chatEntries = Object.keys(portal.chat || {}).map(function(k) { return portal.chat[k]; }).sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
   var lastMsg = chatEntries[0];
   var needsReply = chatNeedsReply(portal.chat, portal.chatMeta);
-  var name = perfil.nombre || c.name || 'Clienta';
+  var name = perfil.nombre || c.name || 'Cliente';
 
   // ── Días entrenados este mes + meta ──
   var now = new Date();
@@ -2180,11 +2477,11 @@ function renderAdminClientProfile(clientId, uid, portal) {
   calHtml += '</div>';
 
   // Vos también podés marcar los días entrenados acá (clic en el día) —
-  // queda guardado en el mismo lugar que usa la clienta, así que si ella
+  // queda guardado en el mismo lugar que usa el cliente, así que si ella
   // también marca desde su app (rutina personalizada), quedan conectadas:
   // lo que marca cualquiera de las dos lo ve la otra.
-  // Caritas de cómo se sintió (clientasPortal/{uid}/sentir), solo en el calendario.
-  var sentirMap = portal.sentir || {};
+  // Caritas de cómo se sintió (clientasPortal/{uid}/sentir) y resumen del mes
+  var sentirMap = (portal && portal.sentir) || {};
   calHtml += '<div class="track-days">';
   DAY_NAMES_ADMIN.forEach(function(d) { calHtml += '<div class="track-day-header">' + d + '</div>'; });
   for (var i = 0; i < firstDay; i++) calHtml += '<div class="track-day empty"></div>';
@@ -2274,7 +2571,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
   return html;
 }
 
-// ── PORTAL DE CLIENTAS: lista de todas las clientas vinculadas, con su actividad real ──
+// ── PORTAL DE CLIENTES: lista de todos los clientes vinculados, con su actividad real ──
 function renderClientsProgressOverview() {
   var el = document.getElementById('pc-progress-list');
   if (!el) return;
@@ -2282,7 +2579,7 @@ function renderClientsProgressOverview() {
     return CLIENT_LINKS[id];
   });
   if (allLinked.length === 0) {
-    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientas vinculadas al portal.</div>';
+    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientes vinculados al portal.</div>';
     return;
   }
   el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Cargando…</div>';
@@ -2324,7 +2621,7 @@ function renderClientsProgressOverview() {
   });
 }
 
-// Estado de pago/programa de una clienta, para mostrar de un vistazo en las
+// Estado de pago/programa de un cliente, para mostrar de un vistazo en las
 // listas del admin sin tener que entrar a su perfil. Misma lógica que la
 // alerta de pago dentro de renderAdminClientProfile.
 function getPaymentStatus(clientId, c) {
@@ -2352,7 +2649,7 @@ function renderProgressResults(results) {
   results.forEach(function(r) {
     var statusColor = r.thisWeekCount > 0 ? '#2a7a2a' : (r.lastFecha ? '#9A7700' : '#c44');
     var statusBg = r.thisWeekCount > 0 ? '#F0FFF0' : (r.lastFecha ? '#fff8e0' : '#fff0f0');
-    var statusText = r.thisWeekCount > 0 ? '🟢 Activa esta semana' : (r.lastFecha ? '🟡 Última: ' + r.lastFecha : '🔴 Sin sesiones registradas');
+    var statusText = r.thisWeekCount > 0 ? '🟢 Entrenó esta semana' : (r.lastFecha ? '🟡 Última: ' + r.lastFecha : '🔴 Sin sesiones registradas');
     var photo = CLIENT_PHOTOS[r.clientId];
     var avatarHtml = photo
       ? '<img src="' + photo + '" alt="" style="width:2.1rem;height:2.1rem;border-radius:50%;object-fit:cover;flex-shrink:0;">'
@@ -2375,7 +2672,7 @@ function renderProgressResults(results) {
   el.innerHTML = html;
 }
 
-// ── PORTAL DE CLIENTAS: solicitudes nuevas (leads sin ficha vinculada) ──
+// ── PORTAL DE CLIENTES: solicitudes nuevas (leads sin ficha vinculada) ──
 var pendingLeadUid = null;
 
 function formatFechaHora(isoString) {
@@ -2411,6 +2708,10 @@ function renderLeadsSection() {
       leads.push({ type: 'landing', id: id, nombre: l.nombre, whatsapp: l.whatsapp, instagram: l.instagram, ts: l.ts, sortTs: l.ts || 0 });
     });
     leads.sort(function(a, b) { return b.sortTs - a.sortTs; });
+    updateDashPcAlert('leads', leads.length);
+    var lb = document.getElementById('pc-leads-badge'), ls = document.getElementById('pc-hub-leads-sub');
+    if (lb) { lb.textContent = String(leads.length); lb.style.display = leads.length ? '' : 'none'; }
+    if (ls) ls.textContent = leads.length ? leads.length + (leads.length === 1 ? ' persona nueva por contactar' : ' personas nuevas por contactar') : 'Ninguna por ahora';
     if (leads.length === 0) {
       el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Sin solicitudes nuevas.</div>';
       return;
@@ -2424,13 +2725,13 @@ function renderLeadsSection() {
         html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">';
         html += '<div><div style="font-weight:700;font-size:0.85rem;">' + (l.perfil.nombre || '') + '</div>';
         html += '<div style="color:var(--muted);font-size:0.72rem;margin-top:0.15rem;">' + (l.perfil.email || '') + (l.perfil.telefono ? ' · ' + l.perfil.telefono : '') + '</div>';
-        if (l.perfil.fechaRegistro) html += '<div style="color:var(--muted);font-size:0.68rem;margin-top:0.15rem;display:flex;align-items:center;gap:0.3rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Registrada el ' + formatFechaHora(l.perfil.fechaRegistro) + '</div>';
+        if (l.perfil.fechaRegistro) html += '<div style="color:var(--muted);font-size:0.68rem;margin-top:0.15rem;display:flex;align-items:center;gap:0.3rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Registro: ' + formatFechaHora(l.perfil.fechaRegistro) + '</div>';
         html += '</div>';
         html += '<button onclick="deleteLead(\'' + l.uid + '\',\'' + safeName + '\')" style="background:none;border:none;color:#c44;font-size:0.9rem;cursor:pointer;flex-shrink:0;padding:0.1rem;">✕</button>';
         html += '</div>';
         html += '<div style="display:flex;gap:0.5rem;margin-top:0.6rem;">';
         if (waNum) html += '<a href="https://wa.me/' + waNum + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;text-decoration:none;">💬 WhatsApp</a>';
-        html += '<button onclick="convertLeadToClient(\'' + l.uid + '\',\'' + safeName + '\')" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">✅ Convertir en clienta</button>';
+        html += '<button onclick="convertLeadToClient(\'' + l.uid + '\',\'' + safeName + '\')" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">✅ Convertir en cliente</button>';
         html += '</div>';
         if (l.cuestionario) {
           html += '<details style="margin-top:0.6rem;"><summary style="font-size:0.72rem;font-weight:700;color:var(--blue);cursor:pointer;">📋 Ver cuestionario inicial</summary>' + cuestionarioHtml(l.cuestionario) + '</details>';
@@ -2451,13 +2752,33 @@ function renderLeadsSection() {
         html += '</div>';
         html += '<div style="display:flex;gap:0.5rem;margin-top:0.6rem;">';
         if (waNum2) html += '<a href="https://wa.me/' + waNum2 + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;text-decoration:none;">💬 WhatsApp</a>';
-        html += '<button onclick="convertLandingLead(\'' + l.id + '\',\'' + safeName2 + '\')" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">✅ Convertir en clienta</button>';
+        html += '<button onclick="convertLandingLead(\'' + l.id + '\',\'' + safeName2 + '\')" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">✅ Convertir en cliente</button>';
         html += '</div>';
         html += '</div>';
       }
     });
     el.innerHTML = html;
+    renderLeadsArchivo();
   }).catch(function(e) { console.warn('renderLeadsSection error', e.message); });
+}
+
+// Solicitudes eliminadas: su perfil y cuestionario quedan aquí para consultarlos.
+function renderLeadsArchivo() {
+  var el = document.getElementById('pc-leads-archivo');
+  var db = getDB();
+  if (!el || !db) return;
+  db.ref('solicitudesArchivadas').once('value').then(function(snap) {
+    var d = snap.val() || {}, ids = Object.keys(d);
+    if (!ids.length) { el.innerHTML = ''; return; }
+    ids.sort(function(a, b) { return String(d[b].archivadoEn || '').localeCompare(String(d[a].archivadoEn || '')); });
+    var h = '<details class="leads-archivo"><summary>🗂️ Solicitudes archivadas (' + ids.length + ')</summary>';
+    ids.forEach(function(id) {
+      var a = d[id] || {}, pf = a.perfil || {};
+      h += '<div class="leads-archivo-item"><b>' + escapeHtmlAdmin(pf.nombre || 'Sin nombre') + '</b><span>' + escapeHtmlAdmin([pf.email, pf.telefono].filter(Boolean).join(' · ')) + '</span>'
+        + (a.cuestionario ? '<details><summary>📋 Ver cuestionario</summary>' + cuestionarioHtml(a.cuestionario) + '</details>' : '<span>Sin cuestionario</span>') + '</div>';
+    });
+    el.innerHTML = h + '</details>';
+  }).catch(function() { el.innerHTML = ''; });
 }
 
 function convertLeadToClient(uid, name) {
@@ -2477,11 +2798,19 @@ function convertLandingLead(id, name) {
 }
 
 function deleteLead(uid, name) {
-  if (!confirm('¿Segura que querés eliminar la solicitud de ' + (name || 'esta persona') + '? Esta acción no se puede deshacer.')) return;
+  if (!confirm('¿Eliminar la solicitud de ' + (name || 'esta persona') + '? Se borra su cuenta, pero sus datos y su cuestionario quedan guardados en "Solicitudes archivadas" por si los necesitas.')) return;
   withAdminAuth(function() {
     var db = getDB();
     if (!db) return;
-    db.ref('clientasPortal/' + uid).remove().then(function() { renderLeadsSection(); });
+    // Antes de borrar, se archiva el perfil y el cuestionario para no perderlos.
+    db.ref('clientasPortal/' + uid).once('value').then(function(snap) {
+      var d = snap.val() || {};
+      return db.ref('solicitudesArchivadas/' + uid).set({ perfil: d.perfil || null, cuestionario: d.cuestionario || null, archivadoEn: new Date().toISOString() });
+    }).then(function() {
+      return db.ref('clientasPortal/' + uid).remove();
+    }).then(function() { renderLeadsSection(); }).catch(function(e) {
+      alert('No se pudo eliminar (no se borró nada): ' + (e && e.message ? e.message : 'error'));
+    });
   });
 }
 
@@ -2494,7 +2823,36 @@ function deleteLandingLead(id, name) {
   });
 }
 
-// ── PORTAL DE CLIENTAS: contenido global (beneficios / servicios) ──
+// ── PORTAL DE CLIENTES: contenido global (beneficios / servicios) ──
+// Abre una sección del portal (o vuelve al menú con null).
+var PC_TITLES = { chats: '💬 Mensajes', solicitudes: '🙋 Solicitudes nuevas', beneficios: '🎁 Beneficios de marcas', anuncios: '📣 Anuncios' };
+function pcOpen(id) {
+  document.querySelectorAll('.pc-content').forEach(function(c) { c.classList.remove('active'); });
+  var hub = document.getElementById('pc-hub'), back = document.getElementById('pc-back'), title = document.getElementById('pc-sec-title');
+  if (!id) { hub.style.display = ''; back.style.display = 'none'; title.style.display = 'none'; renderPcHubPremio(); window.scrollTo(0, 0); return; }
+  hub.style.display = 'none'; back.style.display = ''; title.style.display = ''; title.textContent = PC_TITLES[id] || '';
+  var sec = document.getElementById('pc-tab-' + id); if (sec) sec.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// Aviso en la tarjeta del Portal en el inicio: mensajes sin responder y solicitudes nuevas.
+var DASH_PC = { chats: 0, leads: 0 };
+function updateDashPcAlert(kind, n) {
+  DASH_PC[kind] = n;
+  var el = document.getElementById('dash-pc-alert');
+  if (!el) return;
+  var parts = [];
+  if (DASH_PC.chats) parts.push('💬 ' + DASH_PC.chats + (DASH_PC.chats === 1 ? ' mensaje sin responder' : ' mensajes sin responder'));
+  if (DASH_PC.leads) parts.push('🙋 ' + DASH_PC.leads + (DASH_PC.leads === 1 ? ' solicitud nueva' : ' solicitudes nuevas'));
+  el.innerHTML = parts.join('<br>');
+  el.style.display = parts.length ? '' : 'none';
+}
+
+function renderPcHubPremio() {
+  var el = document.getElementById('pc-hub-premio-sub');
+  if (el) el.textContent = PREMIO_CFG && PREMIO_CFG.texto ? 'Este mes: ' + PREMIO_CFG.texto : 'Sin premio todavía · tócalo para ponerlo';
+}
+
 function pcSwitchTab(id, btn) {
   document.querySelectorAll('.pc-content').forEach(function(c) { c.classList.remove('active'); });
   document.querySelectorAll('.pc-tab-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -2503,13 +2861,13 @@ function pcSwitchTab(id, btn) {
   else { var firstBtn = document.querySelector('.pc-tab-btn'); if (firstBtn) firstBtn.classList.add('active'); }
 }
 
-// ── CHATS: bandeja con todos los chats de clientas, estilo DM ──
+// ── CHATS: bandeja con todos los chats de clientes, estilo DM ──
 function renderChatsInbox() {
   var el = document.getElementById('pc-chats-list');
   if (!el) return;
   var linkedIds = Object.keys(CLIENT_LINKS).filter(function(id) { return CLIENTS[id]; });
   if (linkedIds.length === 0) {
-    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientas vinculadas al portal.</div>';
+    el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no tenés clientes vinculados al portal.</div>';
     var badgeEmpty = document.getElementById('pc-chats-badge');
     if (badgeEmpty) badgeEmpty.style.display = 'none';
     return;
@@ -2527,7 +2885,7 @@ function renderChatsInbox() {
           results.push({
             clientId: clientId,
             uid: uid,
-            name: (CLIENTS[clientId] && CLIENTS[clientId].name) || 'Clienta',
+            name: (CLIENTS[clientId] && CLIENTS[clientId].name) || 'Cliente',
             text: chatPreviewText(lastMsg),
             ts: lastMsg.ts || 0,
             needsReply: chatNeedsReply(chat, chatMeta)
@@ -2550,6 +2908,9 @@ function renderChatsInboxResults(results) {
     if (unreadCount > 0) { badge.textContent = String(unreadCount); badge.style.display = ''; }
     else badge.style.display = 'none';
   }
+  updateDashPcAlert('chats', unreadCount);
+  var hubChats = document.getElementById('pc-hub-chats-sub');
+  if (hubChats) hubChats.textContent = unreadCount > 0 ? unreadCount + (unreadCount === 1 ? ' persona espera' : ' personas esperan') + ' tu respuesta' : (results.length ? 'Todo respondido ✓' : 'Todavía no hay chats');
   if (results.length === 0) {
     el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Todavía no hay chats.</div>';
     return;
@@ -2571,12 +2932,14 @@ function renderChatsInboxResults(results) {
 }
 
 function renderPortalContentScreen() {
-  pcSwitchTab('solicitudes');
+  pcOpen(null);
   renderClientsProgressOverview();
   renderChatsInbox();
   renderLeadsSection();
   fbGet('beneficios', function(data) {
     var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
+    var bs = document.getElementById('pc-hub-benef-sub');
+    if (bs) { var hoyB = new Date().toISOString().slice(0, 10); var vig = items.filter(function(it) { return !it.data.vencimiento || it.data.vencimiento >= hoyB; }).length; bs.textContent = items.length ? vig + (vig === 1 ? ' marca vigente' : ' marcas vigentes') : 'Ninguna todavía · agrega la primera'; }
     ADMIN_BENEFICIOS_CACHE = {};
     items.forEach(function(it) { ADMIN_BENEFICIOS_CACHE[it.id] = it.data; });
     var el = document.getElementById('pc-beneficios-list');
@@ -2618,6 +2981,8 @@ function renderPortalContentScreen() {
   });
   fbGet('anuncios', function(data) {
     var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
+    var as = document.getElementById('pc-hub-anun-sub');
+    if (as) { var act = items.filter(function(it) { return it.data.activo; }).length; as.textContent = act ? act + (act === 1 ? ' anuncio visible ahora' : ' anuncios visibles ahora') : 'Ninguno visible ahora'; }
     ADMIN_ANUNCIOS_CACHE = {};
     items.forEach(function(it) { ADMIN_ANUNCIOS_CACHE[it.id] = it.data; });
     var el = document.getElementById('pc-anuncios-list');
@@ -2633,33 +2998,6 @@ function renderPortalContentScreen() {
       html += '<div style="display:flex;gap:0.4rem;flex-shrink:0;">';
       html += '<button onclick="showAnuncioModal(\'' + it.id + '\')" style="background:none;border:none;color:var(--blue);font-size:0.9rem;cursor:pointer;">✏️</button>';
       html += '<button onclick="deleteAnuncio(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.9rem;cursor:pointer;">✕</button>';
-      html += '</div></div>';
-    });
-    el.innerHTML = html;
-  });
-  fbGet('comunidadPosts', function(data) {
-    var items = Object.keys(data || {}).map(function(k) { return { id: k, data: data[k] }; });
-    items.sort(function(a, b) { return (b.data.createdAt || 0) - (a.data.createdAt || 0); });
-    ADMIN_COMUNIDAD_CACHE = {};
-    items.forEach(function(it) { ADMIN_COMUNIDAD_CACHE[it.id] = it.data; });
-    var el = document.getElementById('pc-comunidad-list');
-    if (items.length === 0) {
-      el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Sin publicaciones todavía.</div>';
-      return;
-    }
-    var html = '';
-    items.forEach(function(it) {
-      html += '<div style="border:1px solid var(--border);border-radius:10px;padding:0.75rem 0.9rem;margin-bottom:0.6rem;display:flex;justify-content:space-between;align-items:flex-start;gap:0.6rem;">';
-      html += '<div style="display:flex;gap:0.6rem;align-items:flex-start;min-width:0;">';
-      if (it.data.fotoUrl) {
-        html += '<img src="' + it.data.fotoUrl + '" style="width:2.6rem;height:2.6rem;border-radius:8px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);" onerror="this.style.display=\'none\'">';
-      }
-      html += '<div style="min-width:0;"><div style="font-size:0.68rem;color:var(--muted);font-weight:700;">' + (it.data.fecha || '') + '</div>';
-      if (it.data.texto) html += '<div style="font-size:0.78rem;margin-top:0.15rem;">' + escapeHtmlAdmin(it.data.texto) + '</div>';
-      html += '</div></div>';
-      html += '<div style="display:flex;gap:0.4rem;flex-shrink:0;">';
-      html += '<button onclick="showComunidadModal(\'' + it.id + '\')" style="background:none;border:none;color:var(--blue);font-size:0.9rem;cursor:pointer;">✏️</button>';
-      html += '<button onclick="deleteComunidadPost(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.9rem;cursor:pointer;">✕</button>';
       html += '</div></div>';
     });
     el.innerHTML = html;
@@ -2707,87 +3045,6 @@ function deleteAnuncio(id) {
     var db = getDB();
     if (!db) return;
     db.ref('anuncios/' + id).remove().then(function() { renderPortalContentScreen(); });
-  });
-}
-
-var ADMIN_COMUNIDAD_CACHE = {};
-var editingComunidadId = null;
-
-function showComunidadModal(id) {
-  editingComunidadId = id || null;
-  var data = editingComunidadId ? (ADMIN_COMUNIDAD_CACHE[editingComunidadId] || {}) : {};
-  document.getElementById('cm-modal-title').textContent = editingComunidadId ? 'Editar publicación' : 'Nueva publicación';
-  document.getElementById('cm-fecha').value = data.fecha || new Date().toISOString().slice(0, 10);
-  document.getElementById('cm-texto').value = data.texto || '';
-  document.getElementById('cm-foto-url').value = data.fotoUrl || '';
-  document.getElementById('cm-foto-preview').src = data.fotoUrl || '';
-  document.getElementById('cm-foto-file').value = '';
-  document.getElementById('cm-foto-status').textContent = '';
-  document.getElementById('comunidad-modal').style.display = 'flex';
-}
-
-function hideComunidadModal() {
-  editingComunidadId = null;
-  document.getElementById('comunidad-modal').style.display = 'none';
-}
-
-function handleComunidadFotoSelect(input) {
-  var file = input.files && input.files[0];
-  if (!file) return;
-  var statusEl = document.getElementById('cm-foto-status');
-  statusEl.style.color = 'var(--muted)';
-  statusEl.textContent = 'Subiendo...';
-  withAdminAuth(function() {
-    if (typeof firebase === 'undefined' || !firebase.storage) {
-      statusEl.style.color = '#c44';
-      statusEl.textContent = 'Storage no está disponible todavía.';
-      return;
-    }
-    var path = 'comunidad-fotos/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-    firebase.storage().ref(path).put(file).then(function(snap) {
-      return snap.ref.getDownloadURL();
-    }).then(function(url) {
-      document.getElementById('cm-foto-url').value = url;
-      document.getElementById('cm-foto-preview').src = url;
-      statusEl.style.color = '#2a7a2a';
-      statusEl.textContent = 'Foto subida ✓';
-    }).catch(function(e) {
-      statusEl.style.color = '#c44';
-      statusEl.textContent = 'No se pudo subir: ' + e.message;
-    });
-  });
-}
-
-function saveComunidadPost() {
-  var fecha = document.getElementById('cm-fecha').value;
-  var texto = document.getElementById('cm-texto').value.trim();
-  var fotoUrl = document.getElementById('cm-foto-url').value.trim();
-  if (!fecha) { alert('Elegí una fecha.'); return; }
-  if (!texto && !fotoUrl) { alert('Agregá una foto o un texto.'); return; }
-  var item = { fecha: fecha, texto: texto || null, fotoUrl: fotoUrl || null };
-  withAdminAuth(function() {
-    var db = getDB();
-    if (!db) { alert('No se pudo conectar con Firebase.'); return; }
-    var promise;
-    if (editingComunidadId) {
-      promise = db.ref('comunidadPosts/' + editingComunidadId).update(item);
-    } else {
-      item.createdAt = Date.now();
-      promise = db.ref('comunidadPosts').push(item);
-    }
-    promise.then(function() {
-      hideComunidadModal();
-      renderPortalContentScreen();
-    }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
-  });
-}
-
-function deleteComunidadPost(id) {
-  if (!confirm('¿Eliminar esta publicación?')) return;
-  withAdminAuth(function() {
-    var db = getDB();
-    if (!db) return;
-    db.ref('comunidadPosts/' + id).remove().then(function() { renderPortalContentScreen(); });
   });
 }
 
@@ -2952,7 +3209,7 @@ var adminChatRef = null;
 var adminChatClientId = null;
 
 function openAdminChat(clientId, uid) {
-  if (!uid) { alert('Esta clienta todavía no vinculó su cuenta.'); return; }
+  if (!uid) { alert('Este cliente todavía no vinculó su cuenta.'); return; }
   adminChatUid = uid;
   adminChatClientId = clientId;
   document.getElementById('ac-title').textContent = (CLIENTS[clientId] && CLIENTS[clientId].name) || 'Chat';
@@ -3021,9 +3278,9 @@ function sendAdminChatMessage() {
   });
 }
 
-// Mismo bucket que usan las fotos de la clienta, bajo su uid — así tanto
+// Mismo bucket que usan las fotos del cliente, bajo su uid — así tanto
 // lo que manda ella como lo que le mandás vos queda junto en la carpeta
-// de chat de esa clienta.
+// de chat de esa cliente.
 function handleAdminChatMediaSelect(input) {
   var file = input.files && input.files[0];
   input.value = '';
@@ -3066,7 +3323,7 @@ function handleGenerateLinkCode(clientId) {
       + '<button onclick="copyLinkCodeUrl(this,\'' + link + '\')" style="flex:1;background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Copiar link</button>'
       + '<a href="https://wa.me/?text=' + encodeURIComponent(waMsg) + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.72rem;text-decoration:none;">WhatsApp</a>'
       + '</div>'
-      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviaselo a la clienta — al abrirlo queda directo en el registro, vinculada a este perfil.</div>'
+      + '<div style="font-size:0.68rem;color:var(--muted);margin-top:0.6rem;">Enviáselo al cliente — al abrirlo queda directo en el registro, vinculado a este perfil.</div>'
       + '</div>';
   });
 }
@@ -3288,11 +3545,11 @@ function saveCustomClient(id, clientData) {
   fbSet('clients_custom/' + id, clientData);
 }
 
-// El panel de admin guarda el detalle completo de la clienta en
-// clients_custom/{id} (o en el CLIENTS hardcodeado), pero la clienta desde
+// El panel de admin guarda el detalle completo del cliente en
+// clients_custom/{id} (o en el CLIENTS hardcodeado), pero el cliente desde
 // su celular lee únicamente clients/{id} — son nodos distintos en Firebase.
 // Sin espejar estos campos ahí, cosas como "Mes X de Y", la barra de días
-// restantes o el bloqueo por plan vencido nunca le llegan a la clienta,
+// restantes o el bloqueo por plan vencido nunca le llegan al cliente,
 // aunque en el panel de admin se vean perfectas.
 function syncClientPublicFields(id, c, onError) {
   if (!id || !c) return;
@@ -3303,9 +3560,10 @@ function syncClientPublicFields(id, c, onError) {
   fbSet('clients/' + id + '/cuota', c.cuota || null);
   fbSet('clients/' + id + '/sessions', c.sessions || null);
   fbSet('clients/' + id + '/planMeses', c.planMeses || null);
+  if (PREMIO_CFG && PREMIO_CFG.texto) fbSet('clients/' + id + '/premioMes', { texto: PREMIO_CFG.texto, meta: clientMetaMes(c) });
 }
 
-// Same dual-write pattern as saveCycle(): a per-field override for clientas
+// Same dual-write pattern as saveCycle(): a per-field override for clientes
 // whose base data still lives in the hardcoded CLIENTS seed, plus the full
 // merged object under clients_custom so it's what actually loads next time.
 // Sessions/mes se recalcula sola a partir de los días — no hay un calendario
@@ -3336,7 +3594,7 @@ function slugify(name) {
     .split(/\s+/)
     .slice(0, 2)
     .join('-');
-  var slug = base || 'clienta';
+  var slug = base || 'cliente';
   var unique = slug;
   var n = 2;
   while (CLIENTS[unique]) {
@@ -3434,7 +3692,7 @@ function markClientAsPaid(id) {
   fbSet('client_payments', payments);
 
   // Reflejado en clients/{id} (no en el nodo compartido client_payments) para
-  // que la clienta pueda leer cuántos ciclos lleva pagados desde su propio
+  // que el cliente pueda leer cuántos ciclos lleva pagados desde su propio
   // perfil, sin necesitar acceso al historial de pagos de las demás.
   c.pagosCount = payments[id].length;
   fbSet('clients/' + id + '/pagosCount', c.pagosCount);
@@ -3475,7 +3733,7 @@ function saveClientProfile(id, profile) {
 var cpSelectedDays = [];
 
 // Personal/Salud y (dentro de Entreno) objetivo/nivel/notas ahora las
-// llena la clienta desde su propia "Ficha" en la app — acá se muestran
+// llena el cliente desde su propia "Ficha" en la app — acá se muestran
 // de solo lectura. Lo único que seguís armando vos en esta pantalla son
 // los días de entrenamiento por semana (para el calendario) y los pagos.
 var CP_FICHA_READONLY_SELECTOR = '#cp-personal .cp-field:not([data-field="nombre"]), #cp-salud .cp-field, #cp-entrenamiento .cp-field[data-field="objetivo"], #cp-entrenamiento .cp-field[data-field="nivel"], #cp-entrenamiento .cp-field[data-field="notasEntreno"]';
@@ -3968,7 +4226,7 @@ function openCycleModal(id) {
 
   // Rutina personalizada paga una cuota mensual fija, no por sesión — no
   // tiene sentido preguntarle a Frida cuántas sesiones ni qué días, así
-  // que ese tipo de clienta usa un formulario aparte, mucho más simple.
+  // que ese tipo de cliente usa un formulario aparte, mucho más simple.
   var isRutinaPersonalizada = c.type === 'rutina-personalizada';
   document.getElementById('cycle-presencial-fields').style.display = isRutinaPersonalizada ? 'none' : 'block';
   document.getElementById('cycle-rp-fields').style.display = isRutinaPersonalizada ? 'block' : 'none';
@@ -4173,7 +4431,7 @@ function saveCycle() {
   renderPaymentStatus(id, c);
   renderQuotation(id, c);
 
-  // Refresca la pantalla de la clienta sin perder la pestaña en la que
+  // Refresca la pantalla del cliente sin perder la pestaña en la que
   // estaba (normalmente Pagos, de donde se activa un ciclo nuevo).
   if (acpState.clientId === id) acpRenderShell();
 }
@@ -4193,7 +4451,7 @@ function addOneMonthToDateStr(dateStr) {
 }
 
 // Renovar ciclo para rutina personalizada: una cuota mensual fija, sin
-// sesiones ni calendario — la clienta entrena por su cuenta desde la app.
+// sesiones ni calendario — el cliente entrena por su cuenta desde la app.
 function saveCycleRutinaPersonalizada() {
   var id = cycleModalClientId;
   var c = CLIENTS[id];
@@ -4264,7 +4522,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ── PERFIL DE FOTOS (ANTES/DESPUÉS) — solo lectura desde el admin ──
-// La clienta sube estas fotos desde su portal (clientasPortal/{uid}/fotosProgreso);
+// El cliente sube estas fotos desde su portal (clientasPortal/{uid}/fotosProgreso);
 // acá solo se muestran, no se suben ni editan desde este lado.
 function openClientPhotosModal(clientId) {
   var c = CLIENTS[clientId];
@@ -4325,7 +4583,7 @@ function renderClientPhotoSlot(entry, label) {
 
 function renderAsistencia(id, c) {
   if (isOnlineType(c.type)) {
-    document.getElementById('cd-asistencia').innerHTML = '<div style="text-align:center;color:var(--muted);font-size:0.78rem;padding:1rem 0;">Las clientas online no tienen cuadro de asistencia presencial.</div>';
+    document.getElementById('cd-asistencia').innerHTML = '<div style="text-align:center;color:var(--muted);font-size:0.78rem;padding:1rem 0;">Los clientes online no tienen cuadro de asistencia presencial.</div>';
     return;
   }
   var asistKey = 'fa_asist_'+id;
@@ -4495,10 +4753,17 @@ function renderClientsList() {
   var container = document.getElementById('clients-list-container');
   if (!container) return;
 
+  var q = ((document.getElementById('clients-search') || {}).value || '').trim().toLowerCase();
+  var nAct = 0, nInact = 0;
   var ids = Object.keys(CLIENTS).filter(function(id) {
     var active = isActive(CLIENTS[id], id);
+    if (active) nAct++; else nInact++;
+    if (q && String(CLIENTS[id].name || '').toLowerCase().indexOf(q) === -1) return false;
     return clientsTab === 'activas' ? active : !active;
   });
+  var tA = document.getElementById('tab-activas'), tI = document.getElementById('tab-inactivas');
+  if (tA) tA.textContent = '🟢 Activos · ' + nAct;
+  if (tI) tI.textContent = '🔴 Inactivos · ' + nInact;
 
   var onlineIds = ids.filter(function(id){ return isOnlineType(CLIENTS[id].type); });
   var presIds = ids.filter(function(id){ return !isOnlineType(CLIENTS[id].type); });
@@ -4506,7 +4771,7 @@ function renderClientsList() {
   var html = '';
 
   if (ids.length === 0) {
-    html = '<div style="text-align:center;color:var(--muted);font-size:0.8rem;padding:2rem 0;">'+(clientsTab === 'activas' ? 'No tenés clientas activas en este momento.' : 'No tenés clientas inactivas. 🎉')+'</div>';
+    html = '<div style="text-align:center;color:var(--muted);font-size:0.8rem;padding:2rem 0;">'+(q ? 'Ningún cliente coincide con “' + escapeHtmlAdmin(q) + '”.' : clientsTab === 'activas' ? 'No tenés clientes activos en este momento.' : 'No tenés clientes inactivos. 🎉')+'</div>';
   }
 
   function buildCard(id) {
@@ -4514,11 +4779,11 @@ function renderClientsList() {
     var active = isActive(c, id);
     var badgeText, badgeBg, badgeColor;
     if (isOnlineType(c.type)) {
-      badgeText = active ? (TYPE_LABELS[c.type] || 'Online') + ' ●' : 'Inactiva';
+      badgeText = active ? (TYPE_LABELS[c.type] || 'Online') + ' ●' : 'Plan vencido';
       badgeBg = active ? '#F0FFF0' : '#fff0f0';
       badgeColor = active ? '#2a7a2a' : '#c44';
     } else {
-      badgeText = active ? 'Activa ●' : 'Inactiva';
+      badgeText = active ? 'Plan activo ●' : 'Plan vencido';
       badgeBg = active ? '#EBF0FF' : '#fff0f0';
       badgeColor = active ? 'var(--blue)' : '#c44';
     }
@@ -4534,7 +4799,7 @@ function renderClientsList() {
       : '<div class="client-avatar" style="background:'+avatarColor+';">'+initials(c.name)+'</div>';
     return '<div class="client-card" data-cid="'+id+'">'
       + avatarHtml
-      + '<div class="client-info"><div class="client-name">'+c.name+'</div><div class="client-meta">'+metaText+'</div></div>'
+      + '<div class="client-info"><div class="client-name">'+c.name+'</div><div class="client-meta"><span class="client-type-inline" style="color:'+badgeColor+'">'+badgeText+' · </span>'+metaText+'</div>'+clientStatusChipsHtml(id, c)+'</div>'
       + '<div class="client-badge" style="background:'+badgeBg+';color:'+badgeColor+';">'+badgeText+'</div>'
       + '<div class="client-arrow">›</div>'
       + '</div>';
@@ -4555,6 +4820,119 @@ function renderClientsList() {
       openAdminClientProfile(this.getAttribute('data-cid'));
     });
   });
+  renderPremioCard();
+  fillClientActivity(ids);
+}
+
+// Estado de un vistazo en cada tarjeta de "Mis clientes": pago pendiente
+// (al instante) y, si tiene la app, si te escribió y cuándo entrenó por
+// última vez (se completa solo cuando llegan los datos de Firebase).
+var SENTIR_EMOJI = { dolor: '😖', nauseas: '🤢', cansada: '🥱', bien: '😊', contodo: '🤩' };
+var SENTIR_LABELS = { dolor: 'Con dolor', nauseas: 'Con náuseas', cansada: 'Cansada', bien: 'Bien', contodo: '¡Con todo!' };
+var SENTIR_ORDEN = ['contodo', 'bien', 'cansada', 'nauseas', 'dolor'];
+
+function clientStatusChipsHtml(id, c) {
+  var chips = '';
+  var pay = isActive(c, id) ? getPaymentStatus(id, c) : null;
+  if (pay && pay.level === 'warn') chips += '<span class="cst-chip warn">💳 Pago pendiente</span>';
+  if (CLIENT_LINKS[id]) chips += '<span class="cst-slot" data-cst="' + id + '"></span>';
+  return chips ? '<div class="cst-row">' + chips + '</div>' : '';
+}
+
+function fillClientActivity(ids) {
+  ids.forEach(function(id) {
+    var uid = CLIENT_LINKS[id];
+    if (!uid) return;
+    fbGet('clientasPortal/' + uid, function(portal) {
+      var slot = document.querySelector('.cst-slot[data-cst="' + id + '"]');
+      if (!slot || !portal) return;
+      var out = '';
+      var hoyK = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()).padStart(2, '0');
+      var caraHoy = portal.sentir && portal.sentir[hoyK];
+      if (SENTIR_LABELS[caraHoy]) out += '<span class="cst-chip feel ' + caraHoy + '"><span class="fa-emoji">' + SENTIR_EMOJI[caraHoy] + '</span>Hoy: ' + SENTIR_LABELS[caraHoy] + '</span>';
+      if (chatNeedsReply(portal.chat, portal.chatMeta)) out += '<span class="cst-chip msg">💬 Te escribió</span>';
+      var dias = portal.diasEntrenados || {};
+      var mk = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
+      var mesN = Object.keys(dias).filter(function(k) { return dias[k] && k.indexOf(mk) === 0; }).length;
+      CLIENT_MES_COUNT[id] = mesN;
+      if (mesN >= clientMetaMes(CLIENTS[id])) out += '<span class="cst-chip prize">🏆 Meta cumplida</span>';
+      var last = Object.keys(dias).filter(function(k) { return dias[k]; }).sort().pop();
+      if (last) {
+        var t0 = new Date(); t0.setHours(0, 0, 0, 0);
+        var ago = Math.round((t0 - new Date(last + 'T00:00:00')) / 86400000);
+        var txt = ago <= 0 ? 'Entrenó hoy' : ago === 1 ? 'Entrenó ayer' : 'Entrenó hace ' + ago + ' días';
+        out += '<span class="cst-chip ' + (ago <= 7 ? 'ok' : 'idle') + '">🏋️ ' + txt + '</span>';
+        if (ago <= 2) out += '<button type="button" class="cst-chip cheer" onclick="event.stopPropagation();felicitarClienta(\'' + id + '\', this)">👏 Felicitar</button>';
+      } else {
+        out += '<span class="cst-chip idle">🏋️ Aún no marca entrenos</span>';
+      }
+      slot.outerHTML = out;
+      renderPremioCard();
+    });
+  });
+}
+
+// ══════════ RECOMPENSAS: premio del mes, quién lo logró y felicitar ══════════
+var PREMIO_CFG = null;        // { texto, meta } — recompensas/config
+var CLIENT_MES_COUNT = {};    // entrenos marcados este mes por cliente (de su app)
+
+// Meta del mes de cada cliente: sus sesiones del plan, o días/semana × 4,
+// o la meta general del premio. La app del cliente usa este mismo número.
+function clientMetaMes(c) {
+  c = c || {};
+  if (c.sessions > 0) return Number(c.sessions);
+  if (c.days && c.days.length) return c.days.length * 4;
+  return (PREMIO_CFG && Number(PREMIO_CFG.meta)) || 12;
+}
+
+function renderPremioCard() {
+  var el = document.getElementById('premio-card');
+  if (!el) return;
+  var cfg = PREMIO_CFG || {};
+  var mes = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'][new Date().getMonth()];
+  var winners = Object.keys(CLIENT_MES_COUNT).filter(function(id) { return CLIENTS[id] && CLIENT_MES_COUNT[id] >= clientMetaMes(CLIENTS[id]); });
+  var html = '<div class="premio-card">';
+  html += '<div class="premio-top"><span class="premio-ico">🎁</span><div style="flex:1;min-width:0;"><div class="premio-lbl">Premio de ' + mes + '</div>';
+  html += '<div class="premio-txt">' + (cfg.texto ? escapeHtmlAdmin(cfg.texto) : '<span style="color:var(--muted);font-weight:400;">Sin premio todavía. Tus clientes verán “Frida te tiene una sorpresa”.</span>') + '</div></div>';
+  html += '<button type="button" class="premio-edit" onclick="editPremio()">' + (cfg.texto ? 'Cambiar' : 'Poner premio') + '</button></div>';
+  html += '<div class="premio-sub">Se gana al cumplir su meta del mes en su cuenta (sus sesiones del plan, o días por semana × 4).</div>';
+  if (winners.length) {
+    html += '<div class="premio-win">🏆 <b>Lo lograron:</b> ' + winners.map(function(id) { return escapeHtmlAdmin(CLIENTS[id].name); }).join(', ') + '</div>';
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function editPremio() {
+  var cfg = PREMIO_CFG || {};
+  var texto = prompt('¿Qué premio ganan este mes los clientes que cumplan su meta?\n(Ej: Un producto de Tu Madre, una gorra FridaActive…)\nDéjalo vacío para quitarlo.', cfg.texto || '');
+  if (texto === null) return;
+  texto = texto.trim();
+  var meta = Number(cfg.meta) || 12;
+  PREMIO_CFG = texto ? { texto: texto, meta: meta } : null;
+  fbSet('recompensas/config', PREMIO_CFG);
+  // Se copia a cada cliente (con su propia meta) porque su app solo puede leer clients/{id}.
+  Object.keys(CLIENTS).forEach(function(id) {
+    fbSet('clients/' + id + '/premioMes', texto ? { texto: texto, meta: clientMetaMes(CLIENTS[id]) } : null);
+  });
+  renderPremioCard();
+}
+
+var FELICITAR_MSGS = [
+  '¡Vi que entrenaste! 👏 Me encanta verte constante, sigue así 💙',
+  '¡Eso! Otro día que cuenta 💪 Estoy muy orgullosa de ti.',
+  '¡Qué bien que entrenaste! 🙌 Cada día suma, de verdad.',
+  '¡Vas increíble! 🔥 Gracias por darte este tiempo para ti.'
+];
+function felicitarClienta(id, btn) {
+  var uid = CLIENT_LINKS[id];
+  if (!uid) return;
+  var c = CLIENTS[id] || {};
+  var msg = FELICITAR_MSGS[Math.floor(Math.random() * FELICITAR_MSGS.length)];
+  if (!confirm('Enviarle a ' + (c.name || 'tu cliente') + ' este mensaje en el chat:\n\n“' + msg + '”')) return;
+  getDB().ref('clientasPortal/' + uid + '/chat').push({ from: 'admin', text: msg, ts: Date.now() }).then(function() {
+    if (btn) { btn.textContent = '✓ Enviado'; btn.disabled = true; btn.classList.add('sent'); }
+  }).catch(function(e) { alert('No se pudo enviar: ' + (e && e.message ? e.message : 'error')); });
 }
 
 function updateClientBadges() {
@@ -4611,7 +4989,7 @@ function updateNCTypeUI() {
   renderDayPills('nc-rutina-days-pills', ncRutinaDays);
 }
 
-// ── SELECTOR DE DÍAS/SEMANA (para clientas "Rutina personalizada", que no
+// ── SELECTOR DE DÍAS/SEMANA (para clientes "Rutina personalizada", que no
 // pasan por el calendario de sesiones específicas) ──
 var WEEKDAY_NAMES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 var ncRutinaDays = [];
@@ -4699,7 +5077,7 @@ function handleSaveNewClient() {
   var cuotaVal = document.getElementById('nc-cuota').value;
   var metaText = document.getElementById('nc-meta').value.trim();
   // La mayoría paga mes a mes, sin fecha de fin planeada — "planMeses" solo
-  // se guarda si esta clienta puntual tiene un paquete con duración fija.
+  // se guarda si este cliente puntual tiene un paquete con duración fija.
   var planDuracion = document.getElementById('nc-plan-duracion').value;
   var planMesesVal = planDuracion === 'fijo' ? (parseInt(document.getElementById('nc-plan-meses').value) || null) : null;
 
@@ -4870,6 +5248,33 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+function faTodayLabel() {
+  var d = new Date();
+  var dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  var meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  return dias[d.getDay()] + ' ' + d.getDate() + ' de ' + meses[d.getMonth()];
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('ad-date');
+  if (el) el.textContent = faTodayLabel();
+});
+
+// Onda al tocar las tarjetas y botones principales del panel
+document.addEventListener('pointerdown', function(e) {
+  var el = e.target.closest && e.target.closest('.menu-card, #btn-quick-quote, .clients-status-tab, .pc-tab-btn, .plan-tab, .content-card, .content-task');
+  if (!el) return;
+  var r = el.getBoundingClientRect(), size = Math.max(r.width, r.height) * 1.3;
+  if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+  el.style.overflow = 'hidden';
+  var dot = document.createElement('span');
+  dot.className = 'ad-ripple';
+  dot.style.width = dot.style.height = size + 'px';
+  dot.style.left = (e.clientX - r.left - size / 2) + 'px';
+  dot.style.top = (e.clientY - r.top - size / 2) + 'px';
+  el.appendChild(dot);
+  setTimeout(function() { dot.remove(); }, 600);
+}, { passive: true });
+
 function showScreen(name) {
   // Hide loading screen
   var loadingEl = document.getElementById('loading');
@@ -4883,6 +5288,8 @@ function showScreen(name) {
   if (cpModal) cpModal.style.display = 'none';
   var eventModal = document.getElementById('event-modal');
   if (eventModal) eventModal.classList.remove('open');
+  closeContentModal();
+  closeContentPop();
   var newClientModal = document.getElementById('new-client-modal');
   if (newClientModal) newClientModal.style.display = 'none';
   var fijoModal = document.getElementById('fin-fijo-modal');
@@ -4891,8 +5298,6 @@ function showScreen(name) {
   if (beneficioModal) beneficioModal.style.display = 'none';
   var anuncioModal = document.getElementById('anuncio-modal');
   if (anuncioModal) anuncioModal.style.display = 'none';
-  var comunidadModal = document.getElementById('comunidad-modal');
-  if (comunidadModal) comunidadModal.style.display = 'none';
   var adminChatModal = document.getElementById('admin-chat-modal');
   if (adminChatModal && adminChatModal.style.display !== 'none') { adminChatModal.style.display = 'none'; if (adminChatRef) { adminChatRef.off(); adminChatRef = null; } adminChatUid = null; }
   var exerciseBankModal = document.getElementById('exercise-bank-modal');
@@ -4908,11 +5313,20 @@ function showScreen(name) {
     if (el) el.classList.remove('active');
   });
   var target = document.getElementById(name);
-  if (target) target.classList.add('active');
+  if (target) {
+    target.classList.add('active');
+    target.classList.remove('ad-screen-in'); void target.offsetWidth; target.classList.add('ad-screen-in');
+  }
   currentScreen = name;
   if (name === 'clientes') updateClientBadges();
   if (name === 'portal-content') renderPortalContentScreen();
+  if (name === 'dashboard') { try { renderChatsInbox(); renderLeadsSection(); } catch (e) {} }
   if (name === 'planificacion') {
+    // Plan de contenido (videos de Instagram): se dibuja en el calendario y en la pestaña Contenido
+    loadContentPlan(function() {
+      if (document.getElementById('content-view').style.display === 'none') renderCalendar();
+      else renderContentList();
+    });
     // Load from Firebase first, then render
     fbGet('cal/events', function(data) {
       calEvents = (data && Object.keys(data).length > 0) ? data : JSON.parse(localStorage.getItem('fa_cal_events') || '{}');
@@ -4976,6 +5390,21 @@ function syncAllFirebaseData() {
         showScreen('dashboard');
       }
     }
+
+    // Premio del mes (recompensas para clientes que usan la app)
+    fbGet('recompensas/config', function(data) {
+      PREMIO_CFG = data || null;
+      if (document.getElementById('premio-card')) renderPremioCard();
+    });
+
+    // Inversiones guardadas (no cuenta para la pantalla de carga)
+    fbGet('inversiones_v2', function(data) {
+      if (data && Object.keys(data).length > 0) {
+        var arr = Array.isArray(data) ? data.filter(Boolean) : Object.values(data);
+        localStorage.setItem('fa_inversiones_v2', JSON.stringify(arr));
+        if (typeof renderInversiones === 'function' && document.getElementById('fin-inv-list')) renderInversiones();
+      }
+    });
 
     fbGet('rutinas', function(data) {
       if (data && Object.keys(data).length > 0) {
@@ -5042,10 +5471,10 @@ function syncAllFirebaseData() {
       onFirebaseReady();
     });
 
-    // Asistencia de clientas presenciales: antes solo se traía por clienta al
+    // Asistencia de clientes presenciales: antes solo se traía por cliente al
     // abrir su detalle (renderAsistencia), así que en un navegador/dispositivo
     // nuevo countSessionsInCycle() podía leer datos vacíos de localStorage y
-    // mostrar mal si una clienta ya agotó sus sesiones del ciclo. La traemos
+    // mostrar mal si un cliente ya agotó sus sesiones del ciclo. La traemos
     // completa acá, igual que el resto de los datos, para que esté lista
     // desde el primer render de la lista.
     fbGet('asistencia', function(asistData) {
@@ -5118,7 +5547,7 @@ function syncAllFirebaseData() {
 // ══════════════════════════════
 // CALENDAR
 // ══════════════════════════════
-var DAYS = ['Lun','Mar','Mié','Jue','Vie','Sáb'];
+var DAYS = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
 var HOURS = [];
 for (var h = 5; h <= 19; h++) { HOURS.push(h); }
 
@@ -5222,7 +5651,7 @@ function getWeekDates(offset) {
   var diff = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
   monday.setDate(now.getDate() + diff + (offset * 7));
   var days = [];
-  for (var i = 0; i < 6; i++) {
+  for (var i = 0; i < 7; i++) {
     var d = new Date(monday);
     d.setDate(monday.getDate() + i);
     days.push(d);
@@ -5291,6 +5720,417 @@ function isToday(date) {
   return date.toDateString() === now.toDateString();
 }
 
+// ── CONTENIDO: plan de videos de Instagram ──
+// El plan (guiones, fechas, captions) vive en contenido/plan.json y lo
+// actualiza Claude. El estado de cada video (Por grabar → Publicado) lo
+// marca Frida desde aquí y se guarda en Firebase.
+var CONTENT_PLAN = [];
+var CONTENT_STATUS = JSON.parse(localStorage.getItem('fa_content_status') || '{}');
+var CONTENT_STATES = ['Por grabar', 'Grabado', 'Editado', 'Publicado'];
+var CONTENT_DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+var CONTENT_MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+var contentPlanLoaded = false;
+// Cambios que Frida hace al guion y al caption desde el portal. Se guardan
+// aparte (Firebase "contentEdits") y se aplican encima del plan, así no se
+// pierden cuando Claude actualiza contenido/plan.json.
+var CONTENT_EDITS = JSON.parse(localStorage.getItem('fa_content_edits') || '{}');
+var contentDraft = null; // { id, tomas, caption } mientras se edita
+
+function loadContentPlan(cb) {
+  fetch('contenido/plan.json?v=' + Date.now(), { cache: 'no-store' })
+    .then(function(r) { return r.ok ? r.json() : { videos: [] }; })
+    .then(function(data) { CONTENT_PLAN = (data && data.videos) || []; contentPlanLoaded = true; })
+    .catch(function(e) { console.warn('No se pudo cargar el plan de contenido', e); })
+    .then(function() {
+      fbGet('contentStatus', function(st) {
+        if (st) {
+          CONTENT_STATUS = st;
+          localStorage.setItem('fa_content_status', JSON.stringify(st));
+        }
+        fbGet('contentEdits', function(ed) {
+          if (ed) {
+            CONTENT_EDITS = ed;
+            localStorage.setItem('fa_content_edits', JSON.stringify(ed));
+          }
+          if (cb) cb();
+        });
+      });
+    });
+}
+
+function contentDate(iso) {
+  var p = String(iso).split('-');
+  return new Date(+p[0], +p[1] - 1, +p[2]);
+}
+
+function contentDateLabel(iso, short) {
+  var d = contentDate(iso);
+  var day = CONTENT_DAY_NAMES[d.getDay()];
+  if (short) day = day.slice(0, 3).toLowerCase();
+  return day + ' ' + d.getDate() + ' ' + CONTENT_MONTHS[d.getMonth()];
+}
+
+function contentTimeLabel(hhmm) {
+  var p = String(hhmm || '').split(':');
+  var h = +p[0], m = p[1] || '00';
+  if (isNaN(h)) return '';
+  var suffix = h < 12 ? 'a. m.' : 'p. m.';
+  var h12 = h === 0 ? 12 : (h > 12 ? h - 12 : h);
+  return h12 + ':' + m + ' ' + suffix;
+}
+
+function contentStatusIdx(id) {
+  var s = CONTENT_STATUS[id];
+  return (typeof s === 'number' && s >= 0 && s < CONTENT_STATES.length) ? s : 0;
+}
+
+// Formato de los textos del guion: **así** = palabra en mayúsculas azules, *así* = cursiva crema.
+function contentMarks(text) {
+  return escHtml(text)
+    .replace(/\*\*(.+?)\*\*/g, '<b style="color:var(--blue)">$1</b>')
+    .replace(/\*(.+?)\*/g, '<i style="background:#F5ECCB;border-radius:4px;padding:0 0.2rem">$1</i>');
+}
+
+function findContentVideo(id) {
+  return CONTENT_PLAN.find(function(v) { return v.id === id; });
+}
+
+// Tareas de contenido de un día: grabar, editar o publicar.
+function contentTasksFor(dk) {
+  var out = [];
+  CONTENT_PLAN.forEach(function(v) {
+    if (v.grabar === dk) out.push({ video: v, kind: 'grabar', label: '🎥 Grabar: ' + v.titulo });
+    if (v.editar === dk) out.push({ video: v, kind: 'editar', label: '✂️ Editar: ' + v.titulo });
+    if (v.publicar && v.publicar.fecha === dk) out.push({ video: v, kind: 'publicar', label: '📲 Publicar: ' + v.titulo });
+  });
+  return out;
+}
+
+function switchPlanTab(tab) {
+  document.getElementById('plan-tab-cal').classList.toggle('active', tab === 'cal');
+  document.getElementById('plan-tab-content').classList.toggle('active', tab === 'content');
+  document.getElementById('plan-cal-view').style.display = tab === 'cal' ? '' : 'none';
+  document.getElementById('content-view').style.display = tab === 'content' ? '' : 'none';
+  if (tab === 'content') renderContentList();
+  else renderCalendar();
+}
+
+function renderContentList() {
+  var el = document.getElementById('content-list');
+  if (!el) return;
+  if (!CONTENT_PLAN.length) {
+    el.innerHTML = '<div class="content-intro">' + (contentPlanLoaded ? 'Todavía no hay videos planificados.' : 'Cargando…') + '</div>';
+    return;
+  }
+  var videos = CONTENT_PLAN.slice().sort(function(a, b) { return a.publicar.fecha < b.publicar.fecha ? -1 : 1; });
+  var todayKey = dateKey(new Date());
+  var next = videos.find(function(v) { return v.publicar.fecha >= todayKey && contentStatusIdx(v.id) < 3; });
+  var html = '', lastWeek = '';
+  videos.forEach(function(v) {
+    var d = contentDate(v.publicar.fecha);
+    var monday = new Date(d);
+    monday.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    var sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    var weekLabel = 'Semana del ' + monday.getDate() + ' ' + CONTENT_MONTHS[monday.getMonth()] + ' al ' + sunday.getDate() + ' ' + CONTENT_MONTHS[sunday.getMonth()];
+    if (weekLabel !== lastWeek) { html += '<div class="content-week-label">' + weekLabel + '</div>'; lastWeek = weekLabel; }
+    var st = contentStatusIdx(v.id);
+    html += '<button type="button" class="content-card' + (next && next.id === v.id ? ' next' : '') + '" onclick="openContentModal(\'' + v.id + '\')">'
+      + '<div class="content-card-top"><div class="content-card-date">Publica: ' + contentDateLabel(v.publicar.fecha) + ' · ' + contentTimeLabel(v.publicar.hora) + '</div>'
+      + '<span class="content-status s' + st + '">' + CONTENT_STATES[st] + '</span></div>'
+      + '<div class="content-card-title">' + escHtml(v.titulo) + (v.borrador ? '<span class="content-draft">Borrador</span>' : '') + '</div>'
+      + '<div class="content-card-meta">' + escHtml(v.pilar) + (v.grabar ? ' · Graba: ' + contentDateLabel(v.grabar, true) : '') + (v.editar ? ' · Edita: ' + contentDateLabel(v.editar, true) : '') + '</div>'
+      + '</button>';
+  });
+  el.innerHTML = html;
+}
+
+// El video con los cambios de Frida aplicados encima del plan
+function contentVideoMerged(id) {
+  var base = findContentVideo(id);
+  if (!base) return null;
+  var e = CONTENT_EDITS[id];
+  if (!e) return base;
+  var v = Object.assign({}, base);
+  if (Array.isArray(e.tomas)) v.tomas = e.tomas;
+  if (typeof e.caption === 'string') v.caption = e.caption;
+  v.editadoPorTi = true;
+  return v;
+}
+
+function startContentEdit(id) {
+  var v = contentVideoMerged(id);
+  if (!v) return;
+  contentDraft = {
+    id: id,
+    tomas: (v.tomas || []).map(function(t) { return { graba: t.graba || '', habla: !!t.habla, dice: t.dice || '' }; }),
+    caption: v.caption || ''
+  };
+  renderContentEditor();
+}
+
+function contentDraftSet(i, field, value) {
+  if (!contentDraft) return;
+  if (i === -1) { contentDraft.caption = value; return; }
+  contentDraft.tomas[i][field] = value;
+}
+
+function contentDraftAdd() {
+  contentDraft.tomas.push({ graba: '', habla: false, dice: '' });
+  renderContentEditor();
+  var areas = document.querySelectorAll('#content-modal-body .ce-graba');
+  if (areas.length) areas[areas.length - 1].focus();
+}
+
+function contentDraftRemove(i) {
+  if (!confirm('¿Quitar la toma ' + (i + 1) + '?')) return;
+  contentDraft.tomas.splice(i, 1);
+  renderContentEditor();
+}
+
+function contentDraftMove(i, dir) {
+  var j = i + dir;
+  if (j < 0 || j >= contentDraft.tomas.length) return;
+  var t = contentDraft.tomas[i];
+  contentDraft.tomas[i] = contentDraft.tomas[j];
+  contentDraft.tomas[j] = t;
+  renderContentEditor();
+}
+
+function renderContentEditor() {
+  var d = contentDraft;
+  var v = findContentVideo(d.id);
+  var h = '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.75rem">'
+    + '<div><div class="content-card-date">Editando el guion</div><div class="modal-title" style="margin:0.2rem 0 0">' + escHtml(v.titulo) + '</div></div>'
+    + '<button type="button" class="cm-btn ghost" onclick="cancelContentEdit()" aria-label="Cancelar">✕</button></div>';
+  h += '<div class="ce-hint">Escribe <b>**así**</b> para que salga en <b style="color:var(--blue)">MAYÚSCULAS AZULES</b> y <b>*así*</b> para que salga en <i style="background:#F5ECCB;border-radius:4px;padding:0 0.2rem">cursiva crema</i>.</div>';
+  h += '<div class="cm-section">Guion de grabación</div>';
+  d.tomas.forEach(function(t, i) {
+    h += '<div class="ce-toma' + (t.habla ? ' talk' : '') + '">'
+      + '<div class="ce-toma-top"><b>Toma ' + (i + 1) + '</b><span class="ce-actions">'
+      + '<button type="button" onclick="contentDraftMove(' + i + ',-1)" aria-label="Subir toma"' + (i === 0 ? ' disabled' : '') + '>↑</button>'
+      + '<button type="button" onclick="contentDraftMove(' + i + ',1)" aria-label="Bajar toma"' + (i === d.tomas.length - 1 ? ' disabled' : '') + '>↓</button>'
+      + '<button type="button" onclick="contentDraftRemove(' + i + ')" aria-label="Quitar toma">✕</button></span></div>'
+      + '<label class="ce-label" for="ce-g-' + i + '">Qué grabas</label>'
+      + '<textarea id="ce-g-' + i + '" class="ce-input ce-graba" rows="2" oninput="contentDraftSet(' + i + ',\'graba\',this.value)">' + escHtml(t.graba) + '</textarea>'
+      + '<label class="ce-check"><input type="checkbox"' + (t.habla ? ' checked' : '') + ' onchange="contentDraftSet(' + i + ',\'habla\',this.checked);this.closest(\'.ce-toma\').classList.toggle(\'talk\',this.checked)"> 🎤 Hablo a cámara en esta toma</label>'
+      + '<label class="ce-label" for="ce-d-' + i + '">Qué dices o qué texto aparece</label>'
+      + '<textarea id="ce-d-' + i + '" class="ce-input" rows="3" oninput="contentDraftSet(' + i + ',\'dice\',this.value)">' + escHtml(t.dice) + '</textarea>'
+      + '</div>';
+  });
+  h += '<button type="button" class="cm-btn ghost" style="width:100%" onclick="contentDraftAdd()">+ Agregar toma</button>';
+  h += '<div class="cm-section">Caption</div>'
+    + '<textarea class="ce-input" rows="7" aria-label="Caption" oninput="contentDraftSet(-1,\'caption\',this.value)">' + escHtml(d.caption) + '</textarea>';
+  h += '<div class="ce-save-row"><button type="button" class="cm-btn ghost" onclick="cancelContentEdit()">Cancelar</button>'
+    + '<button type="button" class="cm-btn primary" onclick="saveContentEdit()">Guardar cambios</button></div>';
+  document.getElementById('content-modal-body').innerHTML = h;
+  document.getElementById('content-modal').classList.add('open');
+}
+
+function saveContentEdit() {
+  var d = contentDraft;
+  if (!d) return;
+  CONTENT_EDITS[d.id] = {
+    tomas: d.tomas.filter(function(t) { return t.graba.trim() || t.dice.trim(); }),
+    caption: d.caption,
+    editado: new Date().toISOString()
+  };
+  localStorage.setItem('fa_content_edits', JSON.stringify(CONTENT_EDITS));
+  fbSet('contentEdits', CONTENT_EDITS, function() {
+    alert('Tus cambios se guardaron en este dispositivo, pero no se pudieron subir a la nube. Revisa tu conexión.');
+  });
+  var id = d.id;
+  contentDraft = null;
+  openContentModal(id);
+}
+
+function cancelContentEdit() {
+  var id = contentDraft && contentDraft.id;
+  contentDraft = null;
+  if (id) openContentModal(id); else closeContentModal();
+}
+
+function restoreContentOriginal(id) {
+  if (!confirm('¿Volver al guion original? Se borrarán tus cambios a este video.')) return;
+  delete CONTENT_EDITS[id];
+  localStorage.setItem('fa_content_edits', JSON.stringify(CONTENT_EDITS));
+  fbSet('contentEdits', CONTENT_EDITS);
+  openContentModal(id);
+}
+
+function openContentModal(id) {
+  contentDraft = null;
+  var v = contentVideoMerged(id);
+  if (!v) return;
+  var st = contentStatusIdx(id);
+  var h = '';
+  h += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.75rem">'
+    + '<div><div class="content-card-date">' + escHtml(v.pilar) + ' · ' + escHtml(v.formato) + ' · ' + escHtml(v.duracion) + '</div>'
+    + '<div class="modal-title" style="margin:0.2rem 0 0">' + escHtml(v.titulo) + (v.borrador ? '<span class="content-draft">Borrador</span>' : '') + '</div></div>'
+    + '<button type="button" class="cm-btn ghost" onclick="closeContentModal()" aria-label="Cerrar">✕</button></div>';
+
+  h += '<div class="cm-section">Estado</div><div class="cm-status-row">';
+  CONTENT_STATES.forEach(function(name, i) {
+    h += '<button type="button" class="cm-status-btn' + (i === st ? ' active' : '') + '" onclick="setContentStatus(\'' + id + '\',' + i + ')">' + name + '</button>';
+  });
+  h += '</div>';
+
+  h += '<div class="cm-section">Fechas</div><div class="cm-dates">'
+    + (v.grabar ? '<div class="cm-date">🎥 Grabar<b>' + contentDateLabel(v.grabar) + '</b></div>' : '')
+    + (v.editar ? '<div class="cm-date">✂️ Editar<b>' + contentDateLabel(v.editar) + '</b></div>' : '')
+    + '<div class="cm-date">📲 Publicar<b>' + contentDateLabel(v.publicar.fecha) + ', ' + contentTimeLabel(v.publicar.hora) + '</b></div>'
+    + '</div>';
+
+  if (v.idea) h += '<div class="cm-section">La idea</div><div class="cm-idea">' + contentMarks(v.idea) + '</div>';
+  // Imágenes listas para descargar y subir (historias, carruseles)
+  if (v.imagenes && v.imagenes.length) {
+    h += '<div class="cm-section">Imágenes listas para subir</div><div class="cm-imgs">';
+    v.imagenes.forEach(function(im, i) {
+      var src = typeof im === 'string' ? im : im.src, nombre = (typeof im === 'object' && im.nombre) || ('Imagen ' + (i + 1));
+      h += '<div class="cm-img"><a href="' + escHtml(src) + '" target="_blank" rel="noopener"><img src="' + escHtml(src) + '" alt="' + escHtml(nombre) + '" loading="lazy"></a>'
+        + '<div class="cm-img-name">' + escHtml(nombre) + '</div>'
+        + '<a class="cm-img-dl" href="' + escHtml(src) + '" download>⬇️ Descargar</a></div>';
+    });
+    h += '</div><div class="cm-img-tip">En el celular: toca la imagen para abrirla, mantén el dedo encima y elige "Guardar en Fotos".</div>';
+  }
+
+  h += '<div class="ce-bar"><button type="button" class="cm-btn primary" onclick="startContentEdit(\'' + id + '\')">✏️ Editar guion y caption</button>'
+    + (v.editadoPorTi ? '<span class="ce-edited">Tiene tus cambios · <button type="button" onclick="restoreContentOriginal(\'' + id + '\')">volver al original</button></span>' : '')
+    + '</div>';
+
+  if (v.tomas && v.tomas.length) {
+    h += '<div class="cm-section">Guion de grabación</div><div class="cm-table-wrap"><table class="cm-table"><thead><tr><th>#</th><th>Qué grabas</th><th>¿Hablas?</th><th>Qué dices o qué texto aparece</th></tr></thead><tbody>';
+    v.tomas.forEach(function(t, i) {
+      h += '<tr' + (t.habla ? ' class="talk"' : '') + '><td class="cm-num">Toma ' + (i + 1) + '</td><td data-label="Qué grabas">' + contentMarks(t.graba) + '</td>'
+        + '<td data-label="¿Hablas?">' + (t.habla ? '<span class="cm-talk">🎤 Sí, a cámara</span>' : 'No') + '</td><td data-label="Qué dices o qué texto aparece">' + contentMarks(t.dice) + '</td></tr>';
+    });
+    h += '</tbody></table></div>';
+  }
+
+  if (v.notas && v.notas.length) {
+    h += '<div class="cm-section">Notas</div><ul class="cm-list">' + v.notas.map(function(n) { return '<li>' + contentMarks(n) + '</li>'; }).join('') + '</ul>';
+  }
+
+  if (v.caption) {
+    h += '<div class="cm-section">Caption</div><div class="cm-caption">' + escHtml(v.caption) + '</div>'
+      + '<button type="button" class="cm-btn primary" style="margin-top:0.5rem" onclick="copyContentCaption(\'' + id + '\', this)">Copiar caption</button>';
+  }
+
+  if (v.checklist && v.checklist.length) {
+    h += '<div class="cm-section">Antes de grabar</div><ul class="cm-list">' + v.checklist.map(function(n) { return '<li>' + escHtml(n) + '</li>'; }).join('') + '</ul>';
+  }
+
+  var body = document.getElementById('content-modal-body');
+  body.innerHTML = h;
+  body.scrollTop = 0;
+  document.getElementById('content-modal').classList.add('open');
+}
+
+function closeContentModal() {
+  var m = document.getElementById('content-modal');
+  if (m) m.classList.remove('open');
+}
+
+function setContentStatus(id, idx) {
+  CONTENT_STATUS[id] = idx;
+  localStorage.setItem('fa_content_status', JSON.stringify(CONTENT_STATUS));
+  fbSet('contentStatus', CONTENT_STATUS);
+  openContentModal(id);
+  renderContentList();
+}
+
+function copyContentCaption(id, btn) {
+  var v = contentVideoMerged(id);
+  if (!v) return;
+  var done = function() { btn.textContent = '¡Copiado!'; setTimeout(function() { btn.textContent = 'Copiar caption'; }, 1800); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(v.caption).then(done).catch(function() { fallbackCopy(v.caption); done(); });
+  } else { fallbackCopy(v.caption); done(); }
+}
+
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  ta.remove();
+}
+
+var CONTENT_TASK_INFO = {
+  grabar: { icon: '🎥', kind: 'Grabar' },
+  editar: { icon: '✂️', kind: 'Editar' },
+  publicar: { icon: '📲', kind: 'Publicar' }
+};
+
+function contentTaskButton(t, dk, showDay) {
+  var info = CONTENT_TASK_INFO[t.kind];
+  var when = showDay ? contentDateLabel(dk) : '';
+  if (t.kind === 'publicar') when = (when ? when + ' · ' : '') + 'hora sugerida: ' + contentTimeLabel(t.video.publicar.hora);
+  var today = dk === dateKey(new Date());
+  return '<button type="button" class="content-task' + (today ? ' today' : '') + '" onclick="closeContentPop();openContentModal(\'' + t.video.id + '\')">'
+    + '<span class="content-task-icon">' + info.icon + '</span>'
+    + '<span><span class="content-task-kind">' + info.kind + (today ? ' · hoy' : '') + '</span>'
+    + '<span class="content-task-title" style="display:block">' + escHtml(t.video.titulo) + '</span>'
+    + (when ? '<span class="content-task-when">' + when + '</span>' : '') + '</span></button>';
+}
+
+// Burbuja que sale del día al tocar el circulito de notificación
+function showContentPop(btn, dk) {
+  closeContentPop();
+  var tasks = contentTasksFor(dk);
+  if (!tasks.length) return;
+  var pop = document.createElement('div');
+  pop.className = 'content-pop';
+  pop.id = 'content-pop';
+  pop.innerHTML = '<div class="content-pop-day">' + contentDateLabel(dk) + '</div>'
+    + tasks.map(function(t) { return contentTaskButton(t, dk, false); }).join('');
+  document.body.appendChild(pop);
+  var r = btn.getBoundingClientRect();
+  var w = pop.offsetWidth;
+  var center = r.left + r.width / 2;
+  var left = Math.max(8, Math.min(window.innerWidth - w - 8, center - w / 2));
+  pop.style.left = left + 'px';
+  pop.style.top = (r.bottom + 10) + 'px';
+  pop.style.setProperty('--arrow-x', (center - left) + 'px');
+  setTimeout(function() {
+    document.addEventListener('click', contentPopOutside, true);
+    window.addEventListener('scroll', closeContentPop, true);
+  }, 0);
+}
+
+function contentPopOutside(e) {
+  var pop = document.getElementById('content-pop');
+  if (pop && !pop.contains(e.target)) closeContentPop();
+}
+
+function closeContentPop() {
+  var pop = document.getElementById('content-pop');
+  if (pop) pop.remove();
+  document.removeEventListener('click', contentPopOutside, true);
+  window.removeEventListener('scroll', closeContentPop, true);
+}
+
+// Cuadro "Publicaciones de la semana" en la columna lateral (lunes a domingo).
+// Solo muestra lo que se publica; grabar y editar se ven en el circulito de cada día.
+function renderWeekContentBox() {
+  var el = document.getElementById('plan-week-content-list');
+  if (!el) return;
+  var monday = getWeekDates(weekOffset)[0];
+  var html = '';
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    var dk = dateKey(d);
+    contentTasksFor(dk).forEach(function(t) {
+      if (t.kind === 'publicar') html += contentTaskButton(t, dk, true);
+    });
+  }
+  el.innerHTML = html || '<div class="plan-week-empty">' + (contentPlanLoaded ? 'Sin publicaciones esta semana.' : 'Cargando…') + '</div>';
+}
+
 function changeWeek(dir) { weekOffset += dir; renderCalendar(); }
 
 function renderCalendar() {
@@ -5300,7 +6140,7 @@ function renderCalendar() {
   var now = new Date();
 
   // Week label
-  var first = days[0], last = days[5];
+  var first = days[0], last = days[6];
   var months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   document.getElementById('week-label').textContent =
     first.getDate() + ' ' + months[first.getMonth()] + ' — ' + last.getDate() + ' ' + months[last.getMonth()] + ' ' + last.getFullYear();
@@ -5313,7 +6153,9 @@ function renderCalendar() {
   html += '<div class="cal-time-header"></div>';
   days.forEach(function(d) {
     var todayClass = isToday(d) ? ' today' : '';
-    html += '<div class="cal-day-header' + todayClass + '">' + DAYS[days.indexOf(d)] + '<br>' + d.getDate() + '</div>';
+    var nTasks = contentTasksFor(dateKey(d)).length;
+    var badge = nTasks ? '<button type="button" class="cal-day-badge' + (isToday(d) ? ' today' : '') + '" aria-label="Contenido de este día: ' + nTasks + '" onclick="event.stopPropagation();showContentPop(this,\'' + dateKey(d) + '\')">' + nTasks + '</button>' : '';
+    html += '<div class="cal-day-header' + todayClass + '">' + DAYS[days.indexOf(d)] + '<br>' + d.getDate() + badge + '</div>';
   });
 
   // Rows — empty cells only, no events drawn inside individual cells anymore
@@ -5339,10 +6181,10 @@ function renderCalendar() {
   var oldOverlays = wrap.querySelectorAll('.cal-day-col-overlay');
   oldOverlays.forEach(function(o) { o.remove(); });
 
-  // Column geometry: first column is 3.5rem (time labels), then 6 equal columns
+  // Column geometry: first column is 3.5rem (time labels), then 7 equal columns
   var gridWidth = grid.offsetWidth;
   var timeColWidth = 3.5 * remPx;
-  var dayColWidth = (gridWidth - timeColWidth) / 6;
+  var dayColWidth = (gridWidth - timeColWidth) / 7;
 
   days.forEach(function(d, dayIdx) {
     var dk = dateKey(d);
@@ -5381,6 +6223,10 @@ function renderCalendar() {
       overlay.appendChild(evDiv);
     });
 
+    // Las publicaciones del plan de contenido NO se dibujan en las horas del
+    // calendario: chocaban con clases ya agendadas. Se ven en el circulito
+    // del día y en "Contenido de la semana"; Frida agenda la hora a mano.
+
     wrap.appendChild(overlay);
   });
 
@@ -5410,12 +6256,52 @@ function renderCalendar() {
   document.querySelectorAll('.cal-event').forEach(function(ev) {
     ev.addEventListener('click', function(e) {
       e.stopPropagation();
+      var cid = this.getAttribute('data-cid');
+      if (cid) { openContentModal(cid); return; }
       var dk = this.getAttribute('data-dk');
       var eid = this.getAttribute('data-eid');
       openModal(dk, null, eid);
     });
   });
+
+  closeContentPop();
+  renderWeekContentBox();
+  var todayBtn = document.getElementById('week-today-btn');
+  if (todayBtn) todayBtn.style.display = weekOffset === 0 ? 'none' : '';
+  drawNowLine();
 }
+
+// Línea de "ahora": marca la hora actual en la columna de hoy
+function drawNowLine() {
+  var wrap = document.getElementById('cal-grid-wrap');
+  var grid = document.getElementById('cal-grid');
+  if (!wrap || !grid) return;
+  var old = wrap.querySelector('.cal-now');
+  if (old) old.remove();
+  if (weekOffset !== 0) return;
+  var days = getWeekDates(0);
+  var idx = days.findIndex(function(d) { return isToday(d); });
+  var now = new Date();
+  var dec = now.getHours() + now.getMinutes() / 60;
+  if (idx < 0 || dec < HOURS[0] || dec > HOURS[HOURS.length - 1] + 1) return;
+  var remPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+  var header = document.querySelector('.cal-day-header');
+  var headerH = header ? header.offsetHeight : 0;
+  var timeCol = 3.5 * remPx;
+  var colW = (grid.offsetWidth - timeCol) / 7;
+  var line = document.createElement('div');
+  line.className = 'cal-now';
+  line.style.left = (timeCol + idx * colW) + 'px';
+  line.style.width = colW + 'px';
+  line.style.top = (headerH + (dec - HOURS[0]) * 3 * remPx) + 'px';
+  var hh = now.getHours(), mm = String(now.getMinutes()).padStart(2, '0');
+  line.innerHTML = '<span class="cal-now-dot"></span><span class="cal-now-time">' + (hh % 12 || 12) + ':' + mm + '</span>';
+  wrap.appendChild(line);
+}
+setInterval(function() {
+  var plan = document.getElementById('planificacion');
+  if (plan && plan.classList.contains('active')) drawNowLine();
+}, 60000);
 
 function decimalToTimeStr(dec) {
   var h = Math.floor(dec);
@@ -5564,9 +6450,12 @@ function initDefaults() {
     localStorage.setItem('fa_ahorros', JSON.stringify(DEFAULT_AHORROS));
     fbSet('ahorros', DEFAULT_AHORROS);
   }
-  // Always reset inversiones to correct list
-  localStorage.setItem('fa_inversiones_v2', JSON.stringify(DEFAULT_INVERSIONES));
-  fbSet('inversiones_v2', DEFAULT_INVERSIONES);
+  // Inversiones: antes se reiniciaban a la lista fija en cada carga y se
+  // perdía lo que Frida agregaba o borraba. Ahora solo se siembran la
+  // primera vez; lo guardado se trae de Firebase en syncAllFirebaseData.
+  if (!localStorage.getItem('fa_inversiones_v2')) {
+    localStorage.setItem('fa_inversiones_v2', JSON.stringify(DEFAULT_INVERSIONES));
+  }
   // Remove obsolete autogen flag from older version (now we check actual events instead)
   localStorage.removeItem('fa_autogen_clients');
 }
@@ -5638,15 +6527,26 @@ function finRender() {
     var el = document.getElementById(id); if(el) el.textContent = chipText;
   });
 
-  // Summary cards
+  // Summary cards: ingresos (con comparación vs el mes anterior), gastos y lo que te queda
+  var prevD = new Date(finViewYear, finViewMonth - 1, 1);
+  var prevKey = finMonthKey(prevD.getFullYear(), prevD.getMonth());
+  var prevInc = finAllData[prevKey] ? finMonthTotals(finAllData[prevKey]).inc : null;
+  var incSub = 'este mes';
+  if (prevInc) {
+    var diff = t.inc - prevInc;
+    incSub = (diff >= 0 ? '▲ ' : '▼ ') + finFmt(Math.abs(diff)) + ' vs ' + FIN_MONTHS[prevD.getMonth()].slice(0, 3).toLowerCase();
+  }
+  var queda = t.inc - t.exp;
   var cards = [
-    {label:'Ingresos', value:finFmt(t.inc), color:'#2a7a2a', icon:'↑'},
-    {label:'Gastos', value:finFmt(t.exp), color:'#c44', icon:'↓'},
+    {label:'Ingresos', value:finFmt(t.inc), color:'#2a7a2a', icon:'↑', sub:incSub},
+    {label:'Gastos', value:finFmt(t.exp), color:'#c44', icon:'↓', sub:'este mes'},
+    {label:'Te queda', value:(queda < 0 ? '-' : '') + finFmt(Math.abs(queda)), color:queda < 0 ? '#c44' : 'var(--blue)', icon:'=', sub:'ingresos − gastos'},
   ];
   var cardsHtml = '';
   cards.forEach(function(c) {
-    cardsHtml += '<div class="fin-card"><div class="fin-icon" style="color:'+c.color+'">'+c.icon+'</div><div class="fin-card-label">'+c.label+'</div><div class="fin-card-value" style="color:'+c.color+'">'+c.value+'</div><div class="fin-card-sub">este mes</div></div>';
+    cardsHtml += '<div class="fin-card"><div class="fin-icon" style="color:'+c.color+'">'+c.icon+'</div><div class="fin-card-label">'+c.label+'</div><div class="fin-card-value" style="color:'+c.color+'">'+c.value+'</div><div class="fin-card-sub">'+c.sub+'</div></div>';
   });
+  renderPorCobrar();
   var cardsEl = document.getElementById('fin-summary-cards');
   if (cardsEl) cardsEl.innerHTML = cardsHtml;
 
@@ -5721,6 +6621,30 @@ function finRender() {
   }
 }
 
+
+// "Por cobrar": clientes activos con el pago del ciclo pendiente, para no
+// tener que entrar una por una. Solo se muestra en el mes actual.
+function renderPorCobrar() {
+  var el = document.getElementById('fin-por-cobrar');
+  if (!el) return;
+  var now = new Date();
+  if (finViewYear !== now.getFullYear() || finViewMonth !== now.getMonth()) { el.innerHTML = ''; return; }
+  var rows = Object.keys(CLIENTS).filter(function(id) {
+    var c = CLIENTS[id];
+    if (!isActive(c, id)) return false;
+    var st = getPaymentStatus(id, c);
+    return st && st.level === 'warn';
+  });
+  if (!rows.length) { el.innerHTML = '<div class="fin-cobrar ok">✅ Todos tus clientes activos están al día con su pago.</div>'; return; }
+  var total = rows.reduce(function(s, id) { return s + (Number(CLIENTS[id].cuota) || 0); }, 0);
+  var html = '<div class="fin-cobrar"><div class="fin-cobrar-hdr"><span>💳 Por cobrar · ' + rows.length + (rows.length === 1 ? ' cliente' : ' clientes') + '</span><b>' + finFmt(total) + '</b></div>';
+  rows.forEach(function(id) {
+    var c = CLIENTS[id];
+    html += '<div class="fin-cobrar-row" onclick="openAdminClientProfile(\'' + id + '\');acpSwitchTab(\'pagos\')"><span>' + escapeHtmlAdmin(c.name) + '</span><span>' + (c.cuota ? finFmt(c.cuota) : 'sin cuota') + ' ›</span></div>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
 
 function finChangeMonth(dir) {
   finViewMonth+=dir;
@@ -6850,14 +7774,15 @@ function openRutinaEditor(clientId) {
   var c = CLIENTS[clientId];
   if (!c) return;
   // El editor de rutina es una pantalla normal (sin position:fixed propio),
-  // así que si se abre desde dentro del perfil de clienta (acp-overlay, que
+  // así que si se abre desde dentro del perfil de cliente (acp-overlay, que
   // sí es fixed y queda encima de todo) hay que cerrar ese overlay primero
   // o la pantalla de rutina carga detrás, invisible, y el botón parece que
   // no hace nada hasta cerrar el perfil manualmente.
   closeAdminClientProfile();
   rutinaClientId = clientId;
-  rutinaCurrentDay = 0;
-  rvViewDay = 0;
+  rvViewDay = window._rvStartDay || 0;
+  rutinaCurrentDay = rvViewDay;
+  window._rvStartDay = 0;
 
   // Load from Firebase first, then localStorage, then defaults.
   // Re-authenticate right before reading — a long-idle tab can hold an
@@ -6902,7 +7827,7 @@ function openRutinaEditor(clientId) {
     };
     // Presencial y online 1:1 nunca ven la pestaña Rutina desde su app (la
     // lleva Frida aparte) — así que estos dos campos no le sirven como
-    // mensaje para la clienta. En vez de ocultarlos, se reetiquetan como
+    // mensaje para el cliente. En vez de ocultarlos, se reetiquetan como
     // notas internas para Frida (siguen siendo los mismos campos, solo
     // cambia para qué sirven según la modalidad).
     var esRutinaPersonalizada = c.type === 'rutina-personalizada';
@@ -6921,7 +7846,7 @@ function openRutinaEditor(clientId) {
     } else if (esPresencial) {
       // Presencial: un solo cuadro simple de aclaraciones para Frida —
       // nada de "mensaje de bienvenida", que no tiene sentido si la
-      // clienta nunca entra a ver la rutina.
+      // cliente nunca entra a ver la rutina.
       msgLabelEl.style.display = 'none';
       msgInicialEl.style.display = 'none';
       aclaracionesLabelEl.textContent = '📝 Aclaraciones';
@@ -6929,7 +7854,7 @@ function openRutinaEditor(clientId) {
     } else {
       msgLabelEl.style.display = '';
       msgInicialEl.style.display = '';
-      msgLabelEl.textContent = '📝 Nota general (solo para vos, la clienta no la ve)';
+      msgLabelEl.textContent = '📝 Nota general (solo para vos, el cliente no la ve)';
       msgInicialEl.placeholder = 'Ej: Rutina de fuerza, revisar carga cada 4 semanas...';
       aclaracionesLabelEl.textContent = '📝 Aclaraciones para vos (una por línea)';
       aclaracionesEl.placeholder = 'Ej: Cuidado con la rodilla derecha.\nPrefiere mancuernas a barra.';
@@ -7159,7 +8084,7 @@ function deleteExerciseBankItem(id) {
 }
 
 // ── VIDEO/TÉCNICA POR EJERCICIO (desde la vista de rutina) ──
-// Reutiliza el mismo banco de ejercicios que ya ve la clienta en su portal:
+// Reutiliza el mismo banco de ejercicios que ya ve el cliente en su portal:
 // tocar el nombre de un ejercicio en "Ver rutina" abre este modal para ver
 // o pegar el link de YouTube, sin tener que buscarlo en el Banco aparte.
 function findExerciseBankItem(name) {
@@ -7211,7 +8136,7 @@ function openExerciseVideoModal(name) {
 }
 
 // El preview dentro del modal usa el mismo truco de alto/aspect-ratio que
-// el reproductor real que ve la clienta, para que Frida vea exactamente
+// el reproductor real que ve el cliente, para que Frida vea exactamente
 // cómo va a quedar antes de guardar.
 function evUpdatePreviewOrientation() {
   var wrap = document.getElementById('ev-preview-wrap');
@@ -7334,7 +8259,7 @@ function renderTemplatesList() {
       html += '<div style="color:var(--muted);font-size:0.7rem;margin-top:0.15rem;">' + dayCount + ' día' + (dayCount !== 1 ? 's' : '') + '</div></div>';
       html += '<button onclick="deleteTemplate(\'' + it.id + '\')" style="background:none;border:none;color:#c44;font-size:0.85rem;cursor:pointer;">✕</button>';
       html += '</div>';
-      html += '<button onclick="applyTemplate(\'' + it.id + '\')" style="width:100%;margin-top:0.6rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Usar en esta clienta</button>';
+      html += '<button onclick="applyTemplate(\'' + it.id + '\')" style="width:100%;margin-top:0.6rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:8px;padding:0.55rem;font-weight:700;font-size:0.75rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Usar en este cliente</button>';
       html += '</div>';
     });
     el.innerHTML = html;
@@ -7356,7 +8281,7 @@ function saveCurrentAsTemplate() {
   });
 }
 function applyTemplate(templateId) {
-  if (!confirm('Esto reemplaza la rutina actual de esta clienta por la plantilla elegida. ¿Continuar?')) return;
+  if (!confirm('Esto reemplaza la rutina actual de este cliente por la plantilla elegida. ¿Continuar?')) return;
   fbGet('programTemplates/' + templateId, function(tpl) {
     if (!tpl) { alert('No se pudo cargar la plantilla.'); return; }
     rutinaData = { days: cloneDaysWithNewIds(tpl.days) };
@@ -7421,7 +8346,7 @@ function renderRutinaEditor() {
 
   if (esPresencialDia) {
     // Presencial no ve la pestaña Rutina, así que acá no hace falta una
-    // nota "para la clienta" — en cambio, lo que Frida necesita de un
+    // nota "para el cliente" — en cambio, lo que Frida necesita de un
     // vistazo antes de bajarse del carro es qué equipo llevar ese día.
     html += '<div style="background:#fff9db;border:1px solid #f5d76e;border-radius:10px;padding:0.75rem;margin-bottom:1rem;">';
     html += '<div style="font-size:0.65rem;font-weight:700;color:#8a6d00;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;">🎒 Equipo a llevar este día (uno por línea)</div>';
@@ -7430,8 +8355,8 @@ function renderRutinaEditor() {
   } else {
     // Nota puntual de este día — a diferencia del "Mensaje de Frida" (que es
     // para toda la rutina), esta se guarda en el propio día y le aparece a
-    // la clienta solo quien abra justo este día.
-    html += '<textarea id="rutina-day-nota" class="fin-form-input" style="width:100%;min-height:3rem;resize:vertical;font-family:\'DM Sans\',sans-serif;margin-bottom:1rem;" placeholder="Nota para este día en particular (opcional) — le aparece a la clienta solo en este día">'+escHtml(day.notaAdmin || '')+'</textarea>';
+    // el cliente solo quien abra justo este día.
+    html += '<textarea id="rutina-day-nota" class="fin-form-input" style="width:100%;min-height:3rem;resize:vertical;font-family:\'DM Sans\',sans-serif;margin-bottom:1rem;" placeholder="Nota para este día en particular (opcional) — le aparece al cliente solo en este día">'+escHtml(day.notaAdmin || '')+'</textarea>';
   }
 
   // Blocks
@@ -8209,7 +9134,7 @@ function renderAhorrosMes() {
     <div class="fin-form-row"><div class="fin-form-label">Video de YouTube</div><input class="fin-form-input" id="ev-video" type="text" placeholder="Pegá el link — subilo como 'No listado' en YouTube"></div>
     <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--text);margin:-0.4rem 0 1rem;cursor:pointer;"><input type="checkbox" id="ev-vertical" onchange="evUpdatePreviewOrientation()" style="width:1.1rem;height:1.1rem;"> Video vertical (grabado con el celular)</label>
     <div class="fin-form-row"><div class="fin-form-label">Nota / descripción (opcional)</div><textarea class="fin-form-input" id="ev-descripcion" rows="3" placeholder="Ej: Espalda pegada al respaldo, no bloquear la rodilla arriba..." style="resize:vertical;"></textarea></div>
-    <div style="font-size:0.68rem;color:var(--muted);margin-bottom:1rem;">Esto queda guardado en el banco de ejercicios y se muestra automáticamente a tus clientas cuando vean "<span id="ev-modal-name-inline"></span>" en su rutina.</div>
+    <div style="font-size:0.68rem;color:var(--muted);margin-bottom:1rem;">Esto queda guardado en el banco de ejercicios y se muestra automáticamente a tus clientes cuando vean "<span id="ev-modal-name-inline"></span>" en su rutina.</div>
     <button onclick="saveExerciseVideoModal()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;">Guardar</button>
   </div>
 </div>
@@ -8234,7 +9159,7 @@ function renderAhorrosMes() {
       <button onclick="hideTemplateModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
     </div>
 
-    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Guardá la rutina que estás viendo como plantilla para reutilizarla en otras clientas.</div>
+    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem;">Guardá la rutina que estás viendo como plantilla para reutilizarla en otros clientes.</div>
     <div class="fin-form-row"><div class="fin-form-label">Nombre de la plantilla</div><input class="fin-form-input" id="tpl-nombre" type="text" placeholder="Ej: Full Body Principiante 4 semanas"></div>
     <button onclick="saveCurrentAsTemplate()" style="width:100%;background:#2a7a2a;color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.5rem;">💾 Guardar rutina actual como plantilla</button>
 

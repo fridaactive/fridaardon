@@ -1,0 +1,57 @@
+/* ══ MI CICLO · "Tu energía de hoy" (diseño FridaActive) ══ */
+.cy-card{position:relative;margin-top:0.9rem;padding:1.1rem 1rem 1rem;border-radius:22px;overflow:hidden;color:#fff;
+  background:radial-gradient(120% 90% at 85% 0%,var(--cy-glow) 0%,rgba(0,0,0,0) 55%),rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12);box-shadow:0 6px 0 rgba(0,0,0,0.25)}
+.cy-top{display:flex;gap:1rem;align-items:center}
+.cy-batt{position:relative;width:92px;flex-shrink:0;filter:drop-shadow(0 0 18px var(--cy-glow))}
+.cy-batt svg{display:block;width:92px;height:150px;overflow:visible}
+.cy-wave{animation:cyWave 3.2s linear infinite}
+.cy-wave2{animation:cyWave 4.6s linear infinite reverse;opacity:.55}
+@keyframes cyWave{from{transform:translateX(0)}to{transform:translateX(-60px)}}
+.cy-bub{animation:cyBub var(--t,3s) ease-in var(--d,0s) infinite;opacity:0}
+@keyframes cyBub{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.85}100%{transform:translateY(-70px) scale(1);opacity:0}}
+.cy-bolt{animation:cyBolt 1.6s ease-in-out infinite;transform-origin:47px 50px}
+@keyframes cyBolt{0%,100%{opacity:.25;transform:scale(.92)}50%{opacity:1;transform:scale(1.06)}}
+.cy-zz{animation:cyZz 3s ease-in-out infinite}
+@keyframes cyZz{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.9;transform:translateY(-6px)}}
+.cy-pct{position:absolute;left:0;right:0;top:104px;text-align:center;font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.45rem;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.cy-pct small{font-size:.7rem;opacity:.8}
+.cy-info{flex:1;min-width:0}
+.cy-tag{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:.22rem .6rem;border-radius:100px;background:var(--cy-chip);color:var(--cy-ink)}
+.cy-name{font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.25rem;line-height:1.05;text-transform:uppercase;margin:.45rem 0 .25rem}
+.cy-name span{color:var(--cy-accent)}
+.cy-day{font-size:.75rem;opacity:.75}
+.cy-msg{font-size:.82rem;line-height:1.45;margin-top:.5rem;color:rgba(255,255,255,.9)}
+.cy-wheel{position:relative;margin:1rem 0 .2rem;height:34px}
+.cy-track{position:absolute;left:0;right:0;top:12px;height:10px;border-radius:100px;overflow:hidden;display:flex;background:rgba(255,255,255,.08)}
+.cy-track i{display:block;height:100%}
+.cy-now{position:absolute;top:2px;width:30px;height:30px;margin-left:-15px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px var(--cy-glow),0 3px 0 rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:.95rem;animation:cyPulse 2.4s ease-in-out infinite}
+@keyframes cyPulse{0%,100%{box-shadow:0 0 0 4px var(--cy-glow),0 3px 0 rgba(0,0,0,.3)}50%{box-shadow:0 0 0 9px rgba(255,255,255,0),0 3px 0 rgba(0,0,0,.3)}}
+.cy-legend{display:flex;justify-content:space-between;font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.6}
+.cy-plan{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.85rem}
+.cy-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:.6rem .7rem}
+.cy-box b{display:block;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-bottom:.25rem}
+.cy-box span{font-size:.8rem;font-weight:700;line-height:1.3}
+.cy-dots{display:flex;gap:4px;margin-top:.35rem}
+.cy-dots i{width:16px;height:6px;border-radius:100px;background:rgba(255,255,255,.15)}
+.cy-dots i.on{background:var(--cy-accent)}
+.cy-feel{margin-top:.85rem;padding-top:.8rem;border-top:1px dashed rgba(255,255,255,.14)}
+.cy-feel p{font-size:.78rem;font-weight:700;margin-bottom:.5rem}
+.cy-feel-row{display:flex;gap:.4rem}
+.cy-feel-row{gap:.35rem}
+.cy-feel button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.3rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:.5rem .1rem .45rem;cursor:pointer;transition:transform .15s,background .15s;color:#fff;font-family:inherit}
+.cy-feel button .cy-face,.cy-feel button svg{width:40px;height:40px;display:block;transition:transform .25s cubic-bezier(.2,1.4,.4,1);overflow:visible}
+.cy-feel button span{font-size:.58rem;font-weight:700;line-height:1.1;text-align:center;opacity:.8}
+.cy-feel button:active .cy-face,.cy-feel button:active svg{transform:scale(.9)}
+.cy-feel button.sel{background:var(--cy-chip);color:var(--cy-ink);transform:translateY(-3px);box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.cy-feel button.sel span{opacity:1}
+.cy-feel button.sel .cy-face,.cy-feel button.sel svg{transform:scale(1.15) rotate(-6deg);animation:cyFaceBop 1.8s ease-in-out infinite}
+@keyframes cyFaceBop{0%,100%{transform:scale(1.15) rotate(-6deg)}50%{transform:scale(1.15) rotate(4deg) translateY(-2px)}}
+.cy-feel-tip{margin-top:.6rem;font-size:.75rem;line-height:1.45;background:rgba(255,255,255,.06);border-radius:12px;padding:.55rem .7rem}
+.cy-feel small{display:block;font-size:.66rem;opacity:.65;margin-top:.45rem}
+.cy-sci{margin-top:.7rem;font-size:.68rem;line-height:1.45;opacity:.6}
+@media (prefers-reduced-motion: reduce){.cy-wave,.cy-wave2,.cy-bub,.cy-bolt,.cy-zz,.cy-now{animation:none}}
+.cy-legend span{display:flex;align-items:center;gap:.3rem;opacity:.55}
+.cy-legend span.on{opacity:1;color:#fff}
+.cy-legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.cy-face{width:40px;height:40px;font-size:32px;line-height:1;display:flex;align-items:center;justify-content:center;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}

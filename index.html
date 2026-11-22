@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FridaActive · Mi Portal</title>
-<meta name="description" content="Entrena en casa o en el gym con un plan hecho para ti, plan de alimentación y seguimiento de tu progreso.">
+<meta name="description" content="Entrena en casa o en el gym con un plan hecho para ti, guía de alimentación y seguimiento de tu progreso.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="FridaActive">
 <meta property="og:title" content="FridaActive · Entrenamiento a tu medida">
-<meta property="og:description" content="Entrena en casa o en el gym con un plan hecho para ti, plan de alimentación y seguimiento de tu progreso.">
+<meta property="og:description" content="Entrena en casa o en el gym con un plan hecho para ti, guía de alimentación y seguimiento de tu progreso.">
 <meta property="og:url" content="https://fridaactive.com/">
 <meta property="og:image" content="https://fridaactive.com/og-image-v2.jpg">
 <meta property="og:image:width" content="1200">
@@ -958,63 +958,6 @@
 .in-goal-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#5b8bf5,#F5ECCB);transition:width 0.8s cubic-bezier(.2,.8,.2,1);}
 .in-goal-prize{font-size:0.78rem;margin-top:0.6rem;line-height:1.45;color:rgba(255,255,255,0.85);}
 .in-goal-prize b{color:#F5ECCB;}
-/* ══ MI CICLO · "Tu energía de hoy" (diseño FridaActive) ══ */
-.cy-card{position:relative;margin-top:0.9rem;padding:1.1rem 1rem 1rem;border-radius:22px;overflow:hidden;color:#fff;
-  background:radial-gradient(120% 90% at 85% 0%,var(--cy-glow) 0%,rgba(0,0,0,0) 55%),rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.12);box-shadow:0 6px 0 rgba(0,0,0,0.25)}
-.cy-top{display:flex;gap:1rem;align-items:center}
-.cy-batt{position:relative;width:92px;flex-shrink:0;filter:drop-shadow(0 0 18px var(--cy-glow))}
-.cy-batt svg{display:block;width:92px;height:150px;overflow:visible}
-.cy-wave{animation:cyWave 3.2s linear infinite}
-.cy-wave2{animation:cyWave 4.6s linear infinite reverse;opacity:.55}
-@keyframes cyWave{from{transform:translateX(0)}to{transform:translateX(-60px)}}
-.cy-bub{animation:cyBub var(--t,3s) ease-in var(--d,0s) infinite;opacity:0}
-@keyframes cyBub{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.85}100%{transform:translateY(-70px) scale(1);opacity:0}}
-.cy-bolt{animation:cyBolt 1.6s ease-in-out infinite;transform-origin:47px 50px}
-@keyframes cyBolt{0%,100%{opacity:.25;transform:scale(.92)}50%{opacity:1;transform:scale(1.06)}}
-.cy-zz{animation:cyZz 3s ease-in-out infinite}
-@keyframes cyZz{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.9;transform:translateY(-6px)}}
-.cy-pct{position:absolute;left:0;right:0;top:104px;text-align:center;font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.45rem;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25)}
-.cy-pct small{font-size:.7rem;opacity:.8}
-.cy-info{flex:1;min-width:0}
-.cy-tag{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:.22rem .6rem;border-radius:100px;background:var(--cy-chip);color:var(--cy-ink)}
-.cy-name{font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.25rem;line-height:1.05;text-transform:uppercase;margin:.45rem 0 .25rem}
-.cy-name span{color:var(--cy-accent)}
-.cy-day{font-size:.75rem;opacity:.75}
-.cy-edit{background:none;border:none;color:rgba(255,255,255,0.6);font-size:.68rem;font-weight:700;text-decoration:underline;font-family:'DM Sans',sans-serif;cursor:pointer;padding:0;margin-left:0.3rem;}
-.cy-msg{font-size:.82rem;line-height:1.45;margin-top:.5rem;color:rgba(255,255,255,.9)}
-.cy-wheel{position:relative;margin:1rem 0 .2rem;height:34px}
-.cy-track{position:absolute;left:0;right:0;top:12px;height:10px;border-radius:100px;overflow:hidden;display:flex;background:rgba(255,255,255,.08)}
-.cy-track i{display:block;height:100%}
-.cy-now{position:absolute;top:2px;width:30px;height:30px;margin-left:-15px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px var(--cy-glow),0 3px 0 rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:.95rem;animation:cyPulse 2.4s ease-in-out infinite}
-@keyframes cyPulse{0%,100%{box-shadow:0 0 0 4px var(--cy-glow),0 3px 0 rgba(0,0,0,.3)}50%{box-shadow:0 0 0 9px rgba(255,255,255,0),0 3px 0 rgba(0,0,0,.3)}}
-.cy-legend{display:flex;justify-content:space-between;font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.6}
-.cy-legend span{display:flex;align-items:center;gap:.3rem;opacity:.55}
-.cy-legend span.on{opacity:1;color:#fff}
-.cy-legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
-.cy-plan{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.85rem}
-.cy-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:.6rem .7rem}
-.cy-box b{display:block;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-bottom:.25rem}
-.cy-box span{font-size:.8rem;font-weight:700;line-height:1.3}
-.cy-dots{display:flex;gap:4px;margin-top:.35rem}
-.cy-dots i{width:16px;height:6px;border-radius:100px;background:rgba(255,255,255,.15)}
-.cy-dots i.on{background:var(--cy-accent)}
-.cy-feel{margin-top:.85rem;padding-top:.8rem;border-top:1px dashed rgba(255,255,255,.14)}
-.cy-feel p{font-size:.78rem;font-weight:700;margin-bottom:.5rem}
-.cy-feel-row{display:flex;gap:.35rem}
-.cy-feel button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.3rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:.5rem .1rem .45rem;cursor:pointer;transition:transform .15s,background .15s;color:#fff;font-family:inherit}
-.cy-feel button .cy-face,.cy-feel button svg{width:40px;height:40px;display:block;transition:transform .25s cubic-bezier(.2,1.4,.4,1);overflow:visible}
-.cy-feel button span{font-size:.58rem;font-weight:700;line-height:1.1;text-align:center;opacity:.8}
-.cy-feel button:active .cy-face,.cy-feel button:active svg{transform:scale(.9)}
-.cy-feel button.sel{background:var(--cy-chip);color:var(--cy-ink);transform:translateY(-3px);box-shadow:0 3px 0 rgba(0,0,0,.3)}
-.cy-feel button.sel span{opacity:1}
-.cy-feel button.sel .cy-face,.cy-feel button.sel svg{transform:scale(1.15) rotate(-6deg);animation:cyFaceBop 1.8s ease-in-out infinite}
-@keyframes cyFaceBop{0%,100%{transform:scale(1.15) rotate(-6deg)}50%{transform:scale(1.15) rotate(4deg) translateY(-2px)}}
-.cy-feel-tip{margin-top:.6rem;font-size:.75rem;line-height:1.45;background:rgba(255,255,255,.06);border-radius:12px;padding:.55rem .7rem}
-.cy-feel small{display:block;font-size:.66rem;opacity:.65;margin-top:.45rem}
-.cy-face{width:40px;height:40px;display:block;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
-.cy-sci{margin-top:.7rem;font-size:.68rem;line-height:1.45;opacity:.6}
-@media (prefers-reduced-motion: reduce){.cy-wave,.cy-wave2,.cy-bub,.cy-bolt,.cy-zz,.cy-now,.cy-feel button.sel .cy-face,.cy-feel button.sel svg{animation:none}}
 .in-med-count{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:0.72rem;opacity:0.7;}
 .in-medals{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:0.3rem;padding:0.9rem 0.6rem 0.8rem;border-radius:20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);}
 .in-med-path{position:absolute;left:12%;right:12%;top:2.75rem;height:4px;border-radius:100px;background:rgba(255,255,255,0.1);}
@@ -1065,9 +1008,9 @@
 .in-feel-q{font-family:'Archivo Black','DM Sans',sans-serif;font-size:.9rem;text-transform:uppercase;margin-bottom:.6rem}
 .in-feel-row{display:flex;gap:.35rem}
 .in-feel-row button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.3rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:.5rem .1rem .45rem;cursor:pointer;color:#fff;font-family:inherit;transition:transform .2s,background .2s}
-.in-feel-row button span{font-size:.58rem;font-weight:700;line-height:1.1;text-align:center;opacity:.8}
+.in-feel-row button span:not(.fa-cara){font-size:.58rem;font-weight:700;line-height:1.1;text-align:center;opacity:.8}
 .in-feel-row button.sel{background:#F5ECCB;color:#0B1B3F;transform:translateY(-3px);box-shadow:0 3px 0 rgba(0,0,0,.3)}
-.in-feel-row button.sel span{opacity:1}
+.in-feel-row button.sel span:not(.fa-cara){opacity:1}
 .fa-emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1;display:flex;align-items:center;justify-content:center}
 .fa-cara{width:40px;height:40px;font-size:32px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3));transition:transform .25s cubic-bezier(.2,1.4,.4,1)}
 .in-feel-row button.sel .fa-cara{transform:scale(1.15) rotate(-6deg)}
@@ -1077,6 +1020,73 @@
 .track-face{position:absolute;top:-9px;right:-7px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none}
 .track-face-img{width:18px;height:18px;font-size:14px}
 @media (prefers-reduced-motion: reduce){.fa-cara{transition:none}}
+
+/* ══ MI CICLO · "Tu energía de hoy" (diseño FridaActive) ══ */
+.cy-card{position:relative;margin-top:0.9rem;padding:1.1rem 1rem 1rem;border-radius:22px;overflow:hidden;color:#fff;
+  background:radial-gradient(120% 90% at 85% 0%,var(--cy-glow) 0%,rgba(0,0,0,0) 55%),rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12);box-shadow:0 6px 0 rgba(0,0,0,0.25)}
+.cy-top{display:flex;gap:1rem;align-items:center}
+.cy-batt{position:relative;width:92px;flex-shrink:0;filter:drop-shadow(0 0 18px var(--cy-glow))}
+.cy-batt svg{display:block;width:92px;height:150px;overflow:visible}
+.cy-wave{animation:cyWave 3.2s linear infinite}
+.cy-wave2{animation:cyWave 4.6s linear infinite reverse;opacity:.55}
+@keyframes cyWave{from{transform:translateX(0)}to{transform:translateX(-60px)}}
+.cy-bub{animation:cyBub var(--t,3s) ease-in var(--d,0s) infinite;opacity:0}
+@keyframes cyBub{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.85}100%{transform:translateY(-70px) scale(1);opacity:0}}
+.cy-bolt{animation:cyBolt 1.6s ease-in-out infinite;transform-origin:47px 50px}
+@keyframes cyBolt{0%,100%{opacity:.25;transform:scale(.92)}50%{opacity:1;transform:scale(1.06)}}
+.cy-zz{animation:cyZz 3s ease-in-out infinite}
+@keyframes cyZz{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.9;transform:translateY(-6px)}}
+.cy-pct{position:absolute;left:0;right:0;top:104px;text-align:center;font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.45rem;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.cy-pct small{font-size:.7rem;opacity:.8}
+.cy-info{flex:1;min-width:0}
+.cy-tag{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:.22rem .6rem;border-radius:100px;background:var(--cy-chip);color:var(--cy-ink)}
+.cy-name{font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.25rem;line-height:1.05;text-transform:uppercase;margin:.45rem 0 .25rem}
+.cy-name span{color:var(--cy-accent)}
+.cy-day{font-size:.75rem;opacity:.75}
+.cy-edit{background:none;border:none;color:rgba(255,255,255,0.6);font-size:.68rem;font-weight:700;text-decoration:underline;font-family:'DM Sans',sans-serif;cursor:pointer;padding:0;margin-left:0.3rem;}
+.cy-msg{font-size:.82rem;line-height:1.45;margin-top:.5rem;color:rgba(255,255,255,.9)}
+.cy-wheel{position:relative;margin:1rem 0 .2rem;height:34px}
+.cy-track{position:absolute;left:0;right:0;top:12px;height:10px;border-radius:100px;overflow:hidden;display:flex;background:rgba(255,255,255,.08)}
+.cy-track i{display:block;height:100%}
+.cy-now{position:absolute;top:2px;width:30px;height:30px;margin-left:-15px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px var(--cy-glow),0 3px 0 rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:.95rem;animation:cyPulse 2.4s ease-in-out infinite}
+@keyframes cyPulse{0%,100%{box-shadow:0 0 0 4px var(--cy-glow),0 3px 0 rgba(0,0,0,.3)}50%{box-shadow:0 0 0 9px rgba(255,255,255,0),0 3px 0 rgba(0,0,0,.3)}}
+.cy-legend{display:flex;justify-content:space-between;font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.6}
+.cy-legend span{display:flex;align-items:center;gap:.3rem;opacity:.55}
+.cy-legend span.on{opacity:1;color:#fff}
+.cy-legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.cy-plan{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.85rem}
+.cy-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:.6rem .7rem}
+.cy-box b{display:block;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-bottom:.25rem}
+.cy-box span{font-size:.8rem;font-weight:700;line-height:1.3}
+.cy-dots{display:flex;gap:4px;margin-top:.35rem}
+.cy-dots i{width:16px;height:6px;border-radius:100px;background:rgba(255,255,255,.15)}
+.cy-dots i.on{background:var(--cy-accent)}
+.cy-sci{margin-top:.7rem;font-size:.68rem;line-height:1.45;opacity:.6}
+@media (prefers-reduced-motion: reduce){.cy-wave,.cy-wave2,.cy-bub,.cy-bolt,.cy-zz,.cy-now{animation:none}}
+
+/* Cuestionario: opciones múltiples (equipo) */
+.cq-option.cq-multi .cq-option-dot{border-radius:5px}
+.cq-option.cq-multi.selected .cq-option-dot{box-shadow:none;background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/80% no-repeat}
+.cq-option.cq-none{margin-top:.9rem;border-style:dashed}
+.cq-peso-in{display:block;width:100%;box-sizing:border-box;margin:-.25rem 0 .7rem;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--blue);font-family:inherit;font-size:.85rem;background:var(--blue-lt);color:var(--text)}
+
+/* Tarjeta de plan bloqueado: planes que llevan a WhatsApp */
+.pf-locked-open{padding:.3rem .9rem .2rem}
+.pf-locked-plans-hdr{font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);padding:.55rem 0 .35rem}
+a.pf-plan-pick{text-decoration:none;color:inherit;cursor:pointer}
+a.pf-plan-pick .plan-price b{color:var(--blue);margin-left:.2rem}
+a.pf-plan-pick:active{opacity:.7}
+.pf-locked-wa{display:block;margin-top:.9rem;background:#25D366;color:#fff;font-weight:700;font-size:.85rem;text-decoration:none;border-radius:100px;padding:.8rem 1rem;box-shadow:0 4px 0 #1B9E4B}
+.pf-locked-more{font-size:.7rem;color:var(--muted);margin-top:.7rem}
+body.portal-dark .pf-locked-plans-hdr{color:var(--cream)}
+body.portal-dark a.pf-plan-pick .plan-price b{color:var(--cream)}
+body.portal-dark .pf-locked-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);box-shadow:0 6px 0 rgba(0,0,0,.25)}
+body.portal-dark .pf-locked-title{color:#fff;font-family:'Archivo Black','DM Sans',sans-serif;text-transform:uppercase;font-size:1.05rem}
+body.portal-dark .pf-locked-text{color:rgba(255,255,255,.75)}
+body.portal-dark .pf-locked-icon{background:#F5ECCB;color:#0B1B3F}
+body.portal-dark .pf-locked-more{color:rgba(255,255,255,.6)}
+body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
 </style>
 </head>
 <body>
@@ -1143,9 +1153,9 @@
             <summary>Ver beneficios</summary>
             <ul>
               <li><span>✓</span> Descripción y video de cada ejercicio</li>
-              <li><span>✓</span> Seguimiento de tu progreso dentro de la app</li>
+              <li><span>✓</span> Seguimiento de tu progreso dentro de tu cuenta en la web</li>
               <li><span>✓</span> Descuentos exclusivos con marcas aliadas</li>
-              <li><span>✓</span> Comunicación directa por la app para dudas puntuales</li>
+              <li><span>✓</span> Comunicación directa por el chat de tu cuenta para dudas puntuales</li>
             </ul>
           </details>
           <a class="pl-btn pl-btn-outline" href="https://wa.me/50372005790?text=Hola%20Frida%2C%20quiero%20comenzar%20una%20rutina%20online" target="_blank">Quiero comenzar</a>
@@ -1203,7 +1213,7 @@
         <div class="pl-benefit">
           <div class="pl-benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H8l-4 4V5Z"/></svg></div>
           <h3>Seguimiento directo</h3>
-          <p>Comunicación directa por la app o WhatsApp para tus dudas puntuales — siempre atenta a tu progreso.</p>
+          <p>Comunicación directa por el chat de tu cuenta o WhatsApp para tus dudas puntuales — siempre atenta a tu progreso.</p>
         </div>
         <div class="pl-benefit">
           <div class="pl-benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 3.2"/></svg></div>
@@ -1633,7 +1643,7 @@
         </div>
       </div>
       <div class="ls-svc-tags">
-          <span class="ls-tag" style="background:#F5ECCB;color:#5a4a10;font-weight:700;">🥗 Plan de alimentación incluido</span>
+          <span class="ls-tag" style="background:#F5ECCB;color:#5a4a10;font-weight:700;">🥗 Guía de alimentación incluida</span>
           <span class="ls-tag">Gym o casa</span>
           <span class="ls-tag">Descripciones detalladas de los ejercicios</span>
           <span class="ls-tag">Cupones de descuento</span>
@@ -1716,7 +1726,7 @@
         </div>
 
         <div class="ls-svc-tags">
-          <span class="ls-tag" style="background:#F5ECCB;color:#5a4a10;font-weight:700;">🥗 Plan de alimentación incluido en los planes por videollamada</span>
+          <span class="ls-tag" style="background:#F5ECCB;color:#5a4a10;font-weight:700;">🥗 Guía de alimentación incluida en los planes por videollamada</span>
         <span class="ls-tag">Corrección en vivo</span>
           <span class="ls-tag">Guía y corrección de técnica y posturas</span>
           <span class="ls-tag">Llevo el gym hasta tu casa</span>
@@ -1725,12 +1735,12 @@
     </div>
 
     <!-- ADDON -->
-    <div class="ls-sec-label">Plan de alimentación</div>
+    <div class="ls-sec-label">Guía de alimentación</div>
     <div class="ls-addon">
       <div class="ls-addon-icon">🥗</div>
       <div>
-        <div class="ls-addon-title">Plan de alimentación personalizado</div>
-        <div class="ls-addon-desc">Un plan de alimentación hecho para ti, práctico y fácil de seguir, para acompañar tu entrenamiento y lograr tus objetivos.</div>
+        <div class="ls-addon-title">Guía de alimentación personalizada</div>
+        <div class="ls-addon-desc">Una guía hecha para ti, práctica y fácil de seguir, para mejorar tu alimentación, acompañar tu entrenamiento y lograr tus objetivos.</div>
       </div>
     </div>
 
@@ -1843,9 +1853,9 @@
       <div id="ficha-plan-actual"></div>
       <div id="ficha-plan-historial"></div>
       <div style="font-size:0.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin:1rem 0 0.5rem;">Otros planes disponibles</div>
-      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">1 mes</span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$40</span></div></div>
-      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">3 meses <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Pago único de $105</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$35/mes</span></div></div>
-      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">6 meses <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Pago único de $180</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$30/mes</span></div></div>
+      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">1 mes <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Pago mensual</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$50</span></div></div>
+      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">3 meses <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Te queda a $45 por mes</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$135</span></div></div>
+      <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">6 meses <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Te queda a $40 por mes</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$240</span></div></div>
       <div class="ficha-promo-card" style="margin-bottom:0;"><div style="font-size:0.82rem;font-weight:700;">Online 1:1 (videollamada)</div><div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem;">Consultá precio y disponibilidad con Frida.</div></div>
     </div>
 
@@ -2039,6 +2049,13 @@ function inicioCounts() {
 function renderInicioTab() {
   var el = document.getElementById('inicio-content');
   if (!el) return;
+  if (PLAN_LOCKED) {
+    el.innerHTML = '<div class="in-hero in-hero-static"><span class="in-hero-tag">' + (PLAN_NEVER_SET ? '¡HOLA! ESTO ES FRIDAACTIVE' : 'TU PLAN') + '</span><span class="in-hero-bottom"><span>'
+      + '<span class="in-hero-title">' + (PLAN_NEVER_SET ? 'Tu cuenta está lista' : 'Renueva tu plan') + '</span>'
+      + '<span class="in-hero-meta">' + (PLAN_NEVER_SET ? 'Ya tengo tus respuestas. Solo falta elegir tu plan.' : 'Tu progreso sigue guardado aquí.') + '</span></span></span></div>'
+      + '<div style="margin-top:0.9rem;">' + renderPlanLockedCard() + '</div>';
+    return;
+  }
   var c = inicioCounts();
   var metaEl = document.getElementById('pf-ring-meta-num');
   var meta = metaEl ? metaEl.textContent.trim() : '-';
@@ -2172,9 +2189,8 @@ function rewardsInicioHtml(c) {
   } else {
     h += '<button type="button" class="in-checkin" onclick="checkInHoy(true)"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>¿Entrenaste hoy?</b><span>Tócalo y suma a tu meta del mes</span></span><span class="in-checkin-btn">Sí ✓</span></button>';
   }
-  // 1.5 ¿Cómo te sientes hoy? (carita general; Frida la ve en su panel)
   h += sentirHtml();
-  // 1.6 Mi ciclo (batería de energía según la fase del ciclo menstrual + carita de hoy)
+  // 1.5 Mi ciclo (batería de energía según la fase del ciclo menstrual)
   h += cicloInicioHtml();
   // 2. Meta del mes (con el premio que puso Frida)
   var meta = metaDelMes(), pct = Math.min(100, Math.round(c.mes / meta * 100));
@@ -2210,16 +2226,36 @@ function rewardsInicioHtml(c) {
   return h;
 }
 
-function checkInHoy(on) {
-  var key = localKey(new Date());
-  if (!!CURRENT_DIAS_ENTRENADOS[key] === on) return;
-  toggleDiaEntrenado(key);
-  if (on) {
-    if (navigator.vibrate) try { navigator.vibrate([20, 40, 30]); } catch (e) {}
-    var c = inicioCounts();
-    var ms = metaSemanal();
-    celebrate('💪', '¡Hoy cuenta!', c.semana >= ms ? '¡Completaste tu semana! ' + c.semana + ' de ' + ms + ' entrenos 🎉' : 'Llevas ' + c.semana + ' de ' + ms + ' entrenos esta semana. Descansa cuando lo necesites 💙');
-  }
+// ── ¿Cómo te sientes hoy? Carita del día (emojis del sistema).
+// Se guarda en clientasPortal/{uid}/sentir/{YYYY-MM-DD} = id; Frida la ve en su panel.
+var FA_SENTIR = [
+  { id:'dolor', label:'Con dolor', tip:'Hoy prioriza moverte suave: caminar, estiramientos o movilidad. Si el dolor es fuerte, descansa y consulta a tu médico.' },
+  { id:'nauseas', label:'Con náuseas', tip:'Toma agua a sorbos, come algo ligero y, si te animas, haz algo suave. No pasa nada si hoy solo descansas.' },
+  { id:'cansada', label:'Cansada', tip:'Haz tu rutina más ligera: menos series o menos peso también suma. Y esta noche, a dormir temprano.' },
+  { id:'bien', label:'Bien', tip:'¡Qué bueno! Haz tu rutina normal y disfrútala.' },
+  { id:'contodo', label:'¡Con todo!', tip:'¡Aprovéchala! Hoy es un gran día para retarte un poquito más.' }
+];
+function faSentirInfo(id) { for (var i = 0; i < FA_SENTIR.length; i++) if (FA_SENTIR[i].id === id) return FA_SENTIR[i]; return null; }
+// Emojis del sistema: en iPhone se ven como los de Apple, en Android como los de Google.
+var FA_EMOJI = { dolor:'😖', nauseas:'🤢', cansada:'🥱', bien:'😊', contodo:'🤩' };
+function faCaraImg(id, cls) { return '<span class="' + (cls || 'fa-cara') + ' fa-emoji" aria-hidden="true">' + (FA_EMOJI[id] || '🙂') + '</span>'; }
+function sentirHtml() {
+  var hoy = localKey(new Date()), sel = faSentirInfo(((CURRENT_PORTAL_DATA || {}).sentir || {})[hoy]);
+  var h = '<div class="in-feel"><div class="in-feel-q">¿Cómo te sientes hoy?</div><div class="in-feel-row">';
+  FA_SENTIR.forEach(function(si) {
+    h += '<button type="button" class="' + (sel && sel.id === si.id ? 'sel' : '') + '" onclick="guardarSentir(\'' + si.id + '\')" aria-label="' + si.label + '">' + faCaraImg(si.id) + '<span>' + si.label + '</span></button>';
+  });
+  h += '</div>' + (sel ? '<div class="in-feel-tip">💙 ' + sel.tip + '</div>' : '<div class="in-feel-note">Frida verá tu carita en su panel para acompañarte mejor 💙</div>') + '</div>';
+  return h;
+}
+function guardarSentir(id) {
+  var hoy = localKey(new Date());
+  if (!CURRENT_PORTAL_DATA) CURRENT_PORTAL_DATA = {};
+  CURRENT_PORTAL_DATA.sentir = CURRENT_PORTAL_DATA.sentir || {};
+  CURRENT_PORTAL_DATA.sentir[hoy] = id;
+  if (navigator.vibrate) try { navigator.vibrate(15); } catch (e) {}
+  renderTrainingTracker(CURRENT_DIAS_ENTRENADOS);
+  db().ref('clientasPortal/' + currentUid + '/sentir/' + hoy).set(id).catch(function(e) { console.warn('guardarSentir', e.message); });
 }
 
 // ══════════ MI CICLO · "Tu energía de hoy" (diseño de la sesión de Estrategia de contenido) ══════════
@@ -2328,41 +2364,6 @@ function cicloInicioHtml() {
   return cicloCardHtml({ dia: dia, largo: largo, sentir: sentir });
 }
 
-// ── ¿Cómo te sientes hoy? Carita del día (emojis del sistema).
-// Se guarda en clientasPortal/{uid}/sentir/{YYYY-MM-DD} = id; Frida la ve en su panel
-// (solo la carita, nunca la fase del ciclo). La tarjeta de Mi ciclo lee esta misma
-// carita para ajustar su batería, sin repetir las botoneras.
-var FA_SENTIR = [
-  { id:'dolor', label:'Con dolor', tip:'Hoy prioriza moverte suave: caminar, estiramientos o movilidad. Si el dolor es fuerte, descansa y consulta a tu médico.' },
-  { id:'nauseas', label:'Con náuseas', tip:'Toma agua a sorbos, come algo ligero y, si te animas, haz algo suave. No pasa nada si hoy solo descansas.' },
-  { id:'cansada', label:'Cansada', tip:'Haz tu rutina más ligera: menos series o menos peso también suma. Y esta noche, a dormir temprano.' },
-  { id:'bien', label:'Bien', tip:'¡Qué bueno! Haz tu rutina normal y disfrútala.' },
-  { id:'contodo', label:'¡Con todo!', tip:'¡Aprovéchala! Hoy es un gran día para retarte un poquito más.' }
-];
-function faSentirInfo(id) { for (var i = 0; i < FA_SENTIR.length; i++) if (FA_SENTIR[i].id === id) return FA_SENTIR[i]; return null; }
-// Emojis del sistema: en iPhone se ven como los de Apple, en Android como los de Google.
-var FA_EMOJI = { dolor:'😖', nauseas:'🤢', cansada:'🥱', bien:'😊', contodo:'🤩' };
-function faCaraImg(id, cls) { return '<span class="' + (cls || 'fa-cara') + ' fa-emoji" aria-hidden="true">' + (FA_EMOJI[id] || '🙂') + '</span>'; }
-function sentirHtml() {
-  var hoy = localKey(new Date()), sel = faSentirInfo(((CURRENT_PORTAL_DATA || {}).sentir || {})[hoy]);
-  var h = '<div class="in-feel"><div class="in-feel-q">¿Cómo te sientes hoy?</div><div class="in-feel-row">';
-  FA_SENTIR.forEach(function(si) {
-    h += '<button type="button" class="' + (sel && sel.id === si.id ? 'sel' : '') + '" onclick="guardarSentir(\'' + si.id + '\')" aria-label="' + si.label + '">' + faCaraImg(si.id) + '<span>' + si.label + '</span></button>';
-  });
-  h += '</div>' + (sel ? '<div class="in-feel-tip">💙 ' + sel.tip + '</div>' : '<div class="in-feel-note">Frida verá tu carita en su panel para acompañarte mejor 💙</div>') + '</div>';
-  return h;
-}
-function guardarSentir(id) {
-  var hoy = localKey(new Date());
-  if (!CURRENT_PORTAL_DATA) CURRENT_PORTAL_DATA = {};
-  CURRENT_PORTAL_DATA.sentir = CURRENT_PORTAL_DATA.sentir || {};
-  CURRENT_PORTAL_DATA.sentir[hoy] = id;
-  if (navigator.vibrate) try { navigator.vibrate(15); } catch (e) {}
-  renderInicioTab();
-  renderTrainingTracker(CURRENT_DIAS_ENTRENADOS);
-  db().ref('clientasPortal/' + currentUid + '/sentir/' + hoy).set(id).catch(function(e) { console.warn('guardarSentir', e.message); });
-}
-
 function openCicloModal() {
   var ciclo = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ciclo) || {};
   var registros = Object.keys(ciclo.registros || {}).sort().reverse();
@@ -2406,6 +2407,18 @@ function deleteCicloRegistro(fecha) {
   db().ref('clientasPortal/' + currentUid + '/ciclo/registros/' + fecha).remove();
   openCicloModal();
   renderInicioTab();
+}
+
+function checkInHoy(on) {
+  var key = localKey(new Date());
+  if (!!CURRENT_DIAS_ENTRENADOS[key] === on) return;
+  toggleDiaEntrenado(key);
+  if (on) {
+    if (navigator.vibrate) try { navigator.vibrate([20, 40, 30]); } catch (e) {}
+    var c = inicioCounts();
+    var ms = metaSemanal();
+    celebrate('💪', '¡Hoy cuenta!', c.semana >= ms ? '¡Completaste tu semana! ' + c.semana + ' de ' + ms + ' entrenos 🎉' : 'Llevas ' + c.semana + ' de ' + ms + ' entrenos esta semana. Descansa cuando lo necesites 💙');
+  }
 }
 
 function showMedal(i) {
@@ -2948,13 +2961,9 @@ function renderPortalScreen(portal, perfil) {
 
   // No linked client record yet — she's a lead, not an active cliente.
   // Show the services landing instead of an empty dashboard.
-  if (!currentClientId) {
-    document.getElementById('ls-greeting').textContent = firstName ? ('¡Hola, ' + firstName + '!') : '';
-    document.getElementById('ls-wa-link').href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(WHATSAPP_MESSAGE);
-    setLoading(false);
-    showScreen('screen-services-landing');
-    return;
-  }
+  // Sin plan vinculado todavía (recién registrada): entra igual a su cuenta,
+  // con las secciones bloqueadas y la invitación a elegir su plan.
+  if (!currentClientId) { PLAN_NEVER_SET = true; PLAN_LOCKED = true; }
 
   var dateEl = document.getElementById('dash-date');
   if (dateEl) dateEl.textContent = faTodayLabel();
@@ -2989,29 +2998,46 @@ function renderPortalScreen(portal, perfil) {
 // One question per screen, Hevy-style, gated by perfil.requiereCuestionario.
 // Answers are saved once at the end to clientasPortal/{uid}/cuestionario —
 // their mere presence is what marks the questionnaire as completed.
+var CQ_EQUIPO = ['Mancuernas', 'Bandas o ligas elásticas', 'Kettlebell', 'Barra y discos', 'Banco', 'Step o cajón', 'Colchoneta', 'Barra para dominadas', 'Cuerda para saltar'];
+var CQ_CON_PESO = { 'Mancuernas': true, 'Kettlebell': true, 'Barra y discos': true };
 var CQ_QUESTIONS = [
   { key: 'fechaNacimiento', type: 'date', required: true, label: '¿Cuándo es tu cumpleaños?' },
   { key: 'genero', type: 'select', required: false, label: '¿Cuál es tu género?', options: ['Femenino', 'Masculino', 'Otro'] },
-  { key: 'peso', type: 'number', required: true, unit: 'kg', label: '¿Cuál es tu peso actual?' },
-  { key: 'estatura', type: 'number', required: true, unit: 'cm', label: '¿Cuánto medís?' },
-  { key: 'objetivo', type: 'select', required: true, label: '¿Cuál es tu objetivo principal?', options: ['Bajar grasa', 'Ganar músculo', 'Tonificar', 'Salud y bienestar'] },
-  { key: 'nutricionista', type: 'select', required: true, label: '¿Tenés nutricionista?', options: [
-      { value: 'si_tengo', label: 'Sí, ya tengo nutri' },
-      { value: 'no_quiero', label: 'No, pero quiero acompañar mi rutina de ejercicio con un plan de alimentación' },
-      { value: 'no_interesada', label: 'No tengo y no estoy interesada por el momento' }
-    ] },
-  { key: 'experiencia', type: 'select', required: true, label: '¿Entrenás actualmente?', options: [
+  { key: 'pesoLb', type: 'number', required: true, unit: 'lb', label: '¿Cuál es tu peso actual?', sub: 'En libras. Es solo para armar tu plan; nadie más lo ve.' },
+  { key: 'estatura', type: 'number', required: true, unit: 'cm', label: '¿Cuánto mides?', sub: 'En centímetros (por ejemplo, 1.62 m son 162 cm).' },
+  { key: 'objetivo', type: 'select', required: true, label: '¿Cuál es tu objetivo principal?', options: ['Bajar grasa', 'Ganar músculo', 'Tonificar', 'Mejorar mi condición física', 'Salud y bienestar'] },
+  { key: 'motivacion', type: 'text', required: false, label: '¿Qué te motivó a empezar ahora?', sub: 'Cuéntame con tus palabras. Me ayuda a acompañarte mejor.' },
+  { key: 'experiencia', type: 'select', required: true, label: '¿Entrenas actualmente?', options: [
       'Sí, de 2 a más días por semana',
       'Sí, pero de forma intermitente (1 vez por semana)',
       'Unas cuantas veces al mes',
       'Tengo meses de no hacer nada',
       'Tengo años de no hacer nada'
     ] },
-  { key: 'lesion', type: 'yesno', required: true, label: '¿Tenés alguna lesión, condición médica o restricción que debamos conocer?' },
-  { key: 'lesionDetalle', type: 'text', required: true, label: 'Contanos un poco más', sub: 'Zona, intensidad y desde cuándo, por ejemplo.', showIf: function(a) { return a.lesion === 'si'; } },
-  { key: 'diasSemana', type: 'select', required: true, label: '¿Cuántos días por semana podés entrenar realmente?', options: ['2 días', '3 días', '4 días', '5 días', '6 días o más'] },
-  { key: 'lugar', type: 'select', required: true, label: '¿Dónde entrenarás?', options: ['Casa', 'Gimnasio', 'Ambos'] },
-  { key: 'equipoCasa', type: 'text', required: true, label: '¿Con qué equipo contás en casa?', sub: "Mancuernas, bandas, banco... si no tenés nada, escribí \"ninguno\".", showIf: function(a) { return a.lugar === 'Casa' || a.lugar === 'Ambos'; } }
+  { key: 'experienciaPesas', type: 'select', required: true, label: '¿Has entrenado con pesas antes?', options: [
+      'Nunca',
+      'Un poco, pero no sé bien la técnica',
+      'Sí, conozco la técnica básica',
+      'Sí, tengo bastante experiencia'
+    ] },
+  { key: 'actividadDiaria', type: 'select', required: true, label: '¿Cómo es tu día normal?', options: [
+      'Paso sentada la mayor parte del día',
+      'Camino o estoy de pie bastante',
+      'Tengo un trabajo muy físico'
+    ] },
+  { key: 'ocupacion', type: 'text', required: false, label: '¿A qué te dedicas?', sub: 'Por ejemplo: estudiante, oficina, mamá a tiempo completo…' },
+  { key: 'lesion', type: 'yesno', required: true, label: '¿Tienes alguna lesión, condición médica o restricción que deba conocer?', sub: 'Por ejemplo: dolor de rodilla, hipertensión, diabetes, embarazo…' },
+  { key: 'lesionDetalle', type: 'text', required: true, label: 'Cuéntame un poco más', sub: 'Zona, intensidad y desde cuándo, por ejemplo.', showIf: function(a) { return a.lesion === 'si'; } },
+  { key: 'diasSemana', type: 'select', required: true, label: '¿Cuántos días por semana puedes entrenar realmente?', options: ['2 días', '3 días', '4 días', '5 días', '6 días o más'] },
+  { key: 'tiempoSesion', type: 'select', required: true, label: '¿Cuánto tiempo tienes para cada entreno?', options: ['30 minutos', '45 minutos', '1 hora', 'Más de 1 hora'] },
+  { key: 'lugar', type: 'select', required: true, label: '¿Dónde vas a entrenar?', options: ['Casa', 'Gimnasio', 'Ambos'] },
+  { key: 'equipoCasa', type: 'multi', required: true, items: CQ_EQUIPO, none: 'No tengo nada', label: '¿Qué equipo tienes en casa?', sub: 'Marca todo lo que tengas. Si tienes pesas, dime de cuántas libras.', showIf: function(a) { return a.lugar === 'Casa' || a.lugar === 'Ambos'; } },
+  { key: 'equipoComprar', type: 'multi', required: true, items: CQ_EQUIPO, none: 'Por ahora no puedo comprar nada', label: 'Si hiciera falta, ¿qué podrías comprar?', sub: 'Así armo tu rutina con lo que tienes y sé qué podríamos sumar más adelante.', skipOwned: 'equipoCasa', showIf: function(a) { return a.lugar === 'Casa' || a.lugar === 'Ambos'; } },
+  { key: 'guiaAlimentacion', type: 'select', required: true, label: '¿Te gustaría recibir una guía de alimentación?', sub: 'Viene incluida en tu plan: ideas y porciones fáciles para mejorar tu alimentación, sin dietas estrictas.', options: [
+      { value: 'si', label: '¡Sí, me encantaría!' },
+      { value: 'tengo_nutri', label: 'Ya tengo nutricionista' },
+      { value: 'no', label: 'Por ahora no' }
+    ] }
 ];
 
 var cqAnswers = {};
@@ -3028,7 +3054,9 @@ function cqFindIndex(startIndex, dir, answers) {
   return dir > 0 ? CQ_QUESTIONS.length : -1;
 }
 
+var CQ_PERFIL = {};
 function startCuestionario(perfil) {
+  CQ_PERFIL = perfil || {};
   cqAnswers = {};
   cqIndex = cqFindIndex(0, 1, cqAnswers);
   showScreen('screen-cuestionario');
@@ -3059,6 +3087,26 @@ function cqRender() {
     fieldEl.innerHTML = '<div class="cq-number-wrap"><input type="number" inputmode="decimal" class="cq-input" id="cq-input" placeholder="0" value="' + (currentVal != null ? currentVal : '') + '"><span class="cq-unit">' + (q.unit || '') + '</span></div>';
   } else if (q.type === 'text') {
     fieldEl.innerHTML = '<textarea class="cq-input cq-textarea" id="cq-input" rows="3" placeholder="Escribí acá…">' + escapeHtml(currentVal || '') + '</textarea>';
+  } else if (q.type === 'multi') {
+    var sel = (currentVal && currentVal.items) || [], pesos = (currentVal && currentVal.pesos) || {};
+    var owned = q.skipOwned && cqAnswers[q.skipOwned] ? (cqAnswers[q.skipOwned].items || []) : [];
+    var items = q.items.filter(function(it) { return owned.indexOf(it) === -1; });
+    var html = items.map(function(it) {
+      var on = sel.indexOf(it) !== -1;
+      var pesoIn = (on && CQ_CON_PESO[it] && !q.skipOwned) ? '<input type="text" class="cq-peso-in" data-peso="' + escapeHtml(it) + '" placeholder="¿De cuántas libras? Ej: 5, 10 y 15" value="' + escapeHtml(pesos[it] || '') + '">' : '';
+      return '<div class="cq-option cq-multi' + (on ? ' selected' : '') + '" data-value="' + escapeHtml(it) + '"><span class="cq-option-dot"></span><span class="cq-option-label">' + escapeHtml(it) + '</span></div>' + pesoIn;
+    }).join('');
+    var noneOn = currentVal && currentVal.ninguno;
+    html += '<div class="cq-option cq-multi cq-none' + (noneOn ? ' selected' : '') + '" data-none="1"><span class="cq-option-dot"></span><span class="cq-option-label">' + escapeHtml(q.none) + '</span></div>';
+    fieldEl.innerHTML = html;
+    fieldEl.querySelectorAll('.cq-option').forEach(function(el) {
+      el.addEventListener('click', function() { cqToggleMulti(q.key, this.getAttribute('data-value'), !!this.getAttribute('data-none')); });
+    });
+    fieldEl.querySelectorAll('.cq-peso-in').forEach(function(el) {
+      el.addEventListener('input', function() {
+        var v = cqAnswers[q.key] || { items: [] }; v.pesos = v.pesos || {}; v.pesos[this.getAttribute('data-peso')] = this.value; cqAnswers[q.key] = v;
+      });
+    });
   } else if (q.type === 'select' || q.type === 'yesno') {
     var opts = q.type === 'yesno' ? [{ value: 'si', label: 'Sí' }, { value: 'no', label: 'No' }] : q.options.map(function(o) {
       return typeof o === 'string' ? { value: o, label: o } : o;
@@ -3078,6 +3126,19 @@ function cqRender() {
 
   var isLast = cqFindIndex(cqIndex + 1, 1, cqAnswers) >= CQ_QUESTIONS.length;
   document.getElementById('cq-continue-btn').textContent = isLast ? 'Finalizar' : 'Continuar';
+}
+
+function cqToggleMulti(key, val, isNone) {
+  var v = cqAnswers[key] || { items: [] };
+  v.items = v.items || [];
+  if (isNone) { v = { items: [], ninguno: !v.ninguno }; }
+  else {
+    v.ninguno = false;
+    var i = v.items.indexOf(val);
+    if (i === -1) v.items.push(val); else v.items.splice(i, 1);
+  }
+  cqAnswers[key] = v;
+  cqRender();
 }
 
 function cqSelect(key, val) {
@@ -3100,6 +3161,7 @@ function cqValid(q) {
   var v = cqAnswers[q.key];
   if (q.type === 'number') return v !== null && v !== undefined && !isNaN(v);
   if (q.type === 'text') return !!(v && ('' + v).trim());
+  if (q.type === 'multi') return !!(v && (v.ninguno || (v.items && v.items.length)));
   return v !== undefined && v !== null && v !== '';
 }
 
@@ -3136,12 +3198,40 @@ function cqBack() {
 function cqFinish() {
   setLoading(true);
   var payload = Object.assign({}, cqAnswers, { completadoEn: new Date().toISOString() });
-  db().ref('clientasPortal/' + currentUid + '/cuestionario').set(payload).then(function() {
+  // La ficha se llena sola con lo que ya respondió (no se le vuelve a preguntar).
+  var fichaPrev = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ficha) || {};
+  var fichaNueva = fichaDesdeCuestionario(payload, Object.assign({}, CQ_PERFIL, CURRENT_PERFIL_DATA || {}), fichaPrev);
+  var upd = {};
+  upd['clientasPortal/' + currentUid + '/cuestionario'] = payload;
+  upd['clientasPortal/' + currentUid + '/ficha'] = fichaNueva;
+  db().ref().update(upd).then(function() {
     fetchPortalAndRender(currentUid, true);
   }).catch(function(e) {
     setLoading(false);
     document.getElementById('cq-error').textContent = 'No se pudo guardar: ' + e.message;
   });
+}
+
+// Arma la ficha a partir del cuestionario, sin pisar lo que ya haya escrito.
+function fichaDesdeCuestionario(c, perfil, prev) {
+  c = c || {}; prev = prev || {};
+  var p = Object.assign({}, prev.personal || {}), sa = Object.assign({}, prev.salud || {}), e = Object.assign({}, prev.entreno || {});
+  var put = function(obj, k, v) { if (v && !obj[k]) obj[k] = v; };
+  if (c.fechaNacimiento) {
+    var b = new Date(c.fechaNacimiento + 'T00:00:00'), now = new Date();
+    var edad = now.getFullYear() - b.getFullYear() - ((now.getMonth() < b.getMonth() || (now.getMonth() === b.getMonth() && now.getDate() < b.getDate())) ? 1 : 0);
+    if (edad > 0 && edad < 110) put(p, 'edad', String(edad));
+    put(p, 'cumple', c.fechaNacimiento);
+  }
+  put(p, 'telefono', perfil.telefono);
+  put(p, 'ocupacion', c.ocupacion);
+  if (c.lesion === 'si') put(sa, 'lesiones', c.lesionDetalle);
+  put(e, 'objetivo', c.objetivo);
+  var nivel = { 'Nunca': 'Principiante', 'Un poco, pero no sé bien la técnica': 'Principiante', 'Sí, conozco la técnica básica': 'Intermedio', 'Sí, tengo bastante experiencia': 'Avanzado' }[c.experienciaPesas];
+  put(e, 'nivel', nivel);
+  put(e, 'notas', c.motivacion);
+  e.dias = e.dias || [];
+  return { personal: p, salud: sa, entreno: e };
 }
 
 // ── FOTO DE PERFIL ── (dos círculos la muestran: el del header y el de Perfil)
@@ -3185,7 +3275,7 @@ function handleAvatarFileSelect(input) {
 // ── RUTINA TAB ──
 function loadRutinaTab(clientId) {
   var el = document.getElementById('rutina-content');
-  if (!clientId) { el.innerHTML = '<div class="empty-note">Tu coach todavía no vinculó tu rutina.</div>'; return; }
+  if (!clientId) { el.innerHTML = renderPlanLockedCard(); return; }
   db().ref('exerciseBank').once('value').then(function(snap) {
     EXERCISE_BANK = snap.val() || {};
   }).catch(function() {}).then(function() {
@@ -4357,7 +4447,7 @@ function renderFichaDiasPills() {
 }
 
 function openFichaModal() {
-  var ficha = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ficha) || {};
+  var ficha = fichaDesdeCuestionario((CURRENT_PORTAL_DATA || {}).cuestionario, CURRENT_PERFIL_DATA || {}, (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ficha) || {});
   var p = ficha.personal || {}, s = ficha.salud || {}, e = ficha.entreno || {};
   var values = Object.assign({}, p, s, e);
   document.querySelectorAll('#ficha-modal .ficha-field').forEach(function(el) {
@@ -4965,7 +5055,7 @@ function canjearBeneficio(beneficioId) {
 
 // ── PLAN: cuenta regresiva de vencimiento ──
 function loadPlanInfo() {
-  if (!currentClientId) { return; }
+  if (!currentClientId) { renderPlanCountdown(null); return; }
   db().ref('clients/' + currentClientId).once('value').then(function(snap) {
     renderPlanCountdown(snap.val());
   }).catch(function(e) {
@@ -4999,19 +5089,25 @@ var PLAN_LOCKED = false;
 // tiene sentido decirle "tu programa caducó" si nunca le activaron uno.
 var PLAN_NEVER_SET = false;
 
+function planWaLink(texto) { return 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(texto); }
 function renderPlanLockedCard() {
-  var title = PLAN_NEVER_SET ? 'Todavía no tenés un plan activo' : 'Tu programa caducó';
-  var text = PLAN_NEVER_SET ? 'Escribile a Frida para activar tu plan y ver esta sección.' : 'Adquirí un nuevo plan para seguir viendo esta sección.';
+  var title = PLAN_NEVER_SET ? 'Elige tu plan y empezamos' : 'Tu programa caducó';
+  var text = PLAN_NEVER_SET ? 'Tu cuenta ya está lista. Cuando elijas tu plan, Frida arma tu rutina y tu guía de alimentación, y aquí se desbloquea todo.' : 'Renueva tu plan para seguir viendo esta sección.';
+  var fila = function(nombre, sub, precio, msg) {
+    return '<a class="pf-locked-price-row pf-plan-pick" href="' + planWaLink(msg) + '" target="_blank" rel="noopener"><span class="plan-name">' + nombre + '<span class="plan-sub">' + sub + '</span></span><span class="plan-price">' + precio + ' <b>›</b></span></a>';
+  };
   return '<div class="pf-locked-card">'
     + '<div class="pf-locked-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>'
     + '<div class="pf-locked-title">' + title + '</div>'
     + '<div class="pf-locked-text">' + text + '</div>'
-    + '<details class="pf-locked-pricing">'
-    + '<summary>Ver planes y precios</summary>'
-    + '<div class="pf-locked-price-row"><span class="plan-name">1 mes</span><span class="plan-price">$40</span></div>'
-    + '<div class="pf-locked-price-row"><span class="plan-name">3 meses<span class="plan-sub">Pago único de $105</span></span><span class="plan-price">$35/mes</span></div>'
-    + '<div class="pf-locked-price-row"><span class="plan-name">6 meses<span class="plan-sub">Pago único de $180</span></span><span class="plan-price">$30/mes</span></div>'
-    + '</details>'
+    + '<div class="pf-locked-pricing pf-locked-open">'
+    + '<div class="pf-locked-plans-hdr">Rutina personalizada online · guía de alimentación incluida</div>'
+    + fila('1 mes', 'Pago mensual', '$50', 'Hola Frida, quiero el plan de 1 mes de rutina personalizada.')
+    + fila('3 meses', 'Te queda a $45 por mes', '$135', 'Hola Frida, quiero el plan de 3 meses de rutina personalizada.')
+    + fila('6 meses', 'Te queda a $40 por mes', '$240', 'Hola Frida, quiero el plan de 6 meses de rutina personalizada.')
+    + '</div>'
+    + '<a class="pf-locked-wa" href="' + planWaLink('Hola Frida, quiero información sobre los planes.') + '" target="_blank" rel="noopener">💬 Escribirle a Frida por WhatsApp</a>'
+    + '<div class="pf-locked-more">¿Prefieres entrenar por videollamada o a domicilio? Escríbeme y te cuento.</div>'
     + '</div>';
 }
 
@@ -5038,6 +5134,7 @@ function applyPlanLockUI() {
   // dibujada — se vuelve a pintar para que los botones de video/historial
   // queden bloqueados (o no) de una, sin esperar a que toque otra acción.
   if (currentRutinaData && currentRutinaData.days) renderRutinaTab();
+  renderInicioTab();
 }
 
 function renderPlanCountdown(c) {

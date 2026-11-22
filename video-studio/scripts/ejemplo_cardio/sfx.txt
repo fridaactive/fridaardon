@@ -1,0 +1,10 @@
+brillo_doble 0.42 0.7
+pop_suave 2.15 0.8
+whoosh_grave 3.15 0.9
+whoosh_grave 7.22 0.9
+whoosh_grave 13.32 0.9
+brillo_doble 14.0 0.6
+brillo_doble 16.2 0.6
+brillo_doble 18.8 0.6
+whoosh_grave 20.22 0.9
+cierre 28.4 0.7

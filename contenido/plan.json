@@ -1,0 +1,447 @@
+{
+ "actualizado": "2026-11-22",
+ "videos": [
+  {
+   "id": "v2026-11-10-cardio",
+   "titulo": "Cardio vs. pesas",
+   "pilar": "Fitness",
+   "formato": "Reel con 2 tomas a cámara",
+   "duracion": "25 s",
+   "publicar": {
+    "fecha": "2026-11-10",
+    "hora": "18:00"
+   },
+   "grabar": "2026-11-08",
+   "editar": "2026-11-09",
+   "borrador": false,
+   "idea": "El cardio no es malo, pero si quieres verte con forma y estructura, primero necesitas construir músculo. Solo hablas a cámara en las tomas 2 y 6; el resto es imagen con texto.",
+   "tomas": [
+    {
+     "graba": "Tú en la caminadora, con cara de aburrida (hook)",
+     "habla": false,
+     "dice": "Texto: \"Me pasé años en la *caminadora*… esperando un cuerpo que **NUNCA LLEGÓ**\""
+    },
+    {
+     "graba": "Tú a cámara, en el gym",
+     "habla": true,
+     "dice": "\"Y ojo, el cardio no es malo. Es buenísimo para tu corazón.\""
+    },
+    {
+     "graba": "Primer plano de tu dedo presionando STOP y tú bajándote",
+     "habla": false,
+     "dice": "Texto: \"pero si quieres bajar de peso y solo haces cardio, puedes perder grasa… y también **MÚSCULO**\""
+    },
+    {
+     "graba": "Tus manos cargando los discos en la barra",
+     "habla": false,
+     "dice": "Texto: \"y sin músculo, no hay forma que *definir*\""
+    },
+    {
+     "graba": "Sentadilla, peso muerto y hip thrust (1 a 2 segundos cada uno)",
+     "habla": false,
+     "dice": "Texto: \"la base de un cuerpo con estructura es la **MASA MUSCULAR**, y se construye levantando peso, *pesado para ti*\""
+    },
+    {
+     "graba": "Tú a cámara, sudada después de entrenar",
+     "habla": true,
+     "dice": "\"Primero construye la base y usa el cardio como complemento. Si no, vas a terminar cansada, sin energía y con más hambre. A mí me pasaba.\""
+    },
+    {
+     "graba": "Una toma bonita tuya entrenando, con buena luz (cierre)",
+     "habla": false,
+     "dice": "Texto: \"Pesas como base, cardio como **COMPLEMENTO**\""
+    }
+   ],
+   "notas": [
+    "Las frases a cámara son la idea: dilas con tus palabras.",
+    "Celular a la altura de los ojos, luz de frente y 2 o 3 tomas de cada frase."
+   ],
+   "caption": "Pasé años matándome con cardio para bajar de peso, y lo único que lograba era terminar cansada y con hambre. El cardio no es malo: es buenísimo para tu corazón. Pero si tu meta es verte con forma y estructura, primero necesitas construir músculo, y eso se logra levantando peso de forma progresiva.\n\nY si quieres empezar a correr, con más razón las pesas son tu aliado: fortalecen músculos, tendones y articulaciones, te ayudan a prevenir lesiones y a correr con más potencia.\n\n¿Tú cuál haces más, cardio o pesas? 👇",
+   "checklist": [
+    "Video HDR apagado (Ajustes → Cámara → Grabar video)",
+    "Lente limpio",
+    "Gym en un horario con poca gente",
+    "Grabar en vertical, cada toma 2 o 3 veces",
+    "Subir todos los clips a la carpeta de Drive"
+   ]
+  },
+  {
+   "id": "v2026-11-13-tumadre",
+   "titulo": "Un día conmigo siendo fitness coach (con Tu Madre)",
+   "pilar": "Lifestyle y alimentación (colaboración)",
+   "formato": "Reel tipo mini vlog con música y una toma hablando",
+   "duracion": "25 a 30 s",
+   "publicar": {
+    "fecha": "2026-11-13",
+    "hora": "12:30"
+   },
+   "grabar": "2026-11-10",
+   "editar": "2026-11-11",
+   "borrador": false,
+   "idea": "Tu día real en orden: estudio y trabajo en la mañana, gym, pasas por tu almuerzo a Tu Madre y te lo comes en el carro (on the go), sesión a domicilio con tu clienta y clase en ciclo. Todo con música de fondo, y solo una toma con tu voz: la recomendación del bowl, que se siente como un consejo tuyo y no como un anuncio.",
+   "tomas": [
+    {
+     "graba": "HOOK (primeros 3 segundos): en la mañana, tú mirando a cámara con una sonrisa y un gesto de \"ven\" con la mano. En edición pasan muy rápido 3 momentos del día (tu entreno, el bowl, tu clase)",
+     "habla": false,
+     "dice": "Texto (título de la serie): \"Un día conmigo siendo *fitness coach*\" (\"Un día conmigo siendo\" en la letra con serifa y \"fitness coach\" en la cursiva de pincel)"
+    },
+    {
+     "graba": "En la mañana: tú estudiando con tu café y tu desayuno a la par, con luz natural (vistazo de 2 segundos al desayuno)",
+     "habla": false,
+     "dice": "Texto: \"como toda buena coach, estoy retomando mis *estudios*…\""
+    },
+    {
+     "graba": "Planificando las rutinas de tus clientas en la laptop o el iPad",
+     "habla": false,
+     "dice": "Texto: \"así que mis mañanas son para estudiar y armar **RUTINAS**\""
+    },
+    {
+     "graba": "Saliendo de tu casa con tu bolso del gym: subes al carro y llegas caminando a la entrada del gym",
+     "habla": false,
+     "dice": "Texto sugerido: \"rumbo al *gym*\""
+    },
+    {
+     "graba": "En el gym: tu entrenamiento (3 tomas cortas)",
+     "habla": false,
+     "dice": "Texto sugerido: \"después, mi **ENTRENO**\""
+    },
+    {
+     "graba": "Saliendo del gym: llegas a Tu Madre (la ventana del carro bajando y la fachada) y sales con tu bolsa",
+     "habla": false,
+     "dice": "Texto sugerido: \"y de pasada, mi almuerzo en *Productos Tu Madre*\""
+    },
+    {
+     "graba": "En el carro: destapas el bowl, le pones el aderezo y das el primer bocado (muy de cerca)",
+     "habla": false,
+     "dice": "Sin texto"
+    },
+    {
+     "graba": "En el carro, tú a cámara con el bowl en la mano (la única toma con tu voz; la música baja aquí)",
+     "habla": true,
+     "dice": "\"Si pasas por Tu Madre, pide el [nombre del bowl]: trae [X] gramos de proteína. Y después me contás.\" (Completa el nombre y la proteína ese día)"
+    },
+    {
+     "graba": "Llegando donde tu clienta: abres el baúl y bajas u ordenas tu equipo (que se vea todo)",
+     "habla": false,
+     "dice": "Texto sugerido: \"y llevo el gym hasta su *casa*\""
+    },
+    {
+     "graba": "Opcional, 2 segundos: tú coacheando a tu clienta, corrigiéndola o dándole un abrazo",
+     "habla": false,
+     "dice": "Sin texto"
+    },
+    {
+     "graba": "En el carro: el Waze o el buscador con \"Ciclo Estudio\" o \"Epic Plaza\" (3 segundos máximo)",
+     "habla": false,
+     "dice": "Texto sugerido: \"última parada del día\""
+    },
+    {
+     "graba": "En ciclo: tú poniéndote el micrófono",
+     "habla": false,
+     "dice": "Sin texto"
+    },
+    {
+     "graba": "Tú dando la clase, con energía",
+     "habla": false,
+     "dice": "Texto sugerido: \"mi clase de las **6**\""
+    },
+    {
+     "graba": "Cierre: video de todo el grupo",
+     "habla": false,
+     "dice": "Sin texto (o tu frase de cierre)"
+    },
+    {
+     "graba": "Cierre del día: tu cena en casa, con calma (vistazo de 2 segundos)",
+     "habla": false,
+     "dice": "Texto sugerido: \"y de cena: [lo que comas]\""
+    }
+   ],
+   "notas": [
+    "El hook es tu invitación: tu cara y tu gesto de \"ven\" en la mañana, con un adelanto muy rápido de 3 momentos del día que se arma en edición. Graba cada momento con ganas, porque cualquiera puede salir en ese adelanto.",
+    "Este video abre la serie \"Un día conmigo siendo fitness coach\": tu día real con vistazos de lo que comes (desayuno, almuerzo y cena). El almuerzo es el protagonista y es el único momento hablado. El título va igual en todos los videos de la serie.",
+    "Los textos son sugerencias: cámbialos con tus palabras en ✏️ Editar guion.",
+    "El orden del video no tiene que ser el orden real del día: se presenta como si el gym fuera en la mañana y Tu Madre justo después.",
+    "Música de fondo en todo el video; solo en la toma 6 se escucha tu voz. Para que la música baje solo ahí, avísale al Estudio de video.",
+    "El bowl de carne ya salió: esta vez pide el de salmón, el de pollo o el Mediterráneo, y anota su proteína.",
+    "Transición para grabar a propósito: la ventana del carro bajando en la toma 4.",
+    "Al publicar: invita a @productostumadre como colaboradora y activa la etiqueta de colaboración pagada."
+   ],
+   "caption": "Un día normal para mí: estudio, trabajo, entreno, clientas y clase en ciclo. En días así como on the go, pero sin descuidar la proteína. Hoy mi almuerzo fue el [nombre del bowl] de @productostumadre, con [X] g de proteína. ¿Ya lo probaste? 💙",
+   "checklist": [
+    "Video HDR apagado",
+    "Lente limpio",
+    "Batería cargada (lleva cargador o batería portátil)",
+    "Pedir el bowl de salmón, pollo o Mediterráneo y anotar sus gramos de proteína",
+    "Permiso de tu clienta (si sale)",
+    "Grabar en vertical, cada toma 3 a 5 segundos más larga y 2 o 3 veces",
+    "Subir todos los clips a la carpeta de Drive"
+   ]
+  },
+  {
+   "id": "v2026-11-20-abs",
+   "titulo": "¿Por qué haces abdominales y no ves resultados?",
+   "pilar": "Educación (pregunta de una seguidora)",
+   "formato": "Reel hablando a cámara en el gym, con tomas de apoyo y texto en pantalla",
+   "duracion": "35 a 45 s",
+   "publicar": {
+    "fecha": "2026-11-24",
+    "hora": "18:00"
+   },
+   "grabar": "2026-11-23",
+   "editar": "2026-11-24",
+   "borrador": false,
+   "idea": "Responder la pregunta que te hicieron por Instagram: \"hago y hago abdominales y no veo cambios\". No es una rutina: son las 4 razones por las que alguien no ve resultados (sin progresión, más no es mejor, solo hacer abs y la alimentación), para que cada persona reconozca cuál le pasa.",
+   "tomas": [
+    {
+     "graba": "HOOK (primeros 3 segundos): en la colchoneta haciendo abdominales; te detienes, te sientas y miras a cámara. En edición aparece encima la captura del mensaje que te enviaron (sin nombre ni foto)",
+     "habla": true,
+     "dice": "\"¿Estás haciendo abdominales y no ves resultados? Te dejo aquí las 4 razones del por qué.\""
+    },
+    {
+     "graba": "Tú a cámara, más cerca, como contando algo personal. En edición se queda en pantalla la captura del mensaje: \"frida tenés rutina de abs? yo siento que hago y hago la misma rutina y no veo nada de cambios\"",
+     "habla": true,
+     "dice": "\"Me escribieron esta pregunta por mensaje y quiero responderla aquí, porque seguro a más de uno le pasa lo mismo.\" · Texto: \"me preguntaron esto 👇\""
+    },
+    {
+     "graba": "Razón 1: tú a cámara, de pie en el gym",
+     "habla": true,
+     "dice": "\"Uno: cada semana cambias la rutina que ves en Instagram y haces 3 o 4 ejercicios seguidos solo para cansar tu abdomen. Es decir, no estás teniendo una progresión. No necesitas tantos: con 1 o 2 ejercicios es suficiente. Mantén la misma rutina de 4 a 8 semanas e incorpórale un peso que te exija en cada repetición. Ahí vas a empezar a ver el progreso.\" · Texto: \"1. muchos ejercicios, cero *progresión*\" · ✂️ Versión corta (graba las dos): \"Uno: cada semana cambias la rutina que ves en Instagram y haces 3 o 4 ejercicios solo para cansarte. No necesitas tantos: con 1 o 2, la misma rutina de 4 a 8 semanas y subiéndoles peso, vas a ver el progreso.\""
+    },
+    {
+     "graba": "(Opcional) Apoyo: tú haciendo un abdominal y después el mismo con una mancuerna o disco (se ve cómo subes la dificultad)",
+     "habla": false,
+     "dice": "Texto: \"misma rutina, más *peso*\""
+    },
+    {
+     "graba": "Razón 2: tú a cámara",
+     "habla": true,
+     "dice": "\"Dos: te falta constancia. Busca entrenar de 2 a 3 veces por semana esta zona muscular. Recuerda que tu abdomen es como cualquier otro músculo: debes entrenarlo con paciencia, constancia y progresión semana a semana para lograr resultados.\" · Texto: \"2. te falta *constancia*\""
+    },
+    {
+     "graba": "Razón 3: tú a cámara",
+     "habla": true,
+     "dice": "\"Tres: ¿quieres tener un abdomen marcado, pero no levantas peso en ejercicios compuestos como la sentadilla, el peso muerto o los remos? Recuerda que tener unos abdominales bonitos no es suficiente: busca trabajar tu core para que sea fuerte y funcional.\" · Texto: \"3. no levantas *peso*\""
+    },
+    {
+     "graba": "Apoyo: tú haciendo sentadilla o peso muerto con peso (2 tomas cortas)",
+     "habla": false,
+     "dice": "Sin texto"
+    },
+    {
+     "graba": "Razón 4: tú a cámara, más cerca (es la más importante)",
+     "habla": true,
+     "dice": "\"Y cuatro, y una de las más importantes: no estás en déficit calórico. Para que tu abdomen se marque, necesitas gastar más calorías de las que consumes, y eso depende principalmente de un buen plan de alimentación y de una buena programación de entrenamiento.\" · Texto: \"4. no estás en *déficit calórico*\""
+    },
+    {
+     "graba": "(Opcional) Apoyo: tú con tu comida o tu bowl (2 segundos)",
+     "habla": false,
+     "dice": "Sin texto"
+    },
+    {
+     "graba": "CIERRE: a cámara, con una sonrisa",
+     "habla": true,
+     "dice": "\"Si quieres saber qué ejercicios son para ti y tener una programación hecha a tu medida, mándame la palabra ABS por mensaje. Y guarda este video para que no se te olvide.\" · Texto: \"escríbeme **ABS** por DM 💬\""
+    }
+   ],
+   "notas": [
+    "Versión exprés (15 min): graba las tomas 1, 2, 3, 5, 6, 7, 8 y 10. Las marcadas como opcionales suman, pero el video funciona sin ellas.",
+    "Nueva fecha: graba a más tardar el lunes 23 y sube los clips a Drive esa noche; se publica el martes 24 a las 6:00 pm.",
+    "Captura del mensaje: tápale el nombre y la foto a la persona antes de mandarla al Estudio de video (o pídele permiso si quieres que se vea). Va encima del hook y de la toma 2.",
+    "No es una rutina de abdominales: es la respuesta a por qué no ven resultados. No hace falta enseñar ejercicios.",
+    "Razón 1 bien explicada: repetir la rutina está bien; lo que frena es cambiarla todo el tiempo o no subir peso ni repeticiones en 4 a 8 semanas.",
+    "Graba todas las tomas habladas seguidas en el mismo lugar, una por razón. Si te equivocas, repite solo esa frase; en la edición se corta.",
+    "Nace de la primera pregunta que te hicieron por Instagram. No digas el nombre de quien preguntó.",
+    "Los textos son sugerencias: cámbialos con tus palabras en ✏️ Editar guion.",
+    "Objetivo: guardados y seguidores nuevos (lo más bajo en los videos 1 y 2). Por eso el cierre pide las dos cosas.",
+    "Cuando te escriban ABS por mensaje: responde con una pregunta corta (si va empezando y dónde entrena) y de ahí le cuentas cómo trabajas. Pídeme ayuda para armar esa respuesta."
+   ],
+   "caption": "\"Hago y hago abdominales y no veo cambios\" 👀 Me lo preguntaron por aquí, y seguro a más de una le pasa.\n\nEstas son las 4 razones más comunes:\n1️⃣ Cambias de rutina cada semana y haces demasiados ejercicios: con 1 o 2 y subiéndoles peso es suficiente\n2️⃣ Te falta constancia: tu abdomen es un músculo como cualquier otro\n3️⃣ No levantas peso en ejercicios compuestos: tu core también tiene que ser fuerte y funcional\n4️⃣ No estás en déficit calórico: depende de un buen plan de alimentación y de una buena programación de entrenamiento\n\n¿Con cuál te identificaste? Guárdalo para que no se te olvide 📌\n\nY si quieres saber qué ejercicios son para ti y tener una programación hecha a tu medida, escríbeme ABS por mensaje 💙",
+   "checklist": [
+    "Video HDR apagado",
+    "Lente limpio y batería cargada",
+    "Trípode o un lugar firme para el celular",
+    "Grabar en un lugar del gym con buena luz y poco ruido (vas a hablar)",
+    "Grabar en vertical, cada toma 3 a 5 segundos más larga y 2 o 3 veces",
+    "Subir todos los clips a la carpeta de Drive"
+   ]
+  },
+  {
+   "id": "h2026-11-24-planes",
+   "titulo": "Historia: mis planes de entrenamiento online",
+   "pilar": "Ventas (historia semanal)",
+   "formato": "Historia de Instagram (3 pantallas)",
+   "duracion": "3 historias seguidas",
+   "publicar": {
+    "fecha": "2026-11-25",
+    "hora": "12:30"
+   },
+   "borrador": false,
+   "idea": "Cada semana una historia que invite a entrenar contigo. La de la semana pasada (con encuesta) te trajo 3 personas interesadas, así que repetimos la fórmula: mostrar el plan, el link y una encuesta para que levanten la mano.",
+   "tomas": [
+    {
+     "graba": "HISTORIA 1: la imagen ya diseñada (celular con tu app): contenido/imagenes/historia-planes-1-web.png",
+     "habla": false,
+     "dice": "Ya trae el texto \"¿Quieres entrenar con un plan hecho solo para ti?\". Si quieres, agrega un sticker de música."
+    },
+    {
+     "graba": "HISTORIA 2: la imagen ya diseñada \"Así puedes entrenar conmigo\" (sin precios): contenido/imagenes/historia-planes-2-tipos.png",
+     "habla": false,
+     "dice": "Agrega el sticker de link en la parte de abajo: fridaactive.com/servicios.html con el texto \"Ver planes\""
+    },
+    {
+     "graba": "HISTORIA 3: foto tuya sonriendo o en el gym",
+     "habla": false,
+     "dice": "Encuesta: \"¿Empezamos en diciembre?\" con las opciones \"¡Sí! Quiero info 🙋‍♀️\" y \"Más adelante\". A quien vote \"Sí\", le escribes ese mismo día."
+    }
+   ],
+   "notas": [
+    "Historia semanal de ventas: esta semana el miércoles 25. Las imágenes están aquí abajo listas para descargar.",
+    "La encuesta es la clave: cada voto de \"Sí\" es una persona que levantó la mano. Escríbele el mismo día con el mensaje de seguimiento.",
+    "Publícala en \"Tu historia\", no en Mejores amigos.",
+    "Cambia la foto de la historia 1 cada semana para que no se vea repetida."
+   ],
+   "caption": "(Las historias no llevan caption.)",
+   "checklist": [
+    "Las 2 imágenes ya diseñadas",
+    "Sticker de link a fridaactive.com/servicios.html en la historia 2",
+    "Encuesta en la historia 3",
+    "Revisar quién votó y escribirle el mismo día"
+   ],
+   "imagenes": [
+    {
+     "src": "contenido/imagenes/historia-planes-1-web.png",
+     "nombre": "Historia 1 · Tu plan a tu medida"
+    },
+    {
+     "src": "contenido/imagenes/historia-planes-2-tipos.png",
+     "nombre": "Historia 2 · Así puedes entrenar conmigo"
+    },
+    {
+     "src": "contenido/imagenes/planes-online-foto.png",
+     "nombre": "Extra · Planes con precios (para mandar por mensaje)"
+    },
+    {
+     "src": "contenido/imagenes/marcas-aliadas.png",
+     "nombre": "Extra · Marcas aliadas (para mandar por mensaje)"
+    }
+   ]
+  },
+  {
+   "id": "v2026-11-17-comidas",
+   "titulo": "Lo que como en un día sin contar calorías",
+   "pilar": "Alimentación (educativo)",
+   "formato": "Carrusel de 7 fotos tipo collage: arriba lo que estás haciendo, abajo lo que comes",
+   "duracion": "7 fotos verticales (4:5)",
+   "publicar": {
+    "fecha": "2026-11-27",
+    "hora": "12:30"
+   },
+   "grabar": "2026-11-23",
+   "editar": "2026-11-26",
+   "borrador": false,
+   "idea": "Tu día real en fotos: en cada foto, arriba lo que estás haciendo en ese momento (estudiando, entrenando, dando clase…) y abajo lo que comiste. Cada foto lleva un consejo corto sobre alimentación sin contar calorías. Cierra con tu promo de Black Friday, de forma suave.",
+   "tomas": [
+    {
+     "graba": "1 · PORTADA: una foto tuya (sonriendo, con tu café o empezando el día)",
+     "habla": false,
+     "dice": "Texto: \"Lo que como en un día *sin contar calorías*\" · abajo: \"desliza →\""
+    },
+    {
+     "graba": "2 · DESAYUNO · arriba: lo que haces en la mañana (estudiando, armando rutinas…) · abajo: tu desayuno real",
+     "habla": false,
+     "dice": "Sugerencias de texto (elige según lo que comiste): \"Empiezo el día con **proteína**: me mantiene llena por más tiempo\" o \"El desayuno me da la energía para arrancar la mañana\""
+    },
+    {
+     "graba": "3 · MERIENDA DE LA MAÑANA · arriba: lo que estás haciendo · abajo: tu merienda real",
+     "habla": false,
+     "dice": "Sugerencias: \"Una merienda a media mañana me ayuda a no llegar con hambre al almuerzo\" o \"Los **carbohidratos** no son el enemigo: son tu energía\""
+    },
+    {
+     "graba": "4 · ALMUERZO · arriba: lo que estás haciendo (en el carro, con una clienta…) · abajo: tu almuerzo real",
+     "habla": false,
+     "dice": "Sugerencias: \"Así armo mi plato: **la mitad verduras**, un cuarto proteína y un cuarto carbohidrato\" o \"No peso nada: me fijo en que tenga proteína, carbohidrato y verduras\""
+    },
+    {
+     "graba": "5 · POST ENTRENO o MERIENDA DE LA TARDE · arriba: tú entrenando o dando clase · abajo: lo que comes después",
+     "habla": false,
+     "dice": "Sugerencias: \"Después de entrenar: **proteína + carbohidrato** para recuperarme\" o \"Comer después de entrenar ayuda a que tus músculos se recuperen\""
+    },
+    {
+     "graba": "6 · CENA · arriba: tu noche (en casa, descansando…) · abajo: tu cena real",
+     "habla": false,
+     "dice": "Sugerencias: \"No tengo que cenar poco: ceno algo que me deje satisfecha\" o \"Las **grasas buenas** (aguacate, aceite de oliva, nueces) también importan\""
+    },
+    {
+     "graba": "7 · CIERRE + PROMO: foto tuya o fondo de tu marca",
+     "habla": false,
+     "dice": "Texto: \"Comer bien no es comer **POCO** 💙\" · y abajo, suave: el mensaje de tu promo de Black Friday (lo definimos al armar la promo)"
+    }
+   ],
+   "notas": [
+    "Toma las fotos el lunes 23 durante tu día normal y súbelas al Drive esa noche. Yo armo los collages con los textos el jueves 26.",
+    "Por cada momento toma DOS fotos: una de lo que estás haciendo (estudiando, entrenando, en el carro, dando clase, en casa) y otra de tu comida. Yo las uno en el collage.",
+    "Muestra lo que de verdad comes: el texto se adapta a tu comida. Cuando me mandes las fotos, me dices qué es cada una y elijo el consejo que mejor le queda.",
+    "Fotos verticales, con luz natural cuando se pueda; la comida desde arriba o en ángulo. Toma 2 o 3 de cada una.",
+    "Sin números de calorías, sin peso y sin \"comí solo esto\".",
+    "La foto 7 cierra con la promo de Black Friday de forma suave: el carrusel se publica justo el viernes 27."
+   ],
+   "caption": "Lo que como en un día sin contar calorías 🍽️\n\nDurante mucho tiempo creí que comer bien era comer poco. Hoy armo mis platos con proteína, carbohidratos, grasas buenas y verduras, y como para tener energía, para entrenar y también para disfrutar.\n\nNo es una dieta para copiar: es una forma de aprender a armar tus platos 💙\n\nGuárdalo para tu próxima comida 📌",
+   "checklist": [
+    "Dos fotos por momento: actividad + comida",
+    "Luz natural cuando se pueda",
+    "Fotos verticales",
+    "Una foto tuya para la portada",
+    "Subir las fotos al Drive el lunes en la noche",
+    "Anotar qué comiste en cada foto"
+   ]
+  },
+  {
+   "id": "v2026-11-20-rutinas",
+   "titulo": "Así armo la rutina de cada cliente",
+   "pilar": "Coach life",
+   "formato": "Reel detrás de cámaras con el iPad",
+   "duracion": "20 a 25 s",
+   "publicar": {
+    "fecha": "2026-12-01",
+    "hora": "18:00"
+   },
+   "grabar": "2026-11-29",
+   "editar": "2026-11-30",
+   "borrador": true,
+   "idea": "Mostrar que ninguna rutina es igual: objetivo, nivel y lugar de entrenamiento de cada cliente, visto en tu plataforma fridaactive.com. Cierra invitando a comentar RETO para el reto de diciembre.",
+   "tomas": [
+    {
+     "graba": "Hook: tú con el iPad mostrando tu plataforma",
+     "habla": true,
+     "dice": "\"Ninguno de mis clientes tiene la misma rutina. Te muestro por qué.\""
+    },
+    {
+     "graba": "Pantalla de la rutina de un cliente (sin nombres ni datos visibles)",
+     "habla": false,
+     "dice": "Texto: su *objetivo*, su *nivel* y dónde entrena"
+    },
+    {
+     "graba": "Un cliente haciendo el ejercicio (con su permiso) o tú demostrándolo",
+     "habla": false,
+     "dice": "Texto: \"una rutina hecha para **TI**\""
+    },
+    {
+     "graba": "Cierre a cámara",
+     "habla": true,
+     "dice": "\"Por eso no te doy una rutina de internet. Te doy la tuya.\""
+    }
+   ],
+   "notas": [
+    "Borrador: lo revisamos juntas antes de grabar.",
+    "Pide permiso al cliente antes de grabarla."
+   ],
+   "caption": "Cada rutina que armo empieza con una conversación: qué quieres lograr, cuánto tiempo tienes y dónde entrenas. Después la ves en tu propia cuenta de fridaactive.com, con la explicación de cada ejercicio. Si quieres la tuya, escríbeme QUIERO por mensaje. Y si prefieres empezar acompañada, en diciembre lanzo un reto: comenta RETO y te aviso primero.",
+   "checklist": [
+    "Video HDR apagado",
+    "Permiso de la cliente",
+    "Ocultar nombres y datos en la pantalla",
+    "Subir todos los clips a la carpeta de Drive"
+   ]
+  }
+ ]
+}
