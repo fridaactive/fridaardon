@@ -958,27 +958,31 @@
 .in-goal-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#5b8bf5,#F5ECCB);transition:width 0.8s cubic-bezier(.2,.8,.2,1);}
 .in-goal-prize{font-size:0.78rem;margin-top:0.6rem;line-height:1.45;color:rgba(255,255,255,0.85);}
 .in-goal-prize b{color:#F5ECCB;}
-.in-ciclo{position:relative;overflow:hidden;margin-top:0.9rem;padding:1rem;border-radius:20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;animation:faExpand 0.4s ease both;}
-.in-ciclo-menstrual{background:linear-gradient(135deg,rgba(242,130,126,0.2),rgba(255,255,255,0.04));border-color:rgba(242,130,126,0.35);}
-.in-ciclo-folicular{background:linear-gradient(135deg,rgba(143,176,255,0.2),rgba(255,255,255,0.04));border-color:rgba(143,176,255,0.35);}
-.in-ciclo-ovulacion{background:linear-gradient(135deg,rgba(245,236,203,0.25),rgba(28,85,229,0.22));border-color:rgba(245,236,203,0.55);}
-.in-ciclo-lutea_temprana{background:linear-gradient(135deg,rgba(143,176,255,0.14),rgba(255,255,255,0.04));}
-.in-ciclo-lutea_tardia{background:linear-gradient(135deg,rgba(242,130,126,0.12),rgba(255,255,255,0.04));}
+.in-ciclo{position:relative;overflow:hidden;margin-top:0.9rem;padding:1rem;border-radius:20px;background:linear-gradient(160deg,#0d1430,#070b1a 65%);border:1px solid rgba(255,255,255,0.12);color:#fff;animation:faExpand 0.4s ease both;}
+.in-ciclo-menstrual{border-color:rgba(242,130,126,0.4);}
+.in-ciclo-folicular{border-color:rgba(143,176,255,0.4);}
+.in-ciclo-ovulacion{border-color:rgba(245,236,203,0.6);}
+.in-ciclo-lutea_temprana{border-color:rgba(232,201,122,0.35);}
+.in-ciclo-lutea_tardia{border-color:rgba(217,143,160,0.35);}
+.in-ciclo-aura{position:absolute;top:-30px;left:-20px;width:140px;height:140px;border-radius:50%;filter:blur(22px);opacity:0.55;animation:ciclo-pulse 4.5s ease-in-out infinite;pointer-events:none;}
+.in-ciclo-aura-dim{opacity:0.15;background:radial-gradient(circle,#8FB0FF 0%,transparent 70%);}
 .in-ciclo-empty{font-size:0.78rem;color:rgba(255,255,255,0.75);line-height:1.5;}
-.in-ciclo-top{display:flex;align-items:center;gap:0.9rem;}
-.in-ciclo-batt-wrap{flex-shrink:0;display:flex;animation:ciclo-float 3.2s ease-in-out infinite;}
+.in-ciclo-top{position:relative;display:flex;align-items:center;gap:0.9rem;}
+.in-ciclo-moon-wrap{position:relative;flex-shrink:0;width:56px;height:56px;animation:ciclo-float 4s ease-in-out infinite;}
+.in-ciclo-moon-svg{position:relative;z-index:1;filter:drop-shadow(0 0 10px rgba(255,255,255,0.25));}
+.in-ciclo-star{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;animation:ciclo-twinkle 2.4s ease-in-out infinite;}
 .in-ciclo-info{flex:1;min-width:0;}
-.in-ciclo-fase{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;font-size:1rem;line-height:1.15;}
-.in-ciclo-meta{font-size:0.72rem;color:rgba(255,255,255,0.6);margin-top:0.2rem;}
+.in-ciclo-poetico{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;font-size:1.02rem;line-height:1.1;}
+.in-ciclo-fase{font-size:0.68rem;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;}
+.in-ciclo-meta{font-size:0.72rem;color:rgba(255,255,255,0.6);margin-top:0.25rem;}
 .in-ciclo-log-btn{margin-left:auto;flex-shrink:0;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.22);border-radius:100px;padding:0.4rem 0.85rem;font-size:0.68rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;}
 .in-ciclo-log-btn:active{transform:scale(0.95);}
-.in-ciclo-tip{font-size:0.78rem;color:rgba(255,255,255,0.85);line-height:1.5;margin-top:0.75rem;}
-.in-battery-pct{font-size:0.62rem;font-weight:700;text-anchor:middle;}
-.in-battery-fill{transition:width 0.6s ease, fill 0.6s ease;animation:ciclo-glow 2.2s ease-in-out infinite;transform-origin:9px 18px;}
-@keyframes ciclo-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
-@keyframes ciclo-glow{0%,100%{opacity:1;}50%{opacity:0.68;}}
-@media (prefers-reduced-motion: reduce){.in-ciclo-batt-wrap,.in-battery-fill{animation:none;}}
-@media (prefers-reduced-motion: reduce){.in-battery-fill{transition:none;}}
+.in-ciclo-tip{position:relative;font-size:0.78rem;color:rgba(255,255,255,0.85);line-height:1.5;margin-top:0.75rem;}
+.in-ciclo-moon-shadow{transition:cx 1s cubic-bezier(.2,.8,.2,1);}
+@keyframes ciclo-float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-4px) rotate(-3deg);}}
+@keyframes ciclo-pulse{0%,100%{opacity:0.4;transform:scale(1);}50%{opacity:0.7;transform:scale(1.15);}}
+@keyframes ciclo-twinkle{0%,100%{opacity:0.15;transform:scale(0.6);}50%{opacity:1;transform:scale(1.15);}}
+@media (prefers-reduced-motion: reduce){.in-ciclo-moon-wrap,.in-ciclo-aura,.in-ciclo-star{animation:none;}.in-ciclo-moon-shadow{transition:none;}}
 .in-med-count{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:0.72rem;opacity:0.7;}
 .in-medals{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:0.3rem;padding:0.9rem 0.6rem 0.8rem;border-radius:20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);}
 .in-med-path{position:absolute;left:12%;right:12%;top:2.75rem;height:4px;border-radius:100px;background:rgba(255,255,255,0.1);}
@@ -2173,27 +2177,32 @@ function checkInHoy(on) {
 var CICLO_FASES = {
   menstrual: {
     label: 'Fase menstrual',
-    emoji: '🩸',
+    poetico: 'Luna nueva',
+    glow: ['#2a1830', '#F2827F'],
     tip: 'Tu energía está en su punto más bajo del mes — es normal. El estrógeno y la progesterona están en su nivel mínimo, así que el cuerpo tiene menos combustible disponible. Hoy no es el día para buscar récords: prioriza movimiento suave, cardio ligero o lo que el cuerpo te pida. Hidrátate bien y descansa si lo necesitas.'
   },
   folicular: {
     label: 'Fase folicular',
-    emoji: '🌱',
+    poetico: 'Luna creciente',
+    glow: ['#13224a', '#8FB0FF'],
     tip: 'Tu energía viene en subida. El estrógeno empieza a crecer, lo que mejora tu fuerza, tu ánimo y tu capacidad de recuperación. Buen momento para ir metiendo más intensidad poco a poco.'
   },
   ovulacion: {
     label: 'Ovulación',
-    emoji: '✨',
+    poetico: 'Luna llena',
+    glow: ['#4a3a10', '#F5ECCB'],
     tip: 'Estás en tu pico de energía del mes. El estrógeno llega a su nivel más alto — es el mejor momento para entrenamientos de fuerza exigentes, cargas pesadas o buscar un récord. Aprovéchalo.'
   },
   lutea_temprana: {
     label: 'Fase lútea',
-    emoji: '🍃',
+    poetico: 'Luna menguante',
+    glow: ['#2a2410', '#E8C97A'],
     tip: 'La energía empieza a bajar de a poco. La progesterona sube y el cuerpo entra en modo más conservador. Sigues bien para entrenar fuerte, pero presta atención a cómo te sientes.'
   },
   lutea_tardia: {
     label: 'Fase lútea (pre-período)',
-    emoji: '🌙',
+    poetico: 'Luna de sombra',
+    glow: ['#301a22', '#D98FA0'],
     tip: 'Es normal sentirte con menos energía o más sensible estos días — el estrógeno y la progesterona caen juntos antes del período. Muévete, pero sin exigirte al máximo: prioriza lo que te haga sentir bien, no lo más pesado.'
   }
 };
@@ -2263,21 +2272,25 @@ function cicloComputeState(ciclo) {
   };
 }
 
-function cicloBateriaColor(pct) {
-  if (pct >= 70) return '#F5ECCB';
-  if (pct >= 40) return '#8FB0FF';
-  return '#F2827F';
-}
+var CICLO_MOON_UID = 0;
 
-function cicloBateriaSvg(pct) {
-  var color = cicloBateriaColor(pct);
-  var innerW = 46, fillW = Math.round(innerW * (pct / 100));
-  return '<svg width="72" height="36" viewBox="0 0 72 36" aria-hidden="true">'
-    + '<rect x="1" y="1" width="62" height="34" rx="7" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2.5"/>'
-    + '<rect x="64" y="11" width="6" height="14" rx="2" fill="rgba(255,255,255,0.3)"/>'
-    + '<rect x="9" y="9" width="' + innerW + '" height="18" rx="3" fill="rgba(255,255,255,0.08)"/>'
-    + '<rect class="in-battery-fill" x="9" y="9" width="' + fillW + '" height="18" rx="3" fill="' + color + '"/>'
-    + '<text x="32" y="22" class="in-battery-pct" fill="' + color + '">' + pct + '%</text>'
+// Una lunita propia (no una batería) que crece y mengua con el ciclo:
+// nueva el día 1, llena en la ovulación, menguante de vuelta al período.
+// El truco es clásico de iconos de fases lunares: un círculo de luz y un
+// círculo de "sombra" que se desliza por encima, recortados con una
+// máscara — nada de matemática de arcos.
+function cicloMoonSvg(pct, waxing, glowColor) {
+  CICLO_MOON_UID++;
+  var uid = 'cmoon' + CICLO_MOON_UID;
+  var r = 23, cx = 28, cy = 28;
+  var illum = Math.max(0, Math.min(1, pct / 100));
+  var offset = illum * (r * 2.1) * (waxing ? 1 : -1);
+  return '<svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true" class="in-ciclo-moon-svg">'
+    + '<defs><mask id="' + uid + '"><rect width="56" height="56" fill="#000"/><circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#fff"/>'
+    + '<circle class="in-ciclo-moon-shadow" cx="' + (cx + offset) + '" cy="' + cy + '" r="' + r + '" fill="#000"/></mask></defs>'
+    + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="rgba(255,255,255,0.08)"/>'
+    + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="' + glowColor + '" mask="url(#' + uid + ')"/>'
+    + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>'
     + '</svg>';
 }
 
@@ -2285,18 +2298,26 @@ function cicloInicioHtml() {
   var ciclo = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ciclo) || {};
   var state = cicloComputeState(ciclo);
   if (!state) {
-    return '<div class="in-ciclo"><div class="in-ciclo-top"><div class="in-ciclo-info"><span class="fa-tag">MI CICLO</span></div>'
+    return '<div class="in-ciclo"><div class="in-ciclo-aura in-ciclo-aura-dim"></div><div class="in-ciclo-top"><div class="in-ciclo-info"><span class="fa-tag">MI CICLO</span></div>'
       + '<button type="button" class="in-ciclo-log-btn" onclick="openCicloModal()">+ Registrar</button></div>'
-      + '<div class="in-ciclo-empty" style="margin-top:0.7rem;">Registra cuándo te empezó tu último período para ver tu fase y nivel de energía del mes.</div></div>';
+      + '<div class="in-ciclo-empty" style="margin-top:0.7rem;position:relative;">Registra cuándo te empezó tu último período para conocer tu luna interior y tu nivel de energía del mes.</div></div>';
   }
   var fase = CICLO_FASES[state.fase];
+  var waxing = state.dayInCycle <= Math.round(state.avgLen * 15 / 28);
   var metaText = state.fase === 'menstrual'
     ? 'Día ' + state.dayInCycle + ' de tu ciclo'
     : 'Día ' + state.dayInCycle + ' · próximo período en ' + state.daysUntilNext + (state.daysUntilNext === 1 ? ' día' : ' días');
-  var sparkle = state.fase === 'ovulacion' ? '<svg class="fa-sticker fa-sticker-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 5.6 2.4 8 8 9-5.6 1-7.4 3.4-8 9-.6-5.6-2.4-8-8-9 5.6-1 7.4-3.4 8-9z"/></svg>' : '';
-  return '<div class="in-ciclo in-ciclo-' + state.fase + '">' + sparkle
-    + '<div class="in-ciclo-top"><div class="in-ciclo-batt-wrap">' + cicloBateriaSvg(state.bateria) + '</div>'
-    + '<div class="in-ciclo-info"><div class="in-ciclo-fase">' + fase.emoji + ' ' + fase.label + '</div><div class="in-ciclo-meta">' + metaText + '</div></div>'
+  var nSparkles = 2 + Math.round((state.bateria / 100) * 3);
+  var sparklesHtml = '';
+  for (var i = 0; i < nSparkles; i++) {
+    var ang = (i / nSparkles) * Math.PI * 2;
+    var sx = 28 + Math.cos(ang) * 26, sy = 28 + Math.sin(ang) * 26;
+    sparklesHtml += '<span class="in-ciclo-star" style="left:' + Math.round(sx) + 'px;top:' + Math.round(sy) + 'px;animation-delay:' + (i * 0.35) + 's;"></span>';
+  }
+  return '<div class="in-ciclo in-ciclo-' + state.fase + '">'
+    + '<div class="in-ciclo-aura" style="background:radial-gradient(circle,' + fase.glow[1] + ' 0%,transparent 70%);"></div>'
+    + '<div class="in-ciclo-top"><div class="in-ciclo-moon-wrap">' + sparklesHtml + cicloMoonSvg(state.bateria, waxing, fase.glow[1]) + '</div>'
+    + '<div class="in-ciclo-info"><div class="in-ciclo-poetico">' + fase.poetico + '</div><div class="in-ciclo-fase">' + fase.label + '</div><div class="in-ciclo-meta">' + metaText + '</div></div>'
     + '<button type="button" class="in-ciclo-log-btn" onclick="openCicloModal()">+ Registrar</button></div>'
     + '<div class="in-ciclo-tip">' + fase.tip + '</div></div>';
 }
