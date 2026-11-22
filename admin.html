@@ -608,6 +608,14 @@
   .transf-privacy { font-size:0.6rem; color:var(--muted); background:#f5f5f5; padding:0.25rem 0.6rem; border-radius:100px; display:flex; align-items:center; gap:0.3rem; white-space:nowrap; }
   .transf-captions { display:flex; gap:0.5rem; padding:0 0.9rem 0.9rem; }
   .transf-slot-empty svg { width:22px; height:22px; }
+
+  .track-day{position:relative;overflow:visible}
+  .track-face{position:absolute;top:-9px;right:-7px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none}
+  .fa-emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
+  .track-face .fa-emoji{font-size:14px}
+  .cst-chip.feel{display:inline-flex;align-items:center;gap:.25rem;background:#F4F6FF;color:var(--text)}
+  .cst-chip.feel .fa-emoji{font-size:12px}
+  .cst-chip.feel.dolor,.cst-chip.feel.nauseas{background:#FFEDEF;color:#B4233C}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
@@ -2085,6 +2093,10 @@ function acpHistShiftMonth(delta) {
   acpRenderShell();
 }
 
+// Caritas de "¿Cómo te sientes hoy?" (clientasPortal/{uid}/sentir) — emojis del sistema.
+var SENTIR_EMOJI = { dolor: '😖', nauseas: '🤢', cansada: '🥱', bien: '😊', contodo: '🤩' };
+var SENTIR_LABELS = { dolor: 'Con dolor', nauseas: 'Con náuseas', cansada: 'Cansada', bien: 'Bien', contodo: '¡Con todo!' };
+
 function renderAdminClientProfile(clientId, uid, portal) {
   var c = CLIENTS[clientId] || {};
   var perfil = portal.perfil || {};
@@ -2171,13 +2183,16 @@ function renderAdminClientProfile(clientId, uid, portal) {
   // queda guardado en el mismo lugar que usa la clienta, así que si ella
   // también marca desde su app (rutina personalizada), quedan conectadas:
   // lo que marca cualquiera de las dos lo ve la otra.
+  // Caritas de cómo se sintió (clientasPortal/{uid}/sentir), solo en el calendario.
+  var sentirMap = portal.sentir || {};
   calHtml += '<div class="track-days">';
   DAY_NAMES_ADMIN.forEach(function(d) { calHtml += '<div class="track-day-header">' + d + '</div>'; });
   for (var i = 0; i < firstDay; i++) calHtml += '<div class="track-day empty"></div>';
   for (var day = 1; day <= daysInMonth; day++) {
     var key = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     var done = !!diasEntrenados[key];
-    calHtml += '<div class="track-day' + (done ? ' done' : '') + '" style="cursor:pointer;" onclick="toggleAdminDiaEntrenado(\'' + uid + '\',\'' + key + '\',this)" title="Marcar/desmarcar como entrenado">' + day + '</div>';
+    var cara = SENTIR_LABELS[sentirMap[key]] ? sentirMap[key] : null;
+    calHtml += '<div class="track-day' + (done ? ' done' : '') + '" style="cursor:pointer;position:relative;overflow:visible;" onclick="toggleAdminDiaEntrenado(\'' + uid + '\',\'' + key + '\',this)" title="Marcar/desmarcar como entrenado' + (cara ? ' · ' + SENTIR_LABELS[cara] : '') + '">' + day + (cara ? '<span class="track-face"><span class="fa-emoji">' + SENTIR_EMOJI[cara] + '</span></span>' : '') + '</div>';
   }
   calHtml += '</div>';
 
