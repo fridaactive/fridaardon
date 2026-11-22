@@ -4,7 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FridaActive · Mi Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<meta name="description" content="Entrena en casa o en el gym con un plan hecho para ti, plan de alimentación y seguimiento de tu progreso.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FridaActive">
+<meta property="og:title" content="FridaActive · Entrenamiento a tu medida">
+<meta property="og:description" content="Entrena en casa o en el gym con un plan hecho para ti, plan de alimentación y seguimiento de tu progreso.">
+<meta property="og:url" content="https://fridaactive.com/">
+<meta property="og:image" content="https://fridaactive.com/og-image-v2.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="es_SV">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fridaactive.com/og-image-v2.jpg">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#1C55E5">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Archivo+Black&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -183,13 +198,6 @@
   .transf-caption-nums { font-size:0.72rem; font-weight:700; color:var(--text); }
   .transf-caption-notas { font-size:0.68rem; color:var(--muted); margin-top:0.15rem; line-height:1.4; }
 
-  /* ── COMUNIDAD (feed de Frida) ── */
-  .comunidad-post { border-radius:16px; overflow:hidden; border:1.5px solid var(--border); margin-bottom:1rem; background:#fff; box-shadow:0 2px 14px rgba(15,63,168,0.05); }
-  .comunidad-post-photo { width:100%; aspect-ratio:4/3; object-fit:cover; display:block; background:#f2f4f9; }
-  .comunidad-post-body { padding:0.8rem 0.95rem; }
-  .comunidad-post-date { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--blue); font-weight:700; margin-bottom:0.35rem; }
-  .comunidad-post-caption { font-size:0.82rem; color:var(--text); line-height:1.5; }
-
   /* ── TRACKING CALENDAR ── */
   .track-stat { display:flex; gap:0.75rem; margin-bottom:0.9rem; }
   .track-stat-box { flex:1; background:var(--blue-lt); border-radius:12px; padding:0.75rem; text-align:center; }
@@ -282,20 +290,6 @@
   .ficha-plan-card { background:var(--blue-lt); border-radius:12px; padding:0.9rem 1rem; margin-bottom:1rem; }
   .ficha-plan-row { display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0; }
   .ficha-promo-card { border:1.5px solid var(--border); border-radius:12px; padding:0.8rem 0.9rem; margin-bottom:0.6rem; }
-
-  /* ── CICLO ── */
-  .pf-ciclo-card { margin-top:1rem; }
-  .pf-ciclo-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; }
-  .pf-ciclo-log-btn { background:var(--blue-lt); color:var(--blue); border:none; border-radius:100px; padding:0.35rem 0.8rem; font-size:0.68rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; white-space:nowrap; }
-  .pf-ciclo-empty { font-size:0.78rem; color:var(--muted); line-height:1.5; text-align:center; padding:0.5rem 0; }
-  .pf-ciclo-main { display:flex; align-items:center; gap:1rem; margin-bottom:0.75rem; }
-  .pf-battery-wrap { flex-shrink:0; }
-  .pf-battery-pct { font-size:0.68rem; font-weight:700; text-anchor:middle; }
-  .pf-ciclo-info { flex:1; }
-  .pf-ciclo-fase { font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:0.15rem; }
-  .pf-ciclo-meta { font-size:0.72rem; color:var(--muted); }
-  .pf-ciclo-tip { font-size:0.8rem; color:var(--text); line-height:1.55; background:var(--blue-lt); border-radius:12px; padding:0.75rem 0.9rem; margin-top:0.25rem; }
-  .pf-battery-fill { transition:width 0.6s ease, fill 0.6s ease; }
   .pf-bio-prompt-line { font-size:0.82rem; color:var(--muted); line-height:1.9; display:flex; align-items:center; gap:0.5rem; }
   .pf-bio-prompt-line span { font-style:italic; }
   .pf-edit-btn { margin-top:0.9rem; width:100%; display:flex; align-items:center; justify-content:center; gap:0.5rem; background:#f2f4f9; color:var(--text); border:1.5px solid var(--border); border-radius:100px; padding:0.8rem 1rem; font-size:0.78rem; font-weight:800; font-family:'DM Sans',sans-serif; cursor:pointer; letter-spacing:0.02em; }
@@ -607,7 +601,419 @@
   .pl-footer-brand { color:var(--pl-cream); font-weight:800; font-size:1rem; margin-bottom:0.6rem; }
   .pl-footer-tagline { font-size:0.78rem; color:rgba(255,255,255,0.5); }
   .pl-footer-tagline a { color:rgba(255,255,255,0.75); font-weight:700; cursor:pointer; }
- </style>
+
+  /* ════════════════════════════════════════════════════════════
+     ESTILO "ENERGÍA AZUL" — PORTAL DE CLIENTES (por dentro)
+     Se activa con body.portal-dark solo en el dashboard; la página
+     pública sigue clara. Casi todo el portal usa las variables de
+     color, así que redefinirlas aquí oscurece todo de una vez; lo de
+     abajo cubre los fondos blancos que estaban escritos fijos.
+     ════════════════════════════════════════════════════════════ */
+  body.portal-dark {
+    --text:#F3F5FB; --muted:#A3B0D1; --border:#22305C; --blue-lt:#16224A;
+    --grad: linear-gradient(135deg, #1B2756 0%, #111A36 100%);
+    --surface:#111A36; --surface-2:#0B1229; --cream:#F5ECCB; --night:#070B1A;
+    background:var(--night); color:var(--text);
+  }
+  body.portal-dark #screen-dashboard { background:var(--night); min-height:100vh; }
+
+  /* Encabezado */
+  body.portal-dark .dash-hero { background:radial-gradient(120% 90% at 85% 0%, rgba(28,85,229,0.55) 0%, rgba(7,11,26,0) 60%), var(--night); border-bottom:1px solid var(--border); }
+  body.portal-dark .dash-hero::before { background:rgba(245,236,203,0.05); }
+  body.portal-dark .dash-hero .brand { opacity:1; color:var(--cream); letter-spacing:0.02em; text-transform:none; font-size:0.8rem; font-weight:500; margin-bottom:0.25rem; }
+  body.portal-dark .dash-hero .greeting { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; font-size:1.35rem; line-height:1.05; text-transform:uppercase; letter-spacing:0.01em; }
+  body.portal-dark .avatar-circle { border-color:var(--blue); background:var(--surface); }
+  body.portal-dark .logout-icon-btn { background:var(--surface); border:1px solid var(--border); }
+  body.portal-dark .tab-btn { background:var(--surface); border:1px solid var(--border); color:var(--text); }
+  body.portal-dark .tab-btn.active { background:var(--blue); color:#fff; border-color:var(--blue); box-shadow:0 8px 22px rgba(28,85,229,0.45); }
+  body.portal-dark .tab-btn.active .tab-btn-badge { background:rgba(255,255,255,0.18); box-shadow:none; }
+
+  /* Superficies (tarjetas y bloques) */
+  body.portal-dark .card,
+  body.portal-dark .track-card,
+  body.portal-dark .rt-acl-card,
+  body.portal-dark .rt-day,
+  body.portal-dark .pf-hero,
+  body.portal-dark .benef-cat-tile,
+  body.portal-dark .benef-card,
+  body.portal-dark .benef-faq-body,
+  body.portal-dark .rt-blq-item,
+  body.portal-dark .track-day { background:var(--surface); box-shadow:none; }
+  body.portal-dark .rt-msg-card { border-color:rgba(245,236,203,0.25); }
+  body.portal-dark .rt-msg-label,
+  body.portal-dark .pf-complete-pct { color:var(--cream); }
+  body.portal-dark .card-label,
+  body.portal-dark .track-summary-label,
+  body.portal-dark .rt-acl-title { color:#8FB0FF; }
+  body.portal-dark .rt-day-body { background:var(--surface-2); }
+  body.portal-dark .rt-day-num { color:#8FB0FF; font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; }
+  body.portal-dark .rt-day-title { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.01em; }
+  body.portal-dark .rt-blq { border-color:var(--border); }
+  body.portal-dark .pf-name { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; }
+  body.portal-dark .pf-avatar { background:var(--blue-lt); color:var(--cream); }
+  body.portal-dark .pf-avatar-edit,
+  body.portal-dark .avatar-edit-badge { background:var(--surface); border-color:var(--border); }
+  body.portal-dark .transf-month { background:var(--surface); }
+  body.portal-dark .transf-slot { background:var(--surface-2); }
+  body.portal-dark .transf-privacy { background:var(--surface-2); }
+  body.portal-dark .transf-uploading { background:rgba(7,11,26,0.85); }
+  body.portal-dark .track-day.done { background:rgba(28,85,229,0.22); color:#fff; border-color:var(--blue); }
+  body.portal-dark .track-day.empty { background:transparent; }
+  body.portal-dark .benef-descuento-pill { background:rgba(42,122,42,0.2); color:#9BE3A9; border-color:rgba(155,227,169,0.3); }
+  body.portal-dark .benef-descuento-pill.muted { background:var(--surface-2); color:var(--muted); border-color:var(--border); }
+  body.portal-dark .benef-faq { background:linear-gradient(135deg,#F5ECCB,#E9D79B); box-shadow:none; }
+  body.portal-dark .benef-faq-label,
+  body.portal-dark .benef-faq-chevron { color:#0D1B3E; }
+
+  /* Campos y botones */
+  body.portal-dark input,
+  body.portal-dark textarea,
+  body.portal-dark select { background:var(--surface-2); color:var(--text); border-color:var(--border); }
+  body.portal-dark input::placeholder,
+  body.portal-dark textarea::placeholder { color:#6F7DA3; }
+  body.portal-dark .ex-stepper-btn:active { background:#22305C; }
+  body.portal-dark .ficha-dia-pill { background:var(--surface-2); color:var(--text); }
+  body.portal-dark .ficha-dia-pill.sel { background:var(--blue); color:#fff; }
+  body.portal-dark .pf-edit-btn { background:var(--surface-2); color:var(--text); border-color:var(--border); }
+  body.portal-dark .pf-edit-btn:active { background:#16224A; }
+  body.portal-dark .btn-secondary { color:#8FB0FF; border:1px solid var(--border); }
+  body.portal-dark .btn-secondary:active { background:#22305C; }
+  /* Pastilla "Historial" (estilo escrito en línea desde JS) */
+  body.portal-dark button[style*="background:#F0F1F4"] { background:#1B2550 !important; color:#C9D3EC !important; }
+  /* Categorías de beneficios: los colores vienen desde JS; las no destacadas pasan a oscuro */
+  body.portal-dark .benef-cat-tile:not(.hero) { background:var(--surface) !important; }
+  body.portal-dark .benef-cat-tile:not(.hero) .benef-cat-tile-name { color:var(--text) !important; }
+  body.portal-dark .benef-cat-tile:not(.hero) .benef-cat-tile-icon { background:var(--blue-lt) !important; color:var(--cream) !important; }
+  body.portal-dark .benef-cat-tile:not(.hero) .benef-cat-tile-count { background:var(--surface-2) !important; color:var(--muted) !important; }
+
+  /* Textos y botones en azul escritos en línea: azul más claro para que se lean sobre fondo oscuro */
+  body.portal-dark #screen-dashboard [style*="color:var(--blue)"],
+  body.portal-dark [id$="-modal"] [style*="color:var(--blue)"] { color:#8FB0FF !important; }
+  body.portal-dark .ex-stepper-btn { color:#8FB0FF; }
+
+  /* Pantallas internas (beneficio, categoría, chat) */
+  body.portal-dark .bp-header { background:var(--night); }
+  body.portal-dark #benef-category-modal,
+  body.portal-dark #benef-profile-modal { background:var(--night); color:var(--text); }
+  body.portal-dark .bp-ig-btn,
+  body.portal-dark .bp-coupon-label { color:#8FB0FF; }
+  body.portal-dark .bp-descuento { color:#9BE3A9; }
+  /* El cupón se muestra en el local: se mantiene claro a propósito */
+  body.portal-dark .bp-coupon-voucher { color:#0a1628; }
+  body.portal-dark .bp-coupon-voucher .bp-coupon-voucher-name { color:#0a1628; }
+
+  /* ── Estructura nueva: menú inferior en lugar de las pestañas de arriba ── */
+  body.portal-dark .tab-bar { display:none; }
+  body.portal-dark .dash-hero { padding-bottom:1.4rem; border-bottom:none; }
+  body.portal-dark .dash-hero-row { align-items:flex-start; }
+  body.portal-dark .dash-hero-id { flex-direction:row-reverse; justify-content:space-between; width:100%; gap:1rem; }
+  body.portal-dark .dash-hero-id .avatar-wrap,
+  body.portal-dark .dash-hero-id .avatar-circle { width:52px; height:52px; }
+  body.portal-dark .dash-hero-id .avatar-circle { border-radius:16px; border:2px solid var(--blue); }
+  body.portal-dark .dash-hero .greeting { font-size:1.45rem; }
+  body.portal-dark .logout-icon-btn { display:none; }
+  .pf-logout { display:none; }
+  .dash-date { display:none; }
+  body.portal-dark .dash-date { display:inline-block; font-size:0.66rem; font-weight:700; letter-spacing:0.04em; background:rgba(245,236,203,0.14); color:var(--cream); border:1px solid rgba(245,236,203,0.3); padding:0.2rem 0.65rem; border-radius:999px; margin-bottom:0.45rem; }
+  body.portal-dark .pf-logout { display:block; width:100%; margin:0.5rem 0 1rem; background:none; border:1px solid var(--border); color:var(--muted); border-radius:999px; padding:0.75rem; font-size:0.78rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; }
+  body.portal-dark .dash-body { padding-bottom:7rem; }
+  .bnav { display:none; }
+  body.portal-dark .bnav { display:flex; position:fixed; left:50%; transform:translateX(-50%); bottom:calc(0.9rem + env(safe-area-inset-bottom, 0px)); width:calc(100% - 2rem); max-width:488px; height:4rem; background:rgba(17,26,54,0.96); border:1px solid var(--border); border-radius:999px; align-items:center; justify-content:space-around; z-index:45; box-shadow:0 10px 30px rgba(0,0,0,0.45); backdrop-filter:blur(8px); }
+  .bnav-btn { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.15rem; min-width:3.6rem; height:3.2rem; padding:0 0.6rem; border:none; border-radius:999px; background:none; color:var(--muted); font-family:'DM Sans',sans-serif; font-size:0.6rem; font-weight:700; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+  .bnav-btn svg { width:21px; height:21px; }
+  .bnav-btn span { display:none; }
+  .bnav-btn.active { background:var(--blue); color:#fff; flex-direction:row; gap:0.4rem; padding:0 1.1rem; font-size:0.8rem; }
+  .bnav-btn.active span { display:inline; }
+  body.portal-dark .chat-fab { bottom:calc(5.9rem + env(safe-area-inset-bottom, 0px)); }
+
+  /* ── Rutina: tarjetas de día más grandes, número en crema ── */
+  body.portal-dark .rt-day,
+  body.portal-dark .rt-msg-card,
+  body.portal-dark .rt-acl-card,
+  body.portal-dark .card,
+  body.portal-dark .track-card,
+  body.portal-dark .pf-hero { border-radius:22px; border-width:1px; }
+  body.portal-dark .rt-day-summary { padding:1.15rem 1.1rem; gap:0.9rem; }
+  body.portal-dark .rt-day-num { font-size:1.7rem; color:var(--cream); }
+  body.portal-dark .rt-day-title { font-size:1rem; }
+  body.portal-dark .rt-day-meta { font-size:0.72rem; }
+  body.portal-dark .rt-day[open] { border-color:var(--blue); }
+  body.portal-dark .rt-blq { border-radius:16px; }
+  body.portal-dark .btn-secondary { border-radius:999px; }
+
+  /* ── Inicio ── */
+  .in-hero { position:relative; display:flex; flex-direction:column; justify-content:space-between; width:100%; height:300px; border:none; border-radius:28px; overflow:hidden; padding:1rem 1.1rem 1.1rem; margin-bottom:0.9rem; text-align:left; cursor:pointer; font-family:'DM Sans',sans-serif; color:#fff;
+    background:linear-gradient(180deg, rgba(15,63,168,0.15) 30%, rgba(7,11,26,0.95) 100%), url('hero-frida.jpg') center/cover no-repeat, var(--blue); }
+  .in-hero-static { cursor:default; height:210px; }
+  .in-hero-tag { align-self:flex-start; background:var(--cream); color:#0D1B3E; font-size:0.66rem; font-weight:700; letter-spacing:0.08em; padding:0.35rem 0.75rem; border-radius:999px; }
+  .in-hero-bottom { display:flex; align-items:flex-end; justify-content:space-between; gap:0.75rem; }
+  .in-hero-title { display:block; font-family:'Archivo Black','DM Sans',sans-serif; font-size:1.7rem; line-height:0.98; text-transform:uppercase; }
+  .in-hero-meta { display:block; font-size:0.8rem; color:#C9D3EC; margin-top:0.35rem; }
+  .in-hero-play { flex-shrink:0; width:3.6rem; height:3.6rem; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 6px rgba(28,85,229,0.3); }
+  .in-hero-play svg { width:24px; height:24px; margin-left:3px; }
+  .in-hero:active { transform:scale(0.985); }
+  .in-stats { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:0.6rem; margin-bottom:0.9rem; }
+  .in-stat { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:0.8rem; display:flex; flex-direction:column; gap:0.1rem; }
+  .in-stat-hl { background:var(--blue); border-color:var(--blue); }
+  .in-stat-num { font-family:'Archivo Black','DM Sans',sans-serif; font-size:1.5rem; line-height:1.1; color:#fff; }
+  .in-stat-num.in-cream { color:var(--cream); }
+  .in-stat-lbl { font-size:0.68rem; color:var(--muted); }
+  .in-stat-hl .in-stat-lbl { color:#E3EAFF; }
+  .in-msg { display:block; background:var(--grad); border:1px solid rgba(245,236,203,0.25); border-radius:18px; padding:0.9rem 1rem; margin-bottom:0.9rem; }
+  .in-msg-lbl { display:block; font-size:0.6rem; font-weight:700; letter-spacing:0.15em; color:var(--cream); margin-bottom:0.35rem; }
+  .in-msg-txt { display:block; font-size:0.85rem; line-height:1.5; color:var(--text); white-space:pre-wrap; }
+  .in-section { font-family:'Archivo Black','DM Sans',sans-serif; font-size:0.95rem; letter-spacing:0.02em; margin:1.1rem 0 0.6rem; color:var(--text); }
+  .in-links { display:flex; flex-direction:column; gap:0.55rem; }
+  .in-link { display:flex; flex-direction:column; align-items:flex-start; gap:0.1rem; width:100%; text-align:left; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:0.85rem 1rem; color:var(--text); cursor:pointer; font-family:'DM Sans',sans-serif; position:relative; }
+  .in-link::after { content:'›'; position:absolute; right:1rem; top:50%; transform:translateY(-50%); font-size:1.3rem; color:var(--muted); }
+  .in-link-blue { background:var(--blue); border-color:var(--blue); }
+  .in-link-blue::after, .in-link-blue .in-link-sub { color:#E3EAFF; }
+  .in-link-title { font-family:'Archivo Black','DM Sans',sans-serif; font-size:0.95rem; letter-spacing:0.01em; }
+  .in-link-sub { font-size:0.72rem; color:var(--muted); }
+
+  /* ── Movimiento: transiciones de app ── */
+  @keyframes faInRight { from { opacity:0; transform:translateX(28px); } to { opacity:1; transform:none; } }
+  @keyframes faInLeft { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:none; } }
+  @keyframes faUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+  @keyframes faSheetUp { from { transform:translateY(100%); } to { transform:none; } }
+  @keyframes faSlideIn { from { transform:translateX(100%); } to { transform:none; } }
+  @keyframes faFade { from { opacity:0; } to { opacity:1; } }
+  @keyframes faExpand { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:none; } }
+  @keyframes faRipple { from { transform:scale(0); opacity:0.35; } to { transform:scale(1); opacity:0; } }
+  body.portal-dark .tab-panel.active { animation:none; }
+  body.portal-dark .tab-panel.tab-in-right { animation:faInRight 0.32s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  body.portal-dark .tab-panel.tab-in-left { animation:faInLeft 0.32s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  /* Las tarjetas de Inicio entran una tras otra */
+  body.portal-dark #tab-inicio.active #inicio-content > *,
+  body.portal-dark #tab-inicio.active .in-links > * { animation:faUp 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  body.portal-dark #inicio-content > *:nth-child(2) { animation-delay:0.06s !important; }
+  body.portal-dark #inicio-content > *:nth-child(3) { animation-delay:0.12s !important; }
+  body.portal-dark #inicio-content > *:nth-child(4) { animation-delay:0.18s !important; }
+  body.portal-dark #inicio-content > *:nth-child(5) { animation-delay:0.22s !important; }
+  body.portal-dark .in-links > *:nth-child(2) { animation-delay:0.28s !important; }
+  body.portal-dark .in-links > *:nth-child(3) { animation-delay:0.32s !important; }
+  body.portal-dark .in-links > *:nth-child(4) { animation-delay:0.36s !important; }
+  /* Botones: se hunden un poquito al tocarlos + onda */
+  body.portal-dark .in-hero, body.portal-dark .in-link, body.portal-dark .in-stat, body.portal-dark .bnav-btn,
+  body.portal-dark .rt-day-summary, body.portal-dark .btn-secondary, body.portal-dark .pf-edit-btn,
+  body.portal-dark .benef-cat-tile, body.portal-dark .benef-card, body.portal-dark .pf-logout { position:relative; overflow:hidden; transition:transform 0.18s ease, background 0.25s ease, color 0.25s ease, padding 0.25s ease; }
+  body.portal-dark .in-hero:active, body.portal-dark .in-link:active, body.portal-dark .in-stat:active,
+  body.portal-dark .btn-secondary:active, body.portal-dark .pf-edit-btn:active, body.portal-dark .pf-logout:active { transform:scale(0.97); }
+  body.portal-dark .bnav-btn:active { transform:scale(0.92); }
+  .fa-ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,0.5); pointer-events:none; animation:faRipple 0.6s ease-out forwards; }
+  /* Días de la rutina: se abren con suavidad */
+  body.portal-dark .rt-day[open] .rt-day-body { animation:faExpand 0.3s ease; }
+  body.portal-dark .rt-day-summary { transition:background 0.25s ease; }
+  /* Ventanas: las de abajo suben como hoja; las de pantalla completa entran desde el lado */
+  body.portal-dark #ficha-modal, body.portal-dark #ex-progress-modal, body.portal-dark #transf-caption-modal,
+  body.portal-dark #video-modal, body.portal-dark #ex-timer-modal { animation:faFade 0.25s ease; }
+  body.portal-dark #ficha-modal > div, body.portal-dark #ex-progress-modal > div,
+  body.portal-dark #transf-caption-modal > div { animation:faSheetUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  body.portal-dark #video-modal > div, body.portal-dark #ex-timer-modal > div { animation:faUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  body.portal-dark #chat-modal, body.portal-dark #benef-category-modal, body.portal-dark #benef-profile-modal { animation:faSlideIn 0.34s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  @media (prefers-reduced-motion: reduce) {
+    body.portal-dark *, body.portal-dark *::before { animation:none !important; transition:none !important; }
+  }
+
+  /* ── Detalles con personalidad: stickers, marcador, etiquetas y botones con relieve ── */
+  .fa-sticker { position:absolute; fill:var(--cream); pointer-events:none; filter:drop-shadow(0 3px 6px rgba(0,0,0,0.35)); }
+  .fa-sticker-spark { width:36px; height:36px; top:12px; right:16px; animation:faTwinkle 2.6s ease-in-out infinite; }
+  .fa-sticker-bolt { width:22px; height:22px; top:-8px; right:-6px; fill:var(--cream); transform:rotate(12deg); }
+  .fa-sticker-star { position:relative; display:inline-block; width:18px; height:18px; margin-left:0.35rem; vertical-align:-2px; transform:rotate(-12deg); }
+  @keyframes faTwinkle { 0%,100% { transform:scale(1) rotate(0deg); opacity:1; } 50% { transform:scale(0.75) rotate(20deg); opacity:0.75; } }
+  .in-stat-hl { position:relative; overflow:visible !important; }
+  .fa-marker { position:relative; z-index:0; }
+  .fa-marker::after { content:''; position:absolute; left:-4px; right:-4px; bottom:1px; height:0.55em; background:var(--blue); border-radius:3px; z-index:-1; transform:skew(-8deg); }
+  .fa-tag { display:inline-block; font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.66rem; letter-spacing:0.04em; text-transform:none; background:var(--cream); color:#0D1B3E; padding:0.25rem 0.7rem; border-radius:999px; transform:rotate(-2deg); }
+  body.portal-dark .in-msg { position:relative; }
+  /* Botones principales con relieve que se "aprietan" */
+  body.portal-dark .in-link-blue { box-shadow:0 5px 0 #0F3FA8; margin-bottom:5px; }
+  body.portal-dark .in-link-blue:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+  body.portal-dark .in-stat-hl { box-shadow:0 5px 0 #0F3FA8; }
+  body.portal-dark .in-hero-play { box-shadow:0 0 0 6px rgba(28,85,229,0.3), 0 5px 0 #0F3FA8; }
+
+  /* ── Perfil ── */
+  body.portal-dark .pf-hero { position:relative; overflow:visible; }
+  .fa-sticker-corner { width:30px; height:30px; top:14px; right:16px; transform:rotate(14deg); animation:faTwinkle 3s ease-in-out infinite; }
+  body.portal-dark .pf-avatar-wrap .pf-avatar { border-radius:28px; border:3px solid var(--blue); }
+  body.portal-dark .pf-name { font-size:1.35rem; margin-top:0.9rem; }
+  body.portal-dark .pf-role:not(:empty) { display:inline-block; margin-top:0.4rem; background:var(--cream); color:#0D1B3E; font-weight:700; font-size:0.68rem; padding:0.22rem 0.75rem; border-radius:999px; transform:rotate(-2deg); }
+  body.portal-dark .pf-ring-progress circle[stroke="#EEF2FA"] { stroke:#22305C; }
+  body.portal-dark .pf-ring-liquid circle[fill="#E6EEFC"] { fill:#16224A; }
+  body.portal-dark .pf-ring-label { color:var(--muted); }
+  body.portal-dark .card-label, body.portal-dark .track-summary-label { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; font-size:0.78rem; letter-spacing:0.04em; color:var(--text); }
+  body.portal-dark .card-label::after { background:var(--border); }
+  body.portal-dark .pf-ficha-card .pf-edit-btn { background:var(--blue); color:#fff; border-color:var(--blue); box-shadow:0 5px 0 #0F3FA8; margin-bottom:5px; }
+  body.portal-dark .pf-ficha-card .pf-edit-btn:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+  body.portal-dark .track-day { border-radius:10px; transition:transform 0.15s ease, background 0.2s ease; }
+  body.portal-dark .track-day:not(.empty):active { transform:scale(0.9); }
+  body.portal-dark .track-day.done { background:var(--blue); border-color:var(--blue); color:#fff; box-shadow:0 3px 0 #0F3FA8; }
+  body.portal-dark .track-day.today { border:2px solid var(--cream); color:var(--cream); }
+  body.portal-dark .track-day.done.today { color:#fff; }
+  body.portal-dark .track-day-dot { background:var(--cream); }
+  body.portal-dark .transf-slot { border-color:rgba(245,236,203,0.35); }
+  body.portal-dark .transf-month.current { border-color:var(--blue); box-shadow:none; }
+
+  /* ── Beneficios ── */
+  body.portal-dark .benef-cat-tile { border-radius:22px; }
+  body.portal-dark .benef-cat-tile.hero { box-shadow:0 5px 0 #0F3FA8; }
+  body.portal-dark .benef-cat-tile-name { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; font-size:0.78rem; letter-spacing:0.01em; text-transform:uppercase; }
+  body.portal-dark .benef-card { background:var(--surface); border-color:var(--border); border-radius:22px; padding:1.2rem 0.8rem 1rem; }
+  body.portal-dark .benef-logo-fallback, body.portal-dark .bp-hero-logo-fallback { background:var(--cream); color:#0D1B3E; }
+  body.portal-dark .bp-marca { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; }
+  body.portal-dark .bp-coupon { border-color:var(--cream); background:var(--surface); }
+  .bp-ig-btn svg { width:18px; height:18px; flex-shrink:0; }
+  body.portal-dark .bp-ig-btn { display:flex; justify-content:center; width:100%; box-sizing:border-box; background:var(--surface); border:1.5px solid var(--cream); color:var(--cream); border-radius:999px; padding:0.75rem 1rem; font-size:0.85rem; box-shadow:0 4px 0 rgba(245,236,203,0.25); }
+  body.portal-dark .bp-ig-btn:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(245,236,203,0.25); }
+  .benef-cover { width:calc(100% + 1.6rem); margin:-1.2rem -0.8rem 0.2rem; height:96px; background-size:cover; background-position:center; border-radius:22px 22px 0 0; }
+  .benef-logo.on-cover { margin-top:-1.9rem; border:3px solid var(--cream); background:#fff; position:relative; }
+
+  /* ── Botones principales con relieve en todo el portal ── */
+  body.portal-dark .btn-primary, body.portal-dark .pf-bio-save,
+  body.portal-dark [id$="-modal"] button[style*="background:var(--blue)"] { box-shadow:0 5px 0 #0F3FA8; border-radius:999px; }
+  body.portal-dark .btn-primary { margin-bottom:5px; }
+  body.portal-dark .btn-primary:active, body.portal-dark .pf-bio-save:active,
+  body.portal-dark [id$="-modal"] button[style*="background:var(--blue)"]:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+  /* Descanso del video: del naranja a tu azul con relieve */
+  body.portal-dark button[style*="#FFC94A,#F3932B"] { background:var(--blue) !important; box-shadow:0 5px 0 #0F3FA8; border-radius:999px !important; }
+  body.portal-dark button[style*="#FFC94A,#F3932B"]:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+  /* Ventanas: esquinas redondeadas y título con fuerza */
+  body.portal-dark #ficha-modal > div, body.portal-dark #ex-progress-modal > div, body.portal-dark #transf-caption-modal > div { border-radius:26px 26px 0 0 !important; border-top:1px solid var(--border); }
+  body.portal-dark #ex-progress-title, body.portal-dark .bp-header-title { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.01em; }
+  body.portal-dark .ficha-tab.active { color:var(--cream); border-bottom-color:var(--cream); }
+
+  /* ── Cupón de regalo ── */
+  body.portal-dark .bp-coupon { border:none; background:none; padding:0; text-align:left; }
+  body.portal-dark .bp-coupon-label { font-family:'Archivo Black','DM Sans',sans-serif; font-size:0.85rem; letter-spacing:0.02em; color:var(--text); text-align:left; }
+  body.portal-dark .bp-coupon-sub { text-align:center; }
+  .fa-gift-wrap { position:relative; margin:0.7rem 0 0.8rem; }
+  .fa-gift { position:relative; height:150px; display:flex; align-items:flex-end; justify-content:center; animation:faGiftGone 0.35s ease 1.25s forwards; }
+  .fa-gift-box { width:110px; height:84px; border-radius:12px; background:linear-gradient(90deg, transparent 44%, var(--cream) 44%, var(--cream) 56%, transparent 56%), var(--blue); box-shadow:0 6px 0 #0F3FA8; animation:faGiftShake 0.6s ease 0.15s 1; }
+  .fa-gift-lid { position:absolute; bottom:80px; left:50%; width:126px; height:28px; margin-left:-63px; border-radius:9px; background:linear-gradient(90deg, transparent 44%, var(--cream) 44%, var(--cream) 56%, transparent 56%), #3A6CF0; z-index:2; animation:faGiftShake 0.6s ease 0.15s 1, faLidOff 0.5s cubic-bezier(0.3, 1.4, 0.5, 1) 0.8s forwards; }
+  .fa-gift-lid::before, .fa-gift-lid::after { content:''; position:absolute; top:-20px; width:30px; height:22px; border:5px solid var(--cream); border-radius:50% 50% 0 50%; }
+  .fa-gift-lid::before { left:30px; transform:rotate(-20deg); }
+  .fa-gift-lid::after { right:30px; transform:scaleX(-1) rotate(-20deg); }
+  .fa-confetti { position:absolute; left:50%; bottom:90px; width:8px; height:12px; border-radius:2px; opacity:0; animation:faConfetti 0.9s ease-out 0.9s forwards; }
+  .fa-c0 { background:var(--cream); } .fa-c1 { background:#3A6CF0; } .fa-c2 { background:#fff; } .fa-c3 { background:#F6D16A; } .fa-c4 { background:#8FB0FF; } .fa-c5 { background:var(--cream); } .fa-c6 { background:#1C55E5; }
+  @keyframes faGiftShake { 0%,100% { transform:rotate(0); } 20% { transform:rotate(-7deg); } 40% { transform:rotate(6deg); } 60% { transform:rotate(-4deg); } 80% { transform:rotate(3deg); } }
+  @keyframes faLidOff { to { transform:translate(70px, -70px) rotate(35deg); opacity:0; } }
+  @keyframes faConfetti { 0% { opacity:1; transform:translate(-50%, 0) rotate(var(--a)) translateY(0); } 100% { opacity:0; transform:translate(-50%, 0) rotate(var(--a)) translateY(calc(var(--d) * -1.6)) rotate(220deg); } }
+  @keyframes faGiftGone { to { height:0; opacity:0; } }
+  .fa-gift-wrap:not(.seen) .fa-ticket { opacity:0; animation:faTicketIn 0.55s cubic-bezier(0.3, 1.4, 0.5, 1) 1.35s forwards; }
+  @keyframes faTicketIn { from { opacity:0; transform:translateY(30px) scale(0.85); } to { opacity:1; transform:none; } }
+  .fa-ticket { position:relative; display:flex; min-height:190px; background:var(--cream); color:#0D1B3E; border-radius:20px; box-shadow:0 14px 30px rgba(0,0,0,0.4);
+    -webkit-mask:radial-gradient(circle 13px at 78px 0, transparent 97%, #000) top/100% 51% no-repeat, radial-gradient(circle 13px at 78px 100%, transparent 97%, #000) bottom/100% 51% no-repeat;
+    mask:radial-gradient(circle 13px at 78px 0, transparent 97%, #000) top/100% 51% no-repeat, radial-gradient(circle 13px at 78px 100%, transparent 97%, #000) bottom/100% 51% no-repeat; }
+  .fa-ticket-stub { width:78px; flex-shrink:0; background:var(--blue); color:var(--cream); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.6rem; border-right:3px dashed rgba(245,236,203,0.6); }
+  .fa-ticket-stub svg { width:34px; height:34px; }
+  .fa-ticket-stub span { writing-mode:vertical-rl; transform:rotate(180deg); font-family:'Archivo Black','DM Sans',sans-serif; font-size:0.8rem; letter-spacing:0.25em; }
+  .fa-ticket-main { position:relative; flex:1; display:flex; flex-direction:column; padding:1rem 1rem 0.9rem 1.1rem; }
+  .fa-ticket-logo { position:absolute; top:0.8rem; right:0.8rem; width:2.6rem; height:2.6rem; border-radius:50%; object-fit:cover; border:2px solid #fff; }
+  .fa-ticket-tag { align-self:flex-start; font-size:0.66rem; font-weight:700; background:var(--blue); color:#fff; padding:0.2rem 0.65rem; border-radius:999px; transform:rotate(-2deg); margin-bottom:0.35rem; }
+  .fa-ticket-big { font-family:'Archivo Black','DM Sans',sans-serif; font-size:3rem; line-height:0.95; color:var(--blue); }
+  .fa-ticket-big-text { font-size:1.5rem; line-height:1.1; }
+  .fa-ticket-rest { font-family:'Archivo Black','DM Sans',sans-serif; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.02em; }
+  .fa-ticket-brand { font-size:0.82rem; font-weight:700; margin-top:0.1rem; }
+  .fa-ticket-detail { font-size:0.72rem; color:#4A5878; margin-top:0.25rem; line-height:1.35; }
+  .fa-ticket-perf { display:block; border-top:2px dashed rgba(13,27,62,0.25); margin:0.7rem 0 0.55rem; }
+  .fa-ticket-for { font-size:0.78rem; }
+  .fa-ticket-alliance { font-size:0.6rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B7A99; margin-top:0.15rem; }
+  /* Fotos de la marca más grandes */
+  body.portal-dark .bp-gallery img { width:82%; height:190px; border-radius:18px; border-color:var(--border); }
+  body.portal-dark .bp-gallery img:only-child { width:100%; }
+  /* El descuento en todo el portal: crema tipo marcador, no verde */
+  body.portal-dark .bp-descuento { color:var(--cream); }
+  body.portal-dark .benef-descuento-pill { background:var(--cream); color:#0D1B3E; border-color:transparent; box-shadow:0 3px 0 #C9B57A; transform:rotate(-2deg); }
+
+  /* Botón de canjear: grande, azul, con relieve */
+  body.portal-dark .bp-coupon .save-btn { width:100%; background:var(--blue); color:#fff; border:none; border-radius:999px; padding:0.95rem; font-family:'Archivo Black','DM Sans',sans-serif; font-size:0.95rem; letter-spacing:0.02em; box-shadow:0 5px 0 #0F3FA8; cursor:pointer; }
+  body.portal-dark .bp-coupon .save-btn:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+
+  /* Chat */
+  body.portal-dark #chat-modal { background:var(--night) !important; color:var(--text); }
+  body.portal-dark .chat-bubble { background:var(--surface); color:var(--text); }
+  body.portal-dark .chat-media-btn { color:#8FB0FF; }
+
+  /* Ventanas (modales): fondos blancos escritos en línea pasan a oscuro */
+  body.portal-dark [id$="-modal"] [style*="background:#fff"],
+  body.portal-dark [id$="-modal"] [style*="background: #fff"],
+  body.portal-dark [id$="-modal"] [style*="background:white"] { background:var(--surface) !important; color:var(--text); }
+ 
+/* ══ Recompensas (check-in, meta del mes, medallas, festejo) ══ */
+.in-checkin{display:flex;align-items:center;gap:0.8rem;width:100%;text-align:left;border:none;cursor:pointer;margin:0.9rem 0 0;padding:0.95rem 1rem;border-radius:20px;background:#F5ECCB;color:#0B1B3F;font-family:'DM Sans',sans-serif;box-shadow:0 5px 0 #D9C98E;position:relative;overflow:hidden;}
+.in-checkin:active{transform:translateY(3px);box-shadow:0 2px 0 #D9C98E;}
+.in-checkin-ico{font-size:1.6rem;line-height:1;}
+.in-checkin-txt{flex:1;display:flex;flex-direction:column;gap:0.1rem;}
+.in-checkin-txt b{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;font-size:0.95rem;text-transform:uppercase;letter-spacing:0.01em;}
+.in-checkin-txt span{font-size:0.75rem;opacity:0.75;}
+.in-checkin-btn{background:#1C55E5;color:#fff;font-weight:700;font-size:0.85rem;padding:0.55rem 0.95rem;border-radius:100px;white-space:nowrap;}
+.in-checkin.done{background:rgba(255,255,255,0.08);color:#fff;box-shadow:none;border:1px solid rgba(255,255,255,0.14);cursor:default;}
+.in-checkin-undo{background:none;border:none;color:rgba(255,255,255,0.6);font-size:0.7rem;text-decoration:underline;cursor:pointer;font-family:inherit;}
+.in-goal{margin-top:0.9rem;padding:1rem;border-radius:20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;}
+.in-goal.won{background:linear-gradient(135deg,rgba(245,236,203,0.18),rgba(28,85,229,0.25));border-color:rgba(245,236,203,0.5);}
+.in-goal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;}
+.in-goal-num{font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.5rem;line-height:1;}
+.in-goal-num small{font-size:0.85rem;opacity:0.6;}
+.in-goal-track{height:10px;border-radius:100px;background:rgba(255,255,255,0.12);overflow:hidden;}
+.in-goal-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#5b8bf5,#F5ECCB);transition:width 0.8s cubic-bezier(.2,.8,.2,1);}
+.in-goal-prize{font-size:0.78rem;margin-top:0.6rem;line-height:1.45;color:rgba(255,255,255,0.85);}
+.in-goal-prize b{color:#F5ECCB;}
+.in-ciclo{margin-top:0.9rem;padding:1rem;border-radius:20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;}
+.in-ciclo-empty{font-size:0.78rem;color:rgba(255,255,255,0.75);line-height:1.5;}
+.in-ciclo-top{display:flex;align-items:center;gap:0.9rem;}
+.in-ciclo-info{flex:1;min-width:0;}
+.in-ciclo-fase{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;font-size:1rem;line-height:1.15;}
+.in-ciclo-meta{font-size:0.72rem;color:rgba(255,255,255,0.6);margin-top:0.2rem;}
+.in-ciclo-log-btn{margin-left:auto;flex-shrink:0;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.22);border-radius:100px;padding:0.4rem 0.85rem;font-size:0.68rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;}
+.in-ciclo-tip{font-size:0.78rem;color:rgba(255,255,255,0.85);line-height:1.5;margin-top:0.75rem;}
+.in-battery-pct{font-size:0.62rem;font-weight:700;text-anchor:middle;}
+.in-battery-fill{transition:width 0.6s ease, fill 0.6s ease;}
+@media (prefers-reduced-motion: reduce){.in-battery-fill{transition:none;}}
+.in-med-count{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:0.72rem;opacity:0.7;}
+.in-medals{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:0.3rem;padding:0.9rem 0.6rem 0.8rem;border-radius:20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);}
+.in-med-path{position:absolute;left:12%;right:12%;top:2.75rem;height:4px;border-radius:100px;background:rgba(255,255,255,0.1);}
+.in-med-path span{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,#D98A4E,#CDD5E0,#F4C542,#F4C542,#9EDFF5);}
+.in-medal{position:relative;display:flex;flex-direction:column;align-items:center;gap:0.25rem;background:none;border:none;cursor:pointer;padding:0;color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;}
+.medal-svg{width:58px;height:64px;display:block;overflow:visible;filter:drop-shadow(0 3px 0 rgba(0,0,0,0.35));transition:transform 0.2s;}
+.medal-svg.locked .medal-art{filter:grayscale(1) brightness(0.55);}
+.in-medal.ok{color:#fff;}
+.in-medal.ok .medal-svg{filter:drop-shadow(0 3px 0 rgba(0,0,0,0.35)) drop-shadow(0 0 10px rgba(245,236,203,0.3));animation:medalShine 3.5s ease-in-out infinite;}
+.in-medal:active .medal-svg{transform:scale(0.92);}
+.in-medal-name{font-size:0.6rem;font-weight:700;text-align:center;line-height:1.15;}
+@keyframes medalShine{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.fa-cel-medal .medal-svg{width:96px;height:106px;margin:0 auto;filter:drop-shadow(0 4px 0 rgba(0,0,0,0.18));}
+/* Revelación de insignia: pantalla oscura, insignia grande con brillo debajo */
+.fa-celebrate.dark{background:radial-gradient(120% 80% at 50% 35%,#0E2160 0%,#050B1F 60%);}
+.fa-celebrate.dark .fa-cel-card{background:transparent;box-shadow:none;color:#fff;max-width:340px;padding-top:0;}
+.fa-celebrate.dark .fa-cel-ico{position:relative;margin-bottom:1.4rem;}
+.fa-celebrate.dark .fa-cel-ico::after{content:'';position:absolute;left:50%;bottom:-30px;width:260px;height:120px;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(91,139,245,0.45),rgba(91,139,245,0) 70%);z-index:-1;}
+.fa-celebrate.dark .fa-cel-medal .medal-svg{width:190px;height:209px;filter:drop-shadow(0 8px 0 rgba(0,0,0,0.4));animation:medalReveal 0.7s cubic-bezier(.2,1.3,.4,1);}
+.fa-celebrate.dark.quiet .fa-cel-medal .medal-svg{width:150px;height:165px;}
+.fa-celebrate.dark .fa-cel-title{color:#fff;font-size:1.5rem;}
+.fa-celebrate.dark .fa-cel-text{color:rgba(255,255,255,0.78);white-space:pre-line;font-size:0.95rem;}
+.fa-celebrate.dark .fa-cel-btn{background:#F5ECCB;color:#0B1B3F;box-shadow:0 4px 0 #D9C98E;}
+@keyframes medalReveal{0%{transform:scale(0.3) rotate(-12deg);opacity:0}60%{transform:scale(1.08) rotate(3deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+@media (prefers-reduced-motion: reduce){.fa-celebrate.dark .fa-cel-medal .medal-svg{animation:none;}}
+@media (prefers-reduced-motion: reduce){.in-medal.ok .medal-svg{animation:none;}}
+.in-nudge{display:flex;gap:0.75rem;align-items:flex-start;width:100%;text-align:left;margin-top:0.7rem;padding:0.85rem 1rem;border-radius:18px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.05);color:#fff;font-family:'DM Sans',sans-serif;cursor:pointer;}
+.in-nudge>span:first-child{font-size:1.3rem;}
+.in-nudge b{display:block;font-size:0.85rem;}
+.in-nudge small{display:block;font-size:0.72rem;opacity:0.75;margin-top:0.15rem;line-height:1.4;}
+.in-nudge-bar{display:block;height:6px;border-radius:100px;background:rgba(255,255,255,0.12);margin-top:0.5rem;overflow:hidden;}
+.in-nudge-bar span{display:block;height:100%;background:#F5ECCB;border-radius:100px;}
+.fa-celebrate{position:fixed;inset:0;z-index:9999;background:rgba(5,14,40,0.55);display:flex;align-items:center;justify-content:center;padding:1.5rem;animation:faCelIn 0.25s ease;overflow:hidden;}
+.fa-celebrate.out{opacity:0;transition:opacity 0.25s;}
+.fa-cel-card{background:#fff;color:#0B1B3F;border-radius:26px;padding:1.6rem 1.4rem 1.2rem;max-width:320px;width:100%;text-align:center;box-shadow:0 8px 0 #D9C98E;animation:faCelPop 0.45s cubic-bezier(.2,1.4,.4,1);}
+.fa-cel-ico{font-size:3rem;line-height:1;margin-bottom:0.5rem;}
+.fa-cel-title{font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.25rem;text-transform:uppercase;color:#1C55E5;}
+.fa-cel-text{font-size:0.88rem;margin-top:0.4rem;line-height:1.45;color:#33405e;}
+.fa-cel-btn{margin-top:1rem;background:#1C55E5;color:#fff;border:none;border-radius:100px;padding:0.7rem 1.6rem;font-weight:700;font-family:'DM Sans',sans-serif;font-size:0.9rem;box-shadow:0 4px 0 #0F3FA8;cursor:pointer;}
+.fa-cel-bit{position:absolute;top:-20px;left:var(--x);width:9px;height:14px;border-radius:2px;animation:faCelFall var(--t) ease-in var(--dl) forwards;}
+@keyframes faCelIn{from{opacity:0}to{opacity:1}}
+@keyframes faCelPop{from{transform:scale(0.6);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes faCelFall{to{transform:translateY(105vh) rotate(var(--r));}}
+@media (prefers-reduced-motion: reduce){.fa-cel-bit{display:none;}.fa-cel-card{animation:none;}}
+</style>
 </head>
 <body>
 
@@ -806,7 +1212,7 @@
  
   <footer class="pl-footer">
     <div class="pl-footer-brand">fridaactive</div>
-    <div class="pl-footer-tagline">Fitness Club · <a onclick="showScreen('screen-login')">¿Ya sos mi clienta? Iniciá sesión</a> · © 2026</div>
+    <div class="pl-footer-tagline">Fitness Club · <a onclick="showScreen('screen-login')">¿Ya sos cliente? Iniciá sesión</a> · © 2026</div>
   </footer>
 </div>
  
@@ -815,7 +1221,7 @@
     <div class="login-logo">fa</div>
     <div class="login-brand">fridaactive · fitness club</div>
     <div class="auth-card">
-      <div class="auth-title">Bienvenida</div>
+      <div class="auth-title">¡Hola!</div>
       <div class="auth-sub">Ingresá con tu cuenta para ver tu rutina y tu progreso.</div>
       <label class="auth-label">Email</label>
       <input class="auth-input" type="email" id="login-email" placeholder="tu@email.com">
@@ -899,7 +1305,8 @@
         </div>
         <input type="file" id="avatar-file-input" accept="image/*" style="display:none;" onchange="handleAvatarFileSelect(this)">
         <div>
-          <div class="brand">fridaactive</div>
+          <div class="dash-date" id="dash-date"></div>
+          <div class="brand" id="dash-greeting-top">fridaactive</div>
           <div class="greeting" id="dash-greeting">Hola</div>
         </div>
       </div>
@@ -907,10 +1314,9 @@
     </div>
 
     <div class="tab-bar">
-      <button class="tab-btn active" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24"><rect x="1.8" y="8.5" width="3.4" height="7" rx="1.2" fill="#fff"/><rect x="18.8" y="8.5" width="3.4" height="7" rx="1.2" fill="#fff"/><rect x="5.2" y="10.7" width="13.6" height="2.6" rx="1.3" fill="#fff"/><rect x="1.8" y="8.5" width="1.3" height="7" rx="0.6" fill="#fff" opacity="0.45"/><rect x="21" y="8.5" width="1.2" height="7" rx="0.6" fill="#0a1a4d" opacity="0.18"/></svg></span> Rutina</button>
+      <button class="tab-btn" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24"><rect x="1.8" y="8.5" width="3.4" height="7" rx="1.2" fill="#fff"/><rect x="18.8" y="8.5" width="3.4" height="7" rx="1.2" fill="#fff"/><rect x="5.2" y="10.7" width="13.6" height="2.6" rx="1.3" fill="#fff"/><rect x="1.8" y="8.5" width="1.3" height="7" rx="0.6" fill="#fff" opacity="0.45"/><rect x="21" y="8.5" width="1.2" height="7" rx="0.6" fill="#0a1a4d" opacity="0.18"/></svg></span> Rutina</button>
       <button class="tab-btn" data-tab="tab-perfil" onclick="showTab('tab-perfil')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.3" r="4.3" fill="#fff"/><path d="M4 21c0-4.6 3.6-7.6 8-7.6s8 3 8 7.6" fill="#fff"/><circle cx="10.2" cy="6.8" r="1.6" fill="#fff" opacity="0.4"/><path d="M4 21c0-4.6 3.6-7.6 8-7.6v0c-3.6 1-6 3.8-6 7.6Z" fill="#0a1a4d" opacity="0.12"/></svg></span> Perfil</button>
       <button class="tab-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24"><rect x="3.5" y="9.5" width="17" height="3.8" rx="1.2" fill="#fff"/><rect x="4.5" y="13.3" width="15" height="7.2" rx="1.5" fill="#fff"/><path d="M9.3 9.5c-1.7 0-2.6-1.5-1.9-2.8.7-1.3 2.8.4 2.8 2.8Zm5.4 0c1.7 0 2.6-1.5 1.9-2.8-.7-1.3-2.8.4-2.8 2.8Z" fill="#fff"/><rect x="4.5" y="13.3" width="15" height="2.4" fill="#0a1a4d" opacity="0.1"/></svg></span> Beneficios</button>
-      <button class="tab-btn" data-tab="tab-comunidad" onclick="showTab('tab-comunidad')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3.2" fill="#fff"/><circle cx="17" cy="10" r="2.6" fill="#fff" opacity="0.7"/><path d="M2.3 20c0-3.6 2.6-6 5.7-6s5.7 2.4 5.7 6" fill="#fff"/><path d="M13.5 20c0-2.8-1.4-5-3.4-5.9 1-0.8 2.3-1.1 3.5-1.1 2.8 0 5.1 2.2 5.1 5.4V20Z" fill="#fff" opacity="0.6"/></svg></span> Comunidad</button>
     </div>
   </div>
 
@@ -919,10 +1325,23 @@
     <span id="chat-unread-dot"></span>
   </button>
 
+  <!-- Menú inferior (como en las apps) -->
+  <nav class="bnav" aria-label="Menú del portal">
+    <button type="button" class="bnav-btn active" data-tab="tab-inicio" onclick="showTab('tab-inicio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Inicio</span></button>
+    <button type="button" class="bnav-btn" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/></svg><span>Rutina</span></button>
+    <button type="button" class="bnav-btn" data-tab="tab-perfil" onclick="showTab('tab-perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span>Perfil</span></button>
+    <button type="button" class="bnav-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/><path d="M12 9c-1-2.2-2.6-3.5-4-3.5S6 6.5 6.3 8 8.5 9 12 9Z"/><path d="M12 9c1-2.2 2.6-3.5 4-3.5S18 6.5 17.7 8 15.5 9 12 9Z"/></svg><span>Beneficios</span></button>
+  </nav>
+
   <div class="dash-body">
 
+    <!-- INICIO (portal rediseñado: entrenamiento de hoy, progreso y accesos) -->
+    <div class="tab-panel active" id="tab-inicio">
+      <div id="inicio-content"><div class="empty-note">Cargando…</div></div>
+    </div>
+
     <!-- RUTINA -->
-    <div class="tab-panel active" id="tab-rutina">
+    <div class="tab-panel" id="tab-rutina">
       <div id="rutina-content"><div class="empty-note">Cargando tu rutina…</div></div>
     </div>
 
@@ -934,6 +1353,7 @@
       </div>
 
       <div class="pf-hero">
+        <svg class="fa-sticker fa-sticker-corner" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 8.7l7.1-.6z"/></svg>
         <div class="avatar-wrap pf-avatar-wrap" onclick="document.getElementById('avatar-file-input').click()">
           <div class="avatar-circle pf-avatar js-avatar-circle" id="perfil-avatar-circle"></div>
           <div class="avatar-edit-badge pf-avatar-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg></div>
@@ -1016,14 +1436,6 @@
             Completar mi ficha
           </button>
         </div>
-
-        <div class="card pf-ciclo-card">
-          <div class="pf-ciclo-hdr">
-            <div class="card-label" style="margin-bottom:0;">🌸 Mi ciclo</div>
-            <button class="pf-ciclo-log-btn" onclick="openCicloModal()">+ Registrar</button>
-          </div>
-          <div id="pf-ciclo-body"></div>
-        </div>
       </div>
 
       <div id="perfil-unlocked-content">
@@ -1051,7 +1463,7 @@
         <div class="card transf-card">
           <div class="transf-hdr">
             <div class="card-label" style="margin-bottom:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M4 8h2.5l1.8-2h7.4l1.8 2H20v11H4Z"/><circle cx="12" cy="13.5" r="3.2"/></svg> Tu transformación</div>
-            <div class="transf-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="5" y="10" width="14" height="9" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Solo vos y Frida</div>
+            <div class="transf-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="5" y="10" width="14" height="9" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Privadas · solo Frida y tú</div>
           </div>
           <div id="transformacion-list"><div class="empty-note">Cargando…</div></div>
         </div>
@@ -1060,6 +1472,7 @@
       </div>
 
       <div id="perfil-locked-card"></div>
+      <button type="button" class="pf-logout" onclick="doLogout()">Cerrar sesión</button>
 
     </div>
 
@@ -1086,14 +1499,6 @@
       <div id="beneficios-locked-card"></div>
     </div>
 
-    <div class="tab-panel" id="tab-comunidad">
-      <div class="card">
-        <div class="card-label">📅 Comunidad FridaActive</div>
-        <div style="font-size:0.78rem;color:var(--muted);line-height:1.5;">Lo que vamos logrando juntas, mes a mes.</div>
-      </div>
-      <div id="comunidad-feed"><div class="empty-note">Cargando…</div></div>
-    </div>
-
   </div>
 </div>
 
@@ -1112,9 +1517,9 @@
 
   <div class="ls-content">
 
-    <!-- VINCULAR CON CÓDIGO (para cuentas ya existentes sin perfil de clienta) -->
+    <!-- VINCULAR CON CÓDIGO (para cuentas ya existentes sin perfil de cliente) -->
     <div style="background:#fff;border:1.5px solid var(--ls-border);border-radius:16px;padding:1rem 1.1rem;margin-bottom:1.25rem;">
-      <div style="font-size:0.78rem;font-weight:700;color:var(--ls-text);margin-bottom:0.5rem;">¿Tu entrenadora ya te armó un plan?</div>
+      <div style="font-size:0.78rem;font-weight:700;color:var(--ls-text);margin-bottom:0.5rem;">¿Tu coach ya te armó un plan?</div>
       <div style="font-size:0.72rem;color:var(--ls-muted);margin-bottom:0.7rem;line-height:1.4;">Ingresá tu nombre y el código de acceso que te compartió para ver tu rutina con esta misma cuenta.</div>
       <div style="display:flex;flex-direction:column;gap:0.5rem;">
         <input id="ls-linkcode-name" type="text" placeholder="Tu nombre" style="border:1.5px solid var(--ls-border);border-radius:10px;padding:0.6rem 0.75rem;font-size:0.85rem;font-family:'DM Sans',sans-serif;">
@@ -1143,13 +1548,28 @@
           <div class="ls-svc-name white">Rutina personalizada de entrenamiento</div>
         </div>
         <div class="ls-svc-price-badge dark">
-          <div class="ls-svc-price-val white">$45</div>
+          <div class="ls-svc-price-val white">$50</div>
           <div class="ls-svc-price-unit light">/ mensual</div>
         </div>
       </div>
       <div class="ls-svc-body">
         <div class="ls-svc-desc">Indicada para quienes buscan bajar de peso, aumentar masa muscular, o mejorar fuerza y resistencia. Tus rutinas las verás a través de fridaactive.com</div>
-        <div class="ls-svc-tags">
+        <div style="margin:0.2rem 0 0.9rem;">
+        <div style="background:#F7F9FF;border:1.5px solid var(--border);border-radius:12px;padding:0.75rem 0.9rem;margin-bottom:0.5rem;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:0.82rem;font-weight:700;color:var(--text);">1 mes</div><div style="font-size:0.7rem;color:var(--muted);">Pago mensual</div></div>
+          <div style="text-align:right;"><div style="font-size:1.1rem;font-weight:800;color:var(--blue);">$50</div><div style="font-size:0.55rem;color:var(--muted);">/mes</div></div>
+        </div>
+        <div style="background:#F7F9FF;border:1.5px solid var(--border);border-radius:12px;padding:0.75rem 0.9rem;margin-bottom:0.5rem;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:0.82rem;font-weight:700;color:var(--text);">3 meses</div><div style="font-size:0.7rem;color:var(--muted);">Te queda a $45 por mes</div></div>
+          <div style="text-align:right;"><div style="font-size:1.1rem;font-weight:800;color:var(--blue);">$135</div><div style="font-size:0.55rem;color:var(--muted);">un solo pago</div></div>
+        </div>
+        <div style="background:#FFFBEA;border:1.5px solid #E8D8A0;border-radius:12px;padding:0.75rem 0.9rem;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:0.82rem;font-weight:700;color:var(--text);">6 meses <span style="font-size:0.55rem;font-weight:700;background:#1C55E5;color:#fff;border-radius:100px;padding:0.12rem 0.45rem;margin-left:0.25rem;vertical-align:middle;">EL MÁS COMPLETO</span></div><div style="font-size:0.7rem;color:var(--muted);">Te queda a $40 por mes</div></div>
+          <div style="text-align:right;"><div style="font-size:1.1rem;font-weight:800;color:var(--blue);">$240</div><div style="font-size:0.55rem;color:var(--muted);">un solo pago</div></div>
+        </div>
+      </div>
+      <div class="ls-svc-tags">
+          <span class="ls-tag" style="background:#F5ECCB;color:#5a4a10;font-weight:700;">🥗 Plan de alimentación incluido</span>
           <span class="ls-tag">Gym o casa</span>
           <span class="ls-tag">Descripciones detalladas de los ejercicios</span>
           <span class="ls-tag">Cupones de descuento</span>
@@ -1185,7 +1605,7 @@
             <div style="font-size:0.7rem;color:var(--ls-muted);">2 sesiones por semana</div>
           </div>
           <div style="text-align:right;">
-            <div style="font-size:1.1rem;font-weight:800;color:var(--ls-blue);">$120</div>
+            <div style="font-size:1.1rem;font-weight:800;color:var(--ls-blue);">$130</div>
             <div style="font-size:0.55rem;color:var(--ls-muted);">/mes · 8 sesiones</div>
           </div>
         </div>
@@ -1196,7 +1616,7 @@
             <div style="font-size:0.7rem;color:var(--ls-muted);">3 sesiones por semana</div>
           </div>
           <div style="text-align:right;">
-            <div style="font-size:1.1rem;font-weight:800;color:var(--ls-blue);">$180</div>
+            <div style="font-size:1.1rem;font-weight:800;color:var(--ls-blue);">$190</div>
             <div style="font-size:0.55rem;color:var(--ls-muted);">/mes · 12 sesiones</div>
           </div>
         </div>
@@ -1232,7 +1652,8 @@
         </div>
 
         <div class="ls-svc-tags">
-          <span class="ls-tag">Corrección en vivo</span>
+          <span class="ls-tag" style="background:#F5ECCB;color:#5a4a10;font-weight:700;">🥗 Plan de alimentación incluido en los planes por videollamada</span>
+        <span class="ls-tag">Corrección en vivo</span>
           <span class="ls-tag">Guía y corrección de técnica y posturas</span>
           <span class="ls-tag">Llevo el gym hasta tu casa</span>
         </div>
@@ -1240,13 +1661,12 @@
     </div>
 
     <!-- ADDON -->
-    <div class="ls-sec-label">Add-on disponible</div>
+    <div class="ls-sec-label">Plan de alimentación</div>
     <div class="ls-addon">
       <div class="ls-addon-icon">🥗</div>
       <div>
-        <div class="ls-addon-title">Plan de alimentación con nutricionista</div>
-        <div class="ls-addon-desc">Adquiere tu plan nutricional personalizado con un experto en nutrición deportiva.</div>
-        <div class="ls-addon-price">+$10 a cualquier plan</div>
+        <div class="ls-addon-title">Plan de alimentación personalizado</div>
+        <div class="ls-addon-desc">Un plan de alimentación hecho para ti, práctico y fácil de seguir, para acompañar tu entrenamiento y lograr tus objetivos.</div>
       </div>
     </div>
 
@@ -1485,7 +1905,7 @@ function notifyNewRegistration(nombre, email, telefono) {
   } catch (e) { console.warn('notifyNewRegistration error', e); }
 }
 
-// Personalized invite links (?code=XXXX) let Frida link a clienta to an
+// Personalized invite links (?code=XXXX) let Frida link a cliente to an
 // already-existing client profile without showing a confusing "código de
 // acceso" field on the registration form — the code travels in the URL.
 var pendingRegCode = (new URLSearchParams(window.location.search).get('code') || '').trim().toUpperCase();
@@ -1494,13 +1914,635 @@ if (pendingRegCode) { showScreen('screen-register'); }
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(function(el) { el.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
+  // Por dentro (dashboard) el portal usa el estilo oscuro "Energía Azul"
+  document.body.classList.toggle('portal-dark', id === 'screen-dashboard');
 }
 
+function faTodayLabel() {
+  var d = new Date();
+  var dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  var meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  return dias[d.getDay()] + ' ' + d.getDate() + ' de ' + meses[d.getMonth()];
+}
+
+// Saludo con conexión según la hora: arriba "Buenos días, Andrea" y en
+// grande una frase con la voz de Frida.
+function portalGreeting(firstName) {
+  var h = new Date().getHours();
+  var name = firstName ? ', ' + firstName : '';
+  if (h >= 5 && h < 12) return { top: 'Buenos días' + name, main: '¿Con ganas de moverte?' };
+  if (h >= 12 && h < 19) return { top: 'Buenas tardes' + name, main: 'Tu hora para ti' };
+  return { top: 'Buenas noches' + name, main: '¿Ya entrenaste hoy?' };
+}
+
+// ── INICIO: entrenamiento de hoy, progreso y accesos rápidos ──
+// Día sugerido: el siguiente al último que el cliente registró; si no hay
+// registros, el día 1.
+function inicioSuggestedDay() {
+  var days = (currentRutinaData && currentRutinaData.days) || [];
+  if (!days.length) return null;
+  var logs = Object.keys(CURRENT_ENTRENO_LOGS || {}).map(function(k) { return CURRENT_ENTRENO_LOGS[k]; })
+    .filter(function(e) { return e && e.dayId; })
+    .sort(function(a, b) { return (a.ts || 0) - (b.ts || 0); });
+  var idx = 0;
+  if (logs.length) {
+    var last = days.findIndex(function(d) { return d.id === logs[logs.length - 1].dayId; });
+    idx = last >= 0 ? (last + 1) % days.length : 0;
+  }
+  return { day: days[idx], index: idx };
+}
+
+function inicioCounts() {
+  var dias = CURRENT_DIAS_ENTRENADOS || {};
+  var now = new Date();
+  var monday = new Date(now); monday.setHours(0, 0, 0, 0);
+  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  var mes = 0, semana = 0;
+  Object.keys(dias).forEach(function(k) {
+    if (!dias[k]) return;
+    var d = new Date(k + 'T00:00:00');
+    if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) mes++;
+    if (d >= monday) semana++;
+  });
+  // Días seguidos: racha que termina hoy (o ayer, si hoy todavía no entrenó)
+  var racha = 0, cur = new Date(now); cur.setHours(0, 0, 0, 0);
+  var key = function(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  if (!dias[key(cur)]) cur.setDate(cur.getDate() - 1);
+  while (dias[key(cur)]) { racha++; cur.setDate(cur.getDate() - 1); }
+  return { mes: mes, semana: semana, racha: racha };
+}
+
+function renderInicioTab() {
+  var el = document.getElementById('inicio-content');
+  if (!el) return;
+  var c = inicioCounts();
+  var metaEl = document.getElementById('pf-ring-meta-num');
+  var meta = metaEl ? metaEl.textContent.trim() : '-';
+  var progEl = document.getElementById('pf-ring-programa-pct');
+  var prog = progEl && progEl.closest('.pf-ring-wrap') && progEl.closest('.pf-ring-wrap').style.display !== 'none' ? progEl.textContent.trim() : '';
+  var rutinaVisible = (function() { var b = document.querySelector('.bnav-btn[data-tab="tab-rutina"]'); return !b || b.style.display !== 'none'; })();
+  var sug = rutinaVisible ? inicioSuggestedDay() : null;
+  var h = '';
+
+  if (sug) {
+    var blocks = (sug.day.blocks || []).filter(function(b) { return b.exercises && b.exercises.length; });
+    var nEx = blocks.reduce(function(n, b) { return n + b.exercises.length; }, 0);
+    h += '<button type="button" class="in-hero" onclick="goToRutinaDay(' + sug.index + ')">'
+      + '<svg class="fa-sticker fa-sticker-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 5.6 2.4 8 8 9-5.6 1-7.4 3.4-8 9-.6-5.6-2.4-8-8-9 5.6-1 7.4-3.4 8-9z"/></svg><span class="in-hero-tag">HOY · DÍA ' + (sug.index + 1) + '</span>'
+      + '<span class="in-hero-bottom"><span><span class="in-hero-title">' + escapeHtml(sug.day.name || ('Día ' + (sug.index + 1))) + '</span>'
+      + '<span class="in-hero-meta">' + nEx + ' ejercicio' + (nEx !== 1 ? 's' : '') + ' · ' + blocks.length + ' bloque' + (blocks.length !== 1 ? 's' : '') + '</span></span>'
+      + '<span class="in-hero-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></span>'
+      + '</button>';
+  } else {
+    h += '<div class="in-hero in-hero-static"><span class="in-hero-tag">TU PLAN</span><span class="in-hero-bottom"><span>'
+      + '<span class="in-hero-title">Tu hora para ti</span><span class="in-hero-meta">Tus sesiones con Frida y tu progreso, en un solo lugar.</span></span></span></div>';
+  }
+
+  h += rewardsInicioHtml(c);
+
+  h += '<div class="in-stats">'
+    + '<div class="in-stat in-stat-hl">' + (c.semana >= metaSemanal() ? '<svg class="fa-sticker fa-sticker-bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1L4 14h6.5L9 23l10-13.5h-6.6z"/></svg>' : '') + '<span class="in-stat-num">' + c.semana + '/' + metaSemanal() + '</span><span class="in-stat-lbl">esta semana</span></div>'
+    + '<div class="in-stat"><span class="in-stat-num">' + c.mes + '</span><span class="in-stat-lbl">días este mes</span></div>'
+    + (prog ? '<div class="in-stat"><span class="in-stat-num in-cream">' + escapeHtml(prog) + '</span><span class="in-stat-lbl">del programa</span></div>'
+            : '<div class="in-stat"><span class="in-stat-num in-cream">' + escapeHtml(meta || '-') + '</span><span class="in-stat-lbl">meta del mes</span></div>')
+    + '</div>';
+
+  if (currentRutinaData && currentRutinaData.mensajeInicial) {
+    h += '<div class="in-msg"><span class="in-msg-lbl"><span class="fa-tag">de Frida para ti</span></span><span class="in-msg-txt">' + escapeHtml(currentRutinaData.mensajeInicial) + '</span></div>';
+  }
+
+  h += '<div class="in-section"><span class="fa-marker">ACCESOS</span> RÁPIDOS<svg class="fa-sticker fa-sticker-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 8.7l7.1-.6z"/></svg></div><div class="in-links">';
+  if (sug) h += '<button type="button" class="in-link in-link-blue" onclick="showTab(\'tab-rutina\')"><span class="in-link-title">MI RUTINA</span><span class="in-link-sub">Todos tus días</span></button>';
+  h += '<button type="button" class="in-link" onclick="showTab(\'tab-perfil\')"><span class="in-link-title">MI PROGRESO</span><span class="in-link-sub">Historial y transformación</span></button>'
+    + '<button type="button" class="in-link" onclick="showTab(\'tab-beneficios\')"><span class="in-link-title">BENEFICIOS</span><span class="in-link-sub">Descuentos de marcas aliadas</span></button>'
+    + '<button type="button" class="in-link" onclick="openChatModal()"><span class="in-link-title">HABLAR CON FRIDA</span><span class="in-link-sub">Escríbeme tus dudas</span></button>'
+    + '</div>';
+  el.innerHTML = h;
+  if (currentTabId === 'tab-inicio') animateInicioNumbers();
+  checkNewMedals();
+}
+
+// ══════════ RECOMPENSAS: check-in de un toque, meta del mes, medallas ══════════
+// Todo se calcula con lo que el cliente ya registra (días entrenados, fotos,
+// perfil, ficha); no se guarda nada nuevo salvo los días que marca.
+// El premio del mes lo define Frida en su panel y llega en clients/{id}/premioMes.
+var PREMIO_MES = null;   // { texto, meta }
+var CLIENT_META = null;  // días/semana × 4 del plan del cliente, si lo tiene
+
+function localKey(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+
+function loadPremioMes() {
+  if (!currentClientId) return;
+  db().ref('clients/' + currentClientId + '/premioMes').once('value').then(function(snap) {
+    PREMIO_MES = snap.val() || null;
+    renderInicioTab();
+  }).catch(function() {});
+}
+
+function metaDelMes() {
+  // La meta la calcula el panel de Frida para cada cliente (sus sesiones o días × 4).
+  return (PREMIO_MES && Number(PREMIO_MES.meta)) || CLIENT_META || 12;
+}
+
+// Entrenos por semana que le tocan (sus días del plan). Se deriva de su meta
+// del mes (días/semana × 4).
+function metaSemanal() {
+  return Math.max(1, Math.round(metaDelMes() / 4));
+}
+
+// Semanas (lunes a domingo) en que cumplió todos los entrenos que le tocan.
+function semanasCompletas(dias) {
+  var porSemana = {};
+  Object.keys(dias || {}).forEach(function(k) {
+    if (!dias[k]) return;
+    var d = new Date(k + 'T00:00:00');
+    d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    var wk = localKey(d);
+    porSemana[wk] = (porSemana[wk] || 0) + 1;
+  });
+  var ms = metaSemanal();
+  return Object.keys(porSemana).filter(function(wk) { return porSemana[wk] >= ms; }).length;
+}
+
+function maxRacha(dias) {
+  var keys = Object.keys(dias || {}).filter(function(k) { return dias[k]; }).sort();
+  var best = 0, run = 0, prev = null;
+  keys.forEach(function(k) {
+    var d = new Date(k + 'T00:00:00');
+    run = (prev && Math.round((d - prev) / 86400000) === 1) ? run + 1 : 1;
+    if (run > best) best = run;
+    prev = d;
+  });
+  return best;
+}
+
+function medallasEstado() {
+  var dias = CURRENT_DIAS_ENTRENADOS || {};
+  var portal = CURRENT_PORTAL_DATA || {}, perfil = CURRENT_PERFIL_DATA || {};
+  var anyDia = Object.keys(dias).some(function(k) { return dias[k]; });
+  var fotos = portal.fotosProgreso && Object.keys(portal.fotosProgreso).length > 0;
+  var perfilOk = !!perfil.fotoPerfil && !!(perfil.bio && perfil.bio.trim()) && !!portal.ficha && !!fotos;
+  // Meses en que cumplió su meta (para el diamante: 3 metas del mes)
+  var porMes = {};
+  Object.keys(dias).forEach(function(k) { if (dias[k]) porMes[k.slice(0, 7)] = (porMes[k.slice(0, 7)] || 0) + 1; });
+  var metasCumplidas = Object.keys(porMes).filter(function(mk) { return porMes[mk] >= metaDelMes(); }).length;
+  var now = new Date();
+  var mesNombre = MESES_LARGOS[now.getMonth()];
+  var c = inicioCounts(), meta = metaDelMes();
+  return [
+    { id: 'primer', kind: 'bronce', tier: 'Bronce', name: 'Primer paso', how: 'Marca tu primer día entrenado.', ok: anyDia },
+    { id: 'perfil', kind: 'plata', tier: 'Plata', name: 'Perfil completo', how: 'Pon tu foto, cuéntanos de ti, llena tu ficha y sube tu primera foto de progreso (solo la ven Frida y tú).', ok: perfilOk },
+    { id: 'semanas2', kind: 'oro', tier: 'Oro', name: 'Semanas completas', how: 'Completa tus ' + metaSemanal() + ' entrenos de la semana durante 2 semanas (no tienen que ser seguidas). Llevas ' + Math.min(semanasCompletas(dias), 2) + ' de 2.', ok: semanasCompletas(dias) >= 2 },
+    { id: 'meta-' + localKey(now).slice(0, 7), kind: 'trofeo', tier: 'Trofeo', name: 'Meta de ' + mesNombre, how: 'Completa todos tus entrenos del mes (' + meta + ')' + (PREMIO_MES && PREMIO_MES.texto ? ' y gana: ' + PREMIO_MES.texto : '') + '.', ok: c.mes >= meta },
+    { id: 'diamante', kind: 'diamante', tier: 'Diamante', name: 'Constancia', how: 'Completa tu meta del mes en 3 meses distintos (por ejemplo noviembre, diciembre y enero). Llevas ' + Math.min(metasCumplidas, 3) + ' de 3. ¡La más valiosa de todas!', ok: metasCumplidas >= 3 }
+  ];
+}
+
+function rewardsInicioHtml(c) {
+  var h = '';
+  var today = localKey(new Date());
+  var hoy = !!(CURRENT_DIAS_ENTRENADOS || {})[today];
+  // 1. Check-in de un toque
+  if (hoy) {
+    h += '<div class="in-checkin done"><span class="in-checkin-ico">✅</span><span class="in-checkin-txt"><b>¡Hoy cuenta!</b><span>Tu entreno de hoy ya está marcado 💪</span></span><button type="button" class="in-checkin-undo" onclick="checkInHoy(false)">Deshacer</button></div>';
+  } else {
+    h += '<button type="button" class="in-checkin" onclick="checkInHoy(true)"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>¿Entrenaste hoy?</b><span>Tócalo y suma a tu meta del mes</span></span><span class="in-checkin-btn">Sí ✓</span></button>';
+  }
+  // 1.5 Mi ciclo (batería de energía según la fase del ciclo menstrual)
+  h += cicloInicioHtml();
+  // 2. Meta del mes (con el premio que puso Frida)
+  var meta = metaDelMes(), pct = Math.min(100, Math.round(c.mes / meta * 100));
+  var premio = PREMIO_MES && PREMIO_MES.texto ? escapeHtml(PREMIO_MES.texto) : '';
+  h += '<div class="in-goal' + (c.mes >= meta ? ' won' : '') + '">'
+    + '<div class="in-goal-top"><span class="fa-tag">META DE ' + MESES_LARGOS[new Date().getMonth()].toUpperCase() + '</span><span class="in-goal-num">' + c.mes + '<small>/' + meta + '</small></span></div>'
+    + '<div class="in-goal-track"><div class="in-goal-fill" style="width:' + pct + '%"></div></div>'
+    + (c.mes >= meta
+        ? '<div class="in-goal-prize">🎉 <b>¡Lo lograste!</b> ' + (premio ? 'Tu premio: ' + premio + '. Frida te escribirá para entregártelo.' : 'Frida te tiene una sorpresa.') + '</div>'
+        : '<div class="in-goal-prize">🎁 ' + (premio ? 'Al llegar ganas: <b>' + premio + '</b>' : 'Al llegar, Frida te tiene una sorpresa') + ' · te faltan ' + (meta - c.mes) + '</div>')
+    + '</div>';
+  // 3. Medallas
+  var meds = medallasEstado(), nOk = meds.filter(function(m) { return m.ok; }).length;
+  h += '<div class="in-section"><span class="fa-marker">TUS</span> MEDALLAS <span class="in-med-count">' + nOk + '/' + meds.length + '</span></div>';
+  h += '<div class="in-medals"><div class="in-med-path"><span style="width:' + Math.round(nOk / meds.length * 100) + '%"></span></div>';
+  meds.forEach(function(m, i) {
+    h += '<button type="button" class="in-medal' + (m.ok ? ' ok' : '') + (m.kind === 'trofeo' ? ' trophy' : '') + (m.kind === 'diamante' ? ' gem' : '') + '" onclick="showMedal(' + i + ')" aria-label="' + escapeHtml(m.tier + ': ' + m.name + (m.ok ? ' (lograda)' : ' (por lograr)')) + '">' + medalSvg(m.kind, m.ok) + '<span class="in-medal-name">' + escapeHtml(m.name) + '</span></button>';
+  });
+  h += '</div>';
+  // 4. Recordatorio de foto (primera semana del mes, si no ha subido la de este mes)
+  var now = new Date(), mk = localKey(now).slice(0, 7);
+  var fotosMes = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.fotosProgreso || {})[mk];
+  if (now.getDate() <= 7 && !(fotosMes && fotosMes.inicio)) {
+    h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\');setTimeout(function(){var t=document.querySelector(\'.transf-card\');if(t)t.scrollIntoView({behavior:\'smooth\',block:\'start\'});},350)"><span>📸</span><span><b>Esta semana es día de foto</b><small>🔒 Tus fotos son privadas: solo las ven Frida y tú. Sirven para ver cuánto has avanzado.</small></span></button>';
+  }
+  // 5. Perfil incompleto
+  var perfil = CURRENT_PERFIL_DATA || {}, portal = CURRENT_PORTAL_DATA || {};
+  var items = [!!perfil.fotoPerfil, !!(perfil.bio && perfil.bio.trim()), !!portal.ficha, !!(portal.fotosProgreso && Object.keys(portal.fotosProgreso).length)];
+  var done = items.filter(Boolean).length;
+  if (done < items.length) {
+    h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\')"><span>💙</span><span><b>Tu perfil va al ' + Math.round(done / items.length * 100) + '%</b><small>Complétalo y gana la medalla de plata.</small><span class="in-nudge-bar"><span style="width:' + Math.round(done / items.length * 100) + '%"></span></span></span></button>';
+  }
+  return h;
+}
+
+function checkInHoy(on) {
+  var key = localKey(new Date());
+  if (!!CURRENT_DIAS_ENTRENADOS[key] === on) return;
+  toggleDiaEntrenado(key);
+  if (on) {
+    if (navigator.vibrate) try { navigator.vibrate([20, 40, 30]); } catch (e) {}
+    var c = inicioCounts();
+    var ms = metaSemanal();
+    celebrate('💪', '¡Hoy cuenta!', c.semana >= ms ? '¡Completaste tu semana! ' + c.semana + ' de ' + ms + ' entrenos 🎉' : 'Llevas ' + c.semana + ' de ' + ms + ' entrenos esta semana. Descansa cuando lo necesites 💙');
+  }
+}
+
+// ══════════ MI CICLO: fase del ciclo menstrual + batería de energía ══════════
+// Cada fase cambia los niveles de estrógeno/progesterona, y con eso la
+// energía disponible — la batería es solo una forma visual de mostrar
+// ese vaivén hormonal, no un dato médico exacto.
+var CICLO_FASES = {
+  menstrual: {
+    label: 'Fase menstrual',
+    tip: 'Tu energía está en su punto más bajo del mes — es normal. El estrógeno y la progesterona están en su nivel mínimo, así que el cuerpo tiene menos combustible disponible. Hoy no es el día para buscar récords: prioriza movimiento suave, cardio ligero o lo que el cuerpo te pida. Hidrátate bien y descansa si lo necesitas.'
+  },
+  folicular: {
+    label: 'Fase folicular',
+    tip: 'Tu energía viene en subida. El estrógeno empieza a crecer, lo que mejora tu fuerza, tu ánimo y tu capacidad de recuperación. Buen momento para ir metiendo más intensidad poco a poco.'
+  },
+  ovulacion: {
+    label: 'Ovulación',
+    tip: 'Estás en tu pico de energía del mes. El estrógeno llega a su nivel más alto — es el mejor momento para entrenamientos de fuerza exigentes, cargas pesadas o buscar un récord. Aprovéchalo.'
+  },
+  lutea_temprana: {
+    label: 'Fase lútea',
+    tip: 'La energía empieza a bajar de a poco. La progesterona sube y el cuerpo entra en modo más conservador. Sigues bien para entrenar fuerte, pero presta atención a cómo te sientes.'
+  },
+  lutea_tardia: {
+    label: 'Fase lútea (pre-período)',
+    tip: 'Es normal sentirte con menos energía o más sensible estos días — el estrógeno y la progesterona caen juntos antes del período. Muévete, pero sin exigirte al máximo: prioriza lo que te haga sentir bien, no lo más pesado.'
+  }
+};
+
+function cicloAvgLength(registros) {
+  if (registros.length < 2) return 28;
+  var diffs = [];
+  for (var i = 1; i < registros.length; i++) {
+    var d1 = new Date(registros[i - 1] + 'T00:00:00');
+    var d2 = new Date(registros[i] + 'T00:00:00');
+    diffs.push(Math.round((d2 - d1) / 86400000));
+  }
+  var sum = diffs.reduce(function(a, b) { return a + b; }, 0);
+  return Math.min(45, Math.max(21, Math.round(sum / diffs.length)));
+}
+
+function cicloFaseForDay(day, len) {
+  var scale = len / 28;
+  var menstrualEnd = Math.round(5 * scale);
+  var ovulStart = Math.round(14 * scale);
+  var ovulEnd = Math.round(16 * scale);
+  var luteaLateStart = len - Math.round(5 * scale);
+  if (day <= menstrualEnd) return 'menstrual';
+  if (day < ovulStart) return 'folicular';
+  if (day <= ovulEnd) return 'ovulacion';
+  if (day < luteaLateStart) return 'lutea_temprana';
+  return 'lutea_tardia';
+}
+
+// Curva aproximada de energía a lo largo del ciclo, interpolada entre
+// puntos clave (no es un dato médico exacto, es una guía visual).
+var CICLO_BATERIA_ANCLAS = [
+  { frac: 0, pct: 20 },
+  { frac: 5 / 28, pct: 30 },
+  { frac: 14 / 28, pct: 90 },
+  { frac: 16 / 28, pct: 100 },
+  { frac: 23 / 28, pct: 55 },
+  { frac: 1, pct: 15 }
+];
+
+function cicloBateriaForDay(day, len) {
+  var frac = (day - 1) / len;
+  for (var i = 1; i < CICLO_BATERIA_ANCLAS.length; i++) {
+    var a = CICLO_BATERIA_ANCLAS[i - 1], b = CICLO_BATERIA_ANCLAS[i];
+    if (frac <= b.frac) {
+      var t = (frac - a.frac) / (b.frac - a.frac || 1);
+      return Math.round(a.pct + (b.pct - a.pct) * t);
+    }
+  }
+  return 20;
+}
+
+function cicloComputeState(ciclo) {
+  var registros = Object.keys((ciclo && ciclo.registros) || {}).sort();
+  if (!registros.length) return null;
+  var lastDate = new Date(registros[registros.length - 1] + 'T00:00:00');
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var daysSince = Math.floor((today - lastDate) / 86400000);
+  var avgLen = cicloAvgLength(registros);
+  var dayInCycle = (daysSince % avgLen) + 1;
+  return {
+    dayInCycle: dayInCycle,
+    avgLen: avgLen,
+    daysUntilNext: avgLen - dayInCycle + 1,
+    fase: cicloFaseForDay(dayInCycle, avgLen),
+    bateria: cicloBateriaForDay(dayInCycle, avgLen)
+  };
+}
+
+function cicloBateriaColor(pct) {
+  if (pct >= 70) return '#F5ECCB';
+  if (pct >= 40) return '#8FB0FF';
+  return '#F2827F';
+}
+
+function cicloBateriaSvg(pct) {
+  var color = cicloBateriaColor(pct);
+  var innerW = 46, fillW = Math.round(innerW * (pct / 100));
+  return '<svg width="72" height="36" viewBox="0 0 72 36" aria-hidden="true">'
+    + '<rect x="1" y="1" width="62" height="34" rx="7" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2.5"/>'
+    + '<rect x="64" y="11" width="6" height="14" rx="2" fill="rgba(255,255,255,0.3)"/>'
+    + '<rect x="9" y="9" width="' + innerW + '" height="18" rx="3" fill="rgba(255,255,255,0.08)"/>'
+    + '<rect class="in-battery-fill" x="9" y="9" width="' + fillW + '" height="18" rx="3" fill="' + color + '"/>'
+    + '<text x="32" y="22" class="in-battery-pct" fill="' + color + '">' + pct + '%</text>'
+    + '</svg>';
+}
+
+function cicloInicioHtml() {
+  var ciclo = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ciclo) || {};
+  var state = cicloComputeState(ciclo);
+  if (!state) {
+    return '<div class="in-ciclo"><div class="in-ciclo-top"><div class="in-ciclo-info"><span class="fa-tag">MI CICLO</span></div>'
+      + '<button type="button" class="in-ciclo-log-btn" onclick="openCicloModal()">+ Registrar</button></div>'
+      + '<div class="in-ciclo-empty" style="margin-top:0.7rem;">Registra cuándo te empezó tu último período para ver tu fase y nivel de energía del mes.</div></div>';
+  }
+  var fase = CICLO_FASES[state.fase];
+  var metaText = state.fase === 'menstrual'
+    ? 'Día ' + state.dayInCycle + ' de tu ciclo'
+    : 'Día ' + state.dayInCycle + ' · próximo período en ' + state.daysUntilNext + (state.daysUntilNext === 1 ? ' día' : ' días');
+  return '<div class="in-ciclo">'
+    + '<div class="in-ciclo-top">' + cicloBateriaSvg(state.bateria)
+    + '<div class="in-ciclo-info"><div class="in-ciclo-fase">' + fase.label + '</div><div class="in-ciclo-meta">' + metaText + '</div></div>'
+    + '<button type="button" class="in-ciclo-log-btn" onclick="openCicloModal()">+ Registrar</button></div>'
+    + '<div class="in-ciclo-tip">' + fase.tip + '</div></div>';
+}
+
+function openCicloModal() {
+  var ciclo = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ciclo) || {};
+  var registros = Object.keys(ciclo.registros || {}).sort().reverse();
+  document.getElementById('ciclo-fecha-input').value = new Date().toISOString().slice(0, 10);
+  var histEl = document.getElementById('ciclo-historial');
+  if (registros.length) {
+    var html = '<div class="ficha-field-label" style="margin-bottom:0.5rem;">Registros anteriores</div>';
+    registros.slice(0, 6).forEach(function(fecha) {
+      var d = new Date(fecha + 'T00:00:00');
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.8rem;color:var(--text);">'
+        + '<span>' + d.getDate() + ' de ' + MESES_LARGOS[d.getMonth()] + ' ' + d.getFullYear() + '</span>'
+        + '<button onclick="deleteCicloRegistro(\'' + fecha + '\')" style="background:none;border:none;color:var(--muted);font-size:0.9rem;cursor:pointer;">✕</button>'
+        + '</div>';
+    });
+    histEl.innerHTML = html;
+  } else {
+    histEl.innerHTML = '';
+  }
+  document.getElementById('ciclo-modal').style.display = 'flex';
+}
+
+function closeCicloModal() {
+  document.getElementById('ciclo-modal').style.display = 'none';
+}
+
+function saveCicloRegistro() {
+  var fecha = document.getElementById('ciclo-fecha-input').value;
+  if (!fecha) return;
+  if (!CURRENT_PORTAL_DATA.ciclo) CURRENT_PORTAL_DATA.ciclo = {};
+  if (!CURRENT_PORTAL_DATA.ciclo.registros) CURRENT_PORTAL_DATA.ciclo.registros = {};
+  CURRENT_PORTAL_DATA.ciclo.registros[fecha] = true;
+  db().ref('clientasPortal/' + currentUid + '/ciclo/registros/' + fecha).set(true);
+  closeCicloModal();
+  renderInicioTab();
+}
+
+function deleteCicloRegistro(fecha) {
+  if (CURRENT_PORTAL_DATA.ciclo && CURRENT_PORTAL_DATA.ciclo.registros) {
+    delete CURRENT_PORTAL_DATA.ciclo.registros[fecha];
+  }
+  db().ref('clientasPortal/' + currentUid + '/ciclo/registros/' + fecha).remove();
+  openCicloModal();
+  renderInicioTab();
+}
+
+function showMedal(i) {
+  var m = medallasEstado()[i];
+  if (!m) return;
+  var fecha = medalDate(m.id);
+  celebrate('<div class="fa-cel-medal">' + medalSvg(m.kind, m.ok) + '</div>', m.name, m.how + (m.ok ? (fecha ? '\n\n✓ Lograda el ' + fecha : '\n\n✓ ¡Ya la tienes!') : ''), !m.ok);
+}
+
+var MEDAL_N = 0;
+// Insignias ilustradas (diseño propio FridaActive): escudo con borde metálico
+// según el nivel, escena azul noche con arcos de luz, ilustración en crema y
+// azul, y el nombre grabado en una cinta. Bloqueadas: en gris con candado.
+var MEDAL_RIM = {
+  bronce:   ['#FBD9B6', '#D98A4E', '#7A3F18'],
+  plata:    ['#FFFFFF', '#C3CCD8', '#6F7B8C'],
+  oro:      ['#FFF6C9', '#F4C542', '#9A6A08'],
+  trofeo:   ['#FFF6C9', '#F4C542', '#9A6A08'],
+  diamante: ['#FFFFFF', '#A8E6FA', '#2F80B8']
+};
+var MEDAL_LABEL = { bronce: 'PRIMER PASO', plata: 'MI PERFIL', oro: '2 SEMANAS', trofeo: 'META DEL MES', diamante: 'CONSTANCIA' };
+function medalScene(kind, id) {
+  var C = '#F5ECCB', B = '#1C55E5', D = '#0F3FA8';
+  if (kind === 'bronce') {
+    // Tenis dando el primer paso sobre un camino que sube hacia el sol
+    return '<circle cx="50" cy="58" r="15" fill="#F6D16A" opacity=".9"/>'
+      + '<path d="M18 92 Q40 70 50 70 Q60 70 82 92 Z" fill="' + D + '"/>'
+      + '<path d="M44 92 L48 72 L52 72 L56 92 Z" fill="' + C + '" opacity=".35"/>'
+      + '<g transform="translate(25 33) rotate(-10 24 20) scale(.92)">'
+      + '<path d="M4 30 Q6 18 16 16 L22 22 Q32 26 42 26 Q50 27 50 34 L50 37 L4 37 Z" fill="' + C + '"/>'
+      + '<path d="M4 37 H50 V40 Q50 42 48 42 H6 Q4 42 4 40 Z" fill="' + B + '"/>'
+      + '<path d="M20 22 l4 -3 M24 25 l4 -3 M28 27 l4 -3" stroke="' + B + '" stroke-width="2" stroke-linecap="round"/>'
+      + '<path d="M16 16 L22 22" stroke="' + B + '" stroke-width="2"/>'
+      + '</g>'
+      + '<path d="M14 48 h10 M10 54 h12 M16 60 h8" stroke="' + C + '" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>';
+  }
+  if (kind === 'plata') {
+    // Corazón con silueta: "así soy yo"
+    return '<path d="M50 84 C30 70 20 60 20 46 C20 37 27 31 35 31 C42 31 47 35 50 40 C53 35 58 31 65 31 C73 31 80 37 80 46 C80 60 70 70 50 84 Z" fill="' + C + '"/>'
+      + '<circle cx="50" cy="49" r="7.5" fill="' + B + '"/>'
+      + '<path d="M36 70 Q38 58 50 58 Q62 58 64 70 Q57 76 50 79 Q43 76 36 70 Z" fill="' + B + '"/>'
+      + '<path d="M27 40 Q29 35 34 34" stroke="#fff" stroke-width="2.4" stroke-linecap="round" fill="none"/>'
+      + '<path d="M78 24 l1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6 4 -1.6z M22 24 l1 2.6 2.6 1 -2.6 1 -1 2.6 -1 -2.6 -2.6 -1 2.6 -1z" fill="' + C + '"/>';
+  }
+  if (kind === 'oro') {
+    // Dos semanas completas: calendario con check y rayo de energía
+    return '<rect x="24" y="34" width="44" height="40" rx="6" fill="' + C + '"/>'
+      + '<path d="M24 40 a6 6 0 0 1 6 -6 h32 a6 6 0 0 1 6 6 v6 H24z" fill="' + B + '"/>'
+      + '<rect x="32" y="29" width="4" height="10" rx="2" fill="' + C + '"/><rect x="56" y="29" width="4" height="10" rx="2" fill="' + C + '"/>'
+      + '<path d="M33 60 l8 8 l16 -16" stroke="' + B + '" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+      + '<path d="M74 30 L64 50 h8 l-5 16 l14 -22 h-8 l6 -14 z" fill="#F6D16A" stroke="' + D + '" stroke-width="1.5" stroke-linejoin="round"/>';
+  }
+  if (kind === 'trofeo') {
+    // Copa con laureles y confeti
+    var g = 'tg' + id;
+    var leaves = '';
+    for (var i = 0; i < 5; i++) {
+      var y = 72 - i * 8, x = 24 + i * 1.6;
+      leaves += '<ellipse cx="' + x + '" cy="' + y + '" rx="3" ry="6" transform="rotate(' + (-40 + i * 12) + ' ' + x + ' ' + y + ')" fill="' + C + '"/>';
+      leaves += '<ellipse cx="' + (100 - x) + '" cy="' + y + '" rx="3" ry="6" transform="rotate(' + (40 - i * 12) + ' ' + (100 - x) + ' ' + y + ')" fill="' + C + '"/>';
+    }
+    return '<defs><linearGradient id="' + g + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF6C9"/><stop offset=".5" stop-color="#F4C542"/><stop offset="1" stop-color="#B07D10"/></linearGradient></defs>'
+      + leaves
+      + '<path d="M36 30 h28 v6 c0 13 -6 21 -14 21 s-14 -8 -14 -21 z" fill="url(#' + g + ')"/>'
+      + '<path d="M36 34 h-6 c0 8 3 12 8 13 M64 34 h6 c0 8 -3 12 -8 13" stroke="#F4C542" stroke-width="3" fill="none" stroke-linecap="round"/>'
+      + '<rect x="47" y="56" width="6" height="9" fill="#D9A520"/><path d="M39 65 h22 l3 8 h-28 z" fill="url(#' + g + ')"/>'
+      + '<path d="M50 36 l2.3 4.6 5 .7 -3.6 3.5 .9 5 -4.6 -2.4 -4.6 2.4 .9 -5 -3.6 -3.5 5 -.7z" fill="#FFFBEA"/>'
+      + '<rect x="22" y="26" width="4" height="7" rx="1" fill="' + B + '" transform="rotate(25 24 29)"/><rect x="74" y="24" width="4" height="7" rx="1" fill="#F6D16A" transform="rotate(-20 76 27)"/><circle cx="80" cy="44" r="2" fill="' + C + '"/><circle cx="19" cy="46" r="2" fill="#F6D16A"/>';
+  }
+  // diamante
+  return '<g stroke="#1D5E8E" stroke-width="1" stroke-linejoin="round">'
+    + '<path d="M30 36h40l10 12-30 34-30-34z" fill="#5FB6E0"/>'
+    + '<path d="M30 36l8 12h24l8-12z" fill="#D6F4FF"/>'
+    + '<path d="M20 48l10-12 8 12z" fill="#9EDFF5"/><path d="M80 48l-10-12-8 12z" fill="#9EDFF5"/>'
+    + '<path d="M20 48h18l12 34z" fill="#9EDFF5"/><path d="M38 48h24l-12 34z" fill="#D6F4FF"/><path d="M62 48h18L50 82z" fill="#2F80B8"/>'
+    + '</g>'
+    + '<path d="M33 39l5 7" stroke="#fff" stroke-width="2" stroke-linecap="round"/>'
+    + '<path d="M78 22l1.8 4.6 4.6 1.8-4.6 1.8L78 35l-1.8-4.6-4.6-1.8 4.6-1.8z" fill="#fff"/>'
+    + '<path d="M22 26l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z" fill="' + C + '"/>';
+}
+function medalSvg(kind, ok) {
+  var n = ++MEDAL_N, rim = MEDAL_RIM[kind] || MEDAL_RIM.oro;
+  var rg = 'mrg' + n, bg = 'mbg' + n, cp = 'mcp' + n;
+  var shield = 'M10 12 Q50 1 90 12 L88 54 Q84 86 50 106 Q16 86 12 54 Z';
+  var inner = 'M16 17 Q50 7 84 17 L82.5 54 Q79 81 50 99 Q21 81 17.5 54 Z';
+  var arcs = '';
+  for (var i = 0; i < 5; i++) arcs += '<circle cx="50" cy="96" r="' + (26 + i * 13) + '" fill="none" stroke="#fff" stroke-opacity="' + (0.13 - i * 0.02).toFixed(2) + '" stroke-width="6"/>';
+  var label = MEDAL_LABEL[kind] || '';
+  var svg = '<defs>'
+    + '<linearGradient id="' + rg + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + rim[0] + '"/><stop offset=".45" stop-color="' + rim[1] + '"/><stop offset="1" stop-color="' + rim[2] + '"/></linearGradient>'
+    + '<linearGradient id="' + bg + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E3F9E"/><stop offset="1" stop-color="#0A1638"/></linearGradient>'
+    + '<clipPath id="' + cp + '"><path d="' + inner + '"/></clipPath></defs>'
+    + '<path d="' + shield + '" fill="url(#' + rg + ')"/>'
+    + '<path d="' + shield + '" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="1"/>'
+    + '<path d="' + inner + '" fill="url(#' + bg + ')"/>'
+    + '<g clip-path="url(#' + cp + ')">' + arcs + medalScene(kind, n) + '</g>'
+    + '<path d="' + inner + '" fill="none" stroke="' + rim[2] + '" stroke-opacity=".6" stroke-width="1.2"/>'
+    + '<path d="M18 86 L82 86 L78 96 L22 96 Z" fill="url(#' + rg + ')" transform="translate(0 -6)"/>'
+    + '<text x="50" y="87" text-anchor="middle" font-family="Archivo Black, DM Sans, sans-serif" font-size="' + (label.length > 10 ? 6.3 : label.length > 8 ? 7 : 8.2) + '" fill="#0B1B3F" letter-spacing=".3">' + label + '</text>'
+    + '<path d="M22 16 Q36 10 48 9" stroke="#fff" stroke-opacity=".75" stroke-width="2" stroke-linecap="round" fill="none"/>';
+  var lock = ok ? '' : '<g><circle cx="84" cy="16" r="11" fill="#0B1B3F" stroke="#F5ECCB" stroke-width="2"/><rect x="78.5" y="14.5" width="11" height="8" rx="1.6" fill="#F5ECCB"/><path d="M80.6 14.5v-2.6a3.4 3.4 0 0 1 6.8 0v2.6" fill="none" stroke="#F5ECCB" stroke-width="2"/></g>';
+  return '<svg class="medal-svg' + (ok ? '' : ' locked') + '" viewBox="0 0 100 110" aria-hidden="true"><g class="medal-art">' + svg + '</g>' + lock + '</svg>';
+}
+
+// Fecha en que se ganó cada insignia (guardada en este celular).
+function medalDates() { try { return JSON.parse(localStorage.getItem('fa_medal_dates_' + currentUid) || '{}'); } catch (e) { return {}; } }
+function saveMedalDate(id) { var d = medalDates(); if (!d[id]) { d[id] = localKey(new Date()); try { localStorage.setItem('fa_medal_dates_' + currentUid, JSON.stringify(d)); } catch (e) {} } }
+function medalDate(id) {
+  var k = medalDates()[id]; if (!k) return '';
+  var p = k.split('-'); return parseInt(p[2], 10) + ' de ' + MESES_LARGOS[parseInt(p[1], 10) - 1] + ' ' + p[0];
+}
+
+// Medallas nuevas: se festejan una sola vez (se recuerdan en este celular).
+function checkNewMedals() {
+  if (!currentUid || !CURRENT_DIAS_ENTRENADOS) return;
+  var storeKey = 'fa_medals_' + currentUid, seen = null;
+  try { seen = JSON.parse(localStorage.getItem(storeKey) || 'null'); } catch (e) {}
+  var okIds = medallasEstado().filter(function(m) { return m.ok; });
+  if (seen === null) { try { localStorage.setItem(storeKey, JSON.stringify(okIds.map(function(m) { return m.id; }))); } catch (e) {} return; }
+  var nueva = okIds.filter(function(m) { return seen.indexOf(m.id) === -1; })[0];
+  if (!nueva) return;
+  seen.push(nueva.id);
+  try { localStorage.setItem(storeKey, JSON.stringify(seen)); } catch (e) {}
+  setTimeout(function() {
+    var premio = nueva.id.indexOf('meta-') === 0 && PREMIO_MES && PREMIO_MES.texto ? ' Ganaste: ' + PREMIO_MES.texto + '. Frida te escribirá 💙' : '';
+    saveMedalDate(nueva.id);
+    celebrate('<div class="fa-cel-medal">' + medalSvg(nueva.kind, true) + '</div>', '¡Nueva insignia!', nueva.name + ' · ' + nueva.tier + '.' + premio);
+  }, 1400);
+}
+
+// Festejo a pantalla completa: confeti + tarjeta. Se cierra al tocar.
+var CELEBRATE_QUEUE = [];
+function celebrate(icon, title, text, quiet, fromQueue) {
+  // Si ya hay un festejo abierto, el nuevo espera su turno (uno a la vez).
+  if (!fromQueue && document.getElementById('fa-celebrate')) { CELEBRATE_QUEUE.push([icon, title, text, quiet]); return; }
+  var wrap = document.createElement('div');
+  wrap.id = 'fa-celebrate'; wrap.className = 'fa-celebrate' + (quiet ? ' quiet' : '') + (String(icon).indexOf('fa-cel-medal') > -1 ? ' dark' : '');
+  var conf = '';
+  if (!quiet) for (var i = 0; i < 26; i++) conf += '<span class="fa-cel-bit fa-c' + (i % 7) + '" style="--x:' + (Math.round(Math.random() * 100)) + 'vw;--r:' + (Math.round(Math.random() * 720) - 360) + 'deg;--t:' + (0.9 + Math.random() * 0.9).toFixed(2) + 's;--dl:' + (Math.random() * 0.3).toFixed(2) + 's"></span>';
+  wrap.innerHTML = conf + '<div class="fa-cel-card" role="dialog" aria-live="polite"><div class="fa-cel-ico">' + icon + '</div><div class="fa-cel-title">' + escapeHtml(title) + '</div><div class="fa-cel-text">' + escapeHtml(text) + '</div><button type="button" class="fa-cel-btn">' + (quiet ? 'Entendido' : '¡Genial!') + '</button></div>';
+  wrap.addEventListener('click', function() {
+    wrap.classList.add('out');
+    setTimeout(function() {
+      wrap.remove();
+      var next = CELEBRATE_QUEUE.shift();
+      if (next) celebrate(next[0], next[1], next[2], next[3], true);
+    }, 250);
+  });
+  document.body.appendChild(wrap);
+}
+
+function goToRutinaDay(index) {
+  showTab('tab-rutina');
+  var dayEls = document.querySelectorAll('#rutina-content details.rt-day');
+  var target = dayEls[index];
+  if (!target) return;
+  dayEls.forEach(function(d) { d.open = false; });
+  target.open = true;
+  setTimeout(function() { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+}
+
+// Los números de progreso cuentan hacia arriba al mostrarse
+function animateInicioNumbers() {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('#inicio-content .in-stat-num').forEach(function(el) {
+    var target = el.getAttribute('data-final') || el.textContent;
+    el.setAttribute('data-final', target);
+    var m = String(target).match(/^(\d+)(.*)$/);
+    if (!m) return;
+    var end = parseInt(m[1], 10), suffix = m[2], start = performance.now(), dur = 700;
+    (function tick(now) {
+      var p = Math.min(1, (now - start) / dur);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(end * eased) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    })(start);
+  });
+}
+
+// Efecto de toque (onda) en los botones principales del portal
+var RIPPLE_SELECTOR = '.in-hero, .in-link, .in-stat, .bnav-btn, .rt-day-summary, .btn-secondary, .pf-edit-btn, .benef-cat-tile, .benef-card, .chat-fab, .pf-logout';
+document.addEventListener('pointerdown', function(e) {
+  if (!document.body.classList.contains('portal-dark')) return;
+  var el = e.target.closest && e.target.closest(RIPPLE_SELECTOR);
+  if (!el) return;
+  var r = el.getBoundingClientRect();
+  var size = Math.max(r.width, r.height) * 1.4;
+  var dot = document.createElement('span');
+  dot.className = 'fa-ripple';
+  dot.style.width = dot.style.height = size + 'px';
+  dot.style.left = (e.clientX - r.left - size / 2) + 'px';
+  dot.style.top = (e.clientY - r.top - size / 2) + 'px';
+  el.appendChild(dot);
+  setTimeout(function() { dot.remove(); }, 600);
+}, { passive: true });
+
+var TAB_ORDER = ['tab-inicio', 'tab-rutina', 'tab-perfil', 'tab-beneficios'];
+var currentTabId = 'tab-inicio';
 function showTab(id) {
+  // Dirección de la animación: hacia la izquierda si la pestaña nueva está a la derecha en el menú
+  var dir = TAB_ORDER.indexOf(id) >= TAB_ORDER.indexOf(currentTabId) ? 'right' : 'left';
+  var panel = document.getElementById(id);
+  if (panel) {
+    panel.classList.remove('tab-in-right', 'tab-in-left');
+    void panel.offsetWidth;
+    if (id !== currentTabId) panel.classList.add('tab-in-' + dir);
+  }
+  currentTabId = id;
+  if (navigator.vibrate) { try { navigator.vibrate(8); } catch (e) {} }
+  if (id === 'tab-inicio') setTimeout(animateInicioNumbers, 60);
   document.querySelectorAll('.tab-panel').forEach(function(el) { el.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn, .bnav-btn').forEach(function(el) { el.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
-  document.querySelector('.tab-btn[data-tab="' + id + '"]').classList.add('active');
+  document.querySelectorAll('.tab-btn[data-tab="' + id + '"], .bnav-btn[data-tab="' + id + '"]').forEach(function(el) { el.classList.add('active'); });
+  window.scrollTo(0, 0);
 }
 
 // Solo rutina personalizada se auto-gestiona la rutina desde la app.
@@ -1511,7 +2553,10 @@ function applyClientTypeUI(type) {
   if (!rutinaBtn) return;
   var hideRutina = !!type && type !== 'rutina-personalizada';
   rutinaBtn.style.display = hideRutina ? 'none' : '';
-  if (hideRutina && rutinaBtn.classList.contains('active')) showTab('tab-perfil');
+  var rutinaNav = document.querySelector('.bnav-btn[data-tab="tab-rutina"]');
+  if (rutinaNav) rutinaNav.style.display = hideRutina ? 'none' : '';
+  if (hideRutina && document.getElementById('tab-rutina').classList.contains('active')) showTab('tab-inicio');
+  renderInicioTab();
 }
 
 function setLoading(on) {
@@ -1599,7 +2644,7 @@ function doRegister() {
 }
 
 // ── VINCULAR CUENTA EXISTENTE CON CÓDIGO ──
-// Para una cuenta ya autenticada que quedó sin perfil de clienta vinculado
+// Para una cuenta ya autenticada que quedó sin perfil de cliente vinculado
 // (por ejemplo si Frida borró por error su solicitud en "Leads", o si se
 // registró como lead antes de tener un plan) — evita tener que crear una
 // cuenta nueva para volver a vincularla.
@@ -1744,8 +2789,8 @@ var WHATSAPP_MESSAGE = 'Hola Frida, estoy interesada en tomar un plan de entrena
 
 // admin.html signs into this fixed account behind the scenes (so its Storage/
 // DB writes pass auth-based rules) — Firebase persists that session on this
-// same domain, so it can leak into the clienta portal on shared devices.
-// Never treat it as a clienta session.
+// same domain, so it can leak into the cliente portal on shared devices.
+// Never treat it as a cliente session.
 var ADMIN_EMAIL = 'admin@fridaactive.app';
 
 var currentUid = null;
@@ -1765,7 +2810,7 @@ function loadDashboard(uid) {
 
 // A tab left open for hours can hold a stale Firebase Auth token — the read
 // below then comes back without perfil.clientId even for an already-linked
-// clienta, which used to bump her straight to the leads landing screen.
+// cliente, which used to bump her straight to the leads landing screen.
 // Force-refresh the ID token and retry once before trusting a "no client
 // linked" result, and fall back to the last confirmed clientId if it's
 // still empty after that.
@@ -1823,7 +2868,7 @@ function fetchPortalAndRender(uid, isRetry) {
 function renderPortalScreen(portal, perfil) {
   var firstName = perfil.nombre ? perfil.nombre.split(' ')[0] : '';
 
-  // No linked client record yet — she's a lead, not an active clienta.
+  // No linked client record yet — she's a lead, not an active cliente.
   // Show the services landing instead of an empty dashboard.
   if (!currentClientId) {
     document.getElementById('ls-greeting').textContent = firstName ? ('¡Hola, ' + firstName + '!') : '';
@@ -1833,7 +2878,11 @@ function renderPortalScreen(portal, perfil) {
     return;
   }
 
-  document.getElementById('dash-greeting').textContent = 'Hola, ' + firstName;
+  var dateEl = document.getElementById('dash-date');
+  if (dateEl) dateEl.textContent = faTodayLabel();
+  var greet = portalGreeting(firstName);
+  document.getElementById('dash-greeting-top').textContent = greet.top;
+  document.getElementById('dash-greeting').textContent = greet.main;
   document.getElementById('perfil-name').textContent = perfil.nombre || firstName || 'Hola';
   renderAvatar(perfil.fotoPerfil, currentClientName);
 
@@ -1842,7 +2891,6 @@ function renderPortalScreen(portal, perfil) {
   renderBioDisplay(perfil.bio);
   updateProfileCompletion();
   updateFichaCompletion();
-  renderCicloCard();
   renderPerfilRoleLine();
 
   CURRENT_ENTRENO_LOGS = portal.entrenoLogs || {};
@@ -1850,10 +2898,10 @@ function renderPortalScreen(portal, perfil) {
   renderTransformacion(portal.fotosProgreso || {});
   renderTrainingTracker(portal.diasEntrenados || {});
   loadPlanInfo();
+  loadPremioMes();
   loadAnuncios();
   initChatListener();
   loadBeneficios();
-  loadComunidad();
 
   setLoading(false);
   showScreen('screen-dashboard');
@@ -2059,7 +3107,7 @@ function handleAvatarFileSelect(input) {
 // ── RUTINA TAB ──
 function loadRutinaTab(clientId) {
   var el = document.getElementById('rutina-content');
-  if (!clientId) { el.innerHTML = '<div class="empty-note">Tu entrenadora todavía no vinculó tu rutina.</div>'; return; }
+  if (!clientId) { el.innerHTML = '<div class="empty-note">Tu coach todavía no vinculó tu rutina.</div>'; return; }
   db().ref('exerciseBank').once('value').then(function(snap) {
     EXERCISE_BANK = snap.val() || {};
   }).catch(function() {}).then(function() {
@@ -2067,7 +3115,7 @@ function loadRutinaTab(clientId) {
   }).then(function(snap) {
     var data = snap.val();
     if (!data || !data.days || data.days.length === 0) {
-      el.innerHTML = '<div class="empty-note">Tu entrenadora todavía no asignó tu rutina.</div>';
+      el.innerHTML = '<div class="empty-note">Tu coach todavía no asignó tu rutina.</div>';
       return;
     }
     currentRutinaData = data;
@@ -2458,6 +3506,7 @@ function renderRutinaTab() {
   }
 
   el.innerHTML = html;
+  renderInicioTab();
 }
 
 // ── VIDEO DE TÉCNICA ──
@@ -2612,7 +3661,11 @@ function guardarSesion(dayIndex, btnEl) {
   if (comentario) entry.comentario = comentario;
 
   db().ref('clientasPortal/' + currentUid + '/entrenoLogs').push(entry).then(function() {
-    alert('¡Sesión guardada! 💪');
+    // Guardar la sesión también marca hoy como día entrenado (un paso menos).
+    var hoyKey = localKey(new Date());
+    var yaEstaba = !!CURRENT_DIAS_ENTRENADOS[hoyKey];
+    if (!yaEstaba) toggleDiaEntrenado(hoyKey);
+    celebrate('💪', '¡Sesión guardada!', yaEstaba ? 'Excelente trabajo hoy.' : 'Marcamos hoy como día entrenado. Ya sumas ' + inicioCounts().mes + ' este mes.');
     if (commentEl) commentEl.value = '';
     db().ref('clientasPortal/' + currentUid + '/entrenoLogs').once('value').then(function(snap) {
       CURRENT_ENTRENO_LOGS = snap.val() || {};
@@ -2805,7 +3858,7 @@ function descargarRutinaPDF() {
 
 // ── TRANSFORMACIÓN (ANTES/DESPUÉS) ──
 // Privado: estas fotos viven bajo clientasPortal/{uid}, la misma rama que ya
-// solo lee la clienta dueña de la cuenta y Frida desde el admin — nadie más
+// solo lee el cliente dueña de la cuenta y Frida desde el admin — nadie más
 // tiene forma de llegar a ellas.
 var TRANSF_DATA = {};
 
@@ -2978,7 +4031,7 @@ function saveTransfCaption() {
   }
 }
 
-// Marcado manual — la clienta toca el día directamente al entrenar, en vez
+// Marcado manual — el cliente toca el día directamente al entrenar, en vez
 // de depender de que haya guardado una sesión completa con carga/reps.
 var CURRENT_DIAS_ENTRENADOS = {};
 
@@ -3002,11 +4055,12 @@ function renderTrainingTracker(diasEntrenados) {
   }
 
   // Meta del mes: días/semana × 4 semanas — mismo criterio que ya usa el
-  // admin para calcular "Sesiones" al armar el plan de la clienta.
+  // admin para calcular "Sesiones" al armar el plan del cliente.
   if (currentClientId) {
     db().ref('clients/' + currentClientId + '/days').once('value').then(function(snap) {
       var days = snap.val();
       var meta = (days && days.length) ? days.length * 4 : null;
+      if (meta !== CLIENT_META) { CLIENT_META = meta; setTimeout(renderInicioTab, 0); }
       document.getElementById('track-meta').textContent = meta !== null ? meta : '-';
       var ringMetaNum = document.getElementById('pf-ring-meta-num');
       if (ringMetaNum) ringMetaNum.textContent = meta !== null ? meta : '-';
@@ -3050,7 +4104,8 @@ function renderTrainingTracker(diasEntrenados) {
     var key = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     var done = !!CURRENT_DIAS_ENTRENADOS[key];
     var dot = logsByDate[key] ? '<span class="track-day-dot" onclick="event.stopPropagation();showDayComment(\'' + key + '\')"></span>' : '';
-    html += '<div class="track-day' + (done ? ' done' : '') + '" data-dk="' + key + '">' + day + dot + '</div>';
+    var isTodayCell = day === now.getDate();
+    html += '<div class="track-day' + (done ? ' done' : '') + (isTodayCell ? ' today' : '') + '" data-dk="' + key + '">' + day + dot + '</div>';
   }
   daysEl.innerHTML = html;
   daysEl.querySelectorAll('.track-day:not(.empty)').forEach(function(cell) {
@@ -3058,6 +4113,7 @@ function renderTrainingTracker(diasEntrenados) {
       toggleDiaEntrenado(this.getAttribute('data-dk'));
     });
   });
+  renderInicioTab();
 }
 
 // Busca el nombre de un ejercicio a partir del día y el id con el que
@@ -3180,9 +4236,9 @@ function updateProfileCompletion() {
   document.getElementById('pf-complete-fill').style.width = pct + '%';
 }
 
-// ── TU FICHA: Personal/Salud/Entreno las llena la clienta; Mi Plan es
+// ── TU FICHA: Personal/Salud/Entreno las llena el cliente; Mi Plan es
 // solo informativo. Se guarda en clientasPortal/{uid}/ficha — ahí mismo
-// la lee el admin (de solo lectura) al abrir el perfil de la clienta.
+// la lee el admin (de solo lectura) al abrir el perfil del cliente.
 var FICHA_DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 var fichaSelectedDias = [];
 
@@ -3237,181 +4293,6 @@ function closeFichaModal() {
   document.getElementById('ficha-modal').style.display = 'none';
 }
 
-// ── CICLO MENSTRUAL ──
-// Cada fase cambia los niveles de estrógeno/progesterona, y con eso la
-// energía disponible — la batería es solo una forma visual de mostrar
-// ese vaivén hormonal, no un dato médico exacto.
-var CICLO_FASES = {
-  menstrual: {
-    label: 'Fase menstrual',
-    tip: 'Tu energía está en su punto más bajo del mes — es normal. El estrógeno y la progesterona están en su nivel mínimo, así que el cuerpo tiene menos combustible disponible. Hoy no es el día para buscar récords: priorizá movimiento suave, cardio ligero o lo que el cuerpo te pida. Hidratate bien y descansá si lo necesitás.'
-  },
-  folicular: {
-    label: 'Fase folicular',
-    tip: 'Tu energía viene en subida. El estrógeno empieza a crecer, lo que mejora tu fuerza, tu ánimo y tu capacidad de recuperación. Buen momento para ir metiendo más intensidad poco a poco.'
-  },
-  ovulacion: {
-    label: 'Ovulación',
-    tip: 'Estás en tu pico de energía del mes. El estrógeno llega a su nivel más alto — es el mejor momento para entrenamientos de fuerza exigentes, cargas pesadas o buscar un récord. Aprovechalo.'
-  },
-  lutea_temprana: {
-    label: 'Fase lútea',
-    tip: 'La energía empieza a bajar de a poco. La progesterona sube y el cuerpo entra en modo más conservador. Seguís bien para entrenar fuerte, pero prestale atención a cómo te sentís.'
-  },
-  lutea_tardia: {
-    label: 'Fase lútea (pre-período)',
-    tip: 'Es normal sentirte con menos energía o más sensible estos días — el estrógeno y la progesterona caen juntos antes del período. Movete, pero sin exigirte al máximo: priorizá lo que te haga sentir bien, no lo más pesado.'
-  }
-};
-
-function cicloAvgLength(registros) {
-  if (registros.length < 2) return 28;
-  var diffs = [];
-  for (var i = 1; i < registros.length; i++) {
-    var d1 = new Date(registros[i - 1] + 'T00:00:00');
-    var d2 = new Date(registros[i] + 'T00:00:00');
-    diffs.push(Math.round((d2 - d1) / 86400000));
-  }
-  var sum = diffs.reduce(function(a, b) { return a + b; }, 0);
-  return Math.min(45, Math.max(21, Math.round(sum / diffs.length)));
-}
-
-function cicloFaseForDay(day, len) {
-  var scale = len / 28;
-  var menstrualEnd = Math.round(5 * scale);
-  var ovulStart = Math.round(14 * scale);
-  var ovulEnd = Math.round(16 * scale);
-  var luteaLateStart = len - Math.round(5 * scale);
-  if (day <= menstrualEnd) return 'menstrual';
-  if (day < ovulStart) return 'folicular';
-  if (day <= ovulEnd) return 'ovulacion';
-  if (day < luteaLateStart) return 'lutea_temprana';
-  return 'lutea_tardia';
-}
-
-// Curva aproximada de energía a lo largo del ciclo, interpolada entre
-// puntos clave (no es un dato médico exacto, es una guía visual).
-var CICLO_BATERIA_ANCLAS = [
-  { frac: 0, pct: 20 },
-  { frac: 5 / 28, pct: 30 },
-  { frac: 14 / 28, pct: 90 },
-  { frac: 16 / 28, pct: 100 },
-  { frac: 23 / 28, pct: 55 },
-  { frac: 1, pct: 15 }
-];
-
-function cicloBateriaForDay(day, len) {
-  var frac = (day - 1) / len;
-  for (var i = 1; i < CICLO_BATERIA_ANCLAS.length; i++) {
-    var a = CICLO_BATERIA_ANCLAS[i - 1], b = CICLO_BATERIA_ANCLAS[i];
-    if (frac <= b.frac) {
-      var t = (frac - a.frac) / (b.frac - a.frac || 1);
-      return Math.round(a.pct + (b.pct - a.pct) * t);
-    }
-  }
-  return 20;
-}
-
-function cicloComputeState(ciclo) {
-  var registros = Object.keys((ciclo && ciclo.registros) || {}).sort();
-  if (!registros.length) return null;
-  var lastDate = new Date(registros[registros.length - 1] + 'T00:00:00');
-  var today = new Date(); today.setHours(0, 0, 0, 0);
-  var daysSince = Math.floor((today - lastDate) / 86400000);
-  var avgLen = cicloAvgLength(registros);
-  var dayInCycle = (daysSince % avgLen) + 1;
-  return {
-    dayInCycle: dayInCycle,
-    avgLen: avgLen,
-    daysUntilNext: avgLen - dayInCycle + 1,
-    fase: cicloFaseForDay(dayInCycle, avgLen),
-    bateria: cicloBateriaForDay(dayInCycle, avgLen)
-  };
-}
-
-function cicloBateriaColor(pct) {
-  if (pct >= 70) return '#2a9d5c';
-  if (pct >= 40) return '#D4A429';
-  return '#E0776B';
-}
-
-function cicloBateriaSvg(pct) {
-  var color = cicloBateriaColor(pct);
-  var innerW = 46, fillW = Math.round(innerW * (pct / 100));
-  return '<svg width="72" height="36" viewBox="0 0 72 36">'
-    + '<rect x="1" y="1" width="62" height="34" rx="7" fill="none" stroke="var(--border)" stroke-width="2.5"/>'
-    + '<rect x="64" y="11" width="6" height="14" rx="2" fill="var(--border)"/>'
-    + '<rect x="9" y="9" width="' + innerW + '" height="18" rx="3" fill="#f2f4f9"/>'
-    + '<rect class="pf-battery-fill" x="9" y="9" width="' + fillW + '" height="18" rx="3" fill="' + color + '"/>'
-    + '<text x="32" y="22" class="pf-battery-pct" fill="' + color + '">' + pct + '%</text>'
-    + '</svg>';
-}
-
-function renderCicloCard() {
-  var body = document.getElementById('pf-ciclo-body');
-  if (!body) return;
-  var ciclo = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ciclo) || {};
-  var state = cicloComputeState(ciclo);
-  if (!state) {
-    body.innerHTML = '<div class="pf-ciclo-empty">Registrá cuándo te empezó tu último período para ver tu fase y nivel de energía del mes.</div>';
-    return;
-  }
-  var fase = CICLO_FASES[state.fase];
-  var metaText = state.fase === 'menstrual'
-    ? 'Día ' + state.dayInCycle + ' de tu ciclo'
-    : 'Día ' + state.dayInCycle + ' · próximo período en ' + state.daysUntilNext + (state.daysUntilNext === 1 ? ' día' : ' días');
-  body.innerHTML = '<div class="pf-ciclo-main">'
-    + '<div class="pf-battery-wrap">' + cicloBateriaSvg(state.bateria) + '</div>'
-    + '<div class="pf-ciclo-info"><div class="pf-ciclo-fase">' + fase.label + '</div><div class="pf-ciclo-meta">' + metaText + '</div></div>'
-    + '</div>'
-    + '<div class="pf-ciclo-tip">' + fase.tip + '</div>';
-}
-
-function openCicloModal() {
-  var ciclo = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ciclo) || {};
-  var registros = Object.keys(ciclo.registros || {}).sort().reverse();
-  document.getElementById('ciclo-fecha-input').value = new Date().toISOString().slice(0, 10);
-  var histEl = document.getElementById('ciclo-historial');
-  if (registros.length) {
-    var html = '<div class="ficha-field-label" style="margin-bottom:0.5rem;">Registros anteriores</div>';
-    registros.slice(0, 6).forEach(function(fecha) {
-      var d = new Date(fecha + 'T00:00:00');
-      html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.8rem;color:var(--text);">'
-        + '<span>' + d.getDate() + ' de ' + MESES_LARGOS[d.getMonth()] + ' ' + d.getFullYear() + '</span>'
-        + '<button onclick="deleteCicloRegistro(\'' + fecha + '\')" style="background:none;border:none;color:var(--muted);font-size:0.9rem;cursor:pointer;">✕</button>'
-        + '</div>';
-    });
-    histEl.innerHTML = html;
-  } else {
-    histEl.innerHTML = '';
-  }
-  document.getElementById('ciclo-modal').style.display = 'flex';
-}
-
-function closeCicloModal() {
-  document.getElementById('ciclo-modal').style.display = 'none';
-}
-
-function saveCicloRegistro() {
-  var fecha = document.getElementById('ciclo-fecha-input').value;
-  if (!fecha) return;
-  if (!CURRENT_PORTAL_DATA.ciclo) CURRENT_PORTAL_DATA.ciclo = {};
-  if (!CURRENT_PORTAL_DATA.ciclo.registros) CURRENT_PORTAL_DATA.ciclo.registros = {};
-  CURRENT_PORTAL_DATA.ciclo.registros[fecha] = true;
-  db().ref('clientasPortal/' + currentUid + '/ciclo/registros/' + fecha).set(true);
-  closeCicloModal();
-  renderCicloCard();
-}
-
-function deleteCicloRegistro(fecha) {
-  if (CURRENT_PORTAL_DATA.ciclo && CURRENT_PORTAL_DATA.ciclo.registros) {
-    delete CURRENT_PORTAL_DATA.ciclo.registros[fecha];
-  }
-  db().ref('clientasPortal/' + currentUid + '/ciclo/registros/' + fecha).remove();
-  openCicloModal();
-  renderCicloCard();
-}
-
 function switchFichaTab(tabId) {
   document.querySelectorAll('#ficha-modal .ficha-content').forEach(function(el) { el.style.display = 'none'; });
   document.querySelectorAll('#ficha-modal .ficha-tab').forEach(function(btn) { btn.classList.remove('active'); });
@@ -3423,7 +4304,7 @@ function switchFichaTab(tabId) {
   if (tabId === 'ficha-plan') renderFichaPlanTab();
 }
 
-// Solo informativo — acá no hay nada que la clienta pueda marcar como
+// Solo informativo — acá no hay nada que el cliente pueda marcar como
 // pagado, es para que sepa qué tiene y qué otros planes existen.
 function renderFichaPlanTab() {
   var actualEl = document.getElementById('ficha-plan-actual');
@@ -3497,10 +4378,10 @@ function getInstagramUrl(handle) {
 }
 
 // Beneficios se canjean 1 vez por ciclo — no es un código de por vida.
-// El "ciclo" es el período de plan activo de la clienta (su initDate en el
+// El "ciclo" es el período de plan activo del cliente (su initDate en el
 // panel de admin), así que el cupo se renueva justo cuando Frida le activa
 // un nuevo mes, no el día 1 de cada mes calendario. Si por algún motivo no
-// se puede leer su ciclo (clienta sin registro de plan todavía), se usa el
+// se puede leer su ciclo (cliente sin registro de plan todavía), se usa el
 // mes calendario como respaldo.
 function getCurrentMonthKey() {
   var d = new Date();
@@ -3535,42 +4416,6 @@ function loadBeneficios() {
       renderBeneficiosList();
     }).catch(function(e) { console.warn('loadBeneficios error', e.message); });
   });
-}
-
-// ── COMUNIDAD: feed de logros/fotos que Frida va subiendo, visible para
-// todas las clientas vinculadas (sin importar la modalidad). Por ahora
-// es de solo lectura acá — las publica Frida desde el admin.
-var DIAS_SEMANA_LARGOS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
-
-function loadComunidad() {
-  var el = document.getElementById('comunidad-feed');
-  if (!el) return;
-  db().ref('comunidadPosts').orderByChild('fecha').once('value').then(function(snap) {
-    var data = snap.val() || {};
-    var posts = Object.keys(data).map(function(k) { return Object.assign({ id: k }, data[k]); });
-    posts.sort(function(a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
-    renderComunidadFeed(posts);
-  }).catch(function(e) { console.warn('loadComunidad error', e.message); el.innerHTML = '<div class="empty-note">No se pudo cargar la comunidad.</div>'; });
-}
-
-function renderComunidadFeed(posts) {
-  var el = document.getElementById('comunidad-feed');
-  if (!el) return;
-  if (!posts.length) {
-    el.innerHTML = '<div class="empty-note">Todavía no hay publicaciones. ¡Pronto vas a ver acá lo que vamos logrando juntas!</div>';
-    return;
-  }
-  el.innerHTML = posts.map(function(p) {
-    var d = p.fecha ? new Date(p.fecha + 'T00:00:00') : null;
-    var dateLabel = d ? (DIAS_SEMANA_LARGOS[d.getDay()] + ' ' + d.getDate() + ' de ' + MESES_LARGOS[d.getMonth()]) : '';
-    var html = '<div class="comunidad-post">';
-    if (p.fotoUrl) html += '<img class="comunidad-post-photo" src="' + escapeHtml(p.fotoUrl) + '" alt="">';
-    html += '<div class="comunidad-post-body">';
-    if (dateLabel) html += '<div class="comunidad-post-date">' + escapeHtml(dateLabel) + '</div>';
-    if (p.texto) html += '<div class="comunidad-post-caption">' + escapeHtml(p.texto) + '</div>';
-    html += '</div></div>';
-    return html;
-  }).join('');
 }
 
 var BENEF_CAT_ICONS = {
@@ -3647,10 +4492,15 @@ function renderBenefCardsHtml(items) {
     if (b._canjeado && !b._vencida) {
       html += '<div class="benef-check-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>';
     }
+    // Portada con la primera foto de la marca (si tiene), para que se vean
+    // las imágenes desde la lista y no solo al entrar al perfil.
+    if (b.fotos && b.fotos.length) {
+      html += '<div class="benef-cover" style="background-image:url(\'' + escapeHtml(b.fotos[0]).replace(/'/g, '%27') + '\')"></div>';
+    }
     // Sin un logo real no se muestra ningún círculo en su lugar — una
     // inicial inventada se puede confundir con el logo real de la marca.
     if (b.logoUrl) {
-      html += '<img class="benef-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
+      html += '<img class="benef-logo' + (b.fotos && b.fotos.length ? ' on-cover' : '') + '" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
     }
     html += '<div class="benef-marca"><span class="benef-marca-text">' + escapeHtml(b.marca || '') + '</span></div>';
     if (b.descuento) html += '<div class="benef-descuento-pill' + (b._vencida ? ' muted' : '') + '"><span class="benef-descuento-pill-text">' + escapeHtml(b.descuento) + '</span></div>';
@@ -3710,8 +4560,41 @@ function getCanjeCount(b) {
 
 // Tarjeta del cupón en sí — sin ninguna etiqueta tipo "Cupón único" o "Sin
 // límite de usos": Frida prefiere que esos detalles del mecanismo no se
-// le muestren a la clienta, el comprobante alcanza con nombre + descuento.
+// le muestren al cliente, el comprobante alcanza con nombre + descuento.
+// Cupón con forma de ticket de regalo. La primera vez que se abre en la
+// sesión aparece una cajita de regalo que se abre con confeti.
+function renderGiftTicket(b) {
+  var desc = String(b.descuento || '');
+  var m = desc.match(/(\d+\s?%|\$\s?\d+(?:[.,]\d+)?|2\s?x\s?1)/i);
+  var big = m ? m[1].replace(/\s/g, '') : '';
+  var rest = m ? desc.replace(m[1], '').replace(/^\s*(de\s+)?/i, '').trim() : desc;
+  var seenKey = 'fa_gift_seen_' + (b.id || b.marca || '');
+  var seen = false;
+  try { seen = sessionStorage.getItem(seenKey) === '1'; sessionStorage.setItem(seenKey, '1'); } catch (e) {}
+  var html = '<div class="fa-gift-wrap' + (seen ? ' seen' : '') + '">';
+  if (!seen) {
+    html += '<div class="fa-gift" aria-hidden="true"><div class="fa-gift-lid"></div><div class="fa-gift-box"></div>';
+    for (var i = 0; i < 14; i++) html += '<span class="fa-confetti fa-c' + (i % 7) + '" style="--a:' + (i * 26) + 'deg;--d:' + (60 + (i % 4) * 18) + 'px"></span>';
+    html += '</div>';
+  }
+  html += '<div class="fa-ticket">'
+    + '<div class="fa-ticket-stub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/><path d="M12 9c-1-2.2-2.6-3.5-4-3.5S6 6.5 6.3 8 8.5 9 12 9Z"/><path d="M12 9c1-2.2 2.6-3.5 4-3.5S18 6.5 17.7 8 15.5 9 12 9Z"/></svg><span>REGALO</span></div>'
+    + '<div class="fa-ticket-main">'
+    + (b.logoUrl ? '<img class="fa-ticket-logo" src="' + escapeHtml(b.logoUrl) + '" alt="" onerror="this.style.display=\'none\'">' : '')
+    + '<span class="fa-ticket-tag">un regalo para ti</span>'
+    + (big ? '<span class="fa-ticket-big">' + escapeHtml(big) + '</span><span class="fa-ticket-rest">' + escapeHtml(rest || 'de descuento') + '</span>'
+           : '<span class="fa-ticket-big fa-ticket-big-text">' + escapeHtml(desc || 'Beneficio exclusivo') + '</span>')
+    + '<span class="fa-ticket-brand">en ' + escapeHtml(b.marca || '') + '</span>'
+    + (b.detalleDescuento ? '<span class="fa-ticket-detail">' + escapeHtml(b.detalleDescuento) + '</span>' : '')
+    + '<span class="fa-ticket-perf"></span>'
+    + '<span class="fa-ticket-for">Para: <b>' + escapeHtml(currentClientName || '') + '</b></span>'
+    + '<span class="fa-ticket-alliance">FridaActive × ' + escapeHtml(b.marca || '') + '</span>'
+    + '</div></div></div>';
+  return html;
+}
+
 function renderCouponVoucherCard(b) {
+  if (document.body.classList.contains('portal-dark')) return renderGiftTicket(b);
   var html = '<div class="bp-coupon-voucher">';
   if (b.logoUrl) html += '<img class="bp-coupon-voucher-logo" src="' + escapeHtml(b.logoUrl) + '" onerror="this.style.display=\'none\'">';
   html += '<div class="bp-coupon-voucher-alliance">FridaActive × ' + escapeHtml(b.marca || '') + '</div>';
@@ -3778,7 +4661,7 @@ function renderBenefProfileHtml(b) {
   } else {
     // Sin código de verificación: el cupón es un comprobante de la alianza
     // FridaActive × marca, y es Frida quien le avisa antes a la marca que
-    // esta clienta va a pasar — por eso no hace falta un código acá.
+    // este cliente va a pasar — por eso no hace falta un código acá.
     html += '<div class="bp-coupon-label">Tu cupón · ' + escapeHtml(cycleLabel(currentCycleKey)) + '</div>';
     html += renderCouponVoucherCard(b);
     html += '<div class="bp-coupon-sub">Mostrá este cupón en el negocio para canjearlo.</div>';
@@ -3789,9 +4672,9 @@ function renderBenefProfileHtml(b) {
   return html;
 }
 
-// Sin código: Frida le avisa antes a la marca que esta clienta va a pasar
+// Sin código: Frida le avisa antes a la marca que este cliente va a pasar
 // (ver canjearBeneficio), así que el comprobante de identidad acá es el
-// nombre de la clienta, no un código que la marca tendría que verificar.
+// nombre del cliente, no un código que la marca tendría que verificar.
 //
 // Antes esto generaba un PDF con un formato de vale chico (100x74mm), pero
 // muchos visores de PDF de celular lo abrían como una página enorme en
@@ -3907,7 +4790,7 @@ function generarCuponCanvas(b, cb) {
     ctx.fill();
 
     // Sin etiquetas de "cupón único" ni "sin límite de usos" — esos
-    // detalles del mecanismo no se le muestran a la clienta.
+    // detalles del mecanismo no se le muestran al cliente.
     ctx.fillStyle = '#1C55E5';
     ctx.font = '700 17px "DM Sans", sans-serif';
     ctx.fillText('TU CUPÓN · CLIENTA', panelX + 40, panelY + 55);
@@ -3991,7 +4874,7 @@ function canjearBeneficio(beneficioId) {
       document.getElementById('bp-content').innerHTML = renderBenefProfileHtml(b);
     }
     // Aviso automático a Frida por el chat — antes dependía de que la
-    // clienta además tocara "Enviar", así que a veces nunca se enteraba.
+    // cliente además tocara "Enviar", así que a veces nunca se enteraba.
     db().ref('clientasPortal/' + currentUid + '/chat').push({
       from: 'client',
       text: 'Quiero canjear mi cupón de ' + ((b && b.marca) || 'una marca aliada') + ' 🎁',
@@ -4007,9 +4890,9 @@ function loadPlanInfo() {
     renderPlanCountdown(snap.val());
   }).catch(function(e) {
     // El permiso para leer su propio plan depende de que
-    // client_links/{clientId} apunte a este uid — si una clienta se
+    // client_links/{clientId} apunte a este uid — si un cliente se
     // revinculó, ese puntero pudo quedar apuntando a otra cuenta vieja.
-    // Como esta clienta sí es dueña legítima de este clientId (es lo que
+    // Como este cliente sí es dueña legítima de este clientId (es lo que
     // dice su propio perfil), se intenta auto-reparar ese puntero y
     // reintentar antes de darse por vencido.
     if (e && e.code === 'PERMISSION_DENIED' && currentUid) {
@@ -4032,7 +4915,7 @@ function loadPlanInfo() {
 var PLAN_GRACE_DAYS = 5;
 var PLAN_LOCKED = false;
 // Vencido (tenía fechas y ya pasaron) y "nunca tuvo plan" se bloquean
-// igual, pero el mensaje que ve la clienta tiene que ser distinto — no
+// igual, pero el mensaje que ve el cliente tiene que ser distinto — no
 // tiene sentido decirle "tu programa caducó" si nunca le activaron uno.
 var PLAN_NEVER_SET = false;
 
@@ -4262,7 +5145,7 @@ function sendChatMessage() {
 }
 
 // Fotos/videos del chat van al mismo bucket que las demás fotos de la
-// clienta, bajo su propio uid — mismo patrón que la foto de perfil.
+// cliente, bajo su propio uid — mismo patrón que la foto de perfil.
 function handleChatMediaSelect(input) {
   var file = input.files && input.files[0];
   input.value = '';
@@ -4349,7 +5232,7 @@ function plSubmitContact(e) {
   var btn = document.querySelector('#pl-contact-form .pl-contact-submit');
   if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
 
-  // Va a "Solicitudes nuevas" en el Portal de Clientas del admin, en vez de
+  // Va a "Solicitudes nuevas" en el Portal de Clientes del admin, en vez de
   // abrirle WhatsApp a la visitante — Frida ve todas las solicitudes desde
   // un solo lugar y decide cómo y cuándo responder.
   db().ref('landingLeads').push({
