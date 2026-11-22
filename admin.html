@@ -927,6 +927,7 @@
         <div class="dash-logo">fa</div>
         <div class="dash-brand-name">fridaactive</div>
       </div>
+      <button class="logout-btn" onclick="openChangePwdModal()" style="margin-right:0.5rem;">Cambiar contraseña</button>
       <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
     </div>
     <div class="ad-date" id="ad-date"></div>
@@ -993,6 +994,20 @@
 </div>
 
 <!-- ══════════ MODAL COTIZACIÓN RÁPIDA ══════════ -->
+<div id="change-pwd-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+      <div style="font-size:1rem;font-weight:700;color:var(--text);">Cambiar contraseña</div>
+      <button onclick="closeChangePwdModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
+    </div>
+    <div class="fin-form-row"><div class="fin-form-label">Contraseña actual</div><input class="fin-form-input" id="cp-current" type="password" autocomplete="current-password"></div>
+    <div class="fin-form-row"><div class="fin-form-label">Contraseña nueva (mínimo 6 caracteres)</div><input class="fin-form-input" id="cp-new" type="password" autocomplete="new-password"></div>
+    <div class="fin-form-row"><div class="fin-form-label">Repetir contraseña nueva</div><input class="fin-form-input" id="cp-new2" type="password" autocomplete="new-password"></div>
+    <div id="cp-msg" style="font-size:0.78rem;margin:0.5rem 0 0.75rem;min-height:1.1em;"></div>
+    <button class="login-btn" id="cp-submit-btn" onclick="submitChangePassword()" style="width:100%;">Guardar nueva contraseña</button>
+  </div>
+</div>
+
 <div id="quick-quote-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;">
 
@@ -3441,6 +3456,53 @@ function logout() {
   sessionStorage.removeItem(SESSION_KEY);
   showScreen('login');
   document.getElementById('pwd-input').value = '';
+}
+
+// ── Cambiar contraseña (ya no hay ninguna copia de la contraseña en el
+// código: para cambiarla hace falta volver a escribir la actual y, con
+// eso, Firebase Auth la reemplaza por la nueva). ──
+function openChangePwdModal() {
+  ['cp-current', 'cp-new', 'cp-new2'].forEach(function(id) { document.getElementById(id).value = ''; });
+  document.getElementById('cp-msg').textContent = '';
+  document.getElementById('cp-msg').style.color = '';
+  document.getElementById('change-pwd-modal').style.display = 'flex';
+}
+function closeChangePwdModal() {
+  document.getElementById('change-pwd-modal').style.display = 'none';
+}
+function submitChangePassword() {
+  var actual = document.getElementById('cp-current').value;
+  var nueva = document.getElementById('cp-new').value;
+  var nueva2 = document.getElementById('cp-new2').value;
+  var msgEl = document.getElementById('cp-msg');
+  msgEl.style.color = '#C8282E';
+  if (!actual || !nueva || !nueva2) { msgEl.textContent = 'Completa los tres campos.'; return; }
+  if (nueva.length < 6) { msgEl.textContent = 'La contraseña nueva debe tener al menos 6 caracteres.'; return; }
+  if (nueva !== nueva2) { msgEl.textContent = 'Las dos contraseñas nuevas no coinciden.'; return; }
+  var user = firebase.auth().currentUser;
+  if (!user) { msgEl.textContent = 'Tu sesión expiró, vuelve a entrar e intenta de nuevo.'; return; }
+  var btn = document.getElementById('cp-submit-btn');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+  var cred = firebase.auth.EmailAuthProvider.credential(ADMIN_EMAIL, actual);
+  user.reauthenticateWithCredential(cred).then(function() {
+    return user.updatePassword(nueva);
+  }).then(function() {
+    msgEl.style.color = '#2a7a2a';
+    msgEl.textContent = '✅ Contraseña actualizada. La próxima vez que entres, usa la nueva.';
+    btn.disabled = false; btn.textContent = 'Guardar nueva contraseña';
+    document.getElementById('cp-current').value = '';
+    document.getElementById('cp-new').value = '';
+    document.getElementById('cp-new2').value = '';
+  }).catch(function(err) {
+    btn.disabled = false; btn.textContent = 'Guardar nueva contraseña';
+    if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential' || err.code === 'auth/invalid-login-credentials') {
+      msgEl.textContent = 'La contraseña actual no es correcta.';
+    } else if (err.code === 'auth/weak-password') {
+      msgEl.textContent = 'La contraseña nueva es muy débil, prueba con otra.';
+    } else {
+      msgEl.textContent = 'No se pudo cambiar: ' + err.message;
+    }
+  });
 }
 
 // ── CLIENT DATA ──
