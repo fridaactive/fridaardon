@@ -958,16 +958,26 @@
 .in-goal-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#5b8bf5,#F5ECCB);transition:width 0.8s cubic-bezier(.2,.8,.2,1);}
 .in-goal-prize{font-size:0.78rem;margin-top:0.6rem;line-height:1.45;color:rgba(255,255,255,0.85);}
 .in-goal-prize b{color:#F5ECCB;}
-.in-ciclo{margin-top:0.9rem;padding:1rem;border-radius:20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;}
+.in-ciclo{position:relative;overflow:hidden;margin-top:0.9rem;padding:1rem;border-radius:20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;animation:faExpand 0.4s ease both;}
+.in-ciclo-menstrual{background:linear-gradient(135deg,rgba(242,130,126,0.2),rgba(255,255,255,0.04));border-color:rgba(242,130,126,0.35);}
+.in-ciclo-folicular{background:linear-gradient(135deg,rgba(143,176,255,0.2),rgba(255,255,255,0.04));border-color:rgba(143,176,255,0.35);}
+.in-ciclo-ovulacion{background:linear-gradient(135deg,rgba(245,236,203,0.25),rgba(28,85,229,0.22));border-color:rgba(245,236,203,0.55);}
+.in-ciclo-lutea_temprana{background:linear-gradient(135deg,rgba(143,176,255,0.14),rgba(255,255,255,0.04));}
+.in-ciclo-lutea_tardia{background:linear-gradient(135deg,rgba(242,130,126,0.12),rgba(255,255,255,0.04));}
 .in-ciclo-empty{font-size:0.78rem;color:rgba(255,255,255,0.75);line-height:1.5;}
 .in-ciclo-top{display:flex;align-items:center;gap:0.9rem;}
+.in-ciclo-batt-wrap{flex-shrink:0;display:flex;animation:ciclo-float 3.2s ease-in-out infinite;}
 .in-ciclo-info{flex:1;min-width:0;}
 .in-ciclo-fase{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;font-size:1rem;line-height:1.15;}
 .in-ciclo-meta{font-size:0.72rem;color:rgba(255,255,255,0.6);margin-top:0.2rem;}
 .in-ciclo-log-btn{margin-left:auto;flex-shrink:0;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.22);border-radius:100px;padding:0.4rem 0.85rem;font-size:0.68rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;}
+.in-ciclo-log-btn:active{transform:scale(0.95);}
 .in-ciclo-tip{font-size:0.78rem;color:rgba(255,255,255,0.85);line-height:1.5;margin-top:0.75rem;}
 .in-battery-pct{font-size:0.62rem;font-weight:700;text-anchor:middle;}
-.in-battery-fill{transition:width 0.6s ease, fill 0.6s ease;}
+.in-battery-fill{transition:width 0.6s ease, fill 0.6s ease;animation:ciclo-glow 2.2s ease-in-out infinite;transform-origin:9px 18px;}
+@keyframes ciclo-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+@keyframes ciclo-glow{0%,100%{opacity:1;}50%{opacity:0.68;}}
+@media (prefers-reduced-motion: reduce){.in-ciclo-batt-wrap,.in-battery-fill{animation:none;}}
 @media (prefers-reduced-motion: reduce){.in-battery-fill{transition:none;}}
 .in-med-count{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:0.72rem;opacity:0.7;}
 .in-medals{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:0.3rem;padding:0.9rem 0.6rem 0.8rem;border-radius:20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);}
@@ -2163,22 +2173,27 @@ function checkInHoy(on) {
 var CICLO_FASES = {
   menstrual: {
     label: 'Fase menstrual',
+    emoji: '🩸',
     tip: 'Tu energía está en su punto más bajo del mes — es normal. El estrógeno y la progesterona están en su nivel mínimo, así que el cuerpo tiene menos combustible disponible. Hoy no es el día para buscar récords: prioriza movimiento suave, cardio ligero o lo que el cuerpo te pida. Hidrátate bien y descansa si lo necesitas.'
   },
   folicular: {
     label: 'Fase folicular',
+    emoji: '🌱',
     tip: 'Tu energía viene en subida. El estrógeno empieza a crecer, lo que mejora tu fuerza, tu ánimo y tu capacidad de recuperación. Buen momento para ir metiendo más intensidad poco a poco.'
   },
   ovulacion: {
     label: 'Ovulación',
+    emoji: '✨',
     tip: 'Estás en tu pico de energía del mes. El estrógeno llega a su nivel más alto — es el mejor momento para entrenamientos de fuerza exigentes, cargas pesadas o buscar un récord. Aprovéchalo.'
   },
   lutea_temprana: {
     label: 'Fase lútea',
+    emoji: '🍃',
     tip: 'La energía empieza a bajar de a poco. La progesterona sube y el cuerpo entra en modo más conservador. Sigues bien para entrenar fuerte, pero presta atención a cómo te sientes.'
   },
   lutea_tardia: {
     label: 'Fase lútea (pre-período)',
+    emoji: '🌙',
     tip: 'Es normal sentirte con menos energía o más sensible estos días — el estrógeno y la progesterona caen juntos antes del período. Muévete, pero sin exigirte al máximo: prioriza lo que te haga sentir bien, no lo más pesado.'
   }
 };
@@ -2278,9 +2293,10 @@ function cicloInicioHtml() {
   var metaText = state.fase === 'menstrual'
     ? 'Día ' + state.dayInCycle + ' de tu ciclo'
     : 'Día ' + state.dayInCycle + ' · próximo período en ' + state.daysUntilNext + (state.daysUntilNext === 1 ? ' día' : ' días');
-  return '<div class="in-ciclo">'
-    + '<div class="in-ciclo-top">' + cicloBateriaSvg(state.bateria)
-    + '<div class="in-ciclo-info"><div class="in-ciclo-fase">' + fase.label + '</div><div class="in-ciclo-meta">' + metaText + '</div></div>'
+  var sparkle = state.fase === 'ovulacion' ? '<svg class="fa-sticker fa-sticker-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 5.6 2.4 8 8 9-5.6 1-7.4 3.4-8 9-.6-5.6-2.4-8-8-9 5.6-1 7.4-3.4 8-9z"/></svg>' : '';
+  return '<div class="in-ciclo in-ciclo-' + state.fase + '">' + sparkle
+    + '<div class="in-ciclo-top"><div class="in-ciclo-batt-wrap">' + cicloBateriaSvg(state.bateria) + '</div>'
+    + '<div class="in-ciclo-info"><div class="in-ciclo-fase">' + fase.emoji + ' ' + fase.label + '</div><div class="in-ciclo-meta">' + metaText + '</div></div>'
     + '<button type="button" class="in-ciclo-log-btn" onclick="openCicloModal()">+ Registrar</button></div>'
     + '<div class="in-ciclo-tip">' + fase.tip + '</div></div>';
 }
