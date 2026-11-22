@@ -279,14 +279,14 @@
    "idea": "Cada semana una historia que invite a entrenar contigo. La de la semana pasada (con encuesta) te trajo 3 personas interesadas, así que repetimos la fórmula: mostrar el plan, el link y una encuesta para que levanten la mano.",
    "tomas": [
     {
-     "graba": "HISTORIA 1: foto o video tuyo entrenando a un cliente, o tu celular mostrando la app con una rutina",
+     "graba": "HISTORIA 1: la imagen ya diseñada (celular con tu app): contenido/imagenes/historia-planes-1-app.png",
      "habla": false,
-     "dice": "Texto: \"¿Quieres entrenar con un plan hecho *solo para ti*?\" · abajo: \"Te cuento 👉\""
+     "dice": "Ya trae el texto \"¿Quieres entrenar con un plan hecho solo para ti?\". Si quieres, agrega un sticker de música."
     },
     {
-     "graba": "HISTORIA 2: tu imagen de planes online (la de tu foto con los precios de 1, 3 y 6 meses)",
+     "graba": "HISTORIA 2: la imagen ya diseñada \"Así puedes entrenar conmigo\" (sin precios): contenido/imagenes/historia-planes-2-tipos.png",
      "habla": false,
-     "dice": "Sticker de link: fridaactive.com/servicios.html con el texto \"Ver planes\" · Texto: \"Plan de alimentación incluido 🥗\""
+     "dice": "Agrega el sticker de link en la parte de abajo: fridaactive.com/servicios.html con el texto \"Ver planes\""
     },
     {
      "graba": "HISTORIA 3: foto tuya sonriendo o en el gym",
@@ -302,8 +302,8 @@
    ],
    "caption": "(Las historias no llevan caption.)",
    "checklist": [
-    "Imagen de planes a la mano",
-    "Sticker de link a fridaactive.com/servicios.html",
+    "Las 2 imágenes ya diseñadas",
+    "Sticker de link a fridaactive.com/servicios.html en la historia 2",
     "Encuesta en la historia 3",
     "Revisar quién votó y escribirle el mismo día"
    ]
