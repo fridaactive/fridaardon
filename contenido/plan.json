@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-11-19",
+ "actualizado": "2026-11-22",
  "videos": [
   {
    "id": "v2026-11-10-cardio",
@@ -268,58 +268,74 @@
   {
    "id": "v2026-11-17-comidas",
    "titulo": "Lo que como en un día sin contar calorías",
-   "pilar": "Alimentación",
-   "formato": "Reel con voz en off",
-   "duracion": "25 a 30 s",
+   "pilar": "Alimentación (educativo)",
+   "formato": "Carrusel de fotos (8 fotos) con un consejo en cada una",
+   "duracion": "8 fotos verticales (4:5)",
    "publicar": {
     "fecha": "2026-11-24",
     "hora": "18:00"
    },
-   "grabar": "2026-11-22",
-   "editar": "2026-11-23",
-   "borrador": true,
-   "idea": "Mostrar tus comidas de un día real y por qué eliges cada una, sin números de calorías ni de peso. Comer bien no es comer poco.",
+   "grabar": "2026-11-23",
+   "editar": "2026-11-24",
+   "borrador": false,
+   "idea": "Tus comidas reales de un día, en fotos, y en cada foto un consejo corto sobre por qué la comes: proteína, carbohidratos, grasas buenas y verduras. Sin calorías ni porciones exactas: aprender a armar tus platos.",
    "tomas": [
     {
-     "graba": "Hook: tu primera comida del día, muy de cerca",
+     "graba": "FOTO 1 · PORTADA (el hook): tú con tu desayuno o tu café, sonriendo, con luz natural",
      "habla": false,
-     "dice": "Texto: \"No cuento calorías, y así me *alimento*\""
+     "dice": "Texto grande: \"Lo que como en un día *sin contar calorías*\" · abajo: \"desliza →\""
     },
     {
-     "graba": "Desayuno: preparándolo y el plato listo",
-     "habla": true,
-     "dice": "Voz: por qué lo elegiste (energía para entrenar)"
-    },
-    {
-     "graba": "Snack o comida antes o después de entrenar",
-     "habla": true,
-     "dice": "Voz: \"Antes contaba todo, y eso me hacía mucho daño\""
-    },
-    {
-     "graba": "Almuerzo",
-     "habla": true,
-     "dice": "Voz: proteína para recuperarme"
-    },
-    {
-     "graba": "Algo rico \"porque sí\" (un antojo)",
-     "habla": true,
-     "dice": "Voz: también hay espacio para disfrutar"
-    },
-    {
-     "graba": "Cena y cierre",
+     "graba": "FOTO 2 · DESAYUNO desde arriba (ej. huevos, pan o avena y fruta)",
      "habla": false,
-     "dice": "Texto: \"Comer bien no es comer **POCO**\""
+     "dice": "\"Desayuno con **proteína**: me mantiene llena por más tiempo y me ayuda a no llegar con hambre feroz al almuerzo\""
+    },
+    {
+     "graba": "FOTO 3 · SNACK o MERIENDA (ej. yogurt griego con fruta, o fruta con crema de maní)",
+     "habla": false,
+     "dice": "\"Los **carbohidratos** no son el enemigo: son la energía que tu cuerpo usa para entrenar\""
+    },
+    {
+     "graba": "FOTO 4 · ALMUERZO: el plato completo desde arriba",
+     "habla": false,
+     "dice": "\"Así armo mi plato: **la mitad verduras**, un cuarto proteína y un cuarto carbohidrato. Sin pesar nada\""
+    },
+    {
+     "graba": "FOTO 5 · ANTES o DESPUÉS DE ENTRENAR: tu comida o batido con el gym de fondo",
+     "habla": false,
+     "dice": "\"Después de entrenar: **proteína + carbohidrato** para recuperarte y que tus músculos crezcan\""
+    },
+    {
+     "graba": "FOTO 6 · UN ANTOJO \"porque sí\" (un postre, un chocolate, un café rico)",
+     "habla": false,
+     "dice": "\"Y sí, también hay espacio para **disfrutar**. Comer bien no es comer perfecto\""
+    },
+    {
+     "graba": "FOTO 7 · CENA desde arriba, con algo de grasa buena a la vista (aguacate, aceite de oliva, nueces)",
+     "habla": false,
+     "dice": "\"Las **grasas buenas** también importan: tu cuerpo las necesita para tus hormonas y para absorber vitaminas\""
+    },
+    {
+     "graba": "FOTO 8 · CIERRE: foto tuya (o fondo de color de tu marca) con el mensaje final",
+     "habla": false,
+     "dice": "\"Comer bien no es comer **POCO**\" · abajo: \"Guárdalo para armar tus platos 📌\""
     }
    ],
    "notas": [
-    "Borrador: lo revisamos juntas antes de grabar.",
-    "Cuidado: sin calorías, sin peso y sin \"comí solo esto\"."
+    "Es un carrusel de fotos, no un reel. Toma las fotos durante el lunes 23 en tus comidas normales y súbelas al Drive esa noche; yo diseño las 8 fotos con los textos el martes.",
+    "Fotos verticales, con luz natural (cerca de una ventana), tomadas desde arriba o en ángulo, que se vean tus manos o tu mesa. Toma 2 o 3 de cada comida.",
+    "Lo que comas está bien: el consejo se adapta a tu comida real. Si alguna foto no encaja, me dices qué comiste y ajusto el texto.",
+    "Sin números de calorías, sin peso y sin \"comí solo esto\". El mensaje es aprender a armar platos, no restringir.",
+    "La primera foto es el hook: tiene que dar ganas de deslizar."
    ],
-   "caption": "Durante mucho tiempo mi relación con la comida fue una pelea. Hoy como para tener energía, para entrenar y para disfrutar. Esto es lo que me funciona a mí, no una dieta para copiar. ¿Quieres que te cuente más de mi historia con la comida?",
+   "caption": "Lo que como en un día sin contar calorías 🍽️\n\nDurante mucho tiempo creí que comer bien era comer poco. Hoy armo mis platos con proteína, carbohidratos, grasas buenas y verduras, y como para tener energía, para entrenar y también para disfrutar.\n\nNo es una dieta para copiar: es una forma de aprender a armar tus platos 💙\n\nGuárdalo para tu próxima comida 📌",
    "checklist": [
-    "Video HDR apagado",
-    "Grabar cada comida con luz natural",
-    "Subir todos los clips a la carpeta de Drive"
+    "Luz natural (cerca de una ventana)",
+    "Lente limpio",
+    "Fotos verticales",
+    "Tomar 2 o 3 fotos de cada comida",
+    "Una foto tuya para la portada",
+    "Subir las fotos al Drive el lunes en la noche"
    ]
   },
   {
