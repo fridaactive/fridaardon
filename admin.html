@@ -98,6 +98,14 @@
   .dash-logo { font-size:1.4rem; font-weight:700; color:#fff; background:rgba(255,255,255,0.15); padding:0.2rem 0.55rem; border-radius:8px; }
   .dash-brand-name { font-size:0.65rem; color:rgba(255,255,255,0.6); letter-spacing:0.2em; text-transform:uppercase; }
   .logout-btn { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.7); border-radius:100px; padding:0.3rem 0.85rem; font-size:0.62rem; font-family:'DM Sans',sans-serif; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+  .acct-menu-wrap { position:relative; }
+  .acct-menu-btn { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.85); border-radius:50%; width:2.1rem; height:2.1rem; display:flex; align-items:center; justify-content:center; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+  .acct-menu-btn svg { width:1.05rem; height:1.05rem; }
+  .acct-menu-list { display:none; position:absolute; top:calc(100% + 0.5rem); right:0; background:#fff; border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,0.18); min-width:180px; padding:0.4rem; z-index:20; }
+  .acct-menu-list.open { display:block; }
+  .acct-menu-item { display:flex; align-items:center; gap:0.6rem; width:100%; background:none; border:none; text-align:left; padding:0.65rem 0.7rem; font-size:0.78rem; font-family:'DM Sans',sans-serif; color:var(--text); border-radius:9px; cursor:pointer; }
+  .acct-menu-item:hover { background:#F4F6FF; }
+  .acct-menu-item.danger { color:#C8282E; }
 
   .dash-greeting { font-size:clamp(1.8rem,7vw,2.8rem); font-weight:700; color:#fff; line-height:1.1; position:relative; z-index:1; margin-bottom:0.3rem; }
   .dash-greeting span { color:var(--cream); }
@@ -927,8 +935,13 @@
         <div class="dash-logo">fa</div>
         <div class="dash-brand-name">fridaactive</div>
       </div>
-      <button class="logout-btn" onclick="openChangePwdModal()" style="margin-right:0.5rem;">Cambiar contraseña</button>
-      <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+      <div class="acct-menu-wrap">
+        <button class="acct-menu-btn" onclick="toggleAcctMenu(event)" aria-label="Cuenta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        <div class="acct-menu-list" id="acct-menu-list">
+          <button class="acct-menu-item" onclick="closeAcctMenu();openChangePwdModal()"><span>🔒</span> Cambiar contraseña</button>
+          <button class="acct-menu-item danger" onclick="logout()"><span>↩</span> Cerrar sesión</button>
+        </div>
+      </div>
     </div>
     <div class="ad-date" id="ad-date"></div>
     <div class="dash-greeting">Hola,<br><span>Frida</span></div>
@@ -3457,6 +3470,18 @@ function logout() {
   showScreen('login');
   document.getElementById('pwd-input').value = '';
 }
+
+function toggleAcctMenu(ev) {
+  if (ev) ev.stopPropagation();
+  document.getElementById('acct-menu-list').classList.toggle('open');
+}
+function closeAcctMenu() {
+  document.getElementById('acct-menu-list').classList.remove('open');
+}
+document.addEventListener('click', function(ev) {
+  var list = document.getElementById('acct-menu-list');
+  if (list && list.classList.contains('open') && !ev.target.closest('.acct-menu-wrap')) list.classList.remove('open');
+});
 
 // ── Cambiar contraseña (ya no hay ninguna copia de la contraseña en el
 // código: para cambiarla hace falta volver a escribir la actual y, con
