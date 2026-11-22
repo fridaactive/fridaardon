@@ -41,18 +41,10 @@ var CY_SENTIR = [
     face:'<path d="M17 15.6l1.5 3.2 3.4.4-2.5 2.3.7 3.4-3.1-1.7-3.1 1.7.7-3.4-2.5-2.3 3.4-.4z" fill="#3B2A3F"/><path d="M31 15.6l1.5 3.2 3.4.4-2.5 2.3.7 3.4-3.1-1.7-3.1 1.7.7-3.4-2.5-2.3 3.4-.4z" fill="#3B2A3F"/><path d="M15.5 28.5h17q-1 8.5-8.5 8.5t-8.5-8.5z" fill="#3B2A3F"/><path d="M19.5 34.2q4.5-3 9 0q-2 2.3-4.5 2.3t-4.5-2.3z" fill="#FF7A8A"/><path d="M41 4l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z" fill="#FFF"/><path d="M6 8l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" fill="#FFF" opacity=".85"/>',
     tip:'¡Aprovéchala! Hoy es un gran día para retarte un poquito más.' }
 ];
-var CY_FACE_N = 0;
+// Caritas 3D (Fluent Emoji de Microsoft, licencia MIT) guardadas en img/caritas/{id}.webp
+var CY_IMG_BASE = (typeof CY_IMG_BASE !== 'undefined') ? CY_IMG_BASE : 'img/caritas/';
 function cicloCaraSvg(s) {
-  var n = ++CY_FACE_N, g = 'cyf' + n;
-  return '<svg viewBox="0 0 48 48" aria-hidden="true"><defs>'
-    + '<radialGradient id="' + g + '" cx="36%" cy="30%" r="75%"><stop offset="0" stop-color="' + s.c[0] + '"/><stop offset=".55" stop-color="' + s.c[1] + '"/><stop offset="1" stop-color="' + s.c[2] + '"/></radialGradient>'
-    + '<linearGradient id="cyDrop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFE8FF"/><stop offset="1" stop-color="#4FA8E8"/></linearGradient>'
-    + '<style>.k{fill:none;stroke:#3B2A3F;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}</style></defs>'
-    + '<ellipse cx="24" cy="45" rx="13" ry="2.2" fill="#000" opacity=".22"/>'
-    + '<circle cx="24" cy="25" r="19.5" fill="url(#' + g + ')"/>'
-    + '<ellipse cx="17" cy="13" rx="7" ry="4" fill="#fff" opacity=".55" transform="rotate(-25 17 13)"/>'
-    + '<ellipse cx="12.5" cy="28.5" rx="3.6" ry="2.3" fill="' + s.cheek + '" opacity=".45"/><ellipse cx="35.5" cy="28.5" rx="3.6" ry="2.3" fill="' + s.cheek + '" opacity=".45"/>'
-    + s.face + '</svg>';
+  return '<img class="cy-face" src="' + CY_IMG_BASE + s.id + '.webp" alt="" width="40" height="40" loading="lazy">';
 }
 function cicloSentirInfo(id) { for (var i = 0; i < CY_SENTIR.length; i++) if (CY_SENTIR[i].id === id) return CY_SENTIR[i]; return null; }
 function cicloFase(dia, largo) {
