@@ -23,6 +23,29 @@ var CY_FASES = {
     ideal:'Tu rutina normal, sin forzar', cuida:'Duerme bien y come suficiente',
     sci:'La progesterona sube y puede dar más cansancio, calor o antojos; es normal y no significa que estés fallando.' }
 };
+// Cómo se siente hoy: caritas dibujadas (SVG propio) y un consejo para cada una.
+var CY_SENTIR = [
+  { id:'dolor', label:'Con dolor', val:1, fill:'#FFD6DA',
+    face:'<path d="M12 15l4 2M28 15l-4 2" /><path d="M13 21l3 2-3 2M27 21l-3 2 3 2"/><path d="M14 31q3-3 6 0t6 0"/><path d="M33 7l1.5 3M36 11l-3 .5" stroke="#E8546A"/>',
+    tip:'Si tienes cólicos, hoy prioriza moverte suave: caminar, estiramientos o movilidad. El calor en el vientre ayuda a muchas. Si el dolor es muy fuerte, descansa y consulta a tu médico.' },
+  { id:'nauseas', label:'Con náuseas', val:1, fill:'#DDF3CC',
+    face:'<path d="M13 19h5M22 19h5"/><path d="M14 29q2-2 4 0t4 0t4 0"/><path d="M31 11q1.5 2.5 0 4q-1.5-1.5 0-4z" fill="#7CC4F0" stroke="#7CC4F0"/>',
+    tip:'Hoy toma agua a sorbos, come algo ligero y, si te animas, haz algo suave. No pasa nada si hoy solo descansas.' },
+  { id:'cansada', label:'Cansada', val:2, fill:'#E4E8F7',
+    face:'<path d="M12 20q3 2 6 0M22 20q3 2 6 0"/><path d="M17 29h6"/><text x="29" y="12" font-size="8" font-weight="800" fill="#0B1B3F" stroke="none">z</text>',
+    tip:'Haz tu rutina más ligera: menos series o menos peso también suma. Y esta noche, a dormir temprano.' },
+  { id:'bien', label:'Bien', val:4, fill:'#F5ECCB',
+    face:'<path d="M12 20q3-3 6 0M22 20q3-3 6 0"/><path d="M14 27q6 5 12 0"/>',
+    tip:'¡Qué bueno! Haz tu rutina normal y disfrútala.' },
+  { id:'contodo', label:'¡Con todo!', val:5, fill:'#FFF0B8',
+    face:'<path d="M15 15l1 2.2 2.3.3-1.7 1.6.4 2.3-2-1.1-2 1.1.4-2.3-1.7-1.6 2.3-.3z" fill="#0B1B3F"/><path d="M25 15l1 2.2 2.3.3-1.7 1.6.4 2.3-2-1.1-2 1.1.4-2.3-1.7-1.6 2.3-.3z" fill="#0B1B3F"/><path d="M13 26q7 8 14 0z" fill="#0B1B3F"/><path d="M34 4l-3 6h2.5l-1.5 5 4.5-7H34l1.5-4z" fill="#F4C542" stroke="#B07D10" stroke-width=".8"/>',
+    tip:'¡Aprovéchala! Hoy es un gran día para retarte un poquito más.' }
+];
+function cicloCaraSvg(s) {
+  return '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="21" r="16" fill="' + s.fill + '" stroke="#0B1B3F" stroke-width="2"/>'
+    + '<g fill="none" stroke="#0B1B3F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + s.face + '</g></svg>';
+}
+function cicloSentirInfo(id) { for (var i = 0; i < CY_SENTIR.length; i++) if (CY_SENTIR[i].id === id) return CY_SENTIR[i]; return null; }
 function cicloFase(dia, largo) {
   largo = largo || 28; var ov = largo - 14;
   if (dia <= 5) return 'menstrual';
@@ -32,7 +55,8 @@ function cicloFase(dia, largo) {
 }
 function cicloEnergia(dia, largo, sentir) {
   var f = CY_FASES[cicloFase(dia, largo)], e = f.base;
-  if (sentir) e = Math.round(e * 0.4 + (sentir - 1) / 4 * 100 * 0.6); // lo que ella siente pesa más
+  var si = cicloSentirInfo(sentir);
+  if (si) e = Math.round(e * 0.4 + (si.val - 1) / 4 * 100 * 0.6); // lo que ella siente pesa más
   return Math.max(8, Math.min(100, e));
 }
 function cicloBateriaSvg(pct, key, uid) {
@@ -71,10 +95,10 @@ function cicloCardHtml(o) {
   var dots = ''; for (var i = 1; i <= 5; i++) dots += '<i class="' + (i <= f.intens ? 'on' : '') + '"></i>';
   h += '<div class="cy-plan"><div class="cy-box"><b>Ideal para hoy</b><span>' + f.ideal + '</span><div class="cy-dots">' + dots + '</div></div>';
   h += '<div class="cy-box"><b>Cuida</b><span>' + f.cuida + '</span></div></div>';
-  var caras = ['🪫', '😴', '😐', '🙂', '⚡'];
-  h += '<div class="cy-feel"><p>¿Cómo sientes tu energía hoy?</p><div class="cy-feel-row">';
-  caras.forEach(function(c, i) { h += '<button type="button" class="' + (o.sentir === i + 1 ? 'sel' : '') + '" onclick="cicloSentir(' + (i + 1) + ')" aria-label="Energía ' + (i + 1) + ' de 5">' + c + '</button>'; });
-  h += '</div><small>Tu batería se ajusta a lo que tú sientes. Cada cuerpo es distinto 💙</small></div>';
+  var sel = cicloSentirInfo(o.sentir);
+  h += '<div class="cy-feel"><p>¿Cómo te sientes hoy?</p><div class="cy-feel-row">';
+  CY_SENTIR.forEach(function(si) { h += '<button type="button" class="' + (sel && sel.id === si.id ? 'sel' : '') + '" onclick="cicloSentir(\'' + si.id + '\')" aria-label="' + si.label + '">' + cicloCaraSvg(si) + '<span>' + si.label + '</span></button>'; });
+  h += '</div>' + (sel ? '<div class="cy-feel-tip">💙 ' + sel.tip + '</div>' : '<small>Tu batería se ajusta a cómo te sientes. Cada cuerpo es distinto 💙</small>') + '</div>';
   h += '<div class="cy-sci">🔬 ' + f.sci + ' Son guías generales: si algo no se siente bien, escucha a tu cuerpo.</div>';
   return h + '</div>';
 }

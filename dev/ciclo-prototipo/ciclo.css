@@ -38,8 +38,15 @@
 .cy-feel{margin-top:.85rem;padding-top:.8rem;border-top:1px dashed rgba(255,255,255,.14)}
 .cy-feel p{font-size:.78rem;font-weight:700;margin-bottom:.5rem}
 .cy-feel-row{display:flex;gap:.4rem}
-.cy-feel button{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:.45rem 0;font-size:1.15rem;cursor:pointer;transition:transform .15s}
-.cy-feel button.sel{background:var(--cy-chip);transform:translateY(-3px);box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.cy-feel-row{gap:.35rem}
+.cy-feel button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.3rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:.5rem .1rem .45rem;cursor:pointer;transition:transform .15s,background .15s;color:#fff;font-family:inherit}
+.cy-feel button svg{width:34px;height:34px;display:block;transition:transform .2s}
+.cy-feel button span{font-size:.58rem;font-weight:700;line-height:1.1;text-align:center;opacity:.8}
+.cy-feel button:active svg{transform:scale(.9)}
+.cy-feel button.sel{background:var(--cy-chip);color:var(--cy-ink);transform:translateY(-3px);box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.cy-feel button.sel span{opacity:1}
+.cy-feel button.sel svg{transform:scale(1.08) rotate(-4deg)}
+.cy-feel-tip{margin-top:.6rem;font-size:.75rem;line-height:1.45;background:rgba(255,255,255,.06);border-radius:12px;padding:.55rem .7rem}
 .cy-feel small{display:block;font-size:.66rem;opacity:.65;margin-top:.45rem}
 .cy-sci{margin-top:.7rem;font-size:.68rem;line-height:1.45;opacity:.6}
 @media (prefers-reduced-motion: reduce){.cy-wave,.cy-wave2,.cy-bub,.cy-bolt,.cy-zz,.cy-now{animation:none}}
