@@ -4523,13 +4523,6 @@ function buildMonthBubbles(id, c, asistData) {
       showMonthDetail(id, c, asistData, parseInt(this.getAttribute('data-year')), parseInt(this.getAttribute('data-month')), parseInt(this.getAttribute('data-mnum')));
     });
   });
-  // Si se llegó acá tocando "Sesiones del ciclo" desde la vista de Rutina,
-  // abrir directo el mes actual en vez de obligar a buscarlo entre las burbujas.
-  if (rvPendingAsistenciaOpen === id && months.length) {
-    rvPendingAsistenciaOpen = null;
-    var cur = months[months.length - 1];
-    showMonthDetail(id, c, asistData, cur.year, cur.month, cur.num);
-  }
 }
 
 function showMonthDetail(id, c, asistData, year, month, mnum) {
@@ -4613,7 +4606,17 @@ function showMonthDetail(id, c, asistData, year, month, mnum) {
     det.style.display = 'none';
     var asistKey = 'fa_asist_'+id;
     var ad = JSON.parse(localStorage.getItem(asistKey)||'{}');
-    buildMonthBubbles(id, c, ad);
+    // Desde la vista de Rutina este calendario se abre en un modal propio,
+    // sin la lista de burbujas por mes (solo tiene sentido en la ficha de
+    // la clienta) — ahí, "Volver" simplemente cierra el modal. Ambos
+    // contenedores ("cd-asistencia" y el modal) viven siempre en el DOM,
+    // así que hay que fijarse cuál de los dos contiene este calendario.
+    if (det.closest('#rv-asist-modal')) {
+      var rvModal = document.getElementById('rv-asist-modal');
+      if (rvModal) rvModal.style.display = 'none';
+    } else {
+      buildMonthBubbles(id, c, ad);
+    }
   });
 }
 
@@ -6307,18 +6310,39 @@ var rutinaData = {};
 var rutinaCurrentDay = 0;
 var rutinaMode = 'view'; // 'view' or 'edit'
 var rvViewDay = 0; // día elegido en la vista de lista + detalle (modo view)
-// Si se toca "Sesiones del ciclo" desde la vista de Rutina, esto le avisa a
-// buildMonthBubbles que la clienta a la que acaba de navegar debe abrir el
-// mes actual directamente, en vez de mostrar la lista de meses primero.
-var rvPendingAsistenciaOpen = null;
-
-// Al tocar el recuadro de "Sesiones del ciclo" en la vista de Rutina — va a
-// la ficha de la clienta (donde ya vive el calendario de asistencia,
-// guardado por clientId así que funciona aunque la clienta no tenga cuenta
-// en el portal, como Joana) y lo abre directo en el mes actual.
+// Al tocar el recuadro de "Sesiones del ciclo" en la vista de Rutina — abre
+// el mismo calendario de asistencia que usa la ficha de la clienta, pero
+// en un modal dentro de la propia pantalla de Rutina (en vez de navegar a
+// otra pantalla), guardado por clientId así que funciona aunque la
+// clienta no tenga cuenta en el portal (ej. Joana).
 function openAsistenciaFromRutina(clientId) {
-  rvPendingAsistenciaOpen = clientId;
-  openClientDetail(clientId);
+  var c = CLIENTS[clientId];
+  if (!c) return;
+  var modal = document.getElementById('rv-asist-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'rv-asist-modal';
+    modal.style.cssText = 'display:flex;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;';
+    modal.innerHTML = '<div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:460px;max-height:88vh;overflow-y:auto;" id="rv-asist-modal-card"></div>';
+    modal.addEventListener('click', function(e) { if (e.target === modal) modal.style.display = 'none'; });
+    document.body.appendChild(modal);
+  }
+  document.getElementById('rv-asist-modal-card').innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;"><div style="font-size:1rem;font-weight:700;color:var(--text);">🗓️ Asistencia</div><button onclick="document.getElementById(\'rv-asist-modal\').style.display=\'none\';" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button></div>' +
+    '<div id="month-detail-' + clientId + '"></div>';
+  modal.style.display = 'flex';
+
+  var asistKey = 'fa_asist_' + clientId;
+  var asistData = JSON.parse(localStorage.getItem(asistKey) || '{}');
+  fbGet('asistencia/' + clientId, function(fbData) {
+    if (fbData && Object.keys(fbData).length > 0) {
+      asistData = fbData;
+      localStorage.setItem(asistKey, JSON.stringify(asistData));
+    }
+    var months = getMonthsRange(c.firstEverDate || c.initDate);
+    var cur = months.length ? months[months.length - 1] : { year: new Date().getFullYear(), month: new Date().getMonth(), num: 1 };
+    showMonthDetail(clientId, c, asistData, cur.year, cur.month, cur.num);
+  });
 }
 
 function rvSelectDay(idx) {
