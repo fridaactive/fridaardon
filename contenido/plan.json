@@ -312,73 +312,69 @@
    "id": "v2026-11-17-comidas",
    "titulo": "Lo que como en un día sin contar calorías",
    "pilar": "Alimentación (educativo)",
-   "formato": "Carrusel de fotos (8 fotos) con un consejo en cada una",
-   "duracion": "8 fotos verticales (4:5)",
+   "formato": "Carrusel de 7 fotos tipo collage: arriba lo que estás haciendo, abajo lo que comes",
+   "duracion": "7 fotos verticales (4:5)",
    "publicar": {
     "fecha": "2026-11-27",
     "hora": "12:30"
    },
-   "grabar": "2026-11-25",
+   "grabar": "2026-11-23",
    "editar": "2026-11-26",
    "borrador": false,
-   "idea": "Tus comidas reales de un día, en fotos, y en cada foto un consejo corto sobre por qué la comes: proteína, carbohidratos, grasas buenas y verduras. Sin calorías ni porciones exactas: aprender a armar tus platos.",
+   "idea": "Tu día real en fotos: en cada foto, arriba lo que estás haciendo en ese momento (estudiando, entrenando, dando clase…) y abajo lo que comiste. Cada foto lleva un consejo corto sobre alimentación sin contar calorías. Cierra con tu promo de Black Friday, de forma suave.",
    "tomas": [
     {
-     "graba": "FOTO 1 · PORTADA (el hook): tú con tu desayuno o tu café, sonriendo, con luz natural",
+     "graba": "1 · PORTADA: una foto tuya (sonriendo, con tu café o empezando el día)",
      "habla": false,
-     "dice": "Texto grande: \"Lo que como en un día *sin contar calorías*\" · abajo: \"desliza →\""
+     "dice": "Texto: \"Lo que como en un día *sin contar calorías*\" · abajo: \"desliza →\""
     },
     {
-     "graba": "FOTO 2 · DESAYUNO desde arriba (ej. huevos, pan o avena y fruta)",
+     "graba": "2 · DESAYUNO · arriba: lo que haces en la mañana (estudiando, armando rutinas…) · abajo: tu desayuno real",
      "habla": false,
-     "dice": "\"Desayuno con **proteína**: me mantiene llena por más tiempo y me ayuda a no llegar con hambre feroz al almuerzo\""
+     "dice": "Sugerencias de texto (elige según lo que comiste): \"Empiezo el día con **proteína**: me mantiene llena por más tiempo\" o \"El desayuno me da la energía para arrancar la mañana\""
     },
     {
-     "graba": "FOTO 3 · SNACK o MERIENDA (ej. yogurt griego con fruta, o fruta con crema de maní)",
+     "graba": "3 · MERIENDA DE LA MAÑANA · arriba: lo que estás haciendo · abajo: tu merienda real",
      "habla": false,
-     "dice": "\"Los **carbohidratos** no son el enemigo: son la energía que tu cuerpo usa para entrenar\""
+     "dice": "Sugerencias: \"Una merienda a media mañana me ayuda a no llegar con hambre al almuerzo\" o \"Los **carbohidratos** no son el enemigo: son tu energía\""
     },
     {
-     "graba": "FOTO 4 · ALMUERZO: el plato completo desde arriba",
+     "graba": "4 · ALMUERZO · arriba: lo que estás haciendo (en el carro, con una clienta…) · abajo: tu almuerzo real",
      "habla": false,
-     "dice": "\"Así armo mi plato: **la mitad verduras**, un cuarto proteína y un cuarto carbohidrato. Sin pesar nada\""
+     "dice": "Sugerencias: \"Así armo mi plato: **la mitad verduras**, un cuarto proteína y un cuarto carbohidrato\" o \"No peso nada: me fijo en que tenga proteína, carbohidrato y verduras\""
     },
     {
-     "graba": "FOTO 5 · ANTES o DESPUÉS DE ENTRENAR: tu comida o batido con el gym de fondo",
+     "graba": "5 · POST ENTRENO o MERIENDA DE LA TARDE · arriba: tú entrenando o dando clase · abajo: lo que comes después",
      "habla": false,
-     "dice": "\"Después de entrenar: **proteína + carbohidrato** para recuperarte y que tus músculos crezcan\""
+     "dice": "Sugerencias: \"Después de entrenar: **proteína + carbohidrato** para recuperarme\" o \"Comer después de entrenar ayuda a que tus músculos se recuperen\""
     },
     {
-     "graba": "FOTO 6 · UN ANTOJO \"porque sí\" (un postre, un chocolate, un café rico)",
+     "graba": "6 · CENA · arriba: tu noche (en casa, descansando…) · abajo: tu cena real",
      "habla": false,
-     "dice": "\"Y sí, también hay espacio para **disfrutar**. Comer bien no es comer perfecto\""
+     "dice": "Sugerencias: \"No tengo que cenar poco: ceno algo que me deje satisfecha\" o \"Las **grasas buenas** (aguacate, aceite de oliva, nueces) también importan\""
     },
     {
-     "graba": "FOTO 7 · CENA desde arriba, con algo de grasa buena a la vista (aguacate, aceite de oliva, nueces)",
+     "graba": "7 · CIERRE + PROMO: foto tuya o fondo de tu marca",
      "habla": false,
-     "dice": "\"Las **grasas buenas** también importan: tu cuerpo las necesita para tus hormonas y para absorber vitaminas\""
-    },
-    {
-     "graba": "FOTO 8 · CIERRE: foto tuya (o fondo de color de tu marca) con el mensaje final",
-     "habla": false,
-     "dice": "\"Comer bien no es comer **POCO**\" · abajo: \"Guárdalo para armar tus platos 📌\""
+     "dice": "Texto: \"Comer bien no es comer **POCO** 💙\" · y abajo, suave: el mensaje de tu promo de Black Friday (lo definimos al armar la promo)"
     }
    ],
    "notas": [
-    "Es un carrusel de fotos, no un reel. Toma las fotos el miércoles 25 en tus comidas normales y súbelas al Drive esa noche; yo diseño las 8 fotos con los textos el jueves 26 y se publica el viernes 27 a las 12:30 pm.",
-    "Fotos verticales, con luz natural (cerca de una ventana), tomadas desde arriba o en ángulo, que se vean tus manos o tu mesa. Toma 2 o 3 de cada comida.",
-    "Lo que comas está bien: el consejo se adapta a tu comida real. Si alguna foto no encaja, me dices qué comiste y ajusto el texto.",
-    "Sin números de calorías, sin peso y sin \"comí solo esto\". El mensaje es aprender a armar platos, no restringir.",
-    "La primera foto es el hook: tiene que dar ganas de deslizar."
+    "Toma las fotos el lunes 23 durante tu día normal y súbelas al Drive esa noche. Yo armo los collages con los textos el jueves 26.",
+    "Por cada momento toma DOS fotos: una de lo que estás haciendo (estudiando, entrenando, en el carro, dando clase, en casa) y otra de tu comida. Yo las uno en el collage.",
+    "Muestra lo que de verdad comes: el texto se adapta a tu comida. Cuando me mandes las fotos, me dices qué es cada una y elijo el consejo que mejor le queda.",
+    "Fotos verticales, con luz natural cuando se pueda; la comida desde arriba o en ángulo. Toma 2 o 3 de cada una.",
+    "Sin números de calorías, sin peso y sin \"comí solo esto\".",
+    "La foto 7 cierra con la promo de Black Friday de forma suave: el carrusel se publica justo el viernes 27."
    ],
    "caption": "Lo que como en un día sin contar calorías 🍽️\n\nDurante mucho tiempo creí que comer bien era comer poco. Hoy armo mis platos con proteína, carbohidratos, grasas buenas y verduras, y como para tener energía, para entrenar y también para disfrutar.\n\nNo es una dieta para copiar: es una forma de aprender a armar tus platos 💙\n\nGuárdalo para tu próxima comida 📌",
    "checklist": [
-    "Luz natural (cerca de una ventana)",
-    "Lente limpio",
+    "Dos fotos por momento: actividad + comida",
+    "Luz natural cuando se pueda",
     "Fotos verticales",
-    "Tomar 2 o 3 fotos de cada comida",
     "Una foto tuya para la portada",
-    "Subir las fotos al Drive el miércoles en la noche"
+    "Subir las fotos al Drive el lunes en la noche",
+    "Anotar qué comiste en cada foto"
    ]
   },
   {
