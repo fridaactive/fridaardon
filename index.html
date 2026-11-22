@@ -958,31 +958,55 @@
 .in-goal-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#5b8bf5,#F5ECCB);transition:width 0.8s cubic-bezier(.2,.8,.2,1);}
 .in-goal-prize{font-size:0.78rem;margin-top:0.6rem;line-height:1.45;color:rgba(255,255,255,0.85);}
 .in-goal-prize b{color:#F5ECCB;}
-.in-ciclo{position:relative;overflow:hidden;margin-top:0.9rem;padding:1rem;border-radius:20px;background:linear-gradient(160deg,#0d1430,#070b1a 65%);border:1px solid rgba(255,255,255,0.12);color:#fff;animation:faExpand 0.4s ease both;}
-.in-ciclo-menstrual{border-color:rgba(242,130,126,0.4);}
-.in-ciclo-folicular{border-color:rgba(143,176,255,0.4);}
-.in-ciclo-ovulacion{border-color:rgba(245,236,203,0.6);}
-.in-ciclo-lutea_temprana{border-color:rgba(232,201,122,0.35);}
-.in-ciclo-lutea_tardia{border-color:rgba(217,143,160,0.35);}
-.in-ciclo-aura{position:absolute;top:-30px;left:-20px;width:140px;height:140px;border-radius:50%;filter:blur(22px);opacity:0.55;animation:ciclo-pulse 4.5s ease-in-out infinite;pointer-events:none;}
-.in-ciclo-aura-dim{opacity:0.15;background:radial-gradient(circle,#8FB0FF 0%,transparent 70%);}
-.in-ciclo-empty{font-size:0.78rem;color:rgba(255,255,255,0.75);line-height:1.5;}
-.in-ciclo-top{position:relative;display:flex;align-items:center;gap:0.9rem;}
-.in-ciclo-moon-wrap{position:relative;flex-shrink:0;width:56px;height:56px;animation:ciclo-float 4s ease-in-out infinite;}
-.in-ciclo-moon-svg{position:relative;z-index:1;filter:drop-shadow(0 0 10px rgba(255,255,255,0.25));}
-.in-ciclo-star{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;animation:ciclo-twinkle 2.4s ease-in-out infinite;}
-.in-ciclo-info{flex:1;min-width:0;}
-.in-ciclo-poetico{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;font-size:1.02rem;line-height:1.1;}
-.in-ciclo-fase{font-size:0.68rem;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;}
-.in-ciclo-meta{font-size:0.72rem;color:rgba(255,255,255,0.6);margin-top:0.25rem;}
-.in-ciclo-log-btn{margin-left:auto;flex-shrink:0;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.22);border-radius:100px;padding:0.4rem 0.85rem;font-size:0.68rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;}
-.in-ciclo-log-btn:active{transform:scale(0.95);}
-.in-ciclo-tip{position:relative;font-size:0.78rem;color:rgba(255,255,255,0.85);line-height:1.5;margin-top:0.75rem;}
-.in-ciclo-moon-shadow{transition:cx 1s cubic-bezier(.2,.8,.2,1);}
-@keyframes ciclo-float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-4px) rotate(-3deg);}}
-@keyframes ciclo-pulse{0%,100%{opacity:0.4;transform:scale(1);}50%{opacity:0.7;transform:scale(1.15);}}
-@keyframes ciclo-twinkle{0%,100%{opacity:0.15;transform:scale(0.6);}50%{opacity:1;transform:scale(1.15);}}
-@media (prefers-reduced-motion: reduce){.in-ciclo-moon-wrap,.in-ciclo-aura,.in-ciclo-star{animation:none;}.in-ciclo-moon-shadow{transition:none;}}
+/* ══ MI CICLO · "Tu energía de hoy" (diseño FridaActive) ══ */
+.cy-card{position:relative;margin-top:0.9rem;padding:1.1rem 1rem 1rem;border-radius:22px;overflow:hidden;color:#fff;
+  background:radial-gradient(120% 90% at 85% 0%,var(--cy-glow) 0%,rgba(0,0,0,0) 55%),rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12);box-shadow:0 6px 0 rgba(0,0,0,0.25)}
+.cy-top{display:flex;gap:1rem;align-items:center}
+.cy-batt{position:relative;width:92px;flex-shrink:0;filter:drop-shadow(0 0 18px var(--cy-glow))}
+.cy-batt svg{display:block;width:92px;height:150px;overflow:visible}
+.cy-wave{animation:cyWave 3.2s linear infinite}
+.cy-wave2{animation:cyWave 4.6s linear infinite reverse;opacity:.55}
+@keyframes cyWave{from{transform:translateX(0)}to{transform:translateX(-60px)}}
+.cy-bub{animation:cyBub var(--t,3s) ease-in var(--d,0s) infinite;opacity:0}
+@keyframes cyBub{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.85}100%{transform:translateY(-70px) scale(1);opacity:0}}
+.cy-bolt{animation:cyBolt 1.6s ease-in-out infinite;transform-origin:47px 50px}
+@keyframes cyBolt{0%,100%{opacity:.25;transform:scale(.92)}50%{opacity:1;transform:scale(1.06)}}
+.cy-zz{animation:cyZz 3s ease-in-out infinite}
+@keyframes cyZz{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.9;transform:translateY(-6px)}}
+.cy-pct{position:absolute;left:0;right:0;top:104px;text-align:center;font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.45rem;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.cy-pct small{font-size:.7rem;opacity:.8}
+.cy-info{flex:1;min-width:0}
+.cy-tag{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:.22rem .6rem;border-radius:100px;background:var(--cy-chip);color:var(--cy-ink)}
+.cy-name{font-family:'Archivo Black','DM Sans',sans-serif;font-size:1.25rem;line-height:1.05;text-transform:uppercase;margin:.45rem 0 .25rem}
+.cy-name span{color:var(--cy-accent)}
+.cy-day{font-size:.75rem;opacity:.75}
+.cy-edit{background:none;border:none;color:rgba(255,255,255,0.6);font-size:.68rem;font-weight:700;text-decoration:underline;font-family:'DM Sans',sans-serif;cursor:pointer;padding:0;margin-left:0.3rem;}
+.cy-msg{font-size:.82rem;line-height:1.45;margin-top:.5rem;color:rgba(255,255,255,.9)}
+.cy-wheel{position:relative;margin:1rem 0 .2rem;height:34px}
+.cy-track{position:absolute;left:0;right:0;top:12px;height:10px;border-radius:100px;overflow:hidden;display:flex;background:rgba(255,255,255,.08)}
+.cy-track i{display:block;height:100%}
+.cy-now{position:absolute;top:2px;width:30px;height:30px;margin-left:-15px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px var(--cy-glow),0 3px 0 rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:.95rem;animation:cyPulse 2.4s ease-in-out infinite}
+@keyframes cyPulse{0%,100%{box-shadow:0 0 0 4px var(--cy-glow),0 3px 0 rgba(0,0,0,.3)}50%{box-shadow:0 0 0 9px rgba(255,255,255,0),0 3px 0 rgba(0,0,0,.3)}}
+.cy-legend{display:flex;justify-content:space-between;font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.6}
+.cy-legend span{display:flex;align-items:center;gap:.3rem;opacity:.55}
+.cy-legend span.on{opacity:1;color:#fff}
+.cy-legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.cy-plan{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.85rem}
+.cy-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:.6rem .7rem}
+.cy-box b{display:block;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-bottom:.25rem}
+.cy-box span{font-size:.8rem;font-weight:700;line-height:1.3}
+.cy-dots{display:flex;gap:4px;margin-top:.35rem}
+.cy-dots i{width:16px;height:6px;border-radius:100px;background:rgba(255,255,255,.15)}
+.cy-dots i.on{background:var(--cy-accent)}
+.cy-feel{margin-top:.85rem;padding-top:.8rem;border-top:1px dashed rgba(255,255,255,.14)}
+.cy-feel p{font-size:.78rem;font-weight:700;margin-bottom:.5rem}
+.cy-feel-row{display:flex;gap:.4rem}
+.cy-feel button{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:.45rem 0;font-size:1.15rem;cursor:pointer;transition:transform .15s}
+.cy-feel button.sel{background:var(--cy-chip);transform:translateY(-3px);box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.cy-feel small{display:block;font-size:.66rem;opacity:.65;margin-top:.45rem}
+.cy-sci{margin-top:.7rem;font-size:.68rem;line-height:1.45;opacity:.6}
+@media (prefers-reduced-motion: reduce){.cy-wave,.cy-wave2,.cy-bub,.cy-bolt,.cy-zz,.cy-now{animation:none}}
 .in-med-count{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:0.72rem;opacity:0.7;}
 .in-medals{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:0.3rem;padding:0.9rem 0.6rem 0.8rem;border-radius:20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);}
 .in-med-path{position:absolute;left:12%;right:12%;top:2.75rem;height:4px;border-radius:100px;background:rgba(255,255,255,0.1);}
@@ -2170,43 +2194,7 @@ function checkInHoy(on) {
   }
 }
 
-// ══════════ MI CICLO: fase del ciclo menstrual + batería de energía ══════════
-// Cada fase cambia los niveles de estrógeno/progesterona, y con eso la
-// energía disponible — la batería es solo una forma visual de mostrar
-// ese vaivén hormonal, no un dato médico exacto.
-var CICLO_FASES = {
-  menstrual: {
-    label: 'Fase menstrual',
-    poetico: 'Luna nueva',
-    glow: ['#2a1830', '#F2827F'],
-    tip: 'Tu energía está en su punto más bajo del mes — es normal. El estrógeno y la progesterona están en su nivel mínimo, así que el cuerpo tiene menos combustible disponible. Hoy no es el día para buscar récords: prioriza movimiento suave, cardio ligero o lo que el cuerpo te pida. Hidrátate bien y descansa si lo necesitas.'
-  },
-  folicular: {
-    label: 'Fase folicular',
-    poetico: 'Luna creciente',
-    glow: ['#13224a', '#8FB0FF'],
-    tip: 'Tu energía viene en subida. El estrógeno empieza a crecer, lo que mejora tu fuerza, tu ánimo y tu capacidad de recuperación. Buen momento para ir metiendo más intensidad poco a poco.'
-  },
-  ovulacion: {
-    label: 'Ovulación',
-    poetico: 'Luna llena',
-    glow: ['#4a3a10', '#F5ECCB'],
-    tip: 'Estás en tu pico de energía del mes. El estrógeno llega a su nivel más alto — es el mejor momento para entrenamientos de fuerza exigentes, cargas pesadas o buscar un récord. Aprovéchalo.'
-  },
-  lutea_temprana: {
-    label: 'Fase lútea',
-    poetico: 'Luna menguante',
-    glow: ['#2a2410', '#E8C97A'],
-    tip: 'La energía empieza a bajar de a poco. La progesterona sube y el cuerpo entra en modo más conservador. Sigues bien para entrenar fuerte, pero presta atención a cómo te sientes.'
-  },
-  lutea_tardia: {
-    label: 'Fase lútea (pre-período)',
-    poetico: 'Luna de sombra',
-    glow: ['#301a22', '#D98FA0'],
-    tip: 'Es normal sentirte con menos energía o más sensible estos días — el estrógeno y la progesterona caen juntos antes del período. Muévete, pero sin exigirte al máximo: prioriza lo que te haga sentir bien, no lo más pesado.'
-  }
-};
-
+// ══════════ MI CICLO · "Tu energía de hoy" (diseño de la sesión de Estrategia de contenido) ══════════
 function cicloAvgLength(registros) {
   if (registros.length < 2) return 28;
   var diffs = [];
@@ -2219,107 +2207,106 @@ function cicloAvgLength(registros) {
   return Math.min(45, Math.max(21, Math.round(sum / diffs.length)));
 }
 
-function cicloFaseForDay(day, len) {
-  var scale = len / 28;
-  var menstrualEnd = Math.round(5 * scale);
-  var ovulStart = Math.round(14 * scale);
-  var ovulEnd = Math.round(16 * scale);
-  var luteaLateStart = len - Math.round(5 * scale);
-  if (day <= menstrualEnd) return 'menstrual';
-  if (day < ovulStart) return 'folicular';
-  if (day <= ovulEnd) return 'ovulacion';
-  if (day < luteaLateStart) return 'lutea_temprana';
-  return 'lutea_tardia';
+var CY_FASES = {
+  menstrual: { tag:'Fase menstrual', name:'Modo <span>recarga</span>', icon:'🌙', base:30, intens:2,
+    glow:'rgba(255,120,130,.35)', accent:'#FF9AA5', chip:'#FFD6DA', ink:'#5A1420', fill:['#FF8F9B','#E8546A'],
+    msg:'Tu energía puede estar más baja estos días. Moverte suave también cuenta: hoy escucha a tu cuerpo.',
+    ideal:'Movilidad, caminata o fuerza ligera', cuida:'Hidrátate y descansa bien',
+    sci:'Al inicio del ciclo, estrógeno y progesterona están en su punto más bajo; muchas mujeres sienten menos energía o molestias.' },
+  folicular: { tag:'Fase folicular', name:'Energía en <span>subida</span>', icon:'🌱', base:70, intens:4,
+    glow:'rgba(91,139,245,.4)', accent:'#9DBBFF', chip:'#D8E4FF', ink:'#0F2E78', fill:['#8FB0FF','#3A6CF0'],
+    msg:'Tu cuerpo se está recargando. Es un gran momento para retarte y subirle un poquito al peso.',
+    ideal:'Fuerza y subir cargas', cuida:'Calienta bien antes de pesado',
+    sci:'El estrógeno va subiendo: muchas mujeres se sienten con más energía y se recuperan mejor entre entrenos.' },
+  ovulacion: { tag:'Ovulación', name:'Tu pico de <span>poder</span>', icon:'⚡', base:95, intens:5,
+    glow:'rgba(245,236,203,.5)', accent:'#F5ECCB', chip:'#F5ECCB', ink:'#3d330c', fill:['#FFF3C4','#F4C542'],
+    msg:'¡Batería a tope! Si te sientes así, hoy es el día para dar lo mejor de ti en el gym.',
+    ideal:'Entreno intenso o tu mejor marca', cuida:'Técnica y calentamiento',
+    sci:'Alrededor de la ovulación el estrógeno llega a su pico; es cuando muchas se sienten más fuertes y con más ánimo.' },
+  lutea: { tag:'Fase lútea', name:'Modo <span>constante</span>', icon:'🍂', base:50, intens:3,
+    glow:'rgba(214,170,120,.35)', accent:'#F0C79A', chip:'#F6DFC6', ink:'#4A2E0E', fill:['#F3CFA3','#C98A4E'],
+    msg:'La energía va bajando poco a poco. Mantén tu rutina a tu ritmo: la constancia es lo que da resultados.',
+    ideal:'Tu rutina normal, sin forzar', cuida:'Duerme bien y come suficiente',
+    sci:'La progesterona sube y puede dar más cansancio, calor o antojos; es normal y no significa que estés fallando.' }
+};
+function cicloFase(dia, largo) {
+  largo = largo || 28; var ov = largo - 14;
+  if (dia <= 5) return 'menstrual';
+  if (dia < ov - 1) return 'folicular';
+  if (dia <= ov + 1) return 'ovulacion';
+  return 'lutea';
 }
-
-// Curva aproximada de energía a lo largo del ciclo, interpolada entre
-// puntos clave (no es un dato médico exacto, es una guía visual).
-var CICLO_BATERIA_ANCLAS = [
-  { frac: 0, pct: 20 },
-  { frac: 5 / 28, pct: 30 },
-  { frac: 14 / 28, pct: 90 },
-  { frac: 16 / 28, pct: 100 },
-  { frac: 23 / 28, pct: 55 },
-  { frac: 1, pct: 15 }
-];
-
-function cicloBateriaForDay(day, len) {
-  var frac = (day - 1) / len;
-  for (var i = 1; i < CICLO_BATERIA_ANCLAS.length; i++) {
-    var a = CICLO_BATERIA_ANCLAS[i - 1], b = CICLO_BATERIA_ANCLAS[i];
-    if (frac <= b.frac) {
-      var t = (frac - a.frac) / (b.frac - a.frac || 1);
-      return Math.round(a.pct + (b.pct - a.pct) * t);
-    }
-  }
-  return 20;
+function cicloEnergia(dia, largo, sentir) {
+  var f = CY_FASES[cicloFase(dia, largo)], e = f.base;
+  if (sentir) e = Math.round(e * 0.4 + (sentir - 1) / 4 * 100 * 0.6); // lo que ella siente pesa más
+  return Math.max(8, Math.min(100, e));
 }
-
-function cicloComputeState(ciclo) {
-  var registros = Object.keys((ciclo && ciclo.registros) || {}).sort();
-  if (!registros.length) return null;
-  var lastDate = new Date(registros[registros.length - 1] + 'T00:00:00');
-  var today = new Date(); today.setHours(0, 0, 0, 0);
-  var daysSince = Math.floor((today - lastDate) / 86400000);
-  var avgLen = cicloAvgLength(registros);
-  var dayInCycle = (daysSince % avgLen) + 1;
-  return {
-    dayInCycle: dayInCycle,
-    avgLen: avgLen,
-    daysUntilNext: avgLen - dayInCycle + 1,
-    fase: cicloFaseForDay(dayInCycle, avgLen),
-    bateria: cicloBateriaForDay(dayInCycle, avgLen)
+function cicloBateriaSvg(pct, key, uid) {
+  var f = CY_FASES[key], top = 18 + (1 - pct / 100) * 120, g = 'cyg' + uid, c = 'cyc' + uid;
+  var wave = function(y, cls, op) {
+    return '<path class="' + cls + '" opacity="' + op + '" d="M0 ' + y + ' q15 -8 30 0 t30 0 t30 0 t30 0 t30 0 V160 H0 Z" fill="url(#' + g + ')"/>';
   };
+  var bubbles = '';
+  for (var i = 0; i < 5; i++) bubbles += '<circle class="cy-bub" cx="' + (22 + i * 12) + '" cy="132" r="' + (2 + (i % 3)) + '" fill="#fff" style="--t:' + (2.4 + i * .5) + 's;--d:' + (i * .6) + 's"/>';
+  var extra = key === 'ovulacion' || key === 'folicular'
+    ? '<path class="cy-bolt" d="M50 30 L38 54 h9 l-5 18 l15 -25 h-9 l6 -17 z" fill="#fff" opacity=".9"/>'
+    : key === 'menstrual' ? '<text class="cy-zz" x="62" y="42" font-size="14" font-weight="800" fill="#fff">z</text><text class="cy-zz" x="70" y="30" font-size="10" font-weight="800" fill="#fff" style="animation-delay:.8s">z</text>' : '';
+  return '<svg viewBox="0 0 92 150" aria-hidden="true"><defs>'
+    + '<linearGradient id="' + g + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + f.fill[0] + '"/><stop offset="1" stop-color="' + f.fill[1] + '"/></linearGradient>'
+    + '<clipPath id="' + c + '"><rect x="9" y="14" width="74" height="130" rx="20"/></clipPath></defs>'
+    + '<rect x="32" y="2" width="28" height="12" rx="5" fill="rgba(255,255,255,.55)"/>'
+    + '<rect x="5" y="10" width="82" height="138" rx="24" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.75)" stroke-width="3"/>'
+    + '<g clip-path="url(#' + c + ')">' + wave(top + 4, 'cy-wave2', .6) + wave(top, 'cy-wave', 1) + bubbles + '</g>'
+    + '<path d="M18 30 Q16 60 18 96" stroke="#fff" stroke-opacity=".35" stroke-width="4" stroke-linecap="round" fill="none"/>'
+    + extra + '</svg>';
 }
-
-var CICLO_MOON_UID = 0;
-
-// Una lunita propia (no una batería) que crece y mengua con el ciclo:
-// nueva el día 1, llena en la ovulación, menguante de vuelta al período.
-// El truco es clásico de iconos de fases lunares: un círculo de luz y un
-// círculo de "sombra" que se desliza por encima, recortados con una
-// máscara — nada de matemática de arcos.
-function cicloMoonSvg(pct, waxing, glowColor) {
-  CICLO_MOON_UID++;
-  var uid = 'cmoon' + CICLO_MOON_UID;
-  var r = 23, cx = 28, cy = 28;
-  var illum = Math.max(0, Math.min(1, pct / 100));
-  var offset = illum * (r * 2.1) * (waxing ? 1 : -1);
-  return '<svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true" class="in-ciclo-moon-svg">'
-    + '<defs><mask id="' + uid + '"><rect width="56" height="56" fill="#000"/><circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#fff"/>'
-    + '<circle class="in-ciclo-moon-shadow" cx="' + (cx + offset) + '" cy="' + cy + '" r="' + r + '" fill="#000"/></mask></defs>'
-    + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="rgba(255,255,255,0.08)"/>'
-    + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="' + glowColor + '" mask="url(#' + uid + ')"/>'
-    + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>'
-    + '</svg>';
+var CY_N = 0;
+function cicloCardHtml(o) {
+  var dia = o.dia, largo = o.largo || 28, key = cicloFase(dia, largo), f = CY_FASES[key];
+  var pct = cicloEnergia(dia, largo, o.sentir), uid = ++CY_N, falta = largo - dia + 1;
+  var ov = largo - 14, seg = function(n, col) { return '<i style="width:' + (n / largo * 100) + '%;background:' + col + '"></i>'; };
+  var h = '<div class="cy-card" style="--cy-glow:' + f.glow + ';--cy-accent:' + f.accent + ';--cy-chip:' + f.chip + ';--cy-ink:' + f.ink + '">';
+  h += '<div class="cy-top"><div class="cy-batt">' + cicloBateriaSvg(pct, key, uid) + '<div class="cy-pct">' + pct + '<small>%</small></div></div>';
+  h += '<div class="cy-info"><span class="cy-tag">' + f.icon + ' ' + f.tag + '</span><div class="cy-name">' + f.name + '</div>';
+  h += '<div class="cy-day">Día ' + dia + ' de ' + largo + ' · tu período llega en ' + falta + (falta === 1 ? ' día' : ' días') + ' <button type="button" class="cy-edit" onclick="openCicloModal()">Editar fecha</button></div>';
+  h += '<div class="cy-msg">' + f.msg + '</div></div></div>';
+  h += '<div class="cy-wheel"><div class="cy-track">' + seg(5, '#E8546A') + seg(ov - 7, '#3A6CF0') + seg(3, '#F4C542') + seg(largo - ov - 1, '#C98A4E') + '</div>';
+  h += '<div class="cy-now" style="left:' + ((dia - 0.5) / largo * 100) + '%">' + f.icon + '</div></div>';
+  var lg = function(txt, col, k) { return '<span class="' + (k === key ? 'on' : '') + '"><i style="background:' + col + '"></i>' + txt + '</span>'; };
+  h += '<div class="cy-legend">' + lg('Menstrual', '#E8546A', 'menstrual') + lg('Folicular', '#3A6CF0', 'folicular') + lg('Ovulación', '#F4C542', 'ovulacion') + lg('Lútea', '#C98A4E', 'lutea') + '</div>';
+  var dots = ''; for (var i = 1; i <= 5; i++) dots += '<i class="' + (i <= f.intens ? 'on' : '') + '"></i>';
+  h += '<div class="cy-plan"><div class="cy-box"><b>Ideal para hoy</b><span>' + f.ideal + '</span><div class="cy-dots">' + dots + '</div></div>';
+  h += '<div class="cy-box"><b>Cuida</b><span>' + f.cuida + '</span></div></div>';
+  var caras = ['🪫', '😴', '😐', '🙂', '⚡'];
+  h += '<div class="cy-feel"><p>¿Cómo sientes tu energía hoy?</p><div class="cy-feel-row">';
+  caras.forEach(function(c, i) { h += '<button type="button" class="' + (o.sentir === i + 1 ? 'sel' : '') + '" onclick="cicloSentir(' + (i + 1) + ')" aria-label="Energía ' + (i + 1) + ' de 5">' + c + '</button>'; });
+  h += '</div><small>Tu batería se ajusta a lo que tú sientes. Cada cuerpo es distinto 💙</small></div>';
+  h += '<div class="cy-sci">🔬 ' + f.sci + ' Son guías generales: si algo no se siente bien, escucha a tu cuerpo.</div>';
+  return h + '</div>';
 }
 
 function cicloInicioHtml() {
   var ciclo = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.ciclo) || {};
-  var state = cicloComputeState(ciclo);
-  if (!state) {
-    return '<div class="in-ciclo"><div class="in-ciclo-aura in-ciclo-aura-dim"></div><div class="in-ciclo-top"><div class="in-ciclo-info"><span class="fa-tag">MI CICLO</span></div>'
-      + '<button type="button" class="in-ciclo-log-btn" onclick="openCicloModal()">+ Registrar</button></div>'
-      + '<div class="in-ciclo-empty" style="margin-top:0.7rem;position:relative;">Registra cuándo te empezó tu último período para conocer tu luna interior y tu nivel de energía del mes.</div></div>';
+  var registros = Object.keys(ciclo.registros || {}).sort();
+  if (!registros.length) {
+    return '<button type="button" class="in-nudge" onclick="openCicloModal()"><span>🌸</span><span><b>Activa Mi ciclo</b><small>Conoce tu energía de cada día según tu ciclo.</small></span></button>';
   }
-  var fase = CICLO_FASES[state.fase];
-  var waxing = state.dayInCycle <= Math.round(state.avgLen * 15 / 28);
-  var metaText = state.fase === 'menstrual'
-    ? 'Día ' + state.dayInCycle + ' de tu ciclo'
-    : 'Día ' + state.dayInCycle + ' · próximo período en ' + state.daysUntilNext + (state.daysUntilNext === 1 ? ' día' : ' días');
-  var nSparkles = 2 + Math.round((state.bateria / 100) * 3);
-  var sparklesHtml = '';
-  for (var i = 0; i < nSparkles; i++) {
-    var ang = (i / nSparkles) * Math.PI * 2;
-    var sx = 28 + Math.cos(ang) * 26, sy = 28 + Math.sin(ang) * 26;
-    sparklesHtml += '<span class="in-ciclo-star" style="left:' + Math.round(sx) + 'px;top:' + Math.round(sy) + 'px;animation-delay:' + (i * 0.35) + 's;"></span>';
-  }
-  return '<div class="in-ciclo in-ciclo-' + state.fase + '">'
-    + '<div class="in-ciclo-aura" style="background:radial-gradient(circle,' + fase.glow[1] + ' 0%,transparent 70%);"></div>'
-    + '<div class="in-ciclo-top"><div class="in-ciclo-moon-wrap">' + sparklesHtml + cicloMoonSvg(state.bateria, waxing, fase.glow[1]) + '</div>'
-    + '<div class="in-ciclo-info"><div class="in-ciclo-poetico">' + fase.poetico + '</div><div class="in-ciclo-fase">' + fase.label + '</div><div class="in-ciclo-meta">' + metaText + '</div></div>'
-    + '<button type="button" class="in-ciclo-log-btn" onclick="openCicloModal()">+ Registrar</button></div>'
-    + '<div class="in-ciclo-tip">' + fase.tip + '</div></div>';
+  var lastDate = new Date(registros[registros.length - 1] + 'T00:00:00');
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var daysSince = Math.floor((today - lastDate) / 86400000);
+  var largo = cicloAvgLength(registros);
+  var dia = (daysSince % largo) + 1;
+  var todayKey = localKey(today);
+  var sentir = (CURRENT_PORTAL_DATA.cicloSentir && CURRENT_PORTAL_DATA.cicloSentir[todayKey]) || null;
+  return cicloCardHtml({ dia: dia, largo: largo, sentir: sentir });
+}
+
+function cicloSentir(n) {
+  var todayKey = localKey(new Date());
+  if (!CURRENT_PORTAL_DATA.cicloSentir) CURRENT_PORTAL_DATA.cicloSentir = {};
+  CURRENT_PORTAL_DATA.cicloSentir[todayKey] = n;
+  db().ref('clientasPortal/' + currentUid + '/cicloSentir/' + todayKey).set(n);
+  renderInicioTab();
 }
 
 function openCicloModal() {
