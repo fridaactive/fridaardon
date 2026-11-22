@@ -1602,24 +1602,22 @@ function ensureAdminAuth(cb) {
   try {
     if (typeof firebase === 'undefined' || !firebase.auth) { if (cb) cb(); return; }
     getDB();
-    // Session-scoped persistence keeps this account out of the browser's
-    // shared (cross-tab) auth storage, so it can't leak into a clienta
-    // portal tab opened on the same device — see index.html's ADMIN_EMAIL
-    // guard for the other half of this fix.
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function() {
-      return firebase.auth().signInWithEmailAndPassword(ADMIN_EMAIL, PASSWORD);
-    }).then(function(cred) { bootstrapAdmin(cred.user.uid); if (cb) cb(); })
-      .catch(function(err) {
-        var code = err && err.code;
-        if (code === 'auth/user-not-found' || code === 'auth/invalid-credential' || code === 'auth/invalid-login-credentials') {
-          firebase.auth().createUserWithEmailAndPassword(ADMIN_EMAIL, PASSWORD)
-            .then(function(cred) { bootstrapAdmin(cred.user.uid); if (cb) cb(); })
-            .catch(function(e2) { console.warn('Admin signup error', e2.message); if (cb) cb(); });
-        } else {
-          console.warn('Admin signin error', err && err.message);
-          if (cb) cb();
-        }
-      });
+    // Ya no se reautentica sola con una contraseña escrita en el código
+    // (eso era un hueco de seguridad real: cualquiera podía verla con
+    // "Ver código fuente"). Si la sesión de Firebase sigue viva, se sigue
+    // de largo; si no, no hay forma de recuperarla sin que Frida escriba
+    // su contraseña de nuevo, así que se manda al login.
+    if (firebase.auth().currentUser) { if (cb) cb(); return; }
+    var unsub = firebase.auth().onAuthStateChanged(function(user) {
+      unsub();
+      if (user) {
+        if (cb) cb();
+      } else {
+        sessionStorage.removeItem(SESSION_KEY);
+        showScreen('login');
+        if (cb) cb();
+      }
+    });
   } catch(e) { console.warn('ensureAdminAuth catch', e); if (cb) cb(); }
 }
 
@@ -3122,7 +3120,6 @@ function finSaveFijo() {
 // ══════════════════════════════
 // AUTH
 // ══════════════════════════════
-var PASSWORD = 'frida2026';
 var SESSION_KEY = 'fa_auth_v2';
 var currentScreen = 'dashboard';
 
@@ -3146,19 +3143,26 @@ function testFirebase() {
 
 function checkPassword() {
   var input = document.getElementById('pwd-input').value;
-  if (input === PASSWORD) {
+  var errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  if (!input) { errEl.textContent = 'Ingresá tu contraseña.'; return; }
+  var loadingEl = document.getElementById('loading');
+  if (loadingEl) loadingEl.style.display = 'flex';
+  // La contraseña se verifica directo contra Firebase Auth — ya no vive
+  // ninguna copia de ella en el código, así que entrar acá es la única
+  // forma de autenticarse.
+  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function() {
+    return firebase.auth().signInWithEmailAndPassword(ADMIN_EMAIL, input);
+  }).then(function(cred) {
+    bootstrapAdmin(cred.user.uid);
     sessionStorage.setItem(SESSION_KEY, '1');
-    // Show loading while Firebase syncs
-    var loadingEl = document.getElementById('loading');
-    if (loadingEl) loadingEl.style.display = 'flex';
-    // Hide all screens first
     document.querySelectorAll('.screen, [id="login"], [id="dashboard"], [id="clientes"], [id="planificacion"], [id="finanzas"]').forEach(function(el) { el.classList.remove('active'); });
-    // Authenticate against Firebase Auth, then trigger Firebase sync
-    ensureAdminAuth(function() { window.onload(); });
-  } else {
-    document.getElementById('login-error').textContent = 'Contraseña incorrecta.';
+    window.onload();
+  }).catch(function(err) {
+    if (loadingEl) loadingEl.style.display = 'none';
+    errEl.textContent = 'Contraseña incorrecta.';
     document.getElementById('pwd-input').value = '';
-  }
+  });
 }
 
 function logout() {
