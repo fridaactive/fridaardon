@@ -149,8 +149,6 @@
   ══════════════════════════════ */
   #clientes { display:none; }
   #clientes.active { display:block; }
-  #client-detail { display:none; }
-  #client-detail.active { display:block; }
   #rutina-editor { display:none; }
   #rutina-editor.active { display:block; }
 
@@ -1133,42 +1131,6 @@
       <button id="nc-cancel" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.85rem;font-size:0.82rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Cancelar</button>
       <button id="nc-save" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.85rem;font-size:0.82rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Guardar cliente</button>
     </div>
-  </div>
-</div>
-
-<!-- ══════════ CLIENT DETAIL ══════════ -->
-<div id="client-detail">
-  <div class="sub-hero">
-    <div class="back-row">
-      <button class="back-btn" onclick="showScreen('clientes')">← Volver</button>
-      <div class="sub-brand">fridaactive</div>
-      <button id="cd-menu-btn" style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.3rem;width:2.2rem;height:2.2rem;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;flex-shrink:0;">⋮</button>
-    </div>
-    <div class="sub-title" id="cd-name">Cliente</div>
-  </div>
-  <div class="clients-wrap">
-    <button id="cd-photos-btn" onclick="openClientPhotosModal(currentClient)" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;background:var(--blue-lt);color:var(--blue);border:none;border-radius:12px;padding:0.7rem;font-weight:700;font-size:0.8rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1rem;">📸 Ir a perfil (antes/después) →</button>
-    <div style="background:var(--grad);border-radius:14px;padding:1.1rem 1.25rem;margin-bottom:1rem;border:1.5px solid #E8D8A0;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
-        <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--blue);font-weight:700;">Estado del programa</div>
-        <div id="cd-status-badge" style="font-size:0.65rem;font-weight:700;padding:0.25rem 0.75rem;border-radius:100px;"></div>
-      </div>
-      <div id="cd-info" style="font-size:0.78rem;color:var(--text);line-height:1.6;font-weight:300;"></div>
-    </div>
-    <div id="cd-quotation" style="margin-bottom:1.5rem;"></div>
-    <a id="cd-rutina-btn" href="#" target="_blank" style="display:block;background:var(--blue);color:#fff;text-align:center;padding:0.85rem;border-radius:12px;font-weight:700;font-size:0.85rem;text-decoration:none;margin-bottom:1.5rem;">Ver rutina →</a>
-    <div id="cd-portal-section">
-      <div class="section-hdr">
-        <div class="section-hdr-label">Cuenta del portal</div>
-        <div class="section-hdr-line"></div>
-      </div>
-      <div id="cd-portal" style="margin-bottom:1.5rem;"></div>
-    </div>
-    <div class="section-hdr">
-      <div class="section-hdr-label">Cuadro de asistencia</div>
-      <div class="section-hdr-line"></div>
-    </div>
-    <div id="cd-asistencia" style="margin-bottom:1.5rem;"></div>
   </div>
 </div>
 
@@ -3397,7 +3359,7 @@ function checkPassword() {
     var loadingEl = document.getElementById('loading');
     if (loadingEl) loadingEl.style.display = 'flex';
     // Hide all screens first
-    document.querySelectorAll('.screen, [id="login"], [id="dashboard"], [id="clientes"], [id="client-detail"], [id="planificacion"], [id="finanzas"]').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.screen, [id="login"], [id="dashboard"], [id="clientes"], [id="planificacion"], [id="finanzas"]').forEach(function(el) { el.classList.remove('active'); });
     // Authenticate against Firebase Auth, then trigger Firebase sync
     ensureAdminAuth(function() { window.onload(); });
   } else {
@@ -3635,26 +3597,6 @@ function loyaltyBadge(months) {
   if (months >= 6)  return { icon:'🥈', label: months+'m · 10% desc.', color:'#7cb8e8' };
   if (months >= 4)  return { icon:'🥉', label: months+'m · ¡Detalle!', color:'#cd7f32' };
   return null;
-}
-
-function activateClient(id) {
-  var c = CLIENTS[id];
-  if (!c) return;
-  var today = new Date();
-  var end = new Date(today);
-  end.setMonth(end.getMonth() + 1);
-  var fmt = function(d) {
-    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-  };
-  c.initDate = fmt(today);
-  c.endDate = fmt(end);
-  // Save to Firebase
-  fbSet('clients/'+id+'/initDate', c.initDate);
-  fbSet('clients/'+id+'/endDate', c.endDate);
-  // Refresh clients list cache so it shows under "Activas" next time
-  renderClientsList();
-  // Re-open detail
-  openClientDetail(id);
 }
 
 // ── PAGOS DE CLIENTAS ──
@@ -3926,12 +3868,6 @@ function deleteClient(id) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Three-dot menu button
-  var cdMenuBtn = document.getElementById('cd-menu-btn');
-  if (cdMenuBtn) cdMenuBtn.addEventListener('click', function() {
-    if (currentClient) openClientProfile(currentClient);
-  });
-
   // Profile modal close
   var cpClose = document.getElementById('cp-close');
   if (cpClose) cpClose.addEventListener('click', function() {
@@ -4516,85 +4452,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-function openClientDetail(id) {
-  var c = CLIENTS[id];
-  if (!c) return;
-  currentClient = id;
-
-  document.getElementById('cd-name').innerHTML = c.name + '<br><span>' + c.meta + '</span>';
-
-  // Status
-  var active = isActive(c, id);
-  var badge = document.getElementById('cd-status-badge');
-  badge.textContent = active ? '🟢 Activo' : '🔴 Inactivo';
-  badge.style.background = active ? '#F0FFF0' : '#fff0f0';
-  badge.style.color = active ? '#2a7a2a' : '#c44';
-
-  // Info
-  var start = new Date(c.initDate);
-  var end = c.endDate ? new Date(c.endDate) : new Date(start);
-  if (!c.endDate) end.setMonth(end.getMonth()+1);
-  var mnames = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-  var infoHtml = '<strong>Período activo:</strong> '+start.getDate()+' '+mnames[start.getMonth()]+' → '+end.getDate()+' '+mnames[end.getMonth()]+' '+end.getFullYear()+'<br>';
-  if (c.sessions > 0) infoHtml += '<strong>Sesiones:</strong> '+c.sessions+' · '+c.days.join(', ')+'<br>';
-  var totalMonths = monthsWith(c.firstEverDate || c.initDate);
-  infoHtml += '<strong>Tiempo contigo:</strong> '+totalMonths+' mes'+(totalMonths!==1?'es':'');
-  var loy = loyaltyBadge(totalMonths);
-  if (loy) infoHtml += ' <span style="background:'+loy.color+'22;color:'+loy.color+';border-radius:100px;padding:0.1rem 0.5rem;font-size:0.65rem;font-weight:700;">'+loy.icon+' '+loy.label+'</span>';
-  document.getElementById('cd-info').innerHTML = infoHtml;
-
-  // Payment status
-  renderPaymentStatus(id, c);
-
-  // Quotation
-  renderQuotation(id, c);
-
-  // Activate button
-  var actEl = document.getElementById('cd-activate-btn');
-  if (actEl) actEl.remove();
-  if (!active) {
-    var actBtn = document.createElement('button');
-    actBtn.id = 'cd-activate-btn';
-    actBtn.textContent = '🟢 Activar nuevo mes';
-    actBtn.setAttribute('data-cid', id);
-    actBtn.style.cssText = 'width:100%;background:#2a7a2a;color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:DM Sans,sans-serif;cursor:pointer;margin-bottom:1rem;touch-action:manipulation;';
-    actBtn.addEventListener('click', function() { openCycleModal(this.getAttribute('data-cid')); });
-    var statusBox = document.getElementById('client-detail').querySelector('div[style*="grad"]');
-    if (statusBox) statusBox.parentNode.insertBefore(actBtn, statusBox.nextSibling);
-  }
-
-  // Rutina btn — now opens the integrated editor
-  var rutinaBtn = document.getElementById('cd-rutina-btn');
-  rutinaBtn.style.display = 'block';
-  // Herberth keeps the original HTML with explanations
-  if (id === 'saca' && c.rutina) {
-    rutinaBtn.href = c.rutina;
-    rutinaBtn.setAttribute('target', '_blank');
-    rutinaBtn.textContent = '📋 Ver rutina →';
-    rutinaBtn.onclick = null;
-  } else {
-    rutinaBtn.removeAttribute('href');
-    rutinaBtn.textContent = '📋 Ver / Editar rutina';
-    rutinaBtn.onclick = function(e) { e.preventDefault(); openRutinaEditor(id); };
-  }
-
-  // Asistencia
-  renderAsistencia(id, c);
-
-  // Portal de cliente — solo aplica a clientes online
-  var portalSectionEl = document.getElementById('cd-portal-section');
-  if (portalSectionEl) {
-    if (isOnlineType(c.type)) {
-      portalSectionEl.style.display = '';
-      renderPortalSection(id);
-    } else {
-      portalSectionEl.style.display = 'none';
-    }
-  }
-
-  showScreen('client-detail');
-}
-
 // ── PERFIL DE FOTOS (ANTES/DESPUÉS) — solo lectura desde el admin ──
 // El cliente sube estas fotos desde su portal (clientasPortal/{uid}/fotosProgreso);
 // acá solo se muestran, no se suben ni editan desde este lado.
@@ -4710,6 +4567,8 @@ function getBubbleClass(pres, aus) {
 }
 
 function buildMonthBubbles(id, c, asistData) {
+  var container = document.getElementById('cd-asistencia');
+  if (!container) return;
   var months = getMonthsRange(c.firstEverDate || c.initDate);
   var html = '<div class="month-bubbles" id="bubbles-'+id+'">';
   months.forEach(function(m) {
@@ -4725,19 +4584,12 @@ function buildMonthBubbles(id, c, asistData) {
   });
   html += '</div>';
   html += '<div id="month-detail-'+id+'" style="display:none;"></div>';
-  document.getElementById('cd-asistencia').innerHTML = html;
+  container.innerHTML = html;
   document.querySelectorAll('.month-bubble[data-id="'+id+'"]').forEach(function(b) {
     b.addEventListener('click', function() {
       showMonthDetail(id, c, asistData, parseInt(this.getAttribute('data-year')), parseInt(this.getAttribute('data-month')), parseInt(this.getAttribute('data-mnum')));
     });
   });
-  // Si se llegó acá tocando "Sesiones del ciclo" desde la vista de Rutina,
-  // abrir directo el mes actual en vez de obligar a buscarlo entre las burbujas.
-  if (rvPendingAsistenciaOpen === id && months.length) {
-    rvPendingAsistenciaOpen = null;
-    var cur = months[months.length - 1];
-    showMonthDetail(id, c, asistData, cur.year, cur.month, cur.num);
-  }
 }
 
 function showMonthDetail(id, c, asistData, year, month, mnum) {
@@ -4793,27 +4645,6 @@ function showMonthDetail(id, c, asistData, year, month, mnum) {
       localStorage.setItem(asistKey, JSON.stringify(ad));
       fbSet('asistencia/'+id, ad);
       showMonthDetail(id, c, ad, y2, mo2, mn2);
-      // Refresh active/inactive status badge after marking attendance
-      var badge = document.getElementById('cd-status-badge');
-      if (badge) {
-        var nowActive = isActive(c, id);
-        badge.textContent = nowActive ? '🟢 Activo' : '🔴 Inactivo';
-        badge.style.background = nowActive ? '#F0FFF0' : '#fff0f0';
-        badge.style.color = nowActive ? '#2a7a2a' : '#c44';
-        if (!nowActive) {
-          var existingBtn = document.getElementById('cd-activate-btn');
-          if (!existingBtn) {
-            var actBtn = document.createElement('button');
-            actBtn.id = 'cd-activate-btn';
-            actBtn.textContent = '🟢 Activar nuevo mes';
-            actBtn.setAttribute('data-cid', id);
-            actBtn.style.cssText = 'width:100%;background:#2a7a2a;color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:DM Sans,sans-serif;cursor:pointer;margin-bottom:1rem;touch-action:manipulation;';
-            actBtn.addEventListener('click', function() { openCycleModal(this.getAttribute('data-cid')); });
-            var statusBox = document.getElementById('client-detail').querySelector('div[style*="grad"]');
-            if (statusBox) statusBox.parentNode.insertBefore(actBtn, statusBox.nextSibling);
-          }
-        }
-      }
     });
   });
 
@@ -4821,7 +4652,17 @@ function showMonthDetail(id, c, asistData, year, month, mnum) {
     det.style.display = 'none';
     var asistKey = 'fa_asist_'+id;
     var ad = JSON.parse(localStorage.getItem(asistKey)||'{}');
-    buildMonthBubbles(id, c, ad);
+    // Desde la vista de Rutina este calendario se abre en un modal propio,
+    // sin la lista de burbujas por mes (solo tiene sentido en la ficha de
+    // la clienta) — ahí, "Volver" simplemente cierra el modal. Ambos
+    // contenedores ("cd-asistencia" y el modal) viven siempre en el DOM,
+    // así que hay que fijarse cuál de los dos contiene este calendario.
+    if (det.closest('#rv-asist-modal')) {
+      var rvModal = document.getElementById('rv-asist-modal');
+      if (rvModal) rvModal.style.display = 'none';
+    } else {
+      buildMonthBubbles(id, c, ad);
+    }
   });
 }
 
@@ -5390,7 +5231,7 @@ function showScreen(name) {
   var templateModal = document.getElementById('template-modal');
   if (templateModal) templateModal.style.display = 'none';
 
-  var screens = ['login','dashboard','clientes','client-detail','planificacion','finanzas','rutina-editor','portal-content'];
+  var screens = ['login','dashboard','clientes','planificacion','finanzas','rutina-editor','portal-content'];
   screens.forEach(function(s) {
     var el = document.getElementById(s);
     if (el) el.classList.remove('active');
@@ -7163,18 +7004,39 @@ var rutinaData = {};
 var rutinaCurrentDay = 0;
 var rutinaMode = 'view'; // 'view' or 'edit'
 var rvViewDay = 0; // día elegido en la vista de lista + detalle (modo view)
-// Si se toca "Sesiones del ciclo" desde la vista de Rutina, esto le avisa a
-// buildMonthBubbles que la clienta a la que acaba de navegar debe abrir el
-// mes actual directamente, en vez de mostrar la lista de meses primero.
-var rvPendingAsistenciaOpen = null;
-
-// Al tocar el recuadro de "Sesiones del ciclo" en la vista de Rutina — va a
-// la ficha de la clienta (donde ya vive el calendario de asistencia,
-// guardado por clientId así que funciona aunque la clienta no tenga cuenta
-// en el portal, como Joana) y lo abre directo en el mes actual.
+// Al tocar el recuadro de "Sesiones del ciclo" en la vista de Rutina — abre
+// el mismo calendario de asistencia que usa la ficha de la clienta, pero
+// en un modal dentro de la propia pantalla de Rutina (en vez de navegar a
+// otra pantalla), guardado por clientId así que funciona aunque la
+// clienta no tenga cuenta en el portal (ej. Joana).
 function openAsistenciaFromRutina(clientId) {
-  rvPendingAsistenciaOpen = clientId;
-  openClientDetail(clientId);
+  var c = CLIENTS[clientId];
+  if (!c) return;
+  var modal = document.getElementById('rv-asist-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'rv-asist-modal';
+    modal.style.cssText = 'display:flex;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;';
+    modal.innerHTML = '<div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:460px;max-height:88vh;overflow-y:auto;" id="rv-asist-modal-card"></div>';
+    modal.addEventListener('click', function(e) { if (e.target === modal) modal.style.display = 'none'; });
+    document.body.appendChild(modal);
+  }
+  document.getElementById('rv-asist-modal-card').innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;"><div style="font-size:1rem;font-weight:700;color:var(--text);">🗓️ Asistencia</div><button onclick="document.getElementById(\'rv-asist-modal\').style.display=\'none\';" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button></div>' +
+    '<div id="month-detail-' + clientId + '"></div>';
+  modal.style.display = 'flex';
+
+  var asistKey = 'fa_asist_' + clientId;
+  var asistData = JSON.parse(localStorage.getItem(asistKey) || '{}');
+  fbGet('asistencia/' + clientId, function(fbData) {
+    if (fbData && Object.keys(fbData).length > 0) {
+      asistData = fbData;
+      localStorage.setItem(asistKey, JSON.stringify(asistData));
+    }
+    var months = getMonthsRange(c.firstEverDate || c.initDate);
+    var cur = months.length ? months[months.length - 1] : { year: new Date().getFullYear(), month: new Date().getMonth(), num: 1 };
+    showMonthDetail(clientId, c, asistData, cur.year, cur.month, cur.num);
+  });
 }
 
 function rvSelectDay(idx) {
