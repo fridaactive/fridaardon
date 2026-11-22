@@ -25,25 +25,34 @@ var CY_FASES = {
 };
 // Cómo se siente hoy: caritas dibujadas (SVG propio) y un consejo para cada una.
 var CY_SENTIR = [
-  { id:'dolor', label:'Con dolor', val:1, fill:'#FFD6DA',
-    face:'<path d="M12 15l4 2M28 15l-4 2" /><path d="M13 21l3 2-3 2M27 21l-3 2 3 2"/><path d="M14 31q3-3 6 0t6 0"/><path d="M33 7l1.5 3M36 11l-3 .5" stroke="#E8546A"/>',
+  { id:'dolor', label:'Con dolor', val:1, c:['#FFD0D5','#FF8A98','#E0566B'], cheek:'#FF5F7A',
+    face:'<path d="M14.5 19.5l5 2.2-5 2.4" class="k"/><path d="M33.5 19.5l-5 2.2 5 2.4" class="k"/><path d="M17 33c2.4-2.2 4.6-2.2 7 0s4.6 2.2 7 0" class="k"/><path d="M38 9l2-3M41 12l3-1" fill="none" stroke="#FFF" stroke-width="3" stroke-linecap="round"/>',
     tip:'Si tienes cólicos, hoy prioriza moverte suave: caminar, estiramientos o movilidad. El calor en el vientre ayuda a muchas. Si el dolor es muy fuerte, descansa y consulta a tu médico.' },
-  { id:'nauseas', label:'Con náuseas', val:1, fill:'#DDF3CC',
-    face:'<path d="M13 19h5M22 19h5"/><path d="M14 29q2-2 4 0t4 0t4 0"/><path d="M31 11q1.5 2.5 0 4q-1.5-1.5 0-4z" fill="#7CC4F0" stroke="#7CC4F0"/>',
+  { id:'nauseas', label:'Con náuseas', val:1, c:['#E6F8D6','#A6E08C','#5FB55A'], cheek:'#5FB55A',
+    face:'<path d="M14 21.5q3 -2 6 0M28 21.5q3 -2 6 0" class="k"/><path d="M16.5 32.5q2.5 -2.5 5 0t5 0t5 0" class="k"/><path d="M36.5 12q2.6 4 0 6.4q-2.6 -2.4 0 -6.4z" fill="url(#cyDrop)"/>',
     tip:'Hoy toma agua a sorbos, come algo ligero y, si te animas, haz algo suave. No pasa nada si hoy solo descansas.' },
-  { id:'cansada', label:'Cansada', val:2, fill:'#E4E8F7',
-    face:'<path d="M12 20q3 2 6 0M22 20q3 2 6 0"/><path d="M17 29h6"/><text x="29" y="12" font-size="8" font-weight="800" fill="#0B1B3F" stroke="none">z</text>',
+  { id:'cansada', label:'Cansada', val:2, c:['#EEF0FF','#C3C8F5','#8B92D9'], cheek:'#B98BE0',
+    face:'<path d="M13.5 21.5q3.5 3 7 0M27.5 21.5q3.5 3 7 0" class="k"/><ellipse cx="24" cy="32.5" rx="2.6" ry="3" fill="#3B2A3F"/><text x="35" y="12" font-size="9" font-weight="800" fill="#FFF" font-family="DM Sans,sans-serif">z</text><text x="40" y="7" font-size="6.5" font-weight="800" fill="#FFF" opacity=".8" font-family="DM Sans,sans-serif">z</text>',
     tip:'Haz tu rutina más ligera: menos series o menos peso también suma. Y esta noche, a dormir temprano.' },
-  { id:'bien', label:'Bien', val:4, fill:'#F5ECCB',
-    face:'<path d="M12 20q3-3 6 0M22 20q3-3 6 0"/><path d="M14 27q6 5 12 0"/>',
+  { id:'bien', label:'Bien', val:4, c:['#FFF6D8','#FFD978','#F2A93B'], cheek:'#FF8E7A',
+    face:'<path d="M13.5 22q3.5 -3.6 7 0M27.5 22q3.5 -3.6 7 0" class="k"/><path d="M17 29.5q7 6.5 14 0" class="k"/>',
     tip:'¡Qué bueno! Haz tu rutina normal y disfrútala.' },
-  { id:'contodo', label:'¡Con todo!', val:5, fill:'#FFF0B8',
-    face:'<path d="M15 15l1 2.2 2.3.3-1.7 1.6.4 2.3-2-1.1-2 1.1.4-2.3-1.7-1.6 2.3-.3z" fill="#0B1B3F"/><path d="M25 15l1 2.2 2.3.3-1.7 1.6.4 2.3-2-1.1-2 1.1.4-2.3-1.7-1.6 2.3-.3z" fill="#0B1B3F"/><path d="M13 26q7 8 14 0z" fill="#0B1B3F"/><path d="M34 4l-3 6h2.5l-1.5 5 4.5-7H34l1.5-4z" fill="#F4C542" stroke="#B07D10" stroke-width=".8"/>',
+  { id:'contodo', label:'¡Con todo!', val:5, c:['#FFF3C2','#FFC93C','#F08A1C'], cheek:'#FF7A6B',
+    face:'<path d="M17 15.6l1.5 3.2 3.4.4-2.5 2.3.7 3.4-3.1-1.7-3.1 1.7.7-3.4-2.5-2.3 3.4-.4z" fill="#3B2A3F"/><path d="M31 15.6l1.5 3.2 3.4.4-2.5 2.3.7 3.4-3.1-1.7-3.1 1.7.7-3.4-2.5-2.3 3.4-.4z" fill="#3B2A3F"/><path d="M15.5 28.5h17q-1 8.5-8.5 8.5t-8.5-8.5z" fill="#3B2A3F"/><path d="M19.5 34.2q4.5-3 9 0q-2 2.3-4.5 2.3t-4.5-2.3z" fill="#FF7A8A"/><path d="M41 4l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z" fill="#FFF"/><path d="M6 8l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" fill="#FFF" opacity=".85"/>',
     tip:'¡Aprovéchala! Hoy es un gran día para retarte un poquito más.' }
 ];
+var CY_FACE_N = 0;
 function cicloCaraSvg(s) {
-  return '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="21" r="16" fill="' + s.fill + '" stroke="#0B1B3F" stroke-width="2"/>'
-    + '<g fill="none" stroke="#0B1B3F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + s.face + '</g></svg>';
+  var n = ++CY_FACE_N, g = 'cyf' + n;
+  return '<svg viewBox="0 0 48 48" aria-hidden="true"><defs>'
+    + '<radialGradient id="' + g + '" cx="36%" cy="30%" r="75%"><stop offset="0" stop-color="' + s.c[0] + '"/><stop offset=".55" stop-color="' + s.c[1] + '"/><stop offset="1" stop-color="' + s.c[2] + '"/></radialGradient>'
+    + '<linearGradient id="cyDrop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFE8FF"/><stop offset="1" stop-color="#4FA8E8"/></linearGradient>'
+    + '<style>.k{fill:none;stroke:#3B2A3F;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}</style></defs>'
+    + '<ellipse cx="24" cy="45" rx="13" ry="2.2" fill="#000" opacity=".22"/>'
+    + '<circle cx="24" cy="25" r="19.5" fill="url(#' + g + ')"/>'
+    + '<ellipse cx="17" cy="13" rx="7" ry="4" fill="#fff" opacity=".55" transform="rotate(-25 17 13)"/>'
+    + '<ellipse cx="12.5" cy="28.5" rx="3.6" ry="2.3" fill="' + s.cheek + '" opacity=".45"/><ellipse cx="35.5" cy="28.5" rx="3.6" ry="2.3" fill="' + s.cheek + '" opacity=".45"/>'
+    + s.face + '</svg>';
 }
 function cicloSentirInfo(id) { for (var i = 0; i < CY_SENTIR.length; i++) if (CY_SENTIR[i].id === id) return CY_SENTIR[i]; return null; }
 function cicloFase(dia, largo) {
