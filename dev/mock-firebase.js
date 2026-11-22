@@ -29,7 +29,7 @@
     anuncios: { an1: { texto: '¡Nuevo programa Core en 15 días muy pronto!', activo: true } },
     linkCodes: {}, client_links: {}, landingLeads: {},
     cal: { events: (function () { var e = {}; var t = new Date(); var k = function (o) { var d = new Date(t); d.setDate(d.getDate() + o); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
-      e[k(0)] = [{ id: 'ev1', title: 'Sesión presencial', note: 'Sara S.', hour: 6, hourEnd: 7, type: 'cliente' }, { id: 'ev2', title: 'Grabar video 1', hour: 11, hourEnd: 12, type: 'tarea' }, { id: 'ev3', title: 'CICLO', hour: 18, hourEnd: 19, type: 'otro' }];
+      e[k(0)] = [{ id: 'ev1', title: 'Sesión presencial', note: 'Sara S.', hour: 6, hourEnd: 7, type: 'cliente' }, { id: 'ev2', title: 'Grabar video abs', hour: 11, hourEnd: 12, type: 'contenido' }, { id: 'ev3', title: 'CICLO', hour: 18, hourEnd: 19, type: 'otro' }];
       e[k(1)] = [{ id: 'ev4', title: 'Sara S.', note: 'Sesión presencial', hour: 15, hourEnd: 16, type: 'cliente' }];
       return e; })() }
   };
