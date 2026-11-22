@@ -38,7 +38,8 @@
     diasEntrenados: dias,
     chat: { m1: { from: 'admin', text: '¡Hola Andrea! ¿Cómo te sentiste con la rutina?', ts: Date.now() - 86400000 }, m2: { from: 'client', text: '¡Muy bien! Me costó la plancha jaja', ts: Date.now() - 3600000 } },
     chatMeta: { lastReadByClient: 0 },
-    entrenoLogs: {}, progreso: {}, ficha: { edad: 31 }
+    entrenoLogs: {}, progreso: {}, ficha: { edad: 31 },
+    sentir: (function () { var o = {}; [[0,'bien'],[1,'contodo'],[2,'cansada'],[4,'dolor'],[6,'bien'],[8,'nauseas'],[9,'bien'],[11,'contodo']].forEach(function (x) { o[dk(x[0])] = x[1]; }); return o; })()
   };
   DATA.clients[CLIENT] = {
     name: 'Andrea Martínez', type: 'rutina-personalizada', initDate: dk(20), days: ['Lun', 'Mié', 'Vie'], sesionesMes: 12, status: 'activa', premioMes: { texto: 'Un producto de Tu Madre', meta: 12 }

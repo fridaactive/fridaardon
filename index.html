@@ -1002,6 +1002,23 @@
 @keyframes faCelPop{from{transform:scale(0.6);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes faCelFall{to{transform:translateY(105vh) rotate(var(--r));}}
 @media (prefers-reduced-motion: reduce){.fa-cel-bit{display:none;}.fa-cel-card{animation:none;}}
+
+/* ── ¿Cómo te sientes hoy? y caritas en el calendario ── */
+.in-feel{margin-top:.9rem;padding:.9rem .9rem .8rem;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:#fff}
+.in-feel-q{font-family:'Archivo Black','DM Sans',sans-serif;font-size:.9rem;text-transform:uppercase;margin-bottom:.6rem}
+.in-feel-row{display:flex;gap:.35rem}
+.in-feel-row button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.3rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:.5rem .1rem .45rem;cursor:pointer;color:#fff;font-family:inherit;transition:transform .2s,background .2s}
+.in-feel-row button span{font-size:.58rem;font-weight:700;line-height:1.1;text-align:center;opacity:.8}
+.in-feel-row button.sel{background:#F5ECCB;color:#0B1B3F;transform:translateY(-3px);box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.in-feel-row button.sel span{opacity:1}
+.fa-cara{width:40px;height:40px;display:block;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3));transition:transform .25s cubic-bezier(.2,1.4,.4,1)}
+.in-feel-row button.sel .fa-cara{transform:scale(1.15) rotate(-6deg)}
+.in-feel-tip{margin-top:.6rem;font-size:.75rem;line-height:1.45;background:rgba(255,255,255,.06);border-radius:12px;padding:.55rem .7rem}
+.in-feel-note{margin-top:.5rem;font-size:.66rem;opacity:.65}
+.track-day{overflow:visible}
+.track-face{position:absolute;top:-9px;right:-7px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none}
+.track-face-img{width:18px;height:18px;display:block}
+@media (prefers-reduced-motion: reduce){.fa-cara{transition:none}}
 </style>
 </head>
 <body>
@@ -2082,6 +2099,7 @@ function rewardsInicioHtml(c) {
   } else {
     h += '<button type="button" class="in-checkin" onclick="checkInHoy(true)"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>¿Entrenaste hoy?</b><span>Tócalo y suma a tu meta del mes</span></span><span class="in-checkin-btn">Sí ✓</span></button>';
   }
+  h += sentirHtml();
   // 2. Meta del mes (con el premio que puso Frida)
   var meta = metaDelMes(), pct = Math.min(100, Math.round(c.mes / meta * 100));
   var premio = PREMIO_MES && PREMIO_MES.texto ? escapeHtml(PREMIO_MES.texto) : '';
@@ -2114,6 +2132,36 @@ function rewardsInicioHtml(c) {
     h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\')"><span>💙</span><span><b>Tu perfil va al ' + Math.round(done / items.length * 100) + '%</b><small>Complétalo y gana la medalla de plata.</small><span class="in-nudge-bar"><span style="width:' + Math.round(done / items.length * 100) + '%"></span></span></span></button>';
   }
   return h;
+}
+
+// ── ¿Cómo te sientes hoy? Carita del día (Fluent Emoji 3D en img/caritas/).
+// Se guarda en clientasPortal/{uid}/sentir/{YYYY-MM-DD} = id; Frida la ve en su panel.
+var FA_SENTIR = [
+  { id:'dolor', label:'Con dolor', tip:'Hoy prioriza moverte suave: caminar, estiramientos o movilidad. Si el dolor es fuerte, descansa y consulta a tu médico.' },
+  { id:'nauseas', label:'Con náuseas', tip:'Toma agua a sorbos, come algo ligero y, si te animas, haz algo suave. No pasa nada si hoy solo descansas.' },
+  { id:'cansada', label:'Cansada', tip:'Haz tu rutina más ligera: menos series o menos peso también suma. Y esta noche, a dormir temprano.' },
+  { id:'bien', label:'Bien', tip:'¡Qué bueno! Haz tu rutina normal y disfrútala.' },
+  { id:'contodo', label:'¡Con todo!', tip:'¡Aprovéchala! Hoy es un gran día para retarte un poquito más.' }
+];
+function faSentirInfo(id) { for (var i = 0; i < FA_SENTIR.length; i++) if (FA_SENTIR[i].id === id) return FA_SENTIR[i]; return null; }
+function faCaraImg(id, cls) { return '<img class="' + (cls || 'fa-cara') + '" src="img/caritas/' + id + '.webp" alt="" loading="lazy">'; }
+function sentirHtml() {
+  var hoy = localKey(new Date()), sel = faSentirInfo(((CURRENT_PORTAL_DATA || {}).sentir || {})[hoy]);
+  var h = '<div class="in-feel"><div class="in-feel-q">¿Cómo te sientes hoy?</div><div class="in-feel-row">';
+  FA_SENTIR.forEach(function(si) {
+    h += '<button type="button" class="' + (sel && sel.id === si.id ? 'sel' : '') + '" onclick="guardarSentir(\'' + si.id + '\')" aria-label="' + si.label + '">' + faCaraImg(si.id) + '<span>' + si.label + '</span></button>';
+  });
+  h += '</div>' + (sel ? '<div class="in-feel-tip">💙 ' + sel.tip + '</div>' : '<div class="in-feel-note">Frida verá tu carita en su panel para acompañarte mejor 💙</div>') + '</div>';
+  return h;
+}
+function guardarSentir(id) {
+  var hoy = localKey(new Date());
+  if (!CURRENT_PORTAL_DATA) CURRENT_PORTAL_DATA = {};
+  CURRENT_PORTAL_DATA.sentir = CURRENT_PORTAL_DATA.sentir || {};
+  CURRENT_PORTAL_DATA.sentir[hoy] = id;
+  if (navigator.vibrate) try { navigator.vibrate(15); } catch (e) {}
+  renderTrainingTracker(CURRENT_DIAS_ENTRENADOS);
+  db().ref('clientasPortal/' + currentUid + '/sentir/' + hoy).set(id).catch(function(e) { console.warn('guardarSentir', e.message); });
 }
 
 function checkInHoy(on) {
@@ -3903,7 +3951,9 @@ function renderTrainingTracker(diasEntrenados) {
     var done = !!CURRENT_DIAS_ENTRENADOS[key];
     var dot = logsByDate[key] ? '<span class="track-day-dot" onclick="event.stopPropagation();showDayComment(\'' + key + '\')"></span>' : '';
     var isTodayCell = day === now.getDate();
-    html += '<div class="track-day' + (done ? ' done' : '') + (isTodayCell ? ' today' : '') + '" data-dk="' + key + '">' + day + dot + '</div>';
+    var cara = ((CURRENT_PORTAL_DATA || {}).sentir || {})[key];
+    var bub = cara && faSentirInfo(cara) ? '<span class="track-face" title="' + faSentirInfo(cara).label + '">' + faCaraImg(cara, 'track-face-img') + '</span>' : '';
+    html += '<div class="track-day' + (done ? ' done' : '') + (isTodayCell ? ' today' : '') + '" data-dk="' + key + '">' + day + dot + bub + '</div>';
   }
   daysEl.innerHTML = html;
   daysEl.querySelectorAll('.track-day:not(.empty)').forEach(function(cell) {
