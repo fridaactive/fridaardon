@@ -872,6 +872,12 @@
 .cst-chip.feel{display:inline-flex;align-items:center;gap:.25rem;background:#F4F6FF;color:var(--text)}
 .cst-chip.feel .fa-emoji{font-size:12px}
 .cst-chip.feel.dolor,.cst-chip.feel.nauseas{background:#FFEDEF;color:#B4233C}
+.cm-imgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.7rem;margin-bottom:.4rem}
+.cm-img{background:#F7F9FF;border:1px solid var(--border);border-radius:14px;padding:.5rem;text-align:center}
+.cm-img img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:10px;display:block}
+.cm-img-name{font-size:.68rem;font-weight:700;color:var(--text);margin:.4rem 0 .35rem;line-height:1.25}
+.cm-img-dl{display:block;background:var(--blue);color:#fff;border-radius:100px;padding:.4rem .5rem;font-size:.68rem;font-weight:700;text-decoration:none;box-shadow:0 3px 0 #0F3FA8}
+.cm-img-tip{font-size:.66rem;color:var(--muted);margin-bottom:.8rem}
 #rutina-editor .back-row{flex-wrap:wrap;gap:0.4rem;}
 #rutina-editor .back-row .sub-brand{margin-right:auto;}
 #rutina-editor .back-row .rv-edit-btn{margin-right:0!important;}
@@ -5927,6 +5933,17 @@ function openContentModal(id) {
     + '</div>';
 
   if (v.idea) h += '<div class="cm-section">La idea</div><div class="cm-idea">' + contentMarks(v.idea) + '</div>';
+  // Imágenes listas para descargar y subir (historias, carruseles)
+  if (v.imagenes && v.imagenes.length) {
+    h += '<div class="cm-section">Imágenes listas para subir</div><div class="cm-imgs">';
+    v.imagenes.forEach(function(im, i) {
+      var src = typeof im === 'string' ? im : im.src, nombre = (typeof im === 'object' && im.nombre) || ('Imagen ' + (i + 1));
+      h += '<div class="cm-img"><a href="' + escHtml(src) + '" target="_blank" rel="noopener"><img src="' + escHtml(src) + '" alt="' + escHtml(nombre) + '" loading="lazy"></a>'
+        + '<div class="cm-img-name">' + escHtml(nombre) + '</div>'
+        + '<a class="cm-img-dl" href="' + escHtml(src) + '" download>⬇️ Descargar</a></div>';
+    });
+    h += '</div><div class="cm-img-tip">En el celular: toca la imagen para abrirla, mantén el dedo encima y elige "Guardar en Fotos".</div>';
+  }
 
   h += '<div class="ce-bar"><button type="button" class="cm-btn primary" onclick="startContentEdit(\'' + id + '\')">✏️ Editar guion y caption</button>'
     + (v.editadoPorTi ? '<span class="ce-edited">Tiene tus cambios · <button type="button" onclick="restoreContentOriginal(\'' + id + '\')">volver al original</button></span>' : '')

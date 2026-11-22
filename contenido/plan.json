@@ -272,7 +272,7 @@
    "formato": "Historia de Instagram (3 pantallas)",
    "duracion": "3 historias seguidas",
    "publicar": {
-    "fecha": "2026-11-24",
+    "fecha": "2026-11-25",
     "hora": "12:30"
    },
    "borrador": false,
@@ -295,7 +295,7 @@
     }
    ],
    "notas": [
-    "Historia semanal de ventas: súbela una vez por semana (de preferencia martes o miércoles).",
+    "Historia semanal de ventas: esta semana el miércoles 25. Las imágenes están aquí abajo listas para descargar.",
     "La encuesta es la clave: cada voto de \"Sí\" es una persona que levantó la mano. Escríbele el mismo día con el mensaje de seguimiento.",
     "Publícala en \"Tu historia\", no en Mejores amigos.",
     "Cambia la foto de la historia 1 cada semana para que no se vea repetida."
@@ -306,6 +306,24 @@
     "Sticker de link a fridaactive.com/servicios.html en la historia 2",
     "Encuesta en la historia 3",
     "Revisar quién votó y escribirle el mismo día"
+   ],
+   "imagenes": [
+    {
+     "src": "contenido/imagenes/historia-planes-1-web.png",
+     "nombre": "Historia 1 · Tu plan a tu medida"
+    },
+    {
+     "src": "contenido/imagenes/historia-planes-2-tipos.png",
+     "nombre": "Historia 2 · Así puedes entrenar conmigo"
+    },
+    {
+     "src": "contenido/imagenes/planes-online-foto.png",
+     "nombre": "Extra · Planes con precios (para mandar por mensaje)"
+    },
+    {
+     "src": "contenido/imagenes/marcas-aliadas.png",
+     "nombre": "Extra · Marcas aliadas (para mandar por mensaje)"
+    }
    ]
   },
   {
