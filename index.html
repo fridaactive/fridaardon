@@ -1143,7 +1143,11 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
 .guia-flex{background:linear-gradient(135deg,rgba(245,236,203,.16),rgba(124,203,106,.12));border:1px solid rgba(245,236,203,.4);border-radius:18px;padding:.9rem 1rem}
 .guia-flex b{font-size:.95rem}
 .guia-flex p{font-size:.82rem;line-height:1.45;margin:.35rem 0 .5rem;color:rgba(255,255,255,.88)}
-.guia-flex div{font-size:.8rem;line-height:1.45;padding:.3rem 0;border-top:1px solid rgba(255,255,255,.1)}
+.guia-flex{margin-bottom:.6rem}
+.guia-flex p{margin-bottom:0!important}
+.guia-flex-tips{background:rgba(245,236,203,.1);border:1px solid rgba(245,236,203,.3);border-radius:18px;padding:.8rem .9rem;margin-top:.2rem}
+.guia-flex-tips b{display:block;font-size:.85rem;color:#F5ECCB;margin-bottom:.3rem}
+.guia-flex-tips div{font-size:.8rem;line-height:1.45;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.1)}
 .guia-tips div{background:rgba(255,255,255,.05);border-radius:14px;padding:.65rem .8rem;font-size:.8rem;line-height:1.45;margin-bottom:.45rem}
 .guia-legal{font-size:.66rem;opacity:.5;line-height:1.5;margin-top:1.5rem}
 </style>
@@ -3404,12 +3408,12 @@ function openGuiaAlimentacion() {
       .map(function(x) { return '<div class="guia-mano">' + AL_ICON[x[0]] + '<b>' + escapeHtml(x[2]) + '</b><span>' + x[1] + '</span></div>'; }).join('')
     + '</div><div class="guia-note">Por cada comida principal. Usa tu propia mano como medida: crece contigo.</div>';
   if (g.menus && g.menus.length) {
-    // Rotación: con 4 menús → Lun A, Mar B, Mié C, Jue D, Vie A, Sáb B y domingo flexible.
+    // Rotación: Lun A, Mar B, Mié C, Jue A, Vie B, Sáb C y domingo flexible.
     // (g.rotacion puede traer otra: índices de menú o 'libre' por cada día, de lunes a domingo).
     var hoyIdx = (new Date().getDay() + 6) % 7;
     var sel = (typeof AL_DIA_SEL === 'number') ? AL_DIA_SEL : hoyIdx;
     var dias = ['L', 'M', 'M', 'J', 'V', 'S', 'D'], nombres = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-    var rot = (g.rotacion && g.rotacion.length === 7) ? g.rotacion : (g.menus.length >= 4 ? [0, 1, 2, 3, 0, 1, 'libre'] : [0, 1, 2, 0, 1, 2, 'libre']);
+    var rot = (g.rotacion && g.rotacion.length === 7) ? g.rotacion : [0, 1, 2, 0, 1, 2, 'libre'];
     var libre = { nombre: 'Flexible', libre: true };
     var menuDe = function(i) { var r = rot[i]; return r === 'libre' ? libre : (g.menus[r] || g.menus[0]); };
     h += '<div class="guia-sec">Tu menú de la semana</div><div class="guia-dias">';
@@ -3420,9 +3424,12 @@ function openGuiaAlimentacion() {
     h += '</div><div class="guia-dia-h">' + nombres[sel] + (sel === hoyIdx ? ' · hoy' : '') + ' <span>' + escapeHtml(mn.nombre || '') + '</span></div>';
     if (mn.libre) {
       var df = g.diaFlexible || {};
-      h += '<div class="guia-flex"><b>🎉 Día flexible</b><p>' + escapeHtml(df.texto || 'Hoy no hay menú: disfruta tu comida en familia o con amigos, sin culpa. Estos consejos te ayudan a seguir avanzando.') + '</p>'
-        + (df.tips || ['Empieza el día con un desayuno con proteína, así llegas con menos hambre al almuerzo.', 'En la comida especial, llena la mitad de tu plato con ensalada o verduras primero.', 'Disfruta tu antojo con calma, una porción, sin repetir por ansiedad.', 'Toma agua durante el día y muévete un poco: una caminata cuenta.'])
-          .map(function(t) { return '<div>✓ ' + escapeHtml(t) + '</div>'; }).join('') + '</div>';
+      h += '<div class="guia-flex"><b>🎉 Día flexible</b><p>' + escapeHtml(df.texto || 'Hoy no hay menú fijo: disfruta tu día en familia o con amigos, sin culpa. Aquí tienes ideas para que sigas avanzando.') + '</p></div>';
+      (df.sugerencias || []).forEach(function(sg) {
+        h += '<div class="guia-comida"><div class="guia-comida-h"><b>' + escapeHtml(sg.momento || '') + '</b><span>Sugerencia</span></div><div class="guia-plato-txt">' + escapeHtml(sg.plato || '') + '</div></div>';
+      });
+      var tipsF = df.tips || ['Si en el día no comiste suficiente proteína, tómate tu shake de proteína para completarla.', 'Toma agua durante el día y muévete un poco: una caminata cuenta.', 'Mañana retomas tu Menú A, sin compensar ni saltarte comidas.'];
+      h += '<div class="guia-flex-tips"><b>Tips para tu domingo</b>' + tipsF.map(function(t) { return '<div>💡 ' + escapeHtml(t) + '</div>'; }).join('') + '</div>';
     }
     (mn.comidas || []).forEach(function(c, ci) {
       var alt = c.alternativa ? '<button type="button" class="guia-alt" onclick="this.nextElementSibling.style.display=\'block\';this.style.display=\'none\'">🔄 Otra opción</button><div class="guia-alt-txt">' + escapeHtml(c.alternativa) + '</div>' : '';
