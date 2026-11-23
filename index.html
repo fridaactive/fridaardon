@@ -1195,6 +1195,13 @@ body.portal-dark .anuncio-text{font-size:.76rem!important;color:#F5ECCB!importan
 .bw-card b{display:block;font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.1rem;margin-top:.6rem}
 .bw-card p{font-size:.82rem;line-height:1.45;color:rgba(255,255,255,.8);margin:.35rem 0 .2rem}
 .bw-card-btn{display:inline-block;margin-top:.7rem;background:#F5ECCB;color:#0B1B3F;font-weight:800;font-size:.85rem;padding:.65rem 1.4rem;border-radius:100px;box-shadow:0 4px 0 #D9C98E}
+.cy-more{margin-top:.8rem;border-top:1px solid rgba(255,255,255,.12);padding-top:.15rem}
+.cy-more summary{list-style:none;display:flex;justify-content:center;align-items:center;gap:.4rem;padding:.55rem 0 .1rem;cursor:pointer;font-size:.78rem;font-weight:700;color:var(--cy-accent,#F5ECCB)}
+.cy-more summary::-webkit-details-marker{display:none}
+.cy-more summary b{transition:transform .2s;display:inline-block}
+.cy-more[open] summary b{transform:rotate(180deg)}
+.cy-more[open] summary span{font-size:0;}
+.cy-more[open] summary span::after{content:'Ver menos';font-size:.78rem}
 </style>
 </head>
 <body>
@@ -2465,8 +2472,10 @@ function cicloCardHtml(o) {
   var h = '<div class="cy-card" style="--cy-glow:' + f.glow + ';--cy-accent:' + f.accent + ';--cy-chip:' + f.chip + ';--cy-ink:' + f.ink + '">';
   h += '<div class="cy-top"><div class="cy-batt">' + cicloBateriaSvg(pct, key, uid) + '<div class="cy-pct">' + pct + '<small>%</small></div></div>';
   h += '<div class="cy-info"><span class="cy-tag">' + f.icon + ' ' + f.tag + '</span><div class="cy-name">' + f.name + '</div>';
-  h += '<div class="cy-day">Día ' + dia + ' de ' + largo + ' · tu período llega en ' + falta + (falta === 1 ? ' día' : ' días') + ' <button type="button" class="cy-edit" onclick="openCicloModal()">Editar fecha</button></div>';
   h += '<div class="cy-msg">' + f.msg + '</div></div></div>';
+  // Lo demás va plegado en "Ver más" para que la tarjeta no se vea saturada.
+  h += '<details class="cy-more"><summary><span>Ver más sobre tu ciclo</span><b>▾</b></summary>';
+  h += '<div class="cy-day" style="margin-top:.7rem">Día ' + dia + ' de ' + largo + ' · tu período llega en ' + falta + (falta === 1 ? ' día' : ' días') + ' <button type="button" class="cy-edit" onclick="openCicloModal()">Editar fecha</button></div>';
   h += '<div class="cy-wheel"><div class="cy-track">' + seg(5, '#E8546A') + seg(ov - 7, '#3A6CF0') + seg(3, '#F4C542') + seg(largo - ov - 1, '#C98A4E') + '</div>';
   h += '<div class="cy-now" style="left:' + ((dia - 0.5) / largo * 100) + '%">' + f.icon + '</div></div>';
   var lg = function(txt, col, k) { return '<span class="' + (k === key ? 'on' : '') + '"><i style="background:' + col + '"></i>' + txt + '</span>'; };
@@ -2475,7 +2484,7 @@ function cicloCardHtml(o) {
   h += '<div class="cy-plan"><div class="cy-box"><b>Ideal para hoy</b><span>' + f.ideal + '</span><div class="cy-dots">' + dots + '</div></div>';
   h += '<div class="cy-box"><b>Cuida</b><span>' + f.cuida + '</span></div></div>';
   h += '<div class="cy-sci">🔬 ' + f.sci + ' Son guías generales: si algo no se siente bien, escucha a tu cuerpo. Tu batería se ajusta con la carita que marcaste arriba 💙</div>';
-  return h + '</div>';
+  return h + '</details></div>';
 }
 
 function cicloInicioHtml() {
