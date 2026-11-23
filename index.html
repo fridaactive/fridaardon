@@ -1166,6 +1166,28 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
 .guia-postre-sub{font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#F5ECCB;margin-top:.4rem}
 .guia-tips div{background:rgba(255,255,255,.05);border-radius:14px;padding:.65rem .8rem;font-size:.8rem;line-height:1.45;margin-bottom:.45rem}
 .guia-legal{font-size:.66rem;opacity:.5;line-height:1.5;margin-top:1.5rem}
+
+/* Bienestar */
+.bw-hero{padding:.4rem .2rem 0}
+.bw-hero h2{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.6rem;line-height:1.02;margin:.55rem 0 .3rem;color:#fff}
+.bw-hero h2 span{color:#F5ECCB}
+.bw-hero p{font-size:.85rem;color:rgba(255,255,255,.75)}
+.bw-sec{font-family:'Archivo Black','DM Sans',sans-serif;text-transform:uppercase;font-size:.85rem;color:#F5ECCB;margin:1.3rem 0 .1rem}
+#bienestar-content .in-nudge{margin-top:.6rem}
+#bienestar-content .cy-card{margin-top:.6rem}
+#perfil-extras{margin-bottom:1rem}
+#perfil-extras .in-section{margin-top:0}
+.bnav-btn{min-width:3rem;padding:0 .45rem}
+.bnav-btn.active{padding:0 .9rem}
+
+/* Avisos más discretos: una línea, ancho completo y se pueden cerrar */
+body.portal-dark #anuncios-wrap{margin-bottom:.6rem!important}
+body.portal-dark .anuncios-strip{flex-direction:column;gap:.4rem}
+body.portal-dark .anuncio-card{position:relative;width:100%;box-sizing:border-box;display:flex;align-items:center;gap:.55rem;background:rgba(245,236,203,.1)!important;border:1px solid rgba(245,236,203,.3)!important;border-radius:14px!important;padding:.5rem 2.2rem .5rem .6rem!important;box-shadow:none!important;min-width:0!important;max-width:none!important}
+body.portal-dark .anuncio-icon{width:1.6rem!important;height:1.6rem!important;background:rgba(245,236,203,.18)!important;color:#F5ECCB!important}
+body.portal-dark .anuncio-icon svg{width:13px;height:13px}
+body.portal-dark .anuncio-text{font-size:.76rem!important;color:#F5ECCB!important;font-weight:600;line-height:1.3}
+.anuncio-x{position:absolute;right:.45rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(245,236,203,.7);font-size:.8rem;cursor:pointer;padding:.3rem}
 </style>
 </head>
 <body>
@@ -1469,6 +1491,7 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
     <div class="tab-bar">
       <button class="tab-btn" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24"><rect x="1.8" y="8.5" width="3.4" height="7" rx="1.2" fill="#fff"/><rect x="18.8" y="8.5" width="3.4" height="7" rx="1.2" fill="#fff"/><rect x="5.2" y="10.7" width="13.6" height="2.6" rx="1.3" fill="#fff"/><rect x="1.8" y="8.5" width="1.3" height="7" rx="0.6" fill="#fff" opacity="0.45"/><rect x="21" y="8.5" width="1.2" height="7" rx="0.6" fill="#0a1a4d" opacity="0.18"/></svg></span> Rutina</button>
       <button class="tab-btn" data-tab="tab-perfil" onclick="showTab('tab-perfil')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.3" r="4.3" fill="#fff"/><path d="M4 21c0-4.6 3.6-7.6 8-7.6s8 3 8 7.6" fill="#fff"/><circle cx="10.2" cy="6.8" r="1.6" fill="#fff" opacity="0.4"/><path d="M4 21c0-4.6 3.6-7.6 8-7.6v0c-3.6 1-6 3.8-6 7.6Z" fill="#0a1a4d" opacity="0.12"/></svg></span> Perfil</button>
+      <button class="tab-btn" data-tab="tab-bienestar" onclick="showTab('tab-bienestar')">🌿 Bienestar</button>
       <button class="tab-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24"><rect x="3.5" y="9.5" width="17" height="3.8" rx="1.2" fill="#fff"/><rect x="4.5" y="13.3" width="15" height="7.2" rx="1.5" fill="#fff"/><path d="M9.3 9.5c-1.7 0-2.6-1.5-1.9-2.8.7-1.3 2.8.4 2.8 2.8Zm5.4 0c1.7 0 2.6-1.5 1.9-2.8-.7-1.3-2.8.4-2.8 2.8Z" fill="#fff"/><rect x="4.5" y="13.3" width="15" height="2.4" fill="#0a1a4d" opacity="0.1"/></svg></span> Beneficios</button>
     </div>
   </div>
@@ -1482,8 +1505,9 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
   <nav class="bnav" aria-label="Menú del portal">
     <button type="button" class="bnav-btn active" data-tab="tab-inicio" onclick="showTab('tab-inicio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Inicio</span></button>
     <button type="button" class="bnav-btn" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/></svg><span>Rutina</span></button>
-    <button type="button" class="bnav-btn" data-tab="tab-perfil" onclick="showTab('tab-perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span>Perfil</span></button>
+    <button type="button" class="bnav-btn" data-tab="tab-bienestar" onclick="showTab('tab-bienestar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14"/><path d="M5 19l7-7"/></svg><span>Bienestar</span></button>
     <button type="button" class="bnav-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/><path d="M12 9c-1-2.2-2.6-3.5-4-3.5S6 6.5 6.3 8 8.5 9 12 9Z"/><path d="M12 9c1-2.2 2.6-3.5 4-3.5S18 6.5 17.7 8 15.5 9 12 9Z"/></svg><span>Beneficios</span></button>
+    <button type="button" class="bnav-btn" data-tab="tab-perfil" onclick="showTab('tab-perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span>Perfil</span></button>
   </nav>
 
   <div class="dash-body">
@@ -1491,6 +1515,11 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
     <!-- INICIO (portal rediseñado: entrenamiento de hoy, progreso y accesos) -->
     <div class="tab-panel active" id="tab-inicio">
       <div id="inicio-content"><div class="empty-note">Cargando…</div></div>
+    </div>
+
+    <!-- BIENESTAR (alimentación y ciclo) -->
+    <div class="tab-panel" id="tab-bienestar">
+      <div id="bienestar-content"><div class="empty-note">Cargando…</div></div>
     </div>
 
     <!-- RUTINA -->
@@ -1592,6 +1621,7 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
       </div>
 
       <div id="perfil-unlocked-content">
+        <div id="perfil-extras"></div>
         <details class="track-card" open>
           <summary class="track-summary">
             <span class="track-summary-label">Historial de entrenos</span>
@@ -2133,6 +2163,8 @@ function renderInicioTab() {
       + '<span class="in-hero-title">' + (PLAN_NEVER_SET ? 'Tu cuenta está lista' : 'Renueva tu plan') + '</span>'
       + '<span class="in-hero-meta">' + (PLAN_NEVER_SET ? 'Ya tengo tus respuestas. Solo falta elegir tu plan.' : 'Tu progreso sigue guardado aquí.') + '</span></span></span></div>'
       + '<div style="margin-top:0.9rem;">' + renderPlanLockedCard() + '</div>';
+    var bw = document.getElementById('bienestar-content');
+    if (bw) bw.innerHTML = renderPlanLockedCard();
     return;
   }
   var c = inicioCounts();
@@ -2171,14 +2203,10 @@ function renderInicioTab() {
     h += '<div class="in-msg"><span class="in-msg-lbl"><span class="fa-tag">de Frida para ti</span></span><span class="in-msg-txt">' + escapeHtml(currentRutinaData.mensajeInicial) + '</span></div>';
   }
 
-  h += '<div class="in-section"><span class="fa-marker">ACCESOS</span> RÁPIDOS<svg class="fa-sticker fa-sticker-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 8.7l7.1-.6z"/></svg></div><div class="in-links">';
-  if (sug) h += '<button type="button" class="in-link in-link-blue" onclick="showTab(\'tab-rutina\')"><span class="in-link-title">MI RUTINA</span><span class="in-link-sub">Todos tus días</span></button>';
-  h += '<button type="button" class="in-link" onclick="showTab(\'tab-perfil\')"><span class="in-link-title">MI PROGRESO</span><span class="in-link-sub">Historial y transformación</span></button>'
-    + '<button type="button" class="in-link" onclick="showTab(\'tab-beneficios\')"><span class="in-link-title">BENEFICIOS</span><span class="in-link-sub">Descuentos de marcas aliadas</span></button>'
-    + '<button type="button" class="in-link" onclick="openChatModal()"><span class="in-link-title">HABLAR CON FRIDA</span><span class="in-link-sub">Escríbeme tus dudas</span></button>'
-    + '</div>';
   el.innerHTML = h;
   if (currentTabId === 'tab-inicio') animateInicioNumbers();
+  renderPerfilExtras();
+  renderBienestarTab();
   checkNewMedals();
 }
 
@@ -2258,30 +2286,9 @@ function medallasEstado() {
   ];
 }
 
-function rewardsInicioHtml(c) {
+// Perfil: medallas y avisos (foto del mes, perfil incompleto), antes estaban en Inicio.
+function perfilExtrasHtml() {
   var h = '';
-  var today = localKey(new Date());
-  var hoy = !!(CURRENT_DIAS_ENTRENADOS || {})[today];
-  // 1. Check-in de un toque
-  if (hoy) {
-    h += '<div class="in-checkin done"><span class="in-checkin-ico">✅</span><span class="in-checkin-txt"><b>¡Hoy cuenta!</b><span>Tu entreno de hoy ya está marcado 💪</span></span><button type="button" class="in-checkin-undo" onclick="checkInHoy(false)">Deshacer</button></div>';
-  } else {
-    h += '<button type="button" class="in-checkin" onclick="checkInHoy(true)"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>¿Entrenaste hoy?</b><span>Tócalo y suma a tu meta del mes</span></span><span class="in-checkin-btn">Sí ✓</span></button>';
-  }
-  h += sentirHtml();
-  h += alimentacionInicioHtml();
-  // 1.5 Mi ciclo (batería de energía según la fase del ciclo menstrual)
-  h += cicloInicioHtml();
-  // 2. Meta del mes (con el premio que puso Frida)
-  var meta = metaDelMes(), pct = Math.min(100, Math.round(c.mes / meta * 100));
-  var premio = PREMIO_MES && PREMIO_MES.texto ? escapeHtml(PREMIO_MES.texto) : '';
-  h += '<div class="in-goal' + (c.mes >= meta ? ' won' : '') + '">'
-    + '<div class="in-goal-top"><span class="fa-tag">META DE ' + MESES_LARGOS[new Date().getMonth()].toUpperCase() + '</span><span class="in-goal-num">' + c.mes + '<small>/' + meta + '</small></span></div>'
-    + '<div class="in-goal-track"><div class="in-goal-fill" style="width:' + pct + '%"></div></div>'
-    + (c.mes >= meta
-        ? '<div class="in-goal-prize">🎉 <b>¡Lo lograste!</b> ' + (premio ? 'Tu premio: ' + premio + '. Frida te escribirá para entregártelo.' : 'Frida te tiene una sorpresa.') + '</div>'
-        : '<div class="in-goal-prize">🎁 ' + (premio ? 'Al llegar ganas: <b>' + premio + '</b>' : 'Al llegar, Frida te tiene una sorpresa') + ' · te faltan ' + (meta - c.mes) + '</div>')
-    + '</div>';
   // 3. Medallas
   var meds = medallasEstado(), nOk = meds.filter(function(m) { return m.ok; }).length;
   h += '<div class="in-section"><span class="fa-marker">TUS</span> MEDALLAS <span class="in-med-count">' + nOk + '/' + meds.length + '</span></div>';
@@ -2303,6 +2310,49 @@ function rewardsInicioHtml(c) {
   if (done < items.length) {
     h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\')"><span>💙</span><span><b>Tu perfil va al ' + Math.round(done / items.length * 100) + '%</b><small>Complétalo y gana la medalla de plata.</small><span class="in-nudge-bar"><span style="width:' + Math.round(done / items.length * 100) + '%"></span></span></span></button>';
   }
+  return h;
+}
+function renderPerfilExtras() {
+  var el = document.getElementById('perfil-extras');
+  if (el) el.innerHTML = perfilExtrasHtml();
+}
+
+// Bienestar: guía de alimentación y Mi ciclo, cada una en su tarjeta.
+function renderBienestarTab() {
+  var el = document.getElementById('bienestar-content');
+  if (!el) return;
+  var h = '<div class="bw-hero"><span class="fa-tag">BIENESTAR</span><h2>Cuídate <span>por dentro</span></h2><p>Tu alimentación y tu energía, en un solo lugar.</p></div>';
+  h += '<div class="bw-sec">🥗 Alimentación</div>';
+  var al = alimentacionInicioHtml();
+  h += al || '<div class="in-nudge" style="cursor:default"><span>🥗</span><span><b>Guía de alimentación</b><small>Viene incluida en los planes online y por videollamada. Pregúntale a Frida por la tuya.</small></span></div>';
+  var genero = ((CURRENT_PORTAL_DATA || {}).cuestionario || {}).genero;
+  if (genero !== 'Masculino') {
+    h += '<div class="bw-sec">🌸 Mi ciclo</div>' + cicloInicioHtml();
+  }
+  el.innerHTML = h;
+}
+
+function rewardsInicioHtml(c) {
+  var h = '';
+  var today = localKey(new Date());
+  var hoy = !!(CURRENT_DIAS_ENTRENADOS || {})[today];
+  // 1. Check-in de un toque
+  if (hoy) {
+    h += '<div class="in-checkin done"><span class="in-checkin-ico">✅</span><span class="in-checkin-txt"><b>¡Hoy cuenta!</b><span>Tu entreno de hoy ya está marcado 💪</span></span><button type="button" class="in-checkin-undo" onclick="checkInHoy(false)">Deshacer</button></div>';
+  } else {
+    h += '<button type="button" class="in-checkin" onclick="checkInHoy(true)"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>¿Entrenaste hoy?</b><span>Tócalo y suma a tu meta del mes</span></span><span class="in-checkin-btn">Sí ✓</span></button>';
+  }
+  h += sentirHtml();
+  // 2. Meta del mes (con el premio que puso Frida)
+  var meta = metaDelMes(), pct = Math.min(100, Math.round(c.mes / meta * 100));
+  var premio = PREMIO_MES && PREMIO_MES.texto ? escapeHtml(PREMIO_MES.texto) : '';
+  h += '<div class="in-goal' + (c.mes >= meta ? ' won' : '') + '">'
+    + '<div class="in-goal-top"><span class="fa-tag">META DE ' + MESES_LARGOS[new Date().getMonth()].toUpperCase() + '</span><span class="in-goal-num">' + c.mes + '<small>/' + meta + '</small></span></div>'
+    + '<div class="in-goal-track"><div class="in-goal-fill" style="width:' + pct + '%"></div></div>'
+    + (c.mes >= meta
+        ? '<div class="in-goal-prize">🎉 <b>¡Lo lograste!</b> ' + (premio ? 'Tu premio: ' + premio + '. Frida te escribirá para entregártelo.' : 'Frida te tiene una sorpresa.') + '</div>'
+        : '<div class="in-goal-prize">🎁 ' + (premio ? 'Al llegar ganas: <b>' + premio + '</b>' : 'Al llegar, Frida te tiene una sorpresa') + ' · te faltan ' + (meta - c.mes) + '</div>')
+    + '</div>';
   return h;
 }
 
@@ -2695,7 +2745,7 @@ document.addEventListener('pointerdown', function(e) {
   setTimeout(function() { dot.remove(); }, 600);
 }, { passive: true });
 
-var TAB_ORDER = ['tab-inicio', 'tab-rutina', 'tab-perfil', 'tab-beneficios'];
+var TAB_ORDER = ['tab-inicio', 'tab-rutina', 'tab-bienestar', 'tab-beneficios', 'tab-perfil'];
 var currentTabId = 'tab-inicio';
 function showTab(id) {
   // Dirección de la animación: hacia la izquierda si la pestaña nueva está a la derecha en el menú
@@ -5536,14 +5586,24 @@ function loadAnuncios() {
   }).catch(function() { renderAnunciosStrip([]); });
 }
 
+function cerrarAnuncio(id) {
+  var c = {};
+  try { c = JSON.parse(localStorage.getItem('fa_anuncios_cerrados') || '{}'); } catch (e) {}
+  c[id] = 1;
+  try { localStorage.setItem('fa_anuncios_cerrados', JSON.stringify(c)); } catch (e) {}
+  loadAnuncios();
+}
 function renderAnunciosStrip(items) {
   var wrap = document.getElementById('anuncios-wrap');
   if (!wrap) return;
+  var cerrados = {};
+  try { cerrados = JSON.parse(localStorage.getItem('fa_anuncios_cerrados') || '{}'); } catch (e) {}
+  items = items.filter(function(x) { return !cerrados[x.id]; });
   if (!items.length) { wrap.style.display = 'none'; return; }
   wrap.style.display = '';
   var html = '';
   items.forEach(function(a) {
-    html += '<div class="anuncio-card"><div class="anuncio-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M15 8a3 3 0 0 1 0 8M18 5a7 7 0 0 1 0 14"/></svg></div><div class="anuncio-text">' + escapeHtml(a.texto || '') + '</div></div>';
+    html += '<div class="anuncio-card"><button type="button" class="anuncio-x" aria-label="Cerrar aviso" onclick="cerrarAnuncio(\'' + a.id + '\')">✕</button><div class="anuncio-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M15 8a3 3 0 0 1 0 8M18 5a7 7 0 0 1 0 14"/></svg></div><div class="anuncio-text">' + escapeHtml(a.texto || '') + '</div></div>';
   });
   document.getElementById('anuncios-strip').innerHTML = html;
 }
