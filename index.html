@@ -1215,6 +1215,9 @@ body.portal-dark .anuncio-text{font-size:.76rem!important;color:#F5ECCB!importan
 .in-goal-rq span{font-size:.7rem;font-weight:700;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:.28rem .6rem;color:rgba(255,255,255,.8)}
 .in-goal-rq span[onclick]{cursor:pointer;border-style:dashed}
 .in-goal-rq span.ok{background:rgba(124,203,106,.15);border-color:rgba(124,203,106,.45);color:#fff}
+.anuncio-btn{flex-shrink:0;margin-left:auto;background:#F5ECCB;color:#0B1B3F;border:none;border-radius:100px;padding:.35rem .7rem;font-size:.7rem;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 3px 0 #D9C98E;white-space:nowrap}
+.anuncio-btn.done{background:rgba(124,203,106,.2);color:#BDF0AE;box-shadow:none;cursor:default}
+body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
 </style>
 </head>
 <body>
@@ -5627,6 +5630,25 @@ function loadAnuncios() {
   }).catch(function() { renderAnunciosStrip([]); });
 }
 
+// Botón "¡Me apunto!" de un aviso: manda el mensaje al chat de Frida y queda marcado.
+function anuncioBotonHtml(a) {
+  if (!a.boton) return '';
+  var ya = !!(((CURRENT_PORTAL_DATA || {}).apuntados || {})[a.id]);
+  return ya ? '<span class="anuncio-btn done">✓ ¡Ya estás!</span>' : '<button type="button" class="anuncio-btn" onclick="apuntarmeAnuncio(\'' + a.id + '\')">' + escapeHtml(a.boton) + '</button>';
+}
+var ANUNCIOS_CACHE = {};
+function apuntarmeAnuncio(id) {
+  var a = ANUNCIOS_CACHE[id]; if (!a || !currentUid) return;
+  var upd = {};
+  var key = db().ref('clientasPortal/' + currentUid + '/chat').push().key;
+  upd['clientasPortal/' + currentUid + '/chat/' + key] = { from: 'client', text: a.botonMensaje || ('¡Me apunto! 🙋‍♀️ ' + (a.texto || '')), ts: Date.now() };
+  upd['clientasPortal/' + currentUid + '/apuntados/' + id] = true;
+  db().ref().update(upd).then(function() {
+    CURRENT_PORTAL_DATA.apuntados = CURRENT_PORTAL_DATA.apuntados || {}; CURRENT_PORTAL_DATA.apuntados[id] = true;
+    loadAnuncios();
+    celebrate('🙌', '¡Listo!', 'Frida ya recibió tu mensaje y te escribirá con los detalles.');
+  }).catch(function(e) { alert('No se pudo enviar: ' + e.message); });
+}
 function cerrarAnuncio(id) {
   var c = {};
   try { c = JSON.parse(localStorage.getItem('fa_anuncios_cerrados') || '{}'); } catch (e) {}
@@ -5640,11 +5662,12 @@ function renderAnunciosStrip(items) {
   var cerrados = {};
   try { cerrados = JSON.parse(localStorage.getItem('fa_anuncios_cerrados') || '{}'); } catch (e) {}
   items = items.filter(function(x) { return !cerrados[x.id]; });
+  items.forEach(function(x) { ANUNCIOS_CACHE[x.id] = x; });
   if (!items.length) { wrap.style.display = 'none'; return; }
   wrap.style.display = '';
   var html = '';
   items.forEach(function(a) {
-    html += '<div class="anuncio-card"><button type="button" class="anuncio-x" aria-label="Cerrar aviso" onclick="cerrarAnuncio(\'' + a.id + '\')">✕</button><div class="anuncio-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M15 8a3 3 0 0 1 0 8M18 5a7 7 0 0 1 0 14"/></svg></div><div class="anuncio-text">' + escapeHtml(a.texto || '') + '</div></div>';
+    html += '<div class="anuncio-card"><button type="button" class="anuncio-x" aria-label="Cerrar aviso" onclick="cerrarAnuncio(\'' + a.id + '\')">✕</button><div class="anuncio-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M15 8a3 3 0 0 1 0 8M18 5a7 7 0 0 1 0 14"/></svg></div><div class="anuncio-text">' + escapeHtml(a.texto || '') + '</div>' + anuncioBotonHtml(a) + '</div>';
   });
   document.getElementById('anuncios-strip').innerHTML = html;
 }

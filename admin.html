@@ -1723,6 +1723,8 @@
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
     <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;" id="an-modal-title">Nuevo anuncio</div>
     <div class="fin-form-row"><div class="fin-form-label">Texto</div><textarea class="fin-form-input" id="an-texto" rows="2" placeholder="Ej: 2x1 en tu marca aliada favorita este mes 💛" style="resize:vertical;"></textarea></div>
+    <div class="fin-form-row"><label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;cursor:pointer;"><input type="checkbox" id="an-boton-on" onchange="document.getElementById('an-boton-row').style.display=this.checked?'':'none'" style="width:1.1rem;height:1.1rem;"> Agregar botón "🙋‍♀️ ¡Me apunto!"</label></div>
+    <div class="fin-form-row" id="an-boton-row" style="display:none;"><div class="fin-form-label">Mensaje que te llega al chat cuando tocan el botón</div><input class="fin-form-input" id="an-boton-msg" type="text" placeholder="Ej: ¡Me apunto a la clase grupal de diciembre! 🙋‍♀️"></div>
     <div class="fin-form-row"><label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;cursor:pointer;"><input type="checkbox" id="an-activo" style="width:1.1rem;height:1.1rem;"> Activo (visible para los clientes)</label></div>
     <div style="display:flex;gap:0.75rem;margin-top:1rem;">
       <button onclick="hideAnuncioModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
@@ -3145,6 +3147,9 @@ function showAnuncioModal(id) {
   document.getElementById('an-modal-title').textContent = editingAnuncioId ? 'Editar anuncio' : 'Nuevo anuncio';
   document.getElementById('an-texto').value = data.texto || '';
   document.getElementById('an-activo').checked = editingAnuncioId ? !!data.activo : true;
+  document.getElementById('an-boton-on').checked = !!data.boton;
+  document.getElementById('an-boton-row').style.display = data.boton ? '' : 'none';
+  document.getElementById('an-boton-msg').value = data.botonMensaje || '';
   document.getElementById('anuncio-modal').style.display = 'flex';
 }
 
@@ -3156,7 +3161,10 @@ function hideAnuncioModal() {
 function saveAnuncio() {
   var texto = document.getElementById('an-texto').value.trim();
   if (!texto) { alert('Escribí el texto del anuncio.'); return; }
-  var item = { texto: texto, activo: document.getElementById('an-activo').checked };
+  var conBoton = document.getElementById('an-boton-on').checked;
+  var item = { texto: texto, activo: document.getElementById('an-activo').checked,
+    boton: conBoton ? '🙋‍♀️ ¡Me apunto!' : null,
+    botonMensaje: conBoton ? (document.getElementById('an-boton-msg').value.trim() || '¡Me apunto! 🙋‍♀️ ' + texto) : null };
   withAdminAuth(function() {
     var db = getDB();
     if (!db) { alert('No se pudo conectar con Firebase.'); return; }
