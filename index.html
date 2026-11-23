@@ -1202,6 +1202,13 @@ body.portal-dark .anuncio-text{font-size:.76rem!important;color:#F5ECCB!importan
 .cy-more[open] summary b{transform:rotate(180deg)}
 .cy-more[open] summary span{font-size:0;}
 .cy-more[open] summary span::after{content:'Ver menos';font-size:.78rem}
+.in-goal-how{margin-top:.55rem;border-top:1px solid rgba(255,255,255,.1)}
+.in-goal-how summary{list-style:none;cursor:pointer;font-size:.74rem;font-weight:700;color:#F5ECCB;padding:.5rem 0 0;display:flex;align-items:center;gap:.35rem}
+.in-goal-how summary::-webkit-details-marker{display:none}
+.in-goal-how summary b{transition:transform .2s;display:inline-block}
+.in-goal-how[open] summary b{transform:rotate(180deg)}
+.in-goal-how ul{margin:.45rem 0 0;padding-left:1.1rem;font-size:.76rem;line-height:1.5;color:rgba(255,255,255,.85)}
+.in-goal-how li+li{margin-top:.25rem}
 </style>
 </head>
 <body>
@@ -2359,6 +2366,12 @@ function rewardsInicioHtml(c) {
     + (c.mes >= meta
         ? '<div class="in-goal-prize">🎉 <b>¡Lo lograste!</b> ' + (premio ? 'Tu premio: ' + premio + '. Frida te escribirá para entregártelo.' : 'Frida te tiene una sorpresa.') + '</div>'
         : '<div class="in-goal-prize">🎁 ' + (premio ? 'Al llegar ganas: <b>' + premio + '</b>' : 'Al llegar, Frida te tiene una sorpresa') + ' · te faltan ' + (meta - c.mes) + '</div>')
+    + '<details class="in-goal-how"><summary>¿Cómo la cumplo? <b>▾</b></summary><ul>'
+    + '<li>Tu meta son <b>' + meta + ' entrenos este mes</b>: tus ' + metaSemanal() + ' días por semana.</li>'
+    + '<li>Cada día que entrenes, toca <b>“¿Entrenaste hoy?”</b> arriba, o guarda tu sesión en Rutina.</li>'
+    + '<li>Si se te olvidó marcar un día, márcalo en Perfil → Historial de entrenos.</li>'
+    + '<li>Cuando llegues a ' + meta + ', ' + (premio ? 'ganas tu premio y Frida te escribe para entregártelo.' : 'Frida te da una sorpresa.') + '</li>'
+    + '</ul></details>'
     + '</div>';
   return h;
 }
