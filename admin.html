@@ -1336,14 +1336,28 @@
     <!-- RUTINA PERSONALIZADA — paga una cuota mensual fija, sin sesiones -->
     <div id="cycle-rp-fields" style="display:none;">
       <div class="fin-form-row" style="margin-bottom:0.85rem;">
-        <div class="fin-form-label">Cuota del mes ($)</div>
-        <input class="fin-form-input" id="cycle-rp-cuota" type="number" placeholder="Ej: 40">
+        <div class="fin-form-label">¿Qué plan pagó?</div>
+        <select class="fin-form-input" id="cycle-rp-plan" onchange="cycleRpPlanChange()">
+          <option value="1">1 mes · $50</option>
+          <option value="3">3 meses · $135 (un solo pago)</option>
+          <option value="6">6 meses · $240 (un solo pago)</option>
+          <option value="otro">Otra cantidad de meses</option>
+        </select>
       </div>
+      <div class="fin-form-row" id="cycle-rp-meses-row" style="margin-bottom:0.85rem;display:none;">
+        <div class="fin-form-label">¿De cuántos meses?</div>
+        <input class="fin-form-input" id="cycle-rp-meses" type="number" min="1" placeholder="Ej: 12">
+      </div>
+      <div class="fin-form-row" style="margin-bottom:0.85rem;">
+        <div class="fin-form-label">Total que pagó ($)</div>
+        <input class="fin-form-input" id="cycle-rp-cuota" type="number" placeholder="Ej: 135">
+      </div>
+      <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;margin-bottom:0.85rem;cursor:pointer;"><input type="checkbox" id="cycle-rp-pagado" checked style="width:1.1rem;height:1.1rem;"> Ya pagó (se registra el total en Mis finanzas)</label>
       <div class="fin-form-row" style="margin-bottom:0.85rem;">
         <div class="fin-form-label">Fecha de inicio del nuevo ciclo</div>
         <input class="fin-form-input" id="cycle-rp-start" type="date">
       </div>
-      <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem;">La fecha de fin se calcula sola: un mes después.</div>
+      <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem;">La fecha de fin se calcula sola según los meses del plan.</div>
     </div>
 
     <div id="cycle-error" style="color:#c44;font-size:0.72rem;margin-bottom:0.75rem;display:none;"></div>
@@ -2069,7 +2083,7 @@ function renderPortalSection(clientId) {
 
       // ── ESTADO DE PAGO / PROGRAMA ──
       if (c.initDate) {
-        var mesActual = (getClientPayments()[clientId] || []).length + 1;
+        var mesActual = c.planMeses ? mesDelPlan(c) : (getClientPayments()[clientId] || []).length + 1;
         var start = new Date(c.initDate + 'T00:00:00');
         var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
         if (!c.endDate) end.setMonth(end.getMonth() + 1);
@@ -2344,13 +2358,14 @@ function renderAcpPagosHtml(clientId, c) {
     // Los pagos ya hechos cuentan los meses que quedaron atrás — si el
     // ciclo actual todavía no se pagó, hay que sumarle 1 para contarlo
     // también (si no, "pagó 1 vez" mostraba "Mes 2" en vez de "Mes 1").
-    var mesActual = (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
+    var mesActual = c.planMeses ? mesDelPlan(c) : (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
     var statusColor = daysLeft <= 0 ? '#A62B2B' : !paid ? '#8A6D14' : '#2a7a2a';
     var statusBg = daysLeft <= 0 ? '#FDEAEA' : !paid ? '#FFF6E0' : '#F0FFF0';
     var statusBorder = daysLeft <= 0 ? '#F3C6C6' : !paid ? '#F0DFA0' : '#cde8cd';
     html += '<div class="card" style="background:' + statusBg + ';border-color:' + statusBorder + ';">';
     html += '<div class="card-label" style="color:' + statusColor + ';">Mes ' + mesActual + (c.planMeses ? ' de ' + c.planMeses : '') + ' · ' + (daysLeft <= 0 ? 'Ciclo vencido' : 'Quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días')) + '</div>';
-    html += '<div style="font-size:0.8rem;color:var(--text);">' + (paid ? '✅ Pagó este ciclo' : '⏳ Pendiente de pago') + (c.cuota ? ' · $' + c.cuota : '') + '</div>';
+    html += '<div style="font-size:0.8rem;color:var(--text);">' + (paid ? (c.planMeses ? '✅ Pagó su plan de ' + c.planMeses + ' meses' : '✅ Pagó este ciclo') : '⏳ Pendiente de pago') + (c.cuota ? ' · $' + c.cuota : '') + '</div>';
+    if (c.planMeses && c.endDate) html += '<div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem;">Vigente hasta el ' + formatFechaCorta(c.endDate) + '</div>';
     if (!paid && c.cuota) {
       html += '<button type="button" onclick="markClientAsPaid(\'' + clientId + '\');acpSwitchTab(\'pagos\');" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Marcar como pagado</button>';
     }
@@ -2359,6 +2374,7 @@ function renderAcpPagosHtml(clientId, c) {
 
   // Duración del plan — editable acá para corregir clientes ya cargadas
   // (nuevas clientes ya lo piden al crearlas, ver handleSaveNewClient).
+  if (c.type !== 'rutina-personalizada') {
   html += '<div class="card" style="margin-bottom:1rem;">';
   html += '<div class="card-label">📅 Duración del plan</div>';
   html += '<select id="acp-plan-tipo" onchange="acpTogglePlanMesesInput()" style="width:100%;padding:0.6rem;border-radius:10px;border:1.5px solid var(--border);font-size:0.8rem;font-family:\'DM Sans\',sans-serif;margin-bottom:0.5rem;">';
@@ -2370,8 +2386,9 @@ function renderAcpPagosHtml(clientId, c) {
   html += '</div>';
   html += '<button type="button" onclick="saveAcpPlanMeses(\'' + clientId + '\')" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Guardar duración</button>';
   html += '</div>';
+  }
 
-  html += '<button type="button" onclick="openCycleModal(\'' + clientId + '\')" style="width:100%;background:#2a7a2a;color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;margin-bottom:1rem;">🟢 Activar nuevo ciclo / mes</button>';
+  html += '<button type="button" onclick="openCycleModal(\'' + clientId + '\')" style="width:100%;background:#2a7a2a;color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;margin-bottom:1rem;">' + (c.type === 'rutina-personalizada' ? '🟢 Activar o corregir plan (1, 3, 6 meses…)' : '🟢 Activar nuevo ciclo / mes') + '</button>';
   html += '<div id="acp-quotation"></div>';
   return html;
 }
@@ -2457,7 +2474,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
     var elapsed = Math.min(totalDays, Math.max(0, totalDays - daysLeft));
     var progPct = Math.min(100, Math.round((elapsed / totalDays) * 100));
     var paid = isCurrentCyclePaid(clientId, c);
-    var mesActual = (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
+    var mesActual = c.planMeses ? mesDelPlan(c) : (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
     var progFillH = 64 * (progPct / 100);
 
     programHtml = '<div class="pf-ring-wrap"><div class="pf-ring-liquid"><svg viewBox="0 0 64 64">'
@@ -3790,7 +3807,7 @@ function markClientAsPaid(id) {
   var monthData = finGetMonth(today.getFullYear(), today.getMonth());
   monthData.incomes.push({
     amount: c.cuota,
-    note: 'Cuota ' + c.name,
+    note: (c.planMeses ? 'Plan ' + c.planMeses + ' meses · ' : 'Cuota ') + c.name,
     id: String(Date.now())
   });
   finSave();
@@ -4327,7 +4344,13 @@ function openCycleModal(id) {
   cycleCard.style.margin = isRutinaPersonalizada ? '1.25rem' : '0';
 
   if (isRutinaPersonalizada) {
-    document.getElementById('cycle-rp-cuota').value = c.cuota || '';
+    var mesesPrev = c.planMeses || 1;
+    var planSel = document.getElementById('cycle-rp-plan');
+    planSel.value = ({ 1: '1', 3: '3', 6: '6' })[mesesPrev] || 'otro';
+    document.getElementById('cycle-rp-meses').value = planSel.value === 'otro' ? mesesPrev : '';
+    document.getElementById('cycle-rp-meses-row').style.display = planSel.value === 'otro' ? '' : 'none';
+    document.getElementById('cycle-rp-cuota').value = c.cuota || PLAN_PRECIOS[planSel.value] || '';
+    document.getElementById('cycle-rp-pagado').checked = true;
     // Si el ciclo anterior terminó hace poco, el nuevo arranca justo al
     // día siguiente (sin perder ni duplicar días). Pero si ya venció hace
     // rato (o nunca tuvo uno), no tiene sentido sugerir esa fecha vieja —
@@ -4537,6 +4560,36 @@ function addOneMonthToDateStr(dateStr) {
   return d.toISOString().slice(0, 10);
 }
 
+function formatFechaCorta(iso) {
+  var m = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'], p = String(iso).split('-');
+  return parseInt(p[2], 10) + ' ' + m[parseInt(p[1], 10) - 1] + ' ' + p[0];
+}
+var PLAN_PRECIOS = { '1': 50, '3': 135, '6': 240 };
+function cycleRpPlanChange() {
+  var v = document.getElementById('cycle-rp-plan').value;
+  document.getElementById('cycle-rp-meses-row').style.display = v === 'otro' ? '' : 'none';
+  if (PLAN_PRECIOS[v]) document.getElementById('cycle-rp-cuota').value = PLAN_PRECIOS[v];
+}
+function addMonthsToDateStr(dateStr, n) {
+  var d = new Date(dateStr + 'T00:00:00');
+  d.setMonth(d.getMonth() + (n || 1));
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+// En qué mes del paquete va (1, 2, 3…) según las fechas, no según cuántos pagos lleva.
+function mesDelPlan(c) {
+  if (!c || !c.initDate) return 1;
+  var s = new Date(c.initDate + 'T00:00:00'), t = new Date();
+  var m = (t.getFullYear() - s.getFullYear()) * 12 + (t.getMonth() - s.getMonth()) - (t.getDate() < s.getDate() ? 1 : 0) + 1;
+  return Math.max(1, Math.min(m, c.planMeses || m));
+}
+function registrarIngresoCliente(c, monto, nota) {
+  var today = new Date();
+  var monthData = finGetMonth(today.getFullYear(), today.getMonth());
+  monthData.incomes.push({ amount: monto, note: nota, id: String(Date.now()) });
+  finSave();
+  fbSet('finanzas', finAllData);
+}
+
 // Renovar ciclo para rutina personalizada: una cuota mensual fija, sin
 // sesiones ni calendario — el cliente entrena por su cuenta desde la app.
 function saveCycleRutinaPersonalizada() {
@@ -4546,6 +4599,14 @@ function saveCycleRutinaPersonalizada() {
 
   var cuota = parseFloat(document.getElementById('cycle-rp-cuota').value) || 0;
   var startDate = document.getElementById('cycle-rp-start').value;
+  var planVal = document.getElementById('cycle-rp-plan').value;
+  var meses = planVal === 'otro' ? (parseInt(document.getElementById('cycle-rp-meses').value) || 0) : parseInt(planVal);
+  var yaPago = document.getElementById('cycle-rp-pagado').checked;
+  if (!meses || meses < 1) {
+    document.getElementById('cycle-error').textContent = 'Indica de cuántos meses es el plan.';
+    document.getElementById('cycle-error').style.display = 'block';
+    return;
+  }
 
   if (!startDate) {
     document.getElementById('cycle-error').textContent = 'Elegí la fecha de inicio del nuevo ciclo.';
@@ -4553,20 +4614,33 @@ function saveCycleRutinaPersonalizada() {
     return;
   }
   if (cuota <= 0) {
-    document.getElementById('cycle-error').textContent = 'Ingresá la cuota del mes.';
+    document.getElementById('cycle-error').textContent = 'Ingresa el total que pagó.';
     document.getElementById('cycle-error').style.display = 'block';
     return;
   }
 
+  var cuotaAnterior = c.cuota, mismoCiclo = c.initDate === startDate;
   c.cuota = cuota;
   c.initDate = startDate;
-  c.endDate = addOneMonthToDateStr(startDate);
+  c.endDate = addMonthsToDateStr(startDate, meses);
+  c.planMeses = meses > 1 ? meses : null;
 
   saveCustomClient(id, c);
   syncClientPublicFields(id, c);
-  // Ciclo nuevo arranca sin pagar, igual que en presencial — hasta que no
-  // se marque pagado, se considera el mes actual pendiente.
-  fbSet('clients/'+id+'/cicloPagado', false);
+  // Un paquete (3, 6 meses…) es UN solo ciclo que cubre todos sus meses.
+  // Si ya pagó, se marca pagado y el total entra a Mis finanzas de una vez.
+  var yaRegistrado = isCurrentCyclePaid(id, c);
+  if (yaPago && yaRegistrado && mismoCiclo) {
+    // Corrección de un ciclo ya cobrado (ej. se registró como 1 mes y era de 3):
+    // solo se suma la diferencia para no duplicar el ingreso.
+    var dif = cuota - (Number(cuotaAnterior) || 0);
+    if (dif > 0) registrarIngresoCliente(c, dif, 'Ajuste plan ' + meses + ' meses · ' + c.name);
+    fbSet('clients/'+id+'/cicloPagado', true);
+  } else if (yaPago) {
+    markClientAsPaid(id);
+  } else {
+    fbSet('clients/'+id+'/cicloPagado', false);
+  }
 
   closeCycleModal();
   renderClientsList();
@@ -5064,7 +5138,7 @@ function closeNewClientModal() {
 
 function updateNCTypeUI() {
   var isRutina = document.getElementById('nc-type').value === 'rutina-personalizada';
-  document.getElementById('nc-cuota-label').textContent = isRutina ? 'Monto mensual ($)' : 'Valor por sesión ($)';
+  document.getElementById('nc-cuota-label').textContent = isRutina ? 'Total que paga ($) · si es paquete, el total del paquete' : 'Valor por sesión ($)';
   document.getElementById('nc-startdate-row').style.display = isRutina ? '' : 'none';
   document.getElementById('nc-rutina-days-row').style.display = isRutina ? '' : 'none';
   document.getElementById('nc-hours-row').style.display = isRutina ? 'none' : 'flex';
@@ -5185,9 +5259,7 @@ function handleSaveNewClient() {
     }
     var id = slugify(name);
     var startD = new Date(startDateVal + 'T00:00:00');
-    var endD = new Date(startD);
-    endD.setMonth(endD.getMonth() + 1);
-    var endDateVal = endD.toISOString().slice(0, 10);
+    var endDateVal = addMonthsToDateStr(startDateVal, planMesesVal || 1);
     var monthlyPrice = cuotaVal ? parseFloat(cuotaVal) : 0;
 
     var rutinaClientData = {

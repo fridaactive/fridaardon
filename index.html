@@ -4489,8 +4489,9 @@ function renderFichaPlanTab() {
       return;
     }
     var html = '<div class="ficha-plan-card">';
-    html += '<div class="ficha-plan-row"><span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Tu plan</span><span style="font-size:0.85rem;font-weight:700;">$' + Number(c.cuota).toFixed(2) + (CURRENT_PLAN_MESES ? ' · ' + CURRENT_PLAN_MESES + ' meses' : ' · mensual') + '</span></div>';
-    html += '<div class="ficha-plan-row"><span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Este ciclo</span><span style="font-size:0.82rem;font-weight:700;color:' + (CURRENT_CICLO_PAGADO ? '#2a7a2a' : '#9a7700') + ';">' + (CURRENT_CICLO_PAGADO ? '✓ Pagado' : '⏳ Pendiente') + '</span></div>';
+    html += '<div class="ficha-plan-row"><span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Tu plan</span><span style="font-size:0.85rem;font-weight:700;">' + (c.planMeses ? 'Paquete de ' + c.planMeses + ' meses · $' + Number(c.cuota).toFixed(2) : '$' + Number(c.cuota).toFixed(2) + ' · mensual') + '</span></div>';
+    if (c.planMeses && c.endDate) html += '<div class="ficha-plan-row"><span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Vigente hasta</span><span style="font-size:0.82rem;font-weight:700;">' + fechaLarga(c.endDate) + '</span></div>';
+    html += '<div class="ficha-plan-row"><span style="font-size:0.72rem;color:var(--muted);font-weight:700;">' + (c.planMeses ? 'Tu paquete' : 'Este ciclo') + '</span><span style="font-size:0.82rem;font-weight:700;color:' + (CURRENT_CICLO_PAGADO ? '#2a7a2a' : '#9a7700') + ';">' + (CURRENT_CICLO_PAGADO ? '✓ Pagado' : '⏳ Pendiente') + '</span></div>';
     html += '</div>';
     actualEl.innerHTML = html;
     histEl.innerHTML = CURRENT_PAGOS_COUNT ? '<div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.5rem;">Llevás ' + CURRENT_PAGOS_COUNT + (CURRENT_PAGOS_COUNT === 1 ? ' pago registrado.' : ' pagos registrados.') + '</div>' : '';
@@ -5178,6 +5179,8 @@ function renderPlanCountdown(c) {
 
   CURRENT_PAGOS_COUNT = c.pagosCount || 0;
   CURRENT_PLAN_MESES = c.planMeses || null;
+  CURRENT_PLAN_INIT = c.initDate || null;
+  CURRENT_PLAN_END = c.endDate || null;
   CURRENT_CICLO_PAGADO = !!c.cicloPagado;
   renderPerfilRoleLine();
 
@@ -5209,13 +5212,21 @@ function renderPlanCountdown(c) {
 
 var CURRENT_PAGOS_COUNT = null;
 var CURRENT_PLAN_MESES = null;
+var CURRENT_PLAN_INIT = null, CURRENT_PLAN_END = null;
+function mesDelPlanPortal() {
+  if (!CURRENT_PLAN_INIT) return 1;
+  var s = new Date(CURRENT_PLAN_INIT + 'T00:00:00'), t = new Date();
+  var m = (t.getFullYear() - s.getFullYear()) * 12 + (t.getMonth() - s.getMonth()) - (t.getDate() < s.getDate() ? 1 : 0) + 1;
+  return Math.max(1, Math.min(m, CURRENT_PLAN_MESES || m));
+}
+function fechaLarga(iso) { var p = String(iso).split('-'); return parseInt(p[2], 10) + ' de ' + MESES_LARGOS[parseInt(p[1], 10) - 1] + ' ' + p[0]; }
 var CURRENT_CICLO_PAGADO = false;
 function renderPerfilRoleLine() {
   var el = document.getElementById('perfil-role');
   if (!el) return;
   var parts = [];
   if (CURRENT_PAGOS_COUNT !== null) {
-    var mes = CURRENT_PAGOS_COUNT + (CURRENT_CICLO_PAGADO ? 0 : 1);
+    var mes = CURRENT_PLAN_MESES ? mesDelPlanPortal() : CURRENT_PAGOS_COUNT + (CURRENT_CICLO_PAGADO ? 0 : 1);
     parts.push('Mes ' + mes + (CURRENT_PLAN_MESES ? ' de ' + CURRENT_PLAN_MESES : ''));
   }
   if (CURRENT_PERFIL_DATA.fechaRegistro) {
