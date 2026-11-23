@@ -2378,6 +2378,8 @@ function alTextoParaClaude(c, portal) {
   CQ_ORDER.forEach(function(k) { if (k === 'fechaNacimiento' || k === 'guiaAlimentacion') return; add(CQ_LABELS[k], formatCuestionarioValue(k, cq[k])); });
   lines.push('ENCUESTA DE ALIMENTACIÓN:');
   Object.keys(AL_LABELS).forEach(function(k) { add(AL_LABELS[k], alValor(k, enc[k])); });
+  var favs = (portal.alimentacion || {}).favoritos;
+  if (favs && Object.keys(favs).length) { lines.push('LE GUSTÓ (de su guía anterior):'); Object.keys(favs).forEach(function(k) { lines.push('- ' + favs[k]); }); }
   return lines.join('\n');
 }
 function renderAcpAlimentacionHtml(clientId, c) {
@@ -2395,6 +2397,8 @@ function renderAcpAlimentacionHtml(clientId, c) {
       var v = alValor(k, enc[k]); if (!v) return;
       html += '<div style="display:flex;justify-content:space-between;gap:0.75rem;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.75rem;"><span style="color:var(--muted);flex-shrink:0;">' + AL_LABELS[k] + '</span><span style="text-align:right;">' + escapeHtmlAdmin(v) + '</span></div>';
     });
+    var favs = al.favoritos ? Object.keys(al.favoritos).map(function(k) { return al.favoritos[k]; }) : [];
+    if (favs.length) html += '<div style="margin-top:0.7rem;"><div style="font-size:0.66rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem;">❤️ Le gustó</div>' + favs.map(function(f) { return '<div style="font-size:0.75rem;padding:0.3rem 0;border-bottom:1px solid var(--border);">' + escapeHtmlAdmin(f) + '</div>'; }).join('') + '</div>';
     html += '<button type="button" class="al-btn" onclick="alCopiarDatos()">📋 Copiar datos para Claude</button>';
     html += '<div style="font-size:0.7rem;color:var(--muted);margin-top:0.4rem;">Pégalos en el chat de Estrategia de contenido y Claude te devuelve la guía lista.</div></div>';
   }

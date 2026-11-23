@@ -1148,6 +1148,22 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
 .guia-flex-tips{background:rgba(245,236,203,.1);border:1px solid rgba(245,236,203,.3);border-radius:18px;padding:.8rem .9rem;margin-top:.2rem}
 .guia-flex-tips b{display:block;font-size:.85rem;color:#F5ECCB;margin-bottom:.3rem}
 .guia-flex-tips div{font-size:.8rem;line-height:1.45;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.1)}
+.guia-plato-row{display:flex;align-items:flex-start;gap:.5rem}
+.guia-plato-row>.guia-plato-txt,.guia-plato-row>span{flex:1;min-width:0}
+.guia-like{flex-shrink:0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:2.1rem;height:2.1rem;font-size:1rem;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;transition:transform .2s}
+.guia-like.on{background:rgba(255,120,140,.18);border-color:rgba(255,120,140,.5);transform:scale(1.08)}
+.guia-alt-txt.guia-plato-row{align-items:center;display:none}
+.guia-postre{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;margin-bottom:.55rem;overflow:hidden}
+.guia-postre summary{list-style:none;display:flex;align-items:center;gap:.7rem;padding:.75rem .85rem;cursor:pointer}
+.guia-postre summary::-webkit-details-marker{display:none}
+.guia-postre-ico{width:2.6rem;height:2.6rem;border-radius:14px;background:#F5ECCB;display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0}
+.guia-postre-t{flex:1;min-width:0}
+.guia-postre-t b{display:block;font-size:.88rem}
+.guia-postre-t small{font-size:.68rem;color:#F5ECCB;opacity:.85}
+.guia-postre-b{padding:0 .9rem .9rem;font-size:.8rem;line-height:1.5;color:rgba(255,255,255,.88)}
+.guia-postre-b ul{margin:.2rem 0 .5rem;padding-left:1.1rem}
+.guia-postre-b p{margin:.2rem 0 0}
+.guia-postre-sub{font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#F5ECCB;margin-top:.4rem}
 .guia-tips div{background:rgba(255,255,255,.05);border-radius:14px;padding:.65rem .8rem;font-size:.8rem;line-height:1.45;margin-bottom:.45rem}
 .guia-legal{font-size:.66rem;opacity:.5;line-height:1.5;margin-top:1.5rem}
 </style>
@@ -3426,14 +3442,14 @@ function openGuiaAlimentacion() {
       var df = g.diaFlexible || {};
       h += '<div class="guia-flex"><b>🎉 Día flexible</b><p>' + escapeHtml(df.texto || 'Hoy no hay menú fijo: disfruta tu día en familia o con amigos, sin culpa. Aquí tienes ideas para que sigas avanzando.') + '</p></div>';
       (df.sugerencias || []).forEach(function(sg) {
-        h += '<div class="guia-comida"><div class="guia-comida-h"><b>' + escapeHtml(sg.momento || '') + '</b><span>Sugerencia</span></div><div class="guia-plato-txt">' + escapeHtml(sg.plato || '') + '</div></div>';
+        h += '<div class="guia-comida"><div class="guia-comida-h"><b>' + escapeHtml(sg.momento || '') + '</b><span>Sugerencia</span></div><div class="guia-plato-row"><div class="guia-plato-txt">' + escapeHtml(sg.plato || '') + '</div>' + alLikeBtn(sg.plato) + '</div></div>';
       });
       var tipsF = df.tips || ['Si en el día no comiste suficiente proteína, tómate tu shake de proteína para completarla.', 'Toma agua durante el día y muévete un poco: una caminata cuenta.', 'Mañana retomas tu Menú A, sin compensar ni saltarte comidas.'];
       h += '<div class="guia-flex-tips"><b>Tips para tu domingo</b>' + tipsF.map(function(t) { return '<div>💡 ' + escapeHtml(t) + '</div>'; }).join('') + '</div>';
     }
     (mn.comidas || []).forEach(function(c, ci) {
-      var alt = c.alternativa ? '<button type="button" class="guia-alt" onclick="this.nextElementSibling.style.display=\'block\';this.style.display=\'none\'">🔄 Otra opción</button><div class="guia-alt-txt">' + escapeHtml(c.alternativa) + '</div>' : '';
-      h += '<div class="guia-comida"><div class="guia-comida-h"><b>' + escapeHtml(c.momento || '') + '</b>' + (c.hora ? '<span>' + escapeHtml(c.hora) + '</span>' : '') + '</div><div class="guia-plato-txt">' + escapeHtml(c.plato || '') + '</div>' + alt + '</div>';
+      var alt = c.alternativa ? '<button type="button" class="guia-alt" onclick="this.nextElementSibling.style.display=\'flex\';this.style.display=\'none\'">🔄 Otra opción</button><div class="guia-alt-txt guia-plato-row"><span>' + escapeHtml(c.alternativa) + '</span>' + alLikeBtn(c.alternativa) + '</div>' : '';
+      h += '<div class="guia-comida"><div class="guia-comida-h"><b>' + escapeHtml(c.momento || '') + '</b>' + (c.hora ? '<span>' + escapeHtml(c.hora) + '</span>' : '') + '</div><div class="guia-plato-row"><div class="guia-plato-txt">' + escapeHtml(c.plato || '') + '</div>' + alLikeBtn(c.plato) + '</div>' + alt + '</div>';
     });
   } else if (g.comidas && g.comidas.length) {
     h += '<div class="guia-sec">Tu día de ejemplo</div>';
@@ -3455,6 +3471,13 @@ function openGuiaAlimentacion() {
     h += '<button type="button" class="guia-reset" onclick="alResetSuper()">Desmarcar todo para la próxima compra</button>';
     h += '<div class="guia-note" style="margin-top:.4rem">Tu lista alcanza para toda la semana.</div>';
   }
+  var postres = (g.postres && g.postres.length) ? g.postres : AL_POSTRES;
+  h += '<div class="guia-sec">Postres ricos con proteína</div><div class="guia-note" style="text-align:left;margin:-.3rem 0 .6rem">Para cuando se te antoje algo dulce: ricos, fáciles y con proteína. Disfrútalos sin culpa.</div>';
+  postres.forEach(function(ps) {
+    h += '<details class="guia-postre"><summary><span class="guia-postre-ico">' + (ps.icono || '🍫') + '</span><span class="guia-postre-t"><b>' + escapeHtml(ps.nombre || '') + '</b>' + (ps.proteina ? '<small>' + escapeHtml(ps.proteina) + ' de proteína aprox.</small>' : '') + '</span>' + alLikeBtn(ps.nombre) + '</summary>'
+      + '<div class="guia-postre-b"><div class="guia-postre-sub">Ingredientes</div><ul>' + (ps.ingredientes || []).map(function(x) { return '<li>' + escapeHtml(x) + '</li>'; }).join('') + '</ul>'
+      + '<div class="guia-postre-sub">Cómo se hace</div><p>' + escapeHtml(ps.pasos || '') + '</p></div></details>';
+  });
   if (g.tips && g.tips.length) {
     h += '<div class="guia-sec">Tips para ti</div><div class="guia-tips">' + g.tips.map(function(t) { return '<div>💡 ' + escapeHtml(t) + '</div>'; }).join('') + '</div>';
   }
@@ -3463,6 +3486,31 @@ function openGuiaAlimentacion() {
   if (m.style.display !== 'block') { m.style.display = 'block'; m.scrollTop = 0; }
 }
 var AL_DIA_SEL = null;
+// Postres con proteína (se usan si la guía no trae los suyos).
+var AL_POSTRES = [
+  { icono: '🍫', nombre: 'Mug cake de chocolate', proteina: '25 g', ingredientes: ['1 scoop de proteína de chocolate', '2 cucharadas de avena molida', '1 huevo', '3 cucharadas de leche', '½ cucharadita de polvo de hornear', 'Opcional: chispas de chocolate oscuro'], pasos: 'Mezcla todo en una taza grande hasta que no queden grumos. Mete la taza al microondas de 60 a 90 segundos, hasta que esté esponjoso. Deja reposar un minuto y disfrútalo tibio.' },
+  { icono: '🍌', nombre: 'Helado de banano y proteína', proteina: '22 g', ingredientes: ['2 bananos maduros en rodajas, congelados', '1 scoop de proteína de vainilla o chocolate', 'Un chorrito de leche', 'Opcional: 1 cucharada de crema de maní'], pasos: 'Licúa el banano congelado con la proteína y un chorrito de leche, solo lo necesario para que se mueva la licuadora. Queda cremoso como helado suave. Si lo quieres más firme, mételo al congelador 30 minutos.' },
+  { icono: '🥜', nombre: 'Yogurt griego con maní y chocolate', proteina: '20 g', ingredientes: ['1 taza de yogurt griego natural', '1 cucharada de crema de maní', 'Unas fresas o banano en trocitos', 'Unas chispas de chocolate oscuro'], pasos: 'Pon el yogurt en un bowl, agrega la fruta, la crema de maní y las chispas encima. Si quieres, endulza con un poquito de miel. Listo en 2 minutos.' },
+  { icono: '🥞', nombre: 'Panqueques de avena y banano', proteina: '18 g', ingredientes: ['1 banano maduro', '2 huevos', '½ taza de avena', 'Canela al gusto', 'Opcional: 1 scoop de proteína'], pasos: 'Licúa todo hasta que quede una mezcla suave. Cocina porciones pequeñas en un sartén antiadherente a fuego medio, 1 o 2 minutos por lado. Acompaña con fruta, yogurt griego o un hilito de miel.' },
+  { icono: '🍪', nombre: 'Bolitas de avena, maní y chocolate', proteina: '6 g por bolita', ingredientes: ['1 taza de avena', '½ taza de crema de maní', '2 cucharadas de miel', '1 scoop de proteína', 'Chispas de chocolate oscuro'], pasos: 'Mezcla todo en un bowl hasta formar una masa. Haz bolitas del tamaño de una nuez y guárdalas en la refri al menos 30 minutos. Se conservan toda la semana: 2 bolitas son un postre perfecto.' }
+];
+// ❤️ Me gusta: guarda los platos favoritos de la clienta para que Frida los vea.
+function alKey(t) { var h = 0, str = String(t || ''); for (var i = 0; i < str.length; i++) { h = ((h << 5) - h + str.charCodeAt(i)) | 0; } return 'p' + (h >>> 0).toString(36); }
+function alLikeBtn(texto) {
+  if (!texto) return '';
+  var fav = (alData().favoritos || {})[alKey(texto)];
+  return '<button type="button" class="guia-like' + (fav ? ' on' : '') + '" data-txt="' + escapeHtml(texto) + '" onclick="event.preventDefault();event.stopPropagation();alToggleLike(this)" aria-label="Me gusta">' + (fav ? '❤️' : '🤍') + '</button>';
+}
+function alToggleLike(btn) {
+  var txt = btn.getAttribute('data-txt'), k = alKey(txt);
+  CURRENT_PORTAL_DATA.alimentacion = CURRENT_PORTAL_DATA.alimentacion || {};
+  var favs = CURRENT_PORTAL_DATA.alimentacion.favoritos = CURRENT_PORTAL_DATA.alimentacion.favoritos || {};
+  var on = !favs[k];
+  if (on) favs[k] = txt; else delete favs[k];
+  document.querySelectorAll('.guia-like').forEach(function(b) { if (alKey(b.getAttribute('data-txt')) === k) { b.classList.toggle('on', on); b.textContent = on ? '❤️' : '🤍'; } });
+  if (on && navigator.vibrate) try { navigator.vibrate(12); } catch (e) {}
+  db().ref('clientasPortal/' + currentUid + '/alimentacion/favoritos/' + k).set(on ? txt : null).catch(function(e) { console.warn('like', e.message); });
+}
 function alVerDia(i) {
   var m = document.getElementById('guia-modal'), y = m ? m.scrollTop : 0;
   AL_DIA_SEL = i; openGuiaAlimentacion();
