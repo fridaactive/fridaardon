@@ -2303,13 +2303,6 @@ function perfilExtrasHtml() {
   if (now.getDate() <= 7 && !(fotosMes && fotosMes.inicio)) {
     h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\');setTimeout(function(){var t=document.querySelector(\'.transf-card\');if(t)t.scrollIntoView({behavior:\'smooth\',block:\'start\'});},350)"><span>📸</span><span><b>Esta semana es día de foto</b><small>🔒 Tus fotos son privadas: solo las ven Frida y tú. Sirven para ver cuánto has avanzado.</small></span></button>';
   }
-  // 5. Perfil incompleto
-  var perfil = CURRENT_PERFIL_DATA || {}, portal = CURRENT_PORTAL_DATA || {};
-  var items = [!!perfil.fotoPerfil, !!(perfil.bio && perfil.bio.trim()), !!portal.ficha, !!(portal.fotosProgreso && Object.keys(portal.fotosProgreso).length)];
-  var done = items.filter(Boolean).length;
-  if (done < items.length) {
-    h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\')"><span>💙</span><span><b>Tu perfil va al ' + Math.round(done / items.length * 100) + '%</b><small>Complétalo y gana la medalla de plata.</small><span class="in-nudge-bar"><span style="width:' + Math.round(done / items.length * 100) + '%"></span></span></span></button>';
-  }
   return h;
 }
 function renderPerfilExtras() {
@@ -4737,6 +4730,7 @@ function updateProfileCompletion() {
   var items = [
     !!CURRENT_PERFIL_DATA.fotoPerfil,
     !!(CURRENT_PERFIL_DATA.bio && CURRENT_PERFIL_DATA.bio.trim()),
+    !!(CURRENT_PORTAL_DATA.ficha),
     !!(CURRENT_PORTAL_DATA.fotosProgreso && Object.keys(CURRENT_PORTAL_DATA.fotosProgreso).length)
   ];
   var done = items.filter(Boolean).length;
