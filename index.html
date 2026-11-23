@@ -1087,6 +1087,49 @@ body.portal-dark .pf-locked-text{color:rgba(255,255,255,.75)}
 body.portal-dark .pf-locked-icon{background:#F5ECCB;color:#0B1B3F}
 body.portal-dark .pf-locked-more{color:rgba(255,255,255,.6)}
 body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
+
+/* ══ Guía de alimentación ══ */
+.al-nudge{border-color:rgba(245,236,203,.45)!important;background:linear-gradient(135deg,rgba(124,203,106,.18),rgba(245,236,203,.10))!important}
+.guia-modal{display:none;position:fixed;inset:0;z-index:9000;overflow-y:auto;background:radial-gradient(90% 40% at 90% 0%,#1C3F9E 0%,rgba(0,0,0,0) 60%),#07122E;color:#fff;font-family:'DM Sans',sans-serif}
+.guia-top{position:sticky;top:0;display:flex;align-items:center;gap:.7rem;padding:.9rem 1rem;background:rgba(7,18,46,.92);backdrop-filter:blur(8px);z-index:2;font-weight:700}
+.guia-back{background:#F5ECCB;color:#0B1B3F;border:none;border-radius:100px;width:2.2rem;height:2.2rem;font-size:1.1rem;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #D9C98E}
+.guia-body{max-width:560px;margin:0 auto;padding:.5rem 1.1rem 3rem}
+.guia-hero h2{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.7rem;line-height:1.02;margin:.6rem 0 .4rem}
+.guia-hero h2 span{color:#F5ECCB}
+.guia-hero p{font-size:.88rem;line-height:1.5;color:rgba(255,255,255,.85)}
+.guia-hero small{display:block;font-size:.66rem;opacity:.55;margin-top:.35rem}
+.guia-alerta{margin-top:.9rem;background:rgba(245,236,203,.14);border:1px solid rgba(245,236,203,.45);border-radius:16px;padding:.8rem .9rem;font-size:.8rem;line-height:1.45}
+.guia-prot{margin-top:1rem;display:flex;align-items:center;gap:.9rem;background:#F5ECCB;color:#0B1B3F;border-radius:20px;padding:.9rem 1rem;box-shadow:0 5px 0 #D9C98E}
+.guia-prot b{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;font-size:1.9rem;line-height:1;white-space:nowrap}
+.guia-prot span{font-size:.8rem;font-weight:600;line-height:1.35}
+.guia-sec{font-family:'Archivo Black','DM Sans',sans-serif;text-transform:uppercase;font-size:.95rem;margin:1.5rem 0 .7rem;color:#F5ECCB}
+.guia-plato{display:flex;justify-content:center}
+.al-plato{width:210px;height:210px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35))}
+.guia-manos{display:grid;grid-template-columns:repeat(4,1fr);gap:.45rem;margin-top:1rem}
+.guia-mano{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:.6rem .3rem;text-align:center}
+.guia-mano svg{width:42px;height:42px;display:block;margin:0 auto .3rem}
+.guia-mano b{display:block;font-size:.74rem;line-height:1.15}
+.guia-mano span{font-size:.6rem;opacity:.7}
+.guia-note{font-size:.68rem;opacity:.6;margin-top:.5rem;text-align:center}
+.guia-comida{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:.8rem .9rem;margin-bottom:.6rem}
+.guia-comida-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem}
+.guia-comida-h b{font-size:.92rem}
+.guia-comida-h span{font-size:.68rem;background:rgba(245,236,203,.18);color:#F5ECCB;border-radius:100px;padding:.15rem .55rem;font-weight:700}
+.guia-comida ul{margin:0;padding-left:1.1rem;font-size:.8rem;line-height:1.5;color:rgba(255,255,255,.88)}
+.guia-comida li+li{margin-top:.2rem}
+.guia-super-h{font-size:.8rem;font-weight:700;margin-bottom:.5rem;opacity:.9}
+.guia-super{background:#fff;color:#0B1B3F;border-radius:18px;padding:.4rem .9rem;margin-bottom:.6rem}
+.guia-super-sec{font-size:.66rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#1C55E5;padding:.55rem 0 .3rem}
+.guia-item{display:flex;align-items:center;gap:.65rem;padding:.5rem 0;border-top:1px solid #E8ECF5;cursor:pointer}
+.guia-item input{width:1.15rem;height:1.15rem;accent-color:#1C55E5;flex-shrink:0}
+.guia-item span{flex:1;min-width:0}
+.guia-item b{display:block;font-size:.82rem}
+.guia-item small{display:block;font-size:.68rem;color:#6B7590}
+.guia-item em{font-style:normal;font-size:.74rem;font-weight:700;color:#1C55E5;white-space:nowrap}
+.guia-item.on b{text-decoration:line-through;opacity:.5}
+.guia-reset{width:100%;background:none;border:1px dashed rgba(255,255,255,.3);color:rgba(255,255,255,.75);border-radius:14px;padding:.6rem;font-family:inherit;font-size:.74rem;cursor:pointer}
+.guia-tips div{background:rgba(255,255,255,.05);border-radius:14px;padding:.65rem .8rem;font-size:.8rem;line-height:1.45;margin-bottom:.45rem}
+.guia-legal{font-size:.66rem;opacity:.5;line-height:1.5;margin-top:1.5rem}
 </style>
 </head>
 <body>
@@ -2190,6 +2233,7 @@ function rewardsInicioHtml(c) {
     h += '<button type="button" class="in-checkin" onclick="checkInHoy(true)"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>¿Entrenaste hoy?</b><span>Tócalo y suma a tu meta del mes</span></span><span class="in-checkin-btn">Sí ✓</span></button>';
   }
   h += sentirHtml();
+  h += alimentacionInicioHtml();
   // 1.5 Mi ciclo (batería de energía según la fase del ciclo menstrual)
   h += cicloInicioHtml();
   // 2. Meta del mes (con el premio que puso Frida)
@@ -2639,7 +2683,9 @@ function showTab(id) {
 // Solo rutina personalizada se auto-gestiona la rutina desde la app.
 // Presencial y online 1:1 entrenan con una rutina que Frida les lleva
 // aparte (en persona o por videollamada) — no tiene sentido esa pestaña.
+var CURRENT_CLIENT_TYPE = null;
 function applyClientTypeUI(type) {
+  CURRENT_CLIENT_TYPE = type || null;
   var rutinaBtn = document.querySelector('.tab-btn[data-tab="tab-rutina"]');
   if (!rutinaBtn) return;
   var hideRutina = !!type && type !== 'rutina-personalizada';
@@ -3042,21 +3088,25 @@ var CQ_QUESTIONS = [
 
 var cqAnswers = {};
 var cqIndex = 0;
+var CQ_SET = CQ_QUESTIONS;     // preguntas activas (bienvenida o alimentación)
+var CQ_DONE = null;            // qué hacer al terminar (null = bienvenida)
 
 function cqVisible(q, answers) { return !q.showIf || q.showIf(answers); }
 
 function cqFindIndex(startIndex, dir, answers) {
   var i = startIndex;
-  while (i >= 0 && i < CQ_QUESTIONS.length) {
-    if (cqVisible(CQ_QUESTIONS[i], answers)) return i;
+  while (i >= 0 && i < CQ_SET.length) {
+    if (cqVisible(CQ_SET[i], answers)) return i;
     i += dir;
   }
-  return dir > 0 ? CQ_QUESTIONS.length : -1;
+  return dir > 0 ? CQ_SET.length : -1;
 }
 
 var CQ_PERFIL = {};
 function startCuestionario(perfil) {
   CQ_PERFIL = perfil || {};
+  CQ_SET = CQ_QUESTIONS; CQ_DONE = null;
+  document.getElementById('cq-back-btn').onclick = cqBack;
   cqAnswers = {};
   cqIndex = cqFindIndex(0, 1, cqAnswers);
   showScreen('screen-cuestionario');
@@ -3064,10 +3114,10 @@ function startCuestionario(perfil) {
 }
 
 function cqRender() {
-  var q = CQ_QUESTIONS[cqIndex];
+  var q = CQ_SET[cqIndex];
   document.getElementById('cq-error').textContent = '';
 
-  var visList = CQ_QUESTIONS.filter(function(item) { return cqVisible(item, cqAnswers); });
+  var visList = CQ_SET.filter(function(item) { return cqVisible(item, cqAnswers); });
   var posInVis = visList.indexOf(q);
   document.getElementById('cq-progress-bar').innerHTML = visList.map(function(_, i) {
     return '<div class="cq-progress-seg' + (i <= posInVis ? ' filled' : '') + '"></div>';
@@ -3121,10 +3171,13 @@ function cqRender() {
     });
   }
 
-  document.getElementById('cq-back-btn').style.visibility = (cqFindIndex(cqIndex - 1, -1, cqAnswers) >= 0) ? 'visible' : 'hidden';
+  var hayAnterior = cqFindIndex(cqIndex - 1, -1, cqAnswers) >= 0;
+  // En la encuesta de alimentación, en la primera pregunta la flecha sirve para salir.
+  document.getElementById('cq-back-btn').style.visibility = (hayAnterior || CQ_DONE) ? 'visible' : 'hidden';
+  document.getElementById('cq-back-btn').onclick = (!hayAnterior && CQ_DONE) ? function() { showScreen('screen-dashboard'); } : cqBack;
   document.getElementById('cq-skip-btn').style.display = q.required ? 'none' : 'block';
 
-  var isLast = cqFindIndex(cqIndex + 1, 1, cqAnswers) >= CQ_QUESTIONS.length;
+  var isLast = cqFindIndex(cqIndex + 1, 1, cqAnswers) >= CQ_SET.length;
   document.getElementById('cq-continue-btn').textContent = isLast ? 'Finalizar' : 'Continuar';
 }
 
@@ -3147,7 +3200,7 @@ function cqSelect(key, val) {
 }
 
 function cqCaptureInput() {
-  var q = CQ_QUESTIONS[cqIndex];
+  var q = CQ_SET[cqIndex];
   if (q.type !== 'date' && q.type !== 'number' && q.type !== 'text') return;
   var input = document.getElementById('cq-input');
   if (!input) return;
@@ -3167,22 +3220,22 @@ function cqValid(q) {
 
 function cqNext() {
   cqCaptureInput();
-  var q = CQ_QUESTIONS[cqIndex];
+  var q = CQ_SET[cqIndex];
   if (!cqValid(q)) {
     document.getElementById('cq-error').textContent = 'Esta respuesta es necesaria para continuar.';
     return;
   }
   var next = cqFindIndex(cqIndex + 1, 1, cqAnswers);
-  if (next >= CQ_QUESTIONS.length) { cqFinish(); return; }
+  if (next >= CQ_SET.length) { cqFinish(); return; }
   cqIndex = next;
   cqRender();
 }
 
 function cqSkip() {
-  var q = CQ_QUESTIONS[cqIndex];
+  var q = CQ_SET[cqIndex];
   delete cqAnswers[q.key];
   var next = cqFindIndex(cqIndex + 1, 1, cqAnswers);
-  if (next >= CQ_QUESTIONS.length) { cqFinish(); return; }
+  if (next >= CQ_SET.length) { cqFinish(); return; }
   cqIndex = next;
   cqRender();
 }
@@ -3196,6 +3249,7 @@ function cqBack() {
 }
 
 function cqFinish() {
+  if (CQ_DONE) { CQ_DONE(cqAnswers); return; }
   setLoading(true);
   var payload = Object.assign({}, cqAnswers, { completadoEn: new Date().toISOString() });
   // La ficha se llena sola con lo que ya respondió (no se le vuelve a preguntar).
@@ -3233,6 +3287,140 @@ function fichaDesdeCuestionario(c, perfil, prev) {
   e.dias = e.dias || [];
   return { personal: p, salud: sa, entreno: e };
 }
+
+// ══════════ GUÍA DE ALIMENTACIÓN ══════════
+// La clienta (planes online o por videollamada) llena esta encuesta; Frida la
+// ve en su panel, arma la guía y la publica en clientasPortal/{uid}/alimentacion/guia.
+// No se muestran calorías: porciones con la mano y la proteína del día.
+var AL_QUESTIONS = [
+  { key: 'despierta', type: 'select', required: true, label: '¿A qué hora te despiertas normalmente?', options: ['Antes de las 5 am', '5 a 6 am', '6 a 7 am', '7 a 8 am', 'Después de las 8 am'] },
+  { key: 'duerme', type: 'select', required: true, label: '¿A qué hora te duermes?', options: ['Antes de las 9 pm', '9 a 10 pm', '10 a 11 pm', '11 pm a 12 am', 'Después de las 12 am'] },
+  { key: 'horaEntreno', type: 'select', required: true, label: '¿A qué hora sueles entrenar?', options: ['Temprano en la mañana', 'Media mañana', 'Al mediodía', 'En la tarde', 'En la noche', 'Varía'] },
+  { key: 'comidas', type: 'select', required: true, label: '¿Cuántas veces comes al día normalmente?', options: ['2 veces', '3 veces', '4 veces', '5 o más'] },
+  { key: 'tipoAlimentacion', type: 'select', required: true, label: '¿Cómo es tu alimentación?', options: ['Como de todo', 'No como carnes rojas', 'Vegetariana', 'Vegana'] },
+  { key: 'noCome', type: 'text', required: false, label: '¿Hay alimentos que no te gustan o no comes?', sub: 'Por ejemplo: pescado, aguacate, huevo… Si no hay ninguno, toca Omitir.' },
+  { key: 'alergias', type: 'text', required: false, label: '¿Tienes alergias o intolerancias?', sub: 'Por ejemplo: lactosa, gluten, maní. Si no tienes, toca Omitir.' },
+  { key: 'salud', type: 'multi', required: true, items: ['Diabetes o resistencia a la insulina', 'Problemas de tiroides', 'Presión alta', 'Colesterol o triglicéridos altos', 'Enfermedad de los riñones', 'Embarazo o lactancia', 'Problemas digestivos (gastritis, colon)'], none: 'Ninguna de estas', label: '¿Tienes alguna de estas condiciones?', sub: 'Así cuidamos que tu guía sea segura para ti.' },
+  { key: 'relacionComida', type: 'select', required: true, label: '¿Cómo te llevas con la comida?', options: [
+      { value: 'bien', label: 'Bien, en general' },
+      { value: 'ansiedad', label: 'A veces como por ansiedad o estrés' },
+      { value: 'dietas', label: 'He hecho muchas dietas y me cuesta' },
+      { value: 'tca', label: 'He tenido o tengo un trastorno de la conducta alimentaria' }
+    ] },
+  { key: 'cocina', type: 'select', required: true, label: '¿Cocinas en casa?', options: ['Sí, casi siempre', 'A veces', 'Casi nunca: como fuera o compro hecho'] },
+  { key: 'comeFuera', type: 'select', required: true, label: '¿Cuántas veces a la semana comes fuera?', options: ['Casi nunca', '1 a 2 veces', '3 a 5 veces', 'Casi todos los días'] },
+  { key: 'super', type: 'multi', required: true, items: ['Super Selectos', 'Walmart', 'PriceSmart', 'La Despensa de Don Juan', 'Maxi Despensa', 'Mercado o tienda de barrio'], none: 'Otro', label: '¿Dónde haces tus compras?', sub: 'Marca todos los que uses.' },
+  { key: 'presupuesto', type: 'select', required: true, label: '¿Cuánto puedes gastar en comida por semana (solo para ti)?', options: ['Menos de $25', '$25 a $40', '$40 a $60', '$60 a $80', 'Más de $80'] },
+  { key: 'agua', type: 'select', required: true, label: '¿Cuánta agua tomas al día?', options: ['Casi nada', '1 a 3 vasos', '4 a 6 vasos', '7 o más vasos'] },
+  { key: 'suplementos', type: 'text', required: false, label: '¿Tomas algún suplemento?', sub: 'Por ejemplo: proteína en polvo, creatina, vitaminas. Si no, toca Omitir.' },
+  { key: 'antojos', type: 'text', required: false, label: '¿Qué antojo o hábito te cuesta más?', sub: 'Por ejemplo: dulces en la noche, gaseosas, pan… Sin culpa, es para ayudarte.' }
+];
+
+function alElegible() { return !!currentClientId && !PLAN_LOCKED && CURRENT_CLIENT_TYPE && CURRENT_CLIENT_TYPE !== 'presencial'; }
+function alData() { return (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.alimentacion) || {}; }
+
+function startEncuestaAlimentacion() {
+  CQ_SET = AL_QUESTIONS;
+  CQ_DONE = function(ans) {
+    setLoading(true);
+    var enc = Object.assign({}, ans, { completadoEn: new Date().toISOString() });
+    db().ref('clientasPortal/' + currentUid + '/alimentacion/encuesta').set(enc).then(function() {
+      CURRENT_PORTAL_DATA.alimentacion = Object.assign({}, alData(), { encuesta: enc });
+      setLoading(false);
+      showScreen('screen-dashboard'); showTab('tab-inicio'); renderInicioTab();
+      celebrate('🥗', '¡Listo!', 'Frida ya tiene tus respuestas y va a preparar tu guía de alimentación. Te avisamos aquí cuando esté lista.');
+    }).catch(function(e) { setLoading(false); document.getElementById('cq-error').textContent = 'No se pudo guardar: ' + e.message; });
+  };
+  cqAnswers = {};
+  cqIndex = cqFindIndex(0, 1, cqAnswers);
+  showScreen('screen-cuestionario');
+  cqRender();
+}
+
+function alimentacionInicioHtml() {
+  if (!alElegible()) return '';
+  var d = alData();
+  if (d.guia) {
+    return '<button type="button" class="in-nudge al-nudge" onclick="openGuiaAlimentacion()"><span>🥗</span><span><b>Tu guía de alimentación</b><small>Tu plato, tus comidas del día y tu lista de súper.</small></span></button>';
+  }
+  if (d.encuesta) {
+    return '<div class="in-nudge al-nudge" style="cursor:default"><span>👩‍🍳</span><span><b>Frida está preparando tu guía</b><small>Ya tiene tus respuestas. Te aparecerá aquí en unos días.</small></span></div>';
+  }
+  return '<button type="button" class="in-nudge al-nudge" onclick="startEncuestaAlimentacion()"><span>🥗</span><span><b>Desbloquea tu guía de alimentación</b><small>Responde unas preguntas (3 minutos) y Frida arma tu guía con tu lista de súper.</small></span></button>';
+}
+
+// Dibujos de las porciones con la mano (SVG propio).
+var AL_ICON = {
+  palma: '<svg viewBox="0 0 48 48"><rect x="12" y="14" width="24" height="26" rx="10" fill="#F6C9A8"/><rect x="14" y="6" width="4.5" height="14" rx="2.2" fill="#F6C9A8"/><rect x="19.5" y="4" width="4.5" height="15" rx="2.2" fill="#F6C9A8"/><rect x="25" y="5" width="4.5" height="14" rx="2.2" fill="#F6C9A8"/><rect x="30.5" y="8" width="4.2" height="12" rx="2.1" fill="#F6C9A8"/><ellipse cx="24" cy="28" rx="8" ry="6" fill="#E08A6C" opacity=".55"/></svg>',
+  puno: '<svg viewBox="0 0 48 48"><rect x="12" y="12" width="24" height="24" rx="9" fill="#F6C9A8"/><path d="M14 20h20M14 26h20" stroke="#D9A07F" stroke-width="2" stroke-linecap="round"/><rect x="8" y="22" width="8" height="12" rx="4" fill="#EDB592"/></svg>',
+  manos: '<svg viewBox="0 0 48 48"><path d="M6 24c0 10 8 16 18 16s18-6 18-16z" fill="#F6C9A8"/><circle cx="17" cy="21" r="5" fill="#5FB55A"/><circle cx="25" cy="19" r="5.5" fill="#7CCB6A"/><circle cx="32" cy="22" r="4.5" fill="#4FA34A"/></svg>',
+  pulgar: '<svg viewBox="0 0 48 48"><rect x="14" y="20" width="20" height="20" rx="8" fill="#F6C9A8"/><rect x="18" y="5" width="8" height="20" rx="4" fill="#F6C9A8"/><ellipse cx="22" cy="10" rx="3" ry="3.4" fill="#F5E39A"/></svg>'
+};
+function alPlatoSvg() {
+  return '<svg viewBox="0 0 200 200" class="al-plato"><circle cx="100" cy="100" r="96" fill="#fff" opacity=".12"/><circle cx="100" cy="100" r="84" fill="#F7F3E8"/>'
+    + '<path d="M100 100 L100 16 A84 84 0 0 0 100 184 Z" fill="#7CCB6A"/>'
+    + '<path d="M100 100 L100 16 A84 84 0 0 1 184 100 Z" fill="#F4A3A8"/>'
+    + '<path d="M100 100 L184 100 A84 84 0 0 1 100 184 Z" fill="#F5D57A"/>'
+    + '<circle cx="100" cy="100" r="84" fill="none" stroke="#fff" stroke-width="5"/><path d="M100 16V184M100 100H184" stroke="#fff" stroke-width="5"/>'
+    + '<text x="52" y="105" text-anchor="middle" font-size="13" font-weight="800" fill="#1E4D1B">Verduras</text><text x="52" y="122" text-anchor="middle" font-size="11" font-weight="700" fill="#1E4D1B">½ plato</text>'
+    + '<text x="140" y="68" text-anchor="middle" font-size="12" font-weight="800" fill="#6B1F2A">Proteína</text><text x="140" y="84" text-anchor="middle" font-size="11" font-weight="700" fill="#6B1F2A">¼</text>'
+    + '<text x="140" y="136" text-anchor="middle" font-size="10" font-weight="800" fill="#6B4A06">Carbohidrato</text><text x="140" y="152" text-anchor="middle" font-size="11" font-weight="700" fill="#6B4A06">¼</text></svg>';
+}
+
+function openGuiaAlimentacion() {
+  var g = alData().guia;
+  if (!g) return;
+  var m = document.getElementById('guia-modal');
+  if (!m) {
+    m = document.createElement('div'); m.id = 'guia-modal'; m.className = 'guia-modal';
+    document.body.appendChild(m);
+  }
+  var checks = {};
+  try { checks = JSON.parse(localStorage.getItem('fa_super_' + currentUid) || '{}'); } catch (e) {}
+  var h = '<div class="guia-top"><button type="button" class="guia-back" onclick="document.getElementById(\'guia-modal\').style.display=\'none\'">←</button><span>Mi guía de alimentación</span></div><div class="guia-body">';
+  h += '<div class="guia-hero"><span class="fa-tag">TU GUÍA</span><h2>Come rico, <span>sin contar calorías</span></h2>' + (g.objetivo ? '<p>' + escapeHtml(g.objetivo) + '</p>' : '') + (g.actualizada ? '<small>Actualizada: ' + escapeHtml(g.actualizada) + '</small>' : '') + '</div>';
+  if (g.alerta) h += '<div class="guia-alerta">💙 ' + escapeHtml(g.alerta) + '</div>';
+  if (g.proteinaG) h += '<div class="guia-prot"><b>' + escapeHtml(String(g.proteinaG)) + ' g</b><span>de proteína al día, repartida en tus comidas' + (g.proteinaComida ? ' (' + escapeHtml(g.proteinaComida) + ' por comida)' : '') + '</span></div>';
+  h += '<div class="guia-sec">Arma tu plato</div><div class="guia-plato">' + alPlatoSvg() + '</div>';
+  var por = g.porciones || {};
+  h += '<div class="guia-manos">'
+    + [['palma', 'Proteína', por.proteina || '1 palma'], ['puno', 'Carbohidrato', por.carbohidrato || '1 puño'], ['manos', 'Verduras', por.verduras || '2 manos'], ['pulgar', 'Grasa buena', por.grasa || '1 pulgar']]
+      .map(function(x) { return '<div class="guia-mano">' + AL_ICON[x[0]] + '<b>' + escapeHtml(x[2]) + '</b><span>' + x[1] + '</span></div>'; }).join('')
+    + '</div><div class="guia-note">Por cada comida principal. Usa tu propia mano como medida: crece contigo.</div>';
+  if (g.comidas && g.comidas.length) {
+    h += '<div class="guia-sec">Tu día de ejemplo</div>';
+    g.comidas.forEach(function(c) {
+      h += '<div class="guia-comida"><div class="guia-comida-h"><b>' + escapeHtml(c.momento || '') + '</b>' + (c.hora ? '<span>' + escapeHtml(c.hora) + '</span>' : '') + '</div><ul>'
+        + (c.opciones || []).map(function(o) { return '<li>' + escapeHtml(o) + '</li>'; }).join('') + '</ul></div>';
+    });
+  }
+  if (g.super && g.super.secciones) {
+    h += '<div class="guia-sec">Tu lista de súper</div><div class="guia-super-h">🛒 ' + escapeHtml(g.super.tienda || '') + (g.super.presupuesto ? ' · ' + escapeHtml(g.super.presupuesto) : '') + '</div>';
+    g.super.secciones.forEach(function(sec, si) {
+      h += '<div class="guia-super"><div class="guia-super-sec">' + escapeHtml(sec.nombre || '') + '</div>';
+      (sec.items || []).forEach(function(it, ii) {
+        var k = si + '-' + ii, on = !!checks[k];
+        h += '<label class="guia-item' + (on ? ' on' : '') + '"><input type="checkbox" ' + (on ? 'checked' : '') + ' onchange="alToggleSuper(\'' + k + '\', this)"><span><b>' + escapeHtml(it.producto || '') + '</b>' + (it.marca ? '<small>' + escapeHtml(it.marca) + '</small>' : '') + '</span><em>' + escapeHtml(it.cantidad || '') + '</em></label>';
+      });
+      h += '</div>';
+    });
+    h += '<button type="button" class="guia-reset" onclick="alResetSuper()">Desmarcar todo para la próxima compra</button>';
+  }
+  if (g.tips && g.tips.length) {
+    h += '<div class="guia-sec">Tips para ti</div><div class="guia-tips">' + g.tips.map(function(t) { return '<div>💡 ' + escapeHtml(t) + '</div>'; }).join('') + '</div>';
+  }
+  h += '<div class="guia-legal">Esta guía es una orientación para mejorar tu alimentación y acompañar tu entrenamiento. No reemplaza la atención de un nutricionista o médico, sobre todo si tienes una condición de salud.</div></div>';
+  m.innerHTML = h;
+  m.style.display = 'block'; m.scrollTop = 0;
+}
+function alToggleSuper(k, el) {
+  var checks = {};
+  try { checks = JSON.parse(localStorage.getItem('fa_super_' + currentUid) || '{}'); } catch (e) {}
+  if (el.checked) checks[k] = 1; else delete checks[k];
+  el.closest('.guia-item').classList.toggle('on', el.checked);
+  try { localStorage.setItem('fa_super_' + currentUid, JSON.stringify(checks)); } catch (e) {}
+}
+function alResetSuper() { try { localStorage.removeItem('fa_super_' + currentUid); } catch (e) {} openGuiaAlimentacion(); }
 
 // ── FOTO DE PERFIL ── (dos círculos la muestran: el del header y el de Perfil)
 var LAST_AVATAR_NOMBRE = '';

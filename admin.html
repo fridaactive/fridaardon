@@ -892,6 +892,8 @@
 .leads-archivo-item{border-top:1px solid var(--border);padding:.6rem 0;font-size:.75rem;display:flex;flex-direction:column;gap:.15rem}
 .leads-archivo-item span{color:var(--muted);font-size:.7rem}
 .leads-archivo-item details summary{font-size:.7rem;font-weight:700;color:var(--blue);cursor:pointer;margin-top:.2rem}
+.al-btn{display:block;width:100%;margin-top:0.7rem;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.8rem;font-family:'DM Sans',sans-serif;cursor:pointer;box-shadow:0 3px 0 #0F3FA8}
+#acp-content .pc-tabs{flex-wrap:wrap;overflow:visible;row-gap:.45rem}
 #rutina-editor .back-row{flex-wrap:wrap;gap:0.4rem;}
 #rutina-editor .back-row .sub-brand{margin-right:auto;}
 #rutina-editor .back-row .rv-edit-btn{margin-right:0!important;}
@@ -2262,9 +2264,11 @@ function acpRenderShell() {
   html += acpTabBtnHtml('resumen', 'Resumen');
   html += acpTabBtnHtml('rutina', '📋 Rutina');
   html += acpTabBtnHtml('pagos', '💳 Pagos');
+  if (c.type && c.type !== 'presencial') html += acpTabBtnHtml('alimentacion', '🥗 Alimentación');
   html += '</div>';
 
-  if (acpState.tab === 'rutina') html += renderAcpRutinaHtml(clientId, c);
+  if (acpState.tab === 'alimentacion') html += renderAcpAlimentacionHtml(clientId, c);
+  else if (acpState.tab === 'rutina') html += renderAcpRutinaHtml(clientId, c);
   else if (acpState.tab === 'pagos') html += renderAcpPagosHtml(clientId, c);
   else if (hasPortal) html += renderAdminClientProfile(clientId, acpState.uid, acpState.portal);
   else html += renderAcpNoPortalHtml(clientId, c);
@@ -2343,6 +2347,81 @@ function renderAcpRutinaHtml(clientId, c) {
     html += '<button type="button" onclick="openRutinaEditor(\'' + clientId + '\')" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">📋 Ver / Editar rutina</button>';
   }
   return html;
+}
+
+// ── Pestaña Alimentación: encuesta de la clienta, copiar datos para Claude,
+// pegar la guía (JSON que arma Claude) y publicarla en su cuenta.
+var AL_LABELS = {
+  despierta: 'Se despierta', duerme: 'Se duerme', horaEntreno: 'Hora de entreno', comidas: 'Comidas al día',
+  tipoAlimentacion: 'Tipo de alimentación', noCome: 'No come / no le gusta', alergias: 'Alergias o intolerancias',
+  salud: 'Condiciones de salud', relacionComida: 'Relación con la comida', cocina: '¿Cocina?', comeFuera: 'Come fuera',
+  super: 'Dónde compra', presupuesto: 'Presupuesto semanal', agua: 'Agua al día', suplementos: 'Suplementos', antojos: 'Antojos / hábitos'
+};
+var AL_REL = { bien: 'Bien, en general', ansiedad: 'A veces come por ansiedad o estrés', dietas: 'Ha hecho muchas dietas y le cuesta', tca: 'Ha tenido o tiene un trastorno de la conducta alimentaria' };
+function alValor(k, v) {
+  if (v === undefined || v === null || v === '') return null;
+  if (k === 'relacionComida') return AL_REL[v] || v;
+  if (typeof v === 'object') { if (v.ninguno || !(v.items && v.items.length)) return k === 'salud' ? 'Ninguna' : 'Otro'; return v.items.join(', '); }
+  return String(v);
+}
+function alNecesitaProfesional(enc) {
+  if (!enc) return false;
+  var sal = (enc.salud && enc.salud.items) || [];
+  return enc.relacionComida === 'tca' || sal.some(function(x) { return /Diabetes|riñones|Embarazo/.test(x); });
+}
+function alTextoParaClaude(c, portal) {
+  var cq = portal.cuestionario || {}, enc = (portal.alimentacion || {}).encuesta || {}, lines = [];
+  lines.push('GUÍA DE ALIMENTACIÓN · ' + (c.name || ''));
+  lines.push('Plan: ' + (TYPE_LABELS[c.type] || c.type || ''));
+  var add = function(label, val) { if (val) lines.push('- ' + label + ': ' + val); };
+  if (cq.fechaNacimiento) { var b = new Date(cq.fechaNacimiento + 'T00:00:00'), n = new Date(); add('Edad', String(n.getFullYear() - b.getFullYear() - ((n.getMonth() < b.getMonth() || (n.getMonth() === b.getMonth() && n.getDate() < b.getDate())) ? 1 : 0))); }
+  CQ_ORDER.forEach(function(k) { if (k === 'fechaNacimiento' || k === 'guiaAlimentacion') return; add(CQ_LABELS[k], formatCuestionarioValue(k, cq[k])); });
+  lines.push('ENCUESTA DE ALIMENTACIÓN:');
+  Object.keys(AL_LABELS).forEach(function(k) { add(AL_LABELS[k], alValor(k, enc[k])); });
+  return lines.join('\n');
+}
+function renderAcpAlimentacionHtml(clientId, c) {
+  var portal = acpState.portal || {}, al = portal.alimentacion || {}, enc = al.encuesta, g = al.guia;
+  var html = '';
+  if (!acpState.uid) return '<div class="card" style="font-size:0.8rem;color:var(--muted);">Este cliente todavía no tiene cuenta en el portal.</div>';
+  var estado = g ? '✅ Guía publicada' + (g.actualizada ? ' · ' + escapeHtmlAdmin(g.actualizada) : '') : enc ? '🟡 Respondió la encuesta: falta armar su guía' : '⚪ Todavía no responde la encuesta de alimentación';
+  html += '<div class="card"><div class="card-label">🥗 Guía de alimentación</div><div style="font-size:0.85rem;font-weight:700;">' + estado + '</div>';
+  if (g && g.actualizada) html += '<div style="font-size:0.72rem;color:var(--muted);margin-top:0.25rem;">Se actualiza una vez al mes.</div>';
+  html += '</div>';
+  if (enc && alNecesitaProfesional(enc)) html += '<div class="card" style="background:#FFF6E0;border-color:#F0DFA0;font-size:0.8rem;">⚠️ Marcó una condición (diabetes, riñones, embarazo o trastorno alimentario). La guía debe ser muy general y recomendarle ver a un nutricionista o médico.</div>';
+  if (enc) {
+    html += '<div class="card"><div class="card-label">📋 Sus respuestas</div>';
+    Object.keys(AL_LABELS).forEach(function(k) {
+      var v = alValor(k, enc[k]); if (!v) return;
+      html += '<div style="display:flex;justify-content:space-between;gap:0.75rem;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.75rem;"><span style="color:var(--muted);flex-shrink:0;">' + AL_LABELS[k] + '</span><span style="text-align:right;">' + escapeHtmlAdmin(v) + '</span></div>';
+    });
+    html += '<button type="button" class="al-btn" onclick="alCopiarDatos()">📋 Copiar datos para Claude</button>';
+    html += '<div style="font-size:0.7rem;color:var(--muted);margin-top:0.4rem;">Pégalos en el chat de Estrategia de contenido y Claude te devuelve la guía lista.</div></div>';
+  }
+  html += '<div class="card"><div class="card-label">' + (g ? '✏️ Actualizar guía' : '📥 Pegar la guía que te dio Claude') + '</div>'
+    + '<textarea id="al-guia-input" rows="5" placeholder="Pega aquí el texto que empieza con { y termina con }" style="width:100%;box-sizing:border-box;border:1.5px solid var(--border);border-radius:10px;padding:0.6rem;font-size:0.72rem;font-family:monospace;"></textarea>'
+    + '<button type="button" class="al-btn" onclick="alGuardarGuia(\'' + clientId + '\')">Publicar guía en su cuenta</button><div id="al-guia-msg" style="font-size:0.72rem;margin-top:0.4rem;"></div></div>';
+  return html;
+}
+function alCopiarDatos() {
+  var c = CLIENTS[acpState.clientId] || {}, txt = alTextoParaClaude(c, acpState.portal || {});
+  var ok = function() { alert('✓ Datos copiados. Pégalos en el chat con Claude.'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, function() { prompt('Copia este texto:', txt); });
+  else prompt('Copia este texto:', txt);
+}
+function alGuardarGuia(clientId) {
+  var msg = document.getElementById('al-guia-msg'), raw = (document.getElementById('al-guia-input').value || '').trim();
+  var g;
+  try { g = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1)); } catch (e) { msg.style.color = '#c44'; msg.textContent = 'El texto no está completo. Copia todo desde { hasta } y vuelve a pegarlo.'; return; }
+  if (!g || !g.comidas || !g.porciones) { msg.style.color = '#c44'; msg.textContent = 'Ese texto no parece una guía. Pídele a Claude que te la vuelva a dar.'; return; }
+  if (!g.actualizada) { var d = new Date(); g.actualizada = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); }
+  g.publicadaEn = new Date().toISOString();
+  var uid = acpState.uid;
+  getDB().ref('clientasPortal/' + uid + '/alimentacion/guia').set(g).then(function() {
+    acpState.portal.alimentacion = Object.assign({}, acpState.portal.alimentacion || {}, { guia: g });
+    acpRenderShell();
+    alert('✓ Guía publicada. Ya la ve en su cuenta.');
+  }).catch(function(e) { msg.style.color = '#c44'; msg.textContent = 'No se pudo publicar: ' + (e && e.message ? e.message : 'error'); });
 }
 
 // ── Pestaña Pagos: estado del ciclo actual + activar uno nuevo + cotización.
@@ -5010,6 +5089,9 @@ function fillClientActivity(ids) {
       var caraHoy = portal.sentir && portal.sentir[hoyK];
       if (SENTIR_LABELS[caraHoy]) out += '<span class="cst-chip feel ' + caraHoy + '"><span class="fa-emoji">' + SENTIR_EMOJI[caraHoy] + '</span>Hoy: ' + SENTIR_LABELS[caraHoy] + '</span>';
       if (chatNeedsReply(portal.chat, portal.chatMeta)) out += '<span class="cst-chip msg">💬 Te escribió</span>';
+      var alm = portal.alimentacion || {};
+      if (alm.encuesta && !alm.guia) out += '<span class="cst-chip warn">🥗 Armar su guía</span>';
+      else if (alm.guia && alm.guia.publicadaEn && (Date.now() - new Date(alm.guia.publicadaEn).getTime()) > 30 * 86400000) out += '<span class="cst-chip warn">🥗 Actualizar guía</span>';
       var dias = portal.diasEntrenados || {};
       var mk = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
       var mesN = Object.keys(dias).filter(function(k) { return dias[k] && k.indexOf(mk) === 0; }).length;
