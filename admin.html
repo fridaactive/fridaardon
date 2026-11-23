@@ -1338,9 +1338,9 @@
       <div class="fin-form-row" style="margin-bottom:0.85rem;">
         <div class="fin-form-label">¿Qué plan pagó?</div>
         <select class="fin-form-input" id="cycle-rp-plan" onchange="cycleRpPlanChange()">
-          <option value="1">1 mes · $50</option>
-          <option value="3">3 meses · $135 (un solo pago)</option>
-          <option value="6">6 meses · $240 (un solo pago)</option>
+          <option value="1">1 mes</option>
+          <option value="3">3 meses</option>
+          <option value="6">6 meses</option>
           <option value="otro">Otra cantidad de meses</option>
         </select>
       </div>
@@ -1350,7 +1350,7 @@
       </div>
       <div class="fin-form-row" style="margin-bottom:0.85rem;">
         <div class="fin-form-label">Total que pagó ($)</div>
-        <input class="fin-form-input" id="cycle-rp-cuota" type="number" placeholder="Ej: 135">
+        <input class="fin-form-input" id="cycle-rp-cuota" type="number" inputmode="decimal" placeholder="Escribe lo que pagó, ej: 135">
       </div>
       <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;margin-bottom:0.85rem;cursor:pointer;"><input type="checkbox" id="cycle-rp-pagado" checked style="width:1.1rem;height:1.1rem;"> Ya pagó (se registra el total en Mis finanzas)</label>
       <div class="fin-form-row" style="margin-bottom:0.85rem;">
@@ -4349,7 +4349,7 @@ function openCycleModal(id) {
     planSel.value = ({ 1: '1', 3: '3', 6: '6' })[mesesPrev] || 'otro';
     document.getElementById('cycle-rp-meses').value = planSel.value === 'otro' ? mesesPrev : '';
     document.getElementById('cycle-rp-meses-row').style.display = planSel.value === 'otro' ? '' : 'none';
-    document.getElementById('cycle-rp-cuota').value = c.cuota || PLAN_PRECIOS[planSel.value] || '';
+    document.getElementById('cycle-rp-cuota').value = '';
     document.getElementById('cycle-rp-pagado').checked = true;
     // Si el ciclo anterior terminó hace poco, el nuevo arranca justo al
     // día siguiente (sin perder ni duplicar días). Pero si ya venció hace
@@ -4564,11 +4564,9 @@ function formatFechaCorta(iso) {
   var m = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'], p = String(iso).split('-');
   return parseInt(p[2], 10) + ' ' + m[parseInt(p[1], 10) - 1] + ' ' + p[0];
 }
-var PLAN_PRECIOS = { '1': 50, '3': 135, '6': 240 };
 function cycleRpPlanChange() {
   var v = document.getElementById('cycle-rp-plan').value;
   document.getElementById('cycle-rp-meses-row').style.display = v === 'otro' ? '' : 'none';
-  if (PLAN_PRECIOS[v]) document.getElementById('cycle-rp-cuota').value = PLAN_PRECIOS[v];
 }
 function addMonthsToDateStr(dateStr, n) {
   var d = new Date(dateStr + 'T00:00:00');
