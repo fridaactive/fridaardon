@@ -1188,6 +1188,13 @@ body.portal-dark .anuncio-icon{width:1.6rem!important;height:1.6rem!important;ba
 body.portal-dark .anuncio-icon svg{width:13px;height:13px}
 body.portal-dark .anuncio-text{font-size:.76rem!important;color:#F5ECCB!important;font-weight:600;line-height:1.3}
 .anuncio-x{position:absolute;right:.45rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(245,236,203,.7);font-size:.8rem;cursor:pointer;padding:.3rem}
+#inicio-content .in-stats{margin-top:.9rem}
+#inicio-content .cy-card{margin-top:.9rem}
+.bw-card{margin-top:1rem;background:linear-gradient(160deg,rgba(124,203,106,.16),rgba(245,236,203,.08));border:1px solid rgba(245,236,203,.3);border-radius:24px;padding:1.2rem 1.1rem 1.1rem;text-align:center;color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.25)}
+.bw-card-plato .al-plato{width:170px;height:170px}
+.bw-card b{display:block;font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.1rem;margin-top:.6rem}
+.bw-card p{font-size:.82rem;line-height:1.45;color:rgba(255,255,255,.8);margin:.35rem 0 .2rem}
+.bw-card-btn{display:inline-block;margin-top:.7rem;background:#F5ECCB;color:#0B1B3F;font-weight:800;font-size:.85rem;padding:.65rem 1.4rem;border-radius:100px;box-shadow:0 4px 0 #D9C98E}
 </style>
 </head>
 <body>
@@ -2190,18 +2197,16 @@ function renderInicioTab() {
       + '<span class="in-hero-title">Tu hora para ti</span><span class="in-hero-meta">Tus sesiones con Frida y tu progreso, en un solo lugar.</span></span></span></div>';
   }
 
-  h += rewardsInicioHtml(c);
-
+  // Orden: entreno de hoy → resumen (semana, mes, programa) → check-in → cómo te sientes → Mi ciclo → meta del mes
   h += '<div class="in-stats">'
     + '<div class="in-stat in-stat-hl">' + (c.semana >= metaSemanal() ? '<svg class="fa-sticker fa-sticker-bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1L4 14h6.5L9 23l10-13.5h-6.6z"/></svg>' : '') + '<span class="in-stat-num">' + c.semana + '/' + metaSemanal() + '</span><span class="in-stat-lbl">esta semana</span></div>'
     + '<div class="in-stat"><span class="in-stat-num">' + c.mes + '</span><span class="in-stat-lbl">días este mes</span></div>'
     + (prog ? '<div class="in-stat"><span class="in-stat-num in-cream">' + escapeHtml(prog) + '</span><span class="in-stat-lbl">del programa</span></div>'
             : '<div class="in-stat"><span class="in-stat-num in-cream">' + escapeHtml(meta || '-') + '</span><span class="in-stat-lbl">meta del mes</span></div>')
     + '</div>';
+  h += rewardsInicioHtml(c);
 
-  if (currentRutinaData && currentRutinaData.mensajeInicial) {
-    h += '<div class="in-msg"><span class="in-msg-lbl"><span class="fa-tag">de Frida para ti</span></span><span class="in-msg-txt">' + escapeHtml(currentRutinaData.mensajeInicial) + '</span></div>';
-  }
+
 
   el.innerHTML = h;
   if (currentTabId === 'tab-inicio') animateInicioNumbers();
@@ -2314,14 +2319,15 @@ function renderPerfilExtras() {
 function renderBienestarTab() {
   var el = document.getElementById('bienestar-content');
   if (!el) return;
-  var h = '<div class="bw-hero"><span class="fa-tag">BIENESTAR</span><h2>Cuídate <span>por dentro</span></h2><p>Tu alimentación y tu energía, en un solo lugar.</p></div>';
-  h += '<div class="bw-sec">🥗 Alimentación</div>';
-  var al = alimentacionInicioHtml();
-  h += al || '<div class="in-nudge" style="cursor:default"><span>🥗</span><span><b>Guía de alimentación</b><small>Viene incluida en los planes online y por videollamada. Pregúntale a Frida por la tuya.</small></span></div>';
-  var genero = ((CURRENT_PORTAL_DATA || {}).cuestionario || {}).genero;
-  if (genero !== 'Masculino') {
-    h += '<div class="bw-sec">🌸 Mi ciclo</div>' + cicloInicioHtml();
-  }
+  var h = '<div class="bw-hero"><span class="fa-tag">BIENESTAR</span><h2>Come rico, <span>sin contar calorías</span></h2><p>Tu guía de alimentación, tu menú de la semana y tu lista de súper.</p></div>';
+  var d = alData(), eleg = alElegible();
+  var titulo, texto, boton = '', accion = '';
+  if (!eleg) { titulo = 'Tu guía de alimentación'; texto = 'Viene incluida en los planes online y por videollamada. Pregúntale a Frida por la tuya.'; }
+  else if (d.guia) { titulo = 'Tu guía está lista'; texto = 'Tu plato, tu menú de la semana, tu lista de súper y postres con proteína.'; boton = 'Ver mi guía'; accion = 'openGuiaAlimentacion()'; }
+  else if (d.encuesta) { titulo = 'Frida está preparando tu guía'; texto = 'Ya tiene tus respuestas. Te aparecerá aquí en unos días.'; }
+  else { titulo = 'Desbloquea tu guía'; texto = 'Responde unas preguntas (3 minutos) y Frida arma tu guía con tu menú y tu lista de súper.'; boton = 'Empezar'; accion = 'startEncuestaAlimentacion()'; }
+  h += '<div class="bw-card"' + (accion ? ' onclick="' + accion + '" role="button" tabindex="0"' : '') + '><div class="bw-card-plato">' + alPlatoSvg() + '</div>'
+    + '<b>' + titulo + '</b><p>' + texto + '</p>' + (boton ? '<span class="bw-card-btn">' + boton + ' →</span>' : '') + '</div>';
   el.innerHTML = h;
 }
 
@@ -2336,6 +2342,7 @@ function rewardsInicioHtml(c) {
     h += '<button type="button" class="in-checkin" onclick="checkInHoy(true)"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>¿Entrenaste hoy?</b><span>Tócalo y suma a tu meta del mes</span></span><span class="in-checkin-btn">Sí ✓</span></button>';
   }
   h += sentirHtml();
+  if ((((CURRENT_PORTAL_DATA || {}).cuestionario || {}).genero) !== 'Masculino') h += cicloInicioHtml();
   // 2. Meta del mes (con el premio que puso Frida)
   var meta = metaDelMes(), pct = Math.min(100, Math.round(c.mes / meta * 100));
   var premio = PREMIO_MES && PREMIO_MES.texto ? escapeHtml(PREMIO_MES.texto) : '';
