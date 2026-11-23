@@ -1128,6 +1128,18 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
 .guia-item em{font-style:normal;font-size:.74rem;font-weight:700;color:#1C55E5;white-space:nowrap}
 .guia-item.on b{text-decoration:line-through;opacity:.5}
 .guia-reset{width:100%;background:none;border:1px dashed rgba(255,255,255,.3);color:rgba(255,255,255,.75);border-radius:14px;padding:.6rem;font-family:inherit;font-size:.74rem;cursor:pointer}
+.guia-dias{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;margin-bottom:.8rem}
+.guia-dia{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:.45rem 0 .4rem;color:#fff;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.1rem;position:relative}
+.guia-dia b{font-size:.85rem}
+.guia-dia span{font-size:.58rem;opacity:.6;font-weight:700}
+.guia-dia.on{background:#F5ECCB;color:#0B1B3F;box-shadow:0 3px 0 #D9C98E;transform:translateY(-2px)}
+.guia-dia.on span{opacity:.8}
+.guia-dia.hoy::after{content:'';position:absolute;top:4px;right:6px;width:6px;height:6px;border-radius:50%;background:#7CCB6A}
+.guia-dia-h{font-weight:700;font-size:.95rem;margin-bottom:.6rem}
+.guia-dia-h span{font-size:.66rem;background:rgba(245,236,203,.18);color:#F5ECCB;border-radius:100px;padding:.15rem .55rem;margin-left:.3rem;vertical-align:middle}
+.guia-plato-txt{font-size:.85rem;line-height:1.45;color:rgba(255,255,255,.92)}
+.guia-alt{margin-top:.5rem;background:none;border:1px dashed rgba(245,236,203,.5);color:#F5ECCB;border-radius:100px;padding:.3rem .75rem;font-size:.7rem;font-weight:700;font-family:inherit;cursor:pointer}
+.guia-alt-txt{display:none;margin-top:.5rem;font-size:.8rem;line-height:1.45;background:rgba(245,236,203,.1);border-radius:12px;padding:.5rem .65rem;color:rgba(255,255,255,.9)}
 .guia-tips div{background:rgba(255,255,255,.05);border-radius:14px;padding:.65rem .8rem;font-size:.8rem;line-height:1.45;margin-bottom:.45rem}
 .guia-legal{font-size:.66rem;opacity:.5;line-height:1.5;margin-top:1.5rem}
 </style>
@@ -3377,7 +3389,7 @@ function openGuiaAlimentacion() {
   }
   var checks = {};
   try { checks = JSON.parse(localStorage.getItem('fa_super_' + currentUid) || '{}'); } catch (e) {}
-  var h = '<div class="guia-top"><button type="button" class="guia-back" onclick="document.getElementById(\'guia-modal\').style.display=\'none\'">←</button><span>Mi guía de alimentación</span></div><div class="guia-body">';
+  var h = '<div class="guia-top"><button type="button" class="guia-back" onclick="AL_DIA_SEL=null;document.getElementById(\'guia-modal\').style.display=\'none\'">←</button><span>Mi guía de alimentación</span></div><div class="guia-body">';
   h += '<div class="guia-hero"><span class="fa-tag">TU GUÍA</span><h2>Come rico, <span>sin contar calorías</span></h2>' + (g.objetivo ? '<p>' + escapeHtml(g.objetivo) + '</p>' : '') + (g.actualizada ? '<small>Actualizada: ' + escapeHtml(g.actualizada) + '</small>' : '') + '</div>';
   if (g.alerta) h += '<div class="guia-alerta">💙 ' + escapeHtml(g.alerta) + '</div>';
   if (g.proteinaG) h += '<div class="guia-prot"><b>' + escapeHtml(String(g.proteinaG)) + ' g</b><span>de proteína al día, repartida en tus comidas' + (g.proteinaComida ? ' (' + escapeHtml(g.proteinaComida) + ' por comida)' : '') + '</span></div>';
@@ -3387,7 +3399,23 @@ function openGuiaAlimentacion() {
     + [['palma', 'Proteína', por.proteina || '1 palma'], ['puno', 'Carbohidrato', por.carbohidrato || '1 puño'], ['manos', 'Verduras', por.verduras || '2 manos'], ['pulgar', 'Grasa buena', por.grasa || '1 pulgar']]
       .map(function(x) { return '<div class="guia-mano">' + AL_ICON[x[0]] + '<b>' + escapeHtml(x[2]) + '</b><span>' + x[1] + '</span></div>'; }).join('')
     + '</div><div class="guia-note">Por cada comida principal. Usa tu propia mano como medida: crece contigo.</div>';
-  if (g.comidas && g.comidas.length) {
+  if (g.menus && g.menus.length) {
+    // Menús que rotan por día: Lun A, Mar B, Mié C, Jue A, Vie B, Sáb C, Dom A.
+    var hoyIdx = (new Date().getDay() + 6) % 7;
+    var sel = (typeof AL_DIA_SEL === 'number') ? AL_DIA_SEL : hoyIdx;
+    var dias = ['L', 'M', 'M', 'J', 'V', 'S', 'D'], nombres = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+    var menuDe = function(i) { return g.menus[i % g.menus.length]; };
+    h += '<div class="guia-sec">Tu menú de la semana</div><div class="guia-dias">';
+    dias.forEach(function(d, i) {
+      h += '<button type="button" class="guia-dia' + (i === sel ? ' on' : '') + (i === hoyIdx ? ' hoy' : '') + '" onclick="alVerDia(' + i + ')"><b>' + d + '</b><span>' + escapeHtml((menuDe(i).nombre || '').replace(/^Menú\s*/i, '')) + '</span></button>';
+    });
+    var mn = menuDe(sel);
+    h += '</div><div class="guia-dia-h">' + nombres[sel] + (sel === hoyIdx ? ' · hoy' : '') + ' <span>' + escapeHtml(mn.nombre || '') + '</span></div>';
+    (mn.comidas || []).forEach(function(c, ci) {
+      var alt = c.alternativa ? '<button type="button" class="guia-alt" onclick="this.nextElementSibling.style.display=\'block\';this.style.display=\'none\'">🔄 Otra opción</button><div class="guia-alt-txt">' + escapeHtml(c.alternativa) + '</div>' : '';
+      h += '<div class="guia-comida"><div class="guia-comida-h"><b>' + escapeHtml(c.momento || '') + '</b>' + (c.hora ? '<span>' + escapeHtml(c.hora) + '</span>' : '') + '</div><div class="guia-plato-txt">' + escapeHtml(c.plato || '') + '</div>' + alt + '</div>';
+    });
+  } else if (g.comidas && g.comidas.length) {
     h += '<div class="guia-sec">Tu día de ejemplo</div>';
     g.comidas.forEach(function(c) {
       h += '<div class="guia-comida"><div class="guia-comida-h"><b>' + escapeHtml(c.momento || '') + '</b>' + (c.hora ? '<span>' + escapeHtml(c.hora) + '</span>' : '') + '</div><ul>'
@@ -3405,13 +3433,20 @@ function openGuiaAlimentacion() {
       h += '</div>';
     });
     h += '<button type="button" class="guia-reset" onclick="alResetSuper()">Desmarcar todo para la próxima compra</button>';
+    h += '<div class="guia-note" style="margin-top:.4rem">Tu lista alcanza para toda la semana.</div>';
   }
   if (g.tips && g.tips.length) {
     h += '<div class="guia-sec">Tips para ti</div><div class="guia-tips">' + g.tips.map(function(t) { return '<div>💡 ' + escapeHtml(t) + '</div>'; }).join('') + '</div>';
   }
   h += '<div class="guia-legal">Esta guía es una orientación para mejorar tu alimentación y acompañar tu entrenamiento. No reemplaza la atención de un nutricionista o médico, sobre todo si tienes una condición de salud.</div></div>';
   m.innerHTML = h;
-  m.style.display = 'block'; m.scrollTop = 0;
+  if (m.style.display !== 'block') { m.style.display = 'block'; m.scrollTop = 0; }
+}
+var AL_DIA_SEL = null;
+function alVerDia(i) {
+  var m = document.getElementById('guia-modal'), y = m ? m.scrollTop : 0;
+  AL_DIA_SEL = i; openGuiaAlimentacion();
+  if (m) m.scrollTop = y;
 }
 function alToggleSuper(k, el) {
   var checks = {};

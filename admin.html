@@ -2413,7 +2413,7 @@ function alGuardarGuia(clientId) {
   var msg = document.getElementById('al-guia-msg'), raw = (document.getElementById('al-guia-input').value || '').trim();
   var g;
   try { g = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1)); } catch (e) { msg.style.color = '#c44'; msg.textContent = 'El texto no está completo. Copia todo desde { hasta } y vuelve a pegarlo.'; return; }
-  if (!g || !g.comidas || !g.porciones) { msg.style.color = '#c44'; msg.textContent = 'Ese texto no parece una guía. Pídele a Claude que te la vuelva a dar.'; return; }
+  if (!g || !(g.menus || g.comidas) || !g.porciones) { msg.style.color = '#c44'; msg.textContent = 'Ese texto no parece una guía. Pídele a Claude que te la vuelva a dar.'; return; }
   if (!g.actualizada) { var d = new Date(); g.actualizada = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); }
   g.publicadaEn = new Date().toISOString();
   var uid = acpState.uid;
