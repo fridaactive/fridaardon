@@ -1211,6 +1211,10 @@ body.portal-dark .anuncio-text{font-size:.76rem!important;color:#F5ECCB!importan
 .in-goal-how[open] summary b{transform:rotate(180deg)}
 .in-goal-how ul{margin:.45rem 0 0;padding-left:1.1rem;font-size:.76rem;line-height:1.5;color:rgba(255,255,255,.85)}
 .in-goal-how li+li{margin-top:.25rem}
+.in-goal-rq{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.65rem}
+.in-goal-rq span{font-size:.7rem;font-weight:700;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:.28rem .6rem;color:rgba(255,255,255,.8)}
+.in-goal-rq span[onclick]{cursor:pointer;border-style:dashed}
+.in-goal-rq span.ok{background:rgba(124,203,106,.15);border-color:rgba(124,203,106,.45);color:#fff}
 </style>
 </head>
 <body>
@@ -2302,7 +2306,7 @@ function medallasEstado() {
     { id: 'primer', kind: 'bronce', tier: 'Bronce', name: 'Primer paso', how: 'Marca tu primer día entrenado.', ok: anyDia },
     { id: 'perfil', kind: 'plata', tier: 'Plata', name: 'Perfil completo', how: 'Pon tu foto, cuéntanos de ti, llena tu ficha y sube tu primera foto de progreso (solo la ven Frida y tú).', ok: perfilOk },
     { id: 'semanas2', kind: 'oro', tier: 'Oro', name: 'Semanas completas', how: 'Completa tus ' + metaSemanal() + ' entrenos de la semana durante 2 semanas (no tienen que ser seguidas). Llevas ' + Math.min(semanasCompletas(dias), 2) + ' de 2.', ok: semanasCompletas(dias) >= 2 },
-    { id: 'meta-' + localKey(now).slice(0, 7), kind: 'trofeo', tier: 'Trofeo', name: 'Meta de ' + mesNombre, how: 'Completa todos tus entrenos del mes (' + meta + ')' + (PREMIO_MES && PREMIO_MES.texto ? ' y gana: ' + PREMIO_MES.texto : '') + '.', ok: c.mes >= meta },
+    { id: 'meta-' + localKey(now).slice(0, 7), kind: 'trofeo', tier: 'Trofeo', name: 'Meta de ' + mesNombre, how: 'Completa tus ' + meta + ' entrenos del mes, tu perfil y ficha, y sube tu foto del mes' + (PREMIO_MES && PREMIO_MES.texto ? '. Ganas: ' + PREMIO_MES.texto : '') + '.', ok: premioRequisitos(c, meta).every(function(r) { return r.ok; }) },
     { id: 'diamante', kind: 'diamante', tier: 'Diamante', name: 'Constancia', how: 'Completa tu meta del mes en 3 meses distintos (por ejemplo noviembre, diciembre y enero). Llevas ' + Math.min(metasCumplidas, 3) + ' de 3. ¡La más valiosa de todas!', ok: metasCumplidas >= 3 }
   ];
 }
@@ -2347,6 +2351,21 @@ function renderBienestarTab() {
   el.innerHTML = h;
 }
 
+// Premio del mes: entrenos del mes + perfil completo + foto de progreso del mes.
+function premioRequisitos(c, meta) {
+  var perfil = CURRENT_PERFIL_DATA || {}, portal = CURRENT_PORTAL_DATA || {};
+  var mk = localKey(new Date()).slice(0, 7);
+  var perfilOk = !!perfil.fotoPerfil && !!(perfil.bio && perfil.bio.trim()) && !!portal.ficha;
+  var fotoMes = !!((portal.fotosProgreso || {})[mk]);
+  var irPerfil = "showTab('tab-perfil')";
+  var irFoto = "showTab('tab-perfil');setTimeout(function(){var t=document.querySelector('.transf-card');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});},350)";
+  return [
+    { ok: c.mes >= meta, txt: c.mes + '/' + meta + ' entrenos' },
+    { ok: perfilOk, txt: 'Perfil y ficha completos', go: perfilOk ? '' : irPerfil },
+    { ok: fotoMes, txt: 'Foto del mes', go: fotoMes ? '' : irFoto }
+  ];
+}
+
 function rewardsInicioHtml(c) {
   var h = '';
   var today = localKey(new Date());
@@ -2362,13 +2381,15 @@ function rewardsInicioHtml(c) {
   // 2. Meta del mes (con el premio que puso Frida)
   var meta = metaDelMes(), pct = Math.min(100, Math.round(c.mes / meta * 100));
   var premio = PREMIO_MES && PREMIO_MES.texto ? escapeHtml(PREMIO_MES.texto) : '';
-  h += '<div class="in-goal' + (c.mes >= meta ? ' won' : '') + '">'
+  var rq = premioRequisitos(c, meta), logrado = rq.every(function(r) { return r.ok; }), faltan = rq.filter(function(r) { return !r.ok; }).length;
+  h += '<div class="in-goal' + (logrado ? ' won' : '') + '">'
     + '<div class="in-goal-top"><span class="fa-tag">META DE ' + MESES_LARGOS[new Date().getMonth()].toUpperCase() + '</span><span class="in-goal-num">' + c.mes + '<small>/' + meta + '</small></span></div>'
     + '<div class="in-goal-track"><div class="in-goal-fill" style="width:' + pct + '%"></div></div>'
-    + (c.mes >= meta
+    + '<div class="in-goal-rq">' + rq.map(function(r) { return '<span class="' + (r.ok ? 'ok' : '') + '"' + (r.go ? ' onclick="' + r.go + '"' : '') + '>' + (r.ok ? '✅' : '⬜') + ' ' + r.txt + '</span>'; }).join('') + '</div>'
+    + (logrado
         ? '<div class="in-goal-prize">🎉 <b>¡Lo lograste!</b> ' + (premio ? 'Tu premio: ' + premio + '. Frida te escribirá para entregártelo.' : 'Frida te tiene una sorpresa.') + '</div>'
-        : '<div class="in-goal-prize">🎁 ' + (premio ? 'Al llegar ganas: <b>' + premio + '</b>' : 'Al llegar, Frida te tiene una sorpresa') + ' · te faltan ' + (meta - c.mes) + '</div>')
-    + '<div class="in-goal-how-txt">Completa tus <b>' + meta + ' entrenos del mes</b> y márcalos como entrenados cada día que entrenes.</div>'
+        : '<div class="in-goal-prize">🎁 ' + (premio ? 'Ganas: <b>' + premio + '</b>' : 'Frida te tiene una sorpresa') + ' al completar las ' + rq.length + ' · te ' + (faltan === 1 ? 'falta 1' : 'faltan ' + faltan) + '</div>')
+    + '<div class="in-goal-how-txt">Marca como entrenado cada día que entrenes.</div>'
     + '</div>';
   return h;
 }

@@ -5099,8 +5099,12 @@ function fillClientActivity(ids) {
       var dias = portal.diasEntrenados || {};
       var mk = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
       var mesN = Object.keys(dias).filter(function(k) { return dias[k] && k.indexOf(mk) === 0; }).length;
-      CLIENT_MES_COUNT[id] = mesN;
-      if (mesN >= clientMetaMes(CLIENTS[id])) out += '<span class="cst-chip prize">🏆 Meta cumplida</span>';
+      var pf = portal.perfil || {}, perfilOk = !!pf.fotoPerfil && !!(pf.bio && String(pf.bio).trim()) && !!portal.ficha;
+      var fotoMes = !!((portal.fotosProgreso || {})[mk]);
+      // Premio del mes: entrenos + perfil y ficha completos + foto del mes.
+      CLIENT_MES_COUNT[id] = (mesN >= clientMetaMes(CLIENTS[id]) && perfilOk && fotoMes) ? mesN : -1;
+      if (CLIENT_MES_COUNT[id] >= 0) out += '<span class="cst-chip prize">🏆 Meta cumplida</span>';
+      else if (mesN >= clientMetaMes(CLIENTS[id])) out += '<span class="cst-chip idle">🏋️ Entrenos listos · falta ' + (!perfilOk && !fotoMes ? 'perfil y foto' : !perfilOk ? 'perfil' : 'foto del mes') + '</span>';
       var last = Object.keys(dias).filter(function(k) { return dias[k]; }).sort().pop();
       if (last) {
         var t0 = new Date(); t0.setHours(0, 0, 0, 0);
@@ -5140,7 +5144,7 @@ function renderPremioCard() {
   html += '<div class="premio-top"><span class="premio-ico">🎁</span><div style="flex:1;min-width:0;"><div class="premio-lbl">Premio de ' + mes + '</div>';
   html += '<div class="premio-txt">' + (cfg.texto ? escapeHtmlAdmin(cfg.texto) : '<span style="color:var(--muted);font-weight:400;">Sin premio todavía. Tus clientes verán “Frida te tiene una sorpresa”.</span>') + '</div></div>';
   html += '<button type="button" class="premio-edit" onclick="editPremio()">' + (cfg.texto ? 'Cambiar' : 'Poner premio') + '</button></div>';
-  html += '<div class="premio-sub">Se gana al cumplir su meta del mes en su cuenta (sus sesiones del plan, o días por semana × 4).</div>';
+  html += '<div class="premio-sub">Lo ganan al cumplir 3 cosas en el mes: sus entrenos (sus días por semana × 4), perfil y ficha completos, y su foto de progreso del mes.</div>';
   if (winners.length) {
     html += '<div class="premio-win">🏆 <b>Lo lograron:</b> ' + winners.map(function(id) { return escapeHtmlAdmin(CLIENTS[id].name); }).join(', ') + '</div>';
   }
