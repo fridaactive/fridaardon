@@ -1007,6 +1007,18 @@
 </div>
 
 <!-- ══════════ MODAL COTIZACIÓN RÁPIDA ══════════ -->
+<div id="edit-startdate-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;box-sizing:border-box;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-size:1rem;font-weight:700;color:var(--text);">Corregir fecha de inicio</div>
+      <button onclick="closeEditStartDate()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
+    </div>
+    <div class="fin-form-row"><div class="fin-form-label">Fecha de inicio correcta</div><input class="fin-form-input" id="esd-date" type="date"></div>
+    <div id="esd-msg" style="font-size:0.78rem;color:#C8282E;margin:0.3rem 0 0.75rem;min-height:1.1em;"></div>
+    <button class="login-btn" onclick="saveEditStartDate()" style="width:100%;">Guardar</button>
+  </div>
+</div>
+
 <div id="link-existing-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;box-sizing:border-box;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
@@ -2479,10 +2491,11 @@ function renderAdminClientProfile(clientId, uid, portal) {
       + '</svg><div class="pf-ring-center"><div class="pf-ring-pct">' + progPct + '%</div></div></div>'
       + '<div class="pf-ring-label">Programa</div></div>';
 
+    var editFechaBtn = '<button onclick="openEditStartDate(\'' + clientId + '\')" style="margin-left:0.3rem;background:none;color:inherit;border:1px solid currentColor;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.68rem;font-weight:700;cursor:pointer;opacity:0.85;">✏️ Corregir fecha</button>';
     if (daysLeft <= 0) {
-      alertHtml = '<div class="pf-program-alert danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Programa inactivo — no pagó el ciclo. ' + (c.cuota ? '<button onclick="markClientAsPaid(\'' + clientId + '\');openAdminClientProfile(\'' + clientId + '\');" style="margin-left:0.3rem;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.68rem;font-weight:700;cursor:pointer;">Marcar pagado</button>' : '') + '</span></div>';
+      alertHtml = '<div class="pf-program-alert danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Programa inactivo — no pagó el ciclo. ' + (c.cuota ? '<button onclick="markClientAsPaid(\'' + clientId + '\');openAdminClientProfile(\'' + clientId + '\');" style="margin-left:0.3rem;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.68rem;font-weight:700;cursor:pointer;">Marcar pagado</button>' : '') + editFechaBtn + '</span></div>';
     } else if (!paid) {
-      alertHtml = '<div class="pf-program-alert warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Mes ' + mesActual + (c.planMeses ? ' de ' + c.planMeses : '') + ' · pendiente de pago' + (c.cuota ? ' · $' + c.cuota : '') + ' · quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días') + '. ' + (c.cuota ? '<button onclick="markClientAsPaid(\'' + clientId + '\');openAdminClientProfile(\'' + clientId + '\');" style="margin-left:0.3rem;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.68rem;font-weight:700;cursor:pointer;">Marcar pagado</button>' : '') + '</span></div>';
+      alertHtml = '<div class="pf-program-alert warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Mes ' + mesActual + (c.planMeses ? ' de ' + c.planMeses : '') + ' · pendiente de pago' + (c.cuota ? ' · $' + c.cuota : '') + ' · quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días') + '. ' + (c.cuota ? '<button onclick="markClientAsPaid(\'' + clientId + '\');openAdminClientProfile(\'' + clientId + '\');" style="margin-left:0.3rem;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.68rem;font-weight:700;cursor:pointer;">Marcar pagado</button>' : '') + editFechaBtn + '</span></div>';
     }
   }
 
@@ -5152,6 +5165,40 @@ function timeStrToDecimal(timeStr) {
   if (!timeStr) return null;
   var parts = timeStr.split(':');
   return parseInt(parts[0]) + (parseInt(parts[1] || '0') / 60);
+}
+
+// ── Corregir la fecha de inicio de una clienta (por si se armó la ficha
+// de carrera y se puso mal). Solo toca initDate/firstEverDate/endDate —
+// el resto de la ficha (días, precio, plan) queda igual. ──
+var esdClientId = null;
+function openEditStartDate(clientId) {
+  esdClientId = clientId;
+  var c = CLIENTS[clientId] || {};
+  document.getElementById('esd-date').value = c.initDate || '';
+  document.getElementById('esd-msg').textContent = '';
+  document.getElementById('edit-startdate-modal').style.display = 'flex';
+}
+function closeEditStartDate() {
+  document.getElementById('edit-startdate-modal').style.display = 'none';
+  esdClientId = null;
+}
+function saveEditStartDate() {
+  var clientId = esdClientId;
+  if (!clientId) return;
+  var c = CLIENTS[clientId];
+  if (!c) return;
+  var nuevaFecha = document.getElementById('esd-date').value;
+  if (!nuevaFecha) { document.getElementById('esd-msg').textContent = 'Elegí una fecha.'; return; }
+  // Si todavía está en su primer ciclo (nunca se le armó un ciclo nuevo),
+  // "Contigo desde" también se corrige junto con la fecha de inicio.
+  if (c.firstEverDate === c.initDate) c.firstEverDate = nuevaFecha;
+  c.initDate = nuevaFecha;
+  if (c.type === 'rutina-personalizada') c.endDate = addOneMonthToDateStr(nuevaFecha);
+  saveCustomClient(clientId, c);
+  syncClientPublicFields(clientId, c);
+  closeEditStartDate();
+  if (acpState.clientId === clientId) acpRenderShell();
+  renderClientsList();
 }
 
 // ── Vincular una cuenta (solicitud ya registrada) con una ficha que YA
