@@ -892,6 +892,8 @@
 .leads-archivo-item{border-top:1px solid var(--border);padding:.6rem 0;font-size:.75rem;display:flex;flex-direction:column;gap:.15rem}
 .leads-archivo-item span{color:var(--muted);font-size:.7rem}
 .leads-archivo-item details summary{font-size:.7rem;font-weight:700;color:var(--blue);cursor:pointer;margin-top:.2rem}
+.al-btn{display:block;width:100%;margin-top:0.7rem;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.8rem;font-family:'DM Sans',sans-serif;cursor:pointer;box-shadow:0 3px 0 #0F3FA8}
+#acp-content .pc-tabs{flex-wrap:wrap;overflow:visible;row-gap:.45rem}
 #rutina-editor .back-row{flex-wrap:wrap;gap:0.4rem;}
 #rutina-editor .back-row .sub-brand{margin-right:auto;}
 #rutina-editor .back-row .rv-edit-btn{margin-right:0!important;}
@@ -1360,14 +1362,28 @@
     <!-- RUTINA PERSONALIZADA — paga una cuota mensual fija, sin sesiones -->
     <div id="cycle-rp-fields" style="display:none;">
       <div class="fin-form-row" style="margin-bottom:0.85rem;">
-        <div class="fin-form-label">Cuota del mes ($)</div>
-        <input class="fin-form-input" id="cycle-rp-cuota" type="number" placeholder="Ej: 40">
+        <div class="fin-form-label">¿Qué plan pagó?</div>
+        <select class="fin-form-input" id="cycle-rp-plan" onchange="cycleRpPlanChange()">
+          <option value="1">1 mes</option>
+          <option value="3">3 meses</option>
+          <option value="6">6 meses</option>
+          <option value="otro">Otra cantidad de meses</option>
+        </select>
       </div>
+      <div class="fin-form-row" id="cycle-rp-meses-row" style="margin-bottom:0.85rem;display:none;">
+        <div class="fin-form-label">¿De cuántos meses?</div>
+        <input class="fin-form-input" id="cycle-rp-meses" type="number" min="1" placeholder="Ej: 12">
+      </div>
+      <div class="fin-form-row" style="margin-bottom:0.85rem;">
+        <div class="fin-form-label">Total que pagó ($)</div>
+        <input class="fin-form-input" id="cycle-rp-cuota" type="number" inputmode="decimal" placeholder="Escribe lo que pagó, ej: 135">
+      </div>
+      <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;margin-bottom:0.85rem;cursor:pointer;"><input type="checkbox" id="cycle-rp-pagado" checked style="width:1.1rem;height:1.1rem;"> Ya pagó (se registra el total en Mis finanzas)</label>
       <div class="fin-form-row" style="margin-bottom:0.85rem;">
         <div class="fin-form-label">Fecha de inicio del nuevo ciclo</div>
         <input class="fin-form-input" id="cycle-rp-start" type="date">
       </div>
-      <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem;">La fecha de fin se calcula sola: un mes después.</div>
+      <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem;">La fecha de fin se calcula sola según los meses del plan.</div>
     </div>
 
     <div id="cycle-error" style="color:#c44;font-size:0.72rem;margin-bottom:0.75rem;display:none;"></div>
@@ -1731,6 +1747,8 @@
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
     <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:1rem;" id="an-modal-title">Nuevo anuncio</div>
     <div class="fin-form-row"><div class="fin-form-label">Texto</div><textarea class="fin-form-input" id="an-texto" rows="2" placeholder="Ej: 2x1 en tu marca aliada favorita este mes 💛" style="resize:vertical;"></textarea></div>
+    <div class="fin-form-row"><label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;cursor:pointer;"><input type="checkbox" id="an-boton-on" onchange="document.getElementById('an-boton-row').style.display=this.checked?'':'none'" style="width:1.1rem;height:1.1rem;"> Agregar botón "🙋‍♀️ ¡Me apunto!"</label></div>
+    <div class="fin-form-row" id="an-boton-row" style="display:none;"><div class="fin-form-label">Mensaje que te llega al chat cuando tocan el botón</div><input class="fin-form-input" id="an-boton-msg" type="text" placeholder="Ej: ¡Me apunto a la clase grupal de diciembre! 🙋‍♀️"></div>
     <div class="fin-form-row"><label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;cursor:pointer;"><input type="checkbox" id="an-activo" style="width:1.1rem;height:1.1rem;"> Activo (visible para los clientes)</label></div>
     <div style="display:flex;gap:0.75rem;margin-top:1rem;">
       <button onclick="hideAnuncioModal()" style="flex:1;background:#f5f5f5;color:var(--muted);border:none;border-radius:10px;padding:0.75rem;font-size:0.82rem;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;">Cancelar</button>
@@ -2093,7 +2111,7 @@ function renderPortalSection(clientId) {
 
       // ── ESTADO DE PAGO / PROGRAMA ──
       if (c.initDate) {
-        var mesActual = (getClientPayments()[clientId] || []).length + 1;
+        var mesActual = c.planMeses ? mesDelPlan(c) : (getClientPayments()[clientId] || []).length + 1;
         var start = new Date(c.initDate + 'T00:00:00');
         var end = c.endDate ? new Date(c.endDate + 'T00:00:00') : new Date(start);
         if (!c.endDate) end.setMonth(end.getMonth() + 1);
@@ -2272,9 +2290,11 @@ function acpRenderShell() {
   html += acpTabBtnHtml('resumen', 'Resumen');
   html += acpTabBtnHtml('rutina', '📋 Rutina');
   html += acpTabBtnHtml('pagos', '💳 Pagos');
+  if (c.type && c.type !== 'presencial') html += acpTabBtnHtml('alimentacion', '🥗 Alimentación');
   html += '</div>';
 
-  if (acpState.tab === 'rutina') html += renderAcpRutinaHtml(clientId, c);
+  if (acpState.tab === 'alimentacion') html += renderAcpAlimentacionHtml(clientId, c);
+  else if (acpState.tab === 'rutina') html += renderAcpRutinaHtml(clientId, c);
   else if (acpState.tab === 'pagos') html += renderAcpPagosHtml(clientId, c);
   else if (hasPortal) html += renderAdminClientProfile(clientId, acpState.uid, acpState.portal);
   else html += renderAcpNoPortalHtml(clientId, c);
@@ -2355,6 +2375,85 @@ function renderAcpRutinaHtml(clientId, c) {
   return html;
 }
 
+// ── Pestaña Alimentación: encuesta de la clienta, copiar datos para Claude,
+// pegar la guía (JSON que arma Claude) y publicarla en su cuenta.
+var AL_LABELS = {
+  despierta: 'Se despierta', duerme: 'Se duerme', horaEntreno: 'Hora de entreno', comidas: 'Comidas al día',
+  tipoAlimentacion: 'Tipo de alimentación', noCome: 'No come / no le gusta', alergias: 'Alergias o intolerancias',
+  salud: 'Condiciones de salud', relacionComida: 'Relación con la comida', cocina: '¿Cocina?', comeFuera: 'Come fuera',
+  super: 'Dónde compra', presupuesto: 'Presupuesto semanal', agua: 'Agua al día', suplementos: 'Suplementos', antojos: 'Antojos / hábitos'
+};
+var AL_REL = { bien: 'Bien, en general', ansiedad: 'A veces come por ansiedad o estrés', dietas: 'Ha hecho muchas dietas y le cuesta', tca: 'Ha tenido o tiene un trastorno de la conducta alimentaria' };
+function alValor(k, v) {
+  if (v === undefined || v === null || v === '') return null;
+  if (k === 'relacionComida') return AL_REL[v] || v;
+  if (typeof v === 'object') { if (v.ninguno || !(v.items && v.items.length)) return k === 'salud' ? 'Ninguna' : 'Otro'; return v.items.join(', '); }
+  return String(v);
+}
+function alNecesitaProfesional(enc) {
+  if (!enc) return false;
+  var sal = (enc.salud && enc.salud.items) || [];
+  return enc.relacionComida === 'tca' || sal.some(function(x) { return /Diabetes|riñones|Embarazo/.test(x); });
+}
+function alTextoParaClaude(c, portal) {
+  var cq = portal.cuestionario || {}, enc = (portal.alimentacion || {}).encuesta || {}, lines = [];
+  lines.push('GUÍA DE ALIMENTACIÓN · ' + (c.name || ''));
+  lines.push('Plan: ' + (TYPE_LABELS[c.type] || c.type || ''));
+  var add = function(label, val) { if (val) lines.push('- ' + label + ': ' + val); };
+  if (cq.fechaNacimiento) { var b = new Date(cq.fechaNacimiento + 'T00:00:00'), n = new Date(); add('Edad', String(n.getFullYear() - b.getFullYear() - ((n.getMonth() < b.getMonth() || (n.getMonth() === b.getMonth() && n.getDate() < b.getDate())) ? 1 : 0))); }
+  CQ_ORDER.forEach(function(k) { if (k === 'fechaNacimiento' || k === 'guiaAlimentacion') return; add(CQ_LABELS[k], formatCuestionarioValue(k, cq[k])); });
+  lines.push('ENCUESTA DE ALIMENTACIÓN:');
+  Object.keys(AL_LABELS).forEach(function(k) { add(AL_LABELS[k], alValor(k, enc[k])); });
+  var favs = (portal.alimentacion || {}).favoritos;
+  if (favs && Object.keys(favs).length) { lines.push('LE GUSTÓ (de su guía anterior):'); Object.keys(favs).forEach(function(k) { lines.push('- ' + favs[k]); }); }
+  return lines.join('\n');
+}
+function renderAcpAlimentacionHtml(clientId, c) {
+  var portal = acpState.portal || {}, al = portal.alimentacion || {}, enc = al.encuesta, g = al.guia;
+  var html = '';
+  if (!acpState.uid) return '<div class="card" style="font-size:0.8rem;color:var(--muted);">Este cliente todavía no tiene cuenta en el portal.</div>';
+  var estado = g ? '✅ Guía publicada' + (g.actualizada ? ' · ' + escapeHtmlAdmin(g.actualizada) : '') : enc ? '🟡 Respondió la encuesta: falta armar su guía' : '⚪ Todavía no responde la encuesta de alimentación';
+  html += '<div class="card"><div class="card-label">🥗 Guía de alimentación</div><div style="font-size:0.85rem;font-weight:700;">' + estado + '</div>';
+  if (g && g.actualizada) html += '<div style="font-size:0.72rem;color:var(--muted);margin-top:0.25rem;">Se actualiza una vez al mes.</div>';
+  html += '</div>';
+  if (enc && alNecesitaProfesional(enc)) html += '<div class="card" style="background:#FFF6E0;border-color:#F0DFA0;font-size:0.8rem;">⚠️ Marcó una condición (diabetes, riñones, embarazo o trastorno alimentario). La guía debe ser muy general y recomendarle ver a un nutricionista o médico.</div>';
+  if (enc) {
+    html += '<div class="card"><div class="card-label">📋 Sus respuestas</div>';
+    Object.keys(AL_LABELS).forEach(function(k) {
+      var v = alValor(k, enc[k]); if (!v) return;
+      html += '<div style="display:flex;justify-content:space-between;gap:0.75rem;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.75rem;"><span style="color:var(--muted);flex-shrink:0;">' + AL_LABELS[k] + '</span><span style="text-align:right;">' + escapeHtmlAdmin(v) + '</span></div>';
+    });
+    var favs = al.favoritos ? Object.keys(al.favoritos).map(function(k) { return al.favoritos[k]; }) : [];
+    if (favs.length) html += '<div style="margin-top:0.7rem;"><div style="font-size:0.66rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem;">❤️ Le gustó</div>' + favs.map(function(f) { return '<div style="font-size:0.75rem;padding:0.3rem 0;border-bottom:1px solid var(--border);">' + escapeHtmlAdmin(f) + '</div>'; }).join('') + '</div>';
+    html += '<button type="button" class="al-btn" onclick="alCopiarDatos()">📋 Copiar datos para Claude</button>';
+    html += '<div style="font-size:0.7rem;color:var(--muted);margin-top:0.4rem;">Pégalos en el chat de Estrategia de contenido y Claude te devuelve la guía lista.</div></div>';
+  }
+  html += '<div class="card"><div class="card-label">' + (g ? '✏️ Actualizar guía' : '📥 Pegar la guía que te dio Claude') + '</div>'
+    + '<textarea id="al-guia-input" rows="5" placeholder="Pega aquí el texto que empieza con { y termina con }" style="width:100%;box-sizing:border-box;border:1.5px solid var(--border);border-radius:10px;padding:0.6rem;font-size:0.72rem;font-family:monospace;"></textarea>'
+    + '<button type="button" class="al-btn" onclick="alGuardarGuia(\'' + clientId + '\')">Publicar guía en su cuenta</button><div id="al-guia-msg" style="font-size:0.72rem;margin-top:0.4rem;"></div></div>';
+  return html;
+}
+function alCopiarDatos() {
+  var c = CLIENTS[acpState.clientId] || {}, txt = alTextoParaClaude(c, acpState.portal || {});
+  var ok = function() { alert('✓ Datos copiados. Pégalos en el chat con Claude.'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, function() { prompt('Copia este texto:', txt); });
+  else prompt('Copia este texto:', txt);
+}
+function alGuardarGuia(clientId) {
+  var msg = document.getElementById('al-guia-msg'), raw = (document.getElementById('al-guia-input').value || '').trim();
+  var g;
+  try { g = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1)); } catch (e) { msg.style.color = '#c44'; msg.textContent = 'El texto no está completo. Copia todo desde { hasta } y vuelve a pegarlo.'; return; }
+  if (!g || !(g.menus || g.comidas) || !g.porciones) { msg.style.color = '#c44'; msg.textContent = 'Ese texto no parece una guía. Pídele a Claude que te la vuelva a dar.'; return; }
+  if (!g.actualizada) { var d = new Date(); g.actualizada = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); }
+  g.publicadaEn = new Date().toISOString();
+  var uid = acpState.uid;
+  getDB().ref('clientasPortal/' + uid + '/alimentacion/guia').set(g).then(function() {
+    acpState.portal.alimentacion = Object.assign({}, acpState.portal.alimentacion || {}, { guia: g });
+    acpRenderShell();
+    alert('✓ Guía publicada. Ya la ve en su cuenta.');
+  }).catch(function(e) { msg.style.color = '#c44'; msg.textContent = 'No se pudo publicar: ' + (e && e.message ? e.message : 'error'); });
+}
+
 // ── Pestaña Pagos: estado del ciclo actual + activar uno nuevo + cotización.
 function renderAcpPagosHtml(clientId, c) {
   var html = '';
@@ -2368,13 +2467,14 @@ function renderAcpPagosHtml(clientId, c) {
     // Los pagos ya hechos cuentan los meses que quedaron atrás — si el
     // ciclo actual todavía no se pagó, hay que sumarle 1 para contarlo
     // también (si no, "pagó 1 vez" mostraba "Mes 2" en vez de "Mes 1").
-    var mesActual = (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
+    var mesActual = c.planMeses ? mesDelPlan(c) : (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
     var statusColor = daysLeft <= 0 ? '#A62B2B' : !paid ? '#8A6D14' : '#2a7a2a';
     var statusBg = daysLeft <= 0 ? '#FDEAEA' : !paid ? '#FFF6E0' : '#F0FFF0';
     var statusBorder = daysLeft <= 0 ? '#F3C6C6' : !paid ? '#F0DFA0' : '#cde8cd';
     html += '<div class="card" style="background:' + statusBg + ';border-color:' + statusBorder + ';">';
     html += '<div class="card-label" style="color:' + statusColor + ';">Mes ' + mesActual + (c.planMeses ? ' de ' + c.planMeses : '') + ' · ' + (daysLeft <= 0 ? 'Ciclo vencido' : 'Quedan ' + daysLeft + (daysLeft === 1 ? ' día' : ' días')) + '</div>';
-    html += '<div style="font-size:0.8rem;color:var(--text);">' + (paid ? '✅ Pagó este ciclo' : '⏳ Pendiente de pago') + (c.cuota ? ' · $' + c.cuota : '') + '</div>';
+    html += '<div style="font-size:0.8rem;color:var(--text);">' + (paid ? (c.planMeses ? '✅ Pagó su plan de ' + c.planMeses + ' meses' : '✅ Pagó este ciclo') : '⏳ Pendiente de pago') + (c.cuota ? ' · $' + c.cuota : '') + '</div>';
+    if (c.planMeses && c.endDate) html += '<div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem;">Vigente hasta el ' + formatFechaCorta(c.endDate) + '</div>';
     if (!paid && c.cuota) {
       html += '<button type="button" onclick="markClientAsPaid(\'' + clientId + '\');acpSwitchTab(\'pagos\');" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Marcar como pagado</button>';
     }
@@ -2383,6 +2483,7 @@ function renderAcpPagosHtml(clientId, c) {
 
   // Duración del plan — editable acá para corregir clientes ya cargadas
   // (nuevas clientes ya lo piden al crearlas, ver handleSaveNewClient).
+  if (c.type !== 'rutina-personalizada') {
   html += '<div class="card" style="margin-bottom:1rem;">';
   html += '<div class="card-label">📅 Duración del plan</div>';
   html += '<select id="acp-plan-tipo" onchange="acpTogglePlanMesesInput()" style="width:100%;padding:0.6rem;border-radius:10px;border:1.5px solid var(--border);font-size:0.8rem;font-family:\'DM Sans\',sans-serif;margin-bottom:0.5rem;">';
@@ -2394,8 +2495,9 @@ function renderAcpPagosHtml(clientId, c) {
   html += '</div>';
   html += '<button type="button" onclick="saveAcpPlanMeses(\'' + clientId + '\')" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Guardar duración</button>';
   html += '</div>';
+  }
 
-  html += '<button type="button" onclick="openCycleModal(\'' + clientId + '\')" style="width:100%;background:#2a7a2a;color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;margin-bottom:1rem;">🟢 Activar nuevo ciclo / mes</button>';
+  html += '<button type="button" onclick="openCycleModal(\'' + clientId + '\')" style="width:100%;background:#2a7a2a;color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;margin-bottom:1rem;">' + (c.type === 'rutina-personalizada' ? '🟢 Activar o corregir plan (1, 3, 6 meses…)' : '🟢 Activar nuevo ciclo / mes') + '</button>';
   html += '<div id="acp-quotation"></div>';
   return html;
 }
@@ -2481,7 +2583,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
     var elapsed = Math.min(totalDays, Math.max(0, totalDays - daysLeft));
     var progPct = Math.min(100, Math.round((elapsed / totalDays) * 100));
     var paid = isCurrentCyclePaid(clientId, c);
-    var mesActual = (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
+    var mesActual = c.planMeses ? mesDelPlan(c) : (getClientPayments()[clientId] || []).length + (paid ? 0 : 1);
     var progFillH = 64 * (progPct / 100);
 
     programHtml = '<div class="pf-ring-wrap"><div class="pf-ring-liquid"><svg viewBox="0 0 64 64">'
@@ -3071,6 +3173,9 @@ function showAnuncioModal(id) {
   document.getElementById('an-modal-title').textContent = editingAnuncioId ? 'Editar anuncio' : 'Nuevo anuncio';
   document.getElementById('an-texto').value = data.texto || '';
   document.getElementById('an-activo').checked = editingAnuncioId ? !!data.activo : true;
+  document.getElementById('an-boton-on').checked = !!data.boton;
+  document.getElementById('an-boton-row').style.display = data.boton ? '' : 'none';
+  document.getElementById('an-boton-msg').value = data.botonMensaje || '';
   document.getElementById('anuncio-modal').style.display = 'flex';
 }
 
@@ -3082,7 +3187,10 @@ function hideAnuncioModal() {
 function saveAnuncio() {
   var texto = document.getElementById('an-texto').value.trim();
   if (!texto) { alert('Escribí el texto del anuncio.'); return; }
-  var item = { texto: texto, activo: document.getElementById('an-activo').checked };
+  var conBoton = document.getElementById('an-boton-on').checked;
+  var item = { texto: texto, activo: document.getElementById('an-activo').checked,
+    boton: conBoton ? '🙋‍♀️ ¡Me apunto!' : null,
+    botonMensaje: conBoton ? (document.getElementById('an-boton-msg').value.trim() || '¡Me apunto! 🙋‍♀️ ' + texto) : null };
   withAdminAuth(function() {
     var db = getDB();
     if (!db) { alert('No se pudo conectar con Firebase.'); return; }
@@ -3816,7 +3924,7 @@ function markClientAsPaid(id) {
   var monthData = finGetMonth(today.getFullYear(), today.getMonth());
   monthData.incomes.push({
     amount: c.cuota,
-    note: 'Cuota ' + c.name,
+    note: (c.planMeses ? 'Plan ' + c.planMeses + ' meses · ' : 'Cuota ') + c.name,
     id: String(Date.now())
   });
   finSave();
@@ -4353,7 +4461,13 @@ function openCycleModal(id) {
   cycleCard.style.margin = isRutinaPersonalizada ? '1.25rem' : '0';
 
   if (isRutinaPersonalizada) {
-    document.getElementById('cycle-rp-cuota').value = c.cuota || '';
+    var mesesPrev = c.planMeses || 1;
+    var planSel = document.getElementById('cycle-rp-plan');
+    planSel.value = ({ 1: '1', 3: '3', 6: '6' })[mesesPrev] || 'otro';
+    document.getElementById('cycle-rp-meses').value = planSel.value === 'otro' ? mesesPrev : '';
+    document.getElementById('cycle-rp-meses-row').style.display = planSel.value === 'otro' ? '' : 'none';
+    document.getElementById('cycle-rp-cuota').value = '';
+    document.getElementById('cycle-rp-pagado').checked = true;
     // Si el ciclo anterior terminó hace poco, el nuevo arranca justo al
     // día siguiente (sin perder ni duplicar días). Pero si ya venció hace
     // rato (o nunca tuvo uno), no tiene sentido sugerir esa fecha vieja —
@@ -4563,6 +4677,34 @@ function addOneMonthToDateStr(dateStr) {
   return d.toISOString().slice(0, 10);
 }
 
+function formatFechaCorta(iso) {
+  var m = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'], p = String(iso).split('-');
+  return parseInt(p[2], 10) + ' ' + m[parseInt(p[1], 10) - 1] + ' ' + p[0];
+}
+function cycleRpPlanChange() {
+  var v = document.getElementById('cycle-rp-plan').value;
+  document.getElementById('cycle-rp-meses-row').style.display = v === 'otro' ? '' : 'none';
+}
+function addMonthsToDateStr(dateStr, n) {
+  var d = new Date(dateStr + 'T00:00:00');
+  d.setMonth(d.getMonth() + (n || 1));
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+// En qué mes del paquete va (1, 2, 3…) según las fechas, no según cuántos pagos lleva.
+function mesDelPlan(c) {
+  if (!c || !c.initDate) return 1;
+  var s = new Date(c.initDate + 'T00:00:00'), t = new Date();
+  var m = (t.getFullYear() - s.getFullYear()) * 12 + (t.getMonth() - s.getMonth()) - (t.getDate() < s.getDate() ? 1 : 0) + 1;
+  return Math.max(1, Math.min(m, c.planMeses || m));
+}
+function registrarIngresoCliente(c, monto, nota) {
+  var today = new Date();
+  var monthData = finGetMonth(today.getFullYear(), today.getMonth());
+  monthData.incomes.push({ amount: monto, note: nota, id: String(Date.now()) });
+  finSave();
+  fbSet('finanzas', finAllData);
+}
+
 // Renovar ciclo para rutina personalizada: una cuota mensual fija, sin
 // sesiones ni calendario — el cliente entrena por su cuenta desde la app.
 function saveCycleRutinaPersonalizada() {
@@ -4572,6 +4714,14 @@ function saveCycleRutinaPersonalizada() {
 
   var cuota = parseFloat(document.getElementById('cycle-rp-cuota').value) || 0;
   var startDate = document.getElementById('cycle-rp-start').value;
+  var planVal = document.getElementById('cycle-rp-plan').value;
+  var meses = planVal === 'otro' ? (parseInt(document.getElementById('cycle-rp-meses').value) || 0) : parseInt(planVal);
+  var yaPago = document.getElementById('cycle-rp-pagado').checked;
+  if (!meses || meses < 1) {
+    document.getElementById('cycle-error').textContent = 'Indica de cuántos meses es el plan.';
+    document.getElementById('cycle-error').style.display = 'block';
+    return;
+  }
 
   if (!startDate) {
     document.getElementById('cycle-error').textContent = 'Elegí la fecha de inicio del nuevo ciclo.';
@@ -4579,20 +4729,33 @@ function saveCycleRutinaPersonalizada() {
     return;
   }
   if (cuota <= 0) {
-    document.getElementById('cycle-error').textContent = 'Ingresá la cuota del mes.';
+    document.getElementById('cycle-error').textContent = 'Ingresa el total que pagó.';
     document.getElementById('cycle-error').style.display = 'block';
     return;
   }
 
+  var cuotaAnterior = c.cuota, mismoCiclo = c.initDate === startDate;
   c.cuota = cuota;
   c.initDate = startDate;
-  c.endDate = addOneMonthToDateStr(startDate);
+  c.endDate = addMonthsToDateStr(startDate, meses);
+  c.planMeses = meses > 1 ? meses : null;
 
   saveCustomClient(id, c);
   syncClientPublicFields(id, c);
-  // Ciclo nuevo arranca sin pagar, igual que en presencial — hasta que no
-  // se marque pagado, se considera el mes actual pendiente.
-  fbSet('clients/'+id+'/cicloPagado', false);
+  // Un paquete (3, 6 meses…) es UN solo ciclo que cubre todos sus meses.
+  // Si ya pagó, se marca pagado y el total entra a Mis finanzas de una vez.
+  var yaRegistrado = isCurrentCyclePaid(id, c);
+  if (yaPago && yaRegistrado && mismoCiclo) {
+    // Corrección de un ciclo ya cobrado (ej. se registró como 1 mes y era de 3):
+    // solo se suma la diferencia para no duplicar el ingreso.
+    var dif = cuota - (Number(cuotaAnterior) || 0);
+    if (dif > 0) registrarIngresoCliente(c, dif, 'Ajuste plan ' + meses + ' meses · ' + c.name);
+    fbSet('clients/'+id+'/cicloPagado', true);
+  } else if (yaPago) {
+    markClientAsPaid(id);
+  } else {
+    fbSet('clients/'+id+'/cicloPagado', false);
+  }
 
   closeCycleModal();
   renderClientsList();
@@ -4964,11 +5127,18 @@ function fillClientActivity(ids) {
       var caraHoy = portal.sentir && portal.sentir[hoyK];
       if (SENTIR_LABELS[caraHoy]) out += '<span class="cst-chip feel ' + caraHoy + '"><span class="fa-emoji">' + SENTIR_EMOJI[caraHoy] + '</span>Hoy: ' + SENTIR_LABELS[caraHoy] + '</span>';
       if (chatNeedsReply(portal.chat, portal.chatMeta)) out += '<span class="cst-chip msg">💬 Te escribió</span>';
+      var alm = portal.alimentacion || {};
+      if (alm.encuesta && !alm.guia) out += '<span class="cst-chip warn">🥗 Armar su guía</span>';
+      else if (alm.guia && alm.guia.publicadaEn && (Date.now() - new Date(alm.guia.publicadaEn).getTime()) > 30 * 86400000) out += '<span class="cst-chip warn">🥗 Actualizar guía</span>';
       var dias = portal.diasEntrenados || {};
       var mk = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
       var mesN = Object.keys(dias).filter(function(k) { return dias[k] && k.indexOf(mk) === 0; }).length;
-      CLIENT_MES_COUNT[id] = mesN;
-      if (mesN >= clientMetaMes(CLIENTS[id])) out += '<span class="cst-chip prize">🏆 Meta cumplida</span>';
+      var pf = portal.perfil || {}, perfilOk = !!pf.fotoPerfil && !!(pf.bio && String(pf.bio).trim()) && !!portal.ficha;
+      var fotoMes = !!((portal.fotosProgreso || {})[mk]);
+      // Premio del mes: entrenos + perfil y ficha completos + foto del mes.
+      CLIENT_MES_COUNT[id] = (mesN >= clientMetaMes(CLIENTS[id]) && perfilOk && fotoMes) ? mesN : -1;
+      if (CLIENT_MES_COUNT[id] >= 0) out += '<span class="cst-chip prize">🏆 Meta cumplida</span>';
+      else if (mesN >= clientMetaMes(CLIENTS[id])) out += '<span class="cst-chip idle">🏋️ Entrenos listos · falta ' + (!perfilOk && !fotoMes ? 'perfil y foto' : !perfilOk ? 'perfil' : 'foto del mes') + '</span>';
       var last = Object.keys(dias).filter(function(k) { return dias[k]; }).sort().pop();
       if (last) {
         var t0 = new Date(); t0.setHours(0, 0, 0, 0);
@@ -5008,7 +5178,7 @@ function renderPremioCard() {
   html += '<div class="premio-top"><span class="premio-ico">🎁</span><div style="flex:1;min-width:0;"><div class="premio-lbl">Premio de ' + mes + '</div>';
   html += '<div class="premio-txt">' + (cfg.texto ? escapeHtmlAdmin(cfg.texto) : '<span style="color:var(--muted);font-weight:400;">Sin premio todavía. Tus clientes verán “Frida te tiene una sorpresa”.</span>') + '</div></div>';
   html += '<button type="button" class="premio-edit" onclick="editPremio()">' + (cfg.texto ? 'Cambiar' : 'Poner premio') + '</button></div>';
-  html += '<div class="premio-sub">Se gana al cumplir su meta del mes en su cuenta (sus sesiones del plan, o días por semana × 4).</div>';
+  html += '<div class="premio-sub">Lo ganan al cumplir 3 cosas en el mes: sus entrenos (sus días por semana × 4), perfil y ficha completos, y su foto de progreso del mes.</div>';
   if (winners.length) {
     html += '<div class="premio-win">🏆 <b>Lo lograron:</b> ' + winners.map(function(id) { return escapeHtmlAdmin(CLIENTS[id].name); }).join(', ') + '</div>';
   }
@@ -5090,7 +5260,7 @@ function closeNewClientModal() {
 
 function updateNCTypeUI() {
   var isRutina = document.getElementById('nc-type').value === 'rutina-personalizada';
-  document.getElementById('nc-cuota-label').textContent = isRutina ? 'Monto mensual ($)' : 'Valor por sesión ($)';
+  document.getElementById('nc-cuota-label').textContent = isRutina ? 'Total que paga ($) · si es paquete, el total del paquete' : 'Valor por sesión ($)';
   document.getElementById('nc-startdate-row').style.display = isRutina ? '' : 'none';
   document.getElementById('nc-rutina-days-row').style.display = isRutina ? '' : 'none';
   document.getElementById('nc-hours-row').style.display = isRutina ? 'none' : 'flex';
@@ -5306,9 +5476,7 @@ function handleSaveNewClient() {
     }
     var id = slugify(name);
     var startD = new Date(startDateVal + 'T00:00:00');
-    var endD = new Date(startD);
-    endD.setMonth(endD.getMonth() + 1);
-    var endDateVal = endD.toISOString().slice(0, 10);
+    var endDateVal = addMonthsToDateStr(startDateVal, planMesesVal || 1);
     var monthlyPrice = cuotaVal ? parseFloat(cuotaVal) : 0;
 
     var rutinaClientData = {

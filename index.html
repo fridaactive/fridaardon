@@ -1087,6 +1087,137 @@ body.portal-dark .pf-locked-text{color:rgba(255,255,255,.75)}
 body.portal-dark .pf-locked-icon{background:#F5ECCB;color:#0B1B3F}
 body.portal-dark .pf-locked-more{color:rgba(255,255,255,.6)}
 body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
+
+/* ══ Guía de alimentación ══ */
+.al-nudge{border-color:rgba(245,236,203,.45)!important;background:linear-gradient(135deg,rgba(124,203,106,.18),rgba(245,236,203,.10))!important}
+.guia-modal{display:none;position:fixed;inset:0;z-index:9000;overflow-y:auto;background:radial-gradient(90% 40% at 90% 0%,#1C3F9E 0%,rgba(0,0,0,0) 60%),#07122E;color:#fff;font-family:'DM Sans',sans-serif}
+.guia-top{position:sticky;top:0;display:flex;align-items:center;gap:.7rem;padding:.9rem 1rem;background:rgba(7,18,46,.92);backdrop-filter:blur(8px);z-index:2;font-weight:700}
+.guia-back{background:#F5ECCB;color:#0B1B3F;border:none;border-radius:100px;width:2.2rem;height:2.2rem;font-size:1.1rem;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #D9C98E}
+.guia-body{max-width:560px;margin:0 auto;padding:.5rem 1.1rem 3rem}
+.guia-hero h2{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.7rem;line-height:1.02;margin:.6rem 0 .4rem}
+.guia-hero h2 span{color:#F5ECCB}
+.guia-hero p{font-size:.88rem;line-height:1.5;color:rgba(255,255,255,.85)}
+.guia-hero small{display:block;font-size:.66rem;opacity:.55;margin-top:.35rem}
+.guia-alerta{margin-top:.9rem;background:rgba(245,236,203,.14);border:1px solid rgba(245,236,203,.45);border-radius:16px;padding:.8rem .9rem;font-size:.8rem;line-height:1.45}
+.guia-prot{margin-top:1rem;display:flex;align-items:center;gap:.9rem;background:#F5ECCB;color:#0B1B3F;border-radius:20px;padding:.9rem 1rem;box-shadow:0 5px 0 #D9C98E}
+.guia-prot b{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;font-size:1.9rem;line-height:1;white-space:nowrap}
+.guia-prot span{font-size:.8rem;font-weight:600;line-height:1.35}
+.guia-sec{font-family:'Archivo Black','DM Sans',sans-serif;text-transform:uppercase;font-size:.95rem;margin:1.5rem 0 .7rem;color:#F5ECCB}
+.guia-plato{display:flex;justify-content:center}
+.al-plato{width:210px;height:210px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35))}
+.guia-manos{display:grid;grid-template-columns:repeat(4,1fr);gap:.45rem;margin-top:1rem}
+.guia-mano{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:.6rem .3rem;text-align:center}
+.guia-mano svg{width:42px;height:42px;display:block;margin:0 auto .3rem}
+.guia-mano b{display:block;font-size:.74rem;line-height:1.15}
+.guia-mano span{font-size:.6rem;opacity:.7}
+.guia-note{font-size:.68rem;opacity:.6;margin-top:.5rem;text-align:center}
+.guia-comida{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:.8rem .9rem;margin-bottom:.6rem}
+.guia-comida-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem}
+.guia-comida-h b{font-size:.92rem}
+.guia-comida-h span{font-size:.68rem;background:rgba(245,236,203,.18);color:#F5ECCB;border-radius:100px;padding:.15rem .55rem;font-weight:700}
+.guia-comida ul{margin:0;padding-left:1.1rem;font-size:.8rem;line-height:1.5;color:rgba(255,255,255,.88)}
+.guia-comida li+li{margin-top:.2rem}
+.guia-super-h{font-size:.8rem;font-weight:700;margin-bottom:.5rem;opacity:.9}
+.guia-super{background:#fff;color:#0B1B3F;border-radius:18px;padding:.4rem .9rem;margin-bottom:.6rem}
+.guia-super-sec{font-size:.66rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#1C55E5;padding:.55rem 0 .3rem}
+.guia-item{display:flex;align-items:center;gap:.65rem;padding:.5rem 0;border-top:1px solid #E8ECF5;cursor:pointer}
+.guia-item input{width:1.15rem;height:1.15rem;accent-color:#1C55E5;flex-shrink:0}
+.guia-item span{flex:1;min-width:0}
+.guia-item b{display:block;font-size:.82rem}
+.guia-item small{display:block;font-size:.68rem;color:#6B7590}
+.guia-item em{font-style:normal;font-size:.74rem;font-weight:700;color:#1C55E5;white-space:nowrap}
+.guia-item.on b{text-decoration:line-through;opacity:.5}
+.guia-reset{width:100%;background:none;border:1px dashed rgba(255,255,255,.3);color:rgba(255,255,255,.75);border-radius:14px;padding:.6rem;font-family:inherit;font-size:.74rem;cursor:pointer}
+.guia-dias{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;margin-bottom:.8rem}
+.guia-dia{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:.45rem 0 .4rem;color:#fff;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.1rem;position:relative}
+.guia-dia b{font-size:.85rem}
+.guia-dia span{font-size:.58rem;opacity:.6;font-weight:700}
+.guia-dia.on{background:#F5ECCB;color:#0B1B3F;box-shadow:0 3px 0 #D9C98E;transform:translateY(-2px)}
+.guia-dia.on span{opacity:.8}
+.guia-dia.hoy::after{content:'';position:absolute;top:4px;right:6px;width:6px;height:6px;border-radius:50%;background:#7CCB6A}
+.guia-dia-h{font-weight:700;font-size:.95rem;margin-bottom:.6rem}
+.guia-dia-h span{font-size:.66rem;background:rgba(245,236,203,.18);color:#F5ECCB;border-radius:100px;padding:.15rem .55rem;margin-left:.3rem;vertical-align:middle}
+.guia-plato-txt{font-size:.85rem;line-height:1.45;color:rgba(255,255,255,.92)}
+.guia-alt{margin-top:.5rem;background:none;border:1px dashed rgba(245,236,203,.5);color:#F5ECCB;border-radius:100px;padding:.3rem .75rem;font-size:.7rem;font-weight:700;font-family:inherit;cursor:pointer}
+.guia-alt-txt{display:none;margin-top:.5rem;font-size:.8rem;line-height:1.45;background:rgba(245,236,203,.1);border-radius:12px;padding:.5rem .65rem;color:rgba(255,255,255,.9)}
+.guia-flex{background:linear-gradient(135deg,rgba(245,236,203,.16),rgba(124,203,106,.12));border:1px solid rgba(245,236,203,.4);border-radius:18px;padding:.9rem 1rem}
+.guia-flex b{font-size:.95rem}
+.guia-flex p{font-size:.82rem;line-height:1.45;margin:.35rem 0 .5rem;color:rgba(255,255,255,.88)}
+.guia-flex{margin-bottom:.6rem}
+.guia-flex p{margin-bottom:0!important}
+.guia-flex-tips{background:rgba(245,236,203,.1);border:1px solid rgba(245,236,203,.3);border-radius:18px;padding:.8rem .9rem;margin-top:.2rem}
+.guia-flex-tips b{display:block;font-size:.85rem;color:#F5ECCB;margin-bottom:.3rem}
+.guia-flex-tips div{font-size:.8rem;line-height:1.45;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.1)}
+.guia-plato-row{display:flex;align-items:flex-start;gap:.5rem}
+.guia-plato-row>.guia-plato-txt,.guia-plato-row>span{flex:1;min-width:0}
+.guia-like{flex-shrink:0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:2.1rem;height:2.1rem;font-size:1rem;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;transition:transform .2s}
+.guia-like.on{background:rgba(255,120,140,.18);border-color:rgba(255,120,140,.5);transform:scale(1.08)}
+.guia-alt-txt.guia-plato-row{align-items:center;display:none}
+.guia-postre{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;margin-bottom:.55rem;overflow:hidden}
+.guia-postre summary{list-style:none;display:flex;align-items:center;gap:.7rem;padding:.75rem .85rem;cursor:pointer}
+.guia-postre summary::-webkit-details-marker{display:none}
+.guia-postre-ico{width:2.6rem;height:2.6rem;border-radius:14px;background:#F5ECCB;display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0}
+.guia-postre-t{flex:1;min-width:0}
+.guia-postre-t b{display:block;font-size:.88rem}
+.guia-postre-t small{font-size:.68rem;color:#F5ECCB;opacity:.85}
+.guia-postre-b{padding:0 .9rem .9rem;font-size:.8rem;line-height:1.5;color:rgba(255,255,255,.88)}
+.guia-postre-b ul{margin:.2rem 0 .5rem;padding-left:1.1rem}
+.guia-postre-b p{margin:.2rem 0 0}
+.guia-postre-sub{font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#F5ECCB;margin-top:.4rem}
+.guia-tips div{background:rgba(255,255,255,.05);border-radius:14px;padding:.65rem .8rem;font-size:.8rem;line-height:1.45;margin-bottom:.45rem}
+.guia-legal{font-size:.66rem;opacity:.5;line-height:1.5;margin-top:1.5rem}
+
+/* Bienestar */
+.bw-hero{padding:.4rem .2rem 0}
+.bw-hero h2{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.6rem;line-height:1.02;margin:.55rem 0 .3rem;color:#fff}
+.bw-hero h2 span{color:#F5ECCB}
+.bw-hero p{font-size:.85rem;color:rgba(255,255,255,.75)}
+.bw-sec{font-family:'Archivo Black','DM Sans',sans-serif;text-transform:uppercase;font-size:.85rem;color:#F5ECCB;margin:1.3rem 0 .1rem}
+#bienestar-content .in-nudge{margin-top:.6rem}
+#bienestar-content .cy-card{margin-top:.6rem}
+#perfil-extras{margin-bottom:1rem}
+#perfil-extras .in-section{margin-top:0}
+.bnav-btn{min-width:3rem;padding:0 .45rem}
+.bnav-btn.active{padding:0 .9rem}
+
+/* Avisos más discretos: una línea, ancho completo y se pueden cerrar */
+body.portal-dark #anuncios-wrap{margin-bottom:.6rem!important}
+body.portal-dark .anuncios-strip{flex-direction:column;gap:.4rem}
+body.portal-dark .anuncio-card{position:relative;width:100%;box-sizing:border-box;display:flex;align-items:center;gap:.55rem;background:rgba(245,236,203,.1)!important;border:1px solid rgba(245,236,203,.3)!important;border-radius:14px!important;padding:.5rem 2.2rem .5rem .6rem!important;box-shadow:none!important;min-width:0!important;max-width:none!important}
+body.portal-dark .anuncio-icon{width:1.6rem!important;height:1.6rem!important;background:rgba(245,236,203,.18)!important;color:#F5ECCB!important}
+body.portal-dark .anuncio-icon svg{width:13px;height:13px}
+body.portal-dark .anuncio-text{font-size:.76rem!important;color:#F5ECCB!important;font-weight:600;line-height:1.3}
+.anuncio-x{position:absolute;right:.45rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(245,236,203,.7);font-size:.8rem;cursor:pointer;padding:.3rem}
+#inicio-content .in-stats{margin-top:.9rem}
+#inicio-content .cy-card{margin-top:.9rem}
+.bw-card{margin-top:1rem;background:linear-gradient(160deg,rgba(124,203,106,.16),rgba(245,236,203,.08));border:1px solid rgba(245,236,203,.3);border-radius:24px;padding:1.2rem 1.1rem 1.1rem;text-align:center;color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.25)}
+.bw-card-plato .al-plato{width:170px;height:170px}
+.bw-card b{display:block;font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.1rem;margin-top:.6rem}
+.bw-card p{font-size:.82rem;line-height:1.45;color:rgba(255,255,255,.8);margin:.35rem 0 .2rem}
+.bw-card-btn{display:inline-block;margin-top:.7rem;background:#F5ECCB;color:#0B1B3F;font-weight:800;font-size:.85rem;padding:.65rem 1.4rem;border-radius:100px;box-shadow:0 4px 0 #D9C98E}
+.cy-more{margin-top:.8rem;border-top:1px solid rgba(255,255,255,.12);padding-top:.15rem}
+.cy-more summary{list-style:none;display:flex;justify-content:center;align-items:center;gap:.4rem;padding:.55rem 0 .1rem;cursor:pointer;font-size:.78rem;font-weight:700;color:var(--cy-accent,#F5ECCB)}
+.cy-more summary::-webkit-details-marker{display:none}
+.cy-more summary b{transition:transform .2s;display:inline-block}
+.cy-more[open] summary b{transform:rotate(180deg)}
+.cy-more[open] summary span{font-size:0;}
+.cy-more[open] summary span::after{content:'Ver menos';font-size:.78rem}
+.in-goal-how-txt{margin-top:.55rem;padding-top:.5rem;border-top:1px solid rgba(255,255,255,.1);font-size:.76rem;line-height:1.45;color:rgba(255,255,255,.8)}
+.in-goal-how-txt b{color:#F5ECCB}
+.in-goal-how{margin-top:.55rem;border-top:1px solid rgba(255,255,255,.1)}
+.in-goal-how summary{list-style:none;cursor:pointer;font-size:.74rem;font-weight:700;color:#F5ECCB;padding:.5rem 0 0;display:flex;align-items:center;gap:.35rem}
+.in-goal-how summary::-webkit-details-marker{display:none}
+.in-goal-how summary b{transition:transform .2s;display:inline-block}
+.in-goal-how[open] summary b{transform:rotate(180deg)}
+.in-goal-how ul{margin:.45rem 0 0;padding-left:1.1rem;font-size:.76rem;line-height:1.5;color:rgba(255,255,255,.85)}
+.in-goal-how li+li{margin-top:.25rem}
+.in-goal-rq{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.65rem}
+.in-goal-rq span{font-size:.7rem;font-weight:700;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:.28rem .6rem;color:rgba(255,255,255,.8)}
+.in-goal-rq span[onclick]{cursor:pointer;border-style:dashed}
+.in-goal-rq span.ok{background:rgba(124,203,106,.15);border-color:rgba(124,203,106,.45);color:#fff}
+.anuncio-btn{flex-shrink:0;margin-left:auto;background:#F5ECCB;color:#0B1B3F;border:none;border-radius:100px;padding:.35rem .7rem;font-size:.7rem;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 3px 0 #D9C98E;white-space:nowrap}
+.anuncio-btn.done{background:rgba(124,203,106,.2);color:#BDF0AE;box-shadow:none;cursor:default}
+body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
 </style>
 </head>
 <body>
@@ -1390,6 +1521,7 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
     <div class="tab-bar">
       <button class="tab-btn" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24"><rect x="1.8" y="8.5" width="3.4" height="7" rx="1.2" fill="#fff"/><rect x="18.8" y="8.5" width="3.4" height="7" rx="1.2" fill="#fff"/><rect x="5.2" y="10.7" width="13.6" height="2.6" rx="1.3" fill="#fff"/><rect x="1.8" y="8.5" width="1.3" height="7" rx="0.6" fill="#fff" opacity="0.45"/><rect x="21" y="8.5" width="1.2" height="7" rx="0.6" fill="#0a1a4d" opacity="0.18"/></svg></span> Rutina</button>
       <button class="tab-btn" data-tab="tab-perfil" onclick="showTab('tab-perfil')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.3" r="4.3" fill="#fff"/><path d="M4 21c0-4.6 3.6-7.6 8-7.6s8 3 8 7.6" fill="#fff"/><circle cx="10.2" cy="6.8" r="1.6" fill="#fff" opacity="0.4"/><path d="M4 21c0-4.6 3.6-7.6 8-7.6v0c-3.6 1-6 3.8-6 7.6Z" fill="#0a1a4d" opacity="0.12"/></svg></span> Perfil</button>
+      <button class="tab-btn" data-tab="tab-bienestar" onclick="showTab('tab-bienestar')">🌿 Bienestar</button>
       <button class="tab-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')"><span class="tab-btn-badge"><svg viewBox="0 0 24 24"><rect x="3.5" y="9.5" width="17" height="3.8" rx="1.2" fill="#fff"/><rect x="4.5" y="13.3" width="15" height="7.2" rx="1.5" fill="#fff"/><path d="M9.3 9.5c-1.7 0-2.6-1.5-1.9-2.8.7-1.3 2.8.4 2.8 2.8Zm5.4 0c1.7 0 2.6-1.5 1.9-2.8-.7-1.3-2.8.4-2.8 2.8Z" fill="#fff"/><rect x="4.5" y="13.3" width="15" height="2.4" fill="#0a1a4d" opacity="0.1"/></svg></span> Beneficios</button>
     </div>
   </div>
@@ -1403,8 +1535,9 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
   <nav class="bnav" aria-label="Menú del portal">
     <button type="button" class="bnav-btn active" data-tab="tab-inicio" onclick="showTab('tab-inicio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Inicio</span></button>
     <button type="button" class="bnav-btn" data-tab="tab-rutina" onclick="showTab('tab-rutina')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/></svg><span>Rutina</span></button>
-    <button type="button" class="bnav-btn" data-tab="tab-perfil" onclick="showTab('tab-perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span>Perfil</span></button>
+    <button type="button" class="bnav-btn" data-tab="tab-bienestar" onclick="showTab('tab-bienestar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14"/><path d="M5 19l7-7"/></svg><span>Bienestar</span></button>
     <button type="button" class="bnav-btn" data-tab="tab-beneficios" onclick="showTab('tab-beneficios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="4" rx="1"/><rect x="4.5" y="13" width="15" height="7" rx="1.5"/><path d="M12 9v11"/><path d="M12 9c-1-2.2-2.6-3.5-4-3.5S6 6.5 6.3 8 8.5 9 12 9Z"/><path d="M12 9c1-2.2 2.6-3.5 4-3.5S18 6.5 17.7 8 15.5 9 12 9Z"/></svg><span>Beneficios</span></button>
+    <button type="button" class="bnav-btn" data-tab="tab-perfil" onclick="showTab('tab-perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span>Perfil</span></button>
   </nav>
 
   <div class="dash-body">
@@ -1412,6 +1545,11 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
     <!-- INICIO (portal rediseñado: entrenamiento de hoy, progreso y accesos) -->
     <div class="tab-panel active" id="tab-inicio">
       <div id="inicio-content"><div class="empty-note">Cargando…</div></div>
+    </div>
+
+    <!-- BIENESTAR (alimentación y ciclo) -->
+    <div class="tab-panel" id="tab-bienestar">
+      <div id="bienestar-content"><div class="empty-note">Cargando…</div></div>
     </div>
 
     <!-- RUTINA -->
@@ -1513,6 +1651,7 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
       </div>
 
       <div id="perfil-unlocked-content">
+        <div id="perfil-extras"></div>
         <details class="track-card" open>
           <summary class="track-summary">
             <span class="track-summary-label">Historial de entrenos</span>
@@ -2054,6 +2193,8 @@ function renderInicioTab() {
       + '<span class="in-hero-title">' + (PLAN_NEVER_SET ? 'Tu cuenta está lista' : 'Renueva tu plan') + '</span>'
       + '<span class="in-hero-meta">' + (PLAN_NEVER_SET ? 'Ya tengo tus respuestas. Solo falta elegir tu plan.' : 'Tu progreso sigue guardado aquí.') + '</span></span></span></div>'
       + '<div style="margin-top:0.9rem;">' + renderPlanLockedCard() + '</div>';
+    var bw = document.getElementById('bienestar-content');
+    if (bw) bw.innerHTML = renderPlanLockedCard();
     return;
   }
   var c = inicioCounts();
@@ -2079,27 +2220,21 @@ function renderInicioTab() {
       + '<span class="in-hero-title">Tu hora para ti</span><span class="in-hero-meta">Tus sesiones con Frida y tu progreso, en un solo lugar.</span></span></span></div>';
   }
 
-  h += rewardsInicioHtml(c);
-
+  // Orden: entreno de hoy → resumen (semana, mes, programa) → check-in → cómo te sientes → Mi ciclo → meta del mes
   h += '<div class="in-stats">'
     + '<div class="in-stat in-stat-hl">' + (c.semana >= metaSemanal() ? '<svg class="fa-sticker fa-sticker-bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1L4 14h6.5L9 23l10-13.5h-6.6z"/></svg>' : '') + '<span class="in-stat-num">' + c.semana + '/' + metaSemanal() + '</span><span class="in-stat-lbl">esta semana</span></div>'
     + '<div class="in-stat"><span class="in-stat-num">' + c.mes + '</span><span class="in-stat-lbl">días este mes</span></div>'
     + (prog ? '<div class="in-stat"><span class="in-stat-num in-cream">' + escapeHtml(prog) + '</span><span class="in-stat-lbl">del programa</span></div>'
             : '<div class="in-stat"><span class="in-stat-num in-cream">' + escapeHtml(meta || '-') + '</span><span class="in-stat-lbl">meta del mes</span></div>')
     + '</div>';
+  h += rewardsInicioHtml(c);
 
-  if (currentRutinaData && currentRutinaData.mensajeInicial) {
-    h += '<div class="in-msg"><span class="in-msg-lbl"><span class="fa-tag">de Frida para ti</span></span><span class="in-msg-txt">' + escapeHtml(currentRutinaData.mensajeInicial) + '</span></div>';
-  }
 
-  h += '<div class="in-section"><span class="fa-marker">ACCESOS</span> RÁPIDOS<svg class="fa-sticker fa-sticker-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 8.7l7.1-.6z"/></svg></div><div class="in-links">';
-  if (sug) h += '<button type="button" class="in-link in-link-blue" onclick="showTab(\'tab-rutina\')"><span class="in-link-title">MI RUTINA</span><span class="in-link-sub">Todos tus días</span></button>';
-  h += '<button type="button" class="in-link" onclick="showTab(\'tab-perfil\')"><span class="in-link-title">MI PROGRESO</span><span class="in-link-sub">Historial y transformación</span></button>'
-    + '<button type="button" class="in-link" onclick="showTab(\'tab-beneficios\')"><span class="in-link-title">BENEFICIOS</span><span class="in-link-sub">Descuentos de marcas aliadas</span></button>'
-    + '<button type="button" class="in-link" onclick="openChatModal()"><span class="in-link-title">HABLAR CON FRIDA</span><span class="in-link-sub">Escríbeme tus dudas</span></button>'
-    + '</div>';
+
   el.innerHTML = h;
   if (currentTabId === 'tab-inicio') animateInicioNumbers();
+  renderPerfilExtras();
+  renderBienestarTab();
   checkNewMedals();
 }
 
@@ -2174,34 +2309,14 @@ function medallasEstado() {
     { id: 'primer', kind: 'bronce', tier: 'Bronce', name: 'Primer paso', how: 'Marca tu primer día entrenado.', ok: anyDia },
     { id: 'perfil', kind: 'plata', tier: 'Plata', name: 'Perfil completo', how: 'Pon tu foto, cuéntanos de ti, llena tu ficha y sube tu primera foto de progreso (solo la ven Frida y tú).', ok: perfilOk },
     { id: 'semanas2', kind: 'oro', tier: 'Oro', name: 'Semanas completas', how: 'Completa tus ' + metaSemanal() + ' entrenos de la semana durante 2 semanas (no tienen que ser seguidas). Llevas ' + Math.min(semanasCompletas(dias), 2) + ' de 2.', ok: semanasCompletas(dias) >= 2 },
-    { id: 'meta-' + localKey(now).slice(0, 7), kind: 'trofeo', tier: 'Trofeo', name: 'Meta de ' + mesNombre, how: 'Completa todos tus entrenos del mes (' + meta + ')' + (PREMIO_MES && PREMIO_MES.texto ? ' y gana: ' + PREMIO_MES.texto : '') + '.', ok: c.mes >= meta },
+    { id: 'meta-' + localKey(now).slice(0, 7), kind: 'trofeo', tier: 'Trofeo', name: 'Meta de ' + mesNombre, how: 'Completa tus ' + meta + ' entrenos del mes, tu perfil y ficha, y sube tu foto del mes' + (PREMIO_MES && PREMIO_MES.texto ? '. Ganas: ' + PREMIO_MES.texto : '') + '.', ok: premioRequisitos(c, meta).every(function(r) { return r.ok; }) },
     { id: 'diamante', kind: 'diamante', tier: 'Diamante', name: 'Constancia', how: 'Completa tu meta del mes en 3 meses distintos (por ejemplo noviembre, diciembre y enero). Llevas ' + Math.min(metasCumplidas, 3) + ' de 3. ¡La más valiosa de todas!', ok: metasCumplidas >= 3 }
   ];
 }
 
-function rewardsInicioHtml(c) {
+// Perfil: medallas y avisos (foto del mes, perfil incompleto), antes estaban en Inicio.
+function perfilExtrasHtml() {
   var h = '';
-  var today = localKey(new Date());
-  var hoy = !!(CURRENT_DIAS_ENTRENADOS || {})[today];
-  // 1. Check-in de un toque
-  if (hoy) {
-    h += '<div class="in-checkin done"><span class="in-checkin-ico">✅</span><span class="in-checkin-txt"><b>¡Hoy cuenta!</b><span>Tu entreno de hoy ya está marcado 💪</span></span><button type="button" class="in-checkin-undo" onclick="checkInHoy(false)">Deshacer</button></div>';
-  } else {
-    h += '<button type="button" class="in-checkin" onclick="checkInHoy(true)"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>¿Entrenaste hoy?</b><span>Tócalo y suma a tu meta del mes</span></span><span class="in-checkin-btn">Sí ✓</span></button>';
-  }
-  h += sentirHtml();
-  // 1.5 Mi ciclo (batería de energía según la fase del ciclo menstrual)
-  h += cicloInicioHtml();
-  // 2. Meta del mes (con el premio que puso Frida)
-  var meta = metaDelMes(), pct = Math.min(100, Math.round(c.mes / meta * 100));
-  var premio = PREMIO_MES && PREMIO_MES.texto ? escapeHtml(PREMIO_MES.texto) : '';
-  h += '<div class="in-goal' + (c.mes >= meta ? ' won' : '') + '">'
-    + '<div class="in-goal-top"><span class="fa-tag">META DE ' + MESES_LARGOS[new Date().getMonth()].toUpperCase() + '</span><span class="in-goal-num">' + c.mes + '<small>/' + meta + '</small></span></div>'
-    + '<div class="in-goal-track"><div class="in-goal-fill" style="width:' + pct + '%"></div></div>'
-    + (c.mes >= meta
-        ? '<div class="in-goal-prize">🎉 <b>¡Lo lograste!</b> ' + (premio ? 'Tu premio: ' + premio + '. Frida te escribirá para entregártelo.' : 'Frida te tiene una sorpresa.') + '</div>'
-        : '<div class="in-goal-prize">🎁 ' + (premio ? 'Al llegar ganas: <b>' + premio + '</b>' : 'Al llegar, Frida te tiene una sorpresa') + ' · te faltan ' + (meta - c.mes) + '</div>')
-    + '</div>';
   // 3. Medallas
   var meds = medallasEstado(), nOk = meds.filter(function(m) { return m.ok; }).length;
   h += '<div class="in-section"><span class="fa-marker">TUS</span> MEDALLAS <span class="in-med-count">' + nOk + '/' + meds.length + '</span></div>';
@@ -2216,13 +2331,69 @@ function rewardsInicioHtml(c) {
   if (now.getDate() <= 7 && !(fotosMes && fotosMes.inicio)) {
     h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\');setTimeout(function(){var t=document.querySelector(\'.transf-card\');if(t)t.scrollIntoView({behavior:\'smooth\',block:\'start\'});},350)"><span>📸</span><span><b>Esta semana es día de foto</b><small>🔒 Tus fotos son privadas: solo las ven Frida y tú. Sirven para ver cuánto has avanzado.</small></span></button>';
   }
-  // 5. Perfil incompleto
+  return h;
+}
+function renderPerfilExtras() {
+  var el = document.getElementById('perfil-extras');
+  if (el) el.innerHTML = perfilExtrasHtml();
+}
+
+// Bienestar: guía de alimentación y Mi ciclo, cada una en su tarjeta.
+function renderBienestarTab() {
+  var el = document.getElementById('bienestar-content');
+  if (!el) return;
+  var h = '<div class="bw-hero"><span class="fa-tag">BIENESTAR</span><h2>Come rico, <span>sin contar calorías</span></h2><p>Tu guía de alimentación, tu menú de la semana y tu lista de súper.</p></div>';
+  var d = alData(), eleg = alElegible();
+  var titulo, texto, boton = '', accion = '';
+  if (!eleg) { titulo = 'Tu guía de alimentación'; texto = 'Viene incluida en los planes online y por videollamada. Pregúntale a Frida por la tuya.'; }
+  else if (d.guia) { titulo = 'Tu guía está lista'; texto = 'Tu plato, tu menú de la semana, tu lista de súper y postres con proteína.'; boton = 'Ver mi guía'; accion = 'openGuiaAlimentacion()'; }
+  else if (d.encuesta) { titulo = 'Frida está preparando tu guía'; texto = 'Ya tiene tus respuestas. Te aparecerá aquí en unos días.'; }
+  else { titulo = 'Desbloquea tu guía'; texto = 'Responde unas preguntas (3 minutos) y Frida arma tu guía con tu menú y tu lista de súper.'; boton = 'Empezar'; accion = 'startEncuestaAlimentacion()'; }
+  h += '<div class="bw-card"' + (accion ? ' onclick="' + accion + '" role="button" tabindex="0"' : '') + '><div class="bw-card-plato">' + alPlatoSvg() + '</div>'
+    + '<b>' + titulo + '</b><p>' + texto + '</p>' + (boton ? '<span class="bw-card-btn">' + boton + ' →</span>' : '') + '</div>';
+  el.innerHTML = h;
+}
+
+// Premio del mes: entrenos del mes + perfil completo + foto de progreso del mes.
+function premioRequisitos(c, meta) {
   var perfil = CURRENT_PERFIL_DATA || {}, portal = CURRENT_PORTAL_DATA || {};
-  var items = [!!perfil.fotoPerfil, !!(perfil.bio && perfil.bio.trim()), !!portal.ficha, !!(portal.fotosProgreso && Object.keys(portal.fotosProgreso).length)];
-  var done = items.filter(Boolean).length;
-  if (done < items.length) {
-    h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\')"><span>💙</span><span><b>Tu perfil va al ' + Math.round(done / items.length * 100) + '%</b><small>Complétalo y gana la medalla de plata.</small><span class="in-nudge-bar"><span style="width:' + Math.round(done / items.length * 100) + '%"></span></span></span></button>';
+  var mk = localKey(new Date()).slice(0, 7);
+  var perfilOk = !!perfil.fotoPerfil && !!(perfil.bio && perfil.bio.trim()) && !!portal.ficha;
+  var fotoMes = !!((portal.fotosProgreso || {})[mk]);
+  var irPerfil = "showTab('tab-perfil')";
+  var irFoto = "showTab('tab-perfil');setTimeout(function(){var t=document.querySelector('.transf-card');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});},350)";
+  return [
+    { ok: c.mes >= meta, txt: c.mes + '/' + meta + ' entrenos' },
+    { ok: perfilOk, txt: 'Perfil y ficha completos', go: perfilOk ? '' : irPerfil },
+    { ok: fotoMes, txt: 'Foto del mes', go: fotoMes ? '' : irFoto }
+  ];
+}
+
+function rewardsInicioHtml(c) {
+  var h = '';
+  var today = localKey(new Date());
+  var hoy = !!(CURRENT_DIAS_ENTRENADOS || {})[today];
+  // 1. Check-in de un toque
+  if (hoy) {
+    h += '<div class="in-checkin done"><span class="in-checkin-ico">✅</span><span class="in-checkin-txt"><b>¡Hoy cuenta!</b><span>Tu entreno de hoy ya está marcado 💪</span></span><button type="button" class="in-checkin-undo" onclick="checkInHoy(false)">Deshacer</button></div>';
+  } else {
+    h += '<button type="button" class="in-checkin" onclick="checkInHoy(true)"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>¿Entrenaste hoy?</b><span>Tócalo y suma a tu meta del mes</span></span><span class="in-checkin-btn">Sí ✓</span></button>';
   }
+  h += sentirHtml();
+  if ((((CURRENT_PORTAL_DATA || {}).cuestionario || {}).genero) !== 'Masculino') h += cicloInicioHtml();
+  // 2. Meta del mes (con el premio que puso Frida)
+  var meta = metaDelMes(), pct = Math.min(100, Math.round(c.mes / meta * 100));
+  var premio = PREMIO_MES && PREMIO_MES.texto ? escapeHtml(PREMIO_MES.texto) : '';
+  var rq = premioRequisitos(c, meta), logrado = rq.every(function(r) { return r.ok; }), faltan = rq.filter(function(r) { return !r.ok; }).length;
+  h += '<div class="in-goal' + (logrado ? ' won' : '') + '">'
+    + '<div class="in-goal-top"><span class="fa-tag">META DE ' + MESES_LARGOS[new Date().getMonth()].toUpperCase() + '</span><span class="in-goal-num">' + c.mes + '<small>/' + meta + '</small></span></div>'
+    + '<div class="in-goal-track"><div class="in-goal-fill" style="width:' + pct + '%"></div></div>'
+    + '<div class="in-goal-rq">' + rq.map(function(r) { return '<span class="' + (r.ok ? 'ok' : '') + '"' + (r.go ? ' onclick="' + r.go + '"' : '') + '>' + (r.ok ? '✅' : '⬜') + ' ' + r.txt + '</span>'; }).join('') + '</div>'
+    + (logrado
+        ? '<div class="in-goal-prize">🎉 <b>¡Lo lograste!</b> ' + (premio ? 'Tu premio: ' + premio + '. Frida te escribirá para entregártelo.' : 'Frida te tiene una sorpresa.') + '</div>'
+        : '<div class="in-goal-prize">🎁 ' + (premio ? 'Ganas: <b>' + premio + '</b>' : 'Frida te tiene una sorpresa') + ' al completar las ' + rq.length + ' · te ' + (faltan === 1 ? 'falta 1' : 'faltan ' + faltan) + '</div>')
+    + '<div class="in-goal-how-txt">Marca como entrenado cada día que entrenes.</div>'
+    + '</div>';
   return h;
 }
 
@@ -2275,23 +2446,23 @@ var CY_FASES = {
   menstrual: { tag:'Fase menstrual', name:'Modo <span>recarga</span>', icon:'🌙', base:30, intens:2,
     glow:'rgba(255,120,130,.35)', accent:'#FF9AA5', chip:'#FFD6DA', ink:'#5A1420', fill:['#FF8F9B','#E8546A'],
     msg:'Tu energía puede estar más baja estos días. Moverte suave también cuenta: hoy escucha a tu cuerpo.',
-    ideal:'Movilidad, caminata o fuerza ligera', cuida:'Hidrátate y descansa bien',
+    ideal:'Movilidad, caminar o una rutina de fuerza más ligera', cuida:'Toma suficiente agua y descansa bien',
     sci:'Al inicio del ciclo, estrógeno y progesterona están en su punto más bajo; muchas mujeres sienten menos energía o molestias.' },
   folicular: { tag:'Fase folicular', name:'Energía en <span>subida</span>', icon:'🌱', base:70, intens:4,
     glow:'rgba(91,139,245,.4)', accent:'#9DBBFF', chip:'#D8E4FF', ink:'#0F2E78', fill:['#8FB0FF','#3A6CF0'],
     msg:'Tu cuerpo se está recargando. Es un gran momento para retarte y subirle un poquito al peso.',
-    ideal:'Fuerza y subir cargas', cuida:'Calienta bien antes de pesado',
+    ideal:'Entrenar fuerza y subir el peso poco a poco', cuida:'Calienta bien antes de levantar pesado',
     sci:'El estrógeno va subiendo: muchas mujeres se sienten con más energía y se recuperan mejor entre entrenos.' },
   ovulacion: { tag:'Ovulación', name:'Tu pico de <span>poder</span>', icon:'⚡', base:95, intens:5,
     glow:'rgba(245,236,203,.5)', accent:'#F5ECCB', chip:'#F5ECCB', ink:'#3d330c', fill:['#FFF3C4','#F4C542'],
     msg:'¡Batería a tope! Si te sientes así, hoy es el día para dar lo mejor de ti en el gym.',
-    ideal:'Entreno intenso o tu mejor marca', cuida:'Técnica y calentamiento',
-    sci:'Alrededor de la ovulación el estrógeno llega a su pico; es cuando muchas se sienten más fuertes y con más ánimo.' },
+    ideal:'Un entreno intenso o intentar tu mejor marca', cuida:'Cuida tu técnica y no te saltes el calentamiento',
+    sci:'Alrededor de la ovulación, el estrógeno llega a su punto más alto; muchas mujeres se sienten más fuertes y con más ánimo.' },
   lutea: { tag:'Fase lútea', name:'Modo <span>constante</span>', icon:'🍂', base:50, intens:3,
     glow:'rgba(214,170,120,.35)', accent:'#F0C79A', chip:'#F6DFC6', ink:'#4A2E0E', fill:['#F3CFA3','#C98A4E'],
     msg:'La energía va bajando poco a poco. Mantén tu rutina a tu ritmo: la constancia es lo que da resultados.',
-    ideal:'Tu rutina normal, sin forzar', cuida:'Duerme bien y come suficiente',
-    sci:'La progesterona sube y puede dar más cansancio, calor o antojos; es normal y no significa que estés fallando.' }
+    ideal:'Tu rutina de siempre, a tu ritmo y sin forzar', cuida:'Duerme bien y come suficiente',
+    sci:'La progesterona sube y puede darte más cansancio, calor o antojos. Es normal y no significa que estés fallando.' }
 };
 // Cuánta energía aporta cada carita de "¿Cómo te sientes hoy?" (ver FA_SENTIR) al cálculo de la batería.
 var CY_SENTIR_VAL = { dolor:1, nauseas:1, cansada:2, bien:4, contodo:5 };
@@ -2335,8 +2506,10 @@ function cicloCardHtml(o) {
   var h = '<div class="cy-card" style="--cy-glow:' + f.glow + ';--cy-accent:' + f.accent + ';--cy-chip:' + f.chip + ';--cy-ink:' + f.ink + '">';
   h += '<div class="cy-top"><div class="cy-batt">' + cicloBateriaSvg(pct, key, uid) + '<div class="cy-pct">' + pct + '<small>%</small></div></div>';
   h += '<div class="cy-info"><span class="cy-tag">' + f.icon + ' ' + f.tag + '</span><div class="cy-name">' + f.name + '</div>';
-  h += '<div class="cy-day">Día ' + dia + ' de ' + largo + ' · tu período llega en ' + falta + (falta === 1 ? ' día' : ' días') + ' <button type="button" class="cy-edit" onclick="openCicloModal()">Editar fecha</button></div>';
   h += '<div class="cy-msg">' + f.msg + '</div></div></div>';
+  // Lo demás va plegado en "Ver más" para que la tarjeta no se vea saturada.
+  h += '<details class="cy-more"><summary><span>Ver más sobre tu ciclo</span><b>▾</b></summary>';
+  h += '<div class="cy-day" style="margin-top:.7rem">Día ' + dia + ' de ' + largo + ' · tu período llega en ' + falta + (falta === 1 ? ' día' : ' días') + ' <button type="button" class="cy-edit" onclick="openCicloModal()">Editar fecha</button></div>';
   h += '<div class="cy-wheel"><div class="cy-track">' + seg(5, '#E8546A') + seg(ov - 7, '#3A6CF0') + seg(3, '#F4C542') + seg(largo - ov - 1, '#C98A4E') + '</div>';
   h += '<div class="cy-now" style="left:' + ((dia - 0.5) / largo * 100) + '%">' + f.icon + '</div></div>';
   var lg = function(txt, col, k) { return '<span class="' + (k === key ? 'on' : '') + '"><i style="background:' + col + '"></i>' + txt + '</span>'; };
@@ -2345,7 +2518,7 @@ function cicloCardHtml(o) {
   h += '<div class="cy-plan"><div class="cy-box"><b>Ideal para hoy</b><span>' + f.ideal + '</span><div class="cy-dots">' + dots + '</div></div>';
   h += '<div class="cy-box"><b>Cuida</b><span>' + f.cuida + '</span></div></div>';
   h += '<div class="cy-sci">🔬 ' + f.sci + ' Son guías generales: si algo no se siente bien, escucha a tu cuerpo. Tu batería se ajusta con la carita que marcaste arriba 💙</div>';
-  return h + '</div>';
+  return h + '</details></div>';
 }
 
 function cicloInicioHtml() {
@@ -2615,7 +2788,7 @@ document.addEventListener('pointerdown', function(e) {
   setTimeout(function() { dot.remove(); }, 600);
 }, { passive: true });
 
-var TAB_ORDER = ['tab-inicio', 'tab-rutina', 'tab-perfil', 'tab-beneficios'];
+var TAB_ORDER = ['tab-inicio', 'tab-rutina', 'tab-bienestar', 'tab-beneficios', 'tab-perfil'];
 var currentTabId = 'tab-inicio';
 function showTab(id) {
   // Dirección de la animación: hacia la izquierda si la pestaña nueva está a la derecha en el menú
@@ -2639,7 +2812,9 @@ function showTab(id) {
 // Solo rutina personalizada se auto-gestiona la rutina desde la app.
 // Presencial y online 1:1 entrenan con una rutina que Frida les lleva
 // aparte (en persona o por videollamada) — no tiene sentido esa pestaña.
+var CURRENT_CLIENT_TYPE = null;
 function applyClientTypeUI(type) {
+  CURRENT_CLIENT_TYPE = type || null;
   var rutinaBtn = document.querySelector('.tab-btn[data-tab="tab-rutina"]');
   if (!rutinaBtn) return;
   var hideRutina = !!type && type !== 'rutina-personalizada';
@@ -3042,21 +3217,25 @@ var CQ_QUESTIONS = [
 
 var cqAnswers = {};
 var cqIndex = 0;
+var CQ_SET = CQ_QUESTIONS;     // preguntas activas (bienvenida o alimentación)
+var CQ_DONE = null;            // qué hacer al terminar (null = bienvenida)
 
 function cqVisible(q, answers) { return !q.showIf || q.showIf(answers); }
 
 function cqFindIndex(startIndex, dir, answers) {
   var i = startIndex;
-  while (i >= 0 && i < CQ_QUESTIONS.length) {
-    if (cqVisible(CQ_QUESTIONS[i], answers)) return i;
+  while (i >= 0 && i < CQ_SET.length) {
+    if (cqVisible(CQ_SET[i], answers)) return i;
     i += dir;
   }
-  return dir > 0 ? CQ_QUESTIONS.length : -1;
+  return dir > 0 ? CQ_SET.length : -1;
 }
 
 var CQ_PERFIL = {};
 function startCuestionario(perfil) {
   CQ_PERFIL = perfil || {};
+  CQ_SET = CQ_QUESTIONS; CQ_DONE = null;
+  document.getElementById('cq-back-btn').onclick = cqBack;
   cqAnswers = {};
   cqIndex = cqFindIndex(0, 1, cqAnswers);
   showScreen('screen-cuestionario');
@@ -3064,10 +3243,10 @@ function startCuestionario(perfil) {
 }
 
 function cqRender() {
-  var q = CQ_QUESTIONS[cqIndex];
+  var q = CQ_SET[cqIndex];
   document.getElementById('cq-error').textContent = '';
 
-  var visList = CQ_QUESTIONS.filter(function(item) { return cqVisible(item, cqAnswers); });
+  var visList = CQ_SET.filter(function(item) { return cqVisible(item, cqAnswers); });
   var posInVis = visList.indexOf(q);
   document.getElementById('cq-progress-bar').innerHTML = visList.map(function(_, i) {
     return '<div class="cq-progress-seg' + (i <= posInVis ? ' filled' : '') + '"></div>';
@@ -3121,10 +3300,13 @@ function cqRender() {
     });
   }
 
-  document.getElementById('cq-back-btn').style.visibility = (cqFindIndex(cqIndex - 1, -1, cqAnswers) >= 0) ? 'visible' : 'hidden';
+  var hayAnterior = cqFindIndex(cqIndex - 1, -1, cqAnswers) >= 0;
+  // En la encuesta de alimentación, en la primera pregunta la flecha sirve para salir.
+  document.getElementById('cq-back-btn').style.visibility = (hayAnterior || CQ_DONE) ? 'visible' : 'hidden';
+  document.getElementById('cq-back-btn').onclick = (!hayAnterior && CQ_DONE) ? function() { showScreen('screen-dashboard'); } : cqBack;
   document.getElementById('cq-skip-btn').style.display = q.required ? 'none' : 'block';
 
-  var isLast = cqFindIndex(cqIndex + 1, 1, cqAnswers) >= CQ_QUESTIONS.length;
+  var isLast = cqFindIndex(cqIndex + 1, 1, cqAnswers) >= CQ_SET.length;
   document.getElementById('cq-continue-btn').textContent = isLast ? 'Finalizar' : 'Continuar';
 }
 
@@ -3147,7 +3329,7 @@ function cqSelect(key, val) {
 }
 
 function cqCaptureInput() {
-  var q = CQ_QUESTIONS[cqIndex];
+  var q = CQ_SET[cqIndex];
   if (q.type !== 'date' && q.type !== 'number' && q.type !== 'text') return;
   var input = document.getElementById('cq-input');
   if (!input) return;
@@ -3167,22 +3349,22 @@ function cqValid(q) {
 
 function cqNext() {
   cqCaptureInput();
-  var q = CQ_QUESTIONS[cqIndex];
+  var q = CQ_SET[cqIndex];
   if (!cqValid(q)) {
     document.getElementById('cq-error').textContent = 'Esta respuesta es necesaria para continuar.';
     return;
   }
   var next = cqFindIndex(cqIndex + 1, 1, cqAnswers);
-  if (next >= CQ_QUESTIONS.length) { cqFinish(); return; }
+  if (next >= CQ_SET.length) { cqFinish(); return; }
   cqIndex = next;
   cqRender();
 }
 
 function cqSkip() {
-  var q = CQ_QUESTIONS[cqIndex];
+  var q = CQ_SET[cqIndex];
   delete cqAnswers[q.key];
   var next = cqFindIndex(cqIndex + 1, 1, cqAnswers);
-  if (next >= CQ_QUESTIONS.length) { cqFinish(); return; }
+  if (next >= CQ_SET.length) { cqFinish(); return; }
   cqIndex = next;
   cqRender();
 }
@@ -3196,6 +3378,7 @@ function cqBack() {
 }
 
 function cqFinish() {
+  if (CQ_DONE) { CQ_DONE(cqAnswers); return; }
   setLoading(true);
   var payload = Object.assign({}, cqAnswers, { completadoEn: new Date().toISOString() });
   // La ficha se llena sola con lo que ya respondió (no se le vuelve a preguntar).
@@ -3233,6 +3416,207 @@ function fichaDesdeCuestionario(c, perfil, prev) {
   e.dias = e.dias || [];
   return { personal: p, salud: sa, entreno: e };
 }
+
+// ══════════ GUÍA DE ALIMENTACIÓN ══════════
+// La clienta (planes online o por videollamada) llena esta encuesta; Frida la
+// ve en su panel, arma la guía y la publica en clientasPortal/{uid}/alimentacion/guia.
+// No se muestran calorías: porciones con la mano y la proteína del día.
+var AL_QUESTIONS = [
+  { key: 'despierta', type: 'select', required: true, label: '¿A qué hora te despiertas normalmente?', options: ['Antes de las 5 am', '5 a 6 am', '6 a 7 am', '7 a 8 am', 'Después de las 8 am'] },
+  { key: 'duerme', type: 'select', required: true, label: '¿A qué hora te duermes?', options: ['Antes de las 9 pm', '9 a 10 pm', '10 a 11 pm', '11 pm a 12 am', 'Después de las 12 am'] },
+  { key: 'horaEntreno', type: 'select', required: true, label: '¿A qué hora sueles entrenar?', options: ['Temprano en la mañana', 'Media mañana', 'Al mediodía', 'En la tarde', 'En la noche', 'Varía'] },
+  { key: 'comidas', type: 'select', required: true, label: '¿Cuántas veces comes al día normalmente?', options: ['2 veces', '3 veces', '4 veces', '5 o más'] },
+  { key: 'tipoAlimentacion', type: 'select', required: true, label: '¿Cómo es tu alimentación?', options: ['Como de todo', 'No como carnes rojas', 'Vegetariana', 'Vegana'] },
+  { key: 'noCome', type: 'text', required: false, label: '¿Hay alimentos que no te gustan o no comes?', sub: 'Por ejemplo: pescado, aguacate, huevo… Si no hay ninguno, toca Omitir.' },
+  { key: 'alergias', type: 'text', required: false, label: '¿Tienes alergias o intolerancias?', sub: 'Por ejemplo: lactosa, gluten, maní. Si no tienes, toca Omitir.' },
+  { key: 'salud', type: 'multi', required: true, items: ['Diabetes o resistencia a la insulina', 'Problemas de tiroides', 'Presión alta', 'Colesterol o triglicéridos altos', 'Enfermedad de los riñones', 'Embarazo o lactancia', 'Problemas digestivos (gastritis, colon)'], none: 'Ninguna de estas', label: '¿Tienes alguna de estas condiciones?', sub: 'Así cuidamos que tu guía sea segura para ti.' },
+  { key: 'relacionComida', type: 'select', required: true, label: '¿Cómo te llevas con la comida?', options: [
+      { value: 'bien', label: 'Bien, en general' },
+      { value: 'ansiedad', label: 'A veces como por ansiedad o estrés' },
+      { value: 'dietas', label: 'He hecho muchas dietas y me cuesta' },
+      { value: 'tca', label: 'He tenido o tengo un trastorno de la conducta alimentaria' }
+    ] },
+  { key: 'cocina', type: 'select', required: true, label: '¿Cocinas en casa?', options: ['Sí, casi siempre', 'A veces', 'Casi nunca: como fuera o compro hecho'] },
+  { key: 'comeFuera', type: 'select', required: true, label: '¿Cuántas veces a la semana comes fuera?', options: ['Casi nunca', '1 a 2 veces', '3 a 5 veces', 'Casi todos los días'] },
+  { key: 'super', type: 'multi', required: true, items: ['Super Selectos', 'Walmart', 'PriceSmart', 'La Despensa de Don Juan', 'Maxi Despensa', 'Mercado o tienda de barrio'], none: 'Otro', label: '¿Dónde haces tus compras?', sub: 'Marca todos los que uses.' },
+  { key: 'presupuesto', type: 'select', required: true, label: '¿Cuánto puedes gastar en comida por semana (solo para ti)?', options: ['Menos de $25', '$25 a $40', '$40 a $60', '$60 a $80', 'Más de $80'] },
+  { key: 'agua', type: 'select', required: true, label: '¿Cuánta agua tomas al día?', options: ['Casi nada', '1 a 3 vasos', '4 a 6 vasos', '7 o más vasos'] },
+  { key: 'suplementos', type: 'text', required: false, label: '¿Tomas algún suplemento?', sub: 'Por ejemplo: proteína en polvo, creatina, vitaminas. Si no, toca Omitir.' },
+  { key: 'antojos', type: 'text', required: false, label: '¿Qué antojo o hábito te cuesta más?', sub: 'Por ejemplo: dulces en la noche, gaseosas, pan… Sin culpa, es para ayudarte.' }
+];
+
+function alElegible() { return !!currentClientId && !PLAN_LOCKED && CURRENT_CLIENT_TYPE && CURRENT_CLIENT_TYPE !== 'presencial'; }
+function alData() { return (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.alimentacion) || {}; }
+
+function startEncuestaAlimentacion() {
+  CQ_SET = AL_QUESTIONS;
+  CQ_DONE = function(ans) {
+    setLoading(true);
+    var enc = Object.assign({}, ans, { completadoEn: new Date().toISOString() });
+    db().ref('clientasPortal/' + currentUid + '/alimentacion/encuesta').set(enc).then(function() {
+      CURRENT_PORTAL_DATA.alimentacion = Object.assign({}, alData(), { encuesta: enc });
+      setLoading(false);
+      showScreen('screen-dashboard'); showTab('tab-inicio'); renderInicioTab();
+      celebrate('🥗', '¡Listo!', 'Frida ya tiene tus respuestas y va a preparar tu guía de alimentación. Te avisamos aquí cuando esté lista.');
+    }).catch(function(e) { setLoading(false); document.getElementById('cq-error').textContent = 'No se pudo guardar: ' + e.message; });
+  };
+  cqAnswers = {};
+  cqIndex = cqFindIndex(0, 1, cqAnswers);
+  showScreen('screen-cuestionario');
+  cqRender();
+}
+
+function alimentacionInicioHtml() {
+  if (!alElegible()) return '';
+  var d = alData();
+  if (d.guia) {
+    return '<button type="button" class="in-nudge al-nudge" onclick="openGuiaAlimentacion()"><span>🥗</span><span><b>Tu guía de alimentación</b><small>Tu plato, tus comidas del día y tu lista de súper.</small></span></button>';
+  }
+  if (d.encuesta) {
+    return '<div class="in-nudge al-nudge" style="cursor:default"><span>👩‍🍳</span><span><b>Frida está preparando tu guía</b><small>Ya tiene tus respuestas. Te aparecerá aquí en unos días.</small></span></div>';
+  }
+  return '<button type="button" class="in-nudge al-nudge" onclick="startEncuestaAlimentacion()"><span>🥗</span><span><b>Desbloquea tu guía de alimentación</b><small>Responde unas preguntas (3 minutos) y Frida arma tu guía con tu lista de súper.</small></span></button>';
+}
+
+// Dibujos de las porciones con la mano (SVG propio).
+var AL_ICON = {
+  palma: '<svg viewBox="0 0 48 48"><rect x="12" y="14" width="24" height="26" rx="10" fill="#F6C9A8"/><rect x="14" y="6" width="4.5" height="14" rx="2.2" fill="#F6C9A8"/><rect x="19.5" y="4" width="4.5" height="15" rx="2.2" fill="#F6C9A8"/><rect x="25" y="5" width="4.5" height="14" rx="2.2" fill="#F6C9A8"/><rect x="30.5" y="8" width="4.2" height="12" rx="2.1" fill="#F6C9A8"/><ellipse cx="24" cy="28" rx="8" ry="6" fill="#E08A6C" opacity=".55"/></svg>',
+  puno: '<svg viewBox="0 0 48 48"><rect x="12" y="12" width="24" height="24" rx="9" fill="#F6C9A8"/><path d="M14 20h20M14 26h20" stroke="#D9A07F" stroke-width="2" stroke-linecap="round"/><rect x="8" y="22" width="8" height="12" rx="4" fill="#EDB592"/></svg>',
+  manos: '<svg viewBox="0 0 48 48"><path d="M6 24c0 10 8 16 18 16s18-6 18-16z" fill="#F6C9A8"/><circle cx="17" cy="21" r="5" fill="#5FB55A"/><circle cx="25" cy="19" r="5.5" fill="#7CCB6A"/><circle cx="32" cy="22" r="4.5" fill="#4FA34A"/></svg>',
+  pulgar: '<svg viewBox="0 0 48 48"><rect x="14" y="20" width="20" height="20" rx="8" fill="#F6C9A8"/><rect x="18" y="5" width="8" height="20" rx="4" fill="#F6C9A8"/><ellipse cx="22" cy="10" rx="3" ry="3.4" fill="#F5E39A"/></svg>'
+};
+function alPlatoSvg() {
+  return '<svg viewBox="0 0 200 200" class="al-plato"><circle cx="100" cy="100" r="96" fill="#fff" opacity=".12"/><circle cx="100" cy="100" r="84" fill="#F7F3E8"/>'
+    + '<path d="M100 100 L100 16 A84 84 0 0 0 100 184 Z" fill="#7CCB6A"/>'
+    + '<path d="M100 100 L100 16 A84 84 0 0 1 184 100 Z" fill="#F4A3A8"/>'
+    + '<path d="M100 100 L184 100 A84 84 0 0 1 100 184 Z" fill="#F5D57A"/>'
+    + '<circle cx="100" cy="100" r="84" fill="none" stroke="#fff" stroke-width="5"/><path d="M100 16V184M100 100H184" stroke="#fff" stroke-width="5"/>'
+    + '<text x="52" y="105" text-anchor="middle" font-size="13" font-weight="800" fill="#1E4D1B">Verduras</text><text x="52" y="122" text-anchor="middle" font-size="11" font-weight="700" fill="#1E4D1B">½ plato</text>'
+    + '<text x="140" y="68" text-anchor="middle" font-size="12" font-weight="800" fill="#6B1F2A">Proteína</text><text x="140" y="84" text-anchor="middle" font-size="11" font-weight="700" fill="#6B1F2A">¼</text>'
+    + '<text x="140" y="136" text-anchor="middle" font-size="10" font-weight="800" fill="#6B4A06">Carbohidrato</text><text x="140" y="152" text-anchor="middle" font-size="11" font-weight="700" fill="#6B4A06">¼</text></svg>';
+}
+
+function openGuiaAlimentacion() {
+  var g = alData().guia;
+  if (!g) return;
+  var m = document.getElementById('guia-modal');
+  if (!m) {
+    m = document.createElement('div'); m.id = 'guia-modal'; m.className = 'guia-modal';
+    document.body.appendChild(m);
+  }
+  var checks = {};
+  try { checks = JSON.parse(localStorage.getItem('fa_super_' + currentUid) || '{}'); } catch (e) {}
+  var h = '<div class="guia-top"><button type="button" class="guia-back" onclick="AL_DIA_SEL=null;document.getElementById(\'guia-modal\').style.display=\'none\'">←</button><span>Mi guía de alimentación</span></div><div class="guia-body">';
+  h += '<div class="guia-hero"><span class="fa-tag">TU GUÍA</span><h2>Come rico, <span>sin contar calorías</span></h2>' + (g.objetivo ? '<p>' + escapeHtml(g.objetivo) + '</p>' : '') + (g.actualizada ? '<small>Actualizada: ' + escapeHtml(g.actualizada) + '</small>' : '') + '</div>';
+  if (g.alerta) h += '<div class="guia-alerta">💙 ' + escapeHtml(g.alerta) + '</div>';
+  if (g.proteinaG) h += '<div class="guia-prot"><b>' + escapeHtml(String(g.proteinaG)) + ' g</b><span>de proteína al día, repartida en tus comidas' + (g.proteinaComida ? ' (' + escapeHtml(g.proteinaComida) + ' por comida)' : '') + '</span></div>';
+  h += '<div class="guia-sec">Arma tu plato</div><div class="guia-plato">' + alPlatoSvg() + '</div>';
+  var por = g.porciones || {};
+  h += '<div class="guia-manos">'
+    + [['palma', 'Proteína', por.proteina || '1 palma'], ['puno', 'Carbohidrato', por.carbohidrato || '1 puño'], ['manos', 'Verduras', por.verduras || '2 manos'], ['pulgar', 'Grasa buena', por.grasa || '1 pulgar']]
+      .map(function(x) { return '<div class="guia-mano">' + AL_ICON[x[0]] + '<b>' + escapeHtml(x[2]) + '</b><span>' + x[1] + '</span></div>'; }).join('')
+    + '</div><div class="guia-note">Por cada comida principal. Usa tu propia mano como medida: crece contigo.</div>';
+  if (g.menus && g.menus.length) {
+    // Rotación: Lun A, Mar B, Mié C, Jue A, Vie B, Sáb C y domingo flexible.
+    // (g.rotacion puede traer otra: índices de menú o 'libre' por cada día, de lunes a domingo).
+    var hoyIdx = (new Date().getDay() + 6) % 7;
+    var sel = (typeof AL_DIA_SEL === 'number') ? AL_DIA_SEL : hoyIdx;
+    var dias = ['L', 'M', 'M', 'J', 'V', 'S', 'D'], nombres = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+    var rot = (g.rotacion && g.rotacion.length === 7) ? g.rotacion : [0, 1, 2, 0, 1, 2, 'libre'];
+    var libre = { nombre: 'Flexible', libre: true };
+    var menuDe = function(i) { var r = rot[i]; return r === 'libre' ? libre : (g.menus[r] || g.menus[0]); };
+    h += '<div class="guia-sec">Tu menú de la semana</div><div class="guia-dias">';
+    dias.forEach(function(d, i) {
+      h += '<button type="button" class="guia-dia' + (i === sel ? ' on' : '') + (i === hoyIdx ? ' hoy' : '') + '" onclick="alVerDia(' + i + ')"><b>' + d + '</b><span>' + escapeHtml((menuDe(i).nombre || '').replace(/^Menú\s*/i, '')) + '</span></button>';
+    });
+    var mn = menuDe(sel);
+    h += '</div><div class="guia-dia-h">' + nombres[sel] + (sel === hoyIdx ? ' · hoy' : '') + ' <span>' + escapeHtml(mn.nombre || '') + '</span></div>';
+    if (mn.libre) {
+      var df = g.diaFlexible || {};
+      h += '<div class="guia-flex"><b>🎉 Día flexible</b><p>' + escapeHtml(df.texto || 'Hoy no hay menú fijo: disfruta tu día en familia o con amigos, sin culpa. Aquí tienes ideas para que sigas avanzando.') + '</p></div>';
+      (df.sugerencias || []).forEach(function(sg) {
+        h += '<div class="guia-comida"><div class="guia-comida-h"><b>' + escapeHtml(sg.momento || '') + '</b><span>Sugerencia</span></div><div class="guia-plato-row"><div class="guia-plato-txt">' + escapeHtml(sg.plato || '') + '</div>' + alLikeBtn(sg.plato) + '</div></div>';
+      });
+      var tipsF = df.tips || ['Si en el día no comiste suficiente proteína, tómate tu shake de proteína para completarla.', 'Toma agua durante el día y muévete un poco: una caminata cuenta.', 'Mañana retomas tu Menú A, sin compensar ni saltarte comidas.'];
+      h += '<div class="guia-flex-tips"><b>Tips para tu domingo</b>' + tipsF.map(function(t) { return '<div>💡 ' + escapeHtml(t) + '</div>'; }).join('') + '</div>';
+    }
+    (mn.comidas || []).forEach(function(c, ci) {
+      var alt = c.alternativa ? '<button type="button" class="guia-alt" onclick="this.nextElementSibling.style.display=\'flex\';this.style.display=\'none\'">🔄 Otra opción</button><div class="guia-alt-txt guia-plato-row"><span>' + escapeHtml(c.alternativa) + '</span>' + alLikeBtn(c.alternativa) + '</div>' : '';
+      h += '<div class="guia-comida"><div class="guia-comida-h"><b>' + escapeHtml(c.momento || '') + '</b>' + (c.hora ? '<span>' + escapeHtml(c.hora) + '</span>' : '') + '</div><div class="guia-plato-row"><div class="guia-plato-txt">' + escapeHtml(c.plato || '') + '</div>' + alLikeBtn(c.plato) + '</div>' + alt + '</div>';
+    });
+  } else if (g.comidas && g.comidas.length) {
+    h += '<div class="guia-sec">Tu día de ejemplo</div>';
+    g.comidas.forEach(function(c) {
+      h += '<div class="guia-comida"><div class="guia-comida-h"><b>' + escapeHtml(c.momento || '') + '</b>' + (c.hora ? '<span>' + escapeHtml(c.hora) + '</span>' : '') + '</div><ul>'
+        + (c.opciones || []).map(function(o) { return '<li>' + escapeHtml(o) + '</li>'; }).join('') + '</ul></div>';
+    });
+  }
+  if (g.super && g.super.secciones) {
+    h += '<div class="guia-sec">Tu lista de súper</div><div class="guia-super-h">🛒 ' + escapeHtml(g.super.tienda || '') + (g.super.presupuesto ? ' · ' + escapeHtml(g.super.presupuesto) : '') + '</div>';
+    g.super.secciones.forEach(function(sec, si) {
+      h += '<div class="guia-super"><div class="guia-super-sec">' + escapeHtml(sec.nombre || '') + '</div>';
+      (sec.items || []).forEach(function(it, ii) {
+        var k = si + '-' + ii, on = !!checks[k];
+        h += '<label class="guia-item' + (on ? ' on' : '') + '"><input type="checkbox" ' + (on ? 'checked' : '') + ' onchange="alToggleSuper(\'' + k + '\', this)"><span><b>' + escapeHtml(it.producto || '') + '</b>' + (it.marca ? '<small>' + escapeHtml(it.marca) + '</small>' : '') + '</span><em>' + escapeHtml(it.cantidad || '') + '</em></label>';
+      });
+      h += '</div>';
+    });
+    h += '<button type="button" class="guia-reset" onclick="alResetSuper()">Desmarcar todo para la próxima compra</button>';
+    h += '<div class="guia-note" style="margin-top:.4rem">Tu lista alcanza para toda la semana.</div>';
+  }
+  var postres = (g.postres && g.postres.length) ? g.postres : AL_POSTRES;
+  h += '<div class="guia-sec">Postres ricos con proteína</div><div class="guia-note" style="text-align:left;margin:-.3rem 0 .6rem">Para cuando se te antoje algo dulce: ricos, fáciles y con proteína. Disfrútalos sin culpa.</div>';
+  postres.forEach(function(ps) {
+    h += '<details class="guia-postre"><summary><span class="guia-postre-ico">' + (ps.icono || '🍫') + '</span><span class="guia-postre-t"><b>' + escapeHtml(ps.nombre || '') + '</b>' + (ps.proteina ? '<small>' + escapeHtml(ps.proteina) + ' de proteína aprox.</small>' : '') + '</span>' + alLikeBtn(ps.nombre) + '</summary>'
+      + '<div class="guia-postre-b"><div class="guia-postre-sub">Ingredientes</div><ul>' + (ps.ingredientes || []).map(function(x) { return '<li>' + escapeHtml(x) + '</li>'; }).join('') + '</ul>'
+      + '<div class="guia-postre-sub">Cómo se hace</div><p>' + escapeHtml(ps.pasos || '') + '</p></div></details>';
+  });
+  if (g.tips && g.tips.length) {
+    h += '<div class="guia-sec">Tips para ti</div><div class="guia-tips">' + g.tips.map(function(t) { return '<div>💡 ' + escapeHtml(t) + '</div>'; }).join('') + '</div>';
+  }
+  h += '<div class="guia-legal">Esta guía es una orientación para mejorar tu alimentación y acompañar tu entrenamiento. No reemplaza la atención de un nutricionista o médico, sobre todo si tienes una condición de salud.</div></div>';
+  m.innerHTML = h;
+  if (m.style.display !== 'block') { m.style.display = 'block'; m.scrollTop = 0; }
+}
+var AL_DIA_SEL = null;
+// Postres con proteína (se usan si la guía no trae los suyos).
+var AL_POSTRES = [
+  { icono: '🍫', nombre: 'Mug cake de chocolate', proteina: '25 g', ingredientes: ['1 scoop de proteína de chocolate', '2 cucharadas de avena molida', '1 huevo', '3 cucharadas de leche', '½ cucharadita de polvo de hornear', 'Opcional: chispas de chocolate oscuro'], pasos: 'Mezcla todo en una taza grande hasta que no queden grumos. Mete la taza al microondas de 60 a 90 segundos, hasta que esté esponjoso. Deja reposar un minuto y disfrútalo tibio.' },
+  { icono: '🍌', nombre: 'Helado de banano y proteína', proteina: '22 g', ingredientes: ['2 bananos maduros en rodajas, congelados', '1 scoop de proteína de vainilla o chocolate', 'Un chorrito de leche', 'Opcional: 1 cucharada de crema de maní'], pasos: 'Licúa el banano congelado con la proteína y un chorrito de leche, solo lo necesario para que se mueva la licuadora. Queda cremoso como helado suave. Si lo quieres más firme, mételo al congelador 30 minutos.' },
+  { icono: '🥜', nombre: 'Yogurt griego con maní y chocolate', proteina: '20 g', ingredientes: ['1 taza de yogurt griego natural', '1 cucharada de crema de maní', 'Unas fresas o banano en trocitos', 'Unas chispas de chocolate oscuro'], pasos: 'Pon el yogurt en un bowl, agrega la fruta, la crema de maní y las chispas encima. Si quieres, endulza con un poquito de miel. Listo en 2 minutos.' },
+  { icono: '🥞', nombre: 'Panqueques de avena y banano', proteina: '18 g', ingredientes: ['1 banano maduro', '2 huevos', '½ taza de avena', 'Canela al gusto', 'Opcional: 1 scoop de proteína'], pasos: 'Licúa todo hasta que quede una mezcla suave. Cocina porciones pequeñas en un sartén antiadherente a fuego medio, 1 o 2 minutos por lado. Acompaña con fruta, yogurt griego o un hilito de miel.' },
+  { icono: '🍪', nombre: 'Bolitas de avena, maní y chocolate', proteina: '6 g por bolita', ingredientes: ['1 taza de avena', '½ taza de crema de maní', '2 cucharadas de miel', '1 scoop de proteína', 'Chispas de chocolate oscuro'], pasos: 'Mezcla todo en un bowl hasta formar una masa. Haz bolitas del tamaño de una nuez y guárdalas en la refri al menos 30 minutos. Se conservan toda la semana: 2 bolitas son un postre perfecto.' }
+];
+// ❤️ Me gusta: guarda los platos favoritos de la clienta para que Frida los vea.
+function alKey(t) { var h = 0, str = String(t || ''); for (var i = 0; i < str.length; i++) { h = ((h << 5) - h + str.charCodeAt(i)) | 0; } return 'p' + (h >>> 0).toString(36); }
+function alLikeBtn(texto) {
+  if (!texto) return '';
+  var fav = (alData().favoritos || {})[alKey(texto)];
+  return '<button type="button" class="guia-like' + (fav ? ' on' : '') + '" data-txt="' + escapeHtml(texto) + '" onclick="event.preventDefault();event.stopPropagation();alToggleLike(this)" aria-label="Me gusta">' + (fav ? '❤️' : '🤍') + '</button>';
+}
+function alToggleLike(btn) {
+  var txt = btn.getAttribute('data-txt'), k = alKey(txt);
+  CURRENT_PORTAL_DATA.alimentacion = CURRENT_PORTAL_DATA.alimentacion || {};
+  var favs = CURRENT_PORTAL_DATA.alimentacion.favoritos = CURRENT_PORTAL_DATA.alimentacion.favoritos || {};
+  var on = !favs[k];
+  if (on) favs[k] = txt; else delete favs[k];
+  document.querySelectorAll('.guia-like').forEach(function(b) { if (alKey(b.getAttribute('data-txt')) === k) { b.classList.toggle('on', on); b.textContent = on ? '❤️' : '🤍'; } });
+  if (on && navigator.vibrate) try { navigator.vibrate(12); } catch (e) {}
+  db().ref('clientasPortal/' + currentUid + '/alimentacion/favoritos/' + k).set(on ? txt : null).catch(function(e) { console.warn('like', e.message); });
+}
+function alVerDia(i) {
+  var m = document.getElementById('guia-modal'), y = m ? m.scrollTop : 0;
+  AL_DIA_SEL = i; openGuiaAlimentacion();
+  if (m) m.scrollTop = y;
+}
+function alToggleSuper(k, el) {
+  var checks = {};
+  try { checks = JSON.parse(localStorage.getItem('fa_super_' + currentUid) || '{}'); } catch (e) {}
+  if (el.checked) checks[k] = 1; else delete checks[k];
+  el.closest('.guia-item').classList.toggle('on', el.checked);
+  try { localStorage.setItem('fa_super_' + currentUid, JSON.stringify(checks)); } catch (e) {}
+}
+function alResetSuper() { try { localStorage.removeItem('fa_super_' + currentUid); } catch (e) {} openGuiaAlimentacion(); }
 
 // ── FOTO DE PERFIL ── (dos círculos la muestran: el del header y el de Perfil)
 var LAST_AVATAR_NOMBRE = '';
@@ -4396,6 +4780,7 @@ function updateProfileCompletion() {
   var items = [
     !!CURRENT_PERFIL_DATA.fotoPerfil,
     !!(CURRENT_PERFIL_DATA.bio && CURRENT_PERFIL_DATA.bio.trim()),
+    !!(CURRENT_PORTAL_DATA.ficha),
     !!(CURRENT_PORTAL_DATA.fotosProgreso && Object.keys(CURRENT_PORTAL_DATA.fotosProgreso).length)
   ];
   var done = items.filter(Boolean).length;
@@ -4489,8 +4874,9 @@ function renderFichaPlanTab() {
       return;
     }
     var html = '<div class="ficha-plan-card">';
-    html += '<div class="ficha-plan-row"><span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Tu plan</span><span style="font-size:0.85rem;font-weight:700;">$' + Number(c.cuota).toFixed(2) + (CURRENT_PLAN_MESES ? ' · ' + CURRENT_PLAN_MESES + ' meses' : ' · mensual') + '</span></div>';
-    html += '<div class="ficha-plan-row"><span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Este ciclo</span><span style="font-size:0.82rem;font-weight:700;color:' + (CURRENT_CICLO_PAGADO ? '#2a7a2a' : '#9a7700') + ';">' + (CURRENT_CICLO_PAGADO ? '✓ Pagado' : '⏳ Pendiente') + '</span></div>';
+    html += '<div class="ficha-plan-row"><span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Tu plan</span><span style="font-size:0.85rem;font-weight:700;">' + (c.planMeses ? 'Paquete de ' + c.planMeses + ' meses · $' + Number(c.cuota).toFixed(2) : '$' + Number(c.cuota).toFixed(2) + ' · mensual') + '</span></div>';
+    if (c.planMeses && c.endDate) html += '<div class="ficha-plan-row"><span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Vigente hasta</span><span style="font-size:0.82rem;font-weight:700;">' + fechaLarga(c.endDate) + '</span></div>';
+    html += '<div class="ficha-plan-row"><span style="font-size:0.72rem;color:var(--muted);font-weight:700;">' + (c.planMeses ? 'Tu paquete' : 'Este ciclo') + '</span><span style="font-size:0.82rem;font-weight:700;color:' + (CURRENT_CICLO_PAGADO ? '#2a7a2a' : '#9a7700') + ';">' + (CURRENT_CICLO_PAGADO ? '✓ Pagado' : '⏳ Pendiente') + '</span></div>';
     html += '</div>';
     actualEl.innerHTML = html;
     histEl.innerHTML = CURRENT_PAGOS_COUNT ? '<div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.5rem;">Llevás ' + CURRENT_PAGOS_COUNT + (CURRENT_PAGOS_COUNT === 1 ? ' pago registrado.' : ' pagos registrados.') + '</div>' : '';
@@ -5178,6 +5564,8 @@ function renderPlanCountdown(c) {
 
   CURRENT_PAGOS_COUNT = c.pagosCount || 0;
   CURRENT_PLAN_MESES = c.planMeses || null;
+  CURRENT_PLAN_INIT = c.initDate || null;
+  CURRENT_PLAN_END = c.endDate || null;
   CURRENT_CICLO_PAGADO = !!c.cicloPagado;
   renderPerfilRoleLine();
 
@@ -5209,13 +5597,21 @@ function renderPlanCountdown(c) {
 
 var CURRENT_PAGOS_COUNT = null;
 var CURRENT_PLAN_MESES = null;
+var CURRENT_PLAN_INIT = null, CURRENT_PLAN_END = null;
+function mesDelPlanPortal() {
+  if (!CURRENT_PLAN_INIT) return 1;
+  var s = new Date(CURRENT_PLAN_INIT + 'T00:00:00'), t = new Date();
+  var m = (t.getFullYear() - s.getFullYear()) * 12 + (t.getMonth() - s.getMonth()) - (t.getDate() < s.getDate() ? 1 : 0) + 1;
+  return Math.max(1, Math.min(m, CURRENT_PLAN_MESES || m));
+}
+function fechaLarga(iso) { var p = String(iso).split('-'); return parseInt(p[2], 10) + ' de ' + MESES_LARGOS[parseInt(p[1], 10) - 1] + ' ' + p[0]; }
 var CURRENT_CICLO_PAGADO = false;
 function renderPerfilRoleLine() {
   var el = document.getElementById('perfil-role');
   if (!el) return;
   var parts = [];
   if (CURRENT_PAGOS_COUNT !== null) {
-    var mes = CURRENT_PAGOS_COUNT + (CURRENT_CICLO_PAGADO ? 0 : 1);
+    var mes = CURRENT_PLAN_MESES ? mesDelPlanPortal() : CURRENT_PAGOS_COUNT + (CURRENT_CICLO_PAGADO ? 0 : 1);
     parts.push('Mes ' + mes + (CURRENT_PLAN_MESES ? ' de ' + CURRENT_PLAN_MESES : ''));
   }
   if (CURRENT_PERFIL_DATA.fechaRegistro) {
@@ -5234,14 +5630,44 @@ function loadAnuncios() {
   }).catch(function() { renderAnunciosStrip([]); });
 }
 
+// Botón "¡Me apunto!" de un aviso: manda el mensaje al chat de Frida y queda marcado.
+function anuncioBotonHtml(a) {
+  if (!a.boton) return '';
+  var ya = !!(((CURRENT_PORTAL_DATA || {}).apuntados || {})[a.id]);
+  return ya ? '<span class="anuncio-btn done">✓ ¡Ya estás!</span>' : '<button type="button" class="anuncio-btn" onclick="apuntarmeAnuncio(\'' + a.id + '\')">' + escapeHtml(a.boton) + '</button>';
+}
+var ANUNCIOS_CACHE = {};
+function apuntarmeAnuncio(id) {
+  var a = ANUNCIOS_CACHE[id]; if (!a || !currentUid) return;
+  var upd = {};
+  var key = db().ref('clientasPortal/' + currentUid + '/chat').push().key;
+  upd['clientasPortal/' + currentUid + '/chat/' + key] = { from: 'client', text: a.botonMensaje || ('¡Me apunto! 🙋‍♀️ ' + (a.texto || '')), ts: Date.now() };
+  upd['clientasPortal/' + currentUid + '/apuntados/' + id] = true;
+  db().ref().update(upd).then(function() {
+    CURRENT_PORTAL_DATA.apuntados = CURRENT_PORTAL_DATA.apuntados || {}; CURRENT_PORTAL_DATA.apuntados[id] = true;
+    loadAnuncios();
+    celebrate('🙌', '¡Listo!', 'Frida ya recibió tu mensaje y te escribirá con los detalles.');
+  }).catch(function(e) { alert('No se pudo enviar: ' + e.message); });
+}
+function cerrarAnuncio(id) {
+  var c = {};
+  try { c = JSON.parse(localStorage.getItem('fa_anuncios_cerrados') || '{}'); } catch (e) {}
+  c[id] = 1;
+  try { localStorage.setItem('fa_anuncios_cerrados', JSON.stringify(c)); } catch (e) {}
+  loadAnuncios();
+}
 function renderAnunciosStrip(items) {
   var wrap = document.getElementById('anuncios-wrap');
   if (!wrap) return;
+  var cerrados = {};
+  try { cerrados = JSON.parse(localStorage.getItem('fa_anuncios_cerrados') || '{}'); } catch (e) {}
+  items = items.filter(function(x) { return !cerrados[x.id]; });
+  items.forEach(function(x) { ANUNCIOS_CACHE[x.id] = x; });
   if (!items.length) { wrap.style.display = 'none'; return; }
   wrap.style.display = '';
   var html = '';
   items.forEach(function(a) {
-    html += '<div class="anuncio-card"><div class="anuncio-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M15 8a3 3 0 0 1 0 8M18 5a7 7 0 0 1 0 14"/></svg></div><div class="anuncio-text">' + escapeHtml(a.texto || '') + '</div></div>';
+    html += '<div class="anuncio-card"><button type="button" class="anuncio-x" aria-label="Cerrar aviso" onclick="cerrarAnuncio(\'' + a.id + '\')">✕</button><div class="anuncio-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M15 8a3 3 0 0 1 0 8M18 5a7 7 0 0 1 0 14"/></svg></div><div class="anuncio-text">' + escapeHtml(a.texto || '') + '</div>' + anuncioBotonHtml(a) + '</div>';
   });
   document.getElementById('anuncios-strip').innerHTML = html;
 }
