@@ -1007,6 +1007,18 @@
 </div>
 
 <!-- ══════════ MODAL COTIZACIÓN RÁPIDA ══════════ -->
+<div id="link-existing-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;box-sizing:border-box;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-size:1rem;font-weight:700;color:var(--text);">¿Cuál es su ficha?</div>
+      <button onclick="closeLinkExistingModal()" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
+    </div>
+    <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.8rem;">Esta cuenta se va a conectar con la ficha que elijas — no se crea ninguna ficha nueva.</div>
+    <input class="fin-form-input" id="le-search" type="text" placeholder="Buscar por nombre..." oninput="renderLinkExistingResults(this.value)" style="margin-bottom:0.8rem;">
+    <div id="le-results"></div>
+  </div>
+</div>
+
 <div id="change-pwd-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;overflow-y:auto;">
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-sizing:border-box;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
@@ -2757,9 +2769,10 @@ function renderLeadsSection() {
         html += '</div>';
         html += '<button onclick="deleteLead(\'' + l.uid + '\',\'' + safeName + '\')" style="background:none;border:none;color:#c44;font-size:0.9rem;cursor:pointer;flex-shrink:0;padding:0.1rem;">✕</button>';
         html += '</div>';
-        html += '<div style="display:flex;gap:0.5rem;margin-top:0.6rem;">';
+        html += '<div style="display:flex;gap:0.5rem;margin-top:0.6rem;flex-wrap:wrap;">';
         if (waNum) html += '<a href="https://wa.me/' + waNum + '" target="_blank" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;text-decoration:none;">💬 WhatsApp</a>';
-        html += '<button onclick="convertLeadToClient(\'' + l.uid + '\',\'' + safeName + '\')" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">✅ Convertir en cliente</button>';
+        html += '<button onclick="convertLeadToClient(\'' + l.uid + '\',\'' + safeName + '\')" style="flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">✅ Convertir en cliente nueva</button>';
+        html += '<button onclick="openLinkExistingModal(\'' + l.uid + '\')" style="flex:1;background:#fff;color:var(--blue);border:1.5px solid var(--blue);border-radius:8px;padding:0.5rem;font-weight:700;font-size:0.7rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">🔗 Ya es una clienta mía</button>';
         html += '</div>';
         if (l.cuestionario) {
           html += '<details style="margin-top:0.6rem;"><summary style="font-size:0.72rem;font-weight:700;color:var(--blue);cursor:pointer;">📋 Ver cuestionario inicial</summary>' + cuestionarioHtml(l.cuestionario) + '</details>';
@@ -5139,6 +5152,60 @@ function timeStrToDecimal(timeStr) {
   if (!timeStr) return null;
   var parts = timeStr.split(':');
   return parseInt(parts[0]) + (parseInt(parts[1] || '0') / 60);
+}
+
+// ── Vincular una cuenta (solicitud ya registrada) con una ficha que YA
+// existe en Mis Clientes, en vez de crear una ficha nueva. Para cuando
+// una clienta se registró dos veces, o Frida ya le había armado la
+// ficha a mano antes de que ella se registrara sola. ──
+var linkExistingLeadUid = null;
+function openLinkExistingModal(leadUid) {
+  linkExistingLeadUid = leadUid;
+  document.getElementById('le-search').value = '';
+  renderLinkExistingResults('');
+  document.getElementById('link-existing-modal').style.display = 'flex';
+}
+function closeLinkExistingModal() {
+  document.getElementById('link-existing-modal').style.display = 'none';
+  linkExistingLeadUid = null;
+}
+function renderLinkExistingResults(q) {
+  var el = document.getElementById('le-results');
+  q = (q || '').toLowerCase().trim();
+  var ids = Object.keys(CLIENTS).filter(function(id) {
+    return !q || (CLIENTS[id].name || '').toLowerCase().indexOf(q) !== -1;
+  }).sort(function(a, b) { return (CLIENTS[a].name || '').localeCompare(CLIENTS[b].name || ''); });
+  if (!ids.length) { el.innerHTML = '<div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0;">Sin resultados.</div>'; return; }
+  el.innerHTML = ids.map(function(id) {
+    var c = CLIENTS[id], yaVinculada = !!CLIENT_LINKS[id];
+    return '<button type="button" onclick="confirmLinkExisting(\'' + id + '\')" style="width:100%;text-align:left;background:#fff;border:1px solid var(--border);border-radius:10px;padding:0.6rem 0.8rem;margin-bottom:0.5rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;">'
+      + '<div style="font-weight:700;font-size:0.8rem;color:var(--text);">' + escapeHtmlAdmin(c.name || '') + (yaVinculada ? ' <span style="color:#c44;font-size:0.65rem;">(ya tiene cuenta)</span>' : '') + '</div>'
+      + '<div style="font-size:0.68rem;color:var(--muted);">' + escapeHtmlAdmin(TYPE_LABELS[c.type] || c.type || '') + (c.firstEverDate ? ' · Contigo desde ' + c.firstEverDate : '') + '</div>'
+      + '</button>';
+  }).join('');
+}
+function confirmLinkExisting(clientId) {
+  var c = CLIENTS[clientId] || {};
+  var leadUid = linkExistingLeadUid;
+  if (!leadUid) return;
+  var msg = CLIENT_LINKS[clientId]
+    ? '"' + (c.name || '') + '" ya tiene una cuenta vinculada. ¿Seguro que querés reemplazarla por esta otra cuenta?'
+    : '¿Vincular esta cuenta con la ficha de "' + (c.name || '') + '"?';
+  if (!confirm(msg)) return;
+  closeLinkExistingModal();
+  withAdminAuth(function() {
+    var db = getDB();
+    if (!db) return;
+    var upd = {};
+    upd['client_links/' + clientId] = leadUid;
+    upd['clientasPortal/' + leadUid + '/perfil/clientId'] = clientId;
+    db.ref().update(upd).then(function() {
+      CLIENT_LINKS[clientId] = leadUid;
+      try { localStorage.setItem('fa_client_links', JSON.stringify(CLIENT_LINKS)); } catch (e) {}
+      renderLeadsSection();
+      alert('Listo, quedó vinculada con "' + (c.name || '') + '".');
+    }).catch(function(e) { alert('No se pudo vincular: ' + (e && e.message ? e.message : 'error')); });
+  });
 }
 
 function linkPendingLead(id) {
