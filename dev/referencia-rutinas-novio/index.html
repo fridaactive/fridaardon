@@ -1,0 +1,2145 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Coach Seba</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: phone-first coaching console — sticky header, single column of cards, full-screen session runner with a fixed control bar. */
+:root{
+  --bg:#f5f4f8; --surface:#ffffff; --sunk:#ecebf2; --fg:#1d1a26; --muted:#6a6578; --line:#dfdce8;
+  --accent:#6a45db; --accent-soft:#ebe5ff; --accent-ink:#ffffff;
+  --rest:#0d8a76; --rest-soft:#dcf3ee;
+  --good:#1d8549; --good-soft:#e1f3e8; --warn:#a86b12; --warn-soft:#fbefd9; --bad:#bf3626; --bad-soft:#fbe4e0;
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:12px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121019; --surface:#1b1824; --sunk:#24212f; --fg:#efedf6; --muted:#a29db2; --line:#302c3c;
+  --accent:#a58cff; --accent-soft:#2c2547; --accent-ink:#140f24;
+  --rest:#3cc6ac; --rest-soft:#123b34;
+  --good:#52c985; --good-soft:#16321f; --warn:#e3ac52; --warn-soft:#3a2c12; --bad:#f07565; --bad-soft:#3d1c18;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121019; --surface:#1b1824; --sunk:#24212f; --fg:#efedf6; --muted:#a29db2; --line:#302c3c;
+  --accent:#a58cff; --accent-soft:#2c2547; --accent-ink:#140f24;
+  --rest:#3cc6ac; --rest-soft:#123b34;
+  --good:#52c985; --good-soft:#16321f; --warn:#e3ac52; --warn-soft:#3a2c12; --bad:#f07565; --bad-soft:#3d1c18;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 96px;display:flex;flex-direction:column;gap:16px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+header.top .in{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;align-items:center;gap:12px}
+.brand{font-family:var(--f-display);font-weight:700;font-size:22px;letter-spacing:.02em;text-transform:uppercase}
+.brand b{color:var(--accent)}
+.grow{flex:1;min-width:0}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;margin:0;text-wrap:balance;letter-spacing:.01em}
+h1{font-size:30px;line-height:1.05}
+h2{font-size:22px;text-transform:uppercase;letter-spacing:.04em}
+h3{font-size:19px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 14px;min-height:44px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--muted)}
+.btn.danger{color:var(--bad)}
+.btn.big{min-height:60px;font-size:19px;font-family:var(--f-display);letter-spacing:.04em;text-transform:uppercase;padding-inline:20px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.tabs{display:flex;gap:4px;background:var(--sunk);border-radius:10px;padding:4px;overflow-x:auto}
+.tabs button{flex:1 0 auto;border:0;background:transparent;border-radius:8px;padding:8px 12px;font-weight:600;color:var(--muted);min-height:40px}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgb(0 0 0 / .08)}
+.pill{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:600;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.acc{background:var(--accent-soft);color:var(--accent)}
+.pill.rest{background:var(--rest-soft);color:var(--rest)}
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.day{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+.day.today{border-color:var(--accent);background:var(--accent-soft)}
+.day .nm{font-family:var(--f-display);font-weight:700;font-size:20px;text-transform:uppercase;letter-spacing:.04em}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+.kpi .v{font-family:var(--f-display);font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.kpi .l{font-size:13px;color:var(--muted);margin-top:4px}
+.tblwrap{overflow-x:auto;margin-inline:-4px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.empty{text-align:center;padding:28px 16px;color:var(--muted);display:flex;flex-direction:column;gap:10px;align-items:center}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:14px;font-weight:600;min-width:0}
+label.f input,label.f select,label.f textarea{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:10px;font-weight:400;min-height:44px;width:100%}
+label.chk{display:flex;gap:8px;align-items:center;font-size:15px}
+label.chk input{width:22px;height:22px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.exrow{display:flex;gap:8px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.exrow:last-child{border-bottom:0}
+.exrow .grow{display:flex;flex-direction:column;gap:2px}
+.exrow.retired{opacity:.55}
+.exrow.retired .nm{text-decoration:line-through}
+.mini{min-height:36px;padding:6px 10px;font-size:14px}
+.sheet-bg{position:fixed;inset:0;background:rgb(10 8 16 / .5);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);width:100%;max-width:640px;max-height:88%;overflow:auto;border-radius:16px 16px 0 0;padding:20px max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:14px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(90px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:60;font-weight:600;font-size:14px}
+.note{border-radius:10px;padding:10px 12px;background:var(--warn-soft);color:var(--warn);font-size:14px}
+
+/* Runner */
+.run{min-height:100%;display:flex;flex-direction:column}
+.run-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.run-head .in{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px;display:flex;gap:10px;align-items:center}
+.clock{font-family:var(--f-display);font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.prog{height:6px;background:var(--sunk)}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.run-body{max-width:760px;width:100%;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px calc(130px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px}
+.exname{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,8vw,40px);line-height:1.02;text-transform:uppercase;letter-spacing:.01em}
+.how{font-size:16px;color:var(--fg);background:var(--sunk);border-radius:10px;padding:10px 12px}
+.timer{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0}
+.timer .ring{position:relative;width:min(260px,70vw);aspect-ratio:1;max-width:100%}
+.timer svg{width:100%;height:100%;transform:rotate(-90deg)}
+.timer .t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.timer .t .n{font-family:var(--f-display);font-weight:700;font-size:clamp(64px,20vw,96px);font-variant-numeric:tabular-nums;line-height:1}
+.timer .t .u{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.run.resting .timer .t .n{color:var(--rest)}
+.stepper{display:flex;align-items:center;gap:6px;background:var(--sunk);border-radius:12px;padding:6px}
+.stepper button{width:48px;height:48px;border-radius:10px;border:0;background:var(--surface);font-size:24px;font-weight:700}
+.stepper .v{flex:1;text-align:center;font-family:var(--f-display);font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;min-width:56px}
+.stepper .lab{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;display:block;font-family:var(--f-body)}
+.steppers{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.next{display:flex;gap:10px;align-items:center;border:1px dashed var(--line);border-radius:10px;padding:10px 12px}
+.next .k{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.scale{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.scale.z{grid-template-columns:repeat(11,1fr)}
+.scale button{min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-weight:700;font-variant-numeric:tabular-nums;padding:0}
+.scale button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.scale-ends{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding-block:10px calc(10px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar .in{max-width:760px;margin:0 auto;display:flex;gap:8px}
+.bar .btn.big{flex:1}
+.sets{display:flex;gap:6px;flex-wrap:wrap}
+.sets span{font-size:13px;font-variant-numeric:tabular-nums;border-radius:8px;padding:4px 8px;background:var(--sunk)}
+.sets span.done{background:var(--good-soft);color:var(--good);font-weight:600}
+.sets span.cur{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.steplist{display:flex;flex-direction:column}
+.steplist button{text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;padding:10px 4px;display:flex;gap:8px;align-items:center}
+.steplist button.cur{color:var(--accent);font-weight:700}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:14px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.bar .btn.big.icon{flex:0 0 64px;padding-inline:0}
+.sessrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-block:8px;border-bottom:1px solid var(--line)}
+.sessrow:last-child{border-bottom:0}
+.run.ending .timer .t .n{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.08);color:var(--bad)}}
+.exrow{flex-wrap:wrap}
+.exrow .ctl{display:flex;gap:4px}
+.day .row .nm{min-width:0}
+.alert{border-radius:10px;padding:10px 12px;background:var(--bad-soft);color:var(--bad);font-size:15px;font-weight:600}
+.card.attn{border-color:var(--warn);background:var(--warn-soft)}
+.notes .nline{font-size:14px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.cal-h{text-align:center;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.06em}
+.cal-c{min-height:52px;border:1px solid var(--line);border-radius:8px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;padding:4px 2px;font-variant-numeric:tabular-nums;min-width:0}
+.cal-c.off{border:0;background:transparent}
+.cal-c span{font-size:14px;font-weight:600}
+.cal-c.today{border-color:var(--accent)}
+.cal-c.today span{color:var(--accent)}
+.cal-c.sel{background:var(--accent);border-color:var(--accent)}
+.cal-c.sel span{color:var(--accent-ink)}
+.dots{display:flex;gap:2px;flex-wrap:wrap;justify-content:center;align-items:center}
+.dots i,.lg{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.dots i.g,.lg.g{background:var(--good)} .dots i.b,.lg.b{background:var(--bad)} .dots i.w,.lg.w{background:var(--warn)} .dots i.x{background:var(--line)}
+.cal-c.sel .dots i{outline:1.5px solid var(--accent-ink)}
+.dots em{font-size:10px;font-style:normal;color:var(--muted)}
+.cal-m{font-family:var(--f-display);font-size:18px;text-transform:capitalize;min-width:120px;text-align:center}
+.legend .lg{margin-right:5px}
+.appt{display:grid;grid-template-columns:58px minmax(0,1fr);gap:12px;padding:14px 0;border-top:1px solid var(--line);align-items:start}
+.appt .tm{font-family:var(--f-display);font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3}
+.appt .ab{display:flex;flex-direction:column;gap:10px;min-width:0}
+.appt .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:17px;line-height:1.3}
+.appt .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.appt .person{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.appt .pn{font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;min-height:40px;padding:0 10px;font-weight:600;font-size:14px;color:var(--muted);white-space:nowrap}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.v[aria-pressed="true"]{background:var(--good-soft);color:var(--good)}
+.seg button.f[aria-pressed="true"]{background:var(--bad-soft);color:var(--bad)}
+.seg button.c[aria-pressed="true"]{background:var(--sunk);color:var(--fg)}
+.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px}
+.slot{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-weight:600}
+.slot input[type=checkbox]{width:20px;height:20px}
+.slot span{width:34px}
+.slot input[type=time]{flex:1;min-width:0;border:0;background:transparent;min-height:36px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.opt input[type=radio]{width:22px;height:22px;margin-top:2px;flex:0 0 auto}
+.opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.resumed{border-radius:10px;padding:10px 12px;background:var(--accent-soft);color:var(--fg);font-size:15px}
+.crash{position:fixed;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));z-index:80;background:var(--surface);border:2px solid var(--bad);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;color:var(--fg)}
+.endbtn{margin-top:12px;align-self:stretch;border-color:var(--bad-soft)}
+.sched{display:flex;flex-direction:column;gap:10px;border:1px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:12px}
+.slot.on{border-color:var(--accent);background:var(--surface)}
+.slot input[type=time]:disabled{opacity:.35}
+.slots .slot span{width:auto;min-width:76px}
+.lanes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.lane{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.exname.sm{font-size:clamp(22px,6vw,28px)}
+.lane-t{font-family:var(--f-display);font-size:26px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.lane-t.over{color:var(--good)}
+.timer.small-t{padding:0}
+.timer.small-t .n{font-family:var(--f-display);font-weight:700;font-size:56px;font-variant-numeric:tabular-nums;line-height:1}
+.timer.small-t .u{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.how-d summary{cursor:pointer;color:var(--muted);font-size:14px}
+.card.pair{border-color:var(--accent)}
+.solo summary{font-size:13px;color:var(--muted);cursor:pointer;margin-top:4px}
+.tracker{gap:8px}
+.trow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-block:4px;border-top:1px solid var(--line)}
+.tcs{display:flex;gap:4px}
+.tc{display:flex;gap:2px;padding:4px;border-radius:6px;background:var(--sunk)}
+.tc.curr{outline:2px solid var(--accent)}
+.tc i,.dot{display:inline-block;width:10px;height:10px;border-radius:50%;border:1.5px solid var(--line);background:transparent}
+.tc i.on.a,.dot.a{background:var(--accent);border-color:var(--accent)}
+.tc i.on.b,.dot.b{background:var(--rest);border-color:var(--rest)}
+.dot{vertical-align:middle;margin-right:3px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.more summary{cursor:pointer;color:var(--muted);font-weight:600;padding:6px 0}
+.more[open] summary{margin-bottom:8px}
+.pv{display:flex;flex-direction:column;gap:2px;padding-top:6px;border-top:1px solid var(--line);font-size:15px}
+.stepper .v input.sv{width:100%;border:0;background:transparent;text-align:center;font-family:var(--f-display);font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--fg);padding:0;min-height:40px}
+.stepper .v input.sv:focus{outline:2px solid var(--accent);border-radius:8px;background:var(--surface)}
+.loadbox{background:var(--sunk);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:6px}
+.loadbox .lab{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;text-align:center}
+.lrow{display:grid;grid-template-columns:48px 1fr 1fr 48px;gap:6px;align-items:center}
+.lrow button{width:48px;height:48px;border-radius:10px;border:0;background:var(--surface);font-size:24px;font-weight:700}
+.lu{display:flex;align-items:baseline;justify-content:center;gap:4px;background:var(--surface);border-radius:10px;padding:4px 6px;min-width:0;border:1.5px solid transparent}
+.lu.main{border-color:var(--accent)}
+.lu input.sv{width:100%;min-width:0;border:0;background:transparent;text-align:right;font-family:var(--f-display);font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--fg);padding:0}
+.lu input.sv:focus{outline:none}
+.lu span{font-size:13px;color:var(--muted);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:600;font-size:14px;background:var(--bg);cursor:pointer}
+.chip input:checked+span{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip input:focus-visible+span{outline:3px solid var(--accent);outline-offset:2px}
+.pausebox{display:flex;gap:10px;align-items:center;border-radius:10px;padding:10px 12px;background:var(--sunk)}
+.rlist{display:flex;flex-direction:column;gap:6px}
+.rrow{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--bg)}
+.rrow input[type=checkbox]{width:22px;height:22px;flex:0 0 auto}
+.rrow input[type=time]{border:1px solid var(--line);border-radius:8px;padding:6px 8px;min-height:40px;background:var(--surface);font-variant-numeric:tabular-nums}
+.rrow .grow{min-width:0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div id="app"></div>
+<div id="sheet"></div>
+<div id="toast" hidden class="toast"></div>
+<div id="crash" hidden class="crash"><b>Algo falló en la pantalla.</b><div id="crash-msg" class="small"></div>
+<div class="row"><button class="btn primary" id="crash-home">Volver al inicio</button><button class="btn" id="crash-reset">Reiniciar la app</button></div>
+<div class="small">Tus sesiones quedan guardadas. Si se repite, mandale una captura de este mensaje a Claude.</div></div>
+
+<script>
+(() => {
+"use strict";
+/* ---------- utils ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const pad = n => String(n).padStart(2, "0");
+const fmt = ms => { const s = Math.max(0, Math.round(ms / 1000)); const h = Math.floor(s / 3600); const m = Math.floor((s % 3600) / 60); return (h ? h + ":" + pad(m) : m) + ":" + pad(s % 60); };
+const fdate = t => new Date(t).toLocaleDateString("es", { day: "numeric", month: "short" });
+const fdateLong = t => new Date(t).toLocaleDateString("es", { weekday: "long", day: "numeric", month: "long" });
+const avg = a => { const v = a.filter(x => typeof x === "number"); return v.length ? v.reduce((x, y) => x + y, 0) / v.length : null; };
+const r1 = n => n == null ? "–" : (Math.round(n * 10) / 10).toString().replace(".", ",");
+const LS = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  del(k) { try { localStorage.removeItem(k); } catch {} }
+};
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2200); }
+
+/* ---------- store ---------- */
+const COLS = ["clients", "routines", "sessions", "library", "attendance"];
+const data = { clients: {}, routines: {}, sessions: {}, library: {}, attendance: {} };
+let DB = null, mode = "loading", canWrite = true;
+const loaded = new Set();
+const writeQ = {};
+function persistLocal() { if (mode === "local") LS.set("liftcoach-local", data); }
+async function put(col, id, obj) {
+  data[col][id] = obj;
+  if (mode !== "db") { persistLocal(); return; }
+  const key = col + "/" + id;
+  const q = writeQ[key] || (writeQ[key] = { busy: false, next: null });
+  q.next = obj;
+  if (q.busy) return;
+  q.busy = true;
+  while (q.next) {
+    const body = q.next; q.next = null;
+    try { await DB.doc(key).set(body); }
+    catch (e) {
+      if (e && e.code === "unavailable") { await new Promise(r => setTimeout(r, 600 + Math.random() * 800)); if (!q.next) q.next = body; continue; }
+      if (e && e.code === "invalid_argument") { canWrite = false; toast("No tenés permiso para guardar en esta página"); }
+      else if (e && e.code === "quota_exceeded") toast("Se llenó el espacio de datos: borrá sesiones viejas");
+      else toast("No se pudo guardar. Revisá la conexión.");
+      // keep local copy so nothing is lost
+      LS.set("liftcoach-unsaved-" + key, body);
+    }
+  }
+  q.busy = false;
+}
+async function del(col, id) {
+  delete data[col][id];
+  if (mode !== "db") { persistLocal(); return; }
+  try { await DB.doc(col + "/" + id).delete(); } catch { toast("No se pudo borrar"); }
+}
+async function initStore() {
+  let db = null;
+  try { db = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch { db = null; }
+  if (!db) {
+    mode = "local";
+    const saved = LS.get("liftcoach-local");
+    if (saved) COLS.forEach(c => data[c] = saved[c] || {});
+    COLS.forEach(c => loaded.add(c));
+    render();
+    return;
+  }
+  DB = db; mode = "db";
+  try { const u = await window.claude.use("user"); const w = u && u.can ? await u.can("data.write") : null; if (w === false) canWrite = false; } catch {}
+  COLS.forEach(c => {
+    DB.collection(c).onSnapshot(snap => {
+      const m = {};
+      snap.docs.forEach(d => { if (d.exists) m[d.id] = clone(d.data()); });
+      // never clobber the session being run on this device, nor a newer local copy
+      if (c === "sessions") {
+        if (run && data.sessions[run.id]) m[run.id] = data.sessions[run.id];
+        if (duo) duo.ids.forEach(id => { if (data.sessions[id]) m[id] = data.sessions[id]; });
+        Object.keys(m).forEach(id => { const loc = data.sessions[id]; if (loc && m[id].status === "active" && newerSess(loc, m[id]) === loc) m[id] = loc; });
+      }
+      data[c] = m; loaded.add(c);
+      // don't rebuild screens while someone is typing or training; refresh when they close
+      if (!run && !sheet && ui.view !== "edit") render(); else ui.dirty = true;
+    }, () => { loaded.add(c); render(); });
+  });
+}
+
+/* full session time: wall clock since start, minus time away (after tapping Salir) */
+function sessionMs(s) {
+  if (!s) return 0;
+  if (s.status === "done" && s.durationMs != null) return s.durationMs;
+  const end = s.status === "done" ? (s.endedAt || Date.now()) : Date.now();
+  return Math.max(0, end - (s.startedAt || end) - (s.awayMs || 0) - (s.leftAt ? end - s.leftAt : 0));
+}
+const durOf = s => s.durationMs != null ? s.durationMs : (s.activeMs || 0);
+/* the copy with more training time wins; ties go to the most recent save */
+function newerSess(a, b) {
+  if (!a) return b; if (!b) return a;
+  const am = a.activeMs || 0, bm = b.activeMs || 0;
+  if (am !== bm) return am > bm ? a : b;
+  return (a.updatedAt || 0) >= (b.updatedAt || 0) ? a : b;
+}
+
+/* ---------- domain ---------- */
+const WD = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+function clientRoutine(cid) { return Object.entries(data.routines).find(([, r]) => r.clientId === cid) || null; }
+function templates() { return Object.entries(data.routines).filter(([, r]) => !r.clientId); }
+function todayDayIdx(r) { const w = new Date().getDay(); const i = r.days.findIndex(d => d.weekday === w); return i; }
+function activeEx(b) { return b.ex.filter(e => !e.retired); }
+function targetTxt(e) {
+  const side = e.side ? " por lado" : "";
+  return e.mode === "time" ? `${e.sets} × ${e.sec} s${side}` : `${e.sets} × ${repsTxt(e)} ${e.unit || "reps"}${side}`;
+}
+function repsAt(e, n) { return e.repsList && e.repsList[n - 1] != null ? e.repsList[n - 1] : e.reps; }
+function repsTxt(e) { return e.maxReps ? "máx" : e.repsList && e.repsList.length ? e.repsList.join("·") : String(e.reps); }
+function repsLbl(e, n) { return e.maxReps ? "máx" : repsAt(e, n); }
+function parseReps(str) { const parts = String(str || "").split(/[.·,\-/ ]+/).map(x => parseInt(x, 10)).filter(x => x > 0); return parts; }
+function findEx(plan, exId) { for (const b of plan.blocks) for (const e of b.ex) if (e.id === exId) return { b, e }; return null; }
+function buildSteps(plan) {
+  const st = [];
+  plan.blocks.forEach(b => {
+    const exs = activeEx(b); if (!exs.length) return;
+    if (b.superset && exs.length > 1) {
+      // biserie: A1, B1, rest, A2, B2, rest...
+      const rounds = Math.max(...exs.map(e => e.sets));
+      for (let r = 1; r <= rounds; r++) {
+        const inRound = exs.filter(e => e.sets >= r);
+        inRound.forEach(e => (e.side ? ["I", "D"] : [null]).forEach(sd => st.push({ t: "work", b: b.id, e: e.id, s: r, sd, ss: true })));
+        if (r < rounds) { const nx = exs.find(e => e.sets >= r + 1) || inRound[0]; st.push({ t: "rest", b: b.id, e: nx.id, s: r, sec: b.rest || Math.max(...inRound.map(e => e.rest || 30)) }); }
+      }
+      exs.forEach(e => st.push({ t: "rate", b: b.id, e: e.id }));
+      st.push({ t: "block", b: b.id });
+      return;
+    }
+    exs.forEach(e => {
+      const sides = e.side ? ["I", "D"] : [null];
+      for (let s = 1; s <= e.sets; s++) {
+        sides.forEach(sd => st.push({ t: "work", b: b.id, e: e.id, s, sd }));
+        if (s < e.sets) st.push({ t: "rest", b: b.id, e: e.id, s, sec: e.rest || 30 });
+      }
+      st.push({ t: "rate", b: b.id, e: e.id });
+    });
+    st.push({ t: "block", b: b.id });
+  });
+  st.push({ t: "end" });
+  return st;
+}
+function exLogs(sess, exId) { return (sess.logs && sess.logs[exId]) || null; }
+function sessMetrics(sess, exId, e) {
+  const L = exLogs(sess, exId); if (!L) return null;
+  const sets = L.sets || [];
+  const time = e ? e.mode === "time" : sets.some(s => s.sec != null && s.reps == null);
+  const vol = sets.reduce((a, s) => a + (time ? (s.sec || 0) : (s.reps || 0)), 0);
+  const load = Math.max(0, ...sets.map(s => s.load || 0));
+  const lvls = sets.map(s => s.level).filter(x => typeof x === "number");
+  const level = typeof L.level === "number" ? L.level : (lvls.length ? Math.max(...lvls) : null);
+  return { vol, load, level, time, rpe: L.rpe ?? null, conf: L.conf ?? null, pain: L.pain ?? null, note: L.note || "", skipped: !!L.skipped, changedTo: L.changedTo || null, nsets: sets.length, unit: e ? (e.unit || "reps") : "reps" };
+}
+function compare(a, b) { // b vs a (newer vs older): 1 better, 0 same, -1 worse
+  if (!a || !b) return null;
+  if (a.level != null && b.level != null && a.level !== b.level) return b.level > a.level ? 1 : -1;
+  if (b.load !== a.load && (a.load || b.load)) return b.load > a.load ? 1 : -1;
+  if (a.vol && Math.abs(b.vol - a.vol) / a.vol > 0.05) return b.vol > a.vol ? 1 : -1;
+  if (a.conf != null && b.conf != null && b.conf !== a.conf) return b.conf > a.conf ? 1 : -1;
+  if (a.rpe != null && b.rpe != null && Math.abs(b.rpe - a.rpe) >= 1) return b.rpe < a.rpe ? 1 : -1;
+  return 0;
+}
+function metricTxt(m) {
+  if (!m) return "–";
+  if (m.skipped) return "No se hizo";
+  let t = m.time ? `${m.vol} s` : `${m.vol} ${m.unit}`;
+  if (m.load) t += ` · ${r1(m.load)} ${U()}`;
+  if (m.level != null) t += ` · N${m.level}`;
+  return t;
+}
+function trendPill(c, m) {
+  if (m && m.changedTo) return `<span class="pill warn">Cambiado</span>`;
+  if (m && m.skipped) return `<span class="pill bad">Desistido</span>`;
+  if (c == null) return `<span class="pill">Sin dato</span>`;
+  return c > 0 ? `<span class="pill good">▲ Mejora</span>` : c < 0 ? `<span class="pill bad">▼ Baja</span>` : `<span class="pill">= Igual</span>`;
+}
+function lastSetValue(cid, exId, field) {
+  const ss = Object.values(data.sessions).filter(s => s.clientId === cid && s.logs && s.logs[exId]).sort((a, b) => b.startedAt - a.startedAt);
+  for (const s of ss) { const sets = s.logs[exId].sets || []; for (let i = sets.length - 1; i >= 0; i--) if (sets[i][field] != null) return sets[i][field]; }
+  return null;
+}
+
+/* ---------- sound & vibration ---------- */
+const settings = Object.assign({ sound: true, vibrate: true, unit: "lb" }, LS.get("coachseba-settings") || {});
+const U = () => settings.unit === "kg" ? "kg" : "lb";
+const LSTEP = () => U() === "lb" ? 2.5 : 0.5;
+let actx = null;
+function audioUnlock() {
+  if (!settings.sound) return;
+  try { if (!actx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); } if (actx && actx.state === "suspended") actx.resume(); } catch { actx = null; }
+}
+function tone(freq, dur, at = 0, vol = 0.3) {
+  const t0 = actx.currentTime + at; const o = actx.createOscillator(), g = actx.createGain();
+  o.type = "sine"; o.frequency.value = freq;
+  g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol, t0 + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(g); g.connect(actx.destination); o.start(t0); o.stop(t0 + dur + 0.05);
+}
+function cue(kind) {
+  try {
+    if (settings.sound && actx) {
+      if (kind === "tick") tone(880, 0.09);
+      else if (kind === "end") { tone(660, 0.16); tone(990, 0.3, 0.2); }
+      else { tone(740, 0.16); tone(740, 0.16, 0.26); tone(988, 0.35, 0.52); }
+    }
+    if (settings.vibrate && navigator.vibrate) navigator.vibrate(kind === "tick" ? 40 : kind === "end" ? [120, 80, 220] : [220, 100, 220, 100, 320]);
+  } catch {}
+}
+
+/* ---------- exercise history, pain alerts, level-up ---------- */
+function exHistory(cid, e, skipId) {
+  return Object.entries(data.sessions).filter(([id, s]) => id !== skipId && s.clientId === cid && s.logs).map(([, s]) => {
+    let L = s.logs[e.id];
+    if (!L) { const k = Object.keys(s.logs).find(k => { const x = findEx(s.plan, k); return x && x.e.name === e.name; }); L = k ? s.logs[k] : null; }
+    return L ? { at: s.startedAt, L } : null;
+  }).filter(Boolean).sort((a, b) => b.at - a.at);
+}
+function painAlert(hist) { return hist.slice(0, 2).find(h => (h.L.pain || 0) >= 4) || null; }
+function clientPainAlerts(cid) {
+  const last = Object.values(data.sessions).filter(s => s.clientId === cid && s.status === "done").sort((a, b) => b.startedAt - a.startedAt)[0];
+  if (!last) return [];
+  return Object.entries(last.logs || {}).filter(([, l]) => (l.pain || 0) >= 4).map(([k, l]) => { const f = findEx(last.plan, k); return { name: f ? f.e.name : k, pain: l.pain }; });
+}
+function findInRoutine(r, dayId, exId) { const d = r.days.find(x => x.id === dayId); if (!d) return null; for (const b of d.blocks) { const i = b.ex.findIndex(e => e.id === exId); if (i >= 0) return { b, i, e: b.ex[i] }; } return null; }
+function goodRun(L, e) {
+  if (!L || L.skipped || L.changedTo) return false;
+  const sets = L.sets || []; if (sets.length < e.sets * (e.side ? 2 : 1)) return false;
+  if (e.mode === "time" ? sets.some(x => (x.sec ?? 0) < e.sec) : sets.some(x => !e.maxReps && (x.reps ?? 0) < repsAt(e, x.s))) return false;
+  if ((L.conf ?? 0) < 7 || (L.pain ?? 0) > 2 || (L.rpe != null && L.rpe > 7)) return false;
+  return true;
+}
+function levelUpDue(sess, exId) {
+  const f = findEx(sess.plan, exId); const r = data.routines[sess.routineId]; if (!f || !r) return false;
+  const ri = findInRoutine(r, sess.dayId, exId); if (!ri || ri.e.retired) return false;
+  if (!goodRun(sess.logs[exId], f.e)) return false;
+  const prev = Object.values(data.sessions).filter(s => s !== sess && s.clientId === sess.clientId && s.status === "done" && s.logs && s.logs[exId] && s.startedAt < sess.startedAt).sort((a, b) => b.startedAt - a.startedAt)[0];
+  if (!prev || !goodRun(prev.logs[exId], f.e)) return false;
+  if (ri.e.lvlDeclinedAt && ri.e.lvlDeclinedAt > prev.startedAt) return false;
+  return true;
+}
+function quickOptions(e) {
+  const o = [];
+  if (e.level != null) o.push({ kind: "patch", label: `${e.name} · nivel ${e.level + 1}`, how: "Mismo ejercicio, un nivel más de dificultad.", patch: { level: e.level + 1 } });
+  if (e.mode === "time") o.push({ kind: "patch", label: `${e.name} · ${e.sec + 5} s por serie`, how: "Mismo ejercicio, 5 segundos más por serie.", patch: { sec: e.sec + 5 } });
+  else o.push({ kind: "patch", label: `${e.name} · ${e.reps + 2} ${e.unit || "reps"}`, how: "Mismo ejercicio, 2 repeticiones más por serie.", patch: e.repsList ? { repsList: e.repsList.map(x => x + 2), reps: e.reps + 2 } : { reps: e.reps + 2 } });
+  o.push({ kind: "patch", label: `${e.name} · ${e.sets + 1} series`, how: "Mismo ejercicio, una serie más.", patch: { sets: e.sets + 1 } });
+  return o.slice(0, 3);
+}
+
+/* ---------- agenda ---------- */
+const ymd = d => d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+const MONTHS = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+function apptsFor(ds) {
+  const d = new Date(ds + "T12:00:00"); const wd = d.getDay(); const out = []; const seen = new Set();
+  const add = (cid, time, extra) => { const key = cid + "_" + ds + "_" + time.replace(":", ""); if (seen.has(key)) return; seen.add(key); out.push({ cid, time, date: ds, key, extra: !!extra }); };
+  Object.entries(data.clients).forEach(([cid, c]) => {
+    if (c.createdAt && ds < ymd(new Date(c.createdAt))) return;
+    (c.slots || []).forEach(sl => { if (sl.wd === wd && sl.time) add(cid, sl.time, false); });
+  });
+  Object.values(data.attendance).forEach(a => { if (a.extra && a.date === ds && data.clients[a.cid]) add(a.cid, a.time, true); });
+  out.forEach(o => {
+    const a = data.attendance[o.key]; o.status = a && a.status || null; o.reason = a && a.reason || ""; o.note = a && a.note || ""; o.makeup = a && a.makeup || null;
+    if (o.status === "reprogramado" && o.note) o.reason = o.note.replace(/^Pasa al /, "→ ");
+    const pz = (data.clients[o.cid] || {}).pause;
+    if (!o.status && pz && pz.from <= ds && ds < pz.until) { o.status = "pausa"; o.reason = pz.reason || "Ausente"; }
+    if (!o.status && Object.values(data.sessions).some(s => s.clientId === o.cid && ymd(new Date(s.startedAt)) === ds && sessFits(s, o))) o.status = "vino";
+  });
+  return out.sort((a, b) => a.time.localeCompare(b.time));
+}
+function apptDayIdx(o, r) { if (o.makeup) { const i = r.days.findIndex(x => x.weekday === o.makeup.wd); if (i >= 0) return i; } return todayDayIdx(r); }
+function apptPast(o) { const now = new Date(); const t = new Date(o.date + "T" + o.time + ":00"); return t <= now; }
+function pendingNow() { return apptsFor(ymd(new Date())).filter(o => !o.status && apptPast(o)); }
+function monthAttendance(cid, ref) {
+  const y = ref.getFullYear(), m = ref.getMonth(); const days = new Date(y, m + 1, 0).getDate(); let exp = 0, came = 0;
+  for (let i = 1; i <= days; i++) { apptsFor(ymd(new Date(y, m, i))).forEach(o => { if (o.cid !== cid || NOCOUNT(o.status) || !apptPast(o)) return; exp++; if (o.status === "vino") came++; }); }
+  return { exp, came };
+}
+const ST = { vino: ["good", "Vino"], falto: ["bad", "No vino"], cancelado: ["", "Canceló"], pausa: ["", "Ausente"], reprogramado: ["", "Reprogramado"], sinclase: ["", "Sin clase"] };
+const REASONS = ["Viaje", "Enfermo", "Trabajo", "Lesión", "Sin aviso", "Otro"];
+const NOCOUNT = st => st === "cancelado" || st === "pausa" || st === "reprogramado" || st === "sinclase";
+const BLOCKED = st => st === "falto" || NOCOUNT(st);
+/* which routine weekday an appointment trains: the missed day for a make-up, else its own day */
+function apptWd(o) { return o.makeup ? o.makeup.wd : new Date(o.date + "T12:00:00").getDay(); }
+function sessFits(s, o) { const w = s.plan && s.plan.weekday; return w == null || w === apptWd(o); }
+function statusPill(o) {
+  if (o.status && ST[o.status]) return `<span class="pill ${ST[o.status][0]}">${o.status === "pausa" ? esc(o.reason) : ST[o.status][1]}${o.reason && o.status !== "pausa" ? " · " + esc(o.reason) : ""}</span>`;
+  return apptPast(o) ? `<span class="pill warn">Confirmar</span>` : `<span class="pill">Esperado</span>`;
+}
+
+/* ---------- ui state ---------- */
+const ui = { view: "home", client: null, tab: "dias", statsDay: 0, editDay: 0, editDraft: null, editRid: null };
+let run = null; // {id, steps, running, lastTs, draft, rate}
+let sheet = null;
+
+/* ---------- render: shell ---------- */
+function header(title, back) {
+  return `<header class="top"><div class="in">
+    ${back ? `<button class="btn ghost mini" data-act="${back}" aria-label="Volver">← Volver</button>` : `<div class="brand">Coach <b>Seba</b></div>`}
+    <div class="grow"></div>
+    ${title ? `<div class="eyebrow">${esc(title)}</div>` : ""}
+    <button class="btn ghost mini" data-act="settings" aria-label="Ajustes">Ajustes · ${U()}</button>
+  </div></header>`;
+}
+function render() {
+  const app = $("#app");
+  if (run) { renderRun(); return; }
+  if (duo) { renderDuo(); return; }
+  if (!COLS.every(c => loaded.has(c))) { app.innerHTML = header() + `<main class="wrap"><div class="card empty">Cargando clientes y rutinas…</div></main>`; return; }
+  if (ui.view === "client" && data.clients[ui.client]) app.innerHTML = renderClient();
+  else if (ui.view === "edit" && ui.editDraft) app.innerHTML = renderEditor();
+  else if (ui.view === "library") app.innerHTML = renderLibrary();
+  else { ui.view = "home"; app.innerHTML = renderHome(); }
+  ui.dirty = false;
+}
+
+/* ---------- home ---------- */
+function renderHome() {
+  const nk = id => { const pid = partnerOf(id); return Math.min(nextAppt(id), pid ? nextAppt(pid) : Infinity); };
+  const clients = Object.entries(data.clients).sort((a, b) => (nk(a[0]) - nk(b[0])) || (a[1].name || "").localeCompare(b[1].name || ""));
+  const active = Object.entries(data.sessions).filter(([, s]) => s.status === "active");
+  const today = WD[new Date().getDay()];
+  let h = header() + `<main class="wrap">`;
+  if (mode === "local") h += `<div class="note">Modo local: los datos se guardan en este navegador. Para compartirlos entre equipos, conectá el guardado a tu servidor (ver LEEME.md).</div>`;
+  if (!canWrite) h += `<div class="note">Esta página está en modo lectura para tu cuenta.</div>`;
+  const pend = pendingNow();
+  const pendUsed = new Set();
+  pend.forEach(o => {
+    if (pendUsed.has(o.key)) return;
+    const pid = partnerOf(o.cid); const po = pid && pend.find(x => x.cid === pid && x.time === o.time);
+    if (po) {
+      pendUsed.add(po.key); const ca = data.clients[o.cid], cb = data.clients[pid];
+      h += `<section class="card attn"><div class="row"><span class="pill warn">${esc(o.time)}</span><b class="grow">¿Vinieron ${esc(ca.name)} y ${esc(cb.name)}?</b></div>
+        <div class="row"><button class="btn primary" data-act="attPair" data-a="${o.key}" data-b="${po.key}" data-ca="${o.cid}" data-cb="${pid}" data-date="${o.date}" data-time="${o.time}">Sí, los dos</button>
+        <button class="btn" data-act="att" data-key="${o.key}" data-cid="${o.cid}" data-date="${o.date}" data-time="${o.time}" data-st="falto">Faltó ${esc(ca.name.split(" ")[0])}</button>
+        <button class="btn" data-act="att" data-key="${po.key}" data-cid="${pid}" data-date="${po.date}" data-time="${po.time}" data-st="falto">Faltó ${esc(cb.name.split(" ")[0])}</button></div></section>`;
+      return;
+    }
+    const c = data.clients[o.cid];
+    h += `<section class="card attn"><div class="row"><span class="pill warn">${esc(o.time)}</span><b class="grow">¿Vino ${esc(c.name)}?</b></div>
+      <div class="row"><button class="btn primary" data-act="att" data-key="${o.key}" data-cid="${o.cid}" data-date="${o.date}" data-time="${o.time}" data-st="vino">Sí, vino</button>
+      <button class="btn" data-act="att" data-key="${o.key}" data-cid="${o.cid}" data-date="${o.date}" data-time="${o.time}" data-st="falto">No vino</button></div></section>`;
+  });
+  h += renderAgenda();
+  h += `<div class="row"><h2 class="grow">Clientes</h2><button class="btn mini" data-act="library">Ejercicios</button><button class="btn primary mini" data-act="newClient">+ Cliente</button></div>`;
+  if (active.length) {
+    h += `<section class="card" style="border-color:var(--accent)"><h3>Sesiones sin terminar</h3>`;
+    active.sort((a, b) => b[1].startedAt - a[1].startedAt).forEach(([id, s]) => {
+      if (s.duo && s.duo.idx === 1 && data.sessions[s.duo.with]) return;
+      const c = s.duo && data.sessions[s.duo.with] ? { name: (data.clients[s.clientId] || {}).name + " + " + (data.clients[data.sessions[s.duo.with].clientId] || {}).name } : data.clients[s.clientId];
+      const nDone = Object.values(s.logs || {}).reduce((a, l) => a + (l.sets || []).length, 0);
+      h += `<div class="sessrow"><div class="grow"><b>${esc(c ? c.name : "Cliente")}</b> · ${esc(s.dayName)}<div class="small muted">Empezó ${esc(fdate(s.startedAt))} ${new Date(s.startedAt).toLocaleTimeString("es", { hour: "2-digit", minute: "2-digit" })} · ${fmt(sessionMs(s))} · ${nDone} series</div></div>
+        <div class="row"><button class="btn danger" data-act="askDelActive" data-id="${id}">Eliminar</button><button class="btn primary" data-act="resume" data-id="${id}">▶ Retomar</button></div></div>`;
+    });
+    h += `</section>`;
+  }
+  if (!clients.length) {
+    h += `<div class="card empty"><h3>Todavía no hay clientes</h3><p>Agregá el primero con sus días y hora, y después escribile la rutina.</p><button class="btn primary" data-act="newClient">+ Agregar cliente</button></div>`;
+  }
+  const shown = new Set();
+  clients.forEach(([cid, c]) => {
+    if (shown.has(cid)) return;
+    const pid = partnerOf(cid);
+    if (pid) { shown.add(pid); h += renderPairCard(cid, pid); return; }
+    const rr = clientRoutine(cid);
+    const done = Object.values(data.sessions).filter(s => s.clientId === cid && s.status === "done");
+    const last = done.sort((a, b) => b.startedAt - a.startedAt)[0];
+    const pa = clientPainAlerts(cid); const pz = pauseInfo(cid);
+    const slots = fmtSlots(c.slots);
+    h += `<section class="card"><div class="row"><div class="grow"><div class="row">${nextPill(cid)}</div><h3>${esc(c.name)}</h3>
+      <div class="small muted">${c.age ? esc(c.age) + " años · " : ""}${done.length} sesiones${last ? " · última " + esc(fdate(last.startedAt)) : ""}</div>
+      ${slots ? `<div class="small muted">${esc(slots)}</div>` : `<button class="btn mini" style="margin-top:6px" data-act="editClientId" data-id="${cid}">+ Cargar días y hora</button>`}</div>
+      <button class="btn mini" data-act="openClient" data-id="${cid}">Progreso</button></div>
+      ${pa.length ? `<div class="alert">⚠ Dolor la última sesión: ${pa.map(x => esc(x.name) + " (" + x.pain + "/10)").join(", ")}</div>` : ""}
+      ${pz ? `<div class="pausebox"><div class="grow"><b>${esc(pz.reason)}</b> · vuelve el ${esc(fmtD(pz.until))}${pz.note ? `<div class="small muted">${esc(pz.note)}</div>` : ""}</div><button class="btn mini" data-act="endPause" data-id="${cid}">Ya volvió</button></div>` : ""}`;
+    if (rr) {
+      const [rid, r] = rr; const ti = todayDayIdx(r);
+      h += `<div class="days">` + r.days.map((d, i) => {
+        const act = Object.entries(data.sessions).find(([, s]) => s.status === "active" && s.clientId === cid && (s.dayId === d.id || (s.duo && s.weekday === d.weekday)));
+        const pid = partnerOf(cid);
+        return `<div class="day ${i === ti ? "today" : ""}"><div class="row"><div class="nm grow">${esc(d.name)}</div>${i === ti ? `<span class="pill acc">Hoy</span>` : ""}</div>
+        <div class="small muted">${esc(d.focus || "")}</div>
+        ${act ? `<button class="btn primary" data-act="resume" data-id="${act[0]}">▶ Retomar</button>`
+              : pid ? `<button class="btn ${i === ti ? "primary" : ""}" data-act="startDuo" data-cid="${cid}" data-di="${i}" ${canWrite ? "" : "disabled"}>▶ Dúo con ${esc(data.clients[pid].name)}</button><button class="btn mini ghost" data-act="start" data-cid="${cid}" data-rid="${rid}" data-di="${i}">Solo</button>`
+              : `<button class="btn ${i === ti ? "primary" : ""}" data-act="start" data-cid="${cid}" data-rid="${rid}" data-di="${i}" ${canWrite ? "" : "disabled"}>▶ Iniciar</button>`}</div>`;
+      }).join("") + `</div>`;
+    } else h += `<div class="row"><span class="muted small grow">Sin rutina asignada.</span><button class="btn" data-act="assign" data-id="${cid}">Crear rutina</button></div>`;
+    h += `</section>`;
+  });
+  h += `<p class="small muted">Hoy es ${esc(today)}. El día que corresponde aparece resaltado.</p></main>`;
+  return h;
+}
+
+const DS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+function fmtSlots(slots) {
+  const byTime = {}; (slots || []).forEach(sl => { (byTime[sl.time] = byTime[sl.time] || []).push(sl.wd); });
+  return Object.entries(byTime).sort((a, b) => a[0].localeCompare(b[0])).map(([t, wds]) => {
+    const o = wds.map(w => (w + 6) % 7).sort((a, b) => a - b); const consec = o.length >= 3 && o.every((v, i) => i === 0 || v === o[i - 1] + 1);
+    const names = o.map(i => DS[(i + 1) % 7]);
+    return (consec ? names[0] + " a " + names[names.length - 1] : names.join(", ")) + " " + t;
+  }).join(" · ");
+}
+/* when this client is training now (active session, or up to 60 min after the slot) or comes next */
+function nextAppt(cid) {
+  const c = data.clients[cid]; if (!c) return Infinity;
+  const now = Date.now(); let best = Infinity;
+  Object.values(data.attendance).forEach(a => { if (!a.extra || a.cid !== cid || a.status) return; const t = new Date(a.date + "T" + a.time + ":00").getTime(); if (t + 60 * 60000 >= now) best = Math.min(best, t); });
+  const act = Object.values(data.sessions).find(x => x.status === "active" && x.clientId === cid && now - x.startedAt < 3 * 3600000);
+  if (act) return act.startedAt;
+  for (let d = 0; d < 60; d++) {
+    const day = new Date(); day.setHours(0, 0, 0, 0); day.setDate(day.getDate() + d);
+    if (c.pause && c.pause.from <= ymd(day) && ymd(day) < c.pause.until) continue;
+    (c.slots || []).forEach(sl => { if (sl.wd !== day.getDay() || !sl.time) return; const ak = data.attendance[cid + "_" + ymd(day) + "_" + sl.time.replace(":", "")]; if (ak && BLOCKED(ak.status)) return; const [h, m] = sl.time.split(":").map(Number); const t = new Date(day); t.setHours(h, m, 0, 0); if (t.getTime() + 60 * 60000 < now) return; best = Math.min(best, t.getTime()); });
+    if (best < Infinity && best < day.getTime() + 86400000) break;
+  }
+  return best;
+}
+function pauseInfo(cid) { const c = data.clients[cid]; const pz = c && c.pause; const today = ymd(new Date()); return pz && today < pz.until ? pz : null; }
+function fmtD(ds) { const d = new Date(ds + "T12:00:00"); return DS[d.getDay()].toLowerCase() + " " + d.getDate() + " " + MONTHS[d.getMonth()].slice(0, 3); }
+function nextPill(cid) {
+  const pz = pauseInfo(cid); if (pz) return `<span class="pill">${esc(pz.reason)} · vuelve ${esc(fmtD(pz.until))}</span>`;
+  const t = nextAppt(cid); if (t === Infinity) return "";
+  const now = Date.now(); const d = new Date(t); const hm = pad(d.getHours()) + ":" + pad(d.getMinutes());
+  const dayDiff = Math.round((new Date(d).setHours(0, 0, 0, 0) - new Date().setHours(0, 0, 0, 0)) / 86400000);
+  if (t <= now) return `<span class="pill good">● Ahora · ${hm}</span>`;
+  if (t - now < 60 * 60000) return `<span class="pill warn">En ${Math.max(1, Math.round((t - now) / 60000))} min · ${hm}</span>`;
+  return `<span class="pill ${dayDiff === 0 ? "acc" : ""}">${dayDiff === 0 ? "Hoy" : dayDiff === 1 ? "Mañana" : DS[d.getDay()]} ${hm}</span>`;
+}
+function renderPairCard(a, b) {
+  const ca = data.clients[a], cb = data.clients[b]; const rr = clientRoutine(a);
+  const slots = fmtSlots(ca.slots);
+  const cnt = id => Object.values(data.sessions).filter(s => s.clientId === id && s.status === "done").length;
+  const pain = [a, b].flatMap(id => clientPainAlerts(id).map(x => data.clients[id].name + ": " + x.name + " (" + x.pain + "/10)"));
+  let h = `<section class="card pair"><div class="row">${nextPill(a)}<span class="eyebrow">Dúo · misma rutina</span></div>
+    <h3>${esc(ca.name)} + ${esc(cb.name)}</h3>
+    <div class="small muted">${slots ? esc(slots) : "Sin horario"} · ${cnt(a)} y ${cnt(b)} sesiones</div>
+    <div class="row"><button class="btn mini" data-act="openClient" data-id="${a}">Progreso ${esc(ca.name.split(" ")[0])}</button><button class="btn mini" data-act="openClient" data-id="${b}">Progreso ${esc(cb.name.split(" ")[0])}</button></div>
+    ${pain.length ? `<div class="alert">⚠ Dolor la última sesión: ${esc(pain.join(" · "))}</div>` : ""}`;
+  if (!rr) return h + `<div class="row"><span class="muted small grow">Sin rutina asignada.</span><button class="btn" data-act="assign" data-id="${a}">Crear rutina</button></div></section>`;
+  const [rid, r] = rr; const ti = todayDayIdx(r); const rb = clientRoutine(b);
+  h += `<div class="days">` + r.days.map((d, i) => {
+    const act = Object.entries(data.sessions).find(([, s]) => s.status === "active" && (s.clientId === a || s.clientId === b) && (s.dayId === d.id || s.weekday === d.weekday));
+    return `<div class="day ${i === ti ? "today" : ""}"><div class="row"><div class="nm grow">${esc(d.name)}</div>${i === ti ? `<span class="pill acc">Hoy</span>` : ""}</div>
+      <div class="small muted">${esc(d.focus || "")}</div>
+      ${act ? `<button class="btn primary" data-act="resume" data-id="${act[0]}">▶ Retomar</button>`
+            : `<button class="btn ${i === ti ? "primary" : ""}" data-act="startDuo" data-cid="${a}" data-di="${i}" ${canWrite ? "" : "disabled"}>▶ Iniciar los dos</button>
+               <details class="solo"><summary>Viene uno solo</summary><div class="row"><button class="btn mini" data-act="start" data-cid="${a}" data-rid="${rid}" data-di="${i}">${esc(ca.name)}</button>${rb ? `<button class="btn mini" data-act="start" data-cid="${b}" data-rid="${rb[0]}" data-di="${Math.max(0, rb[1].days.findIndex(x => x.weekday === d.weekday))}">${esc(cb.name)}</button>` : ""}</div></details>`}</div>`;
+  }).join("") + `</div>`;
+  return h + `</section>`;
+}
+
+/* ---------- agenda ---------- */
+function renderAgenda() {
+  const ref = ui.calMonth || (ui.calMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+  const y = ref.getFullYear(), m = ref.getMonth(); const days = new Date(y, m + 1, 0).getDate();
+  const first = (new Date(y, m, 1).getDay() + 6) % 7; const today = ymd(new Date());
+  const sel = ui.calDay || today;
+  let cells = "";
+  for (let i = 0; i < first; i++) cells += `<div class="cal-c off"></div>`;
+  let exp = 0, came = 0;
+  for (let dd = 1; dd <= days; dd++) {
+    const ds = ymd(new Date(y, m, dd)); const ap = apptsFor(ds);
+    ap.forEach(o => { if (!NOCOUNT(o.status) && apptPast(o)) { exp++; if (o.status === "vino") came++; } });
+    const dots = ap.slice(0, 4).map(o => `<i class="${o.status === "vino" ? "g" : o.status === "falto" ? "b" : NOCOUNT(o.status) ? "x" : apptPast(o) ? "w" : ""}"></i>`).join("") + (ap.length > 4 ? `<em>+${ap.length - 4}</em>` : "");
+    cells += `<button class="cal-c ${ds === today ? "today" : ""} ${ds === sel ? "sel" : ""}" data-act="calDay" data-d="${ds}" aria-label="${dd} de ${MONTHS[m]}, ${ap.length} turnos"><span>${dd}</span><div class="dots">${dots}</div></button>`;
+  }
+  const list = apptsFor(sel);
+  const dsel = new Date(sel + "T12:00:00");
+  let h = `<section class="card agenda"><div class="row"><h2 class="grow">Agenda</h2>
+    <button class="btn mini" data-act="calNav" data-d="-1" aria-label="Mes anterior">‹</button><b class="cal-m">${MONTHS[m]} ${y}</b><button class="btn mini" data-act="calNav" data-d="1" aria-label="Mes siguiente">›</button></div>
+    <div class="cal">${["L", "M", "M", "J", "V", "S", "D"].map(x => `<div class="cal-h">${x}</div>`).join("")}${cells}</div>
+    <div class="legend small"><span><i class="lg g"></i>Vino</span><span><i class="lg b"></i>No vino</span><span><i class="lg w"></i>Confirmar</span><span><i class="lg"></i>Esperado</span>${exp ? `<span class="grow" style="text-align:right">Asistencia del mes: <b>${came}/${exp}</b> (${Math.round(came / exp * 100)} %)</span>` : ""}</div>
+    <div class="row"><h3 class="grow" style="text-transform:capitalize">${esc(fdateLong(dsel.getTime()))}</h3><div class="row"><button class="btn mini" data-act="reschedDay" data-d="${sel}" ${list.some(o => !o.status) ? "" : "hidden"}>Falté yo · reprogramar</button><button class="btn mini" data-act="newAppt" data-d="${sel}">+ Turno extra</button></div></div>`;
+  if (!list.length) h += `<div class="small muted">Sin turnos este día.</div>`;
+  const used = new Set();
+  const doneToday = o => Object.values(data.sessions).some(s => s.clientId === o.cid && s.status === "done" && ymd(new Date(s.startedAt)) === sel && sessFits(s, o));
+  const moveBtn = (keys) => `<button class="btn mini ghost" data-act="moveAppt" data-keys="${keys.join(",")}">Mover</button>`;
+  const seg = o => `<div class="seg" role="group" aria-label="Asistencia">${[["vino", "✓ Vino", "v"], ["falto", "✗ No vino", "f"], ["cancelado", "Canceló", "c"]].map(([stt, lab, cl]) =>
+    `<button class="${cl}" data-act="att" data-key="${o.key}" data-cid="${o.cid}" data-date="${o.date}" data-time="${o.time}" data-st="${stt}" aria-pressed="${o.status === stt}">${lab}</button>`).join("")}</div>`;
+  const pending = o => o.status && !o.reason ? "" : statusPill(o);
+  list.forEach(o => {
+    if (used.has(o.key)) return;
+    const pid = partnerOf(o.cid); const po = pid && list.find(x => x.cid === pid && x.time === o.time);
+    if (po) {
+      used.add(po.key);
+      const ca = data.clients[o.cid], cb = data.clients[pid]; const rr = clientRoutine(o.cid);
+      const di = rr ? apptDayIdx(o, rr[1]) : -1;
+      const canStart = sel === today && di >= 0 && !doneToday(o) && !BLOCKED(o.status);
+      h += `<div class="appt"><div class="tm">${esc(o.time)}</div><div class="ab">
+        <div class="who"><b>${esc(ca.name)} + ${esc(cb.name)}</b><span class="pill acc">dúo</span>${o.makeup ? `<span class="pill acc">Recupera ${esc(WD[o.makeup.wd].toLowerCase())}</span>` : ""}${o.extra && !o.status ? moveBtn([o.key, po.key]) : ""}</div>
+        ${canStart || !(o.status && po.status) ? `<div class="acts">${canStart ? `<button class="btn primary" data-act="startDuo" data-cid="${o.cid}" data-di="${di}">▶ Iniciar los dos</button>` : ""}${!(o.status && po.status) ? `<button class="btn" data-act="attPair" data-a="${o.key}" data-b="${po.key}" data-ca="${o.cid}" data-cb="${pid}" data-date="${o.date}" data-time="${o.time}">✓ Vinieron los dos</button>` : ""}</div>` : ""}
+        ${[[o, ca], [po, cb]].map(([x, c]) => `<div class="person"><span class="pn">${esc(c.name.split(" ")[0])}</span>${pending(x)}${seg(x)}</div>`).join("")}
+      </div></div>`;
+      return;
+    }
+    const c = data.clients[o.cid]; const rr = clientRoutine(o.cid);
+    const di = rr ? apptDayIdx(o, rr[1]) : -1;
+    const canStart = sel === today && di >= 0 && !doneToday(o) && !BLOCKED(o.status);
+    h += `<div class="appt"><div class="tm">${esc(o.time)}</div><div class="ab">
+      <div class="who"><b>${esc(c.name)}</b>${o.makeup ? `<span class="pill acc">Recupera ${esc(WD[o.makeup.wd].toLowerCase())}${o.makeup.reason ? " · " + esc(o.makeup.reason.toLowerCase()) : ""}</span>` : o.extra ? `<span class="pill">extra</span>` : ""}${pending(o)}${o.extra && !o.status ? moveBtn([o.key]) : ""}</div>
+      <div class="acts">${canStart ? `<button class="btn primary" data-act="${partnerOf(o.cid) ? "startDuo" : "start"}" data-cid="${o.cid}" data-rid="${rr[0]}" data-di="${di}">▶ Iniciar</button>` : ""}${seg(o)}</div>
+    </div></div>`;
+  });
+  return h + `</section>`;
+}
+
+/* ---------- library ---------- */
+function libList() { return Object.entries(data.library).sort((a, b) => (a[1].name || "").localeCompare(b[1].name || "")); }
+function renderLibrary() {
+  const q = (ui.libQ || "").toLowerCase();
+  const items = libList().filter(([, e]) => !q || (e.name + " " + (e.how || "")).toLowerCase().includes(q));
+  let h = header("Biblioteca", "home") + `<main class="wrap"><div class="row"><div class="grow"><div class="eyebrow">${libList().length} ejercicios</div><h1>Biblioteca de ejercicios</h1></div>
+    <button class="btn primary" data-act="libEdit" data-id="">+ Ejercicio</button></div>
+    <label class="f">Buscar<input id="lib-q" value="${esc(ui.libQ || "")}" placeholder="Ej. sentadilla, banda, equilibrio"></label><section class="card" id="lib-list">`;
+  if (!items.length) h += `<div class="empty small">${q ? "Nada coincide con la búsqueda." : "Todavía no hay ejercicios. Agregá el primero o guardalos desde el editor de rutinas."}</div>`;
+  items.forEach(([id, e]) => h += `<div class="exrow"><div class="grow"><b class="nm">${esc(e.name)}</b><span class="small muted">${esc(targetTxt(e))}${e.level != null ? " · nivel " + e.level : ""}</span>${e.how ? `<span class="small">${esc(e.how)}</span>` : ""}</div><button class="btn mini" data-act="libEdit" data-id="${id}">Editar</button></div>`);
+  return h + `</section></main>`;
+}
+
+/* ---------- client: progress ---------- */
+function renderClient() {
+  const cid = ui.client, c = data.clients[cid];
+  const rr = clientRoutine(cid);
+  let h = header(c.name, "home") + `<main class="wrap">`;
+  h += `<div class="row"><div class="grow"><div class="eyebrow">${c.age ? esc(c.age) + " años" : "Cliente"}</div><h1>${esc(c.name)}</h1>${c.goal ? `<div class="muted small">${esc(c.goal)}</div>` : ""}</div>
+    <button class="btn mini" data-act="editClient">Editar datos y horario</button></div>`;
+  h += `<div class="tabs" role="tablist">${[["dias", "Progreso"], ["hist", "Historial"], ["rutina", "Rutina"]].map(([k, l]) => `<button role="tab" aria-selected="${ui.tab === k}" data-act="tab" data-tab="${k}">${l}</button>`).join("")}</div>`;
+  const sess = Object.entries(data.sessions).filter(([, s]) => s.clientId === cid && s.status === "done").sort((a, b) => a[1].startedAt - b[1].startedAt);
+  if (ui.tab === "rutina") h += renderRoutineTab(cid, rr);
+  else if (ui.tab === "hist") h += renderHist(sess);
+  else h += renderProgress(cid, rr, sess);
+  h += `</main>`;
+  return h;
+}
+function sessAvg(s, f) { return avg(Object.values(s.logs || {}).map(l => l[f])); }
+function renderProgress(cid, rr, sess) {
+  let h = "";
+  if (!sess.length) return h + `<div class="card empty"><h3>Sin sesiones terminadas</h3><p>Cuando termines la primera sesión vas a ver acá la comparación día a día.</p></div>`;
+  const durs = sess.map(([, s]) => durOf(s));
+  const confs = sess.map(([, s]) => sessAvg(s, "conf"));
+  const first3 = avg(confs.slice(0, 3)), last3 = avg(confs.slice(-3));
+  const month = sess.filter(([, s]) => new Date(s.startedAt).getMonth() === new Date().getMonth() && new Date(s.startedAt).getFullYear() === new Date().getFullYear()).length;
+  h += `<div class="kpis">
+    <div class="kpi"><div class="v">${sess.length}</div><div class="l">Sesiones totales</div></div>
+    <div class="kpi"><div class="v">${(() => { const a = monthAttendance(cid, new Date()); return a.exp ? a.came + "/" + a.exp : month; })()}</div><div class="l">${monthAttendance(cid, new Date()).exp ? "Asistencia del mes" : "Sesiones este mes"}</div></div>
+    <div class="kpi"><div class="v">${fmt(avg(durs))}</div><div class="l">Duración media</div></div>
+    <div class="kpi"><div class="v">${r1(last3)}</div><div class="l">Confianza últimas 3 ${first3 != null && last3 != null ? `(${last3 >= first3 ? "+" : ""}${r1(last3 - first3)} vs inicio)` : ""}</div></div>
+  </div>`;
+  h += `<section class="card chart"><h3>Confianza y esfuerzo por sesión</h3>${lineChart(sess)}
+    <div class="legend"><span><i style="background:var(--accent)"></i>Confianza (1-10)</span><span><i style="background:var(--warn)"></i>Esfuerzo RPE (1-10)</span><span><i style="background:var(--bad)"></i>Dolor</span></div></section>`;
+  if (rr) {
+    const [, r] = rr; const di = Math.min(ui.statsDay, r.days.length - 1); const day = r.days[di];
+    h += `<section class="card"><div class="row"><h3 class="grow">Comparación por ejercicio</h3></div>
+      <div class="tabs">${r.days.map((d, i) => `<button aria-selected="${i === di}" data-act="statsDay" data-i="${i}">${esc(d.name)}</button>`).join("")}</div>`;
+    const ds = sess.filter(([, s]) => s.dayId === day.id).map(([, s]) => s);
+    if (!ds.length) h += `<div class="empty small">Todavía no hay sesiones de ${esc(day.name)}.</div>`;
+    else {
+      const firstS = ds[0], prevS = ds[ds.length - 2], lastS = ds[ds.length - 1];
+      h += `<div class="small muted">${ds.length} sesiones de ${esc(day.name)} · primera ${esc(fdate(firstS.startedAt))} · última ${esc(fdate(lastS.startedAt))}</div><div class="tblwrap"><table><thead><tr><th>Ejercicio</th><th>Primera</th><th>Anterior</th><th>Última</th><th>vs anterior</th><th>vs inicio</th></tr></thead><tbody>`;
+      // union of all exercises ever in plans of this day, ordered by latest plan
+      const seen = new Map();
+      ds.slice().reverse().forEach(s => s.plan.blocks.forEach(b => b.ex.forEach(e => { if (!seen.has(e.id)) seen.set(e.id, { e, b: b.name }); })));
+      let lastBlock = null;
+      [...seen.values()].forEach(({ e, b }) => {
+        const mF = sessMetrics(firstS, e.id, e), mP = prevS ? sessMetrics(prevS, e.id, e) : null, mL = sessMetrics(lastS, e.id, e);
+        if (!mF && !mP && !mL) return;
+        if (b !== lastBlock) { h += `<tr><td colspan="6" class="eyebrow" style="padding-top:14px">${esc(b)}</td></tr>`; lastBlock = b; }
+        const firstAny = ds.map(s => sessMetrics(s, e.id, e)).find(Boolean);
+        h += `<tr><td><b>${esc(e.name)}</b>${e.retired ? ` <span class="pill warn">reemplazado</span>` : ""}${mL && mL.pain >= 4 ? ` <span class="pill bad">dolor ${mL.pain}</span>` : ""}</td>
+          <td class="num">${metricTxt(mF)}</td><td class="num">${metricTxt(mP)}</td><td class="num">${metricTxt(mL)}</td>
+          <td>${trendPill(compare(mP, mL), mL)}</td><td>${trendPill(compare(firstAny, mL), mL)}</td></tr>`;
+      });
+      h += `</tbody></table></div><p class="small muted">Se compara en este orden: nivel, carga, volumen (reps o segundos, ±5 %), confianza y esfuerzo. Menos esfuerzo para el mismo trabajo cuenta como mejora.</p>`;
+    }
+    h += `</section>`;
+    // changes
+    const ch = (r.changes || []).slice().reverse();
+    const skipped = [];
+    sess.forEach(([, s]) => Object.entries(s.logs || {}).forEach(([exId, l]) => { if (l.skipped) { const f = findEx(s.plan, exId); skipped.push({ at: s.startedAt, name: f ? f.e.name : exId, reason: l.skipReason || "", day: s.dayName }); } }));
+    h += `<section class="card"><h3>Cambios y ejercicios desistidos</h3>`;
+    if (!ch.length && !skipped.length) h += `<div class="small muted">Sin cambios por ahora.</div>`;
+    if (ch.length) h += `<div class="tblwrap"><table><thead><tr><th>Fecha</th><th>Día</th><th>Salió</th><th>Entró</th><th>Motivo</th></tr></thead><tbody>${ch.map(x => `<tr><td class="num">${esc(fdate(x.at))}</td><td>${esc(x.dayName || "")}</td><td>${esc(x.from)}</td><td>${esc(x.to)}</td><td>${esc(x.reason || "")}</td></tr>`).join("")}</tbody></table></div>`;
+    if (skipped.length) h += `<div class="eyebrow">Ejercicios que no se pudieron hacer</div><div class="tblwrap"><table><tbody>${skipped.reverse().map(x => `<tr><td class="num">${esc(fdate(x.at))}</td><td>${esc(x.day)}</td><td>${esc(x.name)}</td><td>${esc(x.reason)}</td></tr>`).join("")}</tbody></table></div>`;
+    h += `</section>`;
+  }
+  h += `<section class="card"><h3>Exportar</h3><p class="small muted">Para mostrarle a la clienta sus números o guardarlos aparte.</p>
+    <div class="row"><button class="btn" data-act="exportCsv">Datos completos (CSV)</button><button class="btn primary" data-act="exportReport">Reporte para la clienta</button></div></section>
+    <section class="card"><h3>Borrar datos</h3><p class="small muted">Para sesiones de prueba o cargadas por error. Una sola sesión se borra desde Historial → Ver.</p>
+    <div class="row"><button class="btn danger" data-act="wipe">Borrar todo el historial</button></div></section>`;
+  return h;
+}
+function lineChart(sess) {
+  const W = 640, H = 220, L = 30, R = 12, T = 12, B = 34;
+  const n = sess.length;
+  const x = i => n === 1 ? (L + (W - L - R) / 2) : L + i * (W - L - R) / (n - 1);
+  const y = v => T + (10 - v) * (H - T - B) / 10;
+  const series = [["conf", "var(--accent)"], ["rpe", "var(--warn)"], ["pain", "var(--bad)"]];
+  let g = "";
+  [0, 5, 10].forEach(v => g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${v}</text>`);
+  const step = Math.max(1, Math.ceil(n / 7));
+  sess.forEach(([, s], i) => { if (i % step === 0 || i === n - 1) g += `<text x="${x(i)}" y="${H - 12}" text-anchor="middle" font-size="11" fill="var(--muted)">${esc(fdate(s.startedAt))}</text>`; });
+  series.forEach(([f, col]) => {
+    const pts = sess.map(([, s], i) => { const v = sessAvg(s, f); return v == null ? null : [x(i), y(v)]; }).filter(Boolean);
+    if (!pts.length) return;
+    g += `<polyline fill="none" stroke="${col}" stroke-width="${f === "conf" ? 3 : 2}" stroke-linejoin="round" stroke-linecap="round" points="${pts.map(p => p.join(",")).join(" ")}"/>`;
+    pts.forEach((p, i) => g += `<circle cx="${p[0]}" cy="${p[1]}" r="${i === pts.length - 1 ? 5 : 3}" fill="${col}"/>`);
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Confianza, esfuerzo y dolor promedio por sesión">${g}</svg>`;
+}
+function renderHist(sess) {
+  if (!sess.length) return `<div class="card empty">Sin sesiones terminadas todavía.</div>`;
+  return `<section class="card"><div class="tblwrap"><table><thead><tr><th>Fecha</th><th>Día</th><th>Duración</th><th>Conf.</th><th>RPE</th><th>Nota</th><th></th></tr></thead><tbody>` +
+    sess.slice().reverse().map(([id, s]) => `<tr><td class="num">${esc(fdate(s.startedAt))}</td><td>${esc(s.dayName)}</td><td class="num">${fmt(durOf(s))}</td><td class="num">${r1(sessAvg(s, "conf"))}</td><td class="num">${r1(sessAvg(s, "rpe"))}</td><td>${s.endedEarly ? `<span class="pill warn">Terminó antes</span> ` : ""}${esc(s.note || "")}</td><td><div class="row" style="flex-wrap:nowrap"><button class="btn mini" data-act="viewSess" data-id="${id}">Ver</button><button class="btn mini danger" data-act="delSessRow" data-id="${id}" aria-label="Borrar sesión">Borrar</button></div></td></tr>`).join("") +
+    `</tbody></table></div></section>`;
+}
+function renderRoutineTab(cid, rr) {
+  if (!rr) return `<div class="card empty"><h3>Sin rutina</h3><button class="btn primary" data-act="assign" data-id="${cid}">Crear o asignar rutina</button></div>`;
+  const [rid, r] = rr;
+  let h = `<section class="card"><div class="row"><div class="grow"><h3>${esc(r.name)}</h3><div class="small muted">${r.days.length} días · editada ${esc(fdate(r.updatedAt || Date.now()))}</div></div>
+    <button class="btn primary" data-act="editRoutine" data-id="${rid}" ${canWrite ? "" : "disabled"}>Editar rutina</button></div>
+    <div class="row"><button class="btn mini" data-act="saveTemplate" data-id="${rid}">Guardar como plantilla</button></div></section>`;
+  r.days.forEach(d => {
+    h += `<section class="card"><h3>${esc(d.name)} <span class="muted small">${esc(d.focus || "")}</span></h3>`;
+    d.blocks.forEach(b => {
+      h += `<div class="eyebrow">${esc(b.name)}${b.superset ? " · biserie" : ""}</div>`;
+      activeEx(b).forEach(e => h += `<div class="exrow"><div class="grow"><b class="nm">${esc(e.name)}</b><span class="small muted">${esc(targetTxt(e))}${e.level != null ? " · nivel " + e.level : ""} · descanso ${e.rest || 30} s</span></div></div>`);
+    });
+    h += `</section>`;
+  });
+  return h;
+}
+
+/* ---------- routine as text ---------- */
+const ABS_RE = /\babs\b|plancha|crunch|abdominal|oblicu|elevaci[oó]n(es)? de piernas|tijera|cucaracha|dead ?bug/i;
+const SIDE_RE = /\b(c\/\s*(lado|pierna|brazo)|c\s+(lado|pierna|brazo)|por (lado|pierna|brazo)|cada (lado|pierna|brazo))\b/ig;
+function exLine(e) {
+  const dose = e.mode === "time" ? `${e.sets}x${e.sec}s` : `${e.sets}x${e.maxReps ? "máx" : e.repsList ? e.repsList.join(".") : e.reps}${e.unit && e.unit !== "reps" ? " " + e.unit : ""}`;
+  return `${e.name} ${dose}${e.side ? " c/lado" : ""}${e.startLoad ? ` (${e.startLoad}${U()})` : ""}`;
+}
+function dayToText(d) {
+  const groups = [];
+  d.blocks.forEach(b => { const ex = activeEx(b); if (!ex.length) return; if (b.superset && ex.length > 1) groups.push(ex.map(exLine).join("\n")); else ex.forEach(e => groups.push(exLine(e))); });
+  return groups.join("\n\n");
+}
+function parseLine(line) {
+  let t = line.replace(/^[\s\-•*·]+/, "").replace(/^\d+[.)]\s+/, "").trim(); if (!t) return null;
+  const o = { sets: 3, reps: 12, mode: "reps", sec: 30, side: false, startLoad: null, how: "", unit: "reps", rangeTop: null };
+  const lb = t.match(/\(?\s*(\d+(?:[.,]\d+)?)\s*(lbs?|lib|libras|kg|kilos)\s*\.?\)?/i); if (lb) { o.startLoad = parseFloat(lb[1].replace(",", ".")); t = t.replace(lb[0], " "); }
+  if (SIDE_RE.test(t)) { o.side = true; t = t.replace(SIDE_RE, " "); } SIDE_RE.lastIndex = 0;
+  if (/unilateral|a 1 (brazo|pierna)|un brazo|una pierna/i.test(t)) o.side = true;
+  const pyr = t.match(/(\d+)\s*[x×]\s*(\d+(?:\s*[.·,]\s*\d+)+)/i);
+  if (pyr) { const list = parseReps(pyr[2]); o.sets = Math.max(+pyr[1], list.length); o.reps = list[0]; o.repsList = list; t = t.replace(pyr[0], " "); }
+  const mx = pyr ? null : t.match(/(\d+)\s*[x×\/]\s*m[aá]x\w*\.?(\s*reps?)?/i);
+  if (mx) { o.sets = +mx[1]; o.reps = 10; o.maxReps = true; o.how = "Máximas repeticiones."; t = t.replace(mx[0], " "); }
+  const m = pyr || mx ? null : t.match(/(\d+)\s*[x×]\s*(\d+)\s*(?:(?:a|-|–)\s*(\d+))?\s*(s\b|seg\w*|"|min\w*|m\b)?/i);
+  if (m) {
+    o.sets = +m[1]; const v = +m[2];
+    if (m[4] && /^(s|seg|"|min)/i.test(m[4])) { o.mode = "time"; o.sec = /min/i.test(m[4]) ? v * 60 : v; }
+    else { o.reps = v; if (m[4] && /^m$/i.test(m[4])) o.unit = "m"; }
+    if (m[3]) o.how = `Rango ${m[2]} a ${m[3]}.`;
+    t = t.replace(m[0], " ");
+  }
+  if (/sin descanso/i.test(t)) { o.how = (o.how + " Sin descanso.").trim(); t = t.replace(/sin descanso/ig, " "); }
+  const name = t.replace(/\s+/g, " ").replace(/^[\s.,;:\-]+|[\s.,;:()\-]+$/g, "").trim();
+  if (!name) return m || pyr || mx || lb || o.side ? Object.assign(o, { name: "", doseOnly: true, hasSets: !!(m || pyr || mx) }) : null;
+  const abs = ABS_RE.test(name);
+  if (!m && abs) { if (/plancha/i.test(name)) { o.mode = "time"; o.sec = 30; } else o.reps = 15; }
+  return Object.assign(o, { name: name.charAt(0).toUpperCase() + name.slice(1), trackLoad: !abs });
+}
+function textToBlocks(text, oldDay) {
+  const old = new Map(); (oldDay ? oldDay.blocks : []).forEach(b => b.ex.forEach(e => { if (!e.retired) old.set(e.name.toLowerCase(), e); }));
+  const groups = text.replace(/\r/g, "").split(/\n\s*\n/).map(g => {
+    const out = [];
+    g.split("\n").flatMap(l => l.split(/\s+\/\s*|\s*\/\s+/)).map(parseLine).filter(Boolean).forEach(p => {
+      if (p.doseOnly) { const prev = out[out.length - 1]; if (prev) { if (p.hasSets) Object.assign(prev, { sets: p.sets, reps: p.reps, repsList: p.repsList || null, maxReps: !!p.maxReps, sec: p.sec, mode: p.mode, unit: p.unit, how: p.how || prev.how }); if (p.side) prev.side = true; if (p.startLoad != null) prev.startLoad = p.startLoad; } return; }
+      out.push(p);
+    });
+    return out;
+  }).filter(g => g.length);
+  const used = new Set(); const blocks = []; let singles = null; let n = 0;
+  const make = p => {
+    const prev = old.get(p.name.toLowerCase()); if (prev) used.add(prev.id);
+    const rest = prev && prev.rest != null ? prev.rest : p.mode === "time" ? 30 : p.reps <= 8 ? 90 : 60;
+    return Object.assign({}, prev || {}, { id: prev ? prev.id : uid(), name: prev ? prev.name : p.name, mode: p.mode, sets: p.sets, reps: p.reps, repsList: p.repsList || null, maxReps: !!p.maxReps, sec: p.sec, side: p.side, unit: p.unit,
+      rest, trackLoad: prev ? prev.trackLoad : p.trackLoad, startLoad: p.startLoad ?? (prev ? prev.startLoad ?? null : null),
+      how: p.how ? (prev && prev.how && !prev.how.startsWith("Rango") ? prev.how + " " + p.how : p.how) : (prev ? prev.how : ""), level: prev ? prev.level ?? null : null, retired: false });
+  };
+  groups.forEach(g => {
+    if (g.length > 1) { singles = null; n++; blocks.push({ id: uid(), name: "Biserie " + (blocks.filter(b => b.superset).length + 1), superset: true, rest: 60, ex: g.map(make) }); }
+    else { if (!singles) { singles = { id: uid(), name: "Ejercicios", ex: [] }; blocks.push(singles); } singles.ex.push(make(g[0])); }
+  });
+  // keep removed exercises as retired so their history stays readable
+  const retired = []; old.forEach(e => { if (!used.has(e.id)) retired.push(Object.assign({}, e, { retired: true, retiredAt: Date.now() })); });
+  if (retired.length) { const last = blocks[blocks.length - 1] || (blocks[0] = { id: uid(), name: "Ejercicios", ex: [] }); last.ex.push(...retired); }
+  return blocks;
+}
+
+/* ---------- editor ---------- */
+function renderEditor() {
+  const r = ui.editDraft; const di = Math.min(ui.editDay, r.days.length - 1); const d = r.days[di];
+  let h = header("Editar rutina", "closeEdit") + `<main class="wrap">`;
+  h += `<label class="f">Nombre de la rutina<input id="ed-name" value="${esc(r.name)}"></label>`;
+  h += `<div class="tabs">${r.days.map((x, i) => `<button aria-selected="${i === di}" data-act="editDay" data-i="${i}">${esc(x.name)}</button>`).join("")}<button data-act="addDay">+ Día</button></div>`;
+  h += `<div class="grid2"><label class="f">Nombre del día<input id="ed-dname" value="${esc(d.name)}"></label>
+    <label class="f">Enfoque<input id="ed-dfocus" value="${esc(d.focus || "")}"></label>
+    <label class="f">Día de la semana<select id="ed-dwd">${WD.map((w, i) => `<option value="${i}" ${d.weekday === i ? "selected" : ""}>${w}</option>`).join("")}</select></label></div>`;
+  const preview = d.blocks.map(b => { const ex = activeEx(b); if (!ex.length) return ""; return `<div class="pv"><div class="eyebrow">${esc(b.name)}${b.superset && ex.length > 1 ? " · biserie" : ""}</div>${ex.map(e => `<div>${esc(exLine(e))}</div>`).join("")}</div>`; }).join("");
+  h += `<section class="card"><div class="row"><h3 class="grow">Rutina del ${esc(d.name)}</h3><button class="btn primary" data-act="dayText">✎ Escribir rutina</button></div>
+    ${preview || `<div class="small muted">Sin ejercicios. Tocá "Escribir rutina" y pegala como me la mandás a mí.</div>`}
+    <button class="btn ghost mini" data-act="toggleDetailed">${ui.edDetailed ? "Ocultar edición detallada ▴" : "Edición detallada (mover, biseries, cada ejercicio) ▾"}</button></section>`;
+  if (ui.edDetailed) d.blocks.forEach((b, bi) => {
+    h += `<section class="card"><div class="row"><input class="grow" style="border:1px solid var(--line);border-radius:8px;padding:8px;min-height:40px;background:var(--bg);font-weight:600" data-bname="${bi}" value="${esc(b.name)}" aria-label="Nombre del bloque">
+      <button class="btn mini" data-act="mvBlock" data-bi="${bi}" data-dir="-1" aria-label="Subir bloque">↑</button><button class="btn mini" data-act="mvBlock" data-bi="${bi}" data-dir="1" aria-label="Bajar bloque">↓</button></div>`;
+    h += `<label class="chk small"><input type="checkbox" data-bss="${bi}" ${b.superset ? "checked" : ""}> Biserie: alternar los ejercicios de este bloque serie por serie</label>`;
+    b.ex.forEach((e, ei) => {
+      if (e.retired) return;
+      h += `<div class="exrow"><div class="grow"><b class="nm">${esc(e.name)}</b><span class="small muted">${esc(targetTxt(e))} · descanso ${e.rest || 30} s${e.level != null ? " · nivel " + e.level : ""}</span></div>
+        <div class="ctl"><button class="btn mini" data-act="mvEx" data-bi="${bi}" data-ei="${ei}" data-dir="-1" aria-label="Subir">↑</button>
+        <button class="btn mini" data-act="mvEx" data-bi="${bi}" data-ei="${ei}" data-dir="1" aria-label="Bajar">↓</button>
+        <button class="btn mini" data-act="exEdit" data-bi="${bi}" data-ei="${ei}">Editar</button></div></div>`;
+    });
+    h += `<div class="row"><button class="btn mini" data-act="exEdit" data-bi="${bi}" data-ei="-1">+ Ejercicio</button>${b.ex.filter(e => !e.retired).length ? "" : `<button class="btn mini danger" data-act="rmBlock" data-bi="${bi}">Quitar bloque</button>`}</div></section>`;
+  });
+  if (ui.edDetailed) h += `<button class="btn" data-act="addBlock">+ Bloque</button>`;
+  h += `</main><div class="bar"><div class="in"><button class="btn big" data-act="closeEdit">Cancelar</button><button class="btn big primary" data-act="saveEdit">Guardar</button></div></div>`;
+  return h;
+}
+function syncEditorFields() {
+  const r = ui.editDraft; if (!r) return;
+  const n = $("#ed-name"); if (n) r.name = n.value.trim() || r.name;
+  const d = r.days[Math.min(ui.editDay, r.days.length - 1)];
+  const dn = $("#ed-dname"); if (dn) d.name = dn.value.trim() || d.name;
+  const df = $("#ed-dfocus"); if (df) d.focus = df.value.trim();
+  const dw = $("#ed-dwd"); if (dw) d.weekday = +dw.value;
+  document.querySelectorAll("[data-bname]").forEach(i => { d.blocks[+i.dataset.bname].name = i.value.trim() || "Bloque"; });
+  document.querySelectorAll("[data-bss]").forEach(i => { d.blocks[+i.dataset.bss].superset = i.checked; });
+}
+function exForm(e, opts) {
+  opts = opts || {};
+  e = e || { name: "", how: "", mode: "reps", sets: 3, reps: 12, unit: "reps", sec: 30, side: false, rest: 60, level: null, trackLoad: true };
+  const lib = libList();
+  return `${opts.lib !== false && lib.length ? `<label class="f">Elegir de la biblioteca<select id="x-lib"><option value="">Escribirlo a mano</option>${lib.map(([id, x]) => `<option value="${id}">${esc(x.name)}</option>`).join("")}</select></label>` : ""}
+    <label class="f">Ejercicio<input id="x-name" value="${esc(e.name)}" placeholder="Ej. Press militar"></label>
+    <div class="grid3"><label class="f">Series<input id="x-sets" type="number" min="1" max="20" inputmode="numeric" value="${e.sets}"></label>
+    <label class="f">${e.mode === "time" ? "Segundos" : "Reps"}<input id="${e.mode === "time" ? "x-sec" : "x-reps"}" ${e.mode === "time" ? `type="number" min="1" inputmode="numeric"` : `inputmode="decimal" placeholder="12 o 15.10.8.8"`} value="${e.mode === "time" ? (e.sec ?? 30) : repsTxt(e).replace(/·/g, ".")}"></label>
+    <label class="f">Descanso (s)<input id="x-rest" type="number" min="0" inputmode="numeric" value="${e.rest ?? 60}"></label></div>
+    <label class="chk"><input type="checkbox" id="x-side" ${e.side ? "checked" : ""}> Por lado (izquierda y derecha)</label>
+    <details class="more"><summary>Más opciones</summary><div class="grid2">
+      <label class="f">Se mide por<select id="x-mode"><option value="reps" ${e.mode !== "time" ? "selected" : ""}>Repeticiones</option><option value="time" ${e.mode === "time" ? "selected" : ""}>Tiempo</option></select></label>
+      <label class="f">${e.mode === "time" ? "Reps" : "Segundos"} (si cambiás la medida)<input id="${e.mode === "time" ? "x-reps" : "x-sec"}" type="number" min="1" inputmode="numeric" value="${e.mode === "time" ? (e.reps ?? 12) : (e.sec ?? 30)}"></label>
+      <label class="f">Carga inicial (${U()})<input id="x-sload" type="number" step="0.5" inputmode="decimal" value="${e.startLoad ?? ""}"></label>
+      <label class="f">Nivel (opcional)<input id="x-level" type="number" min="1" max="20" inputmode="numeric" value="${e.level ?? ""}"></label>
+      <label class="f">Unidad (reps, m, pasadas)<input id="x-unit" value="${esc(e.unit || "reps")}"></label>
+      <label class="chk"><input type="checkbox" id="x-load" ${e.trackLoad ? "checked" : ""}> Registrar carga (${U()})</label>
+      <label class="f" style="grid-column:1/-1">Cómo se hace<textarea id="x-how" rows="2">${esc(e.how || "")}</textarea></label>
+      ${opts.note !== false ? `<label class="f" style="grid-column:1/-1">Nota fija<input id="x-cnote" value="${esc(e.coachNote || "")}" placeholder="Ej. no bajar de 90°"></label>` : ""}
+      ${opts.save !== false ? `<label class="chk" style="grid-column:1/-1"><input type="checkbox" id="x-savelib"> Guardar también en la biblioteca</label>` : ""}
+    </div></details>`;
+}
+function fillExForm(x) {
+  const set = (id, v) => { const el = $("#" + id); if (el) { if (el.type === "checkbox") el.checked = !!v; else el.value = v ?? ""; } };
+  set("x-name", x.name); set("x-how", x.how); set("x-mode", x.mode || "reps"); set("x-sets", x.sets); set("x-reps", repsTxt(x).replace(/·/g, ".")); set("x-unit", x.unit || "reps");
+  set("x-sec", x.sec); set("x-rest", x.rest); set("x-sload", x.startLoad ?? ""); set("x-level", x.level ?? ""); set("x-side", x.side); set("x-load", x.trackLoad);
+}
+function libFrom(e) { const { id, retired, retiredAt, replacedBy, lvlDeclinedAt, ...rest } = e; return Object.assign(rest, { updatedAt: Date.now() }); }
+function readExForm(base) {
+  const v = id => $("#" + id).value;
+  const name = v("x-name").trim(); if (!name) { toast("Poné el nombre del ejercicio"); return null; }
+  const lvl = v("x-level").trim();
+  return Object.assign({}, base || { id: uid() }, {
+    name, how: v("x-how").trim(), mode: v("x-mode"), sets: Math.max(1, +v("x-sets") || 1), reps: Math.max(1, parseReps(v("x-reps"))[0] || 1), repsList: parseReps(v("x-reps")).length > 1 ? parseReps(v("x-reps")) : null,
+    unit: v("x-unit").trim() || "reps", sec: Math.max(5, +v("x-sec") || 20), rest: Math.max(0, +v("x-rest") || 0),
+    level: lvl === "" ? null : +lvl, side: $("#x-side").checked, trackLoad: $("#x-load").checked,
+    coachNote: $("#x-cnote") ? $("#x-cnote").value.trim() : (base && base.coachNote) || "",
+    startLoad: $("#x-sload") && $("#x-sload").value !== "" ? +$("#x-sload").value : null
+  });
+}
+function maybeSaveLib(ne) {
+  const c = $("#x-savelib"); if (!c || !c.checked) return;
+  const ex = libList().find(([, x]) => x.name.toLowerCase() === ne.name.toLowerCase());
+  put("library", ex ? ex[0] : uid(), libFrom(ne));
+}
+
+/* ---------- runner ---------- */
+function startSession(cid, rid, di) {
+  const r = data.routines[rid]; const d = r.days[di];
+  const id = uid();
+  const s = { clientId: cid, routineId: rid, dayId: d.id, dayName: d.name, routineName: r.name, status: "active", startedAt: Date.now(), activeMs: 0, stepIdx: 0, stepMs: 0, plan: clone(d), logs: {}, blocks: {}, note: "", score: null };
+  put("sessions", id, s);
+  openRun(id);
+  enterStep(0, true);
+}
+function openRun(id) {
+  if (!data.sessions[id]) return;
+  let s = data.sessions[id] = clone(data.sessions[id]);
+  const mirror = LS.get("liftcoach-run-" + id);
+  if (mirror && mirror.plan && mirror.status === "active" && newerSess(mirror, s) === mirror) { s = data.sessions[id] = mirror; }
+  else if (mirror && !mirror.plan && mirror.stepIdx === s.stepIdx && mirror.activeMs > (s.activeMs || 0)) { s.activeMs = mirror.activeMs; s.stepMs = mirror.stepMs; }
+  if (s.leftAt) { s.awayMs = (s.awayMs || 0) + (Date.now() - s.leftAt); delete s.leftAt; }
+  run = { id, steps: buildSteps(s.plan), running: false, lastTs: 0, draft: null, rate: null, lastMirror: 0, resumed: s.activeMs > 0 };
+  if (s.stepIdx >= run.steps.length) s.stepIdx = run.steps.length - 1;
+  prepStep();
+  wake(true);
+  saveRun();
+  render();
+}
+function S() { return data.sessions[run.id]; }
+function cur() { return run.steps[S().stepIdx]; }
+function saveRun() {
+  const s = S(); s.updatedAt = Date.now();
+  LS.set("liftcoach-run-" + run.id, s);
+  LS.set("coachseba-open-run", run.id);
+  if (canWrite) put("sessions", run.id, clone(s));
+}
+function prepStep() {
+  const s = S(), st = cur(); run.draft = null; run.rate = null;
+  if (st.t === "work") {
+    const { e } = findEx(s.plan, st.e);
+    const L = s.logs[st.e]; const prev = L && (L.sets || []).find(x => x.s === st.s && x.sd === st.sd);
+    const lastLoad = L && (L.sets || []).length ? L.sets[L.sets.length - 1].load : null;
+    run.draft = {
+      reps: prev && prev.reps != null ? prev.reps : repsAt(e, st.s),
+      load: prev && prev.load != null ? prev.load : (lastLoad ?? lastSetValue(s.clientId, e.id, "load") ?? e.startLoad ?? 0),
+      level: prev && prev.level != null ? prev.level : (L && L.level != null ? L.level : (lastSetValue(s.clientId, e.id, "level") ?? e.level))
+    };
+  }
+  if (st.t === "work" && st.s === 1 && st.sd !== "D") { const { e } = findEx(s.plan, st.e); if (painAlert(exHistory(s.clientId, e, run.id))) setTimeout(() => cue("alert"), 150); }
+  if (st.t === "rate") { const L = s.logs[st.e] || {}; run.rate = { rpe: L.rpe ?? null, conf: L.conf ?? null, pain: L.pain ?? null, note: L.note || "" }; }
+  if (st.t === "block") { const B = s.blocks[st.b] || {}; run.rate = { score: B.score ?? null, note: B.note || "" }; }
+  if (st.t === "end") run.rate = { score: s.score ?? null, note: s.note || "" };
+}
+function enterStep(i, fresh) {
+  run.resumed = false;
+  const s = S(); s.stepIdx = Math.max(0, Math.min(i, run.steps.length - 1)); s.stepMs = 0;
+  const st = cur();
+  run.running = st.t === "rest"; run.lastTs = performance.now();
+  prepStep();
+  saveRun();
+  renderRun();
+  window.scrollTo(0, 0);
+}
+function next() { enterStep(S().stepIdx + 1); }
+function prev() { let i = S().stepIdx - 1; while (i > 0 && run.steps[i].t === "rest") i--; enterStep(i); }
+function nextWorkFrom(i) { for (let j = i + 1; j < run.steps.length; j++) if (run.steps[j].t === "work") return j; return -1; }
+function completeSet(auto) {
+  const s = S(), st = cur(); const { e } = findEx(s.plan, st.e);
+  const L = s.logs[st.e] || (s.logs[st.e] = { sets: [] }); L.sets = L.sets || [];
+  const ms = s.stepMs;
+  const rec = { s: st.s, sd: st.sd, ms: Math.round(ms), at: Date.now() };
+  if (e.mode === "time") rec.sec = auto || ms < 1000 ? e.sec : Math.round(ms / 1000);
+  else rec.reps = run.draft.reps;
+  if (e.trackLoad) rec.load = run.draft.load;
+  if (e.level != null || run.draft.level != null) { rec.level = run.draft.level; L.level = run.draft.level; }
+  const k = L.sets.findIndex(x => x.s === st.s && x.sd === st.sd);
+  if (k >= 0) L.sets[k] = rec; else L.sets.push(rec);
+  if (auto) flash();
+  next();
+}
+function flash() { const b = document.body; b.animate && b.animate([{ backgroundColor: "var(--accent-soft)" }, { backgroundColor: "var(--bg)" }], { duration: 700 }); }
+let wl = null;
+async function wake(on) {
+  try {
+    if (on && !wl && navigator.wakeLock) { wl = await navigator.wakeLock.request("screen"); wl.addEventListener && wl.addEventListener("release", () => wl = null); }
+    if (!on && wl) { await wl.release(); wl = null; }
+  } catch { wl = null; }
+}
+document.addEventListener("visibilitychange", () => {
+  if (!run) return;
+  if (document.visibilityState === "hidden") saveRun();
+  else { run.lastTs = performance.now(); wake(true); }
+});
+window.addEventListener("pagehide", () => { if (run) saveRun(); if (duo) saveDuo(); });
+document.addEventListener("visibilitychange", () => { if (!duo) return; if (document.visibilityState === "hidden") saveDuo(); else { duo.lastTs = performance.now(); wake(true); } });
+
+function tick() {
+  if (run || duo) { const now = Date.now(); if (now - (tick.lastClk || 0) > 500) { tick.lastClk = now; const c = $("#clk"); if (c) c.textContent = fmt(sessionMs(run ? S() : D(0))); } }
+  if (duo && duo.running) { duoTick(performance.now()); return requestAnimationFrame(tick); }
+  if (run && run.running) {
+    const now = performance.now(); const d = Math.min(now - run.lastTs, 2000); run.lastTs = now;
+    const s = S(); s.stepMs += d; s.activeMs += d;
+    const st = cur();
+    let total = null;
+    if (st.t === "work") { const { e } = findEx(s.plan, st.e); if (e.mode === "time") total = e.sec * 1000; }
+    if (st.t === "rest") total = st.sec * 1000;
+    if (total != null) {
+      const remS = Math.ceil((total - s.stepMs) / 1000);
+      if (remS <= 3 && remS > 0 && run.lastCue !== remS) { run.lastCue = remS; cue("tick"); }
+      if (s.stepMs >= total) { run.lastCue = null; cue("end"); if (st.t === "work") completeSet(true); else next(); return requestAnimationFrame(tick); }
+    }
+    if (now - run.lastMirror > 2000) { run.lastMirror = now; LS.set("liftcoach-run-" + run.id, s); }
+    updateClock();
+  }
+  requestAnimationFrame(tick);
+}
+function ringSvg(frac, color) {
+  const R = 46, C = 2 * Math.PI * R; frac = Math.max(0, Math.min(1, frac));
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="${R}" fill="none" stroke="var(--sunk)" stroke-width="6"/><circle id="ringfg" cx="50" cy="50" r="${R}" fill="none" stroke="${color}" stroke-width="6" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - frac)}"/></svg>`;
+}
+function updateClock() {
+  if (!run) return; const s = S(), st = cur();
+  const c = $("#clk"); if (c) c.textContent = fmt(sessionMs(s));
+  const n = $("#tnum"); if (!n) return;
+  const rv = $(".run");
+  const R = 46, C = 2 * Math.PI * R; const fg = $("#ringfg");
+  const endingAt = rem => rv && rv.classList.toggle("ending", run.running && rem <= 3000 && rem > 0);
+  if (st.t === "rest") { const rem = st.sec * 1000 - s.stepMs; endingAt(rem); n.textContent = Math.ceil(Math.max(0, rem) / 1000); if (fg) fg.setAttribute("stroke-dashoffset", C * (1 - Math.max(0, rem) / (st.sec * 1000))); }
+  else if (st.t === "work") {
+    const { e } = findEx(s.plan, st.e);
+    if (e.mode === "time") { const rem = e.sec * 1000 - s.stepMs; endingAt(rem); n.textContent = Math.ceil(Math.max(0, rem) / 1000); if (fg) fg.setAttribute("stroke-dashoffset", C * (1 - Math.max(0, rem) / (e.sec * 1000))); }
+    else { n.textContent = fmt(s.stepMs); if (fg) fg.setAttribute("stroke-dashoffset", C * (1 - ((s.stepMs / 1000) % 60) / 60)); }
+  }
+}
+function stepLabel(st, plan) {
+  if (st.t === "end") return "Cierre de la sesión";
+  if (st.t === "block") { const b = plan.blocks.find(x => x.id === st.b); return "Puntuar bloque: " + (b ? b.name : ""); }
+  const f = findEx(plan, st.e); const nm = f ? f.e.name : "";
+  if (st.t === "rest") return "Descanso";
+  if (st.t === "rate") return "Puntuar: " + nm;
+  return `${nm} · serie ${st.s}${st.sd ? (st.sd === "I" ? " izq." : " der.") : ""}`;
+}
+function nextPreview() {
+  const s = S(); const i = s.stepIdx;
+  for (let j = i + 1; j < run.steps.length; j++) {
+    const st = run.steps[j];
+    if (st.t === "work") { const { e } = findEx(s.plan, st.e); return { k: "Sigue", t: e.name, d: `Serie ${st.s} de ${e.sets}${st.sd ? (st.sd === "I" ? " · lado izquierdo" : " · lado derecho") : ""} · ${e.mode === "time" ? e.sec + " s" : repsAt(e, st.s) + " " + (e.unit || "reps")}` }; }
+    if (st.t === "end") return { k: "Sigue", t: "Cierre de la sesión", d: "" };
+  }
+  return null;
+}
+function scale(name, val, from, to) {
+  let h = `<div class="scale ${to - from === 10 ? "z" : ""}" role="group">`;
+  for (let i = from; i <= to; i++) h += `<button data-act="scale" data-k="${name}" data-v="${i}" aria-pressed="${val === i}">${i}</button>`;
+  return h + `</div>`;
+}
+function renderRun() {
+  const s = S(), st = cur(); const c = data.clients[s.clientId];
+  const works = run.steps.filter(x => x.t === "work").length;
+  const doneW = run.steps.slice(0, s.stepIdx).filter(x => x.t === "work").length;
+  const blk = s.plan.blocks.find(b => b.id === st.b);
+  let body = "", bar = "";
+  const np = nextPreview();
+  const npHtml = np ? `<div class="next"><div class="grow"><div class="k">${np.k}</div><b>${esc(np.t)}</b><div class="small muted">${esc(np.d)}</div></div></div>` : "";
+  if (st.t === "work" || st.t === "rest") {
+    const { e } = findEx(s.plan, st.e);
+    const L = s.logs[e.id] || { sets: [] };
+    const sides = e.side ? ["I", "D"] : [null];
+    let sets = `<div class="sets">`;
+    for (let k = 1; k <= e.sets; k++) sides.forEach(sd => {
+      const done = (L.sets || []).some(x => x.s === k && x.sd === sd);
+      const isCur = st.t === "work" && st.s === k && st.sd === sd;
+      sets += `<span class="${isCur ? "cur" : done ? "done" : ""}">S${k}${sd ? " " + sd : ""}</span>`;
+    });
+    sets += `</div>`;
+    if (st.t === "rest") {
+      body = `<div class="row"><span class="pill rest">Descanso</span><span class="pill">${esc(blk ? blk.name : "")}</span></div>
+        <div class="exname">${esc(e.name)}</div>${sets}
+        <div class="timer"><div class="ring">${ringSvg(1 - s.stepMs / (st.sec * 1000), "var(--rest)")}<div class="t"><span class="n" id="tnum">${Math.ceil((st.sec * 1000 - s.stepMs) / 1000)}</span><span class="u">segundos de descanso</span></div></div></div>
+        ${npHtml}`;
+      bar = `<button class="btn big" data-act="addRest">+15 s</button><button class="btn big" data-act="play">${run.running ? "❚❚ Pausa" : "▶ Seguir"}</button><button class="btn big primary" data-act="next">Saltar</button>`;
+    } else {
+      const time = e.mode === "time";
+      const tgt = time ? `${e.sec} s` : `${repsLbl(e, st.s)} ${e.unit || "reps"}`;
+      const hist = exHistory(s.clientId, e, run.id); const pa = painAlert(hist);
+      const notes = hist.filter(x => x.L.note || (x.L.pain || 0) >= 4 || x.L.skipped || x.L.changedTo).slice(0, 4);
+      const notesHtml = (e.coachNote || notes.length) ? `<div class="card notes"><b>Notas de este ejercicio</b>${e.coachNote ? `<div class="nline"><span class="pill acc">Fija</span> ${esc(e.coachNote)}</div>` : ""}${notes.map(x => `<div class="nline"><span class="muted small">${esc(fdate(x.at))}</span>${(x.L.pain || 0) >= 4 ? ` <span class="pill bad">dolor ${x.L.pain}/10</span>` : ""}${x.L.skipped ? ` <span class="pill bad">no se hizo${x.L.skipReason ? ": " + esc(x.L.skipReason) : ""}</span>` : ""} ${esc(x.L.note || "")}</div>`).join("")}</div>` : "";
+      const ssChip = st.ss ? `<span class="pill rest">Biserie con ${esc(activeEx(blk).filter(x => x.id !== e.id).map(x => x.name).join(" + "))}</span>` : "";
+      body = `${pa ? `<div class="alert">⚠ Atención: dolor ${pa.L.pain}/10 el ${esc(fdate(pa.at))}${pa.L.note ? " · " + esc(pa.L.note) : ""}. Preguntale cómo está antes de empezar.</div>` : ""}<div class="row"><span class="pill acc">${esc(blk ? blk.name : "")}</span><span class="pill">Serie ${st.s} de ${e.sets}${st.sd ? (st.sd === "I" ? " · Lado izquierdo" : " · Lado derecho") : ""}</span><span class="pill">Objetivo ${esc(tgt)}</span>${ssChip}</div>
+        <div class="exname">${esc(e.name)}</div>${sets}
+        ${e.how ? `<div class="how">${esc(e.how)}</div>` : ""}
+        <div class="timer"><div class="ring">${ringSvg(time ? 1 - s.stepMs / (e.sec * 1000) : ((s.stepMs / 1000) % 60) / 60, "var(--accent)")}<div class="t"><span class="n" id="tnum">${time ? Math.ceil((e.sec * 1000 - s.stepMs) / 1000) : fmt(s.stepMs)}</span><span class="u">${time ? "segundos" : "tiempo de la serie"}</span></div></div></div>
+        <div class="steppers">
+          ${!time ? stepperHtml("reps", e.unit === "reps" || !e.unit ? "Reps hechas" : e.unit + " hechos", run.draft.reps, 1) : ""}
+          ${e.trackLoad ? loadHtml("solo", 0, run.draft.load) : ""}
+          ${e.level != null || run.draft.level != null ? stepperHtml("level", "Nivel", run.draft.level ?? 1, 1) : ""}
+        </div>
+        ${npHtml}${notesHtml}
+        <div class="row"><button class="btn mini" data-act="changeEx">Cambiar ejercicio</button><button class="btn mini" data-act="skipEx">No se puede hacer</button><button class="btn mini ghost" data-act="steps">Ver todos los pasos</button></div>`;
+      const started = s.stepMs > 0;
+      if (time) bar = `<button class="btn big icon" data-act="prev" aria-label="Paso anterior" ${S().stepIdx === 0 ? "disabled" : ""}>←</button><button class="btn big ${run.running ? "" : "primary"}" data-act="play">${run.running ? "❚❚ Pausa" : started ? "▶ Seguir" : "▶ Empezar"}</button><button class="btn big ${run.running ? "primary" : ""}" data-act="doneSet">${started ? "Terminar" : "Ya hecho"}</button>`;
+      else bar = `<button class="btn big icon" data-act="prev" aria-label="Paso anterior" ${S().stepIdx === 0 ? "disabled" : ""}>←</button><button class="btn big" data-act="play">${run.running ? "❚❚ Pausa" : started ? "▶ Seguir" : "▶ Empezar"}</button><button class="btn big primary" data-act="doneSet">✓ Serie hecha</button>`;
+    }
+  } else if (st.t === "rate") {
+    const { e } = findEx(s.plan, st.e); const L = s.logs[e.id] || { sets: [] };
+    const sum = (L.sets || []).map(x => `<span class="done">S${x.s}${x.sd ? " " + x.sd : ""}: ${x.reps != null ? x.reps : x.sec + " s"}${x.load ? " · " + r1(x.load) + " " + U() : ""}${x.level != null ? " · N" + x.level : ""}</span>`).join("");
+    body = `<div class="row"><span class="pill acc">${esc(blk ? blk.name : "")}</span><span class="pill">Puntuar ejercicio</span></div>
+      <div class="exname">${esc(e.name)}</div><div class="sets">${sum || `<span>Sin series registradas</span>`}</div>
+      <div class="card"><b>Esfuerzo (RPE)</b>${scale("rpe", run.rate.rpe, 1, 10)}<div class="scale-ends"><span>Muy fácil</span><span>Máximo</span></div></div>
+      <div class="card"><b>Confianza / seguridad</b>${scale("conf", run.rate.conf, 1, 10)}<div class="scale-ends"><span>Mucho miedo</span><span>Total confianza</span></div></div>
+      <div class="card"><b>Dolor o molestia</b>${scale("pain", run.rate.pain, 0, 10)}<div class="scale-ends"><span>Nada</span><span>Mucho</span></div>
+        ${(run.rate.pain || 0) >= 4 ? `<div class="alert">Queda registrado y te va a avisar la próxima vez que toque este ejercicio.</div>` : ""}
+        <label class="f">Nota (opcional)<input id="rate-note" value="${esc(run.rate.note)}" placeholder="Ej. le costó bajar con la izquierda"></label></div>
+      ${npHtml}`;
+    bar = `<button class="btn big icon" data-act="prev" aria-label="Paso anterior" ${S().stepIdx === 0 ? "disabled" : ""}>←</button><button class="btn big" data-act="next">Saltar</button><button class="btn big primary" data-act="saveRate">Guardar</button>`;
+  } else if (st.t === "block") {
+    body = `<div class="row"><span class="pill acc">Fin de bloque</span></div><div class="exname">${esc(blk ? blk.name : "")}</div>
+      <div class="card"><b>¿Cómo salió el bloque?</b>${scale("score", run.rate.score, 1, 10)}<div class="scale-ends"><span>Mal</span><span>Excelente</span></div>
+      <label class="f">Nota (opcional)<input id="rate-note" value="${esc(run.rate.note)}"></label></div>${npHtml}`;
+    bar = `<button class="btn big icon" data-act="prev" aria-label="Paso anterior" ${S().stepIdx === 0 ? "disabled" : ""}>←</button><button class="btn big" data-act="next">Saltar</button><button class="btn big primary" data-act="saveBlock">Guardar</button>`;
+  } else {
+    const nEx = Object.values(s.logs).filter(l => (l.sets || []).length).length;
+    body = `<div class="row"><span class="pill acc">Cierre</span></div><div class="exname">Sesión de ${esc(s.dayName)}</div>
+      <div class="kpis"><div class="kpi"><div class="v">${fmt(sessionMs(s))}</div><div class="l">Duración de la sesión</div></div><div class="kpi"><div class="v">${nEx}</div><div class="l">Ejercicios hechos</div></div><div class="kpi"><div class="v">${r1(sessAvg(s, "conf"))}</div><div class="l">Confianza media</div></div></div>
+      <div class="card"><b>Puntaje general de la sesión</b>${scale("score", run.rate.score, 1, 10)}
+      <label class="f">Nota de la sesión<textarea id="rate-note" rows="3" placeholder="Cómo vino, qué cambiar la próxima">${esc(run.rate.note)}</textarea></label></div>`;
+    bar = `<button class="btn big icon" data-act="prev" aria-label="Paso anterior" ${S().stepIdx === 0 ? "disabled" : ""}>←</button><button class="btn big primary" data-act="finish">Terminar sesión</button>`;
+  }
+  $("#app").innerHTML = `<div class="run ${st.t === "rest" ? "resting" : ""}">
+    <div class="run-head"><div class="in"><button class="btn ghost mini" data-act="leaveRun">✕ Salir</button>
+      <div class="grow" style="min-width:0"><b>${esc(c ? c.name : "")}</b> <span class="muted small">${esc(s.dayName)} · serie ${Math.min(doneW + 1, works)} de ${works}</span></div>${stateChip(st)}
+      <div class="clock" id="clk" title="Duración de la sesión">${fmt(sessionMs(s))}</div></div>
+      <div class="prog"><i style="width:${works ? (doneW / works) * 100 : 0}%"></i></div></div>
+    <div class="run-body">${run.resumed ? `<div class="resumed"><b>Sesión retomada.</b> Seguís en ${esc(stepLabel(st, s.plan))} con ${fmt(sessionMs(s))} de sesión. Tocá ▶ para continuar.</div>` : ""}${body}
+      ${st.t !== "end" ? `<button class="btn danger endbtn" data-act="finishEarly">Terminar la sesión ahora</button>` : ""}</div></div>
+    <div class="bar"><div class="in">${bar}</div></div>`;
+}
+function stateChip(st) {
+  if (st.t !== "work" && st.t !== "rest") return "";
+  if (run.running) return `<span class="pill ${st.t === "rest" ? "rest" : "good"}">● ${st.t === "rest" ? "Descanso" : "En curso"}</span>`;
+  return S().stepMs > 0 ? `<span class="pill warn">❚❚ Pausada</span>` : `<span class="pill">Lista</span>`;
+}
+function stepperHtml(k, lab, v, stp) {
+  return `<div class="stepper"><button data-act="step" data-k="${k}" data-d="${-stp}" aria-label="Menos">−</button><label class="v"><span class="lab">${esc(lab)}</span><input class="sv" data-in="solo" data-p="0" data-k="${k}" inputmode="numeric" value="${v ?? ""}" aria-label="${esc(lab)}"></label><button data-act="step" data-k="${k}" data-d="${stp}" aria-label="Más">+</button></div>`;
+}
+const KG = 2.20462;
+const toUnit = (val, from) => from === U() ? val : from === "kg" ? val * KG : val / KG;
+const fromUnit = (val, to) => to === U() ? val : to === "kg" ? val / KG : val * KG;
+const r05 = v => Math.round(v * 2) / 2;
+function loadHtml(scope, p, v) {
+  const act = scope === "duo" ? "dstep" : "step";
+  const shown = u => v ? r1(r05(fromUnit(v, u))).replace(",", ".") : "";
+  return `<div class="loadbox"><span class="lab">Carga · escribí en lb o en kg</span><div class="lrow">
+    <button data-act="${act}" data-p="${p}" data-k="load" data-d="${-LSTEP()}" aria-label="Menos carga">−</button>
+    ${["lb", "kg"].map(u => `<label class="lu ${u === U() ? "main" : ""}"><input class="sv" data-in="${scope}" data-p="${p}" data-load="${u}" inputmode="decimal" placeholder="0" value="${shown(u)}" aria-label="Carga en ${u}"><span>${u}</span></label>`).join("")}
+    <button data-act="${act}" data-p="${p}" data-k="load" data-d="${LSTEP()}" aria-label="Más carga">+</button></div></div>`;
+}
+
+/* ---------- duo: two people rotating ---------- */
+let duo = null;
+function D(i) { return data.sessions[duo.ids[i]]; }
+function dcur() { return duo.steps[D(0).stepIdx]; }
+function buildDuoSteps(pA, pB) {
+  const st = []; const n = Math.max(pA.blocks.length, pB.blocks.length);
+  for (let k = 0; k < n; k++) {
+    const bA = pA.blocks[k], bB = pB.blocks[k];
+    const eA = bA ? activeEx(bA) : [], eB = bB ? activeEx(bB) : [];
+    const m = Math.max(eA.length, eB.length); if (!m) continue;
+    const name = (bA || bB).name;
+    const rounds = Math.max(1, ...eA.map(e => e.sets), ...eB.map(e => e.sets));
+    const rest = (bA && bA.rest) || 60;
+    for (let r = 1; r <= rounds; r++) {
+      for (let h = 0; h < m; h++) {
+        const i0 = h % m, i1 = m >= 2 ? (h + 1) % m : 0;
+        const l0 = eA[i0] && eA[i0].sets >= r ? eA[i0].id : null;
+        const l1 = eB[i1] && eB[i1].sets >= r ? eB[i1].id : null;
+        if (!l0 && !l1) continue;
+        st.push({ t: "dwork", k, name, r, rounds, lanes: [l0, l1] });
+        if (h < m - 1) st.push({ t: "drest", k, name, sec: 15, label: "Cambian de lugar" });
+      }
+      if (r < rounds) st.push({ t: "drest", k, name, sec: rest, label: "Descanso" });
+    }
+    st.push({ t: "drate", k, name });
+  }
+  st.push({ t: "dend" });
+  return st;
+}
+function partnerOf(cid) { const c = data.clients[cid]; return c && c.partnerId && data.clients[c.partnerId] ? c.partnerId : null; }
+function activeDuoFor(cid, dayWeekday) {
+  return Object.entries(data.sessions).find(([, s]) => s.status === "active" && s.clientId === cid && s.duo && (dayWeekday == null || s.weekday === dayWeekday));
+}
+function startDuo(cidA, di) {
+  const cidB = partnerOf(cidA); const ra = clientRoutine(cidA), rb = clientRoutine(cidB);
+  if (!ra || !rb) { toast("Los dos necesitan una rutina asignada"); return; }
+  const dA = ra[1].days[di]; const dB = rb[1].days.find(d => d.weekday === dA.weekday) || rb[1].days[di] || rb[1].days[0];
+  const ex = activeDuoFor(cidA, dA.weekday); if (ex) { resumeDuo(ex[0]); return; }
+  const key = uid(), now = Date.now(); const ids = [uid(), uid()];
+  [[cidA, ra, dA], [cidB, rb, dB]].forEach(([cid, rr, d], i) => {
+    put("sessions", ids[i], { clientId: cid, routineId: rr[0], dayId: d.id, dayName: d.name, weekday: d.weekday, routineName: rr[1].name, status: "active", startedAt: now, activeMs: 0, stepIdx: 0, stepMs: 0, plan: clone(d), logs: {}, blocks: {}, note: "", score: null, duo: { key, with: ids[1 - i], idx: i } });
+  });
+  openDuo(ids); enterDuo(0);
+}
+function resumeDuo(id) { const s = data.sessions[id]; if (!s || !s.duo) return; const ids = s.duo.idx === 0 ? [id, s.duo.with] : [s.duo.with, id]; openDuo(ids); }
+function openDuo(ids) {
+  ids.forEach(id => {
+    if (!data.sessions[id]) return;
+    data.sessions[id] = clone(data.sessions[id]);
+    const mirror = LS.get("liftcoach-run-" + id);
+    if (mirror && mirror.plan && mirror.status === "active" && newerSess(mirror, data.sessions[id]) === mirror) data.sessions[id] = mirror;
+  });
+  if (!data.sessions[ids[0]] || !data.sessions[ids[1]]) { toast("No encuentro la sesión del compañero"); return; }
+  ids.forEach(id => { const x = data.sessions[id]; if (x.leftAt) { x.awayMs = (x.awayMs || 0) + (Date.now() - x.leftAt); delete x.leftAt; } });
+  duo = { ids, steps: buildDuoSteps(data.sessions[ids[0]].plan, data.sessions[ids[1]].plan), running: false, lastTs: 0, drafts: [null, null], rate: null, lastMirror: 0, laneCue: {}, resumed: data.sessions[ids[0]].activeMs > 0 };
+  const s0 = D(0), s1 = D(1); const idx = Math.min(Math.max(s0.stepIdx || 0, s1.stepIdx || 0), duo.steps.length - 1);
+  s0.stepIdx = s1.stepIdx = idx; s1.activeMs = s0.activeMs = Math.max(s0.activeMs || 0, s1.activeMs || 0);
+  prepDuo(); wake(true); saveDuo(); render();
+}
+function saveDuo() {
+  const now = Date.now();
+  duo.ids.forEach((id, i) => { const s = D(i); s.updatedAt = now; s.stepIdx = D(0).stepIdx; LS.set("liftcoach-run-" + id, s); if (canWrite) put("sessions", id, clone(s)); });
+  LS.set("coachseba-open-duo", duo.ids);
+}
+function laneEx(i, st) { const id = st.lanes[i]; if (!id) return null; const f = findEx(D(i).plan, id); return f ? f.e : null; }
+function prepDuo() {
+  const st = dcur(); duo.drafts = [null, null]; duo.rate = null; duo.laneCue = {};
+  if (st.t === "dwork") [0, 1].forEach(i => {
+    const e = laneEx(i, st); if (!e) return; const s = D(i);
+    const L = s.logs[e.id]; const prev = L && (L.sets || []).find(x => x.s === st.r);
+    const last = L && (L.sets || []).length ? L.sets[L.sets.length - 1] : null;
+    duo.drafts[i] = {
+      reps: prev && prev.reps != null ? prev.reps : repsAt(e, st.r), sec: prev && prev.sec != null ? prev.sec : e.sec,
+      load: prev && prev.load != null ? prev.load : ((last && last.load) ?? lastSetValue(s.clientId, e.id, "load") ?? e.startLoad ?? 0),
+      level: prev && prev.level != null ? prev.level : (L && L.level != null ? L.level : (lastSetValue(s.clientId, e.id, "level") ?? e.level))
+    };
+    if (st.r === 1 && painAlert(exHistory(s.clientId, e, duo.ids[i]))) setTimeout(() => cue("alert"), 150);
+  });
+  if (st.t === "drate") duo.rate = [0, 1].map(i => { const b = D(i).plan.blocks[st.k]; const f = b && activeEx(b).map(e => D(i).logs[e.id]).find(l => l && l.rpe != null); return { rpe: f ? f.rpe : null, conf: f ? f.conf : null, pain: f ? f.pain : null, note: f ? f.note || "" : "" }; });
+  if (st.t === "dend") duo.rate = { score: D(0).score ?? null, note: D(0).note || "" };
+}
+function enterDuo(i) {
+  duo.resumed = false;
+  const n = Math.max(0, Math.min(i, duo.steps.length - 1));
+  [0, 1].forEach(p => { D(p).stepIdx = n; D(p).stepMs = 0; });
+  duo.running = dcur().t === "drest"; duo.lastTs = performance.now(); duo.lastCue = null;
+  prepDuo(); saveDuo(); renderDuo(); window.scrollTo(0, 0);
+}
+function dnext() { enterDuo(D(0).stepIdx + 1); }
+function dprev() { let i = D(0).stepIdx - 1; while (i > 0 && duo.steps[i].t === "drest") i--; enterDuo(i); }
+function dComplete() {
+  const st = dcur(); const ms = D(0).stepMs;
+  [0, 1].forEach(i => {
+    const e = laneEx(i, st); if (!e) return; const s = D(i); const dr = duo.drafts[i];
+    const L = s.logs[e.id] || (s.logs[e.id] = { sets: [] }); L.sets = L.sets || [];
+    (e.side ? ["I", "D"] : [null]).forEach(sd => {
+      const rec = { s: st.r, sd, ms: Math.round(ms), at: Date.now() };
+      if (e.mode === "time") rec.sec = dr.sec; else rec.reps = dr.reps;
+      if (e.trackLoad) rec.load = dr.load;
+      if (e.level != null || dr.level != null) { rec.level = dr.level; L.level = dr.level; }
+      const k = L.sets.findIndex(x => x.s === st.r && x.sd === sd); if (k >= 0) L.sets[k] = rec; else L.sets.push(rec);
+    });
+  });
+  dnext();
+}
+function duoTick(now) {
+  const d = Math.min(now - duo.lastTs, 2000); duo.lastTs = now;
+  [0, 1].forEach(i => { D(i).stepMs += d; D(i).activeMs += d; });
+  const st = dcur(); const ms = D(0).stepMs;
+  if (st.t === "drest") {
+    const remS = Math.ceil((st.sec * 1000 - ms) / 1000);
+    if (remS <= 3 && remS > 0 && duo.lastCue !== remS) { duo.lastCue = remS; cue("tick"); }
+    if (ms >= st.sec * 1000) { cue("end"); dnext(); return; }
+  }
+  if (st.t === "dwork") [0, 1].forEach(i => { const e = laneEx(i, st); if (e && e.mode === "time" && ms >= e.sec * 1000 && !duo.laneCue[i]) { duo.laneCue[i] = true; cue("end"); } });
+  if (now - duo.lastMirror > 2000) { duo.lastMirror = now; duo.ids.forEach((id, i) => LS.set("liftcoach-run-" + id, D(i))); }
+  updateDuoClock();
+}
+function updateDuoClock() {
+  const st = dcur(); const ms = D(0).stepMs;
+  const c = $("#clk"); if (c) c.textContent = fmt(sessionMs(D(0)));
+  const n = $("#tnum"); if (n) n.textContent = st.t === "drest" ? Math.ceil(Math.max(0, st.sec * 1000 - ms) / 1000) : fmt(ms);
+  const rv = $(".run"); if (rv && st.t === "drest") rv.classList.toggle("ending", duo.running && st.sec * 1000 - ms <= 3000);
+  if (st.t === "dwork") [0, 1].forEach(i => { const e = laneEx(i, st); const el = $("#lane-t-" + i); if (e && el && e.mode === "time") { const rem = Math.ceil((e.sec * 1000 - ms) / 1000); el.textContent = rem > 0 ? `quedan ${rem} s` : "¡tiempo!"; el.classList.toggle("over", rem <= 0); } });
+}
+function duoNames() { return [0, 1].map(i => (data.clients[D(i).clientId] || {}).name || "—"); }
+function duoNext() {
+  const i0 = D(0).stepIdx; const nm = duoNames();
+  for (let j = i0 + 1; j < duo.steps.length; j++) {
+    const st = duo.steps[j];
+    if (st.t === "dwork") return `<div class="next"><div class="grow"><div class="k">Sigue</div>${[0, 1].map(i => { const e = laneEx(i, st); return `<div><b>${esc(nm[i])}:</b> ${e ? esc(e.name) : "descansa"}</div>`; }).join("")}</div></div>`;
+    if (st.t === "drate" || st.t === "dend") return `<div class="next"><div class="grow"><div class="k">Sigue</div><b>${st.t === "dend" ? "Cierre de la sesión" : "Puntuar " + esc(st.name)}</b></div></div>`;
+  }
+  return "";
+}
+function dStepper(p, k, lab, v, stp) {
+  return `<div class="stepper"><button data-act="dstep" data-p="${p}" data-k="${k}" data-d="${-stp}" aria-label="Menos">−</button><label class="v"><span class="lab">${esc(lab)}</span><input class="sv" data-in="duo" data-p="${p}" data-k="${k}" inputmode="numeric" value="${v ?? ""}" aria-label="${esc(lab)}"></label><button data-act="dstep" data-p="${p}" data-k="${k}" data-d="${stp}" aria-label="Más">+</button></div>`;
+}
+function dScale(p, name, val, from, to) {
+  let h = `<div class="scale ${to - from === 10 ? "z" : ""}" role="group">`;
+  for (let i = from; i <= to; i++) h += `<button data-act="dscale" data-p="${p}" data-k="${name}" data-v="${i}" aria-pressed="${val === i}">${i}</button>`;
+  return h + `</div>`;
+}
+function duoTracker(st) {
+  const k = st.k; const bA = D(0).plan.blocks[k], bB = D(1).plan.blocks[k]; if (!bA && !bB) return "";
+  const eA = bA ? activeEx(bA) : [], eB = bB ? activeEx(bB) : []; const m = Math.max(eA.length, eB.length);
+  const rounds = Math.max(1, ...eA.map(e => e.sets), ...eB.map(e => e.sets)); const nm = duoNames().map(x => x.split(" ")[0]);
+  const done = (i, e, r) => e && D(i).logs[e.id] && (D(i).logs[e.id].sets || []).some(x => x.s === r);
+  let rows = "";
+  for (let j = 0; j < m; j++) {
+    const a = eA[j], b = eB[j]; const label = a && b && a.name !== b.name ? `${esc(a.name)} <span class="muted small">/ ${esc(b.name)} (${esc(nm[1])})</span>` : esc((a || b).name);
+    const nowWho = st.t === "dwork" ? [0, 1].filter(i => st.lanes[i] && ((i === 0 && a && st.lanes[0] === a.id) || (i === 1 && b && st.lanes[1] === b.id))).map(i => `<span class="pill ${i === 0 ? "acc" : "rest"}">${esc(nm[i])} ahora</span>`).join("") : "";
+    let cells = "";
+    for (let r = 1; r <= rounds; r++) cells += `<span class="tc ${st.r === r ? "curr" : ""}"><i class="${done(0, a, r) ? "on a" : ""}"></i><i class="${done(1, b, r) ? "on b" : ""}"></i></span>`;
+    rows += `<div class="trow"><div class="grow"><b>${String.fromCharCode(65 + j)}.</b> ${label} ${nowWho}</div><div class="tcs">${cells}</div></div>`;
+  }
+  return `<div class="card tracker"><div class="row"><b class="grow">${esc(st.name)}</b><span class="small muted"><i class="dot a"></i>${esc(nm[0])} <i class="dot b"></i>${esc(nm[1])} · series 1-${rounds}</span></div>${rows}</div>`;
+}
+function renderDuo() {
+  const st = dcur(); const nm = duoNames();
+  const works = duo.steps.filter(x => x.t === "dwork").length; const doneW = duo.steps.slice(0, D(0).stepIdx).filter(x => x.t === "dwork").length;
+  let body = "", bar = ""; const prevBtn = `<button class="btn big icon" data-act="dprev" aria-label="Paso anterior" ${D(0).stepIdx === 0 ? "disabled" : ""}>←</button>`;
+  const chip = st.t === "dwork" || st.t === "drest" ? (duo.running ? `<span class="pill ${st.t === "drest" ? "rest" : "good"}">● ${st.t === "drest" ? "Descanso" : "En curso"}</span>` : D(0).stepMs > 0 ? `<span class="pill warn">❚❚ Pausada</span>` : `<span class="pill">Lista</span>`) : "";
+  if (st.t === "dwork") {
+    const started = D(0).stepMs > 0;
+    body = `<div class="row"><span class="pill acc">${esc(st.name)}</span><span class="pill">Serie ${st.r} de ${st.rounds}</span></div>
+      ${duoTracker(st)}
+      <div class="timer small-t"><span class="n" id="tnum">${fmt(D(0).stepMs)}</span><span class="u">tiempo de la serie · los dos a la vez</span></div>
+      <div class="lanes">${[0, 1].map(i => {
+        const e = laneEx(i, st); const cls = i === 0 ? "acc" : "rest";
+        if (!e) return `<div class="lane"><span class="pill ${cls}">${esc(nm[i])}</span><div class="exname sm">Descansa esta vuelta</div></div>`;
+        const dr = duo.drafts[i]; const s = D(i); const pa = painAlert(exHistory(s.clientId, e, duo.ids[i]));
+        return `<div class="lane"><span class="pill ${cls}">${esc(nm[i])}</span>
+          <div class="exname sm">${esc(e.name)}</div>
+          <div class="small muted">Serie ${st.r} de ${e.sets} · objetivo ${e.mode === "time" ? e.sec + " s" : repsLbl(e, st.r) + " " + (e.unit || "reps")}${e.side ? " por lado (los dos lados)" : ""}</div>
+          ${e.mode === "time" ? `<div class="lane-t" id="lane-t-${i}">quedan ${e.sec} s</div>` : ""}
+          ${pa ? `<div class="alert">⚠ Dolor ${pa.L.pain}/10 el ${esc(fdate(pa.at))}${pa.L.note ? " · " + esc(pa.L.note) : ""}</div>` : ""}
+          ${e.coachNote ? `<div class="small"><span class="pill acc">Nota</span> ${esc(e.coachNote)}</div>` : ""}
+          ${e.how ? `<details class="how-d"><summary>Cómo se hace</summary>${esc(e.how)}</details>` : ""}
+          <div class="steppers">${e.mode === "time" ? dStepper(i, "sec", "Segundos hechos", dr.sec, 5) : dStepper(i, "reps", (e.unit && e.unit !== "reps" ? e.unit : "Reps") + " hechas", dr.reps, 1)}
+          ${e.trackLoad ? loadHtml("duo", i, dr.load) : ""}${e.level != null || dr.level != null ? dStepper(i, "level", "Nivel", dr.level ?? 1, 1) : ""}</div></div>`;
+      }).join("")}</div>${duoNext()}`;
+    bar = `${prevBtn}<button class="btn big ${duo.running ? "" : "primary"}" data-act="dplay">${duo.running ? "❚❚ Pausa" : started ? "▶ Seguir" : "▶ Empezar"}</button><button class="btn big ${duo.running ? "primary" : ""}" data-act="ddone">✓ Terminaron</button>`;
+  } else if (st.t === "drest") {
+    body = `<div class="row"><span class="pill rest">${esc(st.label)}</span><span class="pill">${esc(st.name)}</span></div>
+      <div class="exname">${st.label === "Cambian de lugar" ? "Cambian de lugar" : "Descanso"}</div>${duoTracker(Object.assign({}, st, { r: null }))}
+      <div class="timer"><div class="ring">${ringSvg(1 - D(0).stepMs / (st.sec * 1000), "var(--rest)")}<div class="t"><span class="n" id="tnum">${Math.ceil((st.sec * 1000 - D(0).stepMs) / 1000)}</span><span class="u">segundos</span></div></div></div>${duoNext()}`;
+    bar = `<button class="btn big" data-act="daddRest">+15 s</button><button class="btn big" data-act="dplay">${duo.running ? "❚❚ Pausa" : "▶ Seguir"}</button><button class="btn big primary" data-act="dnext">Saltar</button>`;
+  } else if (st.t === "drate") {
+    body = `<div class="row"><span class="pill acc">Fin de ${esc(st.name)}</span></div><div class="exname">Puntuar</div>` + [0, 1].map(i => {
+      const b = D(i).plan.blocks[st.k]; const rt = duo.rate[i];
+      const sum = b ? activeEx(b).map(e => { const L = D(i).logs[e.id]; return `<span class="${L && (L.sets || []).length ? "done" : ""}">${esc(e.name)}: ${L ? (L.sets || []).map(x => x.reps != null ? x.reps : x.sec + "s").join("/") : "–"}${L && L.sets && L.sets.some(x => x.load) ? " · " + r1(Math.max(...L.sets.map(x => x.load || 0))) + " " + U() : ""}</span>`; }).join("") : "";
+      return `<div class="card"><span class="pill ${i === 0 ? "acc" : "rest"}">${esc(nm[i])}</span><div class="sets">${sum}</div>
+        <b class="small">Esfuerzo (RPE)</b>${dScale(i, "rpe", rt.rpe, 1, 10)}
+        <b class="small">Confianza</b>${dScale(i, "conf", rt.conf, 1, 10)}
+        <b class="small">Dolor</b>${dScale(i, "pain", rt.pain, 0, 10)}
+        <label class="f">Nota<input id="dnote-${i}" value="${esc(rt.note)}"></label></div>`;
+    }).join("") + duoNext();
+    bar = `${prevBtn}<button class="btn big" data-act="dnext">Saltar</button><button class="btn big primary" data-act="dsaveRate">Guardar</button>`;
+  } else {
+    body = `<div class="row"><span class="pill acc">Cierre</span></div><div class="exname">${esc(nm.join(" + "))}</div>
+      <div class="kpis"><div class="kpi"><div class="v">${fmt(sessionMs(D(0)))}</div><div class="l">Duración de la sesión</div></div>${[0, 1].map(i => `<div class="kpi"><div class="v">${r1(sessAvg(D(i), "conf"))}</div><div class="l">Confianza ${esc(nm[i])}</div></div>`).join("")}</div>
+      <div class="card"><b>Puntaje de la sesión</b>${scale("score", duo.rate.score, 1, 10)}<label class="f">Nota<textarea id="rate-note" rows="3">${esc(duo.rate.note)}</textarea></label></div>`;
+    bar = `${prevBtn}<button class="btn big primary" data-act="dfinish">Terminar sesión</button>`;
+  }
+  $("#app").innerHTML = `<div class="run ${st.t === "drest" ? "resting" : ""}">
+    <div class="run-head"><div class="in"><button class="btn ghost mini" data-act="dleave">✕ Salir</button>
+      <div class="grow" style="min-width:0"><b>${esc(nm.join(" + "))}</b> <span class="muted small">${esc(D(0).dayName)} · dúo</span></div>${chip}
+      <div class="clock" id="clk" title="Duración de la sesión">${fmt(sessionMs(D(0)))}</div></div>
+      <div class="prog"><i style="width:${works ? doneW / works * 100 : 0}%"></i></div></div>
+    <div class="run-body">${duo.resumed ? `<div class="resumed"><b>Sesión retomada.</b> Tocá ▶ para continuar.</div>` : ""}${body}
+      ${st.t !== "dend" ? `<button class="btn danger endbtn" data-act="dFinishEarly">Terminar la sesión ahora</button>` : ""}</div></div>
+    <div class="bar"><div class="in">${bar}</div></div>`;
+}
+function finishDuo(early) {
+  const score = duo.rate && duo.rate.score != null && !Array.isArray(duo.rate) ? duo.rate.score : null; const note = ($("#rate-note") || {}).value || "";
+  [0, 1].forEach(i => { const s = D(i); s.durationMs = sessionMs(s); s.status = "done"; s.endedAt = Date.now(); if (early) s.endedEarly = true; if (score != null) s.score = score; if (note) s.note = note; });
+  saveDuo(); duo.ids.forEach(id => LS.del("liftcoach-run-" + id)); LS.del("coachseba-open-duo");
+  duo = null; wake(false); ui.view = "home"; render(); toast("Sesión del dúo guardada");
+}
+
+/* ---------- sheets (in-page dialogs) ---------- */
+function openSheet(kind, ctx) { sheet = { kind, ctx: ctx || {} }; renderSheet(); const f = document.querySelector('#sheet input:not([type=checkbox]), #sheet select, #sheet button'); f && f.focus({ preventScroll: true }); }
+function closeSheet() { sheet = null; renderSheet(); if (ui.dirty && !run && ui.view !== "edit") { ui.dirty = false; render(); } }
+function renderSheet() {
+  const el = $("#sheet");
+  if (!sheet) { el.innerHTML = ""; return; }
+  let h = "";
+  const k = sheet.kind, ctx = sheet.ctx;
+  if (k === "client") {
+    const c = ctx.id ? data.clients[ctx.id] : { name: "", age: "", goal: "" };
+    const tps = templates();
+    h = `<h2>${ctx.id ? "Editar cliente" : "Nuevo cliente"}</h2>
+      <label class="f">Nombre<input id="c-name" value="${esc(c.name)}"></label>
+      <section class="sched"><div><b>Días que viene y hora de llegada</b><div class="small muted">Marcá los días y poné la hora. Así aparece en la agenda y te avisa cuando llega.</div></div>
+        <div class="row"><label class="f grow" style="flex:1">Misma hora para todos<input id="c-tall" type="time" value="${esc(((c.slots || [])[0] || {}).time || "")}"></label><button class="btn" data-act="slotAll" style="align-self:flex-end">Aplicar</button></div>
+        <div class="slots">${[1, 2, 3, 4, 5, 6, 0].map(wd => { const sl = (c.slots || []).find(x => x.wd === wd); return `<label class="slot ${sl ? "on" : ""}"><input type="checkbox" id="c-wd-${wd}" ${sl ? "checked" : ""}><span>${WD[wd]}</span><input type="time" id="c-t-${wd}" value="${esc(sl ? sl.time : "")}" aria-label="Hora del ${WD[wd]}" ${sl ? "" : "disabled"}></label>`; }).join("")}</div></section>
+      <label class="f">Entrena en dúo con<select id="c-partner"><option value="">Nadie (entrena solo)</option>${Object.entries(data.clients).filter(([id]) => id !== ctx.id).map(([id, x]) => `<option value="${id}" ${c.partnerId === id ? "selected" : ""}>${esc(x.name)}</option>`).join("")}</select></label>
+      <div class="grid2"><label class="f">Edad<input id="c-age" type="number" inputmode="numeric" value="${esc(c.age || "")}"></label></div>
+      <label class="f">Objetivo<textarea id="c-goal" rows="2">${esc(c.goal || "")}</textarea></label>
+      ${!ctx.id ? `<label class="f">Rutina inicial<select id="c-tpl"><option value="">Sin rutina por ahora</option>${tps.map(([id, r]) => `<option value="${id}">${esc(r.name)}</option>`).join("")}</select></label>` : ""}
+      <div class="row"><button class="btn primary" data-act="saveClient">Guardar</button><button class="btn ghost" data-act="closeSheet">Cancelar</button>
+      ${ctx.id ? `<div class="grow"></div><button class="btn danger" data-act="askDelClient">Eliminar</button>` : ""}</div>
+      ${ctx.confirmDel ? `<div class="note">Se borran el cliente, su rutina y todas sus sesiones. <button class="btn danger mini" data-act="delClient">Sí, eliminar</button></div>` : ""}`;
+  } else if (k === "assign") {
+    const tps = templates();
+    h = `<h2>Rutina</h2>
+      <div class="card"><b>Crear rutina nueva</b><div class="small muted">Elegí los días y después escribís los ejercicios de cada uno.</div>
+        <div class="slots">${[1, 2, 3, 4, 5, 6, 0].map(wd => `<label class="slot"><input type="checkbox" id="nr-${wd}" ${(data.clients[ctx.id] && (data.clients[ctx.id].slots || []).some(x => x.wd === wd)) ? "checked" : ""}><span>${WD[wd]}</span></label>`).join("")}</div>
+        <button class="btn primary" data-act="newRoutine">Crear y escribir ejercicios</button></div>
+      ${tps.length ? `<div class="card"><b>O copiar una plantilla</b><label class="f">Plantilla<select id="a-tpl">${tps.map(([id, r]) => `<option value="${id}">${esc(r.name)}</option>`).join("")}</select></label>
+      <button class="btn" data-act="doAssign">Asignar plantilla</button></div>` : ""}
+      <button class="btn ghost" data-act="closeSheet">Cancelar</button>`;
+  } else if (k === "exEdit") {
+    const r = ui.editDraft; const d = r.days[Math.min(ui.editDay, r.days.length - 1)]; const e = ctx.ei >= 0 ? d.blocks[ctx.bi].ex[ctx.ei] : null;
+    h = `<h2>${e ? "Editar ejercicio" : "Nuevo ejercicio"}</h2>${exForm(e)}
+      <div class="row"><button class="btn primary" data-act="saveEx">Guardar</button><button class="btn ghost" data-act="closeSheet">Cancelar</button>${e ? `<div class="grow"></div><button class="btn danger" data-act="rmEx">Quitar</button>` : ""}</div>`;
+  } else if (k === "change") {
+    const s = S(); const { e } = findEx(s.plan, cur().e);
+    h = `<h2>Cambiar ejercicio</h2><p class="small muted">Sale <b>${esc(e.name)}</b>. Queda registrado lo que ya hizo y el motivo.</p>
+      <label class="f">Motivo<select id="ch-reason"><option>Le genera dolor</option><option>Muy difícil por ahora</option><option>Muy fácil</option><option>Le da miedo</option><option>Falta de material</option><option>Otro</option></select></label>
+      <label class="f">Detalle (opcional)<input id="ch-detail"></label>
+      ${exForm(Object.assign({}, e, { name: "", how: "" }))}
+      <label class="chk"><input type="checkbox" id="ch-apply" checked> Usar el nuevo ejercicio también en las próximas sesiones</label>
+      <div class="row"><button class="btn primary" data-act="doChange">Cambiar</button><button class="btn ghost" data-act="closeSheet">Cancelar</button></div>`;
+  } else if (k === "skip") {
+    h = `<h2>No se puede hacer</h2><p class="small muted">El ejercicio queda marcado como desistido en esta sesión.</p>
+      <label class="f">Motivo<select id="sk-reason"><option>Dolor</option><option>Miedo</option><option>Cansancio</option><option>Falta de tiempo</option><option>Falta de material</option><option>Otro</option></select></label>
+      <div class="row"><button class="btn primary" data-act="doSkip">Marcar y seguir</button><button class="btn ghost" data-act="closeSheet">Cancelar</button></div>`;
+  } else if (k === "steps") {
+    const s = S();
+    h = `<h2>Pasos de la sesión</h2><div class="steplist">${run.steps.map((st, i) => st.t === "rest" ? "" : `<button data-act="jump" data-i="${i}" class="${i === s.stepIdx ? "cur" : ""}"><span class="grow">${esc(stepLabel(st, s.plan))}</span>${st.t === "work" && (s.logs[st.e]?.sets || []).some(x => x.s === st.s && x.sd === st.sd) ? `<span class="pill good">hecho</span>` : ""}</button>`).join("")}</div><button class="btn" data-act="closeSheet">Cerrar</button>`;
+  } else if (k === "leave") {
+    h = `<h2>Salir de la sesión</h2><p>Lo hecho queda guardado. Podés retomarla desde el inicio cuando quieras.</p>
+      <div class="row"><button class="btn primary" data-act="doLeave">Salir y guardar</button><button class="btn ghost" data-act="closeSheet">Seguir entrenando</button><div class="grow"></div><button class="btn danger" data-act="askDiscard">Descartar sesión</button></div>
+      ${ctx.confirm ? `<div class="note">Se borra todo lo registrado en esta sesión. <button class="btn danger mini" data-act="doDiscard">Sí, descartar</button></div>` : ""}`;
+  } else if (k === "viewSess") {
+    const s = data.sessions[ctx.id];
+    h = `<h2>${esc(s.dayName)} · ${esc(fdate(s.startedAt))}</h2><div class="small muted">${fmt(durOf(s))} de sesión${s.score ? " · puntaje " + s.score : ""}${s.note ? " · " + esc(s.note) : ""}</div><div class="tblwrap"><table><thead><tr><th>Ejercicio</th><th>Hecho</th><th>RPE</th><th>Conf.</th><th>Dolor</th></tr></thead><tbody>` +
+      s.plan.blocks.map(b => b.ex.map(e => { const m = sessMetrics(s, e.id, e); return m ? `<tr><td>${esc(e.name)}${m.note ? `<div class="small muted">${esc(m.note)}</div>` : ""}</td><td class="num">${metricTxt(m)}${m.changedTo ? " → " + esc(m.changedTo) : ""}</td><td class="num">${m.rpe ?? "–"}</td><td class="num">${m.conf ?? "–"}</td><td class="num">${m.pain ?? "–"}</td></tr>` : ""; }).join("")).join("") +
+      `</tbody></table></div><div class="row"><button class="btn" data-act="closeSheet">Cerrar</button><div class="grow"></div>${ctx.confirm ? `<button class="btn danger" data-act="doDelSess">Sí, borrar</button>` : `<button class="btn danger" data-act="askDelSess">Borrar sesión</button>`}</div>`;
+  } else if (k === "dayText") {
+    const d = ui.editDraft.days[Math.min(ui.editDay, ui.editDraft.days.length - 1)];
+    h = `<h2>Rutina del ${esc(d.name)}</h2>
+      <p class="small muted">Una línea por ejercicio: nombre y series x reps (3x12, 4x8 a 10, 3x30s). Línea en blanco entre grupos: si el grupo tiene 2 o más ejercicios, se hace en biserie. Podés agregar "c/lado", "45lb" o "sin descanso".</p>
+      <textarea id="dt-text" rows="16" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--bg);font-size:16px;line-height:1.5" placeholder="Press militar 3x10&#10;Abs oblicuos 3x15&#10;&#10;Remo bajo 3x12&#10;Curl bíceps 3x12">${esc(dayToText(d))}</textarea>
+      <div class="row"><button class="btn primary" data-act="saveDayText">Guardar rutina</button><button class="btn ghost" data-act="closeSheet">Cancelar</button></div>`;
+  } else if (k === "settings") {
+    h = `<h2>Ajustes</h2><p class="small muted">Se aplican en este celular. Suenan al terminar cada serie y descanso, en los últimos 3 segundos y cuando llega la hora de un turno.</p>
+      <label class="chk"><input type="checkbox" id="set-sound" ${settings.sound ? "checked" : ""}> Sonido</label>
+      <label class="chk"><input type="checkbox" id="set-vib" ${settings.vibrate ? "checked" : ""}> Vibración (si el celular lo permite)</label>
+      <label class="f">Unidad de peso<select id="set-unit"><option value="lb" ${U() === "lb" ? "selected" : ""}>Libras (lb)</option><option value="kg" ${U() === "kg" ? "selected" : ""}>Kilos (kg)</option></select></label>
+      <div class="row"><button class="btn primary" data-act="saveSettings">Guardar</button><button class="btn" data-act="testCue">Probar sonido</button><button class="btn ghost" data-act="closeSheet">Cancelar</button></div>`;
+  } else if (k === "levelUp") {
+    const s = data.sessions[ctx.sid]; const f = findEx(s.plan, ctx.exId); const e = f.e; const L = s.logs[e.id] || {};
+    const opts = ctx.options || []; const who = data.clients[s.clientId];
+    h = `<h2>Recomendable subir el nivel</h2>${duo && who ? `<span class="pill acc">${esc(who.name)}</span>` : ""}
+      <p><b>${esc(e.name)}</b>: 2 sesiones seguidas completas, confianza ${L.conf ?? "–"}/10, esfuerzo ${L.rpe ?? "–"}/10 y sin dolor. ¿Aplicamos?</p>
+      <div class="opts">${ctx.loading ? `<div class="small muted">Buscando 3 variantes más avanzadas…</div>` : ""}
+      ${opts.map((o, i) => `<label class="opt"><input type="radio" name="lvl" value="${i}" ${ctx.pick === i ? "checked" : ""}><div><b>${esc(o.label || o.name)}</b><div class="small muted">${esc(o.how || "")}${o.kind === "variant" ? " · " + esc(targetTxt(o)) : ""}</div></div></label>`).join("")}
+      <label class="opt"><input type="radio" name="lvl" value="custom" ${ctx.pick === "custom" ? "checked" : ""}><div class="grow"><b>Escribir otro</b>
+        <input id="lvl-name" placeholder="Nombre del ejercicio" style="margin-top:6px;width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--bg)">
+        <input id="lvl-how" placeholder="Cómo se hace (opcional)" style="margin-top:6px;width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--bg)"></div></label></div>
+      ${ctx.aiNote ? `<p class="small muted">${esc(ctx.aiNote)}</p>` : ""}
+      <p class="small muted">Se aplica desde la próxima sesión. Si rechazás, vuelve a preguntar después de 2 sesiones buenas más.</p>
+      <div class="row"><button class="btn primary" data-act="lvlApply">Confirmar y guardar</button><button class="btn" data-act="lvlDecline">Rechazar</button></div>`;
+  } else if (k === "libEdit") {
+    const e = ctx.id ? data.library[ctx.id] : null;
+    h = `<h2>${e ? "Editar ejercicio" : "Nuevo ejercicio"}</h2>${exForm(e, { lib: false, save: false })}
+      <div class="row"><button class="btn primary" data-act="saveLib">Guardar</button><button class="btn ghost" data-act="closeSheet">Cancelar</button>${e ? `<div class="grow"></div><button class="btn danger" data-act="${ctx.confirm ? "rmLib" : "askRmLib"}">${ctx.confirm ? "Sí, quitar" : "Quitar"}</button>` : ""}</div>`;
+  } else if (k === "newAppt") {
+    const cl = Object.entries(data.clients).sort((a, b) => a[1].name.localeCompare(b[1].name));
+    h = `<h2>Turno extra</h2><p class="small muted">${esc(fdateLong(new Date(ctx.d + "T12:00:00").getTime()))}</p>
+      ${cl.length ? `<label class="f">Cliente<select id="ap-c">${cl.map(([id, c]) => `<option value="${id}">${esc(c.name)}</option>`).join("")}</select></label>
+      <label class="f">Hora<input id="ap-t" type="time" value="09:00"></label>
+      <div class="row"><button class="btn primary" data-act="saveAppt">Agregar</button><button class="btn ghost" data-act="closeSheet">Cancelar</button></div>` : `<p>Primero agregá un cliente.</p><button class="btn" data-act="closeSheet">Cerrar</button>`}`;
+  } else if (k === "finishEarly") {
+    const s = S(); const done = Object.values(s.logs || {}).reduce((a, l) => a + (l.sets || []).length, 0);
+    h = `<h2>Terminar la sesión ahora</h2><p>Se guarda lo hecho hasta acá: ${done} series en ${fmt(sessionMs(s))}. Lo que falta queda sin hacer.</p>
+      <div class="row"><button class="btn primary" data-act="goEnd">Puntuar y terminar</button><button class="btn" data-act="finishNow">Terminar sin puntuar</button><button class="btn ghost" data-act="closeSheet">Seguir entrenando</button></div>`;
+  } else if (k === "reschedDay") {
+    const groups = ctx.groups;
+    const dflt = (() => { const t = ymd(new Date()); if (ctx.date < t) return t; const d = new Date(ctx.date + "T12:00:00"); d.setDate(d.getDate() + 1); return ymd(d); })();
+    h = `<h2>Reprogramar el día</h2><p class="small muted">${esc(fdateLong(new Date(ctx.date + "T12:00:00").getTime()))}. Cada cliente pasa al día nuevo con la rutina del día que se perdió, y no le cuenta como falta.</p>
+      <div class="f"><b class="small">Motivo</b><div class="chips">${["Falté yo", "Feriado", "Cierre del gym", "Otro"].map((r, i) => `<label class="chip"><input type="radio" name="rs-r" value="${r}" ${i === 0 ? "checked" : ""}><span>${r}</span></label>`).join("")}</div></div>
+      <label class="f">Pasan al día<input id="rs-date" type="date" value="${dflt}"></label>
+      <div class="f"><b class="small">Hora de cada uno. Destildá a quien no repone: le queda "Sin clase" y no le cuenta como falta.</b>
+      <div class="rlist">${groups.map((g, i) => `<label class="rrow"><input type="checkbox" data-rs="${i}" checked><span class="grow"><b>${esc(g.label)}</b><span class="small muted"> · era ${esc(g.time)}</span></span><input type="time" data-rt="${i}" value="${esc(g.time)}" aria-label="Nueva hora de ${esc(g.label)}"></label>`).join("")}</div></div>
+      ${ctx.err ? `<div class="alert">${esc(ctx.err)}</div>` : ""}
+      <div class="row"><button class="btn primary" data-act="saveResched">Reprogramar</button><button class="btn ghost" data-act="closeSheet">Cancelar</button></div>`;
+  } else if (k === "moveAppt") {
+    const a0 = data.attendance[ctx.keys[0]] || {}; const names = ctx.keys.map(k2 => (data.clients[(data.attendance[k2] || {}).cid] || {}).name).filter(Boolean).join(" + ");
+    h = `<h2>Mover turno</h2><p><b>${esc(names)}</b>${a0.makeup ? ` · recupera ${esc(WD[a0.makeup.wd].toLowerCase())}` : ""}</p>
+      <div class="grid2"><label class="f">Día<input id="mv-d" type="date" value="${esc(a0.date || "")}"></label><label class="f">Hora<input id="mv-t" type="time" value="${esc(a0.time || "")}"></label></div>
+      ${ctx.err ? `<div class="alert">${esc(ctx.err)}</div>` : ""}
+      <div class="row"><button class="btn primary" data-act="saveMove">Guardar</button><button class="btn ghost" data-act="closeSheet">Cancelar</button><div class="grow"></div>
+      <button class="btn danger" data-act="${ctx.confirm ? "rmAppt" : "askRmAppt"}">${ctx.confirm ? "Sí, quitar turno" : "Quitar turno"}</button></div>`;
+  } else if (k === "absence") {
+    const c = data.clients[ctx.cid]; const prev = data.attendance[ctx.key] || {};
+    const dflt = new Date(ctx.date + "T12:00:00"); dflt.setDate(dflt.getDate() + ((8 - dflt.getDay()) % 7 || 7));
+    h = `<h2>${ctx.st === "cancelado" ? "Canceló" : "No vino"}: ${esc(c.name)}</h2><p class="small muted">${esc(fdateLong(new Date(ctx.date + "T12:00:00").getTime()))} · ${esc(ctx.time)}</p>
+      <div class="f"><b class="small">Motivo</b><div class="chips">${REASONS.map(r => `<label class="chip"><input type="radio" name="ab-r" value="${r}" ${(prev.reason || "") === r ? "checked" : ""}><span>${r}</span></label>`).join("")}</div></div>
+      <label class="f">Nota (opcional)<input id="ab-note" value="${esc(prev.note || "")}" placeholder="Ej. viaje de trabajo a Guatemala"></label>
+      <label class="chk"><input type="checkbox" id="ab-mk"> Recupera la clase otro día</label>
+      <div class="grid2" id="ab-mk-w" hidden><label class="f">Día<input id="ab-mk-d" type="date" value="${(() => { const t = new Date(ctx.date + "T12:00:00"); t.setDate(t.getDate() + 1); return ymd(t); })()}"></label><label class="f">Hora<input id="ab-mk-t" type="time" value="${esc(ctx.time)}"></label></div>
+      <label class="chk"><input type="checkbox" id="ab-multi"> Va a faltar varios días</label>
+      <label class="f" id="ab-until-w" hidden>Vuelve el<input id="ab-until" type="date" value="${ymd(dflt)}"></label>
+      <div class="row"><button class="btn primary" data-act="saveAbsence">Guardar</button><button class="btn ghost" data-act="closeSheet">Cancelar</button></div>`;
+  } else if (k === "dFinishEarly") {
+    h = `<h2>Terminar la sesión del dúo</h2><p>Se guarda lo hecho hasta acá para los dos (${fmt(sessionMs(D(0)))}). Lo que falta queda sin hacer.</p>
+      <div class="row"><button class="btn primary" data-act="dGoEnd">Puntuar y terminar</button><button class="btn" data-act="dFinishNow">Terminar sin puntuar</button><button class="btn ghost" data-act="closeSheet">Seguir entrenando</button></div>`;
+  } else if (k === "delActive") {
+    const s = data.sessions[ctx.id]; const c = s && data.clients[s.clientId];
+    h = `<h2>Eliminar sesión sin terminar</h2><p>${s ? `<b>${esc(c ? c.name : "")}</b> · ${esc(s.dayName)} · empezó ${esc(fdate(s.startedAt))}` : ""}</p>
+      <p class="small muted">Se borra todo lo registrado en esta sesión. No cuenta para el progreso.</p>
+      <div class="row"><button class="btn danger" data-act="doDelActive">Sí, eliminar</button><button class="btn ghost" data-act="closeSheet">Cancelar</button></div>`;
+  } else if (k === "wipe") {
+    const n = Object.values(data.sessions).filter(s => s.clientId === ui.client).length;
+    h = `<h2>Borrar historial</h2><p>Se borran las ${n} sesiones de <b>${esc(data.clients[ui.client].name)}</b>, terminadas y sin terminar. El cliente y su rutina quedan.</p>
+      <p class="small muted">Para borrar una sola sesión, abrila desde Historial.</p>
+      <div class="row"><button class="btn danger" data-act="doWipe">Sí, borrar todo</button><button class="btn ghost" data-act="closeSheet">Cancelar</button></div>`;
+  } else if (k === "discardEdit") {
+    h = `<h2>Hay cambios sin guardar</h2><p>Si salís ahora, se pierden.</p>
+      <div class="row"><button class="btn primary" data-act="saveEdit">Guardar</button><button class="btn danger" data-act="forceCloseEdit">Salir sin guardar</button><button class="btn ghost" data-act="closeSheet">Seguir editando</button></div>`;
+  } else if (k === "csv") {
+    h = `<h2>${esc(ctx.title || "Datos")}</h2><p class="small muted">No se pudo descargar el archivo. Copiá el texto y pegalo donde lo necesites.</p><textarea id="csvtxt" rows="10" style="width:100%;font-family:ui-monospace,monospace;font-size:12px">${esc(ctx.text)}</textarea><div class="row"><button class="btn primary" data-act="copyCsv">Copiar</button><button class="btn ghost" data-act="closeSheet">Cerrar</button></div>`;
+  }
+  el.innerHTML = `<div class="sheet-bg" data-act="bgClose"><div class="sheet" role="dialog" aria-modal="true">${h}</div></div>`;
+}
+
+/* ---------- level-up suggestions ---------- */
+async function openLevelUp(exId, sid, done) {
+  if (run) run.running = false; if (duo) duo.running = false;
+  const s = data.sessions[sid]; const e = findEx(s.plan, exId).e; const c = data.clients[s.clientId] || {};
+  const ctx = { exId, sid, done, options: quickOptions(e), loading: true, pick: null };
+  openSheet("levelUp", ctx);
+  let sample = null; try { sample = window.claude && window.claude.use ? await window.claude.use("sample") : null; } catch {}
+  if (!sample) { ctx.loading = false; if (sheet && sheet.ctx === ctx) renderSheet(); return; }
+  const L = s.logs[exId] || {};
+  const prompt = `Sos entrenador personal. Cliente: ${c.age ? c.age + " años" : "adulto"}. Objetivo: ${c.goal || "fuerza y equilibrio"}.
+Ejercicio actual: "${e.name}". Cómo se hace: ${e.how || "-"}. Dosis: ${targetTxt(e)}${e.level != null ? ", nivel " + e.level : ""}.
+Lo completó bien 2 sesiones seguidas (confianza ${L.conf ?? "-"}/10, esfuerzo ${L.rpe ?? "-"}/10, sin dolor).
+Proponé exactamente 3 variantes MÁS AVANZADAS y seguras de este mismo ejercicio, de menor a mayor dificultad, usando solo este material: rusas, mancuernas, bandas cortas y largas, cajón, steps, silla, pared.
+Respondé solo con un array JSON, en español, así:
+[{"name":"Nombre corto","how":"Cómo se hace en 1 o 2 frases","mode":"reps","sets":3,"reps":10,"sec":20,"side":false,"unit":"reps"}]
+"mode" es "reps" o "time"; si es "time" usá "sec".`;
+  try {
+    const arr = await sample.json(prompt, { modelTier: "quick" });
+    const v = (Array.isArray(arr) ? arr : []).filter(o => o && o.name).slice(0, 3).map(o => ({
+      kind: "variant", name: String(o.name).slice(0, 80), how: String(o.how || "").slice(0, 300), mode: o.mode === "time" ? "time" : "reps",
+      sets: Math.max(1, Math.min(10, +o.sets || e.sets)), reps: Math.max(1, +o.reps || e.reps), sec: Math.max(5, +o.sec || e.sec), side: !!o.side, unit: o.unit ? String(o.unit).slice(0, 20) : (e.unit || "reps")
+    }));
+    if (v.length) { ctx.options = v; ctx.aiNote = "Variantes propuestas por Claude. Revisalas antes de confirmar."; }
+  } catch (err) { if (err && err.code === "not_granted") ctx.aiNote = "Sin permiso para pedir variantes a Claude: te muestro progresiones simples."; }
+  ctx.loading = false; if (sheet && sheet.ctx === ctx) renderSheet();
+}
+
+/* ---------- appointment alerts ---------- */
+function checkAppts() {
+  const k = "coachseba-notified-" + ymd(new Date()); const done = new Set(LS.get(k) || []); let fresh = false;
+  pendingNow().forEach(o => { if (done.has(o.key)) return; done.add(o.key); fresh = true; const c = data.clients[o.cid]; toast(`${o.time} · ¿Vino ${c ? c.name : ""}? Confirmalo en Agenda`); });
+  if (fresh) { cue("alert"); LS.set(k, [...done]); if (!run && !sheet && (ui.view === "home")) render(); }
+}
+
+/* ---------- export ---------- */
+function csvFor(cid) {
+  const c = data.clients[cid];
+  const rows = [["fecha", "cliente", "dia", "bloque", "ejercicio", "serie", "lado", "reps", "segundos", "carga_" + U(), "nivel", "rpe", "confianza", "dolor", "nota", "cambiado_a", "desistido", "tiempo_serie_s"]];
+  Object.values(data.sessions).filter(s => s.clientId === cid && s.status === "done").sort((a, b) => a.startedAt - b.startedAt).forEach(s => {
+    s.plan.blocks.forEach(b => b.ex.forEach(e => {
+      const L = s.logs[e.id]; if (!L) return;
+      const base = [new Date(s.startedAt).toISOString().slice(0, 10), c.name, s.dayName, b.name, e.name];
+      const tail = [L.rpe ?? "", L.conf ?? "", L.pain ?? "", L.note || "", L.changedTo || "", L.skipped ? "si" : ""];
+      if (!(L.sets || []).length) rows.push([...base, "", "", "", "", "", "", ...tail, ""]);
+      (L.sets || []).forEach(x => rows.push([...base, x.s, x.sd || "", x.reps ?? "", x.sec ?? "", x.load ?? "", x.level ?? "", ...tail, Math.round((x.ms || 0) / 1000)]));
+    }));
+  });
+  return rows.map(r => r.map(v => { const t = String(v); return /[",\n;]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; }).join(",")).join("\n");
+}
+function reportFor(cid) {
+  const c = data.clients[cid];
+  const sess = Object.values(data.sessions).filter(s => s.clientId === cid && s.status === "done").sort((a, b) => a.startedAt - b.startedAt);
+  const rr = clientRoutine(cid);
+  const items = [];
+  if (rr) rr[1].days.forEach(d => {
+    const ds = sess.filter(s => s.dayId === d.id); if (ds.length < 2) return;
+    const seen = new Map(); ds.forEach(s => s.plan.blocks.forEach(b => b.ex.forEach(e => seen.set(e.id, e))));
+    seen.forEach(e => {
+      const ms = ds.map(s => sessMetrics(s, e.id, e)).filter(m => m && !m.skipped);
+      if (ms.length < 2) return; const a = ms[0], b = ms[ms.length - 1];
+      const cmp = compare(a, b);
+      if (cmp > 0) items.push(`<tr><td>${esc(e.name)}</td><td>${esc(metricTxt(a))}</td><td>${esc(metricTxt(b))}</td></tr>`);
+    });
+  });
+  const confs = sess.map(s => sessAvg(s, "conf")).filter(x => x != null);
+  const css = "body{font-family:system-ui,sans-serif;max-width:720px;margin:32px auto;padding:0 16px;color:#1d1a26;line-height:1.5}h1{margin:0 0 4px}.k{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}.k div{border:1px solid #dfdce8;border-radius:10px;padding:12px 16px}.k b{display:block;font-size:28px}table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #dfdce8;padding:8px;text-align:left}th{font-size:12px;text-transform:uppercase;color:#6a6578}.acc{color:#6a45db}";
+  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Progreso de ${esc(c.name)}</title><style>${css}</style></head><body>
+    <p class="acc"><b>COACH SEBA</b></p><h1>Tu progreso, ${esc(c.name)}</h1><p>${sess.length ? `Del ${esc(fdateLong(sess[0].startedAt))} al ${esc(fdateLong(sess[sess.length - 1].startedAt))}` : "Sin sesiones todavía"}</p>
+    <div class="k"><div><b>${sess.length}</b>sesiones</div><div><b>${fmt(sess.reduce((a, s) => a + durOf(s), 0))}</b>tiempo entrenado</div>${confs.length > 1 ? `<div><b>${r1(confs[0])} → ${r1(confs[confs.length - 1])}</b>confianza (1-10)</div>` : ""}</div>
+    <h2>Dónde mejoraste</h2>${items.length ? `<table><thead><tr><th>Ejercicio</th><th>Al empezar</th><th>Ahora</th></tr></thead><tbody>${items.join("")}</tbody></table>` : "<p>Con un par de sesiones más vamos a ver las mejoras acá.</p>"}
+    <p style="margin-top:32px;color:#6a6578;font-size:13px">Generado el ${esc(fdateLong(Date.now()))}.</p></body></html>`;
+}
+async function offerFile(filename, text, fallbackCsv) {
+  let dl = null; try { dl = window.claude && window.claude.use ? await window.claude.use("downloads") : null; } catch {}
+  if (dl) {
+    try { await dl.save({ filename, data: text }); toast("Archivo listo"); return; }
+    catch (e) { if (e && e.code === "declined") return; if (e && e.code === "rate_limited") { toast("Esperá un momento y probá de nuevo"); return; } }
+  }
+  openSheet("csv", { text, title: fallbackCsv ? "Datos en CSV" : "Reporte (HTML)" });
+}
+
+/* ---------- actions ---------- */
+document.addEventListener("click", async ev => {
+  audioUnlock();
+  const t = ev.target.closest("[data-act]"); if (!t) return;
+  const a = t.dataset.act;
+  if (a === "bgClose") { if (ev.target === t) closeSheet(); return; }
+  const A = actions[a]; if (A) { ev.preventDefault(); await A(t); }
+});
+document.addEventListener("keydown", ev => {
+  if (ev.key === "Escape" && sheet) { closeSheet(); return; }
+  if (duo && !sheet && !/INPUT|TEXTAREA|SELECT/.test(ev.target.tagName)) { const st = dcur(); if (ev.code === "Space" && (st.t === "dwork" || st.t === "drest")) { ev.preventDefault(); actions.dplay(); } return; }
+  if (!run || sheet || /INPUT|TEXTAREA|SELECT/.test(ev.target.tagName)) return;
+  const st = cur();
+  if (ev.code === "Space" && (st.t === "work" || st.t === "rest")) { ev.preventDefault(); actions.play(); }
+  else if (ev.key === "Enter" && st.t === "work") { ev.preventDefault(); actions.doneSet(); }
+});
+document.addEventListener("focusin", ev => { if (ev.target.classList && ev.target.classList.contains("sv")) { try { ev.target.select(); } catch {} } });
+document.addEventListener("change", ev => {
+  if (ev.target.id === "ab-multi") { const w = $("#ab-until-w"); if (w) w.hidden = !ev.target.checked; }
+  if (ev.target.id === "ab-mk") { const w = $("#ab-mk-w"); if (w) w.hidden = !ev.target.checked; }
+  const m = /^c-wd-(\d)$/.exec(ev.target.id || "");
+  if (m) {
+    const t = $("#c-t-" + m[1]); const on = ev.target.checked; t.disabled = !on; ev.target.closest(".slot").classList.toggle("on", on);
+    if (on && !t.value) { const filled = [...document.querySelectorAll('.slots input[type=time]')].find(x => x.value && !x.disabled); t.value = ($("#c-tall") || {}).value || (filled && filled.value) || "09:00"; }
+  }
+  if (ev.target.id === "x-lib" && ev.target.value && data.library[ev.target.value]) fillExForm(data.library[ev.target.value]);
+  if (ev.target.name === "lvl" && sheet && sheet.kind === "levelUp") sheet.ctx.pick = ev.target.value === "custom" ? "custom" : +ev.target.value;
+});
+document.addEventListener("input", ev => {
+  const el = ev.target;
+  if (el.dataset && el.dataset.in) {
+    const draft = el.dataset.in === "duo" ? (duo && duo.drafts[+el.dataset.p]) : (run && run.draft); if (!draft) return;
+    const num = parseFloat(String(el.value).replace(",", "."));
+    if (el.dataset.load) {
+      const u = el.dataset.load, other = u === "lb" ? "kg" : "lb";
+      draft.load = isNaN(num) ? 0 : Math.round(toUnit(num, u) * 10) / 10;
+      const o = el.closest(".lrow").querySelector(`[data-load="${other}"]`); if (o) o.value = isNaN(num) ? "" : String(r05(fromUnit(draft.load, other)));
+    } else if (!isNaN(num)) draft[el.dataset.k] = Math.max(0, Math.round(num));
+    return;
+  }
+  if (ev.target.id === "lib-q") { ui.libQ = ev.target.value; const pos = ev.target.selectionStart; render(); const i = $("#lib-q"); if (i) { i.focus(); try { i.setSelectionRange(pos, pos); } catch {} } return; }
+  if (ev.target.id === "rate-note" && run && run.rate) run.rate.note = ev.target.value;
+});
+const actions = {
+  home() { ui.view = "home"; render(); },
+  closeSheet,
+  newClient() { openSheet("client", {}); },
+  editClient() { openSheet("client", { id: ui.client }); },
+  editClientId(t) { openSheet("client", { id: t.dataset.id }); },
+  askDelClient() { sheet.ctx.confirmDel = true; renderSheet(); },
+  async delClient() {
+    const id = sheet.ctx.id; closeSheet();
+    const rr = clientRoutine(id); if (rr) await del("routines", rr[0]);
+    for (const [sid, s] of Object.entries(data.sessions)) if (s.clientId === id) await del("sessions", sid);
+    await del("clients", id); ui.view = "home"; render(); toast("Cliente eliminado");
+  },
+  async saveClient() {
+    const name = $("#c-name").value.trim(); if (!name) { toast("Poné el nombre"); return; }
+    const id = sheet.ctx.id || uid();
+    const prev = data.clients[id] || { createdAt: Date.now() };
+    const age = $("#c-age").value.trim();
+    const slots = [];
+    for (const wd of [0, 1, 2, 3, 4, 5, 6]) { if ($("#c-wd-" + wd).checked) { const t = $("#c-t-" + wd).value; if (!t) { toast("Poné la hora del " + WD[wd]); return; } slots.push({ wd, time: t }); } }
+    const partner = $("#c-partner") ? $("#c-partner").value || null : (prev.partnerId || null);
+    if (prev.partnerId && prev.partnerId !== partner && data.clients[prev.partnerId] && data.clients[prev.partnerId].partnerId === id) put("clients", prev.partnerId, Object.assign({}, data.clients[prev.partnerId], { partnerId: null }));
+    if (partner && data.clients[partner]) put("clients", partner, Object.assign({}, data.clients[partner], { partnerId: id }));
+    put("clients", id, Object.assign({}, prev, { name, age: age ? +age : null, goal: $("#c-goal").value.trim(), slots, partnerId: partner }));
+    const tpl = $("#c-tpl") && $("#c-tpl").value;
+    if (tpl && data.routines[tpl]) { const r = clone(data.routines[tpl]); r.clientId = id; r.changes = []; r.updatedAt = Date.now(); r.name = r.name + " · " + name; put("routines", uid(), r); }
+    closeSheet(); render(); toast("Guardado");
+  },
+  assign(t) { openSheet("assign", { id: t.dataset.id }); },
+  newRoutine() {
+    const id = sheet.ctx.id; const c = data.clients[id];
+    const wds = [1, 2, 3, 4, 5, 6, 0].filter(wd => $("#nr-" + wd).checked); if (!wds.length) { toast("Elegí al menos un día"); return; }
+    const r = { name: "Rutina · " + c.name, clientId: id, changes: [], updatedAt: Date.now(), days: wds.map(wd => ({ id: uid(), name: WD[wd], focus: "", weekday: wd, blocks: [] })) };
+    const rid = uid(); put("routines", rid, r); sheet = null; renderSheet();
+    ui.client = id; ui.editRid = rid; ui.editDraft = clone(r); ui.editDay = 0; ui.view = "edit"; render(); openSheet("dayText");
+  },
+  doAssign() {
+    const tpl = $("#a-tpl").value; const id = sheet.ctx.id; const r = clone(data.routines[tpl]);
+    r.clientId = id; r.changes = []; r.updatedAt = Date.now(); r.name = r.name + " · " + data.clients[id].name;
+    put("routines", uid(), r); closeSheet(); render(); toast("Rutina asignada");
+  },
+  saveTemplate(t) {
+    const r = clone(data.routines[t.dataset.id]); r.clientId = null; r.changes = [];
+    r.days.forEach(d => d.blocks.forEach(b => b.ex = b.ex.filter(e => !e.retired)));
+    r.name = r.name.split(" · ")[0]; r.updatedAt = Date.now(); put("routines", uid(), r); toast("Plantilla guardada");
+  },
+  openClient(t) { ui.view = "client"; ui.client = t.dataset.id; ui.tab = "dias"; render(); },
+  tab(t) { ui.tab = t.dataset.tab; render(); },
+  statsDay(t) { ui.statsDay = +t.dataset.i; render(); },
+  viewSess(t) { openSheet("viewSess", { id: t.dataset.id }); },
+  askDelSess() { sheet.ctx.confirm = true; renderSheet(); },
+  async doDelSess() { const id = sheet.ctx.id; closeSheet(); await del("sessions", id); render(); toast("Sesión borrada"); },
+  exportCsv() { const c = data.clients[ui.client]; offerFile(`coach-seba-${c.name.replace(/\W+/g, "-").toLowerCase()}-datos.csv`, csvFor(ui.client), true); },
+  exportReport() { const c = data.clients[ui.client]; offerFile(`progreso-${c.name.replace(/\W+/g, "-").toLowerCase()}.html`, reportFor(ui.client)); },
+  copyCsv() { const ta = $("#csvtxt"); const p = navigator.clipboard ? navigator.clipboard.writeText(ta.value) : Promise.reject(); p.then(() => toast("Copiado")).catch(() => { ta.select(); toast("Texto seleccionado: copialo"); }); },
+  // editor
+  editRoutine(t) { ui.editRid = t.dataset.id; ui.editDraft = clone(data.routines[t.dataset.id]); ui.editDay = 0; ui.view = "edit"; render(); },
+  closeEdit() {
+    syncEditorFields();
+    if (JSON.stringify(ui.editDraft) !== JSON.stringify(data.routines[ui.editRid])) { openSheet("discardEdit"); return; }
+    ui.editDraft = null; ui.view = "client"; render();
+  },
+  forceCloseEdit() { sheet = null; renderSheet(); ui.editDraft = null; ui.view = "client"; render(); },
+  settings() { openSheet("settings"); },
+  dplay() { duo.resumed = false; duo.running = !duo.running; duo.lastTs = performance.now(); if (!duo.running) saveDuo(); else wake(true); renderDuo(); },
+  dnext() { dnext(); },
+  dprev() { dprev(); },
+  ddone() { duo.running = false; dComplete(); },
+  daddRest() { dcur().sec += 15; renderDuo(); },
+  dstep(t) { const p = +t.dataset.p, k = t.dataset.k, d = +t.dataset.d; const dr = duo.drafts[p]; let v = (dr[k] ?? 0) + d; v = k === "load" ? Math.max(0, Math.round(v * 10) / 10) : Math.max(k === "level" ? 1 : 0, v); dr[k] = v; renderDuo(); },
+  dscale(t) { const p = +t.dataset.p; [0, 1].forEach(i => { const el = $("#dnote-" + i); if (el) duo.rate[i].note = el.value; }); duo.rate[p][t.dataset.k] = +t.dataset.v; renderDuo(); },
+  dsaveRate() {
+    const st = dcur(); const q = [];
+    [0, 1].forEach(i => {
+      const rt = duo.rate[i]; const el = $("#dnote-" + i); if (el) rt.note = el.value;
+      const b = D(i).plan.blocks[st.k]; if (!b) return;
+      activeEx(b).forEach(e => { const L = D(i).logs[e.id] || (D(i).logs[e.id] = { sets: [] }); Object.assign(L, { rpe: rt.rpe, conf: rt.conf, pain: rt.pain, note: rt.note }); if (levelUpDue(D(i), e.id)) q.push({ exId: e.id, sid: duo.ids[i] }); });
+    });
+    saveDuo();
+    const go = () => { if (!q.length) return dnext(); const it = q.shift(); openLevelUp(it.exId, it.sid, go); };
+    go();
+  },
+  dfinish() { duo.rate.note = ($("#rate-note") || {}).value || ""; finishDuo(false); },
+  dFinishEarly() { duo.running = false; saveDuo(); openSheet("dFinishEarly"); renderDuo(); },
+  dGoEnd() { sheet = null; renderSheet(); [0, 1].forEach(i => D(i).endedEarly = true); enterDuo(duo.steps.length - 1); },
+  dFinishNow() { sheet = null; renderSheet(); duo.rate = null; finishDuo(true); },
+  dleave() { duo.running = false; [0, 1].forEach(i => D(i).leftAt = Date.now()); saveDuo(); LS.del("coachseba-open-duo"); duo = null; wake(false); ui.view = "home"; render(); toast("Sesión guardada: retomala cuando quieras"); },
+  slotAll() {
+    const v = $("#c-tall").value; if (!v) { toast("Elegí la hora primero"); return; }
+    let n = 0; [0, 1, 2, 3, 4, 5, 6].forEach(wd => { if ($("#c-wd-" + wd).checked) { $("#c-t-" + wd).value = v; n++; } });
+    toast(n ? "Hora aplicada a " + n + " días" : "Marcá primero los días");
+  },
+  saveSettings() { settings.sound = $("#set-sound").checked; settings.vibrate = $("#set-vib").checked; settings.unit = $("#set-unit").value; LS.set("coachseba-settings", settings); audioUnlock(); closeSheet(); render(); toast("Avisos guardados"); },
+  testCue() { settings.sound = $("#set-sound").checked; settings.vibrate = $("#set-vib").checked; audioUnlock(); cue("end"); },
+  calNav(t) { const r = ui.calMonth; ui.calMonth = new Date(r.getFullYear(), r.getMonth() + +t.dataset.d, 1); render(); },
+  calDay(t) { ui.calDay = t.dataset.d; render(); },
+  attPair(t) {
+    const { a, b, ca, cb, date, time } = t.dataset;
+    [[a, ca], [b, cb]].forEach(([key, cid]) => put("attendance", key, Object.assign({}, data.attendance[key] || { cid, date, time }, { status: "vino", at: Date.now() })));
+    render();
+  },
+  att(t) {
+    const { key, cid, date, time, st } = t.dataset; const prev = data.attendance[key];
+    if (prev && prev.status === st) { const n = Object.assign({}, prev); delete n.status; delete n.reason; delete n.note; if (n.extra) put("attendance", key, n); else del("attendance", key); render(); return; }
+    if (st === "falto" || st === "cancelado") { openSheet("absence", { key, cid, date, time, st }); return; }
+    const n = Object.assign({}, prev || { cid, date, time }, { status: st, at: Date.now() }); delete n.reason; delete n.note;
+    put("attendance", key, n); render();
+  },
+  reschedDay(t) {
+    const date = t.dataset.d; const list = apptsFor(date).filter(o => !o.status); const used = new Set(); const groups = [];
+    list.forEach(o => {
+      if (used.has(o.key)) return; used.add(o.key);
+      const pid = partnerOf(o.cid); const po = pid && list.find(x => x.cid === pid && x.time === o.time && !used.has(x.key));
+      const members = po ? [o, po] : [o]; if (po) used.add(po.key);
+      groups.push({ time: o.time, members: members.map(x => ({ key: x.key, cid: x.cid, extra: x.extra, makeup: x.makeup })), label: members.map(x => data.clients[x.cid].name).join(" + ") });
+    });
+    if (!groups.length) { toast("No hay turnos pendientes ese día"); return; }
+    openSheet("reschedDay", { date, groups });
+  },
+  saveResched() {
+    const ctx = sheet.ctx; const nd = $("#rs-date").value; const reason = (document.querySelector('input[name="rs-r"]:checked') || {}).value || "Falté yo";
+    if (!nd) { sheet.ctx.err = "Elegí el día al que pasan."; renderSheet(); return; }
+    if (nd === ctx.date) { sheet.ctx.err = "El día nuevo tiene que ser distinto."; renderSheet(); return; }
+    const all = ctx.groups.map((g, i) => ({ g, on: $(`[data-rs="${i}"]`).checked, t: $(`[data-rt="${i}"]`).value }));
+    const picks = all.filter(x => x.on), skips = all.filter(x => !x.on);
+    const ndWd = new Date(nd + "T12:00:00").getDay(); const clash = [];
+    picks.forEach(({ g, t }) => {
+      if (!t) clash.push(g.label + ": falta la hora");
+      g.members.forEach(m => { const c = data.clients[m.cid]; if ((c.slots || []).some(sl => sl.wd === ndWd && sl.time === t) || data.attendance[m.cid + "_" + nd + "_" + (t || "").replace(":", "")]) clash.push(`${c.name} ya tiene turno ese día a las ${t}`); });
+    });
+    if (clash.length) { sheet.ctx.err = [...new Set(clash)].join(" · ") + ". Cambiá la hora."; renderSheet(); return; }
+    let n = 0;
+    picks.forEach(({ g, t }) => g.members.forEach(m => {
+      const wd = m.makeup ? m.makeup.wd : new Date(ctx.date + "T12:00:00").getDay();
+      const old = data.attendance[m.key] || { cid: m.cid, date: ctx.date, time: g.time };
+      put("attendance", m.key, Object.assign({}, old, { status: "reprogramado", reason, note: "Pasa al " + fmtD(nd) + " " + t, at: Date.now() }));
+      const nk = m.cid + "_" + nd + "_" + t.replace(":", "");
+      put("attendance", nk, { cid: m.cid, date: nd, time: t, extra: true, makeup: { from: ctx.date, wd, reason } }); n++;
+    }));
+    skips.forEach(({ g }) => g.members.forEach(m => {
+      const old = data.attendance[m.key] || { cid: m.cid, date: ctx.date, time: g.time };
+      put("attendance", m.key, Object.assign({}, old, { status: "sinclase", reason, note: "Sin reposición", at: Date.now() }));
+    }));
+    sheet = null; renderSheet(); ui.calDay = picks.length ? nd : ctx.date; render();
+    toast(picks.length ? `${n} turnos reprogramados al ${fmtD(nd)}${skips.length ? " · " + skips.length + " sin reposición" : ""}` : "Día marcado sin clase");
+  },
+  moveAppt(t) { openSheet("moveAppt", { keys: t.dataset.keys.split(",") }); },
+  saveMove() {
+    const ctx = sheet.ctx; const d = $("#mv-d").value, tm = $("#mv-t").value; if (!d || !tm) { ctx.err = "Elegí día y hora."; renderSheet(); return; }
+    const wd = new Date(d + "T12:00:00").getDay(); const clash = [];
+    ctx.keys.forEach(k2 => { const a = data.attendance[k2]; if (!a) return; const nk = a.cid + "_" + d + "_" + tm.replace(":", ""); const c = data.clients[a.cid];
+      if (nk !== k2 && (data.attendance[nk] || (c.slots || []).some(sl => sl.wd === wd && sl.time === tm))) clash.push(`${c.name} ya tiene turno ese día a las ${tm}`); });
+    if (clash.length) { ctx.err = clash.join(" · ") + "."; renderSheet(); return; }
+    ctx.keys.forEach(k2 => { const a = data.attendance[k2]; if (!a) return; const nk = a.cid + "_" + d + "_" + tm.replace(":", ""); if (nk === k2) return;
+      put("attendance", nk, Object.assign({}, a, { date: d, time: tm })); del("attendance", k2);
+      if (a.makeup && a.makeup.from) { const ok = Object.keys(data.attendance).find(x => x.startsWith(a.cid + "_" + a.makeup.from + "_") && data.attendance[x].status === "reprogramado"); if (ok) put("attendance", ok, Object.assign({}, data.attendance[ok], { note: "Pasa al " + fmtD(d) + " " + tm })); } });
+    sheet = null; renderSheet(); ui.calDay = d; render(); toast("Turno movido");
+  },
+  askRmAppt() { sheet.ctx.confirm = true; renderSheet(); },
+  rmAppt() { sheet.ctx.keys.forEach(k2 => del("attendance", k2)); sheet = null; renderSheet(); render(); toast("Turno quitado"); },
+  saveAbsence() {
+    const { key, cid, date, time, st } = sheet.ctx; const reason = (document.querySelector('input[name="ab-r"]:checked') || {}).value || "";
+    const note = $("#ab-note").value.trim();
+    let fullNote = note;
+    if ($("#ab-mk").checked) {
+      const md = $("#ab-mk-d").value, mt = $("#ab-mk-t").value; if (!md || !mt) { toast("Elegí día y hora para recuperar"); return; }
+      const wd = new Date(date + "T12:00:00").getDay(); const mkey = cid + "_" + md + "_" + mt.replace(":", "");
+      put("attendance", mkey, Object.assign({}, data.attendance[mkey] || {}, { cid, date: md, time: mt, extra: true, makeup: { from: date, wd } }));
+      fullNote = (note ? note + " · " : "") + "Recupera el " + fmtD(md) + " " + mt;
+    }
+    put("attendance", key, Object.assign({}, data.attendance[key] || { cid, date, time }, { status: st, reason, note: fullNote, at: Date.now() }));
+    if ($("#ab-multi").checked) {
+      const until = $("#ab-until").value; if (!until || until <= date) { toast("Elegí el día que vuelve"); return; }
+      const next = new Date(date + "T12:00:00"); next.setDate(next.getDate() + 1);
+      put("clients", cid, Object.assign({}, data.clients[cid], { pause: { from: ymd(next), until, reason: reason || "Ausente", note } }));
+      toast(`${data.clients[cid].name}: ausente hasta el ${fmtD(until)}`);
+    } else toast("Guardado");
+    closeSheet(); render();
+  },
+  endPause(t) { const c = Object.assign({}, data.clients[t.dataset.id]); delete c.pause; put("clients", t.dataset.id, c); render(); toast("Pausa terminada"); },
+  newAppt(t) { openSheet("newAppt", { d: t.dataset.d }); },
+  saveAppt() {
+    const cid = $("#ap-c").value, time = $("#ap-t").value, date = sheet.ctx.d; if (!time) { toast("Poné la hora"); return; }
+    const key = cid + "_" + date + "_" + time.replace(":", "");
+    put("attendance", key, Object.assign({}, data.attendance[key] || {}, { cid, date, time, extra: true }));
+    closeSheet(); render(); toast("Turno agregado");
+  },
+  library() { ui.view = "library"; render(); },
+  libEdit(t) { openSheet("libEdit", { id: t.dataset.id || null }); },
+  saveLib() { const ne = readExForm({}); if (!ne) return; const id = sheet.ctx.id || uid(); put("library", id, libFrom(ne)); closeSheet(); render(); toast("Ejercicio guardado"); },
+  askRmLib() { sheet.ctx.confirm = true; renderSheet(); },
+  async rmLib() { const id = sheet.ctx.id; sheet = null; renderSheet(); await del("library", id); render(); toast("Quitado de la biblioteca"); },
+  lvlApply() {
+    const ctx = sheet.ctx; const pick = (document.querySelector('input[name="lvl"]:checked') || {}).value;
+    if (pick == null) { toast("Elegí una opción"); return; }
+    const s = data.sessions[ctx.sid]; const r = clone(data.routines[s.routineId]); const ri = findInRoutine(r, s.dayId, ctx.exId); const old = ri.e;
+    let to, desc;
+    if (pick === "custom") {
+      const name = $("#lvl-name").value.trim(); if (!name) { toast("Escribí el nombre del ejercicio"); return; }
+      to = Object.assign({}, old, { id: uid(), name, how: $("#lvl-how").value.trim() || old.how, level: old.level != null ? old.level + 1 : null }); delete to.lvlDeclinedAt; desc = name;
+    } else {
+      const o = ctx.options[+pick];
+      if (o.kind === "patch") { Object.assign(old, o.patch); delete old.lvlDeclinedAt; desc = o.label; }
+      else { to = Object.assign({}, old, { id: uid(), name: o.name, how: o.how, mode: o.mode, sets: o.sets, reps: o.reps, sec: o.sec, side: o.side, unit: o.unit || old.unit, level: old.level != null ? old.level + 1 : null }); delete to.lvlDeclinedAt; desc = o.name; }
+    }
+    if (to) { old.retired = true; old.retiredAt = Date.now(); old.replacedBy = to.id; ri.b.ex.splice(ri.i + 1, 0, to); }
+    r.changes = r.changes || []; r.changes.push({ at: Date.now(), dayId: s.dayId, dayName: s.dayName, fromId: ctx.exId, from: findEx(s.plan, ctx.exId).e.name, toId: to ? to.id : ctx.exId, to: desc, reason: "Subida de nivel" });
+    r.updatedAt = Date.now(); put("routines", s.routineId, r);
+    sheet = null; renderSheet(); toast("Nivel subido: se aplica la próxima sesión"); (ctx.done || next)();
+  },
+  lvlDecline() {
+    const ctx = sheet.ctx; const s = data.sessions[ctx.sid]; const r = clone(data.routines[s.routineId]); const ri = findInRoutine(r, s.dayId, ctx.exId);
+    if (ri) { ri.e.lvlDeclinedAt = Date.now(); r.updatedAt = Date.now(); put("routines", s.routineId, r); }
+    sheet = null; renderSheet(); (ctx.done || next)();
+  },
+  askDelActive(t) { openSheet("delActive", { id: t.dataset.id }); },
+  async doDelActive() { const id = sheet.ctx.id; const sd = data.sessions[id]; if (sd && sd.duo && data.sessions[sd.duo.with]) { LS.del("liftcoach-run-" + sd.duo.with); await del("sessions", sd.duo.with); LS.del("coachseba-open-duo"); } sheet = null; renderSheet(); LS.del("liftcoach-run-" + id); if (LS.get("coachseba-open-run") === id) LS.del("coachseba-open-run"); await del("sessions", id); render(); toast("Sesión eliminada"); },
+  delSessRow(t) { openSheet("viewSess", { id: t.dataset.id, confirm: true }); },
+  wipe() { openSheet("wipe"); },
+  async doWipe() {
+    sheet = null; renderSheet();
+    for (const [sid, s] of Object.entries(data.sessions)) if (s.clientId === ui.client) { LS.del("liftcoach-run-" + sid); await del("sessions", sid); }
+    render(); toast("Historial borrado");
+  },
+  dayText() { syncEditorFields(); openSheet("dayText"); },
+  toggleDetailed() { syncEditorFields(); ui.edDetailed = !ui.edDetailed; render(); },
+  saveDayText() {
+    const txt = $("#dt-text").value; const r = ui.editDraft; const d = r.days[Math.min(ui.editDay, r.days.length - 1)];
+    const blocks = textToBlocks(txt, d); if (!blocks.some(b => activeEx(b).length)) { toast("No encontré ejercicios: escribí uno por línea"); return; }
+    d.blocks = blocks; r.updatedAt = Date.now(); put("routines", ui.editRid, clone(r));
+    sheet = null; renderSheet(); render(); toast("Rutina guardada: " + blocks.reduce((a, b) => a + activeEx(b).length, 0) + " ejercicios");
+  },
+  editDay(t) { syncEditorFields(); ui.editDay = +t.dataset.i; render(); },
+  addDay() { syncEditorFields(); ui.editDraft.days.push({ id: uid(), name: "Nuevo día", focus: "", weekday: 2, blocks: [{ id: uid(), name: "Bloque 1", ex: [] }] }); ui.editDay = ui.editDraft.days.length - 1; render(); },
+  addBlock() { syncEditorFields(); const d = ui.editDraft.days[ui.editDay]; d.blocks.push({ id: uid(), name: "Nuevo bloque", ex: [] }); render(); },
+  rmBlock(t) { syncEditorFields(); ui.editDraft.days[ui.editDay].blocks.splice(+t.dataset.bi, 1); render(); },
+  mvBlock(t) { syncEditorFields(); const bl = ui.editDraft.days[ui.editDay].blocks; const i = +t.dataset.bi, j = i + +t.dataset.dir; if (j < 0 || j >= bl.length) return; [bl[i], bl[j]] = [bl[j], bl[i]]; render(); },
+  mvEx(t) {
+    syncEditorFields(); const ex = ui.editDraft.days[ui.editDay].blocks[+t.dataset.bi].ex; const i = +t.dataset.ei; const dir = +t.dataset.dir;
+    let j = i + dir; while (j >= 0 && j < ex.length && ex[j].retired) j += dir; if (j < 0 || j >= ex.length) return; [ex[i], ex[j]] = [ex[j], ex[i]]; render();
+  },
+  exEdit(t) { syncEditorFields(); openSheet("exEdit", { bi: +t.dataset.bi, ei: +t.dataset.ei }); },
+  saveEx() {
+    const { bi, ei } = sheet.ctx; const d = ui.editDraft.days[ui.editDay]; const ex = d.blocks[bi].ex;
+    const base = ei >= 0 ? ex[ei] : null; const ne = readExForm(base); if (!ne) return;
+    maybeSaveLib(ne);
+    if (ei >= 0) ex[ei] = ne; else ex.push(ne); closeSheet(); render();
+  },
+  rmEx() { const { bi, ei } = sheet.ctx; const e = ui.editDraft.days[ui.editDay].blocks[bi].ex[ei]; e.retired = true; e.retiredAt = Date.now(); closeSheet(); render(); },
+  saveEdit() { if (sheet) { sheet = null; renderSheet(); } else syncEditorFields(); const r = ui.editDraft; r.updatedAt = Date.now(); put("routines", ui.editRid, clone(r)); ui.editDraft = null; ui.view = "client"; ui.tab = "rutina"; render(); toast("Rutina guardada"); },
+  // runner
+  startDuo(t) { if (run || duo || t.disabled) return; t.disabled = true; startDuo(t.dataset.cid, +t.dataset.di); },
+  start(t) {
+    if (run || duo || t.disabled) return; t.disabled = true;
+    const d = data.routines[t.dataset.rid].days[+t.dataset.di];
+    const act = Object.entries(data.sessions).find(([, s]) => s.status === "active" && s.clientId === t.dataset.cid && s.dayId === d.id);
+    if (act) openRun(act[0]); else startSession(t.dataset.cid, t.dataset.rid, +t.dataset.di);
+  },
+  resume(t) { const s = data.sessions[t.dataset.id]; if (s && s.duo) resumeDuo(t.dataset.id); else openRun(t.dataset.id); },
+  play() { run.resumed = false; run.running = !run.running; run.lastTs = performance.now(); if (!run.running) saveRun(); else wake(true); renderRun(); },
+  next() { next(); },
+  prev() { prev(); },
+  addRest() { const st = cur(); st.sec += 15; renderRun(); },
+  doneSet() { run.running = false; completeSet(false); },
+  step(t) {
+    const k = t.dataset.k, d = +t.dataset.d; let v = (run.draft[k] ?? 0) + d;
+    if (k === "load") v = Math.max(0, Math.round(v * 10) / 10); else v = Math.max(k === "level" ? 1 : 0, v);
+    run.draft[k] = v; renderRun();
+  },
+  scale(t) { if (duo) { duo.rate.note = ($("#rate-note") || {}).value || duo.rate.note; duo.rate[t.dataset.k] = +t.dataset.v; renderDuo(); return; } run.rate[t.dataset.k] = +t.dataset.v; renderRun(); },
+  saveRate() {
+    const s = S(), st = cur(); const L = s.logs[st.e] || (s.logs[st.e] = { sets: [] });
+    Object.assign(L, { rpe: run.rate.rpe, conf: run.rate.conf, pain: run.rate.pain, note: ($("#rate-note") || {}).value || "" });
+    saveRun();
+    if (levelUpDue(s, st.e)) { openLevelUp(st.e, run.id, next); return; }
+    next();
+  },
+  saveBlock() { const s = S(), st = cur(); s.blocks[st.b] = { score: run.rate.score, note: ($("#rate-note") || {}).value || "" }; next(); },
+  finish() {
+    const s = S(); s.score = run.rate.score; s.note = ($("#rate-note") || {}).value || ""; s.durationMs = sessionMs(s); s.status = "done"; s.endedAt = Date.now();
+    saveRun(); LS.del("liftcoach-run-" + run.id); LS.del("coachseba-open-run"); const cid = s.clientId; run = null; wake(false);
+    ui.view = "client"; ui.client = cid; ui.tab = "dias"; render(); toast("Sesión guardada");
+  },
+  steps() { openSheet("steps"); },
+  finishEarly() { run.running = false; saveRun(); openSheet("finishEarly"); renderRun(); },
+  goEnd() { sheet = null; renderSheet(); S().endedEarly = true; enterStep(run.steps.length - 1); },
+  finishNow() {
+    sheet = null; renderSheet();
+    const s = S(); s.endedEarly = true; s.durationMs = sessionMs(s); s.status = "done"; s.endedAt = Date.now();
+    saveRun(); LS.del("liftcoach-run-" + run.id); LS.del("coachseba-open-run"); const cid = s.clientId; run = null; wake(false);
+    ui.view = "client"; ui.client = cid; ui.tab = "dias"; render(); toast("Sesión terminada y guardada");
+  },
+  jump(t) { closeSheet(); run.running = false; enterStep(+t.dataset.i); },
+  leaveRun() { run.running = false; saveRun(); openSheet("leave", {}); renderRun(); },
+  doLeave() { closeSheet(); S().leftAt = Date.now(); saveRun(); LS.del("coachseba-open-run"); run = null; wake(false); ui.view = "home"; render(); },
+  askDiscard() { sheet.ctx.confirm = true; renderSheet(); },
+  async doDiscard() { const id = run.id; closeSheet(); run = null; wake(false); LS.del("liftcoach-run-" + id); LS.del("coachseba-open-run"); await del("sessions", id); ui.view = "home"; render(); toast("Sesión descartada"); },
+  changeEx() { run.running = false; openSheet("change"); },
+  doChange() {
+    const s = S(), st = cur(); const f = findEx(s.plan, st.e); const old = f.e;
+    const ne = readExForm({ id: uid() }); if (!ne) return;
+    maybeSaveLib(ne);
+    const reason = $("#ch-reason").value + ($("#ch-detail").value.trim() ? ": " + $("#ch-detail").value.trim() : "");
+    const apply = $("#ch-apply").checked;
+    // session: retire old, insert new after it
+    const L = s.logs[old.id] || (s.logs[old.id] = { sets: [] }); L.changedTo = ne.name; L.changeReason = reason;
+    old.retired = true; const bi = f.b.ex.indexOf(old); f.b.ex.splice(bi + 1, 0, clone(ne));
+    // routine
+    if (apply && data.routines[s.routineId]) {
+      const r = clone(data.routines[s.routineId]); const d = r.days.find(x => x.id === s.dayId);
+      if (d) for (const b of d.blocks) { const i = b.ex.findIndex(x => x.id === old.id); if (i >= 0) { b.ex[i].retired = true; b.ex[i].retiredAt = Date.now(); b.ex[i].replacedBy = ne.id; b.ex.splice(i + 1, 0, clone(ne)); break; } }
+      r.changes = r.changes || []; r.changes.push({ at: Date.now(), dayId: s.dayId, dayName: s.dayName, fromId: old.id, from: old.name, toId: ne.id, to: ne.name, reason });
+      r.updatedAt = Date.now(); put("routines", s.routineId, r);
+    }
+    run.steps = buildSteps(s.plan);
+    const idx = run.steps.findIndex(x => x.t === "work" && x.e === ne.id);
+    closeSheet(); enterStep(idx >= 0 ? idx : s.stepIdx); toast("Ejercicio cambiado");
+  },
+  skipEx() { run.running = false; openSheet("skip"); },
+  doSkip() {
+    const s = S(), st = cur(); const L = s.logs[st.e] || (s.logs[st.e] = { sets: [] }); L.skipped = true; L.skipReason = $("#sk-reason").value;
+    const ri = run.steps.findIndex((x, i) => i > s.stepIdx && x.t === "rate" && x.e === st.e);
+    closeSheet(); enterStep(ri >= 0 ? ri + 1 : s.stepIdx + 1);
+  }
+};
+
+function showCrash(msg) { const c = $("#crash"); if (!c) return; $("#crash-msg").textContent = String(msg || "").slice(0, 300); c.hidden = false; }
+window.addEventListener("error", e => showCrash(e.message + (e.lineno ? " (línea " + e.lineno + ")" : "")));
+window.addEventListener("unhandledrejection", e => { const r = e.reason; if (r && r.code && !r.stack) return; showCrash((r && r.message) || r); });
+$("#crash-home").addEventListener("click", () => { $("#crash").hidden = true; try { if (run) saveRun(); } catch {} run = null; duo = null; sheet = null; LS.del("coachseba-open-run"); LS.del("coachseba-open-duo"); renderSheet(); ui.view = "home"; render(); });
+$("#crash-reset").addEventListener("click", () => { LS.del("coachseba-open-run"); location.reload(); });
+
+render();
+initStore();
+requestAnimationFrame(tick);
+setInterval(() => { if (COLS.every(c => loaded.has(c))) checkAppts(); }, 20000);
+(function reopen() {
+  if (!COLS.every(c => loaded.has(c))) return setTimeout(reopen, 300);
+  const dids = LS.get("coachseba-open-duo");
+  if (!run && !duo && Array.isArray(dids)) {
+    try { if (dids.every(x => data.sessions[x] && data.sessions[x].status === "active")) { openDuo(dids); return; } LS.del("coachseba-open-duo"); }
+    catch (e) { LS.del("coachseba-open-duo"); duo = null; render(); showCrash(e.message); return; }
+  }
+  const id = LS.get("coachseba-open-run");
+  if (!run && id) {
+    const mirror = LS.get("liftcoach-run-" + id);
+    if (!data.sessions[id] && mirror && mirror.plan && mirror.status === "active") data.sessions[id] = mirror;
+    try { if (data.sessions[id] && data.sessions[id].status === "active") openRun(id); else LS.del("coachseba-open-run"); }
+    catch (e) { LS.del("coachseba-open-run"); run = null; render(); showCrash(e.message); }
+  }
+})();
+setTimeout(() => { if (COLS.every(c => loaded.has(c))) checkAppts(); }, 4000);
+})();
+</script>
+
+</body>
+</html>
