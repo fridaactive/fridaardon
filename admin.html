@@ -5151,7 +5151,14 @@ function linkPendingLead(id) {
     var linkUpdates = {};
     linkUpdates['client_links/' + id] = leadUid;
     linkUpdates['clientasPortal/' + leadUid + '/perfil/clientId'] = id;
-    db.ref().update(linkUpdates).catch(function(e) { console.warn('link lead error', e.message); });
+    db.ref().update(linkUpdates).then(function() {
+      // Sin esto, el panel seguía mostrando "todavía no tiene cuenta" hasta
+      // recargar la página — CLIENT_LINKS es una copia local (cacheada en
+      // localStorage) que solo se refresca sola al abrir el panel.
+      CLIENT_LINKS[id] = leadUid;
+      try { localStorage.setItem('fa_client_links', JSON.stringify(CLIENT_LINKS)); } catch (e) {}
+      if (acpState.clientId === id) { acpState.uid = leadUid; openAdminClientProfile(id); }
+    }).catch(function(e) { console.warn('link lead error', e.message); });
   });
 }
 
