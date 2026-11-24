@@ -1,0 +1,176 @@
+<title>Propuestas pestaña Rutina</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: three phone mockups side by side (stacking on phones), each with a short note underneath. Single dark look, matching her portal. */
+:root{
+  --bg:#0b1230; --panel:#121c45; --line:rgba(245,236,203,.12);
+  --cream:#F5ECCB; --muted:rgba(245,236,203,.62); --blue:#1C55E5; --blue2:#0F3FA8; --ok:#3ecf8e;
+  --display:"Archivo Black","Arial Black",system-ui,sans-serif;
+  --body:"DM Sans",system-ui,-apple-system,sans-serif;
+  color-scheme:dark;
+}
+body{background:var(--bg);color:var(--cream);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1120px;margin:0 auto;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-family:var(--display);font-size:clamp(26px,5vw,38px);line-height:1.1;margin:0 0 8px;text-wrap:balance}
+.lead{color:var(--muted);max-width:62ch;margin:0 0 28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:28px;align-items:start}
+.prop{display:flex;flex-direction:column;gap:14px;min-width:0}
+.tag{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.prop h2{font-family:var(--display);font-size:22px;margin:0;line-height:1.15}
+.phone{background:#060b22;border:1px solid var(--line);border-radius:30px;padding:14px 12px 16px;max-width:330px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.scr{display:flex;flex-direction:column;gap:10px}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
+.title{font-family:var(--display);font-size:20px;line-height:1.1}
+.sub{font-size:13px;color:var(--muted)}
+.blk{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row b{font-weight:700;display:block;font-size:15px}
+.row small{color:var(--muted);font-size:12.5px}
+.row .go{margin-left:auto;color:var(--muted);font-size:18px}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none}
+.dot.on{background:var(--ok);border-color:var(--ok)}
+.video{aspect-ratio:16/9;border-radius:14px;background:linear-gradient(135deg,#1b2a66,#0a1336);display:grid;place-items:center;position:relative;max-width:100%}
+.video::after{content:"";width:0;height:0;border-left:18px solid var(--cream);border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:4px}
+.video span{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;padding:4px 10px;border-radius:999px;background:var(--panel);color:var(--muted)}
+.chip.on{background:var(--blue);color:#fff}
+.timer{display:flex;align-items:center;justify-content:space-between;background:var(--panel);border-radius:14px;padding:10px 14px}
+.timer .t{font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums}
+.timer small{color:var(--muted);font-size:12px}
+.sets{display:grid;grid-template-columns:auto 1fr 1fr auto;gap:6px 8px;align-items:center;font-size:13px}
+.sets .h{color:var(--muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.in{background:var(--panel);border-radius:10px;padding:7px 8px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.in.done{background:rgba(62,207,142,.16);color:var(--ok)}
+.chk{width:26px;height:26px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;font-size:13px}
+.chk.on{background:var(--ok);border-color:var(--ok);color:#06261a}
+.hint{font-size:12px;color:var(--muted)}
+.btns{display:flex;gap:8px}
+.btn{flex:1;text-align:center;padding:11px;border-radius:14px;font-weight:700;font-size:14px;border:1px solid var(--line)}
+.btn.p{background:var(--blue);border-color:var(--blue);color:#fff}
+.bar{height:6px;border-radius:6px;background:var(--panel);overflow:hidden}
+.bar i{display:block;height:100%;width:34%;background:var(--blue)}
+.rest{background:var(--blue2);border-radius:14px;padding:12px;text-align:center}
+.rest .t{font-family:var(--display);font-size:34px;font-variant-numeric:tabular-nums}
+.days{display:flex;gap:6px}
+.day{flex:1;text-align:center;padding:8px 4px;border-radius:12px;background:var(--panel);font-size:12.5px;color:var(--muted)}
+.day.on{background:var(--cream);color:var(--bg);font-weight:700}
+.card{background:var(--panel);border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.card .head{display:flex;gap:10px;align-items:center}
+.thumb{width:64px;aspect-ratio:1;border-radius:10px;background:linear-gradient(135deg,#1b2a66,#0a1336);flex:none;display:grid;place-items:center}
+.thumb::after{content:"";border-left:11px solid var(--cream);border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px}
+.card.closed .sets,.card.closed .hint{display:none}
+.note{color:var(--muted);font-size:14.5px;max-width:330px}
+.note ul{margin:6px 0 0;padding-left:18px}
+.note li{margin:3px 0}
+.pros{color:var(--cream)}
+.rec{margin-top:40px;background:var(--panel);border-radius:20px;padding:22px;max-width:760px}
+.rec h3{font-family:var(--display);font-size:20px;margin:0 0 8px}
+.rec p{margin:0 0 8px;color:var(--muted)}
+.rec p b{color:var(--cream)}
+</style>
+
+<div class="wrap">
+  <h1>Tu pestaña Rutina, en 3 versiones</h1>
+  <p class="lead">Todas usan la misma idea del sistema de Seba: tu video manda, el cronómetro va pequeño debajo y las series se marcan con un toque. Cambia cómo se recorre el entreno. Los datos son de ejemplo.</p>
+
+  <div class="grid">
+
+    <!-- A -->
+    <section class="prop">
+      <div class="tag">Propuesta A</div>
+      <h2>Lista limpia y pantalla por ejercicio</h2>
+      <div class="phone"><div class="scr">
+        <div class="top"><span>Rutina · Glúteo y fuerza</span><span>Sem 2</span></div>
+        <div class="days"><div class="day on">Día 1</div><div class="day">Día 2</div><div class="day">Día 3</div></div>
+        <div class="title">Piernas y glúteo</div>
+        <div class="sub">5 ejercicios · 45 min aprox.</div>
+        <div class="blk">Bloque 1</div>
+        <div>
+          <div class="row"><span class="dot on"></span><div><b>Sentadilla goblet</b><small>3 × 12 · 60 s descanso</small></div><span class="go">›</span></div>
+          <div class="row"><span class="dot"></span><div><b>Hip thrust</b><small>3 × 10 · 60 s descanso</small></div><span class="go">›</span></div>
+        </div>
+        <div class="blk">Bloque 2</div>
+        <div>
+          <div class="row"><span class="dot"></span><div><b>Zancada atrás</b><small>3 × 10 por lado</small></div><span class="go">›</span></div>
+          <div class="row"><span class="dot"></span><div><b>Plancha</b><small>3 × 30 s</small></div><span class="go">›</span></div>
+        </div>
+      </div></div>
+      <div class="phone"><div class="scr">
+        <div class="top"><span>‹ Volver</span><span>Bloque 1</span></div>
+        <div class="title">Hip thrust</div>
+        <div class="video"><span>Tu video de YouTube</span></div>
+        <div class="timer"><div><small>Descanso</small><div class="t">0:45</div></div><div class="btn p" style="flex:none;padding:9px 16px">Empezar</div></div>
+        <div class="sets">
+          <span class="h"></span><span class="h">Reps</span><span class="h">Lbs</span><span class="h"></span>
+          <span>S1</span><span class="in done">10</span><span class="in done">50</span><span class="chk on">✓</span>
+          <span>S2</span><span class="in">10</span><span class="in">50</span><span class="chk"></span>
+          <span>S3</span><span class="in">10</span><span class="in">50</span><span class="chk"></span>
+        </div>
+        <div class="hint">La vez pasada: 45 lbs × 10</div>
+      </div></div>
+      <div class="note"><span class="pros">La más parecida a la de Seba.</span>
+        <ul><li>La lista se lee de un vistazo, con una línea por ejercicio.</li><li>Cada ejercicio abre su propia pantalla con el video arriba.</li><li>Cada cliente ve lo que hizo la vez pasada, para que suba de peso.</li></ul></div>
+    </section>
+
+    <!-- B -->
+    <section class="prop">
+      <div class="tag">Propuesta B</div>
+      <h2>Modo entreno guiado</h2>
+      <div class="phone"><div class="scr">
+        <div class="top"><span>✕ Salir</span><span>12:40</span></div>
+        <div class="bar"><i></i></div>
+        <div class="sub">Ejercicio 2 de 5 · Bloque 1</div>
+        <div class="title">Hip thrust</div>
+        <div class="video"><span>Tu video de YouTube</span></div>
+        <div class="chips"><span class="chip on">Serie 2 de 3</span><span class="chip">Meta: 10 reps</span></div>
+        <div class="sets" style="grid-template-columns:1fr 1fr">
+          <span class="h">Reps hechas</span><span class="h">Lbs</span>
+          <span class="in">10</span><span class="in">50</span>
+        </div>
+        <div class="btns"><div class="btn">‹</div><div class="btn p" style="flex:3">✓ Serie hecha</div></div>
+      </div></div>
+      <div class="phone"><div class="scr">
+        <div class="top"><span>✕ Salir</span><span>13:25</span></div>
+        <div class="bar"><i></i></div>
+        <div class="rest"><div class="sub" style="color:var(--cream)">Descansa</div><div class="t">0:38</div><div class="sub" style="color:var(--cream)">Sigue: serie 3 de hip thrust</div></div>
+        <div class="btns"><div class="btn">+15 s</div><div class="btn">Saltar</div></div>
+        <div class="hint">Al terminar el descanso, pasa sola a la siguiente serie.</div>
+      </div></div>
+      <div class="note"><span class="pros">Para que la clienta no piense, solo siga.</span>
+        <ul><li>Un botón grande "Empezar entreno" lleva paso a paso.</li><li>Después de cada serie arranca el descanso solo.</li><li>Al final se guarda el entreno y se marca el día como entrenado.</li></ul></div>
+    </section>
+
+    <!-- C -->
+    <section class="prop">
+      <div class="tag">Propuesta C</div>
+      <h2>Tarjetas que se abren en el mismo lugar</h2>
+      <div class="phone"><div class="scr">
+        <div class="days"><div class="day on">Día 1</div><div class="day">Día 2</div><div class="day">Día 3</div></div>
+        <div class="title">Piernas y glúteo</div>
+        <div class="blk">Bloque 1</div>
+        <div class="card closed"><div class="head"><div class="thumb"></div><div><b>Sentadilla goblet</b><br><small class="sub">3 × 12 · ✓ hecho</small></div></div></div>
+        <div class="card"><div class="head"><div class="thumb"></div><div><b>Hip thrust</b><br><small class="sub">3 × 10 · 60 s</small></div></div>
+          <div class="sets">
+            <span>S1</span><span class="in done">10</span><span class="in done">50</span><span class="chk on">✓</span>
+            <span>S2</span><span class="in">10</span><span class="in">50</span><span class="chk"></span>
+            <span>S3</span><span class="in">10</span><span class="in">50</span><span class="chk"></span>
+          </div>
+          <div class="hint">⏱ Al marcar una serie corre el descanso aquí mismo</div>
+        </div>
+        <div class="blk">Bloque 2</div>
+        <div class="card closed"><div class="head"><div class="thumb"></div><div><b>Zancada atrás</b><br><small class="sub">3 × 10 por lado</small></div></div></div>
+      </div></div>
+      <div class="note"><span class="pros">Todo en una sola pantalla.</span>
+        <ul><li>Cada ejercicio es una tarjeta con la miniatura de tu video.</li><li>Al tocarla se abre ahí mismo, con las series para marcar.</li><li>El video se abre en grande al tocar la miniatura.</li></ul></div>
+    </section>
+  </div>
+
+  <div class="rec">
+    <h3>Mi recomendación: A, con el botón de B</h3>
+    <p><b>La lista limpia de A</b> para ver la rutina, y arriba un botón <b>"Empezar entreno"</b> que abre el modo guiado de B. Así quien solo quiere ver qué le toca lo ve rápido, y quien está entrenando va paso a paso con descanso automático.</p>
+    <p>En tu panel: poder agregar series (por defecto 3), pegar el link de YouTube de cada ejercicio y ver lo que cada cliente anotó en reps y lbs.</p>
+  </div>
+</div>
