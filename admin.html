@@ -2477,8 +2477,6 @@ function renderAcpPagosHtml(clientId, c) {
     if (c.planMeses && c.endDate) html += '<div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem;">Vigente hasta el ' + formatFechaCorta(c.endDate) + '</div>';
     if (!paid && c.cuota) {
       html += '<button type="button" onclick="markClientAsPaid(\'' + clientId + '\');acpSwitchTab(\'pagos\');" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Marcar como pagado</button>';
-    } else if (paid) {
-      html += '<button type="button" onclick="unmarkClientAsPaid(\'' + clientId + '\')" style="margin-top:0.6rem;background:none;border:none;color:' + statusColor + ';text-decoration:underline;font-size:0.7rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;padding:0;">↩ Me equivoqué, no pagó</button>';
     }
     html += '</div>';
   }
@@ -3935,17 +3933,40 @@ function markClientAsPaid(id) {
   renderPaymentStatus(id, c);
 }
 
-// Deshacer un "Marcar como pagado" hecho por error — quita el ciclo de
-// la lista de pagos y el ingreso que se había sumado a Mis finanzas.
-function unmarkClientAsPaid(id) {
+// Quita del ingreso en Mis finanzas que un pago había sumado — busca la
+// coincidencia más reciente entre todos los meses para no tener que saber
+// en cuál se registró originalmente.
+function finRemoveIncomeMatch(note, amount) {
+  var keys = Object.keys(finAllData).sort().reverse();
+  for (var k = 0; k < keys.length; k++) {
+    var md = finAllData[keys[k]];
+    if (!md || !Array.isArray(md.incomes)) continue;
+    for (var j = md.incomes.length - 1; j >= 0; j--) {
+      if (md.incomes[j].note === note && Number(md.incomes[j].amount) === Number(amount)) {
+        md.incomes.splice(j, 1);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+// Eliminar un pago del historial (ficha → Pagos) — se usa cuando se marcó
+// pagado por error: borra ese ciclo de la lista, revierte el ingreso que
+// había sumado a Mis finanzas, y si era el ciclo actual lo deja pendiente
+// otra vez, como si no hubiera pasado nada.
+function deletePaymentHistoryEntry(id, idx) {
   var c = CLIENTS[id];
   if (!c) return;
-
   var payments = getClientPayments();
   var paidCycles = payments[id] || [];
-  var idx = paidCycles.lastIndexOf(c.initDate);
-  if (idx === -1) { alert('Este ciclo ya no está marcado como pagado.'); acpRenderShell(); return; }
-  if (!confirm('¿Quitar el pago de este ciclo? También se borra el ingreso que se sumó a Mis finanzas.')) return;
+  var initDate = paidCycles[idx];
+  if (initDate == null) return;
+
+  var MONTH_NAMES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  var d = new Date(initDate + 'T00:00:00');
+  var label = d.getDate() + ' ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear();
+  if (!confirm('¿Eliminar el pago del ciclo desde el ' + label + '? Queda como si no hubiera pagado ese ciclo.')) return;
 
   paidCycles.splice(idx, 1);
   payments[id] = paidCycles;
@@ -3954,25 +3975,16 @@ function unmarkClientAsPaid(id) {
 
   c.pagosCount = paidCycles.length;
   fbSet('clients/' + id + '/pagosCount', c.pagosCount);
-  fbSet('clients/' + id + '/cicloPagado', false);
+  if (initDate === c.initDate) fbSet('clients/' + id + '/cicloPagado', false);
 
-  // Quita el ingreso que ese pago había sumado a Mis finanzas este mes
-  // (busca el más reciente que coincida, para no tocar otro parecido).
-  var today = new Date();
-  var monthData = finGetMonth(today.getFullYear(), today.getMonth());
   var note = (c.planMeses ? 'Plan ' + c.planMeses + ' meses · ' : 'Cuota ') + c.name;
-  for (var i = monthData.incomes.length - 1; i >= 0; i--) {
-    if (monthData.incomes[i].note === note && Number(monthData.incomes[i].amount) === Number(c.cuota)) {
-      monthData.incomes.splice(i, 1);
-      break;
-    }
-  }
+  finRemoveIncomeMatch(note, c.cuota);
   finSave();
   fbSet('finanzas', finAllData);
 
+  renderCpPayments(id, c);
   renderPaymentStatus(id, c);
-  acpRenderShell();
-  alert('✓ Listo, ya no aparece como pagado.');
+  if (acpState.clientId === id) acpRenderShell();
 }
 
 function renderPaymentStatus(id, c) {
@@ -4128,12 +4140,13 @@ function renderCpPayments(id, c) {
   }
   var MONTH_NAMES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   var histHtml = '<div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:700;margin-top:1rem;margin-bottom:0.5rem;">Historial de pagos</div>';
-  paidCycles.slice().reverse().forEach(function(initDate) {
-    var d = new Date(initDate + 'T00:00:00');
+  paidCycles.map(function(initDate, idx) { return { initDate: initDate, idx: idx }; }).reverse().forEach(function(item) {
+    var d = new Date(item.initDate + 'T00:00:00');
     var label = d.getDate() + ' ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear();
-    histHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--border);">';
-    histHtml += '<div style="font-size:0.75rem;color:var(--text);">Ciclo desde ' + label + '</div>';
+    histHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--border);gap:0.5rem;">';
+    histHtml += '<div style="font-size:0.75rem;color:var(--text);flex:1;">Ciclo desde ' + label + '</div>';
     if (c.cuota) histHtml += '<div style="font-size:0.78rem;font-weight:700;color:#2a7a2a;">$' + Number(c.cuota).toFixed(2) + '</div>';
+    histHtml += '<button type="button" onclick="deletePaymentHistoryEntry(\'' + id + '\',' + item.idx + ')" title="Eliminar este pago" style="background:none;border:none;color:#b94a4a;font-size:0.95rem;font-weight:700;cursor:pointer;padding:0.1rem 0.3rem;line-height:1;flex-shrink:0;">✕</button>';
     histHtml += '</div>';
   });
   historyEl.innerHTML = histHtml;
