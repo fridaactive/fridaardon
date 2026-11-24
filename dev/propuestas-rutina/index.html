@@ -129,6 +129,26 @@ h1{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size
 .last{font-size:12.5px;color:var(--muted);margin:10px 2px 0;display:flex;gap:6px;align-items:center}
 .last b{color:var(--cream)}
 
+/* Tiempo total del entreno */
+.clock-card{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:12px 14px;margin-bottom:12px}
+.cc-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cc-top small{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.cc-t{font-family:var(--display);font-size:26px;line-height:1.1;font-variant-numeric:tabular-nums}
+.cc-goal{font-size:15px;color:var(--muted)}
+.pace{font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;white-space:nowrap;transition:background .3s,color .3s}
+.pace.ok{background:rgba(52,199,123,.16);color:#8EF0BF}
+.pace.ahead{background:rgba(143,176,255,.18);color:var(--blue-lt)}
+.pace.late{background:var(--cream);color:var(--ink)}
+.pace.over{background:#E5484D;color:#fff}
+.pace.paused{background:var(--surface-2);color:var(--muted)}
+.cc-bar{position:relative;height:8px;border-radius:8px;background:var(--surface-2);margin-top:10px}
+.cc-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:linear-gradient(90deg,var(--blue),var(--blue-lt));transition:width .9s linear}
+.cc-bar i.over{background:#E5484D}
+.cc-bar b{position:absolute;top:-4px;width:4px;height:16px;border-radius:3px;background:var(--cream);transform:translateX(-2px);transition:left .5s}
+.cc-legend{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px}
+.end-time{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:14px 18px;width:100%}
+.end-time .cc-t{font-size:34px}
+
 /* Modo entreno */
 .progress{height:8px;border-radius:8px;background:var(--surface);overflow:hidden;margin:4px 0 12px}
 .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--blue-lt));border-radius:8px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
@@ -164,7 +184,8 @@ h1{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size
 .card ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
 .card li b{color:var(--text)}
 .try{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.try .chip{color:var(--text)}
+.try .chip{color:var(--text);cursor:pointer}
+.try .chip.cream{color:var(--ink)}
 </style>
 
 <div class="wrap">
@@ -189,7 +210,7 @@ h1{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size
             <span class="tag">HOY · DÍA 1</span>
             <svg class="spark" viewBox="0 0 24 24"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
             <div class="hero-bottom">
-              <div><h2>Pierna y<br>glúteo</h2><small>4 ejercicios · 2 bloques · 40 min</small></div>
+              <div><h2>Pierna y<br>glúteo</h2><small>4 ejercicios · 2 bloques · ⏱ Tu tiempo: <b id="goal-lbl" style="color:var(--cream)">45 min</b></small></div>
               <button class="btn3d play" type="button" data-go="train" aria-label="Empezar entreno"><svg viewBox="0 0 24 24" fill="#fff"><path d="M7 4l13 8-13 8z"/></svg></button>
             </div>
           </div>
@@ -223,8 +244,12 @@ h1{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size
 
       <!-- 3. Modo entreno guiado -->
       <section class="screen" id="s-train" hidden>
-        <div class="bar-top"><button class="back" type="button" data-go="list">✕ Salir</button><span class="pill-out" id="tr-clock">00:00</span></div>
-        <div class="progress"><i id="tr-bar" style="width:0%"></i></div>
+        <div class="bar-top"><button class="back" type="button" data-go="list">✕ Salir</button><button class="back" type="button" id="tr-pause">⏸ Pausar</button></div>
+        <div class="clock-card">
+          <div class="cc-top"><div><small>Tiempo de tu entreno</small><div class="cc-t"><span id="tr-clock">00:00</span><span class="cc-goal"> / <span id="tr-goal">45:00</span></span></div></div><span class="pace ok" id="tr-pace">Vas a tiempo</span></div>
+          <div class="cc-bar"><i id="tr-tbar" style="width:0%"></i><b id="tr-ideal" style="left:0%"></b></div>
+          <div class="cc-legend"><span>Series: <b id="tr-series" style="color:var(--text)">0 de 12</b></span><span>▮ crema = dónde deberías ir</span></div>
+        </div>
         <div class="step" id="tr-step">Ejercicio 1 de 4 · Bloque 1</div>
         <div class="ex-title" id="tr-name">Sentadilla goblet</div>
         <div class="video"><button class="btn3d play" type="button" aria-label="Ver video"><svg viewBox="0 0 24 24" fill="#fff"><path d="M7 4l13 8-13 8z"/></svg></button><span class="yt">Video de Frida</span></div>
@@ -250,7 +275,8 @@ h1{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size
           <span class="fa-tag">¡HOY CUENTA!</span>
           <div class="medal">🏆</div>
           <h2>Entreno<br>completado</h2>
-          <p style="color:var(--muted);margin:0">Tu día quedó marcado como entrenado. 12 series en <b id="end-time" style="color:var(--cream)">00:00</b>.</p>
+          <div class="end-time"><small style="font-size:10.5px;letter-spacing:.12em;color:var(--muted);font-weight:700">TIEMPO TOTAL</small><div class="cc-t"><span id="end-time">00:00</span><span class="cc-goal"> / <span id="end-goal">45:00</span></span></div><p id="end-msg" style="margin:6px 0 0;color:var(--muted)"></p></div>
+          <p style="color:var(--muted);margin:0">Tu día quedó marcado como entrenado.</p>
           <button class="btn3d full" type="button" data-go="list" style="margin-top:8px">Volver a mi rutina</button>
         </div>
       </section>
@@ -261,6 +287,15 @@ h1{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size
         <h3>Pruébalo</h3>
         <p>Toca un ejercicio para ver su pantalla, o el botón azul de play para entrar al modo entreno.</p>
         <div class="try"><button class="chip" type="button" data-go="ex" data-i="1">Ver un ejercicio</button><button class="chip" type="button" data-go="train">Empezar entreno</button></div>
+      </div>
+      <div class="card">
+        <h3>⏱ Tiempo de entreno</h3>
+        <p>Desde que tocan "Empezar entreno" corre el tiempo total, también durante los descansos. Ven cuánto llevan de su meta y si van a tiempo, con algo de ventaja o atrasados.</p>
+        <p style="margin-top:10px">Meta de esta cliente:</p>
+        <div class="try" id="goal-pick"><button class="chip cream" type="button" data-min="45">45 min</button><button class="chip" type="button" data-min="60">1 hora</button></div>
+        <p style="margin-top:10px">Para verlo sin esperar:</p>
+        <div class="try"><button class="chip" type="button" id="fast">⏩ Modo rápido (1 seg = 1 min)</button></div>
+        <p style="margin-top:10px">En tu panel pones los minutos de cada cliente. Sale de lo que contestó en el cuestionario ("¿Cuánto tiempo tienes por sesión?") y lo puedes cambiar. Si cierran la página, el tiempo sigue contando desde la hora en que empezaron.</p>
       </div>
       <div class="card">
         <h3>Qué tomé de tu página</h3>
@@ -349,19 +384,39 @@ h1{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size
   });
 
   // Guided mode
-  var tr={i:0,k:0,start:0,clock:null,reps:0,lbs:0},rInt=null,rLeft=0,rTot=60;
+  var tr={i:0,k:0,el:0,clock:null,paused:false,reps:0,lbs:0},rInt=null,rLeft=0,rTot=60;
+  var GOAL=45, SPEED=1;
+  function mmss(s){s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+  function seriesDone(){return done.reduce(function(a,d){return a+d.filter(Boolean).length},0)}
+  function paintClock(){
+    var g=GOAL*60, el=tr.el, n=seriesDone();
+    $('tr-clock').textContent=mmss(el); $('tr-goal').textContent=mmss(g);
+    var tf=el/g, sf=n/TOTAL, bar=$('tr-tbar');
+    bar.style.width=Math.min(100,tf*100)+'%'; bar.classList.toggle('over',el>g);
+    $('tr-ideal').style.left=Math.min(100,sf*100)+'%';
+    $('tr-series').textContent=n+' de '+TOTAL;
+    var p=$('tr-pace'), diff=Math.round((tf-sf)*GOAL);
+    if(tr.paused){p.className='pace paused';p.textContent='En pausa'}
+    else if(el>g){p.className='pace over';p.textContent='Pasaste tu tiempo'}
+    else if(diff>=2){p.className='pace late';p.textContent='Vas '+diff+' min atrás'}
+    else if(diff<=-2){p.className='pace ahead';p.textContent='Vas con ventaja'}
+    else {p.className='pace ok';p.textContent='Vas a tiempo'}
+  }
+  function setGoal(m){GOAL=m;$('goal-lbl').textContent=m===60?'1 hora':m+' min';document.querySelectorAll('#goal-pick .chip').forEach(function(c){c.classList.toggle('cream',+c.dataset.min===m)});paintClock()}
+  $('goal-pick').addEventListener('click',function(ev){var c=ev.target.closest('[data-min]');if(c)setGoal(+c.dataset.min)});
+  $('fast').addEventListener('click',function(){SPEED=SPEED===1?60:1;this.classList.toggle('cream',SPEED>1)});
+  $('tr-pause').addEventListener('click',function(){tr.paused=!tr.paused;this.textContent=tr.paused?'▶ Seguir':'⏸ Pausar';paintClock()});
   var TOTAL=EX.reduce(function(a,e){return a+e.sets},0);
   function startTrain(){
     done=EX.map(function(e){return new Array(e.sets).fill(false)}); renderList();
-    tr.i=0;tr.k=0;tr.start=Date.now(); clearInterval(tr.clock);
-    tr.clock=setInterval(function(){$('tr-clock').textContent=clock()},1000);
+    tr.i=0;tr.k=0;tr.el=0;tr.paused=false;$('tr-pause').textContent='⏸ Pausar'; clearInterval(tr.clock);
+    tr.clock=setInterval(function(){if(!tr.paused)tr.el+=SPEED;paintClock()},1000); paintClock();
     paintTrain(); show('s-train','in-up');
   }
-  function clock(){var s=Math.floor((Date.now()-tr.start)/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+
   function paintTrain(){
     var e=EX[tr.i]; tr.reps=e.reps; tr.lbs=e.lbs;
-    var n=done.reduce(function(a,d){return a+d.filter(Boolean).length},0);
-    $('tr-bar').style.width=(n/TOTAL*100)+'%';
+    paintClock();
     $('tr-step').textContent='Ejercicio '+(tr.i+1)+' de '+EX.length+' · Bloque '+(e.blk+1);
     $('tr-name').textContent=e.name; $('tr-unit').textContent=e.time?'Segundos':(e.side?'Reps por lado':'Reps hechas');
     $('tr-reps').textContent=tr.reps; $('tr-lbs').textContent=tr.lbs; $('tr-last').textContent=e.last;
@@ -387,7 +442,11 @@ h1{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size
   function endRest(){clearInterval(rInt);$('rest').hidden=true}
   $('rest-skip').addEventListener('click',endRest);
   $('rest-plus').addEventListener('click',function(){rLeft+=15;rTot=Math.max(rTot,rLeft);paintRest()});
-  function finish(){clearInterval(tr.clock);endRest();$('end-time').textContent=clock();show('s-end','in-up')}
+  function finish(){clearInterval(tr.clock);endRest();
+    var g=GOAL*60, d=Math.round((tr.el-g)/60);
+    $('end-time').textContent=mmss(tr.el); $('end-goal').textContent=mmss(g);
+    $('end-msg').textContent= tr.el<=g ? '¡Dentro de tu tiempo! 💪' : 'Te tomó '+d+' min más. Frida lo ve y ajusta tu rutina si hace falta.';
+    show('s-end','in-up')}
 
   // Navigation + ripple
   document.addEventListener('click',function(ev){
