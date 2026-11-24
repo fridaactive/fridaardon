@@ -144,6 +144,34 @@
   .ex-timer-btn { border:none; border-radius:10px; padding:0.5rem; font-size:0.72rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; background:var(--blue); color:#fff; }
   .ex-timer-btn.running { background:#c44; }
 
+  /* ── Sesión de ejercicio: video arriba, cronómetro chico, series ── */
+  .exs-header { display:flex; align-items:center; justify-content:space-between; padding:0.8rem 1rem; flex-shrink:0; }
+  .exs-close { background:rgba(255,255,255,0.12); border:none; color:#fff; font-size:0.78rem; font-weight:700; font-family:'DM Sans',sans-serif; padding:0.4rem 0.8rem; border-radius:100px; cursor:pointer; display:flex; align-items:center; gap:0.3rem; }
+  .exs-title { color:#fff; font-size:0.82rem; font-weight:700; text-align:center; flex:1; padding:0 0.5rem; }
+  .exs-title small { display:block; font-weight:400; opacity:0.6; font-size:0.68rem; margin-top:0.1rem; }
+  .exs-body { flex:1; overflow-y:auto; padding:0 1rem 1.5rem; }
+  .exs-video { position:relative; padding-bottom:56.25%; height:0; border-radius:14px; overflow:hidden; background:#000; }
+  .exs-video iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
+  .exs-nota-card { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.14); border-radius:14px; padding:1rem 1.1rem; color:rgba(255,255,255,0.9); font-size:0.82rem; line-height:1.55; white-space:pre-line; }
+  .exs-timer-row { display:flex; align-items:center; gap:0.9rem; margin-top:1rem; background:rgba(255,255,255,0.06); border-radius:14px; padding:0.7rem 0.9rem; }
+  .exs-timer-ring-wrap { position:relative; width:58px; height:58px; flex-shrink:0; }
+  .exs-timer-ring-wrap svg { width:58px; height:58px; transform:rotate(-90deg); }
+  .exs-timer-ring-bg { fill:none; stroke:rgba(255,255,255,0.18); stroke-width:4; }
+  .exs-timer-num { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:800; color:#fff; }
+  .exs-timer-label { flex:1; color:rgba(255,255,255,0.6); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.08em; }
+  .exs-timer-btn { border:none; border-radius:100px; padding:0.6rem 1rem; font-size:0.78rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; background:var(--blue); color:#fff; flex-shrink:0; }
+  .exs-timer-btn.running { background:#c44; }
+  .exs-series-tabs { display:flex; gap:0.4rem; margin-top:1.1rem; overflow-x:auto; }
+  .exs-series-tab { flex-shrink:0; background:rgba(255,255,255,0.08); border:1.5px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.75); border-radius:10px; padding:0.5rem 0.9rem; font-size:0.78rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; }
+  .exs-series-tab.active { background:var(--blue); border-color:var(--blue); color:#fff; }
+  .exs-series-tab.filled:not(.active) { border-color:#6fd66f; color:#6fd66f; }
+  .exs-inputs { display:flex; gap:0.6rem; margin-top:0.9rem; }
+  .exs-input-group { flex:1; background:rgba(255,255,255,0.06); border-radius:12px; padding:0.6rem 0.8rem; }
+  .exs-input-group label { display:block; color:rgba(255,255,255,0.55); font-size:0.62rem; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.3rem; }
+  .exs-input-group input { width:100%; background:none; border:none; color:#fff; font-size:1.05rem; font-weight:700; font-family:inherit; padding:0; }
+  .exs-prescribed { color:rgba(255,255,255,0.5); font-size:0.72rem; margin-top:0.6rem; }
+  .exs-done-btn { width:100%; margin-top:1rem; background:#6fd66f; color:#0a1628; border:none; border-radius:14px; padding:0.9rem; font-size:0.9rem; font-weight:800; font-family:'DM Sans',sans-serif; cursor:pointer; }
+
   /* ── RUTINA: mensaje + días desplegables ── */
   .rt-msg-card { background:var(--grad); border:1.5px solid var(--border); border-radius:16px; padding:1.15rem 1.25rem; margin-bottom:1.1rem; position:relative; overflow:hidden; }
   .rt-msg-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.18em; color:var(--blue); font-weight:700; margin-bottom:0.5rem; }
@@ -1923,6 +1951,30 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
       <div style="display:flex;align-items:center;gap:0.45rem;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.15em;color:#8FB3FF;font-weight:700;margin-bottom:0.6rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7v.5h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/></svg>Tip técnico</div>
       <div id="video-modal-nota-text" style="color:rgba(255,255,255,0.92);font-size:0.85rem;line-height:1.6;white-space:pre-line;"></div>
     </div>
+  </div>
+</div>
+
+<!-- ══════════ SESIÓN DE EJERCICIO: video + cronómetro + series ══════════ -->
+<div id="ex-session-modal" style="display:none;position:fixed;inset:0;background:#0a1628;z-index:9999;flex-direction:column;">
+  <div class="exs-header">
+    <button class="exs-close" onclick="closeExSession()">✕ Salir</button>
+    <div class="exs-title" id="exs-title"></div>
+    <div style="width:4.4rem;flex-shrink:0;"></div>
+  </div>
+  <div class="exs-body">
+    <div id="exs-video"></div>
+    <div class="exs-timer-row">
+      <div class="exs-timer-ring-wrap">
+        <svg viewBox="0 0 64 64"><circle class="exs-timer-ring-bg" cx="32" cy="32" r="28"/><circle class="ex-timer-ring-progress" id="exs-ring" cx="32" cy="32" r="28" stroke-width="4"/></svg>
+        <div class="exs-timer-num" id="exs-num">0:00</div>
+      </div>
+      <div class="exs-timer-label" id="exs-timer-label">Tiempo de la serie</div>
+      <button type="button" class="exs-timer-btn" id="exs-playbtn" onclick="exsPlayPause()">▶ Empezar</button>
+    </div>
+    <div class="exs-series-tabs" id="exs-series-tabs"></div>
+    <div id="exs-prescribed" class="exs-prescribed"></div>
+    <div class="exs-inputs" id="exs-inputs"></div>
+    <button type="button" class="exs-done-btn" id="exs-done-btn" onclick="exsDoneSeries()">✓ Serie hecha</button>
   </div>
 </div>
 
@@ -3918,6 +3970,178 @@ function stepEsfuerzo(exKey, delta) {
   valEl.textContent = next;
 }
 
+// ══════════ SESIÓN DE EJERCICIO: video + cronómetro + series ══════════
+// Al tocar un ejercicio se abre esta pantalla: el video (técnica) ocupa
+// el lugar donde el sistema "Coach Seba" (del novio de Frida) pone el
+// cronómetro grande — acá el cronómetro va chico, abajo del video — y
+// se registra serie por serie (S1, S2, S3...). Al salir, las series se
+// juntan en los mismos campos de siempre (data-ex/data-field), así que
+// guardarSesion() y el historial funcionan exactamente igual que antes.
+var EXS = null;
+function exsSeriesCount(ex) {
+  var m = String(ex.series || '').match(/\d+/);
+  var n = m ? parseInt(m[0], 10) : 3;
+  return Math.max(1, Math.min(10, n || 3));
+}
+function openExSession(dayId, exId) {
+  var day = currentRutinaData.days.find(function(d) { return d.id === dayId; });
+  if (!day) return;
+  var block = null, ex = null;
+  (day.blocks || []).forEach(function(b) { (b.exercises || []).forEach(function(e) { if (e.id === exId) { block = b; ex = e; } }); });
+  if (!ex) return;
+  var tipo = exTipo(block, ex);
+  var bankItem = findExerciseBankItem(ex.name);
+  var seriesCount = exsSeriesCount(ex);
+  var lastLog = findLastExerciseLog(dayId, exId);
+  var prevReps = lastLog && lastLog.reps ? String(lastLog.reps).split(/[·,]/).map(function(s) { return s.trim(); }) : [];
+  var prevCarga = lastLog && lastLog.carga ? String(lastLog.carga) : '';
+  var seriesData = [];
+  for (var i = 0; i < seriesCount; i++) seriesData.push({ reps: prevReps[i] || '', carga: prevCarga });
+
+  EXS = {
+    dayId: dayId, exId: exId, exName: ex.name, block: block, ex: ex, tipo: tipo,
+    seriesCount: seriesCount, seriesData: seriesData, active: 0,
+    timerSecs: tipo === 'tiempo' ? exSegundos(block, ex) : 0,
+    timerTotal: tipo === 'tiempo' ? exSegundos(block, ex) : 0,
+    timerRunning: false, timerInterval: null
+  };
+
+  document.getElementById('exs-title').innerHTML = escapeHtml(ex.name) + '<small>' + escapeHtml(block.name || '') + '</small>';
+
+  var videoUrl = bankItem && bankItem.video;
+  var nota = bankItem && bankItem.descripcion;
+  var videoEl = document.getElementById('exs-video');
+  if (videoUrl) {
+    videoEl.innerHTML = '<div class="exs-video"><iframe src="' + getYouTubeEmbedUrl(videoUrl) + '" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>'
+      + (nota ? '<div class="exs-nota-card" style="margin-top:0.8rem;">' + escapeHtml(nota) + '</div>' : '');
+  } else {
+    videoEl.innerHTML = '<div class="exs-nota-card">' + (nota ? escapeHtml(nota) : 'Todavía no hay video de técnica para este ejercicio.') + '</div>';
+  }
+
+  document.getElementById('exs-timer-label').textContent = tipo === 'tiempo' ? 'Tiempo de la serie · meta ' + EXS.timerTotal + ' s' : 'Tiempo de la serie';
+  exsRenderSeriesTabs();
+  exsRenderTimer();
+  exsRenderInputs();
+  document.getElementById('ex-session-modal').style.display = 'flex';
+}
+
+function exsRenderSeriesTabs() {
+  var html = '';
+  for (var i = 0; i < EXS.seriesCount; i++) {
+    var filled = EXS.seriesData[i] && EXS.seriesData[i].reps;
+    html += '<button type="button" class="exs-series-tab' + (i === EXS.active ? ' active' : '') + (filled ? ' filled' : '') + '" onclick="exsSelectSeries(' + i + ')">S' + (i + 1) + '</button>';
+  }
+  document.getElementById('exs-series-tabs').innerHTML = html;
+  var ex = EXS.ex, prescribed = [];
+  if (EXS.tipo !== 'tiempo') {
+    if (ex.reps) prescribed.push(appendUnitIfMissing(ex.reps, 'reps'));
+    if (ex.rpe) prescribed.push('RPE ' + ex.rpe);
+  }
+  document.getElementById('exs-prescribed').textContent = prescribed.join(' · ');
+}
+
+function exsSelectSeries(i) {
+  exsSaveCurrentInputs();
+  EXS.active = i;
+  exsStopTimer();
+  EXS.timerSecs = EXS.tipo === 'tiempo' ? EXS.timerTotal : 0;
+  exsRenderSeriesTabs();
+  exsRenderTimer();
+  exsRenderInputs();
+}
+
+function exsSaveCurrentInputs() {
+  var repsEl = document.getElementById('exs-reps-input');
+  var cargaEl = document.getElementById('exs-carga-input');
+  if (repsEl) EXS.seriesData[EXS.active].reps = repsEl.value;
+  if (cargaEl) EXS.seriesData[EXS.active].carga = cargaEl.value;
+}
+
+function exsRenderInputs() {
+  var d = EXS.seriesData[EXS.active];
+  var html = '';
+  if (EXS.tipo === 'tiempo') {
+    html += '<div class="exs-input-group"><label>Segundos logrados</label><input type="number" step="1" id="exs-reps-input" value="' + escapeHtml(d.reps || '') + '" placeholder="' + EXS.timerTotal + '"></div>';
+  } else {
+    html += '<div class="exs-input-group"><label>Reps hechas</label><input type="text" id="exs-reps-input" value="' + escapeHtml(d.reps || '') + '" placeholder="0"></div>';
+  }
+  html += '<div class="exs-input-group"><label>Carga (lbs)</label><input type="number" step="0.5" id="exs-carga-input" value="' + escapeHtml(d.carga || '') + '" placeholder="0"></div>';
+  document.getElementById('exs-inputs').innerHTML = html;
+}
+
+function exsRenderTimer() {
+  var numEl = document.getElementById('exs-num'), ringEl = document.getElementById('exs-ring'), btnEl = document.getElementById('exs-playbtn');
+  var mm = Math.floor(EXS.timerSecs / 60), ss = EXS.timerSecs % 60;
+  numEl.textContent = mm + ':' + String(ss).padStart(2, '0');
+  if (EXS.tipo === 'tiempo' && EXS.timerTotal > 0) {
+    var pct = EXS.timerSecs / EXS.timerTotal;
+    ringEl.style.strokeDashoffset = EX_TIMER_RING_CIRC * (1 - pct);
+    ringEl.classList.toggle('done', EXS.timerSecs === 0);
+  } else {
+    ringEl.style.strokeDashoffset = 0;
+    ringEl.classList.remove('done');
+  }
+  btnEl.classList.toggle('running', EXS.timerRunning);
+  btnEl.textContent = EXS.timerRunning ? '❚❚ Pausa' : (EXS.timerSecs > 0 && EXS.tipo !== 'tiempo' ? '▶ Seguir' : '▶ Empezar');
+}
+
+function exsPlayPause() {
+  if (EXS.timerRunning) { exsStopTimer(); return; }
+  EXS.timerRunning = true;
+  EXS.timerInterval = setInterval(function() {
+    if (EXS.tipo === 'tiempo') {
+      EXS.timerSecs--;
+      if (EXS.timerSecs <= 0) {
+        EXS.timerSecs = 0;
+        exsStopTimer();
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        playExTimerBeep();
+        var repsInput = document.getElementById('exs-reps-input');
+        if (repsInput) repsInput.value = EXS.timerTotal;
+      }
+    } else {
+      EXS.timerSecs++;
+    }
+    exsRenderTimer();
+  }, 1000);
+  exsRenderTimer();
+}
+
+function exsStopTimer() {
+  EXS.timerRunning = false;
+  if (EXS.timerInterval) clearInterval(EXS.timerInterval);
+  EXS.timerInterval = null;
+}
+
+function exsDoneSeries() {
+  exsStopTimer();
+  exsSaveCurrentInputs();
+  if (EXS.active < EXS.seriesCount - 1) {
+    exsSelectSeries(EXS.active + 1);
+  } else {
+    closeExSession();
+  }
+}
+
+function closeExSession() {
+  if (!EXS) { document.getElementById('ex-session-modal').style.display = 'none'; return; }
+  exsStopTimer();
+  exsSaveCurrentInputs();
+  var repsVals = EXS.seriesData.map(function(s) { return s.reps; }).filter(function(v) { return v !== '' && v != null; });
+  var cargaVals = EXS.seriesData.map(function(s) { return s.carga; }).filter(function(v) { return v !== '' && v != null; });
+  var repsInput = document.querySelector('[data-ex="' + EXS.exId + '"][data-field="reps"]');
+  var cargaInput = document.querySelector('[data-ex="' + EXS.exId + '"][data-field="carga"]');
+  var segundosInput = document.getElementById('segundos-input-' + exTimerKeyOf(EXS.dayId, EXS.exId));
+  if (EXS.tipo === 'tiempo') {
+    if (segundosInput && repsVals.length) segundosInput.value = repsVals[repsVals.length - 1];
+  } else {
+    if (repsInput && repsVals.length) repsInput.value = repsVals.join('·');
+    if (cargaInput && cargaVals.length) cargaInput.value = cargaVals[cargaVals.length - 1];
+  }
+  EXS = null;
+  document.getElementById('ex-session-modal').style.display = 'none';
+}
+
 function renderExerciseBlocksHtml(day) {
   var html = '';
   (day.blocks || []).forEach(function(block) {
@@ -3948,14 +4172,12 @@ function renderExerciseBlocksHtml(day) {
       var thumbUrl = videoUrl ? getYouTubeThumbnailUrl(videoUrl) : null;
 
       var hasHistorial = true;
-      var hasTimer = tipo === 'tiempo';
       var exTimerKey = day.id + '__' + ex.id;
       html += '<div class="rt-blq-item">';
       if (thumbUrl) {
-        // Miniatura real del video (no el botón "Ver ejercicio" de antes) —
-        // tocarla abre el mismo modal de siempre. El descanso ahora vive
-        // adentro de ese modal, no acá en la lista — ver showExerciseVideo.
-        html += '<button type="button" onclick="showExerciseVideo(\'' + jsAttrEscape(videoUrl) + '\', \'' + jsAttrEscape(nota || '') + '\', ' + (bankItem && bankItem.vertical ? 'true' : 'false') + ', ' + (block.restSecs || 40) + ', \'' + jsAttrEscape(ex.name) + '\', \'' + jsAttrEscape(day.id) + '\', \'' + jsAttrEscape(ex.id) + '\')" style="flex-shrink:0;width:52px;height:92px;border-radius:10px;border:none;padding:0;position:relative;overflow:hidden;cursor:pointer;background:#0a1628;">'
+        // Miniatura real del video — tocarla abre la sesión del ejercicio
+        // (video + cronómetro + series), igual que el botón "Ver ejercicio".
+        html += '<button type="button" onclick="openExSession(\'' + jsAttrEscape(day.id) + '\', \'' + jsAttrEscape(ex.id) + '\')" style="flex-shrink:0;width:52px;height:92px;border-radius:10px;border:none;padding:0;position:relative;overflow:hidden;cursor:pointer;background:#0a1628;">'
           + '<img src="' + jsAttrEscape(thumbUrl) + '" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">'
           + '<span style="position:absolute;inset:0;background:linear-gradient(0deg, rgba(0,0,0,0.3), transparent 55%);"></span>'
           + '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" fill="#1C55E5" style="width:11px;height:11px;margin-left:1px;"><path d="M8 5v14l11-7z"/></svg></span>'
@@ -3965,22 +4187,16 @@ function renderExerciseBlocksHtml(day) {
       html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;flex-wrap:wrap;">';
       html += '<div class="ex-name">' + escapeHtml(ex.name) + '</div>';
       html += '<div style="display:flex;gap:0.4rem;flex-shrink:0;flex-wrap:wrap;">';
-      if (!thumbUrl && nota) {
-        // Sin video no hay miniatura que tocar — se mantiene el botón de
-        // texto para ver la nota del ejercicio.
-        html += '<button type="button" onclick="showExerciseVideo(\'\', \'' + jsAttrEscape(nota) + '\', false, ' + (block.restSecs || 40) + ', \'' + jsAttrEscape(ex.name) + '\', \'' + jsAttrEscape(day.id) + '\', \'' + jsAttrEscape(ex.id) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M7 3.5h7l4 4v13H7Z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></svg>Ver nota</button>';
+      if (!thumbUrl) {
+        // Sin video no hay miniatura que tocar — un botón de texto lleva a
+        // la misma sesión del ejercicio (con o sin nota técnica).
+        html += '<button type="button" onclick="openExSession(\'' + jsAttrEscape(day.id) + '\', \'' + jsAttrEscape(ex.id) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="#1C55E5" style="width:12px;height:12px;flex-shrink:0;"><path d="M8 5v14l11-7z"/></svg>Ver ejercicio</button>';
       }
       if (hasHistorial) {
-        // Mismo estilo de pill que "Ver ejercicio"/"Ver nota", en vez del
-        // botón ancho y amarillo de antes que le daba demasiado peso visual
-        // a algo que es solo un plus (ver el historial de cargas).
+        // Mismo estilo de pill que "Ver ejercicio", en vez del botón ancho
+        // y amarillo de antes que le daba demasiado peso visual a algo que
+        // es solo un plus (ver el historial de cargas).
         html += '<button type="button" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:#F0F1F4;color:#5A6472;border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Historial</button>';
-      }
-      if (hasTimer) {
-        // El cronómetro siempre abre su propia ventana aparte (no se mete
-        // con el video): fondo oscuro, aro grande centrado, igual estén o
-        // no estén viendo el video del ejercicio.
-        html += '<button type="button" onclick="openExTimerModal(\'' + day.id + '\',\'' + ex.id + '\',' + totalSecs + ',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Cronómetro</button>';
       }
       html += '</div></div>';
       if (tipo === 'tiempo') {
