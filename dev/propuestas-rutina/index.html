@@ -2,175 +2,408 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;700&display=swap">
 <style>
-/* Layout: three phone mockups side by side (stacking on phones), each with a short note underneath. Single dark look, matching her portal. */
+/* Layout: an interactive phone (her real portal look) on the left, short notes on the right; stacks on phones. Single dark look, same tokens as body.portal-dark. */
 :root{
-  --bg:#0b1230; --panel:#121c45; --line:rgba(245,236,203,.12);
-  --cream:#F5ECCB; --muted:rgba(245,236,203,.62); --blue:#1C55E5; --blue2:#0F3FA8; --ok:#3ecf8e;
+  --night:#070B1A; --surface:#111A36; --surface-2:#0B1229; --border:#22305C;
+  --text:#F3F5FB; --muted:#A3B0D1; --cream:#F5ECCB; --ink:#0D1B3E;
+  --blue:#1C55E5; --blue-dk:#0F3FA8; --blue-lt:#8FB0FF; --ok:#34C77B;
   --display:"Archivo Black","Arial Black",system-ui,sans-serif;
   --body:"DM Sans",system-ui,-apple-system,sans-serif;
   color-scheme:dark;
 }
-body{background:var(--bg);color:var(--cream);font-family:var(--body);font-size:15px;line-height:1.5}
-.wrap{max-width:1120px;margin:0 auto;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-h1{font-family:var(--display);font-size:clamp(26px,5vw,38px);line-height:1.1;margin:0 0 8px;text-wrap:balance}
-.lead{color:var(--muted);max-width:62ch;margin:0 0 28px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:28px;align-items:start}
-.prop{display:flex;flex-direction:column;gap:14px;min-width:0}
-.tag{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.prop h2{font-family:var(--display);font-size:22px;margin:0;line-height:1.15}
-.phone{background:#060b22;border:1px solid var(--line);border-radius:30px;padding:14px 12px 16px;max-width:330px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.4)}
-.scr{display:flex;flex-direction:column;gap:10px}
-.top{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
-.title{font-family:var(--display);font-size:20px;line-height:1.1}
-.sub{font-size:13px;color:var(--muted)}
-.blk{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
-.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
-.row:last-child{border-bottom:0}
-.row b{font-weight:700;display:block;font-size:15px}
-.row small{color:var(--muted);font-size:12.5px}
-.row .go{margin-left:auto;color:var(--muted);font-size:18px}
-.dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none}
-.dot.on{background:var(--ok);border-color:var(--ok)}
-.video{aspect-ratio:16/9;border-radius:14px;background:linear-gradient(135deg,#1b2a66,#0a1336);display:grid;place-items:center;position:relative;max-width:100%}
-.video::after{content:"";width:0;height:0;border-left:18px solid var(--cream);border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:4px}
-.video span{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--muted)}
-.chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{font-size:12px;padding:4px 10px;border-radius:999px;background:var(--panel);color:var(--muted)}
-.chip.on{background:var(--blue);color:#fff}
-.timer{display:flex;align-items:center;justify-content:space-between;background:var(--panel);border-radius:14px;padding:10px 14px}
-.timer .t{font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums}
-.timer small{color:var(--muted);font-size:12px}
-.sets{display:grid;grid-template-columns:auto 1fr 1fr auto;gap:6px 8px;align-items:center;font-size:13px}
-.sets .h{color:var(--muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
-.in{background:var(--panel);border-radius:10px;padding:7px 8px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
-.in.done{background:rgba(62,207,142,.16);color:var(--ok)}
-.chk{width:26px;height:26px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;font-size:13px}
-.chk.on{background:var(--ok);border-color:var(--ok);color:#06261a}
-.hint{font-size:12px;color:var(--muted)}
-.btns{display:flex;gap:8px}
-.btn{flex:1;text-align:center;padding:11px;border-radius:14px;font-weight:700;font-size:14px;border:1px solid var(--line)}
-.btn.p{background:var(--blue);border-color:var(--blue);color:#fff}
-.bar{height:6px;border-radius:6px;background:var(--panel);overflow:hidden}
-.bar i{display:block;height:100%;width:34%;background:var(--blue)}
-.rest{background:var(--blue2);border-radius:14px;padding:12px;text-align:center}
-.rest .t{font-family:var(--display);font-size:34px;font-variant-numeric:tabular-nums}
-.days{display:flex;gap:6px}
-.day{flex:1;text-align:center;padding:8px 4px;border-radius:12px;background:var(--panel);font-size:12.5px;color:var(--muted)}
-.day.on{background:var(--cream);color:var(--bg);font-weight:700}
-.card{background:var(--panel);border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:8px}
-.card .head{display:flex;gap:10px;align-items:center}
-.thumb{width:64px;aspect-ratio:1;border-radius:10px;background:linear-gradient(135deg,#1b2a66,#0a1336);flex:none;display:grid;place-items:center}
-.thumb::after{content:"";border-left:11px solid var(--cream);border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px}
-.card.closed .sets,.card.closed .hint{display:none}
-.note{color:var(--muted);font-size:14.5px;max-width:330px}
-.note ul{margin:6px 0 0;padding-left:18px}
-.note li{margin:3px 0}
-.pros{color:var(--cream)}
-.rec{margin-top:40px;background:var(--panel);border-radius:20px;padding:22px;max-width:760px}
-.rec h3{font-family:var(--display);font-size:20px;margin:0 0 8px}
-.rec p{margin:0 0 8px;color:var(--muted)}
-.rec p b{color:var(--cream)}
+*{box-sizing:border-box}
+body{background:var(--night);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.page-head{background:radial-gradient(120% 90% at 85% 0%,rgba(28,85,229,.5) 0%,rgba(7,11,26,0) 60%);border-radius:28px;padding:22px 4px 8px}
+.fa-tag{display:inline-block;font-weight:700;font-size:11px;letter-spacing:.04em;background:var(--cream);color:var(--ink);padding:4px 11px;border-radius:999px;transform:rotate(-2deg)}
+h1{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:clamp(24px,4.6vw,34px);line-height:1.02;margin:12px 0 8px;text-wrap:balance}
+.marker{position:relative;z-index:0;white-space:nowrap}
+.marker::after{content:"";position:absolute;left:-4px;right:-4px;bottom:2px;height:.5em;background:var(--blue);border-radius:3px;z-index:-1;transform:skew(-8deg)}
+.lead{color:var(--muted);max-width:60ch;margin:0}
+.layout{display:grid;grid-template-columns:minmax(0,390px) minmax(0,1fr);gap:36px;margin-top:26px;align-items:start}
+@media (max-width:820px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+/* ── Phone ── */
+.phone{width:100%;max-width:390px;margin:0 auto;height:780px;max-height:86vh;min-height:620px;background:var(--night);border:1px solid var(--border);border-radius:38px;overflow:hidden;position:relative;box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 0 6px #0e1530}
+.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:18px 16px 110px;scrollbar-width:none}
+.screen::-webkit-scrollbar{display:none}
+.screen[hidden]{display:none}
+.screen.in-r{animation:faInRight .34s cubic-bezier(.2,.8,.2,1)}
+.screen.in-l{animation:faInLeft .34s cubic-bezier(.2,.8,.2,1)}
+.screen.in-up{animation:faUp .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes faInRight{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes faInLeft{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+@keyframes faUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes faTwinkle{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(.75) rotate(20deg)}}
+@keyframes pop{0%{transform:scale(.4)}70%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 6px rgba(28,85,229,.3),0 5px 0 var(--blue-dk)}50%{box-shadow:0 0 0 11px rgba(28,85,229,.12),0 5px 0 var(--blue-dk)}}
+.stagger>*{animation:faUp .45s cubic-bezier(.2,.8,.2,1) both}
+.stagger>*:nth-child(2){animation-delay:.06s}.stagger>*:nth-child(3){animation-delay:.12s}.stagger>*:nth-child(4){animation-delay:.18s}.stagger>*:nth-child(5){animation-delay:.24s}.stagger>*:nth-child(6){animation-delay:.3s}
+
+.bar-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.back{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:999px;padding:7px 13px;font:600 13px var(--body);cursor:pointer}
+.pill-out{font-size:12px;color:var(--muted)}
+
+/* Days */
+.days{display:flex;gap:8px;margin-bottom:14px}
+.day{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:9px 6px;text-align:center;cursor:pointer;color:var(--muted);font:600 12px var(--body);transition:transform .18s,background .25s}
+.day b{display:block;font-family:var(--display);font-weight:400;font-size:20px;color:var(--cream);line-height:1.1}
+.day.on{background:var(--blue);border-color:var(--blue);color:#E3EAFF;box-shadow:0 5px 0 var(--blue-dk)}
+.day.on b{color:#fff}
+.day:active{transform:scale(.95)}
+
+/* Hero del día */
+.hero{position:relative;height:210px;border-radius:28px;overflow:hidden;padding:14px 16px 16px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;
+  background:linear-gradient(180deg,rgba(15,63,168,.15) 25%,rgba(7,11,26,.95) 100%),url('hero-frida.jpg') center 30%/cover no-repeat,var(--blue);margin-bottom:16px}
+.hero .tag{align-self:flex-start;background:var(--cream);color:var(--ink);font-size:11px;font-weight:700;letter-spacing:.08em;padding:5px 12px;border-radius:999px}
+.spark{position:absolute;top:12px;right:16px;width:30px;height:30px;fill:var(--cream);animation:faTwinkle 2.6s ease-in-out infinite}
+.hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.hero h2{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:26px;line-height:.98;margin:0}
+.hero small{display:block;color:#C9D3EC;font-size:12.5px;margin-top:5px}
+
+/* Botón con relieve */
+.btn3d{border:0;cursor:pointer;background:var(--blue);color:#fff;font:700 15px var(--body);border-radius:18px;padding:14px 18px;box-shadow:0 5px 0 var(--blue-dk);transition:transform .12s,box-shadow .12s;display:inline-flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+.btn3d:active{transform:translateY(4px);box-shadow:0 1px 0 var(--blue-dk)}
+.btn3d.full{width:100%}
+.btn3d.cream{background:var(--cream);color:var(--ink);box-shadow:0 5px 0 #C9BB8A}
+.btn3d.ghost{background:var(--surface);color:var(--text);border:1px solid var(--border);box-shadow:0 5px 0 #050816}
+.btn3d svg{width:18px;height:18px}
+.play{width:56px;height:56px;border-radius:50%;padding:0;flex:none;animation:pulse 2.4s ease-in-out infinite}
+.play svg{width:22px;height:22px;margin-left:3px}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);pointer-events:none;animation:rip .6s ease-out forwards}
+@keyframes rip{from{transform:scale(0);opacity:.35}to{transform:scale(1);opacity:0}}
+
+/* Bloques y ejercicios */
+.blk-head{display:flex;align-items:baseline;gap:10px;margin:18px 2px 8px}
+.blk-num{font-family:var(--display);color:var(--cream);font-size:22px;line-height:1}
+.blk-name{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-lt)}
+.blk-meta{margin-left:auto;font-size:12px;color:var(--muted)}
+.list{background:var(--surface);border:1px solid var(--border);border-radius:22px;overflow:hidden}
+.ex{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s;position:relative;overflow:hidden;width:100%;background:none;border-left:0;border-right:0;border-top:0;color:inherit;text-align:left;font:inherit}
+.list .ex:last-child{border-bottom:0}
+.ex:active{background:var(--surface-2)}
+.thumb{width:46px;height:46px;border-radius:14px;flex:none;background:linear-gradient(180deg,rgba(15,63,168,.2),rgba(7,11,26,.7)),url('hero-frida.jpg') center 25%/cover;display:grid;place-items:center}
+.thumb svg{width:14px;height:14px;fill:#fff}
+.ex-t{min-width:0;flex:1}
+.ex-t b{display:block;font-weight:700;font-size:15px;line-height:1.25}
+.ex-t small{color:var(--muted);font-size:12.5px}
+.state{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);flex:none;display:grid;place-items:center}
+.state.done{background:var(--ok);border-color:var(--ok);animation:pop .35s}
+.state svg{width:14px;height:14px;stroke:#06261a;stroke-width:3;fill:none}
+.cta-sticky{position:absolute;left:16px;right:16px;bottom:18px;z-index:3}
+
+/* Ejercicio */
+.ex-title{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:24px;line-height:1;margin:2px 0 12px}
+.video{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:22px;overflow:hidden;background:linear-gradient(180deg,rgba(15,63,168,.1),rgba(7,11,26,.75)),url('hero-frida.jpg') center 28%/cover;display:grid;place-items:center;margin-bottom:12px}
+.video .yt{position:absolute;left:12px;bottom:10px;font-size:11px;font-weight:700;background:rgba(7,11,26,.7);padding:3px 9px;border-radius:999px;color:var(--cream)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+.chip.cream{background:var(--cream);border-color:var(--cream);color:var(--ink)}
+.chip.note{cursor:pointer}
+.tip{background:var(--surface);border:1px solid rgba(245,236,203,.25);border-radius:18px;padding:10px 14px;font-size:13.5px;margin:-4px 0 12px}
+.tip b{display:block;font-size:10.5px;letter-spacing:.12em;color:var(--cream);margin-bottom:2px}
+
+.timer{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:10px 12px;margin-bottom:12px}
+.ring{width:58px;height:58px;flex:none;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:6}
+.ring .bg{stroke:var(--border)}
+.ring .fg{stroke:var(--blue);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.timer-t{flex:1;min-width:0}
+.timer-t small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.timer-t .t{font-family:var(--display);font-size:28px;font-variant-numeric:tabular-nums;line-height:1.1}
+.timer .btn3d{padding:10px 14px;font-size:14px;border-radius:14px}
+
+.sets{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:6px 12px 10px}
+.sets-h,.set{display:grid;grid-template-columns:34px 1fr 1fr 40px;gap:8px;align-items:center}
+.sets-h{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:6px 0 2px}
+.set{padding:5px 0}
+.set .n{font-family:var(--display);color:var(--cream);font-size:15px}
+.set input{width:100%;min-width:0;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;color:var(--text);font:700 16px var(--body);text-align:center;padding:9px 4px;font-variant-numeric:tabular-nums}
+.set input:focus{outline:2px solid var(--blue);outline-offset:1px}
+.set.done input{background:rgba(52,199,123,.12);border-color:rgba(52,199,123,.4);color:#8EF0BF}
+.chk{width:38px;height:38px;border-radius:12px;border:2px solid var(--border);background:var(--surface-2);cursor:pointer;display:grid;place-items:center;padding:0}
+.chk svg{width:18px;height:18px;stroke:transparent;stroke-width:3;fill:none}
+.set.done .chk{background:var(--ok);border-color:var(--ok);animation:pop .35s}
+.set.done .chk svg{stroke:#06261a}
+.last{font-size:12.5px;color:var(--muted);margin:10px 2px 0;display:flex;gap:6px;align-items:center}
+.last b{color:var(--cream)}
+
+/* Modo entreno */
+.progress{height:8px;border-radius:8px;background:var(--surface);overflow:hidden;margin:4px 0 12px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--blue-lt));border-radius:8px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.step{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:2px}
+.big-in{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stepper{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:8px 8px 10px;text-align:center}
+.stepper small{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.stepper .row{display:flex;align-items:center;justify-content:space-between;gap:4px;margin-top:4px}
+.stepper button{width:36px;height:36px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font:700 18px var(--body);cursor:pointer}
+.stepper .v{font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums}
+.dots{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
+.dots i{width:28px;height:6px;border-radius:6px;background:var(--surface)}
+.dots i.on{background:var(--ok)}
+.dots i.cur{background:var(--cream)}
+.rest{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 0%,rgba(28,85,229,.55),rgba(7,11,26,.97) 65%),var(--night);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;z-index:5;text-align:center;animation:faUp .3s cubic-bezier(.2,.8,.2,1)}
+.rest[hidden]{display:none}
+.rest .ring{width:190px;height:190px}
+.rest .ring circle{stroke-width:4}
+.rest .ring .fg{stroke:var(--cream)}
+.rest-t{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:46px;font-variant-numeric:tabular-nums}
+.rest h3{font-family:var(--display);font-weight:400;text-transform:uppercase;margin:0;font-size:22px}
+.rest p{margin:0;color:var(--muted)}
+.rest .row{display:flex;gap:10px}
+.done-scr{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding-top:70px}
+.done-scr .medal{font-size:64px;animation:pop .5s}
+.done-scr h2{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:28px;line-height:1;margin:0}
+
+/* Notes */
+.notes{display:flex;flex-direction:column;gap:16px;min-width:0}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:18px}
+.card h3{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:17px;margin:0 0 8px;line-height:1.1}
+.card p,.card li{color:var(--muted);margin:0}
+.card ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.card li b{color:var(--text)}
+.try{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.try .chip{color:var(--text)}
 </style>
 
 <div class="wrap">
-  <h1>Tu pestaña Rutina, en 3 versiones</h1>
-  <p class="lead">Todas usan la misma idea del sistema de Seba: tu video manda, el cronómetro va pequeño debajo y las series se marcan con un toque. Cambia cómo se recorre el entreno. Los datos son de ejemplo.</p>
+  <header class="page-head">
+    <span class="fa-tag">Propuesta A + B</span>
+    <h1>Tu rutina, con la cara de <span class="marker">FridaActive</span></h1>
+    <p class="lead">Tócalo como si fueras tu cliente. Usa tus colores, tu letra, tus botones con relieve y tus animaciones. Los datos son de ejemplo.</p>
+  </header>
 
-  <div class="grid">
+  <div class="layout">
+    <div class="phone" id="phone">
 
-    <!-- A -->
-    <section class="prop">
-      <div class="tag">Propuesta A</div>
-      <h2>Lista limpia y pantalla por ejercicio</h2>
-      <div class="phone"><div class="scr">
-        <div class="top"><span>Rutina · Glúteo y fuerza</span><span>Sem 2</span></div>
-        <div class="days"><div class="day on">Día 1</div><div class="day">Día 2</div><div class="day">Día 3</div></div>
-        <div class="title">Piernas y glúteo</div>
-        <div class="sub">5 ejercicios · 45 min aprox.</div>
-        <div class="blk">Bloque 1</div>
-        <div>
-          <div class="row"><span class="dot on"></span><div><b>Sentadilla goblet</b><small>3 × 12 · 60 s descanso</small></div><span class="go">›</span></div>
-          <div class="row"><span class="dot"></span><div><b>Hip thrust</b><small>3 × 10 · 60 s descanso</small></div><span class="go">›</span></div>
+      <!-- 1. Lista del día -->
+      <section class="screen in-up" id="s-list">
+        <div class="days" id="days">
+          <button class="day on" type="button">Día<b>01</b></button>
+          <button class="day" type="button">Día<b>02</b></button>
+          <button class="day" type="button">Día<b>03</b></button>
         </div>
-        <div class="blk">Bloque 2</div>
-        <div>
-          <div class="row"><span class="dot"></span><div><b>Zancada atrás</b><small>3 × 10 por lado</small></div><span class="go">›</span></div>
-          <div class="row"><span class="dot"></span><div><b>Plancha</b><small>3 × 30 s</small></div><span class="go">›</span></div>
-        </div>
-      </div></div>
-      <div class="phone"><div class="scr">
-        <div class="top"><span>‹ Volver</span><span>Bloque 1</span></div>
-        <div class="title">Hip thrust</div>
-        <div class="video"><span>Tu video de YouTube</span></div>
-        <div class="timer"><div><small>Descanso</small><div class="t">0:45</div></div><div class="btn p" style="flex:none;padding:9px 16px">Empezar</div></div>
-        <div class="sets">
-          <span class="h"></span><span class="h">Reps</span><span class="h">Lbs</span><span class="h"></span>
-          <span>S1</span><span class="in done">10</span><span class="in done">50</span><span class="chk on">✓</span>
-          <span>S2</span><span class="in">10</span><span class="in">50</span><span class="chk"></span>
-          <span>S3</span><span class="in">10</span><span class="in">50</span><span class="chk"></span>
-        </div>
-        <div class="hint">La vez pasada: 45 lbs × 10</div>
-      </div></div>
-      <div class="note"><span class="pros">La más parecida a la de Seba.</span>
-        <ul><li>La lista se lee de un vistazo, con una línea por ejercicio.</li><li>Cada ejercicio abre su propia pantalla con el video arriba.</li><li>Cada cliente ve lo que hizo la vez pasada, para que suba de peso.</li></ul></div>
-    </section>
-
-    <!-- B -->
-    <section class="prop">
-      <div class="tag">Propuesta B</div>
-      <h2>Modo entreno guiado</h2>
-      <div class="phone"><div class="scr">
-        <div class="top"><span>✕ Salir</span><span>12:40</span></div>
-        <div class="bar"><i></i></div>
-        <div class="sub">Ejercicio 2 de 5 · Bloque 1</div>
-        <div class="title">Hip thrust</div>
-        <div class="video"><span>Tu video de YouTube</span></div>
-        <div class="chips"><span class="chip on">Serie 2 de 3</span><span class="chip">Meta: 10 reps</span></div>
-        <div class="sets" style="grid-template-columns:1fr 1fr">
-          <span class="h">Reps hechas</span><span class="h">Lbs</span>
-          <span class="in">10</span><span class="in">50</span>
-        </div>
-        <div class="btns"><div class="btn">‹</div><div class="btn p" style="flex:3">✓ Serie hecha</div></div>
-      </div></div>
-      <div class="phone"><div class="scr">
-        <div class="top"><span>✕ Salir</span><span>13:25</span></div>
-        <div class="bar"><i></i></div>
-        <div class="rest"><div class="sub" style="color:var(--cream)">Descansa</div><div class="t">0:38</div><div class="sub" style="color:var(--cream)">Sigue: serie 3 de hip thrust</div></div>
-        <div class="btns"><div class="btn">+15 s</div><div class="btn">Saltar</div></div>
-        <div class="hint">Al terminar el descanso, pasa sola a la siguiente serie.</div>
-      </div></div>
-      <div class="note"><span class="pros">Para que la clienta no piense, solo siga.</span>
-        <ul><li>Un botón grande "Empezar entreno" lleva paso a paso.</li><li>Después de cada serie arranca el descanso solo.</li><li>Al final se guarda el entreno y se marca el día como entrenado.</li></ul></div>
-    </section>
-
-    <!-- C -->
-    <section class="prop">
-      <div class="tag">Propuesta C</div>
-      <h2>Tarjetas que se abren en el mismo lugar</h2>
-      <div class="phone"><div class="scr">
-        <div class="days"><div class="day on">Día 1</div><div class="day">Día 2</div><div class="day">Día 3</div></div>
-        <div class="title">Piernas y glúteo</div>
-        <div class="blk">Bloque 1</div>
-        <div class="card closed"><div class="head"><div class="thumb"></div><div><b>Sentadilla goblet</b><br><small class="sub">3 × 12 · ✓ hecho</small></div></div></div>
-        <div class="card"><div class="head"><div class="thumb"></div><div><b>Hip thrust</b><br><small class="sub">3 × 10 · 60 s</small></div></div>
-          <div class="sets">
-            <span>S1</span><span class="in done">10</span><span class="in done">50</span><span class="chk on">✓</span>
-            <span>S2</span><span class="in">10</span><span class="in">50</span><span class="chk"></span>
-            <span>S3</span><span class="in">10</span><span class="in">50</span><span class="chk"></span>
+        <div class="stagger">
+          <div class="hero">
+            <span class="tag">HOY · DÍA 1</span>
+            <svg class="spark" viewBox="0 0 24 24"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+            <div class="hero-bottom">
+              <div><h2>Pierna y<br>glúteo</h2><small>4 ejercicios · 2 bloques · 40 min</small></div>
+              <button class="btn3d play" type="button" data-go="train" aria-label="Empezar entreno"><svg viewBox="0 0 24 24" fill="#fff"><path d="M7 4l13 8-13 8z"/></svg></button>
+            </div>
           </div>
-          <div class="hint">⏱ Al marcar una serie corre el descanso aquí mismo</div>
+          <div>
+            <div class="blk-head"><span class="blk-num">01</span><span class="blk-name">Bloque 1</span><span class="blk-meta">Descanso 60 s</span></div>
+            <div class="list" id="list-b1"></div>
+          </div>
+          <div>
+            <div class="blk-head"><span class="blk-num">02</span><span class="blk-name">Bloque 2</span><span class="blk-meta">Descanso 45 s</span></div>
+            <div class="list" id="list-b2"></div>
+          </div>
         </div>
-        <div class="blk">Bloque 2</div>
-        <div class="card closed"><div class="head"><div class="thumb"></div><div><b>Zancada atrás</b><br><small class="sub">3 × 10 por lado</small></div></div></div>
-      </div></div>
-      <div class="note"><span class="pros">Todo en una sola pantalla.</span>
-        <ul><li>Cada ejercicio es una tarjeta con la miniatura de tu video.</li><li>Al tocarla se abre ahí mismo, con las series para marcar.</li><li>El video se abre en grande al tocar la miniatura.</li></ul></div>
-    </section>
-  </div>
+        <div class="cta-sticky"><button class="btn3d full" type="button" data-go="train"><svg viewBox="0 0 24 24" fill="#fff"><path d="M7 4l13 8-13 8z"/></svg>Empezar entreno</button></div>
+      </section>
 
-  <div class="rec">
-    <h3>Mi recomendación: A, con el botón de B</h3>
-    <p><b>La lista limpia de A</b> para ver la rutina, y arriba un botón <b>"Empezar entreno"</b> que abre el modo guiado de B. Así quien solo quiere ver qué le toca lo ve rápido, y quien está entrenando va paso a paso con descanso automático.</p>
-    <p>En tu panel: poder agregar series (por defecto 3), pegar el link de YouTube de cada ejercicio y ver lo que cada cliente anotó en reps y lbs.</p>
+      <!-- 2. Pantalla del ejercicio -->
+      <section class="screen" id="s-ex" hidden>
+        <div class="bar-top"><button class="back" type="button" data-go="list">‹ Volver</button><span class="pill-out" id="ex-blk">Bloque 1</span></div>
+        <div class="ex-title" id="ex-name">Hip thrust</div>
+        <div class="video"><button class="btn3d play" type="button" aria-label="Ver video"><svg viewBox="0 0 24 24" fill="#fff"><path d="M7 4l13 8-13 8z"/></svg></button><span class="yt">Video de Frida</span></div>
+        <div class="chips"><span class="chip cream" id="ex-goal">3 series · 10 reps</span><button class="chip note" type="button" id="note-btn">📝 Nota de Frida</button></div>
+        <div class="tip" id="tip" hidden><b>NOTA DE FRIDA</b><span id="ex-tip"></span></div>
+        <div class="timer">
+          <div class="ring"><svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="27"/><circle class="fg" id="ring-fg" cx="32" cy="32" r="27"/></svg></div>
+          <div class="timer-t"><small id="timer-lbl">Descanso</small><div class="t" id="timer-t">1:00</div></div>
+          <button class="btn3d" type="button" id="timer-btn">Empezar</button>
+        </div>
+        <div class="sets" id="sets"></div>
+        <div class="last">↗ La vez pasada: <b id="ex-last">45 lbs × 10</b></div>
+      </section>
+
+      <!-- 3. Modo entreno guiado -->
+      <section class="screen" id="s-train" hidden>
+        <div class="bar-top"><button class="back" type="button" data-go="list">✕ Salir</button><span class="pill-out" id="tr-clock">00:00</span></div>
+        <div class="progress"><i id="tr-bar" style="width:0%"></i></div>
+        <div class="step" id="tr-step">Ejercicio 1 de 4 · Bloque 1</div>
+        <div class="ex-title" id="tr-name">Sentadilla goblet</div>
+        <div class="video"><button class="btn3d play" type="button" aria-label="Ver video"><svg viewBox="0 0 24 24" fill="#fff"><path d="M7 4l13 8-13 8z"/></svg></button><span class="yt">Video de Frida</span></div>
+        <div class="dots" id="tr-dots"></div>
+        <div class="big-in">
+          <div class="stepper"><small id="tr-unit">Reps hechas</small><div class="row"><button type="button" data-step="reps" data-d="-1">−</button><span class="v" id="tr-reps">12</span><button type="button" data-step="reps" data-d="1">+</button></div></div>
+          <div class="stepper"><small>Lbs</small><div class="row"><button type="button" data-step="lbs" data-d="-5">−</button><span class="v" id="tr-lbs">25</span><button type="button" data-step="lbs" data-d="5">+</button></div></div>
+        </div>
+        <button class="btn3d full" type="button" id="tr-done"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M5 12l5 5 9-10"/></svg>Serie hecha</button>
+        <div class="last" style="justify-content:center">↗ La vez pasada: <b id="tr-last">20 lbs × 12</b></div>
+
+        <div class="rest" id="rest" hidden>
+          <h3>Descansa</h3>
+          <div class="ring"><svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="27"/><circle class="fg" id="rest-fg" cx="32" cy="32" r="27"/></svg><div class="rest-t" id="rest-t">0:60</div></div>
+          <p id="rest-next">Sigue: serie 2 de sentadilla goblet</p>
+          <div class="row"><button class="btn3d ghost" type="button" id="rest-plus">+15 s</button><button class="btn3d cream" type="button" id="rest-skip">Saltar</button></div>
+        </div>
+      </section>
+
+      <!-- 4. Fin -->
+      <section class="screen" id="s-end" hidden>
+        <div class="done-scr">
+          <span class="fa-tag">¡HOY CUENTA!</span>
+          <div class="medal">🏆</div>
+          <h2>Entreno<br>completado</h2>
+          <p style="color:var(--muted);margin:0">Tu día quedó marcado como entrenado. 12 series en <b id="end-time" style="color:var(--cream)">00:00</b>.</p>
+          <button class="btn3d full" type="button" data-go="list" style="margin-top:8px">Volver a mi rutina</button>
+        </div>
+      </section>
+    </div>
+
+    <aside class="notes">
+      <div class="card">
+        <h3>Pruébalo</h3>
+        <p>Toca un ejercicio para ver su pantalla, o el botón azul de play para entrar al modo entreno.</p>
+        <div class="try"><button class="chip" type="button" data-go="ex" data-i="1">Ver un ejercicio</button><button class="chip" type="button" data-go="train">Empezar entreno</button></div>
+      </div>
+      <div class="card">
+        <h3>Qué tomé de tu página</h3>
+        <ul>
+          <li><b>La foto con degradado y el play azul que late</b>, igual que la tarjeta "Hoy · Día 1" de Inicio.</li>
+          <li><b>Botones con relieve</b> que se hunden al tocarlos y hacen una onda.</li>
+          <li><b>Archivo Black en mayúsculas</b> para títulos, números grandes en crema (01, 02) y etiquetas crema.</li>
+          <li><b>Entradas suaves</b>: todo sube un poquito al aparecer y las pantallas entran de lado.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Cómo funciona</h3>
+        <ul>
+          <li><b>Lista:</b> una línea por ejercicio, con un check verde cuando está hecho.</li>
+          <li><b>Ejercicio:</b> tu video arriba, cronómetro pequeño y la tabla de series. Al marcar una serie arranca el descanso solo.</li>
+          <li><b>Modo entreno:</b> serie por serie, con pantalla de descanso. Al final se marca el día como entrenado.</li>
+          <li><b>Tu panel:</b> pones cuántas series (3 por defecto) y el link de YouTube de cada ejercicio.</li>
+        </ul>
+      </div>
+    </aside>
   </div>
 </div>
+
+<script>
+(function(){
+  var EX=[
+    {name:'Sentadilla goblet',blk:0,sets:3,reps:12,lbs:25,rest:60,last:'20 lbs × 12',tip:'Baja lento en 3 segundos y empuja con los talones.'},
+    {name:'Hip thrust',blk:0,sets:3,reps:10,lbs:50,rest:60,last:'45 lbs × 10',tip:'Aprieta el glúteo arriba 1 segundo. Mentón hacia el pecho.'},
+    {name:'Zancada atrás',blk:1,sets:3,reps:10,lbs:15,rest:45,last:'15 lbs × 8',tip:'10 por lado. La rodilla de atrás casi toca el piso.',side:true},
+    {name:'Plancha',blk:1,sets:3,reps:30,lbs:0,rest:45,last:'25 s',tip:'Abdomen firme y cadera alineada.',time:true}
+  ];
+  var done=EX.map(function(e){return new Array(e.sets).fill(false)});
+  var $=function(id){return document.getElementById(id)};
+  var CHECK='<svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>';
+  var PLAY='<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>';
+  function meta(e){return e.sets+' × '+(e.time?e.reps+' s':e.reps+(e.side?' por lado':' reps'))+(e.lbs?' · '+e.lbs+' lbs':'')}
+  function exDone(i){return done[i].every(Boolean)}
+
+  function renderList(){
+    ['list-b1','list-b2'].forEach(function(id,b){
+      $(id).innerHTML=EX.map(function(e,i){ if(e.blk!==b) return '';
+        return '<button class="ex" type="button" data-go="ex" data-i="'+i+'"><span class="thumb">'+PLAY+'</span><span class="ex-t"><b>'+e.name+'</b><small>'+meta(e)+'</small></span><span class="state'+(exDone(i)?' done':'')+'">'+(exDone(i)?CHECK:'')+'</span></button>';
+      }).join('');
+    });
+  }
+
+  var cur='s-list';
+  function show(id,dir){
+    if(id===cur) return;
+    $(cur).hidden=true; var s=$(id); s.hidden=false; s.scrollTop=0;
+    s.classList.remove('in-r','in-l','in-up'); void s.offsetWidth; s.classList.add(dir||'in-r'); cur=id;
+  }
+
+  // Ring helpers
+  var C=2*Math.PI*27;
+  function setRing(el,frac){el.style.strokeDasharray=C;el.style.strokeDashoffset=C*(1-frac)}
+
+  // Exercise screen
+  var exI=1,tLeft=0,tTotal=60,tInt=null;
+  function openEx(i){
+    exI=i; var e=EX[i];
+    $('ex-name').textContent=e.name; $('ex-blk').textContent='Bloque '+(e.blk+1);
+    $('ex-goal').textContent=e.sets+' series · '+(e.time?e.reps+' s':e.reps+' reps'+(e.side?' por lado':''));
+    $('ex-tip').textContent=e.tip; $('tip').hidden=true; $('ex-last').textContent=e.last;
+    var h='<div class="sets-h"><span></span><span>'+(e.time?'Segundos':'Reps')+'</span><span>Lbs</span><span></span></div>';
+    for(var k=0;k<e.sets;k++){
+      h+='<div class="set'+(done[i][k]?' done':'')+'" data-k="'+k+'"><span class="n">S'+(k+1)+'</span><input id="r'+i+'_'+k+'" inputmode="numeric" value="'+e.reps+'" aria-label="Reps serie '+(k+1)+'"><input id="l'+i+'_'+k+'" inputmode="decimal" value="'+(e.lbs||'')+'" placeholder="—" aria-label="Libras serie '+(k+1)+'"><button class="chk" type="button" aria-label="Marcar serie '+(k+1)+'">'+CHECK+'</button></div>';
+    }
+    $('sets').innerHTML=h; stopTimer(e.rest); show('s-ex');
+  }
+  function stopTimer(total){clearInterval(tInt);tInt=null;tTotal=total||tTotal;tLeft=tTotal;paintTimer();$('timer-btn').textContent='Empezar';$('timer-lbl').textContent='Descanso'}
+  function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+  function paintTimer(){$('timer-t').textContent=fmt(tLeft);setRing($('ring-fg'),tLeft/tTotal)}
+  function startTimer(){
+    if(tInt){stopTimer();return}
+    tLeft=tTotal;paintTimer();$('timer-btn').textContent='Parar';$('timer-lbl').textContent='Descansando';
+    tInt=setInterval(function(){tLeft--;paintTimer();if(tLeft<=0){stopTimer();$('timer-lbl').textContent='¡A la siguiente!'}},1000);
+  }
+  $('timer-btn').addEventListener('click',startTimer);
+  $('note-btn').addEventListener('click',function(){$('tip').hidden=!$('tip').hidden});
+  $('sets').addEventListener('click',function(ev){
+    var b=ev.target.closest('.chk'); if(!b) return;
+    var row=b.closest('.set'),k=+row.dataset.k; done[exI][k]=!done[exI][k];
+    row.classList.toggle('done',done[exI][k]); renderList();
+    if(done[exI][k]&&!exDone(exI)){ if(tInt) stopTimer(); startTimer(); }
+  });
+
+  // Guided mode
+  var tr={i:0,k:0,start:0,clock:null,reps:0,lbs:0},rInt=null,rLeft=0,rTot=60;
+  var TOTAL=EX.reduce(function(a,e){return a+e.sets},0);
+  function startTrain(){
+    done=EX.map(function(e){return new Array(e.sets).fill(false)}); renderList();
+    tr.i=0;tr.k=0;tr.start=Date.now(); clearInterval(tr.clock);
+    tr.clock=setInterval(function(){$('tr-clock').textContent=clock()},1000);
+    paintTrain(); show('s-train','in-up');
+  }
+  function clock(){var s=Math.floor((Date.now()-tr.start)/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+  function paintTrain(){
+    var e=EX[tr.i]; tr.reps=e.reps; tr.lbs=e.lbs;
+    var n=done.reduce(function(a,d){return a+d.filter(Boolean).length},0);
+    $('tr-bar').style.width=(n/TOTAL*100)+'%';
+    $('tr-step').textContent='Ejercicio '+(tr.i+1)+' de '+EX.length+' · Bloque '+(e.blk+1);
+    $('tr-name').textContent=e.name; $('tr-unit').textContent=e.time?'Segundos':(e.side?'Reps por lado':'Reps hechas');
+    $('tr-reps').textContent=tr.reps; $('tr-lbs').textContent=tr.lbs; $('tr-last').textContent=e.last;
+    $('tr-dots').innerHTML=done[tr.i].map(function(d,k){return '<i class="'+(d?'on':(k===tr.k?'cur':''))+'"></i>'}).join('');
+    var t=$('tr-name'); t.style.animation='none'; void t.offsetWidth; t.style.animation='faUp .35s cubic-bezier(.2,.8,.2,1)';
+  }
+  document.querySelectorAll('[data-step]').forEach(function(b){b.addEventListener('click',function(){
+    var key=b.dataset.step; tr[key]=Math.max(0,tr[key]+(+b.dataset.d)); $('tr-'+key).textContent=tr[key];
+  })});
+  $('tr-done').addEventListener('click',function(){
+    done[tr.i][tr.k]=true; renderList();
+    var e=EX[tr.i], nextLbl;
+    if(tr.k<e.sets-1){tr.k++; nextLbl='Sigue: serie '+(tr.k+1)+' de '+e.name.toLowerCase();}
+    else if(tr.i<EX.length-1){tr.i++;tr.k=0; nextLbl='Sigue: '+EX[tr.i].name.toLowerCase();}
+    else {finish();return}
+    paintTrain(); rest(e.rest,nextLbl);
+  });
+  function rest(sec,label){
+    rTot=sec;rLeft=sec;$('rest-next').textContent=label;$('rest').hidden=false;paintRest();
+    clearInterval(rInt); rInt=setInterval(function(){rLeft--;paintRest();if(rLeft<=0)endRest()},1000);
+  }
+  function paintRest(){$('rest-t').textContent=fmt(Math.max(0,rLeft));setRing($('rest-fg'),Math.max(0,rLeft)/rTot)}
+  function endRest(){clearInterval(rInt);$('rest').hidden=true}
+  $('rest-skip').addEventListener('click',endRest);
+  $('rest-plus').addEventListener('click',function(){rLeft+=15;rTot=Math.max(rTot,rLeft);paintRest()});
+  function finish(){clearInterval(tr.clock);endRest();$('end-time').textContent=clock();show('s-end','in-up')}
+
+  // Navigation + ripple
+  document.addEventListener('click',function(ev){
+    var b=ev.target.closest('.btn3d,.ex,.day');
+    if(b){var r=b.getBoundingClientRect(),d=Math.max(r.width,r.height)*2,sp=document.createElement('span');
+      sp.className='ripple';sp.style.width=sp.style.height=d+'px';sp.style.left=(ev.clientX-r.left-d/2)+'px';sp.style.top=(ev.clientY-r.top-d/2)+'px';
+      b.appendChild(sp);setTimeout(function(){sp.remove()},600);}
+    var g=ev.target.closest('[data-go]'); if(!g) return;
+    var to=g.dataset.go;
+    if(to==='list'){clearInterval(tr.clock);endRest();stopTimer();show('s-list','in-l')}
+    else if(to==='ex') openEx(+g.dataset.i);
+    else if(to==='train') startTrain();
+  });
+  $('days').addEventListener('click',function(ev){var d=ev.target.closest('.day');if(!d)return;
+    document.querySelectorAll('.day').forEach(function(x){x.classList.toggle('on',x===d)})});
+
+  renderList(); setRing($('ring-fg'),1);
+})();
+</script>
