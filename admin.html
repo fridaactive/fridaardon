@@ -2477,6 +2477,8 @@ function renderAcpPagosHtml(clientId, c) {
     if (c.planMeses && c.endDate) html += '<div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem;">Vigente hasta el ' + formatFechaCorta(c.endDate) + '</div>';
     if (!paid && c.cuota) {
       html += '<button type="button" onclick="markClientAsPaid(\'' + clientId + '\');acpSwitchTab(\'pagos\');" style="margin-top:0.6rem;width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Marcar como pagado</button>';
+    } else if (paid) {
+      html += '<button type="button" onclick="unmarkClientAsPaid(\'' + clientId + '\')" style="margin-top:0.6rem;background:none;border:none;color:' + statusColor + ';text-decoration:underline;font-size:0.7rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;padding:0;">↩ Me equivoqué, no pagó</button>';
     }
     html += '</div>';
   }
@@ -3931,6 +3933,46 @@ function markClientAsPaid(id) {
   fbSet('finanzas', finAllData);
 
   renderPaymentStatus(id, c);
+}
+
+// Deshacer un "Marcar como pagado" hecho por error — quita el ciclo de
+// la lista de pagos y el ingreso que se había sumado a Mis finanzas.
+function unmarkClientAsPaid(id) {
+  var c = CLIENTS[id];
+  if (!c) return;
+
+  var payments = getClientPayments();
+  var paidCycles = payments[id] || [];
+  var idx = paidCycles.lastIndexOf(c.initDate);
+  if (idx === -1) { alert('Este ciclo ya no está marcado como pagado.'); acpRenderShell(); return; }
+  if (!confirm('¿Quitar el pago de este ciclo? También se borra el ingreso que se sumó a Mis finanzas.')) return;
+
+  paidCycles.splice(idx, 1);
+  payments[id] = paidCycles;
+  localStorage.setItem('fa_client_payments', JSON.stringify(payments));
+  fbSet('client_payments', payments);
+
+  c.pagosCount = paidCycles.length;
+  fbSet('clients/' + id + '/pagosCount', c.pagosCount);
+  fbSet('clients/' + id + '/cicloPagado', false);
+
+  // Quita el ingreso que ese pago había sumado a Mis finanzas este mes
+  // (busca el más reciente que coincida, para no tocar otro parecido).
+  var today = new Date();
+  var monthData = finGetMonth(today.getFullYear(), today.getMonth());
+  var note = (c.planMeses ? 'Plan ' + c.planMeses + ' meses · ' : 'Cuota ') + c.name;
+  for (var i = monthData.incomes.length - 1; i >= 0; i--) {
+    if (monthData.incomes[i].note === note && Number(monthData.incomes[i].amount) === Number(c.cuota)) {
+      monthData.incomes.splice(i, 1);
+      break;
+    }
+  }
+  finSave();
+  fbSet('finanzas', finAllData);
+
+  renderPaymentStatus(id, c);
+  acpRenderShell();
+  alert('✓ Listo, ya no aparece como pagado.');
 }
 
 function renderPaymentStatus(id, c) {
