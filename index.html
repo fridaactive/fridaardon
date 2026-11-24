@@ -1666,7 +1666,7 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
               <div class="track-stat-box"><div class="track-stat-num" id="track-meta">-</div><div class="track-stat-label">Meta del mes</div></div>
             </div>
             <div class="track-days" id="track-days"></div>
-            <div style="font-size:0.65rem;color:var(--muted);margin-top:0.6rem;line-height:1.4;">Tocá un día para marcarlo como entrenado. El puntito azul es un comentario — tocalo para verlo.</div>
+            <div id="track-hint" style="font-size:0.65rem;color:var(--muted);margin-top:0.6rem;line-height:1.4;">Toca un día para marcarlo como entrenado. El puntito azul es un comentario: tócalo para verlo.</div>
             <div id="track-day-comment" style="display:none;margin-top:0.6rem;background:var(--blue-lt);border-radius:10px;padding:0.7rem 0.85rem;"></div>
           </div>
         </details>
@@ -2374,7 +2374,11 @@ function rewardsInicioHtml(c) {
   var today = localKey(new Date());
   var hoy = !!(CURRENT_DIAS_ENTRENADOS || {})[today];
   // 1. Check-in de un toque
-  if (hoy) {
+  if (entrenoAutoMarcado()) {
+    h += hoy
+      ? '<div class="in-checkin done"><span class="in-checkin-ico">✅</span><span class="in-checkin-txt"><b>¡Hoy cuenta!</b><span>Terminaste tu entreno de hoy 💪</span></span></div>'
+      : '<button type="button" class="in-checkin" onclick="showTab(\'tab-rutina\')"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>Tu entreno de hoy</b><span>Se marca solo cuando lo terminas</span></span><span class="in-checkin-btn">Ir ›</span></button>';
+  } else if (hoy) {
     h += '<div class="in-checkin done"><span class="in-checkin-ico">✅</span><span class="in-checkin-txt"><b>¡Hoy cuenta!</b><span>Tu entreno de hoy ya está marcado 💪</span></span><button type="button" class="in-checkin-undo" onclick="checkInHoy(false)">Deshacer</button></div>';
   } else {
     h += '<button type="button" class="in-checkin" onclick="checkInHoy(true)"><span class="in-checkin-ico">💪</span><span class="in-checkin-txt"><b>¿Entrenaste hoy?</b><span>Tócalo y suma a tu meta del mes</span></span><span class="in-checkin-btn">Sí ✓</span></button>';
@@ -2392,7 +2396,7 @@ function rewardsInicioHtml(c) {
     + (logrado
         ? '<div class="in-goal-prize">🎉 <b>¡Lo lograste!</b> ' + (premio ? 'Tu premio: ' + premio + '. Frida te escribirá para entregártelo.' : 'Frida te tiene una sorpresa.') + '</div>'
         : '<div class="in-goal-prize">🎁 ' + (premio ? 'Ganas: <b>' + premio + '</b>' : 'Frida te tiene una sorpresa') + ' al completar las ' + rq.length + ' · te ' + (faltan === 1 ? 'falta 1' : 'faltan ' + faltan) + '</div>')
-    + '<div class="in-goal-how-txt">Marca como entrenado cada día que entrenes.</div>'
+    + '<div class="in-goal-how-txt">' + (entrenoAutoMarcado() ? 'Cada entreno que terminas en Rutina suma solo.' : 'Marca como entrenado cada día que entrenes.') + '</div>'
     + '</div>';
   return h;
 }
@@ -2582,7 +2586,13 @@ function deleteCicloRegistro(fecha) {
   renderInicioTab();
 }
 
+// Clientes online (rutina personalizada): el día se marca solo al terminar
+// el entreno en Rutina (todas las series registradas o su tiempo cumplido).
+// No pueden marcarlo a mano. Presencial y videollamada siguen igual.
+function entrenoAutoMarcado() { return CURRENT_CLIENT_TYPE === 'rutina-personalizada'; }
+
 function checkInHoy(on) {
+  if (entrenoAutoMarcado()) return;
   var key = localKey(new Date());
   if (!!CURRENT_DIAS_ENTRENADOS[key] === on) return;
   toggleDiaEntrenado(key);
@@ -4662,8 +4672,13 @@ function renderTrainingTracker(diasEntrenados) {
     html += '<div class="track-day' + (done ? ' done' : '') + (isTodayCell ? ' today' : '') + '" data-dk="' + key + '">' + day + dot + bub + '</div>';
   }
   daysEl.innerHTML = html;
+  var hintEl = document.getElementById('track-hint');
+  if (hintEl) hintEl.textContent = entrenoAutoMarcado()
+    ? 'Los días se marcan solos cuando terminas tu entreno en Rutina. El puntito azul es un comentario: tócalo para verlo.'
+    : 'Toca un día para marcarlo como entrenado. El puntito azul es un comentario: tócalo para verlo.';
   daysEl.querySelectorAll('.track-day:not(.empty)').forEach(function(cell) {
     cell.addEventListener('click', function() {
+      if (entrenoAutoMarcado()) return;
       toggleDiaEntrenado(this.getAttribute('data-dk'));
     });
   });
