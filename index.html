@@ -3914,6 +3914,22 @@ function exsSeriesCount(ex) {
   var n = m ? parseInt(m[0], 10) : 3;
   return Math.max(1, Math.min(10, n || 3));
 }
+
+// ¿Quedaron registradas todas las series de todos los ejercicios del día?
+// (ejercicios viene de lo que guardarSesion acaba de juntar de los inputs).
+function dayFullyLogged(day, ejercicios) {
+  return (day.blocks || []).every(function(block) {
+    return (block.exercises || []).every(function(ex) {
+      var rec = ejercicios[ex.id];
+      if (!rec) return false;
+      var tipo = exTipo(block, ex);
+      var val = tipo === 'tiempo' ? rec.segundos : rec.reps;
+      if (!val) return false;
+      var partes = String(val).split('·').filter(function(s) { return s !== ''; });
+      return partes.length >= exsSeriesCount(ex);
+    });
+  });
+}
 function findExAndBlock(dayId, exId) {
   var day = currentRutinaData.days.find(function(d) { return d.id === dayId; });
   if (!day) return null;
@@ -4351,6 +4367,11 @@ function guardarSesion(dayIndex, btnEl) {
   });
   if (!any) { alert('Ingresá al menos la carga o las repeticiones de un ejercicio.'); return; }
 
+  // Clientes online (rutina personalizada): el día solo cuenta como
+  // entrenado si quedaron registradas TODAS las series de TODOS los
+  // ejercicios — si no, se guarda el avance pero el día sigue sin marcar.
+  var diaCompleto = dayFullyLogged(day, ejercicios);
+
   var commentEl = document.getElementById('day-comment-' + day.id);
   var comentario = commentEl ? commentEl.value.trim() : '';
 
@@ -4364,11 +4385,13 @@ function guardarSesion(dayIndex, btnEl) {
   if (comentario) entry.comentario = comentario;
 
   db().ref('clientasPortal/' + currentUid + '/entrenoLogs').push(entry).then(function() {
-    // Guardar la sesión también marca hoy como día entrenado (un paso menos).
+    // Guardar la sesión también marca hoy como día entrenado (un paso menos) —
+    // pero si es cliente online, solo cuando se registraron todas las series.
     var hoyKey = localKey(new Date());
     var yaEstaba = !!CURRENT_DIAS_ENTRENADOS[hoyKey];
-    if (!yaEstaba) toggleDiaEntrenado(hoyKey);
-    celebrate('💪', '¡Sesión guardada!', yaEstaba ? 'Excelente trabajo hoy.' : 'Marcamos hoy como día entrenado. Ya sumas ' + inicioCounts().mes + ' este mes.');
+    var puedeMarcar = !entrenoAutoMarcado() || diaCompleto;
+    if (!yaEstaba && puedeMarcar) toggleDiaEntrenado(hoyKey);
+    celebrate('💪', '¡Sesión guardada!', !puedeMarcar ? 'Guardamos tu avance. Completá todas las series para que el día cuente.' : yaEstaba ? 'Excelente trabajo hoy.' : 'Marcamos hoy como día entrenado. Ya sumas ' + inicioCounts().mes + ' este mes.');
     if (commentEl) commentEl.value = '';
     db().ref('clientasPortal/' + currentUid + '/entrenoLogs').once('value').then(function(snap) {
       CURRENT_ENTRENO_LOGS = snap.val() || {};
