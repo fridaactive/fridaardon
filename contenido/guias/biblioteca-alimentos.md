@@ -119,7 +119,7 @@ Formato: plato · cal · proteína. Marcar con ⭐ las que a los clientes les gu
 
 ### Almuerzo / después de entrenar
 - Bowl de meal prep: pollo (100 g) + 1½ taza de arroz + ½ taza de frijoles + vegetales + ¼ de aguacate · 670 · 44
-- Bowl: carne molida en salsa de tomate (100 g) + 1 taza de arroz + 1 papa mediana (170 g) + ensalada + fruta · 690 · 32
+- Bowl: carne molida en salsa de tomate (100 g) + 1 taza de arroz + ensalada + fruta · 530 · 28 (con 1 papa mediana: 690 · 32)
 - Pollo a la plancha (120 g) + 1 taza de arroz con ½ taza de frijoles + ensalada + fruta · 640 · 42
 - Pollo guisado con güisquil y zanahoria + arroz + 1 tortilla · 600 · 40
 - Bistec encebollado (120 g) + 1 taza de arroz + 1 tortilla + ensalada con aguacate · 620 · 37
@@ -135,7 +135,7 @@ Formato: plato · cal · proteína. Marcar con ⭐ las que a los clientes les gu
 - 1 fruta + 1 cuadrito de chocolate oscuro · 120 · 1
 
 ### Cena
-- Bistec de posta a la plancha (120 g) + 1 taza de arroz + vegetales salteados con 1 cdita de aceite · 470 · 38
+- ⭐ Bistec de posta a la plancha (120 g) + 1 papa mediana (170 g) + vegetales salteados con 1 cdita de aceite · 430 · 39
 - 3 tacos de carne molida (90 g) con pico de gallo, lechuga y ¼ de aguacate · 480 · 27
 - Pollo a la plancha (100 g) + 1 taza de arroz + vegetales salteados + ½ taza de frijoles · 545 · 41
 - Bistec encebollado (100 g) + 1 papa cocida + 1 tortilla + ½ taza de frijoles + ensalada con aguacate · 620 · 37
