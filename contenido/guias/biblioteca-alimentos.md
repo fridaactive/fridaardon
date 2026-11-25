@@ -25,6 +25,8 @@ Si falta la etiqueta, se calcula igual y se marca 🧮; cuando Frida mande foto,
 | Proteína en polvo (whey) | 1 scoop (30 g) | 120 | 24 | 3 | 1.5 | 🔎 promedio |
 | Leche semidescremada | 1 taza | 120 | 8 | 12 | 5 | 🔎 |
 | Leche descremada | 1 taza | 90 | 8 | 12 | 0 | 🔎 |
+| ⭐ **Leche Dos Pinos Doble Proteína** descremada deslactosada (946 ml) | 1 taza (240 ml) | ≈ 125 | **16** | ≈ 12 | ≈ 0.5 | 🧮 falta etiqueta · Super Selectos ≈ $3.07 · Walmart ≈ $3.06 · [link](https://www.superselectos.com/products?category=037102&productId=115998) · **leche base para todos los clientes** |
+| **Leche Dos Pinos +50 % Proteína** descremada deslactosada (946 ml, la gris) | 1 taza (240 ml) | ≈ 105 | **12** | ≈ 12 | ≈ 0.5 | 🧮 falta etiqueta · Super Selectos ≈ $2.65 · [link](https://www.superselectos.com/products-landing/dospinoseneroproteina?productId=101684) |
 
 ### Yogurts con proteína (por vasito, con marca)
 | Producto | Porción | cal | P | C | G | Fuente / dónde |
@@ -35,6 +37,7 @@ Si falta la etiqueta, se calcula igual y se marca 🧮; cuando Frida mande foto,
 | Oikos Natural (normal) | 1 vasito 150 g | 140 | 10 | 8 | 8 | 🔎 FatSecret · Super Selectos |
 | Oikos Pro (si lo encuentras) | 1 vasito 150 g | 130 a 140 | 20 a 23 | 6 a 8 | 1.5 a 3 | 🔎 FatSecret · no confirmado en El Salvador |
 
+> Leche: usar **Dos Pinos Doble Proteína** en batidos, avena y café (si el cliente toma lácteos).
 > Para comparar: el vasito de 150 g es un poco más de media taza. El que más proteína da por precio es el bote grande de Oikos con proteína o el Yes de 1 kg.
 
 ### Quesos
@@ -66,6 +69,7 @@ Si falta la etiqueta, se calcula igual y se marca 🧮; cuando Frida mande foto,
 | **Nature Valley Protein** (crema de maní y chocolate oscuro) | 1 barra (40 g) | 190 | 10 | 14 | 12 | 🔎 etiqueta EE. UU. · Super Selectos caja de 5 (201 g) ≈ $7.00 = $1.40 c/u · [link](https://www.superselectos.com/products?category=0313136&productId=117397) |
 | Special K Proteína Chocolate | 1 barrita (45 g) | ≈ 180 | ≈ 10 | ≈ 20 | ≈ 6 | 🧮 falta etiqueta · Super Selectos ≈ $1.75 · [link](https://www.superselectos.com/products?category=0313136&productId=115612) |
 | Barra de granola normal | 1 unidad | 120 | 2 | 20 | 4 | 🔎 promedio · poca proteína, mejor una de proteína |
+| Barra de cereal Tosh (varios sabores) | 1 barra (23 g) | 70 a 100 | 1 | 15 a 18 | 1 a 3 | 🔎 FatSecret · baratas y ligeras, casi sin proteína · buenas junto a un batido |
 
 ### Frutas
 | Alimento | Porción | cal | P | C | G |
