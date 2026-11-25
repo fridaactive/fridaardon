@@ -1273,6 +1273,14 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
 .al-rec-h h2{flex:1;font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.45rem;line-height:1.05;margin:0}
 .al-rec-p{background:#111A36;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:.9rem 1rem;font-size:.85rem;line-height:1.6;color:rgba(255,255,255,.9)}
 .bw-atajos{margin-top:.2rem}
+.al-com{margin:.2rem 0 .4rem;border:1px dashed rgba(245,236,203,.3);border-radius:16px;padding:.1rem .85rem}
+.al-com summary{list-style:none;cursor:pointer;font-size:.74rem;color:rgba(245,236,203,.8);padding:.6rem 0;font-weight:700}
+.al-com summary::-webkit-details-marker{display:none}
+.al-com textarea{width:100%;box-sizing:border-box;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;color:#fff;font-family:inherit;font-size:.8rem;padding:.6rem .7rem;resize:vertical}
+.al-com textarea::placeholder{color:rgba(255,255,255,.4)}
+.al-com-f{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.5rem 0 .7rem}
+.al-com-f small{font-size:.66rem;opacity:.65}
+.al-com-f button{border:none;background:#F5ECCB;color:#0B1B3F;font-weight:800;font-size:.78rem;font-family:inherit;border-radius:100px;padding:.45rem 1.1rem;box-shadow:0 3px 0 #D9C98E;cursor:pointer;flex-shrink:0}
 .bw-ring{display:inline-block;margin:0 auto}
 .bw-card-ico{font-size:3.2rem;line-height:1;margin:.3rem 0}
 
@@ -3730,7 +3738,7 @@ function openGuiaAlimentacion() {
           + '<div class="al-em">' + alIcoComida(c) + '</div><div class="al-ml-x"><div class="al-ml-h"><span>' + escapeHtml(c.momento || '') + '</span>' + (c.hora ? '<span>' + escapeHtml(c.hora) + '</span>' : '') + '</div>'
           + '<div class="al-ml-p">' + escapeHtml(c.plato || '') + '</div>' + (chips ? '<div class="al-chips">' + chips + '</div>' : '') + alt + '</div>' + alLikeBtn(c.plato) + '</div>';
       });
-      h += '</div>';
+      h += '</div>' + alComentHtml(alRot(g)[sel], mn.nombre || 'menú');
     }
   } else if (g.comidas && g.comidas.length) {
     h += alAtajosHtml(g) + '<div class="guia-sec">Tu día de ejemplo</div>';
@@ -3802,6 +3810,26 @@ function alVistaHtml(g) {
     h += '<div class="guia-sec">Cómo se hace</div><div class="al-rec-p faUp">' + escapeHtml(ps.pasos || '') + '</div>';
   }
   return h + '</div>';
+}
+// ✏️ Caja por menú para que el cliente diga qué no le gustó o qué cambiaría.
+// Se guarda en clientasPortal/{uid}/alimentacion/comentarios/{índice del menú}.
+function alComentHtml(mi, nombre) {
+  var c = ((alData().comentarios || {})[mi] || {}).texto || '';
+  return '<details class="al-com"' + (c ? ' open' : '') + '><summary>✏️ ¿Algo que no te gustó o cambiarías de tu ' + escapeHtml(nombre) + '?</summary>'
+    + '<textarea id="al-com-' + mi + '" rows="3" placeholder="Ej.: no me gusta la avena, prefiero algo salado a las 7 am, agrégame más fruta…">' + escapeHtml(c) + '</textarea>'
+    + '<div class="al-com-f"><small id="al-com-msg-' + mi + '">' + (c ? 'Frida ya lo tiene. Lo verá en tu próxima guía 💙' : 'Frida lo lee para tu próxima guía.') + '</small><button type="button" onclick="alGuardarComent(' + mi + ')">Enviar</button></div></details>';
+}
+function alGuardarComent(mi) {
+  var ta = document.getElementById('al-com-' + mi), msg = document.getElementById('al-com-msg-' + mi);
+  var txt = (ta.value || '').trim().slice(0, 1000);
+  var val = txt ? { texto: txt, fecha: new Date().toISOString() } : null;
+  msg.textContent = 'Guardando…';
+  db().ref('clientasPortal/' + currentUid + '/alimentacion/comentarios/' + mi).set(val).then(function() {
+    CURRENT_PORTAL_DATA.alimentacion = CURRENT_PORTAL_DATA.alimentacion || {};
+    var cm = CURRENT_PORTAL_DATA.alimentacion.comentarios = CURRENT_PORTAL_DATA.alimentacion.comentarios || {};
+    if (val) cm[mi] = val; else delete cm[mi];
+    msg.textContent = txt ? '✓ ¡Gracias! Frida lo verá para tu próxima guía 💙' : 'Listo, se borró.';
+  }).catch(function(e) { msg.textContent = 'No se pudo guardar. Intenta de nuevo.'; console.warn('comentario', e.message); });
 }
 function alToggleComida(ci) {
   var ch = alComiChecks();

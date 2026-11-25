@@ -30,6 +30,7 @@ Este archivo es para el chat "Guía de alimentación", que arma las guías y tam
 - Respeta tipo de alimentación, alimentos que no come y alergias. Si cocina poco o come mucho fuera: opciones simples y tips para pedir fuera.
 - Usa sus antojos para los tips (alternativas, no prohibiciones). Agua: si toma poca, un tip para subirla.
 - En actualizaciones mensuales: repite o adapta los platos que le gustaron (❤️) y cambia lo demás.
+- "NO LE GUSTÓ / CAMBIARÍA": lo que el cliente escribió en la caja ✏️ de cada menú. Respétalo siempre en la siguiente guía.
 - **Seguridad:** si marcó diabetes, enfermedad de los riñones, embarazo o lactancia, o trastorno de la conducta alimentaria, la guía debe ser muy general: sin `calorias`, `macros`, `proteinaG` ni `cal`/`prot` por comida (la página entonces cuenta comidas en vez de calorías). Con resistencia a la insulina sin medicamento, Frida decide tras preguntarle. Recomienda en `objetivo` hablarlo con su médico, y avísale a Frida en el chat antes de darle el JSON. Con tiroides, presión, colesterol o problemas digestivos: guía normal con cuidados (menos sal, menos frituras, comidas suaves) y una nota.
 
 ## Biblioteca de alimentos
