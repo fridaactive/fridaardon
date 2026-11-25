@@ -2437,7 +2437,7 @@ function renderAcpAlimentacionHtml(clientId, c) {
   html += '<div class="card"><div class="card-label">🥗 Guía de alimentación</div><div style="font-size:0.85rem;font-weight:700;">' + estado + '</div>';
   if (g && g.actualizada) html += '<div style="font-size:0.72rem;color:var(--muted);margin-top:0.25rem;">Se actualiza una vez al mes.</div>';
   html += '</div>';
-  if (enc && alNecesitaProfesional(enc)) html += '<div class="card" style="background:#FFF6E0;border-color:#F0DFA0;font-size:0.8rem;">⚠️ Marcó una condición (diabetes, riñones, embarazo o trastorno alimentario). La guía debe ser muy general y recomendarle ver a un nutricionista o médico.</div>';
+  if (enc && alNecesitaProfesional(enc)) html += '<div class="card" style="background:#FFF6E0;border-color:#F0DFA0;font-size:0.8rem;">⚠️ Marcó una condición (diabetes, riñones, embarazo o trastorno alimentario). La guía debe ser muy general, sin calorías ni números, y recomendarle hablarlo con su médico.</div>';
   if (enc) {
     html += '<div class="card"><div class="card-label">📋 Sus respuestas</div>';
     Object.keys(AL_LABELS).forEach(function(k) {
@@ -2447,7 +2447,7 @@ function renderAcpAlimentacionHtml(clientId, c) {
     var favs = al.favoritos ? Object.keys(al.favoritos).map(function(k) { return al.favoritos[k]; }) : [];
     if (favs.length) html += '<div style="margin-top:0.7rem;"><div style="font-size:0.66rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem;">❤️ Le gustó</div>' + favs.map(function(f) { return '<div style="font-size:0.75rem;padding:0.3rem 0;border-bottom:1px solid var(--border);">' + escapeHtmlAdmin(f) + '</div>'; }).join('') + '</div>';
     html += '<button type="button" class="al-btn" onclick="alCopiarDatos()">📋 Copiar datos para Claude</button>';
-    html += '<div style="font-size:0.7rem;color:var(--muted);margin-top:0.4rem;">Pégalos en el chat de Estrategia de contenido y Claude te devuelve la guía lista.</div></div>';
+    html += '<div style="font-size:0.7rem;color:var(--muted);margin-top:0.4rem;">Pégalos en el chat de Guía de alimentación y Claude te devuelve la guía lista.</div></div>';
   }
   html += '<div class="card"><div class="card-label">' + (g ? '✏️ Actualizar guía' : '📥 Pegar la guía que te dio Claude') + '</div>'
     + '<textarea id="al-guia-input" rows="5" placeholder="Pega aquí el texto que empieza con { y termina con }" style="width:100%;box-sizing:border-box;border:1.5px solid var(--border);border-radius:10px;padding:0.6rem;font-size:0.72rem;font-family:monospace;"></textarea>'

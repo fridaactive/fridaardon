@@ -1,6 +1,6 @@
 # Cómo armar una guía de alimentación (FridaActive)
 
-Este archivo es para el chat que arma las guías. La página web ya está lista: encuesta, panel y vista de la guía. Ese chat NO edita index.html ni admin.html: solo devuelve el JSON de cada guía.
+Este archivo es para el chat "Guía de alimentación", que arma las guías y también se encarga del diseño de la guía (index.html: pestaña Bienestar; admin.html: pestaña 🥗 Alimentación). Por cada cliente devuelve el JSON de su guía.
 
 ## Cómo llega la información
 
@@ -15,7 +15,14 @@ Este archivo es para el chat que arma las guías. La página web ya está lista:
 
 - Se llama **"Guía de alimentación"**. Nunca "plan de alimentación", "dieta", "nutricionista" ni "app" (es su página web).
 - Lenguaje neutro e inclusivo ("clientes", no "clientas"). Tono cálido, sin culpa, sin prohibir.
-- Sin contar calorías: porciones con la mano (palma, puño, manos, pulgar).
+- **Calorías (desde nov 2026):** se calculan con Mifflin-St Jeor y se muestran como referencia, nunca como regla.
+  - Base: mujer = 10×kg + 6.25×cm − 5×edad − 161; hombre = … + 5. Peso en lbs ÷ 2.2.
+  - × actividad: sentada casi todo el día 1.2; + 1-3 entrenos/sem 1.375; + 4-5 entrenos/sem 1.45 a 1.55; trabajo activo + entrenos 1.6 a 1.725.
+  - Mantenimiento = base × actividad. Meta: bajar grasa −300 a −500; tonificar/mantener = mantenimiento; ganar músculo +200 a +300.
+  - Macros: proteína primero; grasa 25 a 30 % de la meta (÷ 9); carbohidratos el resto (÷ 4).
+  - Cada comida lleva `cal`, `prot`, `carb` y `grasa` aproximados; los 3 menús deben sumar cerca de la meta (± 100).
+  - En el chat, darle a Frida el detalle (IMC, mantenimiento, meta, macros y cómo se calculó) antes del JSON.
+  - El IMC (kg ÷ m²) solo es referencia para Frida; no va en la guía.
 - **Proteína: 1.6 a 2.0 g por kg de peso** (el peso llega en lbs: lbs ÷ 2.2). Repartida en las comidas (`proteinaComida`, p. ej. "25 a 30 g").
 - Carbohidratos alrededor del entreno, según su hora de entreno. Siempre una comida o merienda "Antes de entrenar".
 - Horarios de las comidas según su hora de despertar, de dormir y de entreno, y el número de comidas que hace al día.
@@ -23,7 +30,7 @@ Este archivo es para el chat que arma las guías. La página web ya está lista:
 - Respeta tipo de alimentación, alimentos que no come y alergias. Si cocina poco o come mucho fuera: opciones simples y tips para pedir fuera.
 - Usa sus antojos para los tips (alternativas, no prohibiciones). Agua: si toma poca, un tip para subirla.
 - En actualizaciones mensuales: repite o adapta los platos que le gustaron (❤️) y cambia lo demás.
-- **Seguridad:** si marcó diabetes, enfermedad de los riñones, embarazo o lactancia, o trastorno de la conducta alimentaria, la guía debe ser muy general (sin números de proteína ni restricciones). Recomienda en `objetivo` hablarlo con su médico, y avísale a Frida en el chat antes de darle el JSON. Con tiroides, presión, colesterol o problemas digestivos: guía normal con cuidados (menos sal, menos frituras, comidas suaves) y una nota.
+- **Seguridad:** si marcó diabetes, enfermedad de los riñones, embarazo o lactancia, o trastorno de la conducta alimentaria, la guía debe ser muy general: sin `calorias`, `macros`, `proteinaG` ni `cal`/`prot` por comida (la página entonces cuenta comidas en vez de calorías). Con resistencia a la insulina sin medicamento, Frida decide tras preguntarle. Recomienda en `objetivo` hablarlo con su médico, y avísale a Frida en el chat antes de darle el JSON. Con tiroides, presión, colesterol o problemas digestivos: guía normal con cuidados (menos sal, menos frituras, comidas suaves) y una nota.
 
 ## Estructura de la guía
 
@@ -40,12 +47,14 @@ Este archivo es para el chat que arma las guías. La página web ya está lista:
 {
   "actualizada": "DD/MM/AAAA",
   "objetivo": "1-2 frases en segunda persona: su meta y cómo la guía la apoya",
-  "proteinaG": 100,
+  "calorias": { "meta": 2150, "mantenimiento": 1900 },
+  "macros": { "proteina": 105, "carbohidratos": 250, "grasa": 70 },
+  "proteinaG": 105,
   "proteinaComida": "25 a 30 g",
   "porciones": { "proteina": "1 palma", "carbohidrato": "1 puño", "verduras": "2 manos", "grasa": "1 pulgar" },
   "menus": [
     { "nombre": "Menú A", "comidas": [
-      { "momento": "Desayuno", "hora": "7:00 am", "plato": "...", "alternativa": "... (opcional)" }
+      { "momento": "Desayuno", "hora": "7:00 am", "icono": "🍳", "plato": "...", "alternativa": "... (opcional)", "cal": 450, "prot": 28, "carb": 45, "grasa": 15 }
     ] },
     { "nombre": "Menú B", "comidas": [] },
     { "nombre": "Menú C", "comidas": [] }
@@ -58,7 +67,7 @@ Este archivo es para el chat que arma las guías. La página web ya está lista:
   "super": {
     "tienda": "Super Selectos",
     "presupuesto": "Para unos $40 por semana",
-    "secciones": [ { "nombre": "Proteínas", "items": [ { "producto": "Huevos", "marca": "Cartón de 30", "cantidad": "1 cartón" } ] } ]
+    "secciones": [ { "nombre": "Proteínas", "items": [ { "producto": "Huevos", "marca": "Cartón de 30", "cantidad": "1 cartón", "icono": "🥚 (opcional)" } ] } ]
   },
   "tips": ["3 a 5 tips personalizados"],
   "postres": [ { "icono": "🍫", "nombre": "...", "proteina": "20 g", "ingredientes": ["..."], "pasos": "..." } ],
@@ -67,5 +76,8 @@ Este archivo es para el chat que arma las guías. La página web ya está lista:
 ```
 
 - `porciones`, y `menus` (o `comidas`), son obligatorios. Sin ellos el panel no la publica.
+- `calorias`, `macros`, `icono` y `cal`/`prot`/`carb`/`grasa` son opcionales. Sin `calorias`, el anillo de arriba cuenta comidas. Si no hay `icono`, la página pone uno según el momento (🍳 desayuno, 🍎 merienda, 🍗 almuerzo, 🍌 antes de entrenar, 🥗 cena) o el producto del súper.
+- Lo que ve el cliente: anillo "Hoy llevas X de [meta] cal" que se llena al marcar ✓ cada comida, barras de proteína/carbohidratos/grasas, su mantenimiento, la semana L-D con su menú, las comidas con dibujito y calorías, la lista de súper con ✓, postres y tips. Las ✓ se guardan solo en su celular.
+- `porciones` ya no se muestra en la página, pero el panel lo sigue pidiendo: mándalo siempre.
 - `postres` y `rotacion` son opcionales: si no se mandan, se usan los postres por defecto y la rotación A-B-C-A-B-C + domingo libre. `rotacion` va de lunes a domingo: el índice del menú o "libre".
 - Nombres de `momento` sugeridos: Desayuno, Merienda, Almuerzo, Antes de entrenar, Después de entrenar, Cena.
