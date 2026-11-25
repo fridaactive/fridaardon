@@ -1298,6 +1298,9 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
 .al-ing span{background:#111A36;border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:.4rem .75rem;font-size:.78rem;line-height:1.25;color:rgba(255,255,255,.92)}
 .al-steps{font-size:.82rem!important;line-height:1.5!important;padding:.75rem .9rem .75rem 2rem!important}
 .al-steps li+li{margin-top:.35rem!important}
+.al-marca{font-weight:800;color:#F5ECCB}
+body.am2 .al-marca{color:#fff;text-decoration:underline;text-decoration-color:#1C55E5;text-decoration-thickness:3px;text-underline-offset:3px}
+body.am3 .al-marca{color:#0B1B3F;background:#F5ECCB;border-radius:6px;padding:.05rem .35rem;box-shadow:0 2px 0 #D9C98E}
 .bw-ring{display:inline-block;margin:0 auto}
 .bw-card-ico{font-size:3.2rem;line-height:1;margin:.3rem 0}
 
@@ -3752,7 +3755,7 @@ function openGuiaAlimentacion() {
         h += '<div class="al-ml al-ml-tap faUp' + (on ? ' done' : '') + '" onclick="alIr(\'comida:' + ci + '\')" role="button" tabindex="0">'
           + (esHoy ? '<button type="button" class="al-ck" onclick="event.stopPropagation();alToggleComida(' + ci + ')" aria-label="Ya la comí">' + (on ? '✓' : '') + '</button>' : '')
           + alThumbHtml(c) + '<div class="al-ml-x"><div class="al-ml-h"><span>' + escapeHtml(c.momento || '') + '</span>' + (c.hora ? '<span>' + escapeHtml(c.hora) + '</span>' : '') + '</div>'
-          + '<div class="al-ml-n">' + escapeHtml(alNombre(c)) + '</div>' + (chips ? '<div class="al-chips">' + chips + '</div>' : '') + '</div><span class="al-ml-go">›</span></div>';
+          + '<div class="al-ml-n">' + escapeHtml(alPlano(alNombre(c))) + '</div>' + (chips ? '<div class="al-chips">' + chips + '</div>' : '') + '</div><span class="al-ml-go">›</span></div>';
       });
       h += '</div>' + alComentHtml(alRot(g)[sel], mn.nombre || 'menú');
     }
@@ -3790,6 +3793,9 @@ function alNombre(c) {
   t = t.charAt(0).toUpperCase() + t.slice(1);
   return t.length > 48 ? t.slice(0, 46) + '…' : t;
 }
+// Marcas: en la guía van entre *asteriscos* ("1 taza de leche *Dos Pinos Doble Proteína*") y se resaltan.
+function alTxt(t) { return escapeHtml(String(t || '')).replace(/\*([^*]+)\*/g, '<b class="al-marca">$1</b>'); }
+function alPlano(t) { return String(t || '').replace(/\*/g, ''); }
 function alUrl(u) { u = String(u || ''); return /^(https:\/\/|[\w\-\/.]+$)/.test(u) ? escapeHtml(u) : ''; }
 function alThumbHtml(c) { var u = alUrl(c.foto); return u ? '<div class="al-em al-em-foto" style="background-image:url(\'' + u + '\')"></div>' : '<div class="al-em">' + alIcoComida(c) + '</div>'; }
 function alCerrarGuia() { AL_DIA_SEL = null; AL_VISTA = null; AL_SCROLL_G = 0; var m = document.getElementById('guia-modal'); if (m) m.style.display = 'none'; renderBienestarTab(); }
@@ -3822,7 +3828,7 @@ function alVistaHtml(g) {
       h += '<div class="al-list faUp"><div class="al-list-sec">' + escapeHtml(sec.nombre || '') + '</div>';
       (sec.items || []).forEach(function(it, ii) {
         var k = si + '-' + ii, on = !!sc.checks[k];
-        h += '<label class="al-li' + (on ? ' on' : '') + '"><input type="checkbox" ' + (on ? 'checked' : '') + ' onchange="alToggleSuper(\'' + k + '\', this)"><span class="al-li-e">' + alIcoSuper(it) + '</span><span class="al-li-n"><b>' + escapeHtml(it.producto || '') + '</b>' + (it.marca ? '<small>' + escapeHtml(it.marca) + '</small>' : '') + '</span><em>' + escapeHtml(it.cantidad || '') + '</em></label>';
+        h += '<label class="al-li' + (on ? ' on' : '') + '"><input type="checkbox" ' + (on ? 'checked' : '') + ' onchange="alToggleSuper(\'' + k + '\', this)"><span class="al-li-e">' + alIcoSuper(it) + '</span><span class="al-li-n"><b>' + alTxt(it.producto || '') + '</b>' + (it.marca ? '<small>' + alTxt(it.marca) + '</small>' : '') + '</span><em>' + escapeHtml(it.cantidad || '') + '</em></label>';
       });
       h += '</div>';
     });
@@ -3865,7 +3871,7 @@ function alGuardarComent(mi) {
 function alComidaHtml(g, ci) {
   var hoyIdx = (new Date().getDay() + 6) % 7, sel = (typeof AL_DIA_SEL === 'number') ? AL_DIA_SEL : hoyIdx;
   var mn = alMenuDe(g, sel), c = (mn.comidas || [])[ci] || {}, esHoy = sel === hoyIdx, on = esHoy && !!alComiChecks()[ci];
-  var nom = alNombre(c), u = alUrl(c.foto);
+  var nom = alPlano(alNombre(c)), u = alUrl(c.foto);
   var h = '<div class="guia-top"><button type="button" class="guia-back" onclick="alIr()">←</button><span>' + escapeHtml(c.momento || 'Tu comida') + '</span></div><div class="guia-body">';
   h += u ? '<div class="al-rec-img al-rec-foto faUp" style="background-image:url(\'' + u + '\')"></div>' : '<div class="al-rec-img c' + (ci % 4) + ' faUp">' + alIcoComida(c) + '</div>';
   h += '<div class="al-rec-h"><h2>' + escapeHtml(nom) + '</h2>' + alLikeBtn(nom) + '</div>';
@@ -3874,11 +3880,11 @@ function alComidaHtml(g, ci) {
   if (ch.length) h += '<div class="al-chips">' + ch.map(function(x, i) { return '<span class="al-chip' + (i === 1 ? ' b' : '') + '">' + x + '</span>'; }).join('') + '</div>';
   if (esHoy) h += '<button type="button" class="al-ya' + (on ? ' on' : '') + '" onclick="alToggleComida(' + ci + ')">' + (on ? '✓ Ya la comí' : 'Marcar como comida ✓') + '</button>';
   var ing = c.ingredientes || [];
-  if (ing.length) h += '<div class="guia-sec">Ingredientes</div><div class="al-ing faUp">' + ing.map(function(x) { return '<span>' + escapeHtml(x) + '</span>'; }).join('') + '</div>';
-  else if (c.plato && c.plato !== nom) h += '<div class="guia-sec">Ingredientes</div><div class="al-ing faUp">' + String(c.plato).split(/\s\+\s/).map(function(x) { return '<span>' + escapeHtml(x.trim()) + '</span>'; }).join('') + '</div>';
+  if (ing.length) h += '<div class="guia-sec">Ingredientes</div><div class="al-ing faUp">' + ing.map(function(x) { return '<span>' + alTxt(x) + '</span>'; }).join('') + '</div>';
+  else if (c.plato && c.plato !== nom) h += '<div class="guia-sec">Ingredientes</div><div class="al-ing faUp">' + String(c.plato).split(/\s\+\s/).map(function(x) { return '<span>' + alTxt(x.trim()) + '</span>'; }).join('') + '</div>';
   var prep = c.preparacion;
-  if (prep && prep.length) h += '<div class="guia-sec">Cómo se hace</div>' + (Array.isArray(prep) ? '<ol class="al-steps faUp">' + prep.map(function(x) { return '<li>' + escapeHtml(x) + '</li>'; }).join('') + '</ol>' : '<div class="al-rec-p faUp">' + escapeHtml(prep) + '</div>');
-  if (c.alternativa) h += '<div class="guia-sec">¿Hoy no se te antoja?</div><div class="al-alt-box faUp"><div><b>🔄 Otra opción</b><p>' + escapeHtml(c.alternativa) + '</p></div>' + alLikeBtn(c.alternativa) + '</div>';
+  if (prep && prep.length) h += '<div class="guia-sec">Cómo se hace</div>' + (Array.isArray(prep) ? '<ol class="al-steps faUp">' + prep.map(function(x) { return '<li>' + alTxt(x) + '</li>'; }).join('') + '</ol>' : '<div class="al-rec-p faUp">' + alTxt(prep) + '</div>');
+  if (c.alternativa) h += '<div class="guia-sec">¿Hoy no se te antoja?</div><div class="al-alt-box faUp"><div><b>🔄 Otra opción</b><p>' + alTxt(c.alternativa) + '</p></div>' + alLikeBtn(alPlano(c.alternativa)) + '</div>';
   return h + '</div>';
 }
 function alToggleComida(ci) {
