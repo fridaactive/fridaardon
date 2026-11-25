@@ -1281,6 +1281,22 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
 .al-com-f{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.5rem 0 .7rem}
 .al-com-f small{font-size:.66rem;opacity:.65}
 .al-com-f button{border:none;background:#F5ECCB;color:#0B1B3F;font-weight:800;font-size:.78rem;font-family:inherit;border-radius:100px;padding:.45rem 1.1rem;box-shadow:0 3px 0 #D9C98E;cursor:pointer;flex-shrink:0}
+.al-ml-tap{cursor:pointer}
+.al-ml-tap:active{transform:scale(.99)}
+.al-ml-n{font-size:.92rem;font-weight:700;line-height:1.3;margin:.15rem 0 .3rem;color:#fff}
+.al-ml-go{font-size:1.4rem;font-weight:800;opacity:.4;flex-shrink:0;padding-left:.1rem}
+.al-em-foto,.al-rec-foto{background-size:cover;background-position:center}
+.al-rec-meta{font-size:.68rem;color:#F5ECCB;opacity:.85;margin:-.2rem 0 .6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.al-steps{background:#111A36;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:.8rem 1rem .8rem 2.1rem;margin:0;font-size:.85rem;line-height:1.55;color:rgba(255,255,255,.92)}
+.al-steps li+li{margin-top:.45rem}
+.al-steps li::marker{color:#F5ECCB;font-weight:800}
+.al-alt-box{display:flex;gap:.6rem;align-items:flex-start;background:rgba(245,236,203,.08);border:1px dashed rgba(245,236,203,.45);border-radius:20px;padding:.85rem 1rem}
+.al-alt-box>div{flex:1;min-width:0}.al-alt-box b{font-size:.82rem;color:#F5ECCB}.al-alt-box p{margin:.3rem 0 0;font-size:.84rem;line-height:1.45;color:rgba(255,255,255,.9)}
+.al-ing{display:flex;flex-wrap:wrap;gap:.4rem}
+.al-ing span{background:#111A36;border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:.4rem .75rem;font-size:.78rem;line-height:1.25;color:rgba(255,255,255,.92)}
+.al-steps{font-size:.82rem!important;line-height:1.5!important;padding:.75rem .9rem .75rem 2rem!important}
+.al-steps li+li{margin-top:.35rem!important}
+.al-marca{font-weight:800;color:#6E9BFF}
 .bw-ring{display:inline-block;margin:0 auto}
 .bw-card-ico{font-size:3.2rem;line-height:1;margin:.3rem 0}
 
@@ -3656,7 +3672,7 @@ function alimentacionInicioHtml() {
 // (p. ej. clientes con alguna condición de salud), el anillo cuenta comidas.
 // Las ✓ de comidas y del súper se guardan solo en el celular (localStorage).
 var AL_ICO_MOMENTO = { desayuno: '🍳', merienda: '🍎', almuerzo: '🍗', 'antes de entrenar': '🍌', 'después de entrenar': '🥤', cena: '🥗' };
-var AL_ICO_SUPER = [[/huevo/i, '🥚'], [/pollo|pechuga|pavo/i, '🍗'], [/carne|res|molida/i, '🥩'], [/atún|atun|sardina/i, '🐟'], [/yogurt|leche|queso|requesón/i, '🥛'], [/arroz/i, '🍚'], [/avena|granola|cereal/i, '🥣'], [/tortilla|pan|galleta/i, '🫓'], [/frijol/i, '🫘'], [/papa|camote|yuca/i, '🥔'], [/plátano|platano|banano/i, '🍌'], [/aguacate/i, '🥑'], [/maní|mani|almendra|nuez|semilla/i, '🥜'], [/aceite/i, '🫒'], [/espinaca|lechuga|brócoli|brocoli|verdura|ensalada|pepino|tomate|güisquil|ejote/i, '🥬'], [/fresa|manzana|fruta|piña|papaya|mango|naranja/i, '🍓'], [/proteína|proteina|whey/i, '💪'], [/chocolate/i, '🍫']];
+var AL_ICO_SUPER = [[/galleta|cookie/i, '🍪'], [/syrup|miel/i, '🍯'], [/huevo/i, '🥚'], [/pollo|pechuga|pavo/i, '🍗'], [/carne|res|molida|posta|bistec/i, '🥩'], [/atún|atun|sardina|tilapia|pescado|salmón|salmon/i, '🐟'], [/queso|mozzarella|feta|cottage|requesón/i, '🧀'], [/yogurt|leche/i, '🥛'], [/arroz/i, '🍚'], [/pasta|espagueti|fideo/i, '🍝'], [/avena|granola|cereal/i, '🥣'], [/wrap|rapiditas/i, '🌯'], [/pan/i, '🍞'], [/tortilla/i, '🫓'], [/frijol/i, '🫘'], [/papa|camote|yuca/i, '🥔'], [/plátano|platano|banano/i, '🍌'], [/aguacate/i, '🥑'], [/maní|mani|almendra|nuez|semilla/i, '🥜'], [/aceite/i, '🫒'], [/espinaca|lechuga|brócoli|brocoli|verdura|ensalada|pepino|tomate|güisquil|ejote/i, '🥬'], [/fresa|manzana|fruta|piña|papaya|mango|naranja/i, '🍓'], [/proteína|proteina|whey/i, '💪'], [/chocolate/i, '🍫']];
 function alIcoSuper(it) { if (it.icono) return it.icono; var t = (it.producto || '') + ' ' + (it.marca || ''); for (var i = 0; i < AL_ICO_SUPER.length; i++) if (AL_ICO_SUPER[i][0].test(t)) return AL_ICO_SUPER[i][1]; return '🛒'; }
 function alIcoComida(c) { return c.icono || AL_ICO_MOMENTO[String(c.momento || '').toLowerCase()] || '🍽️'; }
 function alNum(n) { return Math.round(Number(n) || 0).toLocaleString('en-US'); }
@@ -3727,16 +3743,15 @@ function openGuiaAlimentacion() {
       var tipsF = df.tips || ['Si en el día no comiste suficiente proteína, tómate tu shake de proteína para completarla.', 'Toma agua durante el día y muévete un poco: una caminata cuenta.', 'Mañana retomas tu Menú A, sin compensar ni saltarte comidas.'];
       h += '</div><div class="guia-flex-tips"><b>Tips para tu domingo</b>' + tipsF.map(function(t) { return '<div>💡 ' + escapeHtml(t) + '</div>'; }).join('') + '</div>';
     } else {
-      if (esHoy) h += '<div class="al-hint">Toca ✓ cuando hagas cada comida.</div>';
+      h += '<div class="al-hint">Toca una comida para ver su receta' + (esHoy ? ' · marca ✓ cuando la hagas' : '') + '.</div>';
       h += '<div class="al-tl">';
       (mn.comidas || []).forEach(function(c, ci) {
         var on = !!comi[ci];
         var chips = (c.cal ? '<span class="al-chip">≈ ' + alNum(c.cal) + ' cal</span>' : '') + (c.prot ? '<span class="al-chip b">' + alNum(c.prot) + ' g prot</span>' : '');
-        var alt = c.alternativa ? '<button type="button" class="guia-alt" onclick="this.nextElementSibling.style.display=\'flex\';this.style.display=\'none\'">🔄 Otra opción</button><div class="guia-alt-txt guia-plato-row"><span>' + escapeHtml(c.alternativa) + '</span>' + alLikeBtn(c.alternativa) + '</div>' : '';
-        h += '<div class="al-ml faUp' + (on ? ' done' : '') + '">'
-          + (esHoy ? '<button type="button" class="al-ck" onclick="alToggleComida(' + ci + ')" aria-label="Ya la comí">' + (on ? '✓' : '') + '</button>' : '')
-          + '<div class="al-em">' + alIcoComida(c) + '</div><div class="al-ml-x"><div class="al-ml-h"><span>' + escapeHtml(c.momento || '') + '</span>' + (c.hora ? '<span>' + escapeHtml(c.hora) + '</span>' : '') + '</div>'
-          + '<div class="al-ml-p">' + escapeHtml(c.plato || '') + '</div>' + (chips ? '<div class="al-chips">' + chips + '</div>' : '') + alt + '</div>' + alLikeBtn(c.plato) + '</div>';
+        h += '<div class="al-ml al-ml-tap faUp' + (on ? ' done' : '') + '" onclick="alIr(\'comida:' + ci + '\')" role="button" tabindex="0">'
+          + (esHoy ? '<button type="button" class="al-ck" onclick="event.stopPropagation();alToggleComida(' + ci + ')" aria-label="Ya la comí">' + (on ? '✓' : '') + '</button>' : '')
+          + alThumbHtml(c) + '<div class="al-ml-x"><div class="al-ml-h"><span>' + escapeHtml(c.momento || '') + '</span>' + (c.hora ? '<span>' + escapeHtml(c.hora) + '</span>' : '') + '</div>'
+          + '<div class="al-ml-n">' + escapeHtml(alPlano(alNombre(c))) + '</div>' + (chips ? '<div class="al-chips">' + chips + '</div>' : '') + '</div><span class="al-ml-go">›</span></div>';
       });
       h += '</div>' + alComentHtml(alRot(g)[sel], mn.nombre || 'menú');
     }
@@ -3757,13 +3772,29 @@ function alPintar(m, h) {
   m.classList.toggle('al-quiet', m.style.display === 'block' && !AL_NUEVA);
   m.innerHTML = h;
   if (m.style.display !== 'block') { m.style.display = 'block'; m.scrollTop = 0; }
-  if (AL_NUEVA) { m.scrollTop = 0; AL_NUEVA = false; }
+  if (AL_NUEVA) { m.scrollTop = (!AL_VISTA && AL_SCROLL_G) ? AL_SCROLL_G : 0; AL_NUEVA = false; }
 }
 // ── Espacios propios dentro de la guía: Súper y Postres ──
 // AL_VISTA: null (guía) | 'super' | 'postres' | 'postre:N' (receta).
-var AL_VISTA = null, AL_NUEVA = false;
-function alIr(v) { AL_VISTA = v || null; AL_NUEVA = true; openGuiaAlimentacion(); }
-function alCerrarGuia() { AL_DIA_SEL = null; AL_VISTA = null; var m = document.getElementById('guia-modal'); if (m) m.style.display = 'none'; renderBienestarTab(); }
+var AL_VISTA = null, AL_NUEVA = false, AL_SCROLL_G = 0;
+function alIr(v) {
+  var m = document.getElementById('guia-modal');
+  if (!AL_VISTA && m) AL_SCROLL_G = m.scrollTop; else if (!v && AL_VISTA && AL_VISTA.indexOf('comida:') !== 0) AL_SCROLL_G = 0;
+  AL_VISTA = v || null; AL_NUEVA = true; openGuiaAlimentacion();
+}
+// Nombre corto: si la guía no trae `nombre`, se toma la primera parte del plato.
+function alNombre(c) {
+  if (c.nombre) return c.nombre;
+  var t = String(c.plato || '').replace(/^[^:]{0,25}:\s*/, '').split(/\s\+\s|,\s| con /)[0].trim();
+  t = t.charAt(0).toUpperCase() + t.slice(1);
+  return t.length > 48 ? t.slice(0, 46) + '…' : t;
+}
+// Marcas: en la guía van entre *asteriscos* ("1 taza de leche *Dos Pinos Doble Proteína*") y se resaltan.
+function alTxt(t) { return escapeHtml(String(t || '')).replace(/\*([^*]+)\*/g, '<b class="al-marca">$1</b>'); }
+function alPlano(t) { return String(t || '').replace(/\*/g, ''); }
+function alUrl(u) { u = String(u || ''); return /^(https:\/\/|[\w\-\/.]+$)/.test(u) ? escapeHtml(u) : ''; }
+function alThumbHtml(c) { var u = alUrl(c.foto); return u ? '<div class="al-em al-em-foto" style="background-image:url(\'' + u + '\')"></div>' : '<div class="al-em">' + alIcoComida(c) + '</div>'; }
+function alCerrarGuia() { AL_DIA_SEL = null; AL_VISTA = null; AL_SCROLL_G = 0; var m = document.getElementById('guia-modal'); if (m) m.style.display = 'none'; renderBienestarTab(); }
 function alPostresDe(g) { return (g.postres && g.postres.length) ? g.postres : AL_POSTRES; }
 function alSuperCuenta(g) {
   var checks = {}, total = 0, listos = 0;
@@ -3782,6 +3813,7 @@ function alAtajosHtml(g) {
 }
 function alVistaHtml(g) {
   var v = AL_VISTA, back = 'alIr(' + (v.indexOf('postre:') === 0 ? '\'postres\'' : '') + ')';
+  if (v.indexOf('comida:') === 0) return alComidaHtml(g, +v.split(':')[1]);
   var titulo = v === 'super' ? 'Mi súper' : 'Postres con proteína';
   var h = '<div class="guia-top"><button type="button" class="guia-back" onclick="' + back + '">←</button><span>' + titulo + '</span></div><div class="guia-body">';
   if (v === 'super') {
@@ -3792,7 +3824,7 @@ function alVistaHtml(g) {
       h += '<div class="al-list faUp"><div class="al-list-sec">' + escapeHtml(sec.nombre || '') + '</div>';
       (sec.items || []).forEach(function(it, ii) {
         var k = si + '-' + ii, on = !!sc.checks[k];
-        h += '<label class="al-li' + (on ? ' on' : '') + '"><input type="checkbox" ' + (on ? 'checked' : '') + ' onchange="alToggleSuper(\'' + k + '\', this)"><span class="al-li-e">' + alIcoSuper(it) + '</span><span class="al-li-n"><b>' + escapeHtml(it.producto || '') + '</b>' + (it.marca ? '<small>' + escapeHtml(it.marca) + '</small>' : '') + '</span><em>' + escapeHtml(it.cantidad || '') + '</em></label>';
+        h += '<label class="al-li' + (on ? ' on' : '') + '"><input type="checkbox" ' + (on ? 'checked' : '') + ' onchange="alToggleSuper(\'' + k + '\', this)"><span class="al-li-e">' + alIcoSuper(it) + '</span><span class="al-li-n"><b>' + alTxt(it.producto || '') + '</b>' + (it.marca ? '<small>' + alTxt(it.marca) + '</small>' : '') + '</span><em>' + escapeHtml(it.cantidad || '') + '</em></label>';
       });
       h += '</div>';
     });
@@ -3830,6 +3862,25 @@ function alGuardarComent(mi) {
     if (val) cm[mi] = val; else delete cm[mi];
     msg.textContent = txt ? '✓ ¡Gracias! Frida lo verá para tu próxima guía 💙' : 'Listo, se borró.';
   }).catch(function(e) { msg.textContent = 'No se pudo guardar. Intenta de nuevo.'; console.warn('comentario', e.message); });
+}
+// Página de cada comida: foto (o dibujito), nombre, calorías, ingredientes y preparación.
+function alComidaHtml(g, ci) {
+  var hoyIdx = (new Date().getDay() + 6) % 7, sel = (typeof AL_DIA_SEL === 'number') ? AL_DIA_SEL : hoyIdx;
+  var mn = alMenuDe(g, sel), c = (mn.comidas || [])[ci] || {};
+  var nom = alPlano(alNombre(c)), u = alUrl(c.foto);
+  var h = '<div class="guia-top"><button type="button" class="guia-back" onclick="alIr()">←</button><span>' + escapeHtml(c.momento || 'Tu comida') + '</span></div><div class="guia-body">';
+  h += u ? '<div class="al-rec-img al-rec-foto faUp" style="background-image:url(\'' + u + '\')"></div>' : '<div class="al-rec-img c' + (ci % 4) + ' faUp">' + alIcoComida(c) + '</div>';
+  h += '<div class="al-rec-h"><h2>' + escapeHtml(nom) + '</h2>' + alLikeBtn(nom) + '</div>';
+  h += '<div class="al-rec-meta">' + escapeHtml(c.momento || '') + (c.hora ? ' · ' + escapeHtml(c.hora) : '') + ' · ' + escapeHtml(mn.nombre || '') + '</div>';
+  var ch = [c.cal ? '≈ ' + alNum(c.cal) + ' cal' : '', c.prot ? alNum(c.prot) + ' g proteína' : '', c.carb ? alNum(c.carb) + ' g carbohidratos' : '', c.grasa ? alNum(c.grasa) + ' g grasa' : ''].filter(Boolean);
+  if (ch.length) h += '<div class="al-chips">' + ch.map(function(x, i) { return '<span class="al-chip' + (i === 1 ? ' b' : '') + '">' + x + '</span>'; }).join('') + '</div>';
+  var ing = c.ingredientes || [];
+  if (ing.length) h += '<div class="guia-sec">Ingredientes</div><div class="al-ing faUp">' + ing.map(function(x) { return '<span>' + alTxt(x) + '</span>'; }).join('') + '</div>';
+  else if (c.plato && c.plato !== nom) h += '<div class="guia-sec">Ingredientes</div><div class="al-ing faUp">' + String(c.plato).split(/\s\+\s/).map(function(x) { return '<span>' + alTxt(x.trim()) + '</span>'; }).join('') + '</div>';
+  var prep = c.preparacion;
+  if (prep && prep.length) h += '<div class="guia-sec">Cómo se hace</div>' + (Array.isArray(prep) ? '<ol class="al-steps faUp">' + prep.map(function(x) { return '<li>' + alTxt(x) + '</li>'; }).join('') + '</ol>' : '<div class="al-rec-p faUp">' + alTxt(prep) + '</div>');
+  if (c.alternativa) h += '<div class="guia-sec">¿Hoy no se te antoja?</div><div class="al-alt-box faUp"><div><b>🔄 Otra opción</b><p>' + alTxt(c.alternativa) + '</p></div>' + alLikeBtn(alPlano(c.alternativa)) + '</div>';
+  return h + '</div>';
 }
 function alToggleComida(ci) {
   var ch = alComiChecks();

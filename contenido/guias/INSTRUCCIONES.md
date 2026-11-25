@@ -61,7 +61,7 @@ Este archivo es para el chat "Guía de alimentación", que arma las guías y tam
   "porciones": { "proteina": "1 palma", "carbohidrato": "1 puño", "verduras": "2 manos", "grasa": "1 pulgar" },
   "menus": [
     { "nombre": "Menú A", "comidas": [
-      { "momento": "Desayuno", "hora": "7:00 am", "icono": "🍳", "plato": "...", "alternativa": "... (opcional)", "cal": 450, "prot": 28, "carb": 45, "grasa": 15 }
+      { "momento": "Desayuno", "hora": "7:00 am", "icono": "🍳", "nombre": "Waffles de avena y banano", "plato": "resumen en una línea", "ingredientes": ["½ taza de avena", "..."], "preparacion": ["Paso 1", "Paso 2"], "foto": "fotos/comidas/waffles.jpg (opcional)", "alternativa": "... (opcional)", "cal": 450, "prot": 28, "carb": 45, "grasa": 15 }
     ] },
     { "nombre": "Menú B", "comidas": [] },
     { "nombre": "Menú C", "comidas": [] }
@@ -83,6 +83,9 @@ Este archivo es para el chat "Guía de alimentación", que arma las guías y tam
 ```
 
 - `porciones`, y `menus` (o `comidas`), son obligatorios. Sin ellos el panel no la publica.
+- Cada comida: la tarjeta muestra solo `nombre` (corto y antojable, 2 a 6 palabras), hora y calorías; al tocarla se abre su página con foto (o dibujito), `ingredientes` con cantidades exactas y marca, `preparacion` en pasos y la `alternativa`. Siempre mandar `nombre`, `ingredientes` y `preparacion`.
+- **Marcas entre asteriscos:** en `ingredientes`, `preparacion`, `plato`, `alternativa` y en el súper (`producto`, `marca`), la marca va así: `1 taza de leche *Dos Pinos Doble Proteína*`. La página la resalta.
+- `foto`: ruta de una imagen guardada en la página (Frida manda la foto en el chat y se guarda en `fotos/comidas/`). Si no hay, sale el dibujito.
 - `calorias`, `macros`, `icono` y `cal`/`prot`/`carb`/`grasa` son opcionales. Sin `calorias`, el anillo de arriba cuenta comidas. Si no hay `icono`, la página pone uno según el momento (🍳 desayuno, 🍎 merienda, 🍗 almuerzo, 🍌 antes de entrenar, 🥗 cena) o el producto del súper.
 - Lo que ve el cliente: anillo "Hoy llevas X de [meta] cal" que se llena al marcar ✓ cada comida, barras de proteína/carbohidratos/grasas, su mantenimiento, la semana L-D con su menú, las comidas con dibujito y calorías, la lista de súper con ✓, postres y tips. Las ✓ se guardan solo en su celular.
 - `porciones` ya no se muestra en la página, pero el panel lo sigue pidiendo: mándalo siempre.
