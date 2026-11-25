@@ -2349,8 +2349,29 @@ function handleGenerateLinkCodeAcp(clientId) {
 
 // ── Pestaña Rutina: acá sí interesa ver el objetivo, a diferencia del
 // resumen general donde solo se quiere ver actividad/estado de un vistazo.
+function rutinaTextoParaClaude(c, portal) {
+  var cq = portal.cuestionario || {}, f = portal.ficha || {}, lines = [];
+  lines.push('RUTINA · ' + (c.name || '') + ' · ' + (TYPE_LABELS[c.type] || c.type || ''));
+  var add = function(label, val) { if (val) lines.push('- ' + label + ': ' + val); };
+  if (cq.fechaNacimiento) { var b = new Date(cq.fechaNacimiento + 'T00:00:00'), n = new Date(); add('Edad', String(n.getFullYear() - b.getFullYear() - ((n.getMonth() < b.getMonth() || (n.getMonth() === b.getMonth() && n.getDate() < b.getDate())) ? 1 : 0))); }
+  CQ_ORDER.forEach(function(k) { if (k === 'fechaNacimiento' || k === 'guiaAlimentacion' || k === 'nutricionista') return; add(CQ_LABELS[k], formatCuestionarioValue(k, cq[k])); });
+  var p = f.personal || {}, sa = f.salud || {}, e = f.entreno || {};
+  add('Ocupación (ficha)', p.ocupacion); add('Patologías', sa.patologias); add('Lesiones (ficha)', sa.lesiones); add('Medicamentos', sa.medicamentos); add('Restricciones', sa.restricciones);
+  add('Objetivo (ficha)', e.objetivo); add('Nivel', e.nivel); add('Días que piensa entrenar', (e.dias || []).join(', ')); add('Notas', e.notas);
+  add('Meta en el panel', c.meta);
+  return lines.join('\n');
+}
+function rutinaCopiarDatos() {
+  var c = CLIENTS[acpState.clientId] || {}, txt = rutinaTextoParaClaude(c, acpState.portal || {});
+  var ok = function() { alert('✓ Datos copiados. Pégalos en el chat con Claude.'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, function() { prompt('Copia este texto:', txt); });
+  else prompt('Copia este texto:', txt);
+}
+
 function renderAcpRutinaHtml(clientId, c) {
-  var html = '<div class="card">';
+  var html = '';
+  if (acpState.uid) html += '<button type="button" class="al-btn" style="margin:0 0 1rem;" onclick="rutinaCopiarDatos()">📋 Copiar datos para Claude (armar su rutina)</button>';
+  html += '<div class="card">';
   html += '<div class="card-label">🎯 Objetivo</div>';
   html += '<div style="font-size:0.85rem;color:var(--text);line-height:1.5;">' + (c.meta ? escapeHtmlAdmin(c.meta) : '<span style="color:var(--muted);">Sin objetivo definido todavía.</span>') + '</div>';
   html += '</div>';
