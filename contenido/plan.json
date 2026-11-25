@@ -310,6 +310,10 @@
    ],
    "imagenes": [
     {
+     "src": "contenido/imagenes/historia-planes-encuesta.png",
+     "nombre": "Historia única · Con espacio para la encuesta (Quiero info / Empiezo en enero)"
+    },
+    {
      "src": "contenido/imagenes/historia-planes-1-web.png",
      "nombre": "Historia 1 · Tu plan a tu medida"
     },
