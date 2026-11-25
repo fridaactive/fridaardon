@@ -20,10 +20,21 @@ Si falta la etiqueta, se calcula igual y se marca 🧮; cuando Frida mande foto,
 | Carne molida de res 90/10 (cocida) | 100 g | 210 | 26 | 0 | 11 | 🔎 |
 | Bistec de res magro (cocido) | 100 g | 185 | 28 | 0 | 8 | 🔎 |
 | Jamón de pavo | 2 lonjas (40 g) | 45 | 7 | 1 | 1 | 🔎 |
-| Yogurt griego natural sin azúcar | ½ taza (120 g) | 70 | 11 | 4 | 0.5 | 🔎 |
+| Yogurt griego natural genérico | ½ taza (120 g) | 70 | 11 | 4 | 0.5 | 🔎 · mejor usar una marca de abajo |
 | Proteína en polvo (whey) | 1 scoop (30 g) | 120 | 24 | 3 | 1.5 | 🔎 promedio |
 | Leche semidescremada | 1 taza | 120 | 8 | 12 | 5 | 🔎 |
 | Leche descremada | 1 taza | 90 | 8 | 12 | 0 | 🔎 |
+
+### Yogurts con proteína (por vasito, con marca)
+| Producto | Porción | cal | P | C | G | Fuente / dónde |
+|---|---|---|---|---|---|---|
+| **Yes Griego Natural** | 1 vasito 150 g (≈ ⅔ taza) | 130 | 12 | 14 | 2.5 | 🔎 FatSecret · Super Selectos ≈ $1.15 · también 1 kg ≈ $5.60 |
+| **Yes Griego Fresa Sin Azúcar** | 1 vasito 150 g | ≈ 120 | ≈ 12 | ≈ 12 | ≈ 2 | 🧮 falta etiqueta · Super Selectos ≈ $1.15 |
+| **Oikos Natural Con Proteína** | 1 vasito 150 g | ≈ 140 | ≈ 15 | ≈ 8 | ≈ 4 | 🧮 falta etiqueta · Super Selectos ≈ $1.38 · bote 900 g ≈ $6.45 (rinde 6 porciones) |
+| Oikos Natural (normal) | 1 vasito 150 g | 140 | 10 | 8 | 8 | 🔎 FatSecret · Super Selectos |
+| Oikos Pro (si lo encuentras) | 1 vasito 150 g | 130 a 140 | 20 a 23 | 6 a 8 | 1.5 a 3 | 🔎 FatSecret · no confirmado en El Salvador |
+
+> Para comparar: el vasito de 150 g es un poco más de media taza. El que más proteína da por precio es el bote grande de Oikos con proteína o el Yes de 1 kg.
 
 ### Quesos
 | Alimento | Porción | cal | P | C | G | Notas |
@@ -111,9 +122,9 @@ Formato: plato · cal · proteína. Marcar con ⭐ las que a los clientes les gu
 - Fajitas de pollo con chile verde y cebolla + 3 tortillas + guacamole · 600 · 38
 
 ### Merienda de la tarde / antojo dulce 🍫
-- ⭐ 2 paquetitos de galletas El Panal + ½ taza de yogurt griego + 1 fruta · 310 · 14
+- ⭐ 2 paquetitos de galletas El Panal + 1 vasito de yogurt Yes Griego (o Oikos con proteína) + 1 fruta · 370 · 15
   - Variación: galletas El Panal + 1 cucharada de crema de maní o de almendra + fresas · 330 · 6
-- 2 tortitas de arroz con chocolate + ½ taza de yogurt griego + 1 fruta · 290 · 13
+- 2 tortitas de arroz con chocolate + 1 vasito de yogurt Yes Griego + 1 fruta · 350 · 14
 - 1 rebanada de masa madre con crema de maní y banano · 330 · 10
 - ½ taza de yogurt griego con fresas, granola y chispas de chocolate oscuro · 320 · 16
 - Batido de proteína con leche + 1 barra de granola · 330 · 34
