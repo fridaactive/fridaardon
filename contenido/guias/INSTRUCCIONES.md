@@ -32,6 +32,12 @@ Este archivo es para el chat "Guía de alimentación", que arma las guías y tam
 - En actualizaciones mensuales: repite o adapta los platos que le gustaron (❤️) y cambia lo demás.
 - **Seguridad:** si marcó diabetes, enfermedad de los riñones, embarazo o lactancia, o trastorno de la conducta alimentaria, la guía debe ser muy general: sin `calorias`, `macros`, `proteinaG` ni `cal`/`prot` por comida (la página entonces cuenta comidas en vez de calorías). Con resistencia a la insulina sin medicamento, Frida decide tras preguntarle. Recomienda en `objetivo` hablarlo con su médico, y avísale a Frida en el chat antes de darle el JSON. Con tiroides, presión, colesterol o problemas digestivos: guía normal con cuidados (menos sal, menos frituras, comidas suaves) y una nota.
 
+## Biblioteca de alimentos
+
+- `biblioteca-alimentos.md` guarda alimentos (con calorías y macros) y comidas ya probadas, por momento del día. Úsala para escoger platos y súmale lo nuevo de cada guía.
+- Productos de marca (antojos, snacks): buscar su tabla nutricional; si no aparece, calcular y marcar 🧮. Frida puede mandar foto de la etiqueta para dejarlo exacto.
+- Antes de publicar, mostrarle a Frida los 3 menús en el chat (tabla por hora) para que los revise; publicar solo cuando los apruebe.
+
 ## Estructura de la guía
 
 - **3 menús (A, B y C)** que rotan de lunes a sábado: A-B-C-A-B-C.
