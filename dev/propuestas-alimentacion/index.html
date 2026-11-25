@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propuestas guía</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#1C55E5;--blue2:#0F3FA8;--cream:#F5ECCB;--night:#070B1A;--surf:#111A36;--line:rgba(255,255,255,.12)}
+*{box-sizing:border-box}body{margin:0;background:#222;font-family:'DM Sans',sans-serif;color:#fff;display:flex;flex-wrap:wrap;gap:24px;padding:24px;justify-content:center}
+.ph{width:390px;background:radial-gradient(90% 30% at 90% 0%,#1C3F9E 0%,rgba(0,0,0,0) 60%),var(--night);padding:18px 18px 30px;border-radius:0}
+.tag{display:inline-block;background:var(--cream);color:#0B1B3F;font-size:.66rem;font-weight:800;letter-spacing:.08em;border-radius:8px;padding:.25rem .55rem;transform:rotate(-2deg);box-shadow:0 3px 0 #D9C98E}
+h2{font-family:'Archivo Black';font-weight:400;text-transform:uppercase;font-size:1.6rem;line-height:1.02;margin:.6rem 0 .35rem}h2 span{color:var(--cream)}
+.sub{font-size:.82rem;color:rgba(255,255,255,.75);line-height:1.45;margin:0 0 1rem}
+.sec{font-family:'Archivo Black';text-transform:uppercase;font-size:.9rem;color:var(--cream);margin:1.4rem 0 .7rem}
+.up{animation:faUp .5s both}@keyframes faUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* ---------- 1. ANILLO ---------- */
+.ring-card{background:var(--surf);border:1px solid var(--line);border-radius:24px;padding:1.1rem;display:flex;gap:1rem;align-items:center}
+.ring{position:relative;width:128px;height:128px;flex-shrink:0}.ring svg{transform:rotate(-90deg)}
+.ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .c b{font-family:'Archivo Black';font-weight:400;font-size:1.55rem;line-height:1}.ring .c small{font-size:.62rem;opacity:.7;margin-top:.2rem}
+.macros{flex:1;display:flex;flex-direction:column;gap:.6rem}
+.mac .t{display:flex;justify-content:space-between;font-size:.72rem;font-weight:700;margin-bottom:.25rem}.mac .t span{opacity:.6;font-weight:500}
+.bar{height:8px;border-radius:8px;background:rgba(255,255,255,.1);overflow:hidden}.bar i{display:block;height:100%;border-radius:8px}
+.mant{display:flex;justify-content:space-between;margin-top:.7rem;font-size:.72rem;color:rgba(255,255,255,.7);padding:0 .3rem}.mant b{color:#fff}
+.week{display:flex;gap:.35rem;overflow:hidden}
+.wd{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:16px;padding:.5rem 0;text-align:center}
+.wd small{display:block;font-size:.58rem;opacity:.6;font-weight:700}.wd b{font-size:.95rem}
+.wd.on{background:var(--cream);color:#0B1B3F;box-shadow:0 3px 0 #D9C98E;transform:translateY(-2px)}
+.tl{position:relative;padding-left:22px}.tl::before{content:'';position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:rgba(245,236,203,.25)}
+.ml{position:relative;background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:.75rem .85rem;margin-bottom:.6rem;display:flex;gap:.7rem;align-items:center}
+.ml::before{content:'';position:absolute;left:-21px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--night);border:2px solid var(--cream)}
+.em{width:44px;height:44px;border-radius:14px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.ml .x{flex:1;min-width:0}.ml .h{display:flex;justify-content:space-between;font-size:.68rem;opacity:.65;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.ml .p{font-size:.84rem;font-weight:500;line-height:1.35;margin:.15rem 0 .25rem}
+.chips{display:flex;gap:.3rem}.chip{font-size:.62rem;font-weight:800;border-radius:100px;padding:.12rem .5rem;background:rgba(245,236,203,.16);color:var(--cream)}.chip.b{background:rgba(28,85,229,.35);color:#cfdcff}
+.heart{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+/* ---------- 2. TARJETAS ---------- */
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.45rem}
+.st{background:var(--cream);color:#0B1B3F;border-radius:18px;padding:.7rem .5rem;text-align:center;box-shadow:0 4px 0 #D9C98E}
+.st.bl{background:var(--blue);color:#fff;box-shadow:0 4px 0 var(--blue2)}
+.st .i{font-size:1.1rem}.st b{display:block;font-family:'Archivo Black';font-weight:400;font-size:1.15rem;line-height:1.1;margin-top:.15rem}.st small{font-size:.6rem;font-weight:700;opacity:.75}
+.note{font-size:.66rem;color:rgba(255,255,255,.55);text-align:center;margin-top:.55rem}
+.tabs{display:flex;background:var(--surf);border:1px solid var(--line);border-radius:100px;padding:4px}
+.tab{flex:1;text-align:center;font-size:.75rem;font-weight:800;padding:.45rem 0;border-radius:100px;opacity:.65}.tab.on{background:var(--blue);opacity:1;box-shadow:0 3px 0 var(--blue2)}
+.cards{display:flex;gap:.7rem;overflow:hidden;margin:0 -18px;padding:0 18px .3rem}
+.fc{width:230px;flex-shrink:0;background:var(--surf);border:1px solid var(--line);border-radius:24px;overflow:hidden}
+.fc .img{height:118px;display:flex;align-items:center;justify-content:center;font-size:3.6rem;position:relative}
+.fc .img .hr{position:absolute;top:10px;left:10px;background:rgba(7,11,26,.75);border-radius:100px;font-size:.66rem;font-weight:800;padding:.2rem .55rem}
+.fc .img .heart{position:absolute;top:8px;right:8px;background:rgba(7,11,26,.6)}
+.fc .bd{padding:.75rem .85rem .9rem}.fc .m{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--cream)}
+.fc .p{font-size:.86rem;font-weight:700;line-height:1.3;margin:.25rem 0 .5rem;min-height:2.2rem}
+.alt{font-size:.7rem;font-weight:800;color:var(--cream);border:1px dashed rgba(245,236,203,.5);border-radius:100px;padding:.25rem .65rem;display:inline-block;margin-top:.5rem}
+.list{background:var(--surf);border:1px solid var(--line);border-radius:20px;padding:.3rem .9rem}
+.li{display:flex;align-items:center;gap:.7rem;padding:.6rem 0;border-top:1px solid var(--line);font-size:.8rem}.li:first-child{border-top:0}
+.li .e{font-size:1.1rem}.li .n{flex:1}.li .n small{display:block;opacity:.55;font-size:.66rem}.li em{font-style:normal;color:var(--cream);font-weight:800;font-size:.72rem}
+/* ---------- 3. MI DÍA ---------- */
+.today{background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:24px;padding:1rem 1.1rem;box-shadow:0 5px 0 #0A2C7A}
+.today .r{display:flex;justify-content:space-between;align-items:flex-end}
+.today .big{font-family:'Archivo Black';font-weight:400;font-size:2.1rem;line-height:1}.today .big small{font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:700;opacity:.8}
+.today .lbl{font-size:.7rem;font-weight:700;opacity:.8;text-transform:uppercase;letter-spacing:.06em}
+.prog{height:12px;background:rgba(255,255,255,.2);border-radius:12px;margin:.7rem 0 .45rem;overflow:hidden}.prog i{display:block;height:100%;width:48%;background:var(--cream);border-radius:12px}
+.today .f{display:flex;justify-content:space-between;font-size:.7rem;opacity:.85}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;margin-top:.6rem}
+.mini div{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:.6rem .75rem;font-size:.7rem;opacity:.95}.mini b{display:block;font-size:1rem}
+.ck{display:flex;gap:.75rem;align-items:center;background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:.75rem .85rem;margin-bottom:.55rem}
+.ck .box{width:28px;height:28px;border-radius:10px;border:2px solid rgba(245,236,203,.6);display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;color:#0B1B3F}
+.ck.done{opacity:.55}.ck.done .box{background:var(--cream);border-color:var(--cream)}.ck.done .p{text-decoration:line-through}
+.ck .x{flex:1;min-width:0}.ck .h{font-size:.68rem;font-weight:800;color:var(--cream);text-transform:uppercase;letter-spacing:.05em}.ck .p{font-size:.84rem;line-height:1.35;margin-top:.1rem}
+.ck .kc{font-size:.66rem;opacity:.6;margin-top:.2rem}
+.lbl-top{font-family:'Archivo Black';font-size:1rem;color:#fff;text-align:center;margin:0 0 10px;width:100%}
+.col{display:flex;flex-direction:column}
+</style></head><body>
+
+<!-- ======== PROPUESTA 1: ANILLO DEL DÍA ======== -->
+<div class="col"><div class="lbl-top">1 · Anillo del día</div>
+<div class="ph" id="p1">
+  <span class="tag">TU GUÍA</span>
+  <h2>La comida es <span>tu aliada</span></h2>
+  <p class="sub">Comidas ricas para ganar músculo, a tu ritmo.</p>
+  <div class="ring-card up">
+    <div class="ring"><svg width="128" height="128"><circle cx="64" cy="64" r="54" stroke="rgba(255,255,255,.1)" stroke-width="13" fill="none"/><circle cx="64" cy="64" r="54" stroke="#F5ECCB" stroke-width="13" fill="none" stroke-linecap="round" stroke-dasharray="339" stroke-dashoffset="40"/></svg>
+      <div class="c"><b>2,150</b><small>calorías meta</small></div></div>
+    <div class="macros">
+      <div class="mac"><div class="t">Proteína <span>105 g</span></div><div class="bar"><i style="width:80%;background:#F4A3A8"></i></div></div>
+      <div class="mac"><div class="t">Carbohidratos <span>260 g</span></div><div class="bar"><i style="width:95%;background:#F5D57A"></i></div></div>
+      <div class="mac"><div class="t">Grasas <span>70 g</span></div><div class="bar"><i style="width:55%;background:#7CCB6A"></i></div></div>
+    </div>
+  </div>
+  <div class="mant"><span>Mantenimiento <b>1,900</b></span><span>Es una referencia, no una regla 💙</span></div>
+  <div class="sec">Tu semana</div>
+  <div class="week"><div class="wd"><small>LUN</small><b>A</b></div><div class="wd"><small>MAR</small><b>B</b></div><div class="wd on"><small>MIÉ</small><b>C</b></div><div class="wd"><small>JUE</small><b>A</b></div><div class="wd"><small>VIE</small><b>B</b></div><div class="wd"><small>SÁB</small><b>C</b></div><div class="wd"><small>DOM</small><b>🎉</b></div></div>
+  <div class="sec">Miércoles · Menú C</div>
+  <div class="tl">
+    <div class="ml up"><div class="em">🍳</div><div class="x"><div class="h"><span>Desayuno</span><span>8:00 am</span></div><div class="p">Huevos con frijoles, aguacate y 2 tortillas</div><div class="chips"><span class="chip">≈ 550 cal</span><span class="chip b">28 g prot</span></div></div><div class="heart">🤍</div></div>
+    <div class="ml up"><div class="em">🍗</div><div class="x"><div class="h"><span>Almuerzo</span><span>1:00 pm</span></div><div class="p">Pollo a la plancha, arroz y ensalada</div><div class="chips"><span class="chip">≈ 620 cal</span><span class="chip b">35 g prot</span></div></div><div class="heart">❤️</div></div>
+    <div class="ml up"><div class="em">🍌</div><div class="x"><div class="h"><span>Antes de entrenar</span><span>6:30 pm</span></div><div class="p">Avena con banano y crema de maní</div><div class="chips"><span class="chip">≈ 430 cal</span><span class="chip b">15 g prot</span></div></div><div class="heart">🤍</div></div>
+    <div class="ml up"><div class="em">🌮</div><div class="x"><div class="h"><span>Cena</span><span>9:00 pm</span></div><div class="p">Tacos de carne molida con pico de gallo</div><div class="chips"><span class="chip">≈ 550 cal</span><span class="chip b">30 g prot</span></div></div><div class="heart">🤍</div></div>
+  </div>
+</div></div>
+
+<!-- ======== PROPUESTA 2: TARJETAS ======== -->
+<div class="col"><div class="lbl-top">2 · Tarjetas de comida</div>
+<div class="ph" id="p2">
+  <span class="tag">TU GUÍA</span>
+  <h2>Come rico, <span>sin culpa</span></h2>
+  <p class="sub">Tu energía del día y tus comidas, en un vistazo.</p>
+  <div class="stats up">
+    <div class="st"><div class="i">🔥</div><b>2,150</b><small>calorías meta</small></div>
+    <div class="st bl"><div class="i">💪</div><b>105 g</b><small>proteína</small></div>
+    <div class="st"><div class="i">💧</div><b>8</b><small>vasos de agua</small></div>
+  </div>
+  <div class="note">Tu cuerpo usa unas 1,900 al día · Es una guía, no una regla</div>
+  <div class="sec">Hoy · Menú C</div>
+  <div class="tabs"><div class="tab">Menú A</div><div class="tab">Menú B</div><div class="tab on">Menú C</div><div class="tab">Domingo</div></div>
+  <div style="height:.8rem"></div>
+  <div class="cards">
+    <div class="fc up"><div class="img" style="background:linear-gradient(135deg,#F5ECCB,#F5D57A)"><span class="hr">8:00 am</span><div class="heart">🤍</div>🍳</div><div class="bd"><div class="m">Desayuno</div><div class="p">Huevos con frijoles, aguacate y 2 tortillas</div><div class="chips"><span class="chip">≈ 550 cal</span><span class="chip b">28 g prot</span></div><span class="alt">🔄 Otra opción</span></div></div>
+    <div class="fc up"><div class="img" style="background:linear-gradient(135deg,#F4A3A8,#F5ECCB)"><span class="hr">1:00 pm</span><div class="heart">❤️</div>🍗</div><div class="bd"><div class="m">Almuerzo</div><div class="p">Pollo a la plancha, arroz y ensalada</div><div class="chips"><span class="chip">≈ 620 cal</span><span class="chip b">35 g prot</span></div><span class="alt">🔄 Otra opción</span></div></div>
+  </div>
+  <div class="sec">Tu súper · Super Selectos</div>
+  <div class="list">
+    <div class="li"><span class="e">🥚</span><span class="n">Huevos<small>Cartón de 30</small></span><em>1 cartón</em></div>
+    <div class="li"><span class="e">🍗</span><span class="n">Pechuga de pollo<small>Sin piel</small></span><em>3 lb</em></div>
+    <div class="li"><span class="e">🍚</span><span class="n">Arroz</span><em>2 lb</em></div>
+    <div class="li"><span class="e">🥑</span><span class="n">Aguacate</span><em>4</em></div>
+  </div>
+</div></div>
+
+<!-- ======== PROPUESTA 3: MI DÍA (palomitas) ======== -->
+<div class="col"><div class="lbl-top">3 · Mi día (para ir marcando)</div>
+<div class="ph" id="p3">
+  <span class="tag">TU GUÍA</span>
+  <h2>Disfruta <span>y crece</span></h2>
+  <p class="sub">Marca cada comida y mira cómo avanzas hacia tu meta.</p>
+  <div class="today up">
+    <div class="r"><div><div class="lbl">Hoy llevas</div><div class="big">1,170 <small>/ 2,150 cal</small></div></div><div style="font-size:2rem">💪</div></div>
+    <div class="prog"><i></i></div>
+    <div class="f"><span>2 de 4 comidas</span><span>Mantenimiento: 1,900</span></div>
+  </div>
+  <div class="mini"><div>Proteína<b>63 / 105 g</b></div><div>Agua<b>💧 4 / 8 vasos</b></div></div>
+  <div class="sec">Miércoles · Menú C</div>
+  <div class="ck done up"><div class="box">✓</div><div class="x"><div class="h">Desayuno · 8:00 am</div><div class="p">Huevos con frijoles, aguacate y 2 tortillas</div><div class="kc">≈ 550 cal · 28 g proteína</div></div><div class="heart">🤍</div></div>
+  <div class="ck done up"><div class="box">✓</div><div class="x"><div class="h">Almuerzo · 1:00 pm</div><div class="p">Pollo a la plancha, arroz y ensalada</div><div class="kc">≈ 620 cal · 35 g proteína</div></div><div class="heart">❤️</div></div>
+  <div class="ck up"><div class="box"></div><div class="x"><div class="h">Antes de entrenar · 6:30 pm</div><div class="p">Avena con banano y crema de maní</div><div class="kc">≈ 430 cal · 15 g proteína</div></div><div class="heart">🤍</div></div>
+  <div class="ck up"><div class="box"></div><div class="x"><div class="h">Cena · 9:00 pm</div><div class="p">Tacos de carne molida con pico de gallo</div><div class="kc">≈ 550 cal · 30 g proteína</div></div><div class="heart">🤍</div></div>
+</div></div>
+</body></html>
