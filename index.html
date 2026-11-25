@@ -144,6 +144,84 @@
   .ex-timer-btn { border:none; border-radius:10px; padding:0.5rem; font-size:0.72rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; background:var(--blue); color:#fff; }
   .ex-timer-btn.running { background:#c44; }
 
+  /* ── Rutina: fila de ejercicio (miniatura + nombre + estado) ── */
+  .rt-ex-row { display:flex; align-items:center; gap:0.75rem; width:100%; background:none; border:none; padding:0; cursor:pointer; text-align:left; font:inherit; color:inherit; -webkit-tap-highlight-color:transparent; }
+  .rt-ex-thumb { width:2.9rem; height:2.9rem; border-radius:12px; flex-shrink:0; background:linear-gradient(180deg, rgba(15,63,168,0.2), rgba(7,11,26,0.7)), var(--blue); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .rt-ex-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+  .rt-ex-thumb svg { width:13px; height:13px; }
+  .rt-ex-t { flex:1; min-width:0; }
+  .rt-ex-state { width:1.6rem; height:1.6rem; border-radius:50%; border:2px solid var(--border); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .rt-ex-state.done { background:#34C77B; border-color:#34C77B; animation:faCelPop 0.35s; }
+  .rt-ex-state svg { width:12px; height:12px; stroke:#06261a; stroke-width:3; fill:none; }
+
+  /* ── Sesión de ejercicio: video arriba, cronómetro chico, series ── */
+  .exs-header { display:flex; align-items:center; justify-content:space-between; padding:0.8rem 1rem; flex-shrink:0; }
+  .exs-close { background:var(--surface); border:1px solid var(--border); color:var(--text); font-size:0.78rem; font-weight:700; font-family:'DM Sans',sans-serif; padding:0.4rem 0.8rem; border-radius:100px; cursor:pointer; display:flex; align-items:center; gap:0.3rem; }
+  .exs-title { color:var(--text); font-size:0.78rem; font-weight:700; text-align:center; flex:1; padding:0 0.5rem; }
+  .exs-title small { display:block; font-weight:400; opacity:0.6; font-size:0.65rem; margin-top:0.1rem; }
+  .exs-body { flex:1; overflow-y:auto; padding:0 1rem 1.5rem; }
+  .exs-ex-title { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; font-size:1.3rem; line-height:1.05; color:var(--text); margin:0.2rem 0 0.7rem; }
+  .exs-video { position:relative; aspect-ratio:16/9; border-radius:18px; overflow:hidden; background:#000; margin-bottom:0.7rem; }
+  .exs-video iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
+  .exs-nota-card { background:var(--surface); border:1px solid rgba(245,236,203,0.25); border-radius:14px; padding:0.7rem 0.9rem; color:var(--text); font-size:0.78rem; line-height:1.5; white-space:pre-line; margin-bottom:0.7rem; }
+  .exs-chips { display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.7rem; }
+  .exs-chip { font-size:0.68rem; font-weight:700; padding:0.3rem 0.65rem; border-radius:100px; background:var(--surface); border:1px solid var(--border); color:var(--muted); }
+  .exs-chip.cream { background:var(--cream); border-color:var(--cream); color:#0D1B3E; }
+  .exs-chip.note { cursor:pointer; }
+  .exs-timer-row { display:flex; align-items:center; gap:0.8rem; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:0.6rem 0.75rem; margin-bottom:0.9rem; }
+  .exs-timer-ring-wrap { position:relative; width:52px; height:52px; flex-shrink:0; }
+  .exs-timer-ring-wrap svg { width:52px; height:52px; transform:rotate(-90deg); }
+  .exs-timer-ring-bg { fill:none; stroke:var(--border); stroke-width:4; }
+  .exs-timer-num { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:800; color:var(--text); }
+  .exs-timer-label { flex:1; color:var(--muted); font-size:0.64rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; }
+  .exs-timer-btn { border:none; border-radius:100px; padding:0.55rem 0.95rem; font-size:0.75rem; font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer; background:var(--blue); color:#fff; flex-shrink:0; box-shadow:0 3px 0 var(--blue-dk); }
+  .exs-timer-btn.running { background:#c44; box-shadow:0 3px 0 #8a2e2e; }
+  .exs-sets { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:0.4rem 0.8rem 0.6rem; }
+  .exs-sets-h, .exs-set { display:grid; grid-template-columns:1.7rem 1fr 1fr 2.3rem; gap:0.5rem; align-items:center; }
+  .exs-sets-h { font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); font-weight:700; padding:0.4rem 0 0.15rem; }
+  .exs-set { padding:0.3rem 0; }
+  .exs-set .n { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; color:var(--cream); font-size:0.9rem; }
+  .exs-set input { width:100%; min-width:0; background:var(--surface-2); border:1px solid var(--border); border-radius:10px; color:var(--text); font:700 0.92rem 'DM Sans',sans-serif; text-align:center; padding:0.5rem 0.2rem; }
+  .exs-set input:focus { outline:2px solid var(--blue); outline-offset:1px; }
+  .exs-set.done input { background:rgba(52,199,123,0.12); border-color:rgba(52,199,123,0.4); color:#8EF0BF; }
+  .exs-chk { width:2.1rem; height:2.1rem; border-radius:10px; border:2px solid var(--border); background:var(--surface-2); cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+  .exs-chk svg { width:14px; height:14px; stroke:transparent; stroke-width:3; fill:none; }
+  .exs-set.done .exs-chk { background:#34C77B; border-color:#34C77B; animation:faCelPop 0.35s; }
+  .exs-set.done .exs-chk svg { stroke:#06261a; }
+  .exs-last { font-size:0.72rem; color:var(--muted); margin:0.7rem 0.1rem 0; display:flex; gap:0.3rem; align-items:center; }
+  .exs-last b { color:var(--cream); }
+
+  /* ── Modo entreno guiado ── */
+  .rtt-bar-top { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.8rem; }
+  .rtt-clock { font-size:0.72rem; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .rtt-progress { height:0.5rem; border-radius:0.5rem; background:var(--surface); overflow:hidden; margin-bottom:0.8rem; }
+  .rtt-progress i { display:block; height:100%; background:linear-gradient(90deg,var(--blue),var(--blue-lt2,#8FB0FF)); border-radius:0.5rem; transition:width 0.5s cubic-bezier(0.2,0.8,0.2,1); }
+  .rtt-step { font-size:0.72rem; color:var(--muted); font-weight:700; margin-bottom:0.2rem; }
+  .rtt-dots { display:flex; gap:0.4rem; justify-content:center; margin:0.8rem 0; }
+  .rtt-dots i { width:1.7rem; height:0.4rem; border-radius:0.4rem; background:var(--surface); display:block; }
+  .rtt-dots i.on { background:#34C77B; }
+  .rtt-dots i.cur { background:var(--cream); }
+  .rtt-big { display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin-bottom:0.8rem; }
+  .rtt-stepper { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:0.6rem 0.5rem 0.7rem; text-align:center; }
+  .rtt-stepper small { display:block; font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); font-weight:700; }
+  .rtt-stepper .row { display:flex; align-items:center; justify-content:space-between; gap:0.3rem; margin-top:0.3rem; }
+  .rtt-stepper button { width:2.1rem; height:2.1rem; border-radius:10px; border:1px solid var(--border); background:var(--surface-2); color:var(--text); font:700 1.1rem 'DM Sans',sans-serif; cursor:pointer; }
+  .rtt-stepper .v { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; font-size:1.6rem; font-variant-numeric:tabular-nums; }
+  .rtt-rest { position:absolute; inset:0; background:radial-gradient(120% 80% at 50% 0%, rgba(28,85,229,0.55), rgba(7,11,26,0.97) 65%), var(--night); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.7rem; padding:1.5rem; z-index:5; text-align:center; }
+  .rtt-rest[hidden] { display:none; }
+  .rtt-rest .ring { width:11.5rem; height:11.5rem; position:relative; }
+  .rtt-rest .ring svg { width:100%; height:100%; transform:rotate(-90deg); }
+  .rtt-rest .ring circle { fill:none; stroke-width:4; }
+  .rtt-rest .ring .bg { stroke:rgba(255,255,255,0.15); }
+  .rtt-rest .ring .fg { stroke:var(--cream); stroke-linecap:round; transition:stroke-dashoffset 1s linear; }
+  .rtt-rest-t { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; font-size:2.6rem; color:#fff; font-variant-numeric:tabular-nums; }
+  .rtt-rest h3 { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; margin:0; font-size:1.3rem; color:#fff; }
+  .rtt-rest p { margin:0; color:rgba(255,255,255,0.75); font-size:0.85rem; }
+  .rtt-rest .row { display:flex; gap:0.6rem; }
+  .rtt-done-scr { display:flex; flex-direction:column; align-items:center; text-align:center; gap:0.7rem; padding-top:3.2rem; }
+  .rtt-done-scr .medal { font-size:3.6rem; animation:faCelPop 0.5s; }
+  .rtt-done-scr h2 { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; font-size:1.6rem; line-height:1; margin:0; color:var(--text); }
+
   /* ── RUTINA: mensaje + días desplegables ── */
   .rt-msg-card { background:var(--grad); border:1.5px solid var(--border); border-radius:16px; padding:1.15rem 1.25rem; margin-bottom:1.1rem; position:relative; overflow:hidden; }
   .rt-msg-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.18em; color:var(--blue); font-weight:700; margin-bottom:0.5rem; }
@@ -806,10 +884,9 @@
   body.portal-dark .rt-day-summary { transition:background 0.25s ease; }
   /* Ventanas: las de abajo suben como hoja; las de pantalla completa entran desde el lado */
   body.portal-dark #ficha-modal, body.portal-dark #ex-progress-modal, body.portal-dark #transf-caption-modal,
-  body.portal-dark #video-modal, body.portal-dark #ex-timer-modal { animation:faFade 0.25s ease; }
+  body.portal-dark #ex-session-modal, body.portal-dark #rt-train-modal { animation:faFade 0.25s ease; }
   body.portal-dark #ficha-modal > div, body.portal-dark #ex-progress-modal > div,
   body.portal-dark #transf-caption-modal > div { animation:faSheetUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
-  body.portal-dark #video-modal > div, body.portal-dark #ex-timer-modal > div { animation:faUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
   body.portal-dark #chat-modal, body.portal-dark #benef-category-modal, body.portal-dark #benef-profile-modal { animation:faSlideIn 0.34s cubic-bezier(0.2, 0.8, 0.2, 1); }
   @media (prefers-reduced-motion: reduce) {
     body.portal-dark *, body.portal-dark *::before { animation:none !important; transition:none !important; }
@@ -1907,21 +1984,70 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
   </div>
 </div>
 
-<!-- ══════════ MODAL VIDEO DE TÉCNICA ══════════ -->
-<div id="video-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center;padding:1rem;overflow-y:auto;">
-  <div style="width:100%;max-width:520px;">
-    <div style="display:flex;justify-content:flex-end;margin-bottom:0.5rem;">
-      <button onclick="hideVideoModal()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1rem;width:2.2rem;height:2.2rem;border-radius:50%;cursor:pointer;">✕</button>
+<!-- ══════════ SESIÓN DE EJERCICIO: video + cronómetro + series ══════════ -->
+<div id="ex-session-modal" style="display:none;position:fixed;inset:0;background:var(--night);z-index:9999;flex-direction:column;">
+  <div class="exs-header">
+    <button class="exs-close" onclick="closeExSession()">‹ Volver</button>
+    <div class="exs-title" id="exs-blk-pill"></div>
+    <div style="width:4.4rem;flex-shrink:0;"></div>
+  </div>
+  <div class="exs-body">
+    <div class="exs-ex-title" id="exs-ex-title"></div>
+    <div id="exs-video"></div>
+    <div class="exs-chips">
+      <span class="exs-chip cream" id="exs-goal"></span>
+      <button type="button" class="exs-chip note" id="exs-note-btn" onclick="exsToggleNota()" style="display:none;">📝 Nota de Frida</button>
     </div>
-    <div id="video-modal-frame-wrap" style="position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;background:#000;">
-      <iframe id="video-modal-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="exs-nota-card" id="exs-nota-card" style="display:none;"></div>
+    <div class="exs-timer-row">
+      <div class="exs-timer-ring-wrap">
+        <svg viewBox="0 0 64 64"><circle class="exs-timer-ring-bg" cx="32" cy="32" r="28"/><circle class="ex-timer-ring-progress" id="exs-ring" cx="32" cy="32" r="28" stroke-width="4"/></svg>
+        <div class="exs-timer-num" id="exs-num">0:00</div>
+      </div>
+      <div class="exs-timer-label" id="exs-timer-label">Descanso</div>
+      <button type="button" class="exs-timer-btn" id="exs-playbtn" onclick="exsPlayPause()">▶ Empezar</button>
     </div>
-    <div id="video-modal-rest-row" style="display:none;margin-top:0.85rem;">
-      <button type="button" onclick="startVideoModalRest()" style="width:100%;background:linear-gradient(135deg,#FFC94A,#F3932B);color:#fff;border:none;border-radius:12px;padding:0.8rem;font-weight:700;font-size:0.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.4rem;box-shadow:0 6px 18px rgba(243,147,43,0.4);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Descanso</button>
+    <div class="exs-sets" id="exs-sets"></div>
+    <div class="exs-last" id="exs-last" style="display:none;">↗ La vez pasada: <b id="exs-last-val"></b></div>
+  </div>
+</div>
+
+<!-- ══════════ MODO ENTRENO GUIADO ══════════ -->
+<div id="rt-train-modal" style="display:none;position:fixed;inset:0;background:var(--night);z-index:9999;flex-direction:column;">
+  <div id="rtt-train-view" class="exs-body" style="padding-top:0.8rem;position:relative;">
+    <div class="rtt-bar-top">
+      <button class="exs-close" onclick="rttExit()">✕ Salir</button>
+      <div class="rtt-clock" id="rtt-clock">00:00</div>
     </div>
-    <div id="video-modal-nota" style="display:none;margin-top:0.85rem;background:rgba(255,255,255,0.1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.18);border-radius:16px;padding:1.1rem 1.2rem;box-shadow:0 0 0 1px rgba(255,255,255,0.06), 0 10px 30px rgba(0,0,0,0.35), 0 0 24px rgba(255,255,255,0.1);">
-      <div style="display:flex;align-items:center;gap:0.45rem;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.15em;color:#8FB3FF;font-weight:700;margin-bottom:0.6rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7v.5h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/></svg>Tip técnico</div>
-      <div id="video-modal-nota-text" style="color:rgba(255,255,255,0.92);font-size:0.85rem;line-height:1.6;white-space:pre-line;"></div>
+    <div class="rtt-progress"><i id="rtt-bar" style="width:0%"></i></div>
+    <div class="rtt-step" id="rtt-step"></div>
+    <div class="exs-ex-title" id="rtt-ex-title"></div>
+    <div id="rtt-video"></div>
+    <div class="rtt-dots" id="rtt-dots"></div>
+    <div class="rtt-big">
+      <div class="rtt-stepper"><small id="rtt-unit">Reps hechas</small><div class="row"><button type="button" onclick="rttStep('reps',-1)">−</button><span class="v" id="rtt-reps">0</span><button type="button" onclick="rttStep('reps',1)">+</button></div></div>
+      <div class="rtt-stepper"><small>Carga (lbs)</small><div class="row"><button type="button" onclick="rttStep('carga',-5)">−</button><span class="v" id="rtt-carga">0</span><button type="button" onclick="rttStep('carga',5)">+</button></div></div>
+    </div>
+    <button type="button" class="exs-timer-btn" style="width:100%;padding:0.9rem;font-size:0.88rem;" id="rtt-done-btn" onclick="rttDoneSet()">✓ Serie hecha</button>
+    <div class="exs-last" id="rtt-last" style="display:none;justify-content:center;">↗ La vez pasada: <b id="rtt-last-val"></b></div>
+
+    <div class="rtt-rest" id="rtt-rest" hidden>
+      <h3>Descansa</h3>
+      <div class="ring">
+        <svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="27"/><circle class="fg" id="rtt-rest-ring" cx="32" cy="32" r="27"/></svg>
+        <div class="rtt-rest-t" id="rtt-rest-t">0:00</div>
+      </div>
+      <p id="rtt-rest-next"></p>
+      <div class="row"><button class="exs-close" type="button" onclick="rttRestPlus()">+15 s</button><button class="exs-timer-btn" type="button" onclick="rttRestSkip()">Saltar</button></div>
+    </div>
+  </div>
+  <div id="rtt-end-view" class="exs-body" style="display:none;">
+    <div class="rtt-done-scr">
+      <span class="in-hero-tag">¡HOY CUENTA!</span>
+      <div class="medal">🏆</div>
+      <h2>Entreno<br>completado</h2>
+      <p style="color:var(--muted);margin:0;font-size:0.85rem;">Tu día quedó marcado como entrenado. <b id="rtt-end-time" style="color:var(--cream)"></b></p>
+      <button type="button" class="exs-timer-btn" style="width:100%;padding:0.9rem;font-size:0.88rem;margin-top:0.5rem;" onclick="rttExit()">Volver a mi rutina</button>
     </div>
   </div>
 </div>
@@ -2001,25 +2127,6 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
     <div id="ficha-save-wrap" style="margin-top:0.5rem;">
       <button class="pf-edit-btn" style="background:var(--blue);color:#fff;" onclick="saveFicha()">Guardar cambios</button>
     </div>
-  </div>
-</div>
-
-<!-- ══════════ CRONÓMETRO (aparte del video) ══════════ -->
-<div id="ex-timer-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9999;align-items:center;justify-content:center;padding:1rem;">
-  <div style="width:100%;max-width:340px;text-align:center;">
-    <div style="display:flex;justify-content:flex-end;margin-bottom:0.5rem;">
-      <button onclick="closeExTimerModal()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1rem;width:2.2rem;height:2.2rem;border-radius:50%;cursor:pointer;">✕</button>
-    </div>
-    <div id="etm-ex-name" style="color:#fff;font-size:0.95rem;font-weight:700;margin-bottom:1.75rem;"></div>
-    <div style="position:relative;width:220px;height:220px;margin:0 auto;">
-      <svg viewBox="0 0 64 64" style="width:220px;height:220px;transform:rotate(-90deg);">
-        <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="3.5"/>
-        <circle class="ex-timer-ring-progress" id="etm-ring" cx="32" cy="32" r="28" stroke-width="3.5"/>
-      </svg>
-      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3.2rem;font-weight:800;color:#fff;" id="etm-num"></div>
-    </div>
-    <div style="color:rgba(255,255,255,0.65);font-size:0.8rem;margin-top:1.1rem;" id="etm-sub"></div>
-    <button type="button" class="ex-timer-btn" id="etm-btn" onclick="startStopEtmTimer()" style="margin-top:1.5rem;width:100%;padding:0.9rem;font-size:0.9rem;">Iniciar</button>
   </div>
 </div>
 
@@ -3770,86 +3877,9 @@ function closeExProgressModal() {
   document.getElementById('ex-progress-modal').style.display = 'none';
 }
 
-// ── Cronómetro circular para ejercicios por tiempo (plancha, etc.) ──
-// Siempre abre su propia ventana aparte (ex-timer-modal) — separado del
-// video, para no competir visualmente con él ni esconderse encima suyo.
-var EX_TIMERS = {};
-var EX_TIMER_RING_CIRC = 175.93; // 2 * PI * 28
-var etmTimerDayId = null;
-var etmTimerExId = null;
+var EX_TIMER_RING_CIRC = 175.93; // 2 * PI * 28, usado por los aros de cronómetro de la sesión de ejercicio y el modo entreno
 
 function exTimerKeyOf(dayId, exId) { return dayId + '__' + exId; }
-
-function openExTimerModal(dayId, exId, totalSecs, exName, subLabel) {
-  etmTimerDayId = dayId;
-  etmTimerExId = exId;
-  var key = exTimerKeyOf(dayId, exId);
-  if (!EX_TIMERS[key]) EX_TIMERS[key] = { remaining: totalSecs, total: totalSecs, running: false, interval: null };
-  document.getElementById('etm-ex-name').textContent = exName || '';
-  document.getElementById('etm-sub').textContent = subLabel || (totalSecs + ' seg de meta');
-  renderEtmTimerUI();
-  document.getElementById('ex-timer-modal').style.display = 'flex';
-}
-
-// Cronómetro de descanso: mismo modal que el de tiempo de trabajo, pero
-// con una clave aparte (exId + '-rest') para no pisar el timer del
-// ejercicio cuando es de tipo "tiempo" — y disponible para CUALQUIER
-// ejercicio, sea por reps o por tiempo, que es lo que de verdad hace
-// falta cuando se entrena por repeticiones. onDone (opcional) corre al
-// llegar a 0 — lo usa el botón de descanso del modal del video para
-// cerrarse solo y retomar la reproducción.
-function openExRestTimer(dayId, exId, restSecs, exName, onDone) {
-  var restExId = exId + '-rest';
-  openExTimerModal(dayId, restExId, restSecs, 'Descanso', restSecs + ' seg · ' + (exName || ''));
-  EX_TIMERS[exTimerKeyOf(dayId, restExId)].onDone = onDone || null;
-  startStopEtmTimer();
-}
-
-function closeExTimerModal() {
-  document.getElementById('ex-timer-modal').style.display = 'none';
-}
-
-function startStopEtmTimer() {
-  if (!etmTimerDayId || !etmTimerExId) return;
-  var key = exTimerKeyOf(etmTimerDayId, etmTimerExId);
-  var t = EX_TIMERS[key];
-  startStopExTimer(etmTimerDayId, etmTimerExId, t ? t.total : 0);
-}
-
-function startStopExTimer(dayId, exId, totalSecs) {
-  var key = exTimerKeyOf(dayId, exId);
-  if (!EX_TIMERS[key]) EX_TIMERS[key] = { remaining: totalSecs, total: totalSecs, running: false, interval: null };
-  var t = EX_TIMERS[key];
-  if (t.running) {
-    t.running = false;
-    clearInterval(t.interval);
-    t.interval = null;
-    fillExTimerInput(dayId, exId, t.total - t.remaining);
-  } else {
-    if (t.remaining <= 0) t.remaining = t.total;
-    t.running = true;
-    t.interval = setInterval(function() {
-      t.remaining--;
-      if (t.remaining <= 0) {
-        t.remaining = 0;
-        t.running = false;
-        clearInterval(t.interval);
-        t.interval = null;
-        fillExTimerInput(dayId, exId, t.total);
-        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-        playExTimerBeep();
-        if (t.onDone) { var cb = t.onDone; t.onDone = null; cb(); }
-      }
-      renderExTimerUI(key);
-    }, 1000);
-  }
-  renderExTimerUI(key);
-}
-
-function fillExTimerInput(dayId, exId, secs) {
-  var input = document.getElementById('segundos-input-' + exTimerKeyOf(dayId, exId));
-  if (input) input.value = secs;
-}
 
 function playExTimerBeep() {
   try {
@@ -3864,72 +3894,337 @@ function playExTimerBeep() {
   } catch (e) {}
 }
 
-function renderExTimerUI(key) {
-  var t = EX_TIMERS[key];
-  if (!t) return;
-  if (etmTimerDayId && exTimerKeyOf(etmTimerDayId, etmTimerExId) === key) {
-    renderEtmTimerUI();
+// ══════════ SESIÓN DE EJERCICIO: video + cronómetro + series ══════════
+// Al tocar un ejercicio se abre esta pantalla: el video (técnica) ocupa
+// el lugar donde el sistema "Coach Seba" (del novio de Frida) pone el
+// cronómetro grande — acá el cronómetro va chico, abajo del video — y
+// se registra serie por serie (S1, S2, S3...). Al salir, las series se
+// juntan en los mismos campos de siempre (data-ex/data-field), así que
+// guardarSesion() y el historial funcionan exactamente igual que antes.
+// Lo que ya se registró en esta visita pero todavía no se guardó (el botón
+// "Guardar sesión de este día" sigue siendo el único que lo manda a
+// Firebase) — sin esto, volver a dibujar la lista después de cerrar la
+// sesión de un ejercicio o el modo entreno borraba lo recién registrado.
+var RT_PENDING = {};
+function rtPendingKey(dayId, exId) { return dayId + '__' + exId; }
+
+var EXS = null;
+function exsSeriesCount(ex) {
+  var m = String(ex.series || '').match(/\d+/);
+  var n = m ? parseInt(m[0], 10) : 3;
+  return Math.max(1, Math.min(10, n || 3));
+}
+
+// ¿Quedaron registradas todas las series de todos los ejercicios del día?
+// (ejercicios viene de lo que guardarSesion acaba de juntar de los inputs).
+function dayFullyLogged(day, ejercicios) {
+  return (day.blocks || []).every(function(block) {
+    return (block.exercises || []).every(function(ex) {
+      var rec = ejercicios[ex.id];
+      if (!rec) return false;
+      var tipo = exTipo(block, ex);
+      var val = tipo === 'tiempo' ? rec.segundos : rec.reps;
+      if (!val) return false;
+      var partes = String(val).split('·').filter(function(s) { return s !== ''; });
+      return partes.length >= exsSeriesCount(ex);
+    });
+  });
+}
+function findExAndBlock(dayId, exId) {
+  var day = currentRutinaData.days.find(function(d) { return d.id === dayId; });
+  if (!day) return null;
+  var block = null, ex = null;
+  (day.blocks || []).forEach(function(b) { (b.exercises || []).forEach(function(e) { if (e.id === exId) { block = b; ex = e; } }); });
+  if (!ex) return null;
+  return { day: day, block: block, ex: ex };
+}
+function exGoalTxt(block, ex) {
+  var tipo = exTipo(block, ex);
+  var n = exsSeriesCount(ex);
+  return n + ' series · ' + (tipo === 'tiempo' ? exSegundos(block, ex) + ' s' : appendUnitIfMissing(ex.reps || '', 'reps'));
+}
+function exLastTxt(dayId, exId) {
+  var log = findLastExerciseLog(dayId, exId);
+  if (!log || (!log.carga && !log.reps)) return null;
+  var primerRep = log.reps ? String(log.reps).split(/[·,]/)[0].trim() : '';
+  return (log.carga ? log.carga + ' lbs' : '') + (log.carga && primerRep ? ' × ' : '') + primerRep;
+}
+// Lo que ya se registró ahora (sin guardar todavía) tiene prioridad sobre
+// lo último guardado — para que no se "olvide" al reabrir la pantalla.
+function exPendingOrLog(dayId, exId, field) {
+  var pending = RT_PENDING[rtPendingKey(dayId, exId)];
+  if (pending && pending[field] != null && pending[field] !== '') return pending[field];
+  var log = findLastExerciseLog(dayId, exId);
+  return (log && log[field]) ? log[field] : '';
+}
+
+function openExSession(dayId, exId) {
+  var found = findExAndBlock(dayId, exId);
+  if (!found) return;
+  var day = found.day, block = found.block, ex = found.ex;
+  var tipo = exTipo(block, ex);
+  var bankItem = findExerciseBankItem(ex.name);
+  var seriesCount = exsSeriesCount(ex);
+  var prevRepsStr = exPendingOrLog(dayId, exId, tipo === 'tiempo' ? 'segundos' : 'reps');
+  var prevReps = prevRepsStr ? String(prevRepsStr).split(/[·,]/).map(function(s) { return s.trim(); }) : [];
+  var restSecs = block.restSecs || 40;
+
+  EXS = {
+    dayId: dayId, exId: exId, block: block, ex: ex, tipo: tipo,
+    seriesCount: seriesCount, done: new Array(seriesCount).fill(false),
+    restSecs: restSecs, timerSecs: restSecs, timerRunning: false, timerInterval: null
+  };
+
+  document.getElementById('exs-blk-pill').textContent = block.name || '';
+  document.getElementById('exs-ex-title').textContent = ex.name;
+  document.getElementById('exs-goal').textContent = exGoalTxt(block, ex);
+
+  var videoUrl = bankItem && bankItem.video;
+  var nota = bankItem && bankItem.descripcion;
+  var videoEl = document.getElementById('exs-video');
+  videoEl.innerHTML = videoUrl
+    ? '<div class="exs-video"><iframe src="' + getYouTubeEmbedUrl(videoUrl) + '" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>'
+    : '';
+  var noteBtn = document.getElementById('exs-note-btn');
+  var notaCard = document.getElementById('exs-nota-card');
+  if (nota) {
+    noteBtn.style.display = '';
+    notaCard.style.display = 'none';
+    notaCard.textContent = nota;
+  } else {
+    noteBtn.style.display = 'none';
+    notaCard.style.display = 'none';
   }
+
+  var lastTxt = exLastTxt(dayId, exId);
+  document.getElementById('exs-last').style.display = lastTxt ? '' : 'none';
+  if (lastTxt) document.getElementById('exs-last-val').textContent = lastTxt;
+
+  exsRenderSets(prevReps);
+  exsRenderTimer();
+  document.getElementById('ex-session-modal').style.display = 'flex';
 }
 
-function applyExTimerDom(t, numId, ringId, circumference, btnId) {
-  var numEl = document.getElementById(numId);
-  var ringEl = document.getElementById(ringId);
-  var btnEl = btnId ? document.getElementById(btnId) : null;
-  if (numEl) numEl.textContent = t.remaining;
-  if (ringEl) {
-    var pct = t.total > 0 ? t.remaining / t.total : 0;
-    ringEl.style.strokeDashoffset = circumference * (1 - pct);
-    ringEl.classList.toggle('done', t.remaining === 0);
+function exsToggleNota() {
+  var el = document.getElementById('exs-nota-card');
+  el.style.display = el.style.display === 'none' ? '' : 'none';
+}
+
+function exsRenderSets(prevReps) {
+  var tipo = EXS.tipo;
+  var html = '<div class="exs-sets-h"><span></span><span>' + (tipo === 'tiempo' ? 'Segundos' : 'Reps') + '</span><span>Lbs</span><span></span></div>';
+  for (var k = 0; k < EXS.seriesCount; k++) {
+    html += '<div class="exs-set' + (EXS.done[k] ? ' done' : '') + '" data-k="' + k + '">'
+      + '<span class="n">S' + (k + 1) + '</span>'
+      + '<input type="text" inputmode="numeric" id="exs-reps-' + k + '" value="' + escapeHtml(prevReps[k] || '') + '" placeholder="' + (tipo === 'tiempo' ? exSegundos(EXS.block, EXS.ex) : (parseInt(EXS.ex.reps, 10) || '0')) + '">'
+      + '<input type="text" inputmode="decimal" id="exs-carga-' + k + '" placeholder="—">'
+      + '<button type="button" class="exs-chk" onclick="exsToggleSet(' + k + ')"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></button>'
+      + '</div>';
   }
-  if (btnEl) {
-    btnEl.classList.toggle('running', t.running);
-    btnEl.textContent = t.running ? 'Pausar' : (t.remaining === 0 ? 'Reiniciar' : (t.remaining < t.total ? 'Reanudar' : 'Iniciar'));
+  document.getElementById('exs-sets').innerHTML = html;
+}
+
+function exsToggleSet(k) {
+  EXS.done[k] = !EXS.done[k];
+  var row = document.querySelector('#exs-sets .exs-set[data-k="' + k + '"]');
+  if (row) row.classList.toggle('done', EXS.done[k]);
+  if (EXS.done[k]) { exsStopTimer(); exsPlayPause(); }
+}
+
+function exsRenderTimer() {
+  var numEl = document.getElementById('exs-num'), ringEl = document.getElementById('exs-ring'), btnEl = document.getElementById('exs-playbtn');
+  numEl.textContent = fmtMinSec(EXS.timerSecs);
+  var pct = EXS.restSecs > 0 ? EXS.timerSecs / EXS.restSecs : 0;
+  ringEl.style.strokeDashoffset = EX_TIMER_RING_CIRC * (1 - pct);
+  ringEl.classList.toggle('done', EXS.timerSecs === 0);
+  btnEl.classList.toggle('running', EXS.timerRunning);
+  btnEl.textContent = EXS.timerRunning ? '❚❚ Parar' : '▶ Empezar';
+}
+
+function fmtMinSec(s) { return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+
+function exsPlayPause() {
+  if (EXS.timerRunning) { exsStopTimer(); return; }
+  EXS.timerSecs = EXS.restSecs;
+  EXS.timerRunning = true;
+  EXS.timerInterval = setInterval(function() {
+    EXS.timerSecs--;
+    if (EXS.timerSecs <= 0) {
+      EXS.timerSecs = 0;
+      exsStopTimer();
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      playExTimerBeep();
+    }
+    exsRenderTimer();
+  }, 1000);
+  exsRenderTimer();
+}
+
+function exsStopTimer() {
+  EXS.timerRunning = false;
+  if (EXS.timerInterval) clearInterval(EXS.timerInterval);
+  EXS.timerInterval = null;
+}
+
+function closeExSession() {
+  if (!EXS) { document.getElementById('ex-session-modal').style.display = 'none'; return; }
+  exsStopTimer();
+  var repsVals = [], cargaVals = [];
+  for (var k = 0; k < EXS.seriesCount; k++) {
+    var r = (document.getElementById('exs-reps-' + k) || {}).value;
+    var c = (document.getElementById('exs-carga-' + k) || {}).value;
+    if (r) repsVals.push(r);
+    if (c) cargaVals.push(c);
   }
+  var pending = RT_PENDING[rtPendingKey(EXS.dayId, EXS.exId)] || {};
+  if (EXS.tipo === 'tiempo') {
+    if (repsVals.length) pending.segundos = repsVals[repsVals.length - 1];
+  } else {
+    if (repsVals.length) pending.reps = repsVals.join('·');
+  }
+  if (cargaVals.length) pending.carga = cargaVals[cargaVals.length - 1];
+  RT_PENDING[rtPendingKey(EXS.dayId, EXS.exId)] = pending;
+  EXS = null;
+  document.getElementById('ex-session-modal').style.display = 'none';
+  renderRutinaTab();
 }
 
-function renderEtmTimerUI() {
-  if (!etmTimerDayId || !etmTimerExId) return;
-  var key = exTimerKeyOf(etmTimerDayId, etmTimerExId);
-  var t = EX_TIMERS[key];
-  if (!t) return;
-  applyExTimerDom(t, 'etm-num', 'etm-ring', EX_TIMER_RING_CIRC, 'etm-btn');
+// ══════════ MODO ENTRENO GUIADO: serie por serie, con descanso automático ══════════
+var RTT = null;
+function rttFlatExList(day) {
+  var out = [];
+  (day.blocks || []).forEach(function(b) { (b.exercises || []).forEach(function(e) { out.push({ block: b, ex: e }); }); });
+  return out;
+}
+function startGuidedWorkout(dayId) {
+  if (PLAN_LOCKED) { alert('Tu programa caducó. Adquirí un nuevo plan para seguir registrando tus sesiones.'); return; }
+  var day = currentRutinaData.days.find(function(d) { return d.id === dayId; });
+  if (!day) return;
+  var list = rttFlatExList(day);
+  if (!list.length) return;
+  RTT = { dayId: dayId, list: list, i: 0, k: 0, startTs: Date.now(), clockInterval: null,
+    restInterval: null, restSecs: 0, restTotal: 0, totalSeries: list.reduce(function(a, it) { return a + exsSeriesCount(it.ex); }, 0) };
+  document.getElementById('rtt-end-view').style.display = 'none';
+  document.getElementById('rtt-train-view').style.display = '';
+  clearInterval(RTT.clockInterval);
+  RTT.clockInterval = setInterval(function() { document.getElementById('rtt-clock').textContent = rttClock(); }, 1000);
+  rttPaint();
+  document.getElementById('rt-train-modal').style.display = 'flex';
+}
+function rttClock() {
+  var s = Math.floor((Date.now() - RTT.startTs) / 1000);
+  return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+}
+function rttDoneCount() {
+  var n = 0;
+  for (var i = 0; i < RTT.i; i++) n += exsSeriesCount(RTT.list[i].ex);
+  return n + RTT.k;
+}
+function rttPaint() {
+  var it = RTT.list[RTT.i], block = it.block, ex = it.ex, tipo = exTipo(block, ex);
+  var seriesCount = exsSeriesCount(ex);
+  var bankItem = findExerciseBankItem(ex.name);
+  document.getElementById('rtt-bar').style.width = (rttDoneCount() / RTT.totalSeries * 100) + '%';
+  document.getElementById('rtt-step').textContent = 'Ejercicio ' + (RTT.i + 1) + ' de ' + RTT.list.length + ' · ' + (block.name || '');
+  document.getElementById('rtt-ex-title').textContent = ex.name;
+  var videoUrl = bankItem && bankItem.video;
+  document.getElementById('rtt-video').innerHTML = videoUrl ? '<div class="exs-video"><iframe src="' + getYouTubeEmbedUrl(videoUrl) + '" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>' : '';
+  var dotsHtml = '';
+  for (var d = 0; d < seriesCount; d++) dotsHtml += '<i class="' + (d < RTT.k ? 'on' : (d === RTT.k ? 'cur' : '')) + '"></i>';
+  document.getElementById('rtt-dots').innerHTML = dotsHtml;
+  document.getElementById('rtt-unit').textContent = tipo === 'tiempo' ? 'Segundos' : (ex.side ? 'Reps por lado' : 'Reps hechas');
+  RTT.repsVal = parseInt(ex.reps, 10) || (tipo === 'tiempo' ? exSegundos(block, ex) : 0);
+  RTT.cargaVal = 0;
+  document.getElementById('rtt-reps').textContent = RTT.repsVal;
+  document.getElementById('rtt-carga').textContent = RTT.cargaVal;
+  var lastTxt = exLastTxt(RTT.dayId, ex.id);
+  document.getElementById('rtt-last').style.display = lastTxt ? '' : 'none';
+  if (lastTxt) document.getElementById('rtt-last-val').textContent = lastTxt;
+}
+function rttStep(key, delta) {
+  if (key === 'reps') RTT.repsVal = Math.max(0, RTT.repsVal + delta);
+  else RTT.cargaVal = Math.max(0, RTT.cargaVal + delta);
+  document.getElementById('rtt-reps').textContent = RTT.repsVal;
+  document.getElementById('rtt-carga').textContent = RTT.cargaVal;
+}
+function rttWriteSeries(it, k, val) {
+  var tipo = exTipo(it.block, it.ex);
+  var key = rtPendingKey(RTT.dayId, it.ex.id);
+  var pending = RT_PENDING[key] || {};
+  if (tipo === 'tiempo') {
+    pending.segundos = val;
+  } else {
+    var parts = pending.reps ? pending.reps.split('·') : [];
+    parts[k] = String(val);
+    pending.reps = parts.join('·');
+  }
+  RT_PENDING[key] = pending;
+}
+function rttDoneSet() {
+  var it = RTT.list[RTT.i];
+  rttWriteSeries(it, RTT.k, RTT.repsVal);
+  if (RTT.cargaVal) {
+    var key = rtPendingKey(RTT.dayId, it.ex.id);
+    RT_PENDING[key] = RT_PENDING[key] || {};
+    RT_PENDING[key].carga = RTT.cargaVal;
+  }
+  var seriesCount = exsSeriesCount(it.ex);
+  var nextLbl;
+  if (RTT.k < seriesCount - 1) { RTT.k++; nextLbl = 'Sigue: serie ' + (RTT.k + 1) + ' de ' + it.ex.name.toLowerCase(); }
+  else if (RTT.i < RTT.list.length - 1) { RTT.i++; RTT.k = 0; nextLbl = 'Sigue: ' + RTT.list[RTT.i].ex.name.toLowerCase(); }
+  else { rttFinish(); return; }
+  rttPaint();
+  rttRest(it.block.restSecs || 40, nextLbl);
+}
+function rttRest(sec, label) {
+  RTT.restTotal = sec; RTT.restSecs = sec;
+  document.getElementById('rtt-rest-next').textContent = label;
+  document.getElementById('rtt-rest').hidden = false;
+  rttPaintRest();
+  clearInterval(RTT.restInterval);
+  RTT.restInterval = setInterval(function() { RTT.restSecs--; rttPaintRest(); if (RTT.restSecs <= 0) rttEndRest(); }, 1000);
+}
+function rttPaintRest() {
+  document.getElementById('rtt-rest-t').textContent = fmtMinSec(Math.max(0, RTT.restSecs));
+  var ring = document.getElementById('rtt-rest-ring');
+  var pct = RTT.restTotal > 0 ? Math.max(0, RTT.restSecs) / RTT.restTotal : 0;
+  ring.style.strokeDasharray = EX_TIMER_RING_CIRC;
+  ring.style.strokeDashoffset = EX_TIMER_RING_CIRC * (1 - pct);
+}
+function rttEndRest() { clearInterval(RTT.restInterval); document.getElementById('rtt-rest').hidden = true; }
+function rttRestSkip() { rttEndRest(); }
+function rttRestPlus() { RTT.restSecs += 15; RTT.restTotal = Math.max(RTT.restTotal, RTT.restSecs); rttPaintRest(); }
+function rttFinish() {
+  clearInterval(RTT.clockInterval);
+  rttEndRest();
+  var elapsed = rttClock();
+  var hoyKey = localKey(new Date());
+  if (!CURRENT_DIAS_ENTRENADOS[hoyKey]) toggleDiaEntrenado(hoyKey);
+  document.getElementById('rtt-end-time').textContent = elapsed + ' entrenados.';
+  document.getElementById('rtt-train-view').style.display = 'none';
+  document.getElementById('rtt-end-view').style.display = '';
+}
+function rttExit() {
+  if (RTT) { clearInterval(RTT.clockInterval); rttEndRest(); }
+  RTT = null;
+  document.getElementById('rt-train-modal').style.display = 'none';
+  renderRutinaTab();
 }
 
-// ── Esfuerzo percibido (1-10) por ejercicio: controlador compacto −/+,
-// a la par de Carga/Reps (o Segundos) en la misma fila — los cuadros de
-// carga y reps son más anchos de lo que necesitan, así que de ese ancho
-// sobrante sale el lugar para este.
-function renderEsfuerzoGroupHtml(exId, exKey, lastEsfuerzo) {
-  // "0" en vez de un guión como placeholder: un guión se confundía
-  // visualmente con el botón de "−" al lado, parecía un segundo botón.
-  var val = lastEsfuerzo ? escapeHtml(String(lastEsfuerzo)) : '0';
-  var html = '<div class="ex-input-group ex-input-group-fixed">';
-  html += '<label class="ex-input-label">Esfuerzo</label>';
-  html += '<div class="ex-stepper">';
-  html += '<button type="button" class="ex-stepper-btn" onclick="stepEsfuerzo(\'' + exKey + '\',-1)"' + (PLAN_LOCKED ? ' disabled' : '') + '>−</button>';
-  html += '<div class="ex-stepper-val" id="esfuerzo-val-' + exKey + '">' + val + '</div>';
-  html += '<button type="button" class="ex-stepper-btn" onclick="stepEsfuerzo(\'' + exKey + '\',1)"' + (PLAN_LOCKED ? ' disabled' : '') + '>+</button>';
-  html += '</div>';
-  html += '<input type="hidden" data-ex="' + exId + '" data-field="esfuerzo" id="esfuerzo-input-' + exKey + '" value="' + (lastEsfuerzo ? escapeHtml(String(lastEsfuerzo)) : '') + '">';
-  html += '</div>';
-  return html;
-}
-
-function stepEsfuerzo(exKey, delta) {
-  if (PLAN_LOCKED) return;
-  var input = document.getElementById('esfuerzo-input-' + exKey);
-  var valEl = document.getElementById('esfuerzo-val-' + exKey);
-  if (!input || !valEl) return;
-  var next = (parseInt(input.value, 10) || 0) + delta;
-  if (next < 1) next = 1;
-  if (next > 10) next = 10;
-  input.value = next;
-  valEl.textContent = next;
+function rtDayHeroHtml(day) {
+  var blocks = (day.blocks || []).filter(function(b) { return b.exercises && b.exercises.length; });
+  var exCount = blocks.reduce(function(a, b) { return a + b.exercises.length; }, 0);
+  var h = '<button type="button" class="in-hero" onclick="startGuidedWorkout(\'' + jsAttrEscape(day.id) + '\')"' + (PLAN_LOCKED ? ' disabled' : '') + '>';
+  h += '<span class="in-hero-tag">▶ MODO ENTRENO</span>';
+  h += '<svg class="fa-sticker fa-sticker-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>';
+  h += '<span class="in-hero-bottom"><span><span class="in-hero-title">' + escapeHtml(day.name) + '</span><span class="in-hero-meta">' + exCount + ' ejercicio' + (exCount !== 1 ? 's' : '') + ' · ' + blocks.length + ' bloque' + (blocks.length !== 1 ? 's' : '') + '</span></span>';
+  h += '<span class="in-hero-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></span>';
+  h += '</button>';
+  return h;
 }
 
 function renderExerciseBlocksHtml(day) {
-  var html = '';
+  var html = rtDayHeroHtml(day);
   (day.blocks || []).forEach(function(block) {
     if (!block.exercises || block.exercises.length === 0) return;
     var hasTiempoEx = block.exercises.some(function(e){ return exTipo(block, e) === 'tiempo'; });
@@ -3943,76 +4238,33 @@ function renderExerciseBlocksHtml(day) {
 
     block.exercises.forEach(function(ex) {
       var tipo = exTipo(block, ex);
-      var prescribed = [];
       var totalSecs = tipo === 'tiempo' ? exSegundos(block, ex) : 0;
-      if (tipo === 'tiempo') {
-        prescribed.push(totalSecs + ' seg');
-      } else {
-        if (ex.series) prescribed.push(appendUnitIfMissing(ex.series, 'series'));
-        if (ex.reps) prescribed.push(appendUnitIfMissing(ex.reps, 'reps'));
-        if (ex.rpe) prescribed.push('RPE ' + ex.rpe);
-      }
       var bankItem = findExerciseBankItem(ex.name);
       var videoUrl = bankItem && bankItem.video;
-      var nota = bankItem && bankItem.descripcion;
       var thumbUrl = videoUrl ? getYouTubeThumbnailUrl(videoUrl) : null;
-
-      var hasHistorial = true;
-      var hasTimer = tipo === 'tiempo';
       var exTimerKey = day.id + '__' + ex.id;
+      var lastReps = escapeHtml(String(exPendingOrLog(day.id, ex.id, 'reps') || ''));
+      var lastCarga = escapeHtml(String(exPendingOrLog(day.id, ex.id, 'carga') || ''));
+      var lastSegs = escapeHtml(String(exPendingOrLog(day.id, ex.id, 'segundos') || ''));
+      var done = tipo === 'tiempo' ? !!lastSegs : !!lastReps;
+      var metaTxt = tipo === 'tiempo' ? exsSeriesCount(ex) + ' × ' + totalSecs + ' s' : exsSeriesCount(ex) + ' × ' + appendUnitIfMissing(ex.reps || '', 'reps');
+
       html += '<div class="rt-blq-item">';
-      if (thumbUrl) {
-        // Miniatura real del video (no el botón "Ver ejercicio" de antes) —
-        // tocarla abre el mismo modal de siempre. El descanso ahora vive
-        // adentro de ese modal, no acá en la lista — ver showExerciseVideo.
-        html += '<button type="button" onclick="showExerciseVideo(\'' + jsAttrEscape(videoUrl) + '\', \'' + jsAttrEscape(nota || '') + '\', ' + (bankItem && bankItem.vertical ? 'true' : 'false') + ', ' + (block.restSecs || 40) + ', \'' + jsAttrEscape(ex.name) + '\', \'' + jsAttrEscape(day.id) + '\', \'' + jsAttrEscape(ex.id) + '\')" style="flex-shrink:0;width:52px;height:92px;border-radius:10px;border:none;padding:0;position:relative;overflow:hidden;cursor:pointer;background:#0a1628;">'
-          + '<img src="' + jsAttrEscape(thumbUrl) + '" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">'
-          + '<span style="position:absolute;inset:0;background:linear-gradient(0deg, rgba(0,0,0,0.3), transparent 55%);"></span>'
-          + '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" fill="#1C55E5" style="width:11px;height:11px;margin-left:1px;"><path d="M8 5v14l11-7z"/></svg></span>'
-          + '</button>';
-      }
-      html += '<div style="flex:1;min-width:0;">';
-      html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;flex-wrap:wrap;">';
-      html += '<div class="ex-name">' + escapeHtml(ex.name) + '</div>';
-      html += '<div style="display:flex;gap:0.4rem;flex-shrink:0;flex-wrap:wrap;">';
-      if (!thumbUrl && nota) {
-        // Sin video no hay miniatura que tocar — se mantiene el botón de
-        // texto para ver la nota del ejercicio.
-        html += '<button type="button" onclick="showExerciseVideo(\'\', \'' + jsAttrEscape(nota) + '\', false, ' + (block.restSecs || 40) + ', \'' + jsAttrEscape(ex.name) + '\', \'' + jsAttrEscape(day.id) + '\', \'' + jsAttrEscape(ex.id) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M7 3.5h7l4 4v13H7Z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></svg>Ver nota</button>';
-      }
-      if (hasHistorial) {
-        // Mismo estilo de pill que "Ver ejercicio"/"Ver nota", en vez del
-        // botón ancho y amarillo de antes que le daba demasiado peso visual
-        // a algo que es solo un plus (ver el historial de cargas).
-        html += '<button type="button" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:#F0F1F4;color:#5A6472;border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Historial</button>';
-      }
-      if (hasTimer) {
-        // El cronómetro siempre abre su propia ventana aparte (no se mete
-        // con el video): fondo oscuro, aro grande centrado, igual estén o
-        // no estén viendo el video del ejercicio.
-        html += '<button type="button" onclick="openExTimerModal(\'' + day.id + '\',\'' + ex.id + '\',' + totalSecs + ',\'' + jsAttrEscape(ex.name) + '\')" style="flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;background:var(--blue-lt);color:var(--blue);border:none;border-radius:100px;padding:0.3rem 0.65rem;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Cronómetro</button>';
-      }
-      html += '</div></div>';
+      html += '<button type="button" class="rt-ex-row" onclick="openExSession(\'' + jsAttrEscape(day.id) + '\', \'' + jsAttrEscape(ex.id) + '\')"' + (PLAN_LOCKED ? ' disabled' : '') + '>';
+      html += '<span class="rt-ex-thumb">' + (thumbUrl ? '<img src="' + jsAttrEscape(thumbUrl) + '" alt="">' : '<svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>') + '</span>';
+      html += '<span class="rt-ex-t"><b class="ex-name">' + escapeHtml(ex.name) + '</b><small class="ex-prescribed">' + metaTxt + '</small></span>';
+      html += '<span class="rt-ex-state' + (done ? ' done' : '') + '">' + (done ? '<svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>' : '') + '</span>';
+      html += '</button>';
+      html += '<button type="button" onclick="openExProgressModal(\'' + day.id + '\',\'' + ex.id + '\',\'' + jsAttrEscape(ex.name) + '\')" style="margin-top:0.5rem;display:inline-flex;align-items:center;gap:0.3rem;background:none;color:var(--muted);border:none;padding:0;font-size:0.65rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0;"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg>Historial</button>';
+      // Campos reales donde se guarda lo registrado (desde la sesión del
+      // ejercicio o el modo entreno) — ocultos, porque ahora se llenan solos.
       if (tipo === 'tiempo') {
-        if (prescribed.length) html += '<div class="ex-prescribed">Duración: ' + prescribed.join(' · ') + '</div>';
-        var lastLogT = findLastExerciseLog(day.id, ex.id);
-        var lastSegs = lastLogT && lastLogT.segundos ? escapeHtml(String(lastLogT.segundos)) : '';
-        html += '<div class="ex-inputs">';
-        html += '<div class="ex-input-group"><label class="ex-input-label">Segundos logrados</label><input type="number" step="1" placeholder="' + totalSecs + '" value="' + lastSegs + '" data-ex="' + ex.id + '" data-field="segundos" id="segundos-input-' + exTimerKey + '"' + (PLAN_LOCKED ? ' disabled' : '') + '></div>';
-        html += renderEsfuerzoGroupHtml(ex.id, exTimerKey, lastLogT && lastLogT.esfuerzo);
-        html += '</div>';
+        html += '<input type="hidden" value="' + lastSegs + '" data-ex="' + ex.id + '" data-field="segundos" id="segundos-input-' + exTimerKey + '">';
       } else {
-        if (prescribed.length) html += '<div class="ex-prescribed">Repeticiones: ' + prescribed.join(' · ') + '</div>';
-        var lastLog = findLastExerciseLog(day.id, ex.id);
-        var lastCarga = lastLog && lastLog.carga ? escapeHtml(String(lastLog.carga)) : '';
-        var lastReps = lastLog && lastLog.reps ? escapeHtml(String(lastLog.reps)) : '';
-        html += '<div class="ex-inputs">';
-        html += '<div class="ex-input-group"><label class="ex-input-label">Carga (lbs)</label><input type="number" step="0.5" placeholder="0" value="' + lastCarga + '" data-ex="' + ex.id + '" data-field="carga"' + (PLAN_LOCKED ? ' disabled' : '') + '></div>';
-        html += '<div class="ex-input-group"><label class="ex-input-label">Reps hechas</label><input type="text" placeholder="0" value="' + lastReps + '" data-ex="' + ex.id + '" data-field="reps"' + (PLAN_LOCKED ? ' disabled' : '') + '></div>';
-        html += renderEsfuerzoGroupHtml(ex.id, exTimerKey, lastLog && lastLog.esfuerzo);
-        html += '</div>';
+        html += '<input type="hidden" value="' + lastCarga + '" data-ex="' + ex.id + '" data-field="carga">';
+        html += '<input type="hidden" value="' + lastReps + '" data-ex="' + ex.id + '" data-field="reps">';
       }
-      html += '</div></div>';
+      html += '</div>';
     });
 
     html += '</div>';
@@ -4029,6 +4281,8 @@ function renderRutinaTab() {
   var el = document.getElementById('rutina-content');
   var days = currentRutinaData.days;
   var html = '';
+  var openDayIds = {};
+  el.querySelectorAll('.rt-day[open]').forEach(function(d) { if (d.dataset.dayId) openDayIds[d.dataset.dayId] = true; });
 
   if (currentRutinaData.mensajeInicial) {
     html += '<div class="rt-msg-card"><div class="rt-msg-label">Mensaje de Frida</div><div class="rt-msg-text">' + escapeHtml(currentRutinaData.mensajeInicial) + '</div></div>';
@@ -4044,7 +4298,7 @@ function renderRutinaTab() {
 
   days.forEach(function(day, i) {
     var blockCount = (day.blocks || []).filter(function(b) { return b.exercises && b.exercises.length > 0; }).length;
-    html += '<details class="rt-day">';
+    html += '<details class="rt-day" data-day-id="' + jsAttrEscape(day.id) + '"' + (openDayIds[day.id] ? ' open' : '') + '>';
     html += '<summary class="rt-day-summary">';
     html += '<div class="rt-day-num">' + String(i + 1).padStart(2, '0') + '</div>';
     html += '<div class="rt-day-info"><div class="rt-day-title">' + escapeHtml(day.name) + '</div><div class="rt-day-meta">' + blockCount + ' bloque' + (blockCount !== 1 ? 's' : '') + '</div></div>';
@@ -4097,103 +4351,6 @@ function getYouTubeThumbnailUrl(url) {
   return id ? ('https://img.youtube.com/vi/' + id + '/hqdefault.jpg') : null;
 }
 
-var videoModalRestSecs = null;
-var videoModalExName = null;
-var videoModalDayId = null;
-var videoModalExId = null;
-
-function showExerciseVideo(url, nota, vertical, restSecs, exName, dayId, exId) {
-  var wrap = document.getElementById('video-modal-frame-wrap');
-  // Con el plan vencido se puede seguir viendo el nombre/nota del
-  // ejercicio, pero el video en sí no se reproduce.
-  if (PLAN_LOCKED && url) {
-    wrap.style.display = 'block';
-    wrap.style.padding = '0'; wrap.style.height = 'auto'; wrap.style.maxHeight = '';
-    wrap.style.aspectRatio = ''; wrap.style.width = '100%'; wrap.style.maxWidth = ''; wrap.style.margin = '0';
-    wrap.innerHTML = renderPlanLockedCard();
-    var restRowL = document.getElementById('video-modal-rest-row');
-    if (restRowL) restRowL.style.display = 'none';
-    var notaElL = document.getElementById('video-modal-nota');
-    if (notaElL) notaElL.style.display = 'none';
-    document.getElementById('video-modal').style.display = 'flex';
-    return;
-  }
-  // El contenido real del reproductor pudo quedar pisado por la tarjeta de
-  // bloqueo en un video anterior — se restaura antes de usarlo de nuevo.
-  if (!wrap.querySelector('#video-modal-frame')) wrap.innerHTML = '<iframe id="video-modal-frame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-  var frame = document.getElementById('video-modal-frame');
-  videoModalRestSecs = restSecs || null;
-  videoModalExName = exName || '';
-  videoModalDayId = dayId || null;
-  videoModalExId = exId || null;
-  var restRow = document.getElementById('video-modal-rest-row');
-  if (restRow) restRow.style.display = (videoModalDayId && videoModalExId && videoModalRestSecs) ? 'block' : 'none';
-  if (url) {
-    frame.src = getYouTubeEmbedUrl(url);
-    wrap.style.display = 'block';
-    if (vertical) {
-      // Video grabado vertical (celular): en vez de forzar un recuadro
-      // horizontal 16:9 con barras negras a los costados, se arma como
-      // 9:16 real, alto, casi pantalla completa — como se grabó.
-      wrap.style.padding = '0';
-      wrap.style.height = '80vh';
-      wrap.style.maxHeight = '700px';
-      wrap.style.aspectRatio = '9 / 16';
-      wrap.style.width = 'auto';
-      wrap.style.maxWidth = '100%';
-      wrap.style.margin = '0 auto';
-    } else {
-      wrap.style.padding = '';
-      wrap.style.paddingBottom = '56.25%';
-      wrap.style.height = '0';
-      wrap.style.maxHeight = '';
-      wrap.style.aspectRatio = '';
-      wrap.style.width = '100%';
-      wrap.style.maxWidth = '';
-      wrap.style.margin = '0';
-    }
-  } else {
-    frame.src = '';
-    wrap.style.display = 'none';
-  }
-  var notaEl = document.getElementById('video-modal-nota');
-  var notaTextEl = document.getElementById('video-modal-nota-text');
-  if (nota) {
-    notaTextEl.textContent = nota;
-    notaEl.style.display = 'block';
-  } else {
-    notaTextEl.textContent = '';
-    notaEl.style.display = 'none';
-  }
-  document.getElementById('video-modal').style.display = 'flex';
-}
-
-function hideVideoModal() {
-  document.getElementById('video-modal-frame').src = '';
-  document.getElementById('video-modal').style.display = 'none';
-}
-
-// Comando simple al iframe de YouTube (requiere enablejsapi=1 en la URL del
-// embed) — no hace falta cargar la librería completa del IFrame Player API
-// para esto, un postMessage directo alcanza para pausar/reanudar.
-function postVideoCommand(func) {
-  var frame = document.getElementById('video-modal-frame');
-  if (!frame || !frame.contentWindow) return;
-  try { frame.contentWindow.postMessage(JSON.stringify({ event: 'command', func: func, args: '' }), '*'); } catch (e) {}
-}
-
-// Botón de descanso fijo dentro del modal del video (no en la lista de
-// ejercicios, para no saturarla): pausa el video, corre el mismo
-// cronómetro de siempre, y al terminar se cierra solo y retoma el video.
-function startVideoModalRest() {
-  if (!videoModalDayId || !videoModalExId || !videoModalRestSecs) return;
-  postVideoCommand('pauseVideo');
-  openExRestTimer(videoModalDayId, videoModalExId, videoModalRestSecs, videoModalExName, function() {
-    closeExTimerModal();
-    postVideoCommand('playVideo');
-  });
-}
-
 function guardarSesion(dayIndex, btnEl) {
   if (PLAN_LOCKED) { alert('Tu programa caducó. Adquirí un nuevo plan para seguir registrando tus sesiones.'); return; }
   var day = currentRutinaData.days[dayIndex];
@@ -4210,6 +4367,11 @@ function guardarSesion(dayIndex, btnEl) {
   });
   if (!any) { alert('Ingresá al menos la carga o las repeticiones de un ejercicio.'); return; }
 
+  // Clientes online (rutina personalizada): el día solo cuenta como
+  // entrenado si quedaron registradas TODAS las series de TODOS los
+  // ejercicios — si no, se guarda el avance pero el día sigue sin marcar.
+  var diaCompleto = dayFullyLogged(day, ejercicios);
+
   var commentEl = document.getElementById('day-comment-' + day.id);
   var comentario = commentEl ? commentEl.value.trim() : '';
 
@@ -4223,11 +4385,13 @@ function guardarSesion(dayIndex, btnEl) {
   if (comentario) entry.comentario = comentario;
 
   db().ref('clientasPortal/' + currentUid + '/entrenoLogs').push(entry).then(function() {
-    // Guardar la sesión también marca hoy como día entrenado (un paso menos).
+    // Guardar la sesión también marca hoy como día entrenado (un paso menos) —
+    // pero si es cliente online, solo cuando se registraron todas las series.
     var hoyKey = localKey(new Date());
     var yaEstaba = !!CURRENT_DIAS_ENTRENADOS[hoyKey];
-    if (!yaEstaba) toggleDiaEntrenado(hoyKey);
-    celebrate('💪', '¡Sesión guardada!', yaEstaba ? 'Excelente trabajo hoy.' : 'Marcamos hoy como día entrenado. Ya sumas ' + inicioCounts().mes + ' este mes.');
+    var puedeMarcar = !entrenoAutoMarcado() || diaCompleto;
+    if (!yaEstaba && puedeMarcar) toggleDiaEntrenado(hoyKey);
+    celebrate('💪', '¡Sesión guardada!', !puedeMarcar ? 'Guardamos tu avance. Completá todas las series para que el día cuente.' : yaEstaba ? 'Excelente trabajo hoy.' : 'Marcamos hoy como día entrenado. Ya sumas ' + inicioCounts().mes + ' este mes.');
     if (commentEl) commentEl.value = '';
     db().ref('clientasPortal/' + currentUid + '/entrenoLogs').once('value').then(function(snap) {
       CURRENT_ENTRENO_LOGS = snap.val() || {};
