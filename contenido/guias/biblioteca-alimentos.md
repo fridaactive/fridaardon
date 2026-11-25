@@ -95,6 +95,7 @@ Si falta la etiqueta, se calcula igual y se marca 🧮; cuando Frida mande foto,
 | **El Panal galletas de arroz y amaranto con chocolate** (bolsa 198 g, 9 paquetitos de 2) | 1 paquetito (2 galletas) | ≈ 90 | 1 | 18 | 2 | 🧮 la tienda dice 40 cal por 12 g; se usa 90 para no quedarse corto · Super Selectos ≈ $3.35 · falta foto de etiqueta |
 | Tortitas de arroz integral con chocolate negro (tipo Bicentury) | 1 tortita (16 g) | 76 | 1 | 10 | 3.5 | 🔎 FatSecret |
 | Miel | 1 cucharadita | 20 | 0 | 6 | 0 | 🔎 |
+| ⭐ **Syrup Great Value Sugar Free** (24 oz) | ¼ taza (60 ml) | 15 | 0 | ≈ 7 | 0 | 🔎 etiqueta EE. UU. · Walmart · [link EE. UU.](https://www.walmart.com/ip/Great-Value-Sugar-Free-Syrup-24-fl-oz/5214528800) · para waffles y pancakes, el favorito de los clientes |
 | Chocolate oscuro 70 % | 1 cuadrito (10 g) | 60 | 1 | 4 | 4 | 🔎 |
 
 ---
@@ -115,6 +116,9 @@ Formato: plato · cal · proteína. Marcar con ⭐ las que a los clientes les gu
 - ⭐ 2 huevos revueltos + 2 rebanadas de pan de masa madre + ½ plátano cocido + queso (cottage, mozzarella o feta) · 600 · 30
 - Omelette de 2 huevos con espinaca y mozzarella + 2 rebanadas de masa madre · 490 · 27
 - Tostadas de masa madre con 2 huevos estrellados, 2 cdas de queso crema light Dos Pinos y feta · 550 · 30
+- ⭐ Waffles (o pancakes) de avena y banano · 540 · 32
+  - Licuar ½ taza de avena + 1 banano + 1 huevo + ½ taza de leche Dos Pinos Doble Proteína + vainilla o canela; hacer en la wafflera.
+  - Encima: 1 vasito de yogurt Yes Griego + ¼ taza de syrup Great Value Sugar Free. Sin el yogurt: 410 · 20.
 - Panqueques de avena y banano (½ taza de avena, 1 banano, 2 huevos) con yogurt griego y miel · 535 · 27
 - Avena de la noche con proteína, banano y crema de maní · 560 · 42
 - Desayuno típico: 2 huevos + 2 tortillas + ½ taza de frijoles + ½ plátano + queso fresco · 600 · 29
