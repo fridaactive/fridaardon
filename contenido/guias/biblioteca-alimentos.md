@@ -122,9 +122,10 @@ Formato: plato · cal · proteína. Marcar con ⭐ las que a los clientes les gu
 - ⭐ 2 huevos revueltos + 2 rebanadas de pan de masa madre + ½ plátano cocido + queso (cottage, mozzarella o feta) · 600 · 30
 - Omelette de 2 huevos con espinaca y mozzarella + 2 rebanadas de masa madre · 490 · 27
 - Tostadas de masa madre con 2 huevos estrellados, 2 cdas de queso crema light Dos Pinos y feta · 550 · 30
-- ⭐ Waffles (o pancakes) de avena y banano · 540 · 32
-  - Licuar ½ taza de avena + 1 banano + 1 huevo + ½ taza de leche Dos Pinos Doble Proteína + vainilla o canela; hacer en la wafflera.
-  - Encima: 1 vasito de yogurt Yes Griego + ¼ taza de syrup Great Value Sugar Free. Sin el yogurt: 410 · 20.
+- ⭐ Waffles (o pancakes) de avena y banano · 560 · 36
+  - Licuar ½ taza de avena + 1 banano + 1 huevo + ½ taza de leche Dos Pinos Doble Proteína + ½ scoop de proteína + vainilla o canela; hacer en la wafflera.
+  - Encima: 1 cucharada de crema de maní + ¼ taza de syrup Great Value Sugar Free.
+  - Variaciones: scoop completo (+60 cal, +12 g) · con 1 vasito de Yes Griego encima en vez de crema de maní (≈ 600 · 44).
 - Panqueques de avena y banano (½ taza de avena, 1 banano, 2 huevos) con yogurt griego y miel · 535 · 27
 - Avena de la noche con proteína, banano y crema de maní · 560 · 42
 - Desayuno típico: 2 huevos + 2 tortillas + ½ taza de frijoles + ½ plátano + queso fresco · 600 · 29
