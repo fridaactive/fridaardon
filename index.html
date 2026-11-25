@@ -1208,17 +1208,6 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
 .guia-like{flex-shrink:0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:2.1rem;height:2.1rem;font-size:1rem;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;transition:transform .2s}
 .guia-like.on{background:rgba(255,120,140,.18);border-color:rgba(255,120,140,.5);transform:scale(1.08)}
 .guia-alt-txt.guia-plato-row{align-items:center;display:none}
-.guia-postre{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;margin-bottom:.55rem;overflow:hidden}
-.guia-postre summary{list-style:none;display:flex;align-items:center;gap:.7rem;padding:.75rem .85rem;cursor:pointer}
-.guia-postre summary::-webkit-details-marker{display:none}
-.guia-postre-ico{width:2.6rem;height:2.6rem;border-radius:14px;background:#F5ECCB;display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0}
-.guia-postre-t{flex:1;min-width:0}
-.guia-postre-t b{display:block;font-size:.88rem}
-.guia-postre-t small{font-size:.68rem;color:#F5ECCB;opacity:.85}
-.guia-postre-b{padding:0 .9rem .9rem;font-size:.8rem;line-height:1.5;color:rgba(255,255,255,.88)}
-.guia-postre-b ul{margin:.2rem 0 .5rem;padding-left:1.1rem}
-.guia-postre-b p{margin:.2rem 0 0}
-.guia-postre-sub{font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#F5ECCB;margin-top:.4rem}
 .guia-tips div{background:rgba(255,255,255,.05);border-radius:14px;padding:.65rem .8rem;font-size:.8rem;line-height:1.45;margin-bottom:.45rem}
 .guia-legal{font-size:.66rem;opacity:.5;line-height:1.5;margin-top:1.5rem}
 
@@ -1258,6 +1247,32 @@ body.portal-dark a.pf-plan-pick .plan-price{color:#F5ECCB}
 .al-li-n{flex:1;min-width:0}.al-li-n b{display:block;font-weight:600}.al-li-n small{display:block;opacity:.55;font-size:.66rem}
 .al-li em{font-style:normal;color:#F5ECCB;font-weight:800;font-size:.72rem;white-space:nowrap}
 .al-li.on .al-li-n,.al-li.on .al-li-e{opacity:.45}.al-li.on .al-li-n b{text-decoration:line-through}
+.al-atajos{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:1rem}
+.al-atajo{border:none;border-radius:22px;padding:.9rem .9rem .85rem;text-align:left;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;gap:.1rem;position:relative;overflow:hidden;transition:transform .15s}
+.al-atajo:active{transform:translateY(3px)}
+.al-atajo.sup{background:#F5ECCB;color:#0B1B3F;box-shadow:0 5px 0 #D9C98E}
+.al-atajo.pos{background:#1C55E5;color:#fff;box-shadow:0 5px 0 #0F3FA8}
+.al-atajo-e{font-size:1.9rem;line-height:1;margin-bottom:.35rem}
+.al-atajo b{font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;text-transform:uppercase;font-size:1rem;line-height:1.05}
+.al-atajo small{font-size:.7rem;font-weight:700;opacity:.75}
+.al-atajo::after{content:'›';position:absolute;right:.9rem;top:.7rem;font-size:1.3rem;font-weight:800;opacity:.5}
+.al-sup-res{margin-top:1rem;display:flex;justify-content:space-between;align-items:flex-end;gap:.6rem}
+.al-sup-res b{display:block;font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;font-size:1.5rem;line-height:1}
+.al-sup-res small{font-size:.7rem;opacity:.65;font-weight:700}
+.al-sup-res span{font-size:.68rem;font-weight:800;background:rgba(245,236,203,.16);color:#F5ECCB;border-radius:100px;padding:.25rem .6rem;text-align:right}
+.al-sup-bar{height:10px;margin:.55rem 0 1.1rem}
+.al-pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:1.1rem}
+.al-pos{background:#111A36;border:1px solid rgba(255,255,255,.12);border-radius:22px;overflow:hidden;cursor:pointer;padding-bottom:.75rem}
+.al-pos b{display:block;font-size:.84rem;line-height:1.25;padding:.6rem .75rem .35rem}
+.al-pos .al-chip{margin-left:.75rem}
+.al-pos-img,.al-rec-img{height:104px;display:flex;align-items:center;justify-content:center;font-size:3.2rem;position:relative}
+.al-pos-img .guia-like{position:absolute;top:8px;right:8px;width:1.9rem;height:1.9rem;font-size:.85rem;background:rgba(7,11,26,.55)}
+.c0{background:linear-gradient(135deg,#F5ECCB,#E9C9A0)}.c1{background:linear-gradient(135deg,#F5D57A,#F5ECCB)}.c2{background:linear-gradient(135deg,#F4A3A8,#F5ECCB)}.c3{background:linear-gradient(135deg,#B9CCFF,#F5ECCB)}
+.al-rec-img{height:170px;font-size:5rem;border-radius:26px;margin-top:.6rem}
+.al-rec-h{display:flex;align-items:flex-start;gap:.6rem;margin:1rem 0 .5rem}
+.al-rec-h h2{flex:1;font-family:'Archivo Black','DM Sans',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.45rem;line-height:1.05;margin:0}
+.al-rec-p{background:#111A36;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:.9rem 1rem;font-size:.85rem;line-height:1.6;color:rgba(255,255,255,.9)}
+.bw-atajos{margin-top:.2rem}
 .bw-ring{display:inline-block;margin:0 auto}
 .bw-card-ico{font-size:3.2rem;line-height:1;margin:.3rem 0}
 
@@ -2485,6 +2500,7 @@ function renderBienestarTab() {
   else { titulo = 'Desbloquea tu guía'; texto = 'Responde unas preguntas (3 minutos) y Frida arma tu guía con tu menú y tu lista de súper.'; boton = 'Empezar'; accion = 'startEncuestaAlimentacion()'; }
   h += '<div class="bw-card faUp"' + (accion ? ' onclick="' + accion + '" role="button" tabindex="0"' : '') + '>' + top
     + '<b>' + titulo + '</b><p>' + texto + '</p>' + (boton ? '<span class="bw-card-btn">' + boton + ' →</span>' : '') + '</div>';
+  if (eleg && d.guia) h += '<div class="bw-atajos">' + alAtajosHtml(d.guia) + '</div>';
   el.innerHTML = h;
 }
 
@@ -3675,13 +3691,12 @@ function openGuiaAlimentacion() {
     m = document.createElement('div'); m.id = 'guia-modal'; m.className = 'guia-modal';
     document.body.appendChild(m);
   }
-  var checks = {};
-  try { checks = JSON.parse(localStorage.getItem('fa_super_' + currentUid) || '{}'); } catch (e) {}
-  var h = '<div class="guia-top"><button type="button" class="guia-back" onclick="AL_DIA_SEL=null;document.getElementById(\'guia-modal\').style.display=\'none\';renderBienestarTab()">←</button><span>Mi guía de alimentación</span></div><div class="guia-body">';
+  if (AL_VISTA) return alPintar(m, alVistaHtml(g));
+  var h = '<div class="guia-top"><button type="button" class="guia-back" onclick="alCerrarGuia()">←</button><span>Mi guía de alimentación</span></div><div class="guia-body">';
   h += '<div class="guia-hero"><span class="fa-tag">TU GUÍA</span><h2>La comida es <span>tu aliada</span></h2>' + (g.objetivo ? '<p>' + escapeHtml(g.objetivo) + '</p>' : '') + (g.actualizada ? '<small>Actualizada: ' + escapeHtml(g.actualizada) + '</small>' : '') + '</div>';
   if (g.alerta) h += '<div class="guia-alerta">💙 ' + escapeHtml(g.alerta) + '</div>';
   if (g.menus && g.menus.length) {
-    h += alResumenHtml(g);
+    h += alResumenHtml(g) + alAtajosHtml(g);
     var hoyIdx = (new Date().getDay() + 6) % 7;
     var sel = (typeof AL_DIA_SEL === 'number') ? AL_DIA_SEL : hoyIdx;
     var dias = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'], nombres = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -3715,38 +3730,75 @@ function openGuiaAlimentacion() {
       h += '</div>';
     }
   } else if (g.comidas && g.comidas.length) {
-    h += '<div class="guia-sec">Tu día de ejemplo</div>';
+    h += alAtajosHtml(g) + '<div class="guia-sec">Tu día de ejemplo</div>';
     g.comidas.forEach(function(c) {
       h += '<div class="guia-comida"><div class="guia-comida-h"><b>' + escapeHtml(c.momento || '') + '</b>' + (c.hora ? '<span>' + escapeHtml(c.hora) + '</span>' : '') + '</div><ul>'
         + (c.opciones || []).map(function(o) { return '<li>' + escapeHtml(o) + '</li>'; }).join('') + '</ul></div>';
     });
   }
+  if (g.tips && g.tips.length) {
+    h += '<div class="guia-sec">Tips para ti</div><div class="guia-tips">' + g.tips.map(function(t) { return '<div>💡 ' + escapeHtml(t) + '</div>'; }).join('') + '</div>';
+  }
+  h += '<div class="guia-legal">Esta guía es una orientación para mejorar tu alimentación y acompañar tu entrenamiento. Las calorías son aproximadas. No reemplaza la atención de tu médico, sobre todo si tienes una condición de salud.</div></div>';
+  alPintar(m, h);
+}
+function alPintar(m, h) {
+  m.classList.toggle('al-quiet', m.style.display === 'block' && !AL_NUEVA);
+  m.innerHTML = h;
+  if (m.style.display !== 'block') { m.style.display = 'block'; m.scrollTop = 0; }
+  if (AL_NUEVA) { m.scrollTop = 0; AL_NUEVA = false; }
+}
+// ── Espacios propios dentro de la guía: Súper y Postres ──
+// AL_VISTA: null (guía) | 'super' | 'postres' | 'postre:N' (receta).
+var AL_VISTA = null, AL_NUEVA = false;
+function alIr(v) { AL_VISTA = v || null; AL_NUEVA = true; openGuiaAlimentacion(); }
+function alCerrarGuia() { AL_DIA_SEL = null; AL_VISTA = null; var m = document.getElementById('guia-modal'); if (m) m.style.display = 'none'; renderBienestarTab(); }
+function alPostresDe(g) { return (g.postres && g.postres.length) ? g.postres : AL_POSTRES; }
+function alSuperCuenta(g) {
+  var checks = {}, total = 0, listos = 0;
+  try { checks = JSON.parse(localStorage.getItem('fa_super_' + currentUid) || '{}'); } catch (e) {}
+  ((g.super || {}).secciones || []).forEach(function(sec, si) { (sec.items || []).forEach(function(it, ii) { total++; if (checks[si + '-' + ii]) listos++; }); });
+  return { checks: checks, total: total, listos: listos };
+}
+function alAtajosHtml(g) {
+  var h = '<div class="al-atajos">';
   if (g.super && g.super.secciones) {
-    h += '<div class="guia-sec">Tu súper' + (g.super.tienda ? ' · ' + escapeHtml(g.super.tienda) : '') + '</div>' + (g.super.presupuesto ? '<div class="al-hint">🛒 ' + escapeHtml(g.super.presupuesto) + ' · alcanza para toda la semana</div>' : '');
-    g.super.secciones.forEach(function(sec, si) {
-      h += '<div class="al-list"><div class="al-list-sec">' + escapeHtml(sec.nombre || '') + '</div>';
+    var sc = alSuperCuenta(g);
+    h += '<button type="button" class="al-atajo sup faUp" onclick="alIr(\'super\')"><span class="al-atajo-e">🛒</span><b>Mi súper</b><small>' + (sc.listos ? sc.listos + ' de ' + sc.total + ' listos' : sc.total + ' productos') + '</small></button>';
+  }
+  h += '<button type="button" class="al-atajo pos faUp" onclick="alIr(\'postres\')"><span class="al-atajo-e">🍫</span><b>Postres</b><small>con proteína</small></button>';
+  return h + '</div>';
+}
+function alVistaHtml(g) {
+  var v = AL_VISTA, back = 'alIr(' + (v.indexOf('postre:') === 0 ? '\'postres\'' : '') + ')';
+  var titulo = v === 'super' ? 'Mi súper' : 'Postres con proteína';
+  var h = '<div class="guia-top"><button type="button" class="guia-back" onclick="' + back + '">←</button><span>' + titulo + '</span></div><div class="guia-body">';
+  if (v === 'super') {
+    var sp = g.super || {}, sc = alSuperCuenta(g);
+    h += '<div class="guia-hero"><span class="fa-tag">TU SÚPER</span><h2>Tu lista <span>de compras</span></h2><p>Todo lo de tu guía' + (sp.tienda ? ', pensado para ' + escapeHtml(sp.tienda) : '') + '. Ve marcando mientras compras.</p></div>';
+    h += '<div class="al-sup-res faUp"><div><b>' + sc.listos + ' de ' + sc.total + '</b><small>en tu carrito</small></div>' + (sp.presupuesto ? '<span>' + escapeHtml(sp.presupuesto) + '</span>' : '') + '</div><div class="al-bar al-sup-bar"><i style="width:' + (sc.total ? (sc.listos / sc.total) * 100 : 0).toFixed(0) + '%;background:#F5ECCB"></i></div>';
+    (sp.secciones || []).forEach(function(sec, si) {
+      h += '<div class="al-list faUp"><div class="al-list-sec">' + escapeHtml(sec.nombre || '') + '</div>';
       (sec.items || []).forEach(function(it, ii) {
-        var k = si + '-' + ii, on = !!checks[k];
+        var k = si + '-' + ii, on = !!sc.checks[k];
         h += '<label class="al-li' + (on ? ' on' : '') + '"><input type="checkbox" ' + (on ? 'checked' : '') + ' onchange="alToggleSuper(\'' + k + '\', this)"><span class="al-li-e">' + alIcoSuper(it) + '</span><span class="al-li-n"><b>' + escapeHtml(it.producto || '') + '</b>' + (it.marca ? '<small>' + escapeHtml(it.marca) + '</small>' : '') + '</span><em>' + escapeHtml(it.cantidad || '') + '</em></label>';
       });
       h += '</div>';
     });
     h += '<button type="button" class="guia-reset" onclick="alResetSuper()">Desmarcar todo para la próxima compra</button>';
+  } else if (v === 'postres') {
+    h += '<div class="guia-hero"><span class="fa-tag">PARA TUS ANTOJOS</span><h2>Postres <span>con proteína</span></h2><p>Ricos, fáciles y te ayudan con tu meta. Disfrútalos sin culpa.</p></div><div class="al-pos-grid">';
+    alPostresDe(g).forEach(function(ps, i) {
+      h += '<div class="al-pos faUp" style="animation-delay:' + (i * 60) + 'ms" onclick="alIr(\'postre:' + i + '\')" role="button" tabindex="0"><div class="al-pos-img c' + (i % 4) + '">' + (ps.icono || '🍫') + alLikeBtn(ps.nombre) + '</div><b>' + escapeHtml(ps.nombre || '') + '</b>' + (ps.proteina ? '<span class="al-chip b">' + escapeHtml(ps.proteina) + ' prot</span>' : '') + '</div>';
+    });
+    h += '</div>';
+  } else {
+    var i = +v.split(':')[1], ps = alPostresDe(g)[i] || {};
+    h += '<div class="al-rec-img c' + (i % 4) + ' faUp">' + (ps.icono || '🍫') + '</div><div class="al-rec-h"><h2>' + escapeHtml(ps.nombre || '') + '</h2>' + alLikeBtn(ps.nombre) + '</div>' + (ps.proteina ? '<span class="al-chip b">' + escapeHtml(ps.proteina) + ' de proteína aprox.</span>' : '');
+    h += '<div class="guia-sec">Ingredientes</div><div class="al-list faUp">' + (ps.ingredientes || []).map(function(x) { return '<div class="al-li"><span class="al-li-e">•</span><span class="al-li-n">' + escapeHtml(x) + '</span></div>'; }).join('') + '</div>';
+    h += '<div class="guia-sec">Cómo se hace</div><div class="al-rec-p faUp">' + escapeHtml(ps.pasos || '') + '</div>';
   }
-  var postres = (g.postres && g.postres.length) ? g.postres : AL_POSTRES;
-  h += '<div class="guia-sec">Postres ricos con proteína</div><div class="al-hint">Para cuando se te antoje algo dulce. Disfrútalos sin culpa.</div>';
-  postres.forEach(function(ps) {
-    h += '<details class="guia-postre"><summary><span class="guia-postre-ico">' + (ps.icono || '🍫') + '</span><span class="guia-postre-t"><b>' + escapeHtml(ps.nombre || '') + '</b>' + (ps.proteina ? '<small>' + escapeHtml(ps.proteina) + ' de proteína aprox.</small>' : '') + '</span>' + alLikeBtn(ps.nombre) + '</summary>'
-      + '<div class="guia-postre-b"><div class="guia-postre-sub">Ingredientes</div><ul>' + (ps.ingredientes || []).map(function(x) { return '<li>' + escapeHtml(x) + '</li>'; }).join('') + '</ul>'
-      + '<div class="guia-postre-sub">Cómo se hace</div><p>' + escapeHtml(ps.pasos || '') + '</p></div></details>';
-  });
-  if (g.tips && g.tips.length) {
-    h += '<div class="guia-sec">Tips para ti</div><div class="guia-tips">' + g.tips.map(function(t) { return '<div>💡 ' + escapeHtml(t) + '</div>'; }).join('') + '</div>';
-  }
-  h += '<div class="guia-legal">Esta guía es una orientación para mejorar tu alimentación y acompañar tu entrenamiento. Las calorías son aproximadas. No reemplaza la atención de tu médico, sobre todo si tienes una condición de salud.</div></div>';
-  m.classList.toggle('al-quiet', m.style.display === 'block');
-  m.innerHTML = h;
-  if (m.style.display !== 'block') { m.style.display = 'block'; m.scrollTop = 0; }
+  return h + '</div>';
 }
 function alToggleComida(ci) {
   var ch = alComiChecks();
@@ -3791,6 +3843,7 @@ function alToggleSuper(k, el) {
   if (el.checked) checks[k] = 1; else delete checks[k];
   el.closest('.al-li').classList.toggle('on', el.checked);
   try { localStorage.setItem('fa_super_' + currentUid, JSON.stringify(checks)); } catch (e) {}
+  var m = document.getElementById('guia-modal'), y = m ? m.scrollTop : 0; openGuiaAlimentacion(); if (m) m.scrollTop = y;
 }
 function alResetSuper() { try { localStorage.removeItem('fa_super_' + currentUid); } catch (e) {} openGuiaAlimentacion(); }
 
