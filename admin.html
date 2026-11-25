@@ -2361,6 +2361,22 @@ function rutinaTextoParaClaude(c, portal) {
   add('Meta en el panel', c.meta);
   return lines.join('\n');
 }
+// Para actualizar datos viejos o de prueba: guarda el cuestionario actual
+// como "cuestionarioAnterior" y al entrar a su cuenta le vuelve a salir.
+function acpRepetirCuestionario() {
+  var uid = acpState.uid; if (!uid) return;
+  if (!confirm('Le va a salir de nuevo el cuestionario de bienvenida la próxima vez que entre. Sus respuestas actuales quedan guardadas como anteriores. ¿Continuar?')) return;
+  var portal = acpState.portal || {}, up = {};
+  if (portal.cuestionario) up['clientasPortal/' + uid + '/cuestionarioAnterior'] = portal.cuestionario;
+  up['clientasPortal/' + uid + '/cuestionario'] = null;
+  up['clientasPortal/' + uid + '/perfil/requiereCuestionario'] = true;
+  getDB().ref().update(up).then(function() {
+    delete portal.cuestionario;
+    alert('✓ Listo. Cuando entre a su cuenta le va a salir el cuestionario.');
+    acpRenderShell();
+  }).catch(function(e) { alert('No se pudo: ' + (e && e.message ? e.message : 'error')); });
+}
+
 function rutinaCopiarDatos() {
   var c = CLIENTS[acpState.clientId] || {}, txt = rutinaTextoParaClaude(c, acpState.portal || {});
   var ok = function() { alert('✓ Datos copiados. Pégalos en el chat con Claude.'); };
@@ -2371,6 +2387,7 @@ function rutinaCopiarDatos() {
 function renderAcpRutinaHtml(clientId, c) {
   var html = '';
   if (acpState.uid) html += '<button type="button" class="al-btn" style="margin:0 0 1rem;" onclick="rutinaCopiarDatos()">📋 Copiar datos para Claude (armar su rutina)</button>';
+  if (acpState.uid) html += '<button type="button" onclick="acpRepetirCuestionario()" style="display:block;margin:-0.5rem 0 1rem;border:0;background:none;color:var(--muted);font-size:0.72rem;text-decoration:underline;cursor:pointer;">🔁 Pedir que vuelva a responder el cuestionario de bienvenida</button>';
   html += '<div class="card">';
   html += '<div class="card-label">🎯 Objetivo</div>';
   html += '<div style="font-size:0.85rem;color:var(--text);line-height:1.5;">' + (c.meta ? escapeHtmlAdmin(c.meta) : '<span style="color:var(--muted);">Sin objetivo definido todavía.</span>') + '</div>';
