@@ -2214,7 +2214,7 @@ function openAdminClientProfile(clientId) {
   var acpTitle = document.getElementById('acp-header-title');
   if (acpTitle) {
     var cc = CLIENTS[clientId] || {};
-    acpTitle.innerHTML = escapeHtmlAdmin(cc.name || 'Perfil de cliente') + (cc.type ? ' <span class="acp-type-tag">' + escapeHtmlAdmin(TYPE_LABELS[cc.type] || cc.type) + '</span>' : '');
+    acpTitle.innerHTML = escapeHtmlAdmin(cc.name || 'Perfil de cliente') + ' <button type="button" onclick="acpEditarNombre(\'' + clientId + '\')" title="Cambiar nombre" aria-label="Cambiar nombre" style="border:0;background:none;cursor:pointer;font-size:0.85rem;padding:0 0.2rem;">✏️</button>' + (cc.type ? ' <span class="acp-type-tag">' + escapeHtmlAdmin(TYPE_LABELS[cc.type] || cc.type) + '</span>' : '');
   }
   var uid = CLIENT_LINKS[clientId];
   // Auto-reparo: por si este cliente quedó creada antes de que
@@ -3826,6 +3826,27 @@ function saveClientDaysPerWeek(id, days) {
   CLIENTS[id] = Object.assign(CLIENTS[id], updatedData);
   localStorage.setItem('fa_custom_clients', JSON.stringify(custom));
   fbSet('clients_custom/' + id, updatedData);
+}
+
+// Cambiar el nombre de un cliente: en su ficha del panel y, si tiene
+// cuenta vinculada, también el nombre que ve en su perfil del portal.
+function acpEditarNombre(id) {
+  var c = CLIENTS[id]; if (!c) return;
+  var nuevo = prompt('Nombre del cliente', c.name || '');
+  if (nuevo === null) return;
+  nuevo = nuevo.trim().replace(/\s+/g, ' ');
+  if (!nuevo || nuevo === c.name) return;
+  var custom = JSON.parse(localStorage.getItem('fa_custom_clients') || '{}');
+  var updatedData = Object.assign({}, c, custom[id] || {}, { name: nuevo });
+  custom[id] = updatedData;
+  CLIENTS[id] = Object.assign(c, updatedData);
+  localStorage.setItem('fa_custom_clients', JSON.stringify(custom));
+  fbSet('clients_custom/' + id, updatedData);
+  fbSet('clients/' + id + '/name', nuevo);
+  var uid = CLIENT_LINKS[id];
+  if (uid) fbSet('clientasPortal/' + uid + '/perfil/nombre', nuevo);
+  openAdminClientProfile(id);
+  if (typeof renderClientsList === 'function') renderClientsList();
 }
 
 function slugify(name) {
