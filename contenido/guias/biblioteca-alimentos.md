@@ -19,6 +19,7 @@ Si falta la etiqueta, se calcula igual y se marca 🧮; cuando Frida mande foto,
 | Pechuga de pollo sin piel (cocida) | 100 g | 165 | 31 | 0 | 3.6 | 🔎 · PriceSmart más barata |
 | Carne molida de res 90/10 (cocida) | 100 g | 210 | 26 | 0 | 11 | 🔎 |
 | Bistec de res magro (cocido) | 100 g | 185 | 28 | 0 | 8 | 🔎 |
+| **Posta de res** (bistec de posta, a la plancha) | 120 g cocido (≈ 150 g crudo) | 200 | 34 | 0 | 6 | 🔎 · corte magro y económico; también: lomo de aguja o solomo (más grasa) · lomito es el más magro pero caro |
 | Jamón de pavo | 2 lonjas (40 g) | 45 | 7 | 1 | 1 | 🔎 |
 | Yogurt griego natural genérico | ½ taza (120 g) | 70 | 11 | 4 | 0.5 | 🔎 · mejor usar una marca de abajo |
 | Proteína en polvo (whey) | 1 scoop (30 g) | 120 | 24 | 3 | 1.5 | 🔎 promedio |
@@ -43,6 +44,7 @@ Si falta la etiqueta, se calcula igual y se marca 🧮; cuando Frida mande foto,
 | Mozzarella | 30 g (puñito rallado) | 85 | 6 | 1 | 6 | 🔎 · se derrite en huevos |
 | Feta | 30 g | 75 | 4 | 1 | 6 | 🔎 · mucho sabor, poca cantidad |
 | Queso fresco | 30 g (1 rodaja) | 80 | 6 | 1 | 6 | 🔎 |
+| **Queso crema light Dos Pinos** | 1 cucharada (15 g) | ≈ 35 | 1.5 | 1 | 3 | 🔎 Fitia (69 cal por 30 g) · falta etiqueta · **2 cucharadas ≈ ¼ de aguacate** en calorías |
 
 ### Carbohidratos
 | Alimento | Porción | cal | P | C | G | Notas |
@@ -55,7 +57,7 @@ Si falta la etiqueta, se calcula igual y se marca 🧮; cuando Frida mande foto,
 | Frijoles rojos enteros | ½ taza | 115 | 7 | 20 | 0.5 | 🔎 |
 | Frijoles molidos | ½ taza | 120 | 7 | 20 | 2 | 🔎 |
 | Avena en hojuelas (cruda) | ½ taza (40 g) | 150 | 5 | 27 | 3 | 🔎 |
-| Papa cocida con cáscara | 1 mediana (170 g) | 160 | 4 | 36 | 0 | 🔎 |
+| Papa cocida con cáscara | 1 mediana (170 g, como el puño) | 160 | 4 | 36 | 0 | 🔎 · pequeña 100 g ≈ 95 cal · grande 300 g ≈ 280 cal |
 | Camote cocido | 1 mediano | 115 | 2 | 27 | 0 | 🔎 |
 | Plátano maduro cocido | ½ mediano (90 g) | 110 | 1 | 29 | 0 | 🔎 |
 | Granola | ¼ taza | 120 | 3 | 20 | 4 | 🔎 |
@@ -91,6 +93,8 @@ Si falta la etiqueta, se calcula igual y se marca 🧮; cuando Frida mande foto,
 
 ## 2. Comidas (para escoger y ajustar porciones)
 
+> Tortillas: 1 tortilla ≈ 70 cal. Se pueden cambiar por arroz o papa: 1 tortilla ≈ ⅓ taza de arroz ≈ ½ papa mediana.
+
 Formato: plato · cal · proteína. Marcar con ⭐ las que a los clientes les gustaron (❤️).
 
 ### Merienda de la mañana / para la lonchera
@@ -102,7 +106,7 @@ Formato: plato · cal · proteína. Marcar con ⭐ las que a los clientes les gu
 ### Desayuno
 - ⭐ 2 huevos revueltos + 2 rebanadas de pan de masa madre + ½ plátano cocido + queso (cottage, mozzarella o feta) · 600 · 30
 - Omelette de 2 huevos con espinaca y mozzarella + 2 rebanadas de masa madre · 490 · 27
-- Tostadas de masa madre con 2 huevos estrellados, ¼ de aguacate y feta · 540 · 27
+- Tostadas de masa madre con 2 huevos estrellados, 2 cdas de queso crema light Dos Pinos y feta · 550 · 30
 - Panqueques de avena y banano (½ taza de avena, 1 banano, 2 huevos) con yogurt griego y miel · 535 · 27
 - Avena de la noche con proteína, banano y crema de maní · 560 · 42
 - Desayuno típico: 2 huevos + 2 tortillas + ½ taza de frijoles + ½ plátano + queso fresco · 600 · 29
@@ -115,7 +119,7 @@ Formato: plato · cal · proteína. Marcar con ⭐ las que a los clientes les gu
 
 ### Almuerzo / después de entrenar
 - Bowl de meal prep: pollo (100 g) + 1½ taza de arroz + ½ taza de frijoles + vegetales + ¼ de aguacate · 670 · 44
-- Bowl: carne molida en salsa de tomate (100 g) + 1½ taza de arroz o papa grande + ensalada + 2 tortillas + fruta · 670 · 30
+- Bowl: carne molida en salsa de tomate (100 g) + 1 taza de arroz + 1 papa mediana (170 g) + ensalada + fruta · 690 · 32
 - Pollo a la plancha (120 g) + 1 taza de arroz con ½ taza de frijoles + ensalada + fruta · 640 · 42
 - Pollo guisado con güisquil y zanahoria + arroz + 1 tortilla · 600 · 40
 - Bistec encebollado (120 g) + 1 taza de arroz + 1 tortilla + ensalada con aguacate · 620 · 37
@@ -131,6 +135,7 @@ Formato: plato · cal · proteína. Marcar con ⭐ las que a los clientes les gu
 - 1 fruta + 1 cuadrito de chocolate oscuro · 120 · 1
 
 ### Cena
+- Bistec de posta a la plancha (120 g) + 1 taza de arroz + vegetales salteados con 1 cdita de aceite · 470 · 38
 - 3 tacos de carne molida (90 g) con pico de gallo, lechuga y ¼ de aguacate · 480 · 27
 - Pollo a la plancha (100 g) + 1 taza de arroz + vegetales salteados + ½ taza de frijoles · 545 · 41
 - Bistec encebollado (100 g) + 1 papa cocida + 1 tortilla + ½ taza de frijoles + ensalada con aguacate · 620 · 37
