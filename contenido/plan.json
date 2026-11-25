@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-11-22",
+ "actualizado": "2026-11-25",
  "videos": [
   {
    "id": "v2026-11-10-cardio",
@@ -267,38 +267,39 @@
   },
   {
    "id": "h2026-11-24-planes",
-   "titulo": "Historia: mis planes de entrenamiento online",
+   "titulo": "Historia: así se ve entrenar conmigo (mi página web por dentro)",
    "pilar": "Ventas (historia semanal)",
    "formato": "Historia de Instagram (3 pantallas)",
    "duracion": "3 historias seguidas",
    "publicar": {
     "fecha": "2026-11-25",
-    "hora": "12:30"
+    "hora": "19:00"
    },
    "borrador": false,
-   "idea": "Cada semana una historia que invite a entrenar contigo. La de la semana pasada (con encuesta) te trajo 3 personas interesadas, así que repetimos la fórmula: mostrar el plan, el link y una encuesta para que levanten la mano.",
+   "idea": "Frida usa su propia cuenta como clienta y muestra la página por dentro con grabaciones de pantalla reales. Ver cómo funciona vende más que contarlo. Cierra con la encuesta que ya trajo 3 personas interesadas.",
    "tomas": [
     {
-     "graba": "HISTORIA 1: la imagen ya diseñada (celular con tu app): contenido/imagenes/historia-planes-1-web.png",
+     "graba": "HISTORIA 1: grabación de pantalla de tu cuenta (8 a 10 s): Inicio → tocas \"Hoy · Día 1\" y se abre tu rutina.",
      "habla": false,
-     "dice": "Ya trae el texto \"¿Quieres entrenar con un plan hecho solo para ti?\". Si quieres, agrega un sticker de música."
+     "dice": "Texto: \"así se ve entrenar conmigo 👀\". Si quieres, hablas en voz: \"Así es por dentro mi página web: aquí cada cliente tiene su rutina hecha a su medida.\""
     },
     {
-     "graba": "HISTORIA 2: la imagen ya diseñada \"Así puedes entrenar conmigo\" (sin precios): contenido/imagenes/historia-planes-2-tipos.png",
+     "graba": "HISTORIA 2: grabación de pantalla de la pestaña Bienestar: tu guía de alimentación (menú del día y lista del súper). Si tu guía todavía no está lista, graba tu calendario de entrenos y tus medallas en Perfil.",
      "habla": false,
-     "dice": "Agrega el sticker de link en la parte de abajo: fridaactive.com/servicios.html con el texto \"Ver planes\""
+     "dice": "Texto: \"y también tu guía de alimentación 🥗\" (o \"y cada entreno suma a tus medallas 🏅\")."
     },
     {
-     "graba": "HISTORIA 3: foto tuya sonriendo o en el gym",
+     "graba": "HISTORIA 3: foto o video tuyo sonriendo.",
      "habla": false,
-     "dice": "Encuesta: \"¿Empezamos en diciembre?\" con las opciones \"¡Sí! Quiero info 🙋‍♀️\" y \"Más adelante\". A quien vote \"Sí\", le escribes ese mismo día."
+     "dice": "Encuesta: \"¿Empezamos en diciembre?\" con \"¡Sí! Quiero info 🙋‍♀️\" y \"Más adelante\". Sticker de link: fridaactive.com/servicios.html con el texto \"Ver planes\". A quien vote Sí, le escribes hoy mismo."
     }
    ],
    "notas": [
-    "Historia semanal de ventas: esta semana el miércoles 25. Las imágenes están aquí abajo listas para descargar.",
-    "La encuesta es la clave: cada voto de \"Sí\" es una persona que levantó la mano. Escríbele el mismo día con el mensaje de seguimiento.",
-    "Publícala en \"Tu historia\", no en Mejores amigos.",
-    "Cambia la foto de la historia 1 cada semana para que no se vea repetida."
+    "Antes de grabar: cambia tu nombre a \"Frida Ardón\" y revisa que tu cuenta se vea con datos reales.",
+    "Grabación de pantalla en iPhone: desliza desde la esquina superior derecha y toca el botón ⏺. Graba lento, sin prisa, y luego corta en Edits o Instagram.",
+    "No muestres datos de otras clientas: solo tu cuenta.",
+    "Las imágenes diseñadas de la semana pasada (aquí abajo) siguen sirviendo si prefieres algo más rápido.",
+    "A quien vote \"Sí\", escríbele hoy mismo con el mensaje del chat de Ventas."
    ],
    "caption": "(Las historias no llevan caption.)",
    "checklist": [

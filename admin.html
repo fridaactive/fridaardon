@@ -2214,7 +2214,7 @@ function openAdminClientProfile(clientId) {
   var acpTitle = document.getElementById('acp-header-title');
   if (acpTitle) {
     var cc = CLIENTS[clientId] || {};
-    acpTitle.innerHTML = escapeHtmlAdmin(cc.name || 'Perfil de cliente') + (cc.type ? ' <span class="acp-type-tag">' + escapeHtmlAdmin(TYPE_LABELS[cc.type] || cc.type) + '</span>' : '');
+    acpTitle.innerHTML = escapeHtmlAdmin(cc.name || 'Perfil de cliente') + ' <button type="button" onclick="acpEditarNombre(\'' + clientId + '\')" title="Cambiar nombre" aria-label="Cambiar nombre" style="border:0;background:none;cursor:pointer;font-size:0.85rem;padding:0 0.2rem;">✏️</button>' + (cc.type ? ' <span class="acp-type-tag">' + escapeHtmlAdmin(TYPE_LABELS[cc.type] || cc.type) + '</span>' : '');
   }
   var uid = CLIENT_LINKS[clientId];
   // Auto-reparo: por si este cliente quedó creada antes de que
@@ -2361,6 +2361,22 @@ function rutinaTextoParaClaude(c, portal) {
   add('Meta en el panel', c.meta);
   return lines.join('\n');
 }
+// Para actualizar datos viejos o de prueba: guarda el cuestionario actual
+// como "cuestionarioAnterior" y al entrar a su cuenta le vuelve a salir.
+function acpRepetirCuestionario() {
+  var uid = acpState.uid; if (!uid) return;
+  if (!confirm('Le va a salir de nuevo el cuestionario de bienvenida la próxima vez que entre. Sus respuestas actuales quedan guardadas como anteriores. ¿Continuar?')) return;
+  var portal = acpState.portal || {}, up = {};
+  if (portal.cuestionario) up['clientasPortal/' + uid + '/cuestionarioAnterior'] = portal.cuestionario;
+  up['clientasPortal/' + uid + '/cuestionario'] = null;
+  up['clientasPortal/' + uid + '/perfil/requiereCuestionario'] = true;
+  getDB().ref().update(up).then(function() {
+    delete portal.cuestionario;
+    alert('✓ Listo. Cuando entre a su cuenta le va a salir el cuestionario.');
+    acpRenderShell();
+  }).catch(function(e) { alert('No se pudo: ' + (e && e.message ? e.message : 'error')); });
+}
+
 function rutinaCopiarDatos() {
   var c = CLIENTS[acpState.clientId] || {}, txt = rutinaTextoParaClaude(c, acpState.portal || {});
   var ok = function() { alert('✓ Datos copiados. Pégalos en el chat con Claude.'); };
@@ -2371,6 +2387,7 @@ function rutinaCopiarDatos() {
 function renderAcpRutinaHtml(clientId, c) {
   var html = '';
   if (acpState.uid) html += '<button type="button" class="al-btn" style="margin:0 0 1rem;" onclick="rutinaCopiarDatos()">📋 Copiar datos para Claude (armar su rutina)</button>';
+  if (acpState.uid) html += '<button type="button" onclick="acpRepetirCuestionario()" style="display:block;margin:-0.5rem 0 1rem;border:0;background:none;color:var(--muted);font-size:0.72rem;text-decoration:underline;cursor:pointer;">🔁 Pedir que vuelva a responder el cuestionario de bienvenida</button>';
   html += '<div class="card">';
   html += '<div class="card-label">🎯 Objetivo</div>';
   html += '<div style="font-size:0.85rem;color:var(--text);line-height:1.5;">' + (c.meta ? escapeHtmlAdmin(c.meta) : '<span style="color:var(--muted);">Sin objetivo definido todavía.</span>') + '</div>';
@@ -3826,6 +3843,27 @@ function saveClientDaysPerWeek(id, days) {
   CLIENTS[id] = Object.assign(CLIENTS[id], updatedData);
   localStorage.setItem('fa_custom_clients', JSON.stringify(custom));
   fbSet('clients_custom/' + id, updatedData);
+}
+
+// Cambiar el nombre de un cliente: en su ficha del panel y, si tiene
+// cuenta vinculada, también el nombre que ve en su perfil del portal.
+function acpEditarNombre(id) {
+  var c = CLIENTS[id]; if (!c) return;
+  var nuevo = prompt('Nombre del cliente', c.name || '');
+  if (nuevo === null) return;
+  nuevo = nuevo.trim().replace(/\s+/g, ' ');
+  if (!nuevo || nuevo === c.name) return;
+  var custom = JSON.parse(localStorage.getItem('fa_custom_clients') || '{}');
+  var updatedData = Object.assign({}, c, custom[id] || {}, { name: nuevo });
+  custom[id] = updatedData;
+  CLIENTS[id] = Object.assign(c, updatedData);
+  localStorage.setItem('fa_custom_clients', JSON.stringify(custom));
+  fbSet('clients_custom/' + id, updatedData);
+  fbSet('clients/' + id + '/name', nuevo);
+  var uid = CLIENT_LINKS[id];
+  if (uid) fbSet('clientasPortal/' + uid + '/perfil/nombre', nuevo);
+  openAdminClientProfile(id);
+  if (typeof renderClientsList === 'function') renderClientsList();
 }
 
 function slugify(name) {

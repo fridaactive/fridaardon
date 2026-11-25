@@ -1737,6 +1737,9 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
           Editar perfil
         </button>
         <div class="pf-bio-edit-row" id="pf-bio-edit-row">
+          <label for="pf-name-input" style="display:block;font-size:0.7rem;font-weight:700;color:var(--muted);margin-bottom:0.3rem;">Tu nombre</label>
+          <input id="pf-name-input" type="text" maxlength="60" autocomplete="name" style="width:100%;box-sizing:border-box;margin-bottom:0.6rem;padding:0.7rem 0.9rem;border-radius:14px;border:1.5px solid var(--border);background:var(--surface-2);color:var(--text);font:600 0.9rem 'DM Sans',sans-serif;">
+          <label for="pf-bio-textarea" style="display:block;font-size:0.7rem;font-weight:700;color:var(--muted);margin-bottom:0.3rem;">Sobre ti</label>
           <textarea class="pf-bio-textarea" id="pf-bio-textarea" placeholder="Ej: Mi meta es sentirme fuerte y con más energía. Me motiva verme mejor cada semana. Me encanta el senderismo los fines de semana 🏔️" maxlength="280"></textarea>
           <div class="pf-bio-actions">
             <button class="pf-bio-cancel" onclick="closeBioEdit()">Cancelar</button>
@@ -5045,6 +5048,8 @@ function openBioEdit() {
   document.getElementById('pf-bio-edit-row').classList.add('open');
   var ta = document.getElementById('pf-bio-textarea');
   ta.value = CURRENT_BIO;
+  var ni = document.getElementById('pf-name-input');
+  if (ni) ni.value = (CURRENT_PERFIL_DATA && CURRENT_PERFIL_DATA.nombre) || currentClientName || '';
   ta.focus();
 }
 
@@ -5056,6 +5061,13 @@ function closeBioEdit() {
 
 function saveBio() {
   var val = document.getElementById('pf-bio-textarea').value.trim();
+  var ni = document.getElementById('pf-name-input'), nuevoNombre = ni ? ni.value.trim().replace(/\s+/g, ' ') : '';
+  if (nuevoNombre && nuevoNombre !== ((CURRENT_PERFIL_DATA && CURRENT_PERFIL_DATA.nombre) || '')) {
+    CURRENT_PERFIL_DATA.nombre = nuevoNombre;
+    currentClientName = nuevoNombre;
+    var pn = document.getElementById('perfil-name'); if (pn) pn.textContent = nuevoNombre;
+    db().ref('clientasPortal/' + currentUid + '/perfil/nombre').set(nuevoNombre).catch(function(e) { console.warn('saveNombre error', e.message); });
+  }
   renderBioDisplay(val);
   closeBioEdit();
   CURRENT_PERFIL_DATA.bio = val;
