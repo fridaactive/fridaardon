@@ -9,7 +9,7 @@ Este archivo es para el chat que arma las guías. La página web ya está lista:
    - Su cuestionario de bienvenida: edad, sexo, peso en lbs, estatura, objetivo, nivel, días y tiempo de entreno, actividad diaria, ocupación, lesiones, etc.
    - La encuesta de alimentación: hora de despertar y de dormir, hora de entreno, comidas al día, tipo de alimentación (de todo / sin carnes rojas / vegetariana / vegana), alimentos que no come, alergias, condiciones de salud, relación con la comida, si cocina, cuántas veces come fuera, supermercados, presupuesto semanal, agua, suplementos y antojos.
    - "LE GUSTÓ": los platos que marcó con ❤️ en su guía anterior (cuando es una actualización).
-3. El chat devuelve UN bloque JSON (desde `{` hasta `}`). Frida lo pega en la misma pestaña → "Publicar guía" y el cliente la ve al instante en su pestaña Bienestar.
+3. El chat devuelve UN bloque JSON (desde `{` hasta `}`). Frida lo pega en la misma pestaña → "Publicar guía en su cuenta" y el cliente la ve al instante en su pestaña Bienestar.
 
 ## Reglas de contenido
 
