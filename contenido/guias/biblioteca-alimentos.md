@@ -52,7 +52,9 @@ Si falta la etiqueta, se calcula igual y se marca 🧮; cuando Frida mande foto,
 | Pan de masa madre | 1 rebanada mediana (50 g) | 130 | 5 | 25 | 1 | 🔎 |
 | Pan integral | 1 rebanada | 80 | 4 | 14 | 1 | 🔎 |
 | Tortilla de maíz | 1 mediana | 70 | 2 | 14 | 1 | 🔎 |
-| Tortilla de harina grande | 1 unidad | 200 | 5 | 34 | 5 | 🔎 |
+| **Rapiditas Bimbo Clásicas** (12 piezas, 312 g) | 1 tortilla (26 g, mediana) | ≈ 80 | 2 | 13 | 2 | 🧮 · Super Selectos ≈ $2.20 · [link](https://www.superselectos.com/?productId=9876) · para tacos |
+| **Rapiditas Bimbo Wraps** (5 piezas, 320 g) | 1 wrap (64 g, grande) | ≈ 200 | 5 | 33 | 5 | 🧮 · Super Selectos ≈ $2.40 · [link](https://www.superselectos.com/products?category=039111&productId=12484) · para burritos |
+| Rapiditas Bimbo Integrales / Light / Burritos (250 a 260 g) | revisar piezas en el paquete | ≈ 300 cal por 100 g | | | | 🧮 · Super Selectos ≈ $2.20 a $2.30 |
 | Arroz blanco cocido | 1 taza | 200 | 4 | 45 | 0.5 | 🔎 |
 | Frijoles rojos enteros | ½ taza | 115 | 7 | 20 | 0.5 | 🔎 |
 | Frijoles molidos | ½ taza | 120 | 7 | 20 | 2 | 🔎 |
@@ -61,7 +63,9 @@ Si falta la etiqueta, se calcula igual y se marca 🧮; cuando Frida mande foto,
 | Camote cocido | 1 mediano | 115 | 2 | 27 | 0 | 🔎 |
 | Plátano maduro cocido | ½ mediano (90 g) | 110 | 1 | 29 | 0 | 🔎 |
 | Granola | ¼ taza | 120 | 3 | 20 | 4 | 🔎 |
-| Barra de granola | 1 unidad | 120 | 2 | 20 | 4 | 🔎 promedio |
+| **Nature Valley Protein** (crema de maní y chocolate oscuro) | 1 barra (40 g) | 190 | 10 | 14 | 12 | 🔎 etiqueta EE. UU. · Super Selectos caja de 5 (201 g) ≈ $7.00 = $1.40 c/u · [link](https://www.superselectos.com/products?category=0313136&productId=117397) |
+| Special K Proteína Chocolate | 1 barrita (45 g) | ≈ 180 | ≈ 10 | ≈ 20 | ≈ 6 | 🧮 falta etiqueta · Super Selectos ≈ $1.75 · [link](https://www.superselectos.com/products?category=0313136&productId=115612) |
+| Barra de granola normal | 1 unidad | 120 | 2 | 20 | 4 | 🔎 promedio · poca proteína, mejor una de proteína |
 
 ### Frutas
 | Alimento | Porción | cal | P | C | G |
@@ -110,7 +114,8 @@ Formato: plato · cal · proteína. Marcar con ⭐ las que a los clientes les gu
 - Panqueques de avena y banano (½ taza de avena, 1 banano, 2 huevos) con yogurt griego y miel · 535 · 27
 - Avena de la noche con proteína, banano y crema de maní · 560 · 42
 - Desayuno típico: 2 huevos + 2 tortillas + ½ taza de frijoles + ½ plátano + queso fresco · 600 · 29
-- Burrito de desayuno (tortilla de harina, 2 huevos, frijoles y queso), se congela en lote · 490 · 27
+- Burrito de desayuno sin frijoles: 1 Rapiditas Wrap + 2 huevos + 2 claras revueltos con chile verde y tomate + 2 cdas de queso crema light Dos Pinos (o 30 g de mozzarella) + 1 fruta · 525 · 27 · se puede congelar en lote
+- Burrito de desayuno con frijoles: tortilla de harina, 2 huevos, frijoles y queso · 490 · 27
 
 ### Antes de entrenar
 - 1 banano + 1 cucharada de crema de maní · 200 · 5
@@ -131,10 +136,13 @@ Formato: plato · cal · proteína. Marcar con ⭐ las que a los clientes les gu
 - 2 tortitas de arroz con chocolate + 1 vasito de yogurt Yes Griego + 1 fruta · 350 · 14
 - 1 rebanada de masa madre con crema de maní y banano · 330 · 10
 - ½ taza de yogurt griego con fresas, granola y chispas de chocolate oscuro · 320 · 16
-- Batido de proteína con leche + 1 barra de granola · 330 · 34
+- Batido de proteína (1 scoop + 1 taza de leche descremada) + 1 barra Nature Valley Protein · 400 · 42
 - 1 fruta + 1 cuadrito de chocolate oscuro · 120 · 1
 
 ### Cena
+- Sándwich de pollo cremoso · 540 · 43
+  - 2 rebanadas de pan de masa madre (o integral: 440 cal) + 100 g de pollo desmenuzado + 1 cda de queso crema light Dos Pinos + 1 cdita de mostaza + chile verde y cebolla picados + lechuga y tomate + 1 fruta
+  - Mezcla el pollo con el queso crema, la mostaza, el chile y la cebolla; tuesta el pan, arma con lechuga y tomate. El pollo sale del meal prep.
 - ⭐ Bistec de posta a la plancha (120 g) + 1 papa mediana (170 g) + vegetales salteados con 1 cdita de aceite · 430 · 39
 - 3 tacos de carne molida (90 g) con pico de gallo, lechuga y ¼ de aguacate · 480 · 27
 - Pollo a la plancha (100 g) + 1 taza de arroz + vegetales salteados + ½ taza de frijoles · 545 · 41
