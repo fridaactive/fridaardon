@@ -2471,7 +2471,7 @@ function rutinaDesdeTexto(raw) {
   var out = { days: r.days.map(function(d, di) {
     return { id: 'day-' + Date.now() + '-' + di, name: str(d.name) || ('Día ' + (di + 1)), blocks: (d.blocks || []).map(function(b, bi) {
       var mode = b.mode === 'tiempo' ? 'tiempo' : 'reps';
-      return { id: 'blk-' + Date.now() + '-' + di + '-' + bi, name: str(b.name) || 'Bloque', mode: mode, workSecs: parseInt(b.workSecs) || 40, restSecs: parseInt(b.restSecs) || 40,
+      return { id: 'blk-' + Date.now() + '-' + di + '-' + bi, name: str(b.name) || 'Bloque', mode: mode, workSecs: parseInt(b.workSecs) || 40, restSecs: parseInt(b.restSecs) || 40, descansoRonda: parseInt(b.descansoRonda) || null,
         exercises: (b.exercises || []).filter(function(e) { return e && str(e.name); }).map(function(e) {
           n++;
           var tipo = (e.tipo === 'tiempo' || e.tipo === 'reps') ? e.tipo : mode;
@@ -2483,6 +2483,7 @@ function rutinaDesdeTexto(raw) {
   }) };
   if (!n) throw new Error('sin ejercicios');
   if (r.mensajeInicial) out.mensajeInicial = str(r.mensajeInicial);
+  if (parseInt(r.metaMin)) out.metaMin = parseInt(r.metaMin);
   if (Array.isArray(r.aclaraciones)) out.aclaraciones = r.aclaraciones.map(str).filter(Boolean);
   out.publicadaEn = new Date().toISOString();
   return { rutina: out, total: n };
