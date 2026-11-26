@@ -4482,10 +4482,8 @@ function rttMainBtn() {
   RTT.timerRunning = true; rttPaintMainBtn();
   RTT.timerInterval = setInterval(function() {
     RTT.timerLeft--;
-    if (RTT.timerLeft > 0 && RTT.timerLeft <= 3) rttBeep(660, 0.08);
     rttPaintTimer();
     if (RTT.timerLeft > 0) return;
-    rttBeep(990, 0.25);
     if (RTT.lado === 1) { RTT.lado = 2; RTT.timerLeft = RTT.timerTotal; rttPaintTimer(); return; }
     clearInterval(RTT.timerInterval); RTT.timerRunning = false;
     rttDoneSet();
@@ -4532,12 +4530,13 @@ function rttRest(sec, titulo, next) {
     + '<span class="rtt-next-t"><small>Sigue · ' + escapeHtml(rttBlockLabel(next.block)) + ' · ronda ' + (next.r + 1) + '</small><b>' + escapeHtml(next.ex.name) + '</b><small>' + escapeHtml(exDosisTxt(next.block, next.ex)) + '</small></span>';
   document.getElementById('rtt-rest').hidden = false;
   rttPaintRest();
+  rttSonido('inicio');
   clearInterval(RTT.restInterval);
   RTT.restInterval = setInterval(function() {
     RTT.restSecs--;
-    if (RTT.restSecs > 0 && RTT.restSecs <= 3) rttBeep(660, 0.08);
     rttPaintRest();
-    if (RTT.restSecs <= 0) { rttBeep(990, 0.25); rttEndRest(); }
+    if (RTT.restSecs > 0) rttSonido('tic');
+    else { rttSonido('fin'); rttEndRest(); }
   }, 1000);
 }
 function rttPaintRest() {
@@ -4550,13 +4549,26 @@ function rttPaintRest() {
 function rttEndRest() { if (RTT) clearInterval(RTT.restInterval); document.getElementById('rtt-rest').hidden = true; }
 function rttRestSkip() { rttEndRest(); }
 function rttRestPlus() { RTT.restSecs += 15; RTT.restTotal = Math.max(RTT.restTotal, RTT.restSecs); rttPaintRest(); }
-// Pitido suave al final de cada cuenta (si el celular no está en silencio).
+// Sonidos del descanso (solo ahí): al empezar, un tic suave cada segundo y
+// otro al terminar, justo cuando pasa al siguiente ejercicio. Se generan en
+// el navegador; en iPhone no suenan si está en silencio.
 var RTT_AUDIO = null;
 function rttBeepInit() { try { RTT_AUDIO = RTT_AUDIO || new (window.AudioContext || window.webkitAudioContext)(); if (RTT_AUDIO.state === 'suspended') RTT_AUDIO.resume(); } catch (e) { RTT_AUDIO = null; } }
-function rttBeep(freq, dur) {
-  try { if (navigator.vibrate && dur > 0.2) navigator.vibrate(200); } catch (e) {}
+function rttNota(freq, empieza, dur, vol, forma) {
+  var t = RTT_AUDIO.currentTime + empieza, o = RTT_AUDIO.createOscillator(), g = RTT_AUDIO.createGain();
+  o.type = forma || 'sine'; o.frequency.value = freq;
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(RTT_AUDIO.destination); o.start(t); o.stop(t + dur + 0.02);
+}
+function rttSonido(tipo) {
+  if (tipo === 'fin') { try { if (navigator.vibrate) navigator.vibrate([120, 60, 220]); } catch (e) {} }
   if (!RTT_AUDIO) return;
-  try { var o = RTT_AUDIO.createOscillator(), g = RTT_AUDIO.createGain(); o.frequency.value = freq; g.gain.value = 0.15; o.connect(g); g.connect(RTT_AUDIO.destination); o.start(); o.stop(RTT_AUDIO.currentTime + dur); } catch (e) {}
+  try {
+    if (RTT_AUDIO.state === 'suspended') RTT_AUDIO.resume();
+    if (tipo === 'inicio') { rttNota(784, 0, 0.18, 0.22); rttNota(523, 0.16, 0.28, 0.22); }
+    else if (tipo === 'tic') rttNota(1200, 0, 0.04, 0.07, 'triangle');
+    else if (tipo === 'fin') { rttNota(659, 0, 0.16, 0.25); rttNota(880, 0.14, 0.16, 0.25); rttNota(1319, 0.28, 0.42, 0.25); }
+  } catch (e) {}
 }
 function rttFinish() {
   clearInterval(RTT.clockInterval); clearInterval(RTT.timerInterval);
