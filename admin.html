@@ -2006,10 +2006,10 @@ var CQ_LABELS = {
   objetivo: 'Objetivo principal', motivacion: 'Qué la motivó a empezar', experiencia: '¿Entrena actualmente?',
   experienciaPesas: 'Experiencia con pesas', actividadDiaria: 'Su día normal', ocupacion: 'Ocupación',
   lesion: '¿Lesión o condición médica?', lesionDetalle: 'Detalle de la lesión', diasSemana: 'Días por semana',
-  tiempoSesion: 'Tiempo por entreno', lugar: '¿Dónde entrena?', equipoCasa: 'Equipo en casa', equipoComprar: 'Podría comprar',
+  tiempoSesion: 'Tiempo por entreno', lugar: '¿Dónde entrena?', equipoCasa: 'Equipo en casa', equipoGym: 'Equipo en su gimnasio', equipoComprar: 'Podría comprar',
   guiaAlimentacion: 'Guía de alimentación', nutricionista: 'Nutricionista'
 };
-var CQ_ORDER = ['fechaNacimiento', 'genero', 'pesoLb', 'peso', 'estatura', 'objetivo', 'motivacion', 'experiencia', 'experienciaPesas', 'actividadDiaria', 'ocupacion', 'lesion', 'lesionDetalle', 'diasSemana', 'tiempoSesion', 'lugar', 'equipoCasa', 'equipoComprar', 'guiaAlimentacion', 'nutricionista'];
+var CQ_ORDER = ['fechaNacimiento', 'genero', 'pesoLb', 'peso', 'estatura', 'objetivo', 'motivacion', 'experiencia', 'experienciaPesas', 'actividadDiaria', 'ocupacion', 'lesion', 'lesionDetalle', 'diasSemana', 'tiempoSesion', 'lugar', 'equipoCasa', 'equipoGym', 'equipoComprar', 'guiaAlimentacion', 'nutricionista'];
 var CQ_NUTRI_LABELS = {
   si_tengo: 'Sí, ya tiene nutricionista',
   no_quiero: 'No, pero quiere el servicio de nutrición',
@@ -2028,8 +2028,8 @@ function formatCuestionarioValue(key, val) {
   if (key === 'nutricionista') return CQ_NUTRI_LABELS[val] || val;
   if (key === 'guiaAlimentacion') return CQ_GUIA_LABELS[val] || val;
   if (key === 'pesoLb') return val + ' lb';
-  if ((key === 'equipoCasa' || key === 'equipoComprar') && typeof val === 'object') {
-    if (val.ninguno || !(val.items && val.items.length)) return key === 'equipoCasa' ? 'Nada' : 'Nada por ahora';
+  if ((key === 'equipoCasa' || key === 'equipoComprar' || key === 'equipoGym') && typeof val === 'object') {
+    if (val.ninguno || !(val.items && val.items.length)) return key === 'equipoCasa' ? 'Nada' : key === 'equipoGym' ? 'Gym completo, tiene de todo' : 'Nada por ahora';
     return val.items.map(function(it) { var p = val.pesos && val.pesos[it]; return p ? it + ' (' + p + ')' : it; }).join(', ');
   }
   if (key === 'lesion') return val === 'si' ? 'Sí' : 'No';

@@ -3361,6 +3361,8 @@ function renderPortalScreen(portal, perfil) {
 // Answers are saved once at the end to clientasPortal/{uid}/cuestionario —
 // their mere presence is what marks the questionnaire as completed.
 var CQ_EQUIPO = ['Mancuernas', 'Bandas o ligas elásticas', 'Kettlebell', 'Barra y discos', 'Banco', 'Step o cajón', 'Colchoneta', 'Barra para dominadas', 'Cuerda para saltar'];
+// Gimnasio: muchos son de apartamento o residencial y no tienen máquinas.
+var CQ_EQUIPO_GYM = ['Mancuernas', 'Barra y discos', 'Banco', 'Poleas (máquina de cables)', 'Máquina Smith', 'Prensa de pierna', 'Máquinas de pierna (extensión, curl, abductores)', 'Máquinas de pecho, espalda u hombro', 'Bandas o ligas elásticas', 'Caminadora, bici o elíptica'];
 var CQ_CON_PESO = { 'Mancuernas': true, 'Kettlebell': true, 'Barra y discos': true };
 var CQ_QUESTIONS = [
   { key: 'fechaNacimiento', type: 'date', required: true, label: '¿Cuándo es tu cumpleaños?' },
@@ -3394,6 +3396,7 @@ var CQ_QUESTIONS = [
   { key: 'tiempoSesion', type: 'select', required: true, label: '¿Cuánto tiempo tienes para cada entreno?', options: ['30 minutos', '45 minutos', '1 hora', 'Más de 1 hora'] },
   { key: 'lugar', type: 'select', required: true, label: '¿Dónde vas a entrenar?', options: ['Casa', 'Gimnasio', 'Ambos'] },
   { key: 'equipoCasa', type: 'multi', required: true, items: CQ_EQUIPO, none: 'No tengo nada', label: '¿Qué equipo tienes en casa?', sub: 'Marca todo lo que tengas. Si tienes pesas, dime de cuántas libras.', showIf: function(a) { return a.lugar === 'Casa' || a.lugar === 'Ambos'; } },
+  { key: 'equipoGym', type: 'multi', required: true, items: CQ_EQUIPO_GYM, none: 'Es un gym completo, tiene de todo', label: '¿Qué hay en tu gimnasio?', sub: 'Marca lo que tenga. Así tu rutina usa solo lo que vas a encontrar ahí.', showIf: function(a) { return a.lugar === 'Gimnasio' || a.lugar === 'Ambos'; } },
   { key: 'equipoComprar', type: 'multi', required: true, items: CQ_EQUIPO, none: 'Por ahora no puedo comprar nada', label: 'Si hiciera falta, ¿qué podrías comprar?', sub: 'Así armo tu rutina con lo que tienes y sé qué podríamos sumar más adelante.', skipOwned: 'equipoCasa', showIf: function(a) { return a.lugar === 'Casa' || a.lugar === 'Ambos'; } },
   { key: 'guiaAlimentacion', type: 'select', required: true, label: '¿Te gustaría recibir una guía de alimentación?', sub: 'Viene incluida en tu plan: ideas y porciones fáciles para mejorar tu alimentación, sin dietas estrictas.', options: [
       { value: 'si', label: '¡Sí, me encantaría!' },
@@ -3459,7 +3462,7 @@ function cqRender() {
     var items = q.items.filter(function(it) { return owned.indexOf(it) === -1; });
     var html = items.map(function(it) {
       var on = sel.indexOf(it) !== -1;
-      var pesoIn = (on && CQ_CON_PESO[it] && !q.skipOwned) ? '<input type="text" class="cq-peso-in" data-peso="' + escapeHtml(it) + '" placeholder="¿De cuántas libras? Ej: 5, 10 y 15" value="' + escapeHtml(pesos[it] || '') + '">' : '';
+      var pesoIn = (on && CQ_CON_PESO[it] && !q.skipOwned) ? '<input type="text" class="cq-peso-in" data-peso="' + escapeHtml(it) + '" placeholder="' + (q.key === 'equipoGym' ? '¿Hasta cuántas libras llegan? Ej: 30' : '¿De cuántas libras? Ej: 5, 10 y 15') + '" value="' + escapeHtml(pesos[it] || '') + '">' : '';
       return '<div class="cq-option cq-multi' + (on ? ' selected' : '') + '" data-value="' + escapeHtml(it) + '"><span class="cq-option-dot"></span><span class="cq-option-label">' + escapeHtml(it) + '</span></div>' + pesoIn;
     }).join('');
     var noneOn = currentVal && currentVal.ninguno;
