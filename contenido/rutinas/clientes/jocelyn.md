@@ -1,10 +1,10 @@
-# Jocelyn · Mes 1 (desde el 1 de diciembre de 2026) · BORRADOR v3 por aprobar
+# Jocelyn · Mes 1 (desde el 1 de diciembre de 2026) · VERSIÓN FINAL, falta el ok de Frida
 
 Objetivo del mes: movilidad, control corporal, aprender los ejercicios. Intensidad baja.
 3 días FULL BODY en casa (~45 min) + 2 días de caminata de 25 min en días sin fuerza.
 Semana: Lun Día 1 · Mar caminar · Mié Día 2 · Jue caminar · Vie o Sáb Día 3.
 Equipo: mancuernas de 25 lbs + comprar de 5 y 10 lbs, bandas, mat, silla firme.
-Pie derecho: nada de saltos ni cuerda, no cargar peso en las puntas; plancha sobre rodillas si molesta.
+Pie derecho: nada de saltos ni cuerda, no cargar peso en las puntas; planchas con rodillas apoyadas si molesta.
 
 Formato de cada día:
 - Calentamiento · 3 ejercicios · 2 rondas (40 s c/u, 15 s entre ejercicios)
@@ -14,7 +14,7 @@ Formato de cada día:
 ## Día 1
 - Calentamiento · 2 rondas: Gato-vaca · Movilidad de cadera 90/90 · Movilidad de dedos y tobillo
 - Principal · 3 rondas: Sentadilla goblet con mancuerna 12 (10 lbs) · Remo inclinado con mancuernas 12 (10 lbs c/mano) · Puente de glúteo con mancuerna 12 (25 lbs) · Press de hombro con mancuernas 10 (5 lbs c/mano)
-- Finisher · 3 rondas: Dead bug 10 c/lado · Plancha frontal 20 s · Estiramiento de flexor de cadera 30 s c/lado
+- Finisher · 3 rondas: Dead bug 10 c/lado · Plancha baja 20 s · Estiramiento de flexor de cadera 30 s c/lado
 
 ## Día 2
 - Calentamiento · 2 rondas: Rotación torácica en cuadrupedia · Aperturas con banda · Caminata lateral con banda
@@ -23,5 +23,5 @@ Formato de cada día:
 
 ## Día 3
 - Calentamiento · 2 rondas: Círculos de brazos · Movilidad de dedos y tobillo · Equilibrio en un pie 20 s c/lado
-- Principal · 3 rondas: Sentadilla sumo con mancuerna 12 (25 lbs) · [2º PENDIENTE: tren superior, Frida lo piensa (¿elevaciones laterales?)] · Patada de glúteo con banda 12 c/pierna (en cuadrupedia) · Remo sentada con banda 12
-- Finisher · 3 rondas: Elevación de piernas acostada 10 · Plancha frontal 20 s · Postura del niño 30 s
+- Principal · 3 rondas: Sentadilla sumo con mancuerna 12 (25 lbs) · Plancha alta con toques de hombro 10 c/lado (lenta; con rodillas apoyadas si el pie molesta) · Patada de glúteo con banda 12 c/pierna (en cuadrupedia) · Remo sentada con banda 12
+- Finisher · 3 rondas: Elevación de piernas acostada 10 · Plancha baja 20 s · Postura del niño 30 s
