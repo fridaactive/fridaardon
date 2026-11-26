@@ -359,16 +359,45 @@ window.addEventListener("load", function(){ setTimeout(function(){ try { showTab
   .rtt-next-t b { color:#fff; font-size:0.9rem; }
   .rtt-next-t small { color:rgba(255,255,255,0.65); font-size:0.68rem; }
   .rtt-start { display:flex; flex-direction:column; padding-top:0.8rem; }
+  .rtt-start-hero { position:relative; min-height:230px; border-radius:28px; overflow:hidden; padding:1rem 1.1rem 1.2rem; margin-bottom:1rem; display:flex; flex-direction:column; justify-content:space-between;
+    background:linear-gradient(180deg, rgba(15,63,168,0.1) 20%, rgba(7,11,26,0.92) 100%), url('hero-frida.jpg') center 30%/cover no-repeat, var(--blue); box-shadow:0 6px 0 #0F3FA8; animation:faUp 0.45s cubic-bezier(0.2,0.8,0.2,1); }
+  .rtt-tilt { transform:rotate(-3deg); box-shadow:0 3px 0 #C9B57A; }
+  .rtt-start-title .fa-marker { color:#fff; }
+  .rtt-start-title .fa-marker::after { height:0.5em; bottom:0.05em; }
+  .rtt-sb { animation:faUp 0.45s cubic-bezier(0.2,0.8,0.2,1) both; }
+  .rtt-go-ico { animation:fa-chat-pulse 2s ease-in-out infinite; }
+  .rtt-go:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+  .rtt-in { animation:faUp 0.4s cubic-bezier(0.2,0.8,0.2,1) both; }
+  .rtt-target .rtt-target-tag { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; font-size:1.05rem; padding:0.45rem 1rem; text-transform:uppercase; box-shadow:0 4px 0 #C9B57A; }
+  .rtt-chip-cream { transform:rotate(-2deg); box-shadow:0 3px 0 #C9B57A; }
+  .rtt-chip:not(.rtt-chip-cream) { box-shadow:0 3px 0 #0F3FA8; }
+  .rtt-timer.on .ring { filter:drop-shadow(0 0 14px rgba(143,176,255,0.45)); }
+  .rtt-timer.ult .ring { animation:rttLatido 1s ease-in-out infinite; }
+  .rtt-timer.ult .ring .fg { stroke:var(--cream); }
+  @keyframes rttLatido { 0%,100% { transform:scale(1); } 50% { transform:scale(1.06); } }
+  .rtt-pop { animation:rttPop 0.5s cubic-bezier(.2,1.5,.4,1); }
+  @keyframes rttPop { from { transform:scale(0.6) rotate(-4deg); opacity:0; } to { transform:none; opacity:1; } }
+  .rtt-rest .ring { filter:drop-shadow(0 0 22px rgba(245,236,203,0.25)); }
+  .rtt-rest .fa-sticker { width:30px; height:30px; animation:faTwinkle 2.6s ease-in-out infinite; }
+  .rtt-rest-spark1 { top:18%; left:12%; }
+  .rtt-rest-spark2 { top:26%; right:14%; width:20px !important; height:20px !important; animation-delay:0.8s !important; }
+  .rtt-confeti { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+  #rtt-end-view { position:relative; }
+  .rtt-done-scr { position:relative; }
+  .rtt-done-scr .fa-sticker { width:28px; height:28px; animation:faTwinkle 2.6s ease-in-out infinite; }
+  .rtt-end-spark1 { top:5.2rem; left:18%; }
+  .rtt-end-spark2 { top:8rem; right:16%; width:20px !important; height:20px !important; animation-delay:0.9s !important; }
+  .rtt-done-scr h2 .fa-marker::after { height:0.45em; }
   .rtt-start .in-hero-tag { align-self:flex-start; }
-  .rtt-start-title { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; font-size:2rem; line-height:1; color:var(--text); margin:0.7rem 0 0.4rem; }
-  .rtt-start-meta { color:var(--muted); font-size:0.8rem; margin-bottom:1.1rem; }
+  .rtt-start-title { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; font-size:2.3rem; line-height:1.02; color:#fff; margin:0 0 0.45rem; }
+  .rtt-start-meta { color:#C9D3EC; font-size:0.8rem; }
   .rtt-start-blocks { display:flex; flex-direction:column; gap:0.55rem; margin-bottom:1.4rem; }
   .rtt-sb { display:flex; align-items:center; gap:0.8rem; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:0.75rem 0.9rem; }
   .rtt-sb-n { font-family:'Archivo Black','DM Sans',sans-serif; color:var(--cream); font-size:1.1rem; }
   .rtt-sb-t { flex:1; min-width:0; display:flex; flex-direction:column; gap:0.15rem; }
   .rtt-sb-t b { font-size:0.88rem; color:var(--text); }
   .rtt-sb-t small { font-size:0.68rem; color:var(--muted); line-height:1.35; }
-  .rtt-sb-r { font-family:'Archivo Black','DM Sans',sans-serif; color:#fff; background:var(--blue); border-radius:999px; padding:0.3rem 0.6rem; font-size:0.75rem; }
+  .rtt-sb-r { font-family:'DM Sans',sans-serif; font-weight:800; color:#0D1B3E; background:var(--cream); border-radius:999px; padding:0.3rem 0.65rem; font-size:0.7rem; white-space:nowrap; transform:rotate(-3deg); box-shadow:0 3px 0 #C9B57A; }
   .rtt-go { display:flex; align-items:center; justify-content:center; gap:0.7rem; width:100%; border:none; border-radius:100px; padding:0.8rem 1rem; background:var(--blue); color:#fff; font-family:'Archivo Black','DM Sans',sans-serif; font-size:1.05rem; text-transform:uppercase; letter-spacing:0.04em; box-shadow:0 5px 0 #0F3FA8; cursor:pointer; margin-top:auto; }
   .rtt-go-ico { width:2.4rem; height:2.4rem; border-radius:50%; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; }
   .rtt-go-ico svg { width:18px; height:18px; }
@@ -2258,9 +2287,12 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
   <!-- 1. Portada del día: se revisa el plan y se toca Comenzar (ahí arranca el reloj) -->
   <div id="rtt-start-view" class="exs-body rtt-start">
     <div class="rtt-bar-top"><button class="exs-close" onclick="rttExit()">✕ Salir</button></div>
-    <span class="in-hero-tag">▶ MODO ENTRENO</span>
-    <h2 class="rtt-start-title" id="rtt-start-title"></h2>
-    <div class="rtt-start-meta" id="rtt-start-meta"></div>
+    <div class="rtt-start-hero">
+      <svg class="fa-sticker fa-sticker-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+      <span class="in-hero-tag rtt-tilt">▶ MODO ENTRENO</span>
+      <div><h2 class="rtt-start-title" id="rtt-start-title"></h2>
+      <div class="rtt-start-meta" id="rtt-start-meta"></div></div>
+    </div>
     <div class="rtt-start-blocks" id="rtt-start-blocks"></div>
     <button type="button" class="rtt-go" onclick="rttStart()"><span class="rtt-go-ico"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>Comenzar</button>
   </div>
@@ -2287,6 +2319,9 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
     <div class="rtt-sub-row"><span class="exs-last" id="rtt-last" style="display:none;">↗ La vez pasada: <b id="rtt-last-val"></b></span><button type="button" class="rtt-skip" onclick="rttSkipEx()">Saltar ›</button></div>
 
     <div class="rtt-rest" id="rtt-rest" hidden>
+      <div class="rtt-confeti" id="rtt-rest-conf"></div>
+      <svg class="fa-sticker rtt-rest-spark1" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+      <svg class="fa-sticker rtt-rest-spark2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
       <h3 id="rtt-rest-h">Descansa</h3>
       <div class="ring">
         <svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="27"/><circle class="fg" id="rtt-rest-ring" cx="32" cy="32" r="27"/></svg>
@@ -2298,10 +2333,13 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
   </div>
   <!-- 3. Final: tiempo total, comentario y guardar -->
   <div id="rtt-end-view" class="exs-body" style="display:none;">
+    <div class="rtt-confeti" id="rtt-end-conf"></div>
     <div class="rtt-done-scr">
-      <span class="in-hero-tag">¡HOY CUENTA!</span>
+      <svg class="fa-sticker rtt-end-spark1" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+      <svg class="fa-sticker rtt-end-spark2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+      <span class="in-hero-tag rtt-tilt">¡HOY CUENTA!</span>
       <div class="medal">🏆</div>
-      <h2>Entreno<br>completado</h2>
+      <h2>Entreno<br><span class="fa-marker">completado</span></h2>
       <div class="rtt-end-time"><b id="rtt-end-time"></b><small id="rtt-end-meta"></small></div>
       <textarea id="rtt-end-comment" class="rtt-end-comment" rows="3"></textarea>
       <button type="button" class="rtt-main-btn" onclick="rttSaveAndExit()">Guardar mi entreno</button>
@@ -4531,13 +4569,14 @@ function startGuidedWorkout(dayId) {
   if (!steps.length) return;
   RTT = { dayId: dayId, day: day, steps: steps, s: 0, startTs: null, clockInterval: null, restInterval: null, timerInterval: null,
     restSecs: 0, restTotal: 0, meta: parseInt(currentRutinaData.metaMin, 10) || 0, finished: false, saved: false };
-  document.getElementById('rtt-start-title').textContent = day.name;
+  var partes = String(day.name || '').split('·');
+  document.getElementById('rtt-start-title').innerHTML = escapeHtml(partes[0].trim()) + (partes[1] ? '<br><span class="fa-marker">' + escapeHtml(partes.slice(1).join('·').trim()) + '</span>' : '');
   var nEx = 0, blocks = (day.blocks || []).filter(function(b) { return b.exercises && b.exercises.length; });
   blocks.forEach(function(b) { nEx += b.exercises.length; });
   document.getElementById('rtt-start-meta').textContent = nEx + ' ejercicios · ' + blocks.length + ' bloques' + (RTT.meta ? ' · meta ' + RTT.meta + ' min' : '');
   document.getElementById('rtt-start-blocks').innerHTML = blocks.map(function(b, i) {
     var rondas = b.exercises.reduce(function(m, e) { return Math.max(m, exsSeriesCount(e)); }, 1);
-    return '<div class="rtt-sb"><span class="rtt-sb-n">' + String(i + 1).padStart(2, '0') + '</span><span class="rtt-sb-t"><b>Bloque ' + (i + 1) + ' · ' + escapeHtml(rttBlockLabel(b)) + '</b><small>' + b.exercises.map(function(e) { return escapeHtml(e.name); }).join(' · ') + '</small></span><span class="rtt-sb-r">' + rondas + ' rondas</span></div>';
+    return '<div class="rtt-sb" style="animation-delay:' + (0.12 + i * 0.08).toFixed(2) + 's"><span class="rtt-sb-n">' + String(i + 1).padStart(2, '0') + '</span><span class="rtt-sb-t"><b>Bloque ' + (i + 1) + ' · ' + escapeHtml(rttBlockLabel(b)) + '</b><small>' + b.exercises.map(function(e) { return escapeHtml(e.name); }).join(' · ') + '</small></span><span class="rtt-sb-r">' + rondas + ' rondas</span></div>';
   }).join('');
   rttShow('start');
   document.getElementById('rt-train-modal').style.display = 'flex';
@@ -4556,6 +4595,10 @@ function rttStart() {
   rttShow('train');
   rttPaint();
 }
+function rttConfeti(n) {
+  var h = ''; for (var i = 0; i < n; i++) h += '<span class="fa-cel-bit fa-c' + (i % 7) + '" style="--x:' + Math.round(Math.random() * 100) + '%;--r:' + (Math.round(Math.random() * 720) - 360) + 'deg;--t:' + (1 + Math.random() * 1).toFixed(2) + 's;--dl:' + (Math.random() * 0.35).toFixed(2) + 's"></span>';
+  return h;
+}
 function rttElapsed() { return RTT && RTT.startTs ? Math.floor((Date.now() - RTT.startTs) / 1000) : 0; }
 function rttClock() { var s = rttElapsed(); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }
 function rttPaintClock() {
@@ -4568,16 +4611,18 @@ function rttPaint() {
   var st = RTT.steps[RTT.s], block = st.block, ex = st.ex, tipo = exTipo(block, ex);
   var bankItem = findExerciseBankItem(ex.name);
   clearInterval(RTT.timerInterval); RTT.timerRunning = false;
+  document.getElementById('rtt-timer').classList.remove('on', 'ult');
   document.getElementById('rtt-bar').style.width = (RTT.s / RTT.steps.length * 100) + '%';
   document.getElementById('rtt-blk').textContent = 'Bloque ' + st.nb + ' · ' + rttBlockLabel(block);
   document.getElementById('rtt-ronda').textContent = 'Ronda ' + (st.r + 1) + '/' + st.rondas;
   document.getElementById('rtt-exn').textContent = 'Ejercicio ' + (st.i + 1) + '/' + st.n;
-  document.getElementById('rtt-ex-title').textContent = ex.name;
+  var tEl = document.getElementById('rtt-ex-title'); tEl.textContent = ex.name;
+  ['rtt-ex-title', 'rtt-target', 'rtt-video'].forEach(function(id) { var el = document.getElementById(id); el.classList.remove('rtt-in'); void el.offsetWidth; el.classList.add('rtt-in'); });
   var videoUrl = bankItem && bankItem.video;
   document.getElementById('rtt-video').innerHTML = videoUrl
     ? '<div class="exs-video"><iframe src="' + getYouTubeEmbedUrl(videoUrl) + '" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>'
     : '<div class="rtt-novideo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="13" height="14" rx="3"/><path d="M16 10l5-3v10l-5-3"/></svg>Video muy pronto</div>';
-  document.getElementById('rtt-target').textContent = exDosisTxt(block, ex);
+  document.getElementById('rtt-target').innerHTML = '<span class="fa-tag rtt-target-tag">' + escapeHtml(exDosisTxt(block, ex)) + '</span>';
   var esTiempo = tipo === 'tiempo';
   document.getElementById('rtt-timer').hidden = !esTiempo;
   document.getElementById('rtt-big').style.display = esTiempo ? 'none' : '';
@@ -4613,11 +4658,12 @@ function rttMainBtn() {
   var st = RTT.steps[RTT.s];
   if (exTipo(st.block, st.ex) !== 'tiempo') { rttDoneSet(); return; }
   if (RTT.timerRunning) { clearInterval(RTT.timerInterval); RTT.timerRunning = false; rttPaintMainBtn(); return; }
-  RTT.timerRunning = true; rttPaintMainBtn();
+  RTT.timerRunning = true; rttPaintMainBtn(); document.getElementById('rtt-timer').classList.add('on');
   if (RTT.timerLeft === RTT.timerTotal) rttSonido('tStart');
   RTT.timerInterval = setInterval(function() {
     RTT.timerLeft--;
     rttPaintTimer();
+    document.getElementById('rtt-timer').classList.toggle('ult', RTT.timerLeft > 0 && RTT.timerLeft <= 3);
     if (RTT.timerLeft > 0) { rttSonido(RTT.timerLeft <= 3 ? 'tUlt' : 'tTic'); return; }
     rttSonido('tFin');
     if (RTT.lado === 1) { RTT.lado = 2; RTT.timerLeft = RTT.timerTotal; rttPaintTimer(); rttSonido('tStart'); return; }
@@ -4660,7 +4706,8 @@ function rttAdvance() {
 }
 function rttRest(sec, titulo, next) {
   RTT.restTotal = sec; RTT.restSecs = sec;
-  document.getElementById('rtt-rest-h').textContent = titulo;
+  var h = document.getElementById('rtt-rest-h'); h.textContent = titulo; h.classList.remove('rtt-pop'); void h.offsetWidth; h.classList.add('rtt-pop');
+  document.getElementById('rtt-rest-conf').innerHTML = titulo === 'Descansa' ? '' : rttConfeti(22);
   var thumb = (function() { var b = findExerciseBankItem(next.ex.name); return b && b.video ? getYouTubeThumbnailUrl(b.video) : null; })();
   document.getElementById('rtt-rest-next').innerHTML = '<span class="rtt-next-thumb">' + (thumb ? '<img src="' + jsAttrEscape(thumb) + '" alt="">' : '<svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>') + '</span>'
     + '<span class="rtt-next-t"><small>Sigue · Bloque ' + next.nb + ' · ronda ' + (next.r + 1) + '/' + next.rondas + '</small><b>' + escapeHtml(next.ex.name) + '</b><small>' + escapeHtml(exDosisTxt(next.block, next.ex)) + '</small></span>';
@@ -4760,6 +4807,7 @@ function rttFinish() {
   RTT.finished = true; RTT.duracion = rttElapsed();
   document.getElementById('rtt-end-time').textContent = rttClock();
   document.getElementById('rtt-end-meta').textContent = RTT.meta ? (RTT.duracion <= RTT.meta * 60 ? 'Dentro de tu meta de ' + RTT.meta + ' min 🙌' : 'Tu meta es ' + RTT.meta + ' min') : 'de entreno';
+  document.getElementById('rtt-end-conf').innerHTML = rttConfeti(34);
   var c = document.getElementById('rtt-end-comment'); c.value = ''; c.placeholder = DAY_COMMENT_PLACEHOLDER;
   rttShow('end');
 }
