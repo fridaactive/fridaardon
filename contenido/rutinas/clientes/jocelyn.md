@@ -23,5 +23,5 @@ Formato de cada día:
 
 ## Día 3
 - Calentamiento · 2 rondas: Círculos de brazos · Movilidad de dedos y tobillo · Equilibrio en un pie 20 s c/lado
-- Principal · 3 rondas: Sentadilla sumo con mancuerna 12 (25 lbs) · Extensión de tríceps con mancuerna sobre la cabeza 12 (10 lbs, sentada) [POR CONFIRMAR] · Patada de glúteo con banda 12 c/pierna (en cuadrupedia) · Pájaros con mancuernas 12 (5 lbs c/mano)
+- Principal · 3 rondas: Sentadilla sumo con mancuerna 12 (25 lbs) · Press militar de pie con mancuernas 12 (5 lbs c/mano) · Patada de glúteo con banda 12 c/pierna (en cuadrupedia) · [4º POR DEFINIR: tren superior]
 - Finisher · 3 rondas: Elevación de piernas acostada 10 · Plancha frontal 20 s · Postura del niño 30 s
