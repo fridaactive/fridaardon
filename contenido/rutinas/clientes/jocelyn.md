@@ -18,10 +18,10 @@ Formato de cada día:
 
 ## Día 2
 - Calentamiento · 2 rondas: Rotación torácica en cuadrupedia · Aperturas con banda · Caminata lateral con banda
-- Principal · 3 rondas (arriba, abajo, arriba, abajo): Press de pecho en puente de glúteo con mancuernas 12 (10 lbs c/mano) · Subida a silla 10 c/pierna (sin peso) · Remo al mentón con mancuernas 12 (5 lbs c/mano; codos hasta la altura de los hombros, no más) · Peso muerto rumano con mancuernas 12 (10 lbs c/mano)
+- Principal · 3 rondas (arriba, abajo, arriba, abajo): Press de pecho en puente de glúteo con mancuernas 12 (10 lbs c/mano) · Sentadilla isométrica en pared 30 s · Remo al mentón con mancuernas 12 (5 lbs c/mano; codos hasta la altura de los hombros, no más) · Peso muerto rumano con mancuernas 12 (10 lbs c/mano)
 - Finisher · 3 rondas: Bird dog 10 c/lado · Plancha lateral 20 s c/lado · Estiramiento de glúteo en figura 4 30 s c/lado
 
 ## Día 3
 - Calentamiento · 2 rondas: Círculos de brazos · Movilidad de dedos y tobillo · Equilibrio en un pie 20 s c/lado
-- Principal · 3 rondas: Sentadilla sumo con mancuerna 12 (25 lbs) · Flexiones con rodillas apoyadas 8–10 · Peso muerto rumano a una pierna con mancuerna 8 c/pierna (5 lbs, con apoyo en la pared) · Pájaros con mancuernas 12 (5 lbs c/mano)
+- Principal · 3 rondas: Sentadilla sumo con mancuerna 12 (25 lbs) · Extensión de tríceps con mancuerna sobre la cabeza 12 (10 lbs, sentada) [POR CONFIRMAR] · Patada de glúteo con banda 12 c/pierna (en cuadrupedia) · Pájaros con mancuernas 12 (5 lbs c/mano)
 - Finisher · 3 rondas: Elevación de piernas acostada 10 · Plancha frontal 20 s · Postura del niño 30 s
