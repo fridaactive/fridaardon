@@ -2171,6 +2171,7 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
       <div><h2 class="rtt-start-title" id="rtt-start-title"></h2>
       <div class="rtt-start-meta" id="rtt-start-meta"></div></div>
     </div>
+    <div id="rtt-start-mat"></div>
     <div class="rtt-start-blocks" id="rtt-start-blocks"></div>
     <button type="button" class="rtt-go" onclick="rttStart()"><span class="rtt-go-ico"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>Comenzar</button>
   </div>
@@ -4452,6 +4453,7 @@ function startGuidedWorkout(dayId) {
   var nEx = 0, blocks = (day.blocks || []).filter(function(b) { return b.exercises && b.exercises.length; });
   blocks.forEach(function(b) { nEx += b.exercises.length; });
   document.getElementById('rtt-start-meta').textContent = nEx + ' ejercicios · ' + blocks.length + ' bloques' + (RTT.meta ? ' · meta ' + RTT.meta + ' min' : '');
+  document.getElementById('rtt-start-mat').innerHTML = rtMaterialHtml(day);
   document.getElementById('rtt-start-blocks').innerHTML = blocks.map(function(b, i) {
     var rondas = b.exercises.reduce(function(m, e) { return Math.max(m, exsSeriesCount(e)); }, 1);
     return '<div class="rtt-sb" style="animation-delay:' + (0.12 + i * 0.08).toFixed(2) + 's"><span class="rtt-sb-n">' + String(i + 1).padStart(2, '0') + '</span><span class="rtt-sb-t"><b>Bloque ' + (i + 1) + ' · ' + escapeHtml(rttBlockLabel(b)) + '</b><small>' + b.exercises.map(function(e) { return escapeHtml(e.name); }).join(' · ') + '</small></span><span class="rtt-sb-r">' + rondas + ' rondas</span></div>';
