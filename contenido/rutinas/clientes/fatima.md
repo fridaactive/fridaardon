@@ -1,7 +1,11 @@
 # Fátima · Mes 1 (desde el 1 de diciembre de 2026) · BORRADOR por aprobar
 
-4 días en gym, 1 hora, ganar músculo. Mes 1 solo con mancuernas, bandas, mat y silla/banco
-(se puede grabar sin equipo de gym). Enero: sumar barra, banco, poleas o máquinas según su gym.
+4 días en gym, 1 hora, ganar músculo.
+PENDIENTE: qué equipo tiene el gym de sus apartamentos (Frida le escribió).
+- Si tiene máquinas, poleas o barra: se usan, y Frida graba esos videos en SU gimnasio (no en el estudio).
+- Abajo está la versión solo con mancuernas y bandas (por si su gym es básico). La versión con máquinas
+  es la primera que se le propuso a Frida (hip thrust con barra, jalón y remo en polea, curl femoral,
+  extensión de cuádriceps, abducción en máquina, face pull en polea, press en banco).
 Pasa ~10 h sentada: calentamientos de cadera y mucha espalda alta.
 
 ## Día 1 · Glúteo y femoral

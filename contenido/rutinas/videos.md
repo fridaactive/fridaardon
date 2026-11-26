@@ -2,7 +2,8 @@
 
 Estados: ✅ con video · ⏳ falta grabar · 🔁 volver a grabar
 El nombre tiene que ser IDÉNTICO al del banco de ejercicios del panel para que el video salga en la rutina.
-F = Fátima · J = Jocelyn. (Pendiente: cruzar con el banco real de Frida; puede que algunos ya tengan video.)
+F = Fátima · J = Jocelyn.
+Dónde se graba: el estudio es para ejercicios de casa (mancuernas, bandas, mat, silla). Lo que lleve máquina, polea, barra o banco lo graba Frida en su gimnasio. (Pendiente: cruzar con el banco real de Frida; puede que algunos ya tengan video.)
 
 ## Peso corporal y mat
 | Ejercicio | Estado | Quién |
