@@ -901,6 +901,16 @@
 .leads-archivo-item span{color:var(--muted);font-size:.7rem}
 .leads-archivo-item details summary{font-size:.7rem;font-weight:700;color:var(--blue);cursor:pointer;margin-top:.2rem}
 .al-btn{display:block;width:100%;margin-top:0.7rem;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.7rem;font-weight:700;font-size:0.8rem;font-family:'DM Sans',sans-serif;cursor:pointer;box-shadow:0 3px 0 #0F3FA8}
+.acp-tabs{display:flex;gap:0.35rem;background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:0.35rem;margin-bottom:1.1rem;box-shadow:0 2px 14px rgba(15,63,168,0.06);}
+.acp-tab{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:0.3rem;padding:0.6rem 0.3rem 0.55rem;background:none;border:none;border-radius:15px;color:#7A86A8;font-family:'Archivo Black','DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s,transform .15s,box-shadow .2s;touch-action:manipulation;}
+.acp-tab svg{width:22px;height:22px;}
+.acp-tab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+.acp-tab:hover{color:var(--blue);background:#F4F7FF;}
+.acp-tab.active{background:var(--blue);color:#fff;box-shadow:0 4px 0 #0F3FA8;transform:translateY(-1px);}
+.acp-tab.active svg{color:#F5ECCB;}
+.acp-tab-pagos{flex:0.75 1 0;position:relative;margin-left:0.35rem;}
+.acp-tab-pagos::before{content:'';position:absolute;left:-0.38rem;top:22%;bottom:22%;width:1px;background:var(--border);}
+@media (max-width:480px){.acp-tab{flex:1 1 auto;font-size:0.56rem;letter-spacing:0.01em;padding:0.55rem 0.4rem}.acp-tab-pagos{flex:0 1 auto;margin-left:0.25rem}.acp-tab svg{width:20px;height:20px}.acp-rt-tools button{font-size:0.7rem}}
 #acp-content .pc-tabs{flex-wrap:wrap;overflow:visible;row-gap:.45rem}
 #rutina-editor .back-row{flex-wrap:wrap;gap:0.4rem;}
 #rutina-editor .back-row .sub-brand{margin-right:auto;}
@@ -2281,8 +2291,16 @@ function acpSwitchTab(tab) {
   acpRenderShell();
 }
 
+var ACP_TAB_ICONS = {
+  resumen: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/>',
+  rutina: '<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>',
+  alimentacion: '<path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M12 8c0-2.5 1.5-4 4-4 0 2.5-1.5 4-4 4z"/><path d="M8 9c0-1.5-.8-2.5-2-3"/>',
+  pagos: '<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18M7 15h3"/>'
+};
 function acpTabBtnHtml(tab, label) {
-  return '<button type="button" class="pc-tab-btn' + (acpState.tab === tab ? ' active' : '') + '" onclick="acpSwitchTab(\'' + tab + '\')">' + label + '</button>';
+  return '<button type="button" class="acp-tab acp-tab-' + tab + (acpState.tab === tab ? ' active' : '') + '" onclick="acpSwitchTab(\'' + tab + '\')">'
+    + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ACP_TAB_ICONS[tab] + '</svg>'
+    + '<span>' + label + '</span></button>';
 }
 
 function acpRenderShell() {
@@ -2294,11 +2312,12 @@ function acpRenderShell() {
   // se muestra cómo generar su código de acceso.
   var hasPortal = !!acpState.uid;
 
-  var html = '<div class="pc-tabs" style="margin-bottom:1rem;">';
-  html += acpTabBtnHtml('resumen', 'Resumen');
-  html += acpTabBtnHtml('rutina', '📋 Rutina');
-  html += acpTabBtnHtml('pagos', '💳 Pagos');
-  if (c.type && c.type !== 'presencial') html += acpTabBtnHtml('alimentacion', '🥗 Alimentación');
+  // Orden: lo importante primero (perfil, rutina, alimentación); pagos al final.
+  var html = '<div class="acp-tabs">';
+  html += acpTabBtnHtml('resumen', 'Perfil');
+  html += acpTabBtnHtml('rutina', 'Rutina');
+  if (c.type && c.type !== 'presencial') html += acpTabBtnHtml('alimentacion', 'Alimentación');
+  html += acpTabBtnHtml('pagos', 'Pagos');
   html += '</div>';
 
   if (acpState.tab === 'alimentacion') html += renderAcpAlimentacionHtml(clientId, c);
