@@ -150,6 +150,8 @@
   .rt-ex-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
   .rt-ex-thumb svg { width:13px; height:13px; }
   .rt-ex-t { flex:1; min-width:0; }
+  .rt-ex-t .ex-name, .rt-ex-t .ex-prescribed { display:block; }
+  .rt-ex-t .ex-prescribed { margin-bottom:0; }
   .rt-ex-state { width:1.6rem; height:1.6rem; border-radius:50%; border:2px solid var(--border); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
   .rt-ex-state.done { background:#34C77B; border-color:#34C77B; animation:faCelPop 0.35s; }
   .rt-ex-state svg { width:12px; height:12px; stroke:#06261a; stroke-width:3; fill:none; }
@@ -4015,8 +4017,16 @@ function exSegundos(block, ex) {
 // ahí ("10 reps", "3 series") no hay que agregarla de nuevo, si no queda
 // duplicado ("10 reps reps").
 function appendUnitIfMissing(value, unit) {
-  var str = String(value);
-  return new RegExp(unit, 'i').test(str) ? str : (str + ' ' + unit);
+  var str = String(value).trim();
+  // Si ya trae texto ("10 c/lado", "30 s", "8–10 reps") se deja tal cual.
+  return (new RegExp(unit, 'i').test(str) || /[a-záéíóúñ]/i.test(str)) ? str : (str + ' ' + unit);
+}
+// Lo que se le pide en cada serie: "12 reps · 10 lbs" o "30 s c/lado".
+function exDosisTxt(block, ex) {
+  var tipo = exTipo(block, ex);
+  var t = tipo === 'tiempo' ? exSegundos(block, ex) + ' s' + (ex.lado ? ' c/lado' : '') : appendUnitIfMissing(ex.reps || '', 'reps');
+  if (ex.carga) t += ' · ' + appendUnitIfMissing(ex.carga, 'lbs');
+  return t;
 }
 
 function findExerciseBankItem(name) {
@@ -4144,7 +4154,7 @@ function findExAndBlock(dayId, exId) {
 function exGoalTxt(block, ex) {
   var tipo = exTipo(block, ex);
   var n = exsSeriesCount(ex);
-  return n + ' series · ' + (tipo === 'tiempo' ? exSegundos(block, ex) + ' s' : appendUnitIfMissing(ex.reps || '', 'reps'));
+  return n + ' series · ' + exDosisTxt(block, ex);
 }
 function exLastTxt(dayId, exId) {
   var log = findLastExerciseLog(dayId, exId);
@@ -4450,7 +4460,7 @@ function renderExerciseBlocksHtml(day) {
       var lastCarga = escapeHtml(String(exPendingOrLog(day.id, ex.id, 'carga') || ''));
       var lastSegs = escapeHtml(String(exPendingOrLog(day.id, ex.id, 'segundos') || ''));
       var done = tipo === 'tiempo' ? !!lastSegs : !!lastReps;
-      var metaTxt = tipo === 'tiempo' ? exsSeriesCount(ex) + ' × ' + totalSecs + ' s' : exsSeriesCount(ex) + ' × ' + appendUnitIfMissing(ex.reps || '', 'reps');
+      var metaTxt = exsSeriesCount(ex) + ' × ' + exDosisTxt(block, ex);
 
       html += '<div class="rt-blq-item">';
       html += '<button type="button" class="rt-ex-row" onclick="openExSession(\'' + jsAttrEscape(day.id) + '\', \'' + jsAttrEscape(ex.id) + '\')"' + (PLAN_LOCKED ? ' disabled' : '') + '>';

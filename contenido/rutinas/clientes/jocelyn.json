@@ -1,0 +1,293 @@
+{
+ "mensajeInicial": "¡Hola, Jocelyn! Bienvenida 💙 Este primer mes es para que tu cuerpo aprenda a moverse: vamos a trabajar movilidad, control y técnica, sin prisa. Entrena 3 días por semana y camina 25 minutos otros 2 días. Cualquier duda o molestia, escríbeme. ¡Vamos con todo!",
+ "aclaraciones": [
+  "Cada día tiene 3 bloques: calentamiento (2 rondas), principal (3 rondas) y finisher (3 rondas).",
+  "Descansa 30 segundos entre ejercicios y 90 segundos al terminar cada ronda del principal.",
+  "Tu semana: lunes día 1 · martes caminar 25 min · miércoles día 2 · jueves caminar 25 min · viernes o sábado día 3.",
+  "Cuida tu pie: nada de saltos. Si te molesta, haz las planchas con las rodillas apoyadas y avísame.",
+  "Las libras son una guía. Si las repeticiones te salen muy fáciles, avísame y subimos.",
+  "Consigue mancuernas de 5 y 10 lbs para brazos y hombros. Las de 25 lbs son para pierna.",
+  "Cuando diga c/lado, haz el tiempo o las repeticiones de cada lado."
+ ],
+ "days": [
+  {
+   "name": "Día 1 · Full body",
+   "blocks": [
+    {
+     "name": "Calentamiento · 2 rondas",
+     "mode": "tiempo",
+     "workSecs": 40,
+     "restSecs": 15,
+     "exercises": [
+      {
+       "name": "Gato-vaca",
+       "series": "2",
+       "tipo": "tiempo",
+       "segundos": "40"
+      },
+      {
+       "name": "Movilidad de cadera 90/90",
+       "series": "2",
+       "tipo": "tiempo",
+       "segundos": "40"
+      },
+      {
+       "name": "Movilidad de dedos y tobillo",
+       "series": "2",
+       "tipo": "tiempo",
+       "segundos": "40"
+      }
+     ]
+    },
+    {
+     "name": "Principal · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 30,
+     "exercises": [
+      {
+       "name": "Sentadilla goblet con mancuerna",
+       "series": "3",
+       "reps": "12",
+       "tipo": "reps",
+       "carga": "10"
+      },
+      {
+       "name": "Remo inclinado con mancuernas",
+       "series": "3",
+       "reps": "12",
+       "tipo": "reps",
+       "carga": "10"
+      },
+      {
+       "name": "Puente de glúteo con mancuerna",
+       "series": "3",
+       "reps": "12",
+       "tipo": "reps",
+       "carga": "25"
+      },
+      {
+       "name": "Press de hombro con mancuernas",
+       "series": "3",
+       "reps": "10",
+       "tipo": "reps",
+       "carga": "5"
+      }
+     ]
+    },
+    {
+     "name": "Finisher · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 20,
+     "exercises": [
+      {
+       "name": "Dead bug",
+       "series": "3",
+       "reps": "10 c/lado",
+       "tipo": "reps"
+      },
+      {
+       "name": "Plancha baja",
+       "series": "3",
+       "tipo": "tiempo",
+       "segundos": "20"
+      },
+      {
+       "name": "Estiramiento de flexor de cadera",
+       "series": "3",
+       "tipo": "tiempo",
+       "segundos": "30",
+       "lado": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Día 2 · Full body",
+   "blocks": [
+    {
+     "name": "Calentamiento · 2 rondas",
+     "mode": "tiempo",
+     "workSecs": 40,
+     "restSecs": 15,
+     "exercises": [
+      {
+       "name": "Rotación torácica en cuadrupedia",
+       "series": "2",
+       "tipo": "tiempo",
+       "segundos": "40"
+      },
+      {
+       "name": "Aperturas con banda",
+       "series": "2",
+       "tipo": "tiempo",
+       "segundos": "40"
+      },
+      {
+       "name": "Caminata lateral con banda",
+       "series": "2",
+       "tipo": "tiempo",
+       "segundos": "40"
+      }
+     ]
+    },
+    {
+     "name": "Principal · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 30,
+     "exercises": [
+      {
+       "name": "Sentadilla isométrica en pared",
+       "series": "3",
+       "tipo": "tiempo",
+       "segundos": "30"
+      },
+      {
+       "name": "Remo al mentón con mancuernas",
+       "series": "3",
+       "reps": "12",
+       "tipo": "reps",
+       "carga": "5"
+      },
+      {
+       "name": "Peso muerto rumano con mancuernas",
+       "series": "3",
+       "reps": "12",
+       "tipo": "reps",
+       "carga": "10"
+      },
+      {
+       "name": "Press de pecho en puente de glúteo con mancuernas",
+       "series": "3",
+       "reps": "12",
+       "tipo": "reps",
+       "carga": "10"
+      }
+     ]
+    },
+    {
+     "name": "Finisher · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 20,
+     "exercises": [
+      {
+       "name": "Bird dog",
+       "series": "3",
+       "reps": "10 c/lado",
+       "tipo": "reps"
+      },
+      {
+       "name": "Plancha lateral",
+       "series": "3",
+       "tipo": "tiempo",
+       "segundos": "20",
+       "lado": true
+      },
+      {
+       "name": "Estiramiento de glúteo en figura 4",
+       "series": "3",
+       "tipo": "tiempo",
+       "segundos": "30",
+       "lado": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Día 3 · Full body",
+   "blocks": [
+    {
+     "name": "Calentamiento · 2 rondas",
+     "mode": "tiempo",
+     "workSecs": 40,
+     "restSecs": 15,
+     "exercises": [
+      {
+       "name": "Círculos de brazos",
+       "series": "2",
+       "tipo": "tiempo",
+       "segundos": "40"
+      },
+      {
+       "name": "Movilidad de dedos y tobillo",
+       "series": "2",
+       "tipo": "tiempo",
+       "segundos": "40"
+      },
+      {
+       "name": "Equilibrio en un pie",
+       "series": "2",
+       "tipo": "tiempo",
+       "segundos": "20",
+       "lado": true
+      }
+     ]
+    },
+    {
+     "name": "Principal · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 30,
+     "exercises": [
+      {
+       "name": "Sentadilla sumo con mancuerna",
+       "series": "3",
+       "reps": "12",
+       "tipo": "reps",
+       "carga": "25"
+      },
+      {
+       "name": "Plancha alta con toques de hombro",
+       "series": "3",
+       "reps": "10 c/lado",
+       "tipo": "reps"
+      },
+      {
+       "name": "Patada de glúteo con banda",
+       "series": "3",
+       "reps": "12 c/pierna",
+       "tipo": "reps"
+      },
+      {
+       "name": "Remo sentada con banda",
+       "series": "3",
+       "reps": "12",
+       "tipo": "reps"
+      }
+     ]
+    },
+    {
+     "name": "Finisher · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 20,
+     "exercises": [
+      {
+       "name": "Elevación de piernas acostada",
+       "series": "3",
+       "reps": "10",
+       "tipo": "reps"
+      },
+      {
+       "name": "Plancha baja",
+       "series": "3",
+       "tipo": "tiempo",
+       "segundos": "20"
+      },
+      {
+       "name": "Postura del niño",
+       "series": "3",
+       "tipo": "tiempo",
+       "segundos": "30"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

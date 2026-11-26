@@ -815,6 +815,9 @@
 .acp-rt-main:active{transform:translateY(3px);box-shadow:0 1px 0 #0F3FA8;}
 .acp-rt-tools{display:flex;gap:0.6rem;}
 .acp-rt-tools button{flex:1;background:#fff;color:var(--blue);border:1.5px solid var(--border);border-radius:12px;padding:0.65rem 0.5rem;font-weight:700;font-size:0.74rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:border-color .15s,background .15s;}
+.acp-rt-paste{margin-top:1rem;}
+.acp-rt-paste textarea{width:100%;box-sizing:border-box;border:1.5px solid var(--border);border-radius:12px;padding:0.7rem;font-family:'DM Sans',sans-serif;font-size:0.78rem;resize:vertical;}
+.acp-rt-paste-msg{font-size:0.72rem;color:#c44;margin-top:0.35rem;min-height:0.9rem;}
 .acp-rt-tools button:hover{border-color:var(--blue);background:#F4F7FF;}
 .acp-rday{display:flex;align-items:center;gap:0.7rem;padding:0.7rem 0.2rem;border-top:1px solid var(--border);cursor:pointer;}
 .acp-rday:first-of-type{border-top:none;}
@@ -2438,11 +2441,76 @@ function renderAcpRutinaHtml(clientId, c) {
   }
   if (acpState.uid) {
     html += '<div class="acp-rt-tools">';
-    html += '<button type="button" onclick="rutinaCopiarDatos()">📋 Copiar datos para Claude</button>';
-    html += '<button type="button" onclick="acpRepetirCuestionario()">🔁 Repetir cuestionario</button>';
+    html += '<button type="button" onclick="rutinaCopiarDatos()">📋 Copiar datos</button>';
+    html += '<button type="button" onclick="rutinaPegarToggle()">📥 Pegar rutina</button>';
+    html += '<button type="button" onclick="acpRepetirCuestionario()">🔁 Cuestionario</button>';
     html += '</div>';
+    html += '<div class="card acp-rt-paste" id="rt-paste" style="display:none;">'
+      + '<div class="card-label">📥 Pegar la rutina que te dio Claude</div>'
+      + '<textarea id="rt-paste-input" rows="6" placeholder="Pega aquí todo el texto, desde { hasta }"></textarea>'
+      + '<div id="rt-paste-msg" class="acp-rt-paste-msg"></div>'
+      + '<button type="button" class="acp-rt-main" onclick="rutinaPegarPublicar(\'' + clientId + '\')">Publicar en su cuenta</button></div>';
   }
   return html;
+}
+
+// ── Pegar la rutina que arma Claude (JSON) y publicarla en rutinas/{id}.
+// Formato: { mensajeInicial, aclaraciones:[], days:[{ name, blocks:[{ name,
+// mode, workSecs, restSecs, exercises:[{ name, series, reps, carga, tipo,
+// segundos, lado }] }] }] }. Los ids se generan aquí. Los ejercicios que no
+// están en el banco se agregan sin video, para que Frida solo pegue el link.
+function rutinaPegarToggle() {
+  var el = document.getElementById('rt-paste'); if (!el) return;
+  el.style.display = el.style.display === 'none' ? '' : 'none';
+  if (el.style.display === '') document.getElementById('rt-paste-input').focus();
+}
+function rutinaDesdeTexto(raw) {
+  var r = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1));
+  if (!r || !Array.isArray(r.days) || !r.days.length) throw new Error('sin días');
+  var n = 0, str = function(v) { return v == null ? '' : String(v).trim(); };
+  var out = { days: r.days.map(function(d, di) {
+    return { id: 'day-' + Date.now() + '-' + di, name: str(d.name) || ('Día ' + (di + 1)), blocks: (d.blocks || []).map(function(b, bi) {
+      var mode = b.mode === 'tiempo' ? 'tiempo' : 'reps';
+      return { id: 'blk-' + Date.now() + '-' + di + '-' + bi, name: str(b.name) || 'Bloque', mode: mode, workSecs: parseInt(b.workSecs) || 40, restSecs: parseInt(b.restSecs) || 40,
+        exercises: (b.exercises || []).filter(function(e) { return e && str(e.name); }).map(function(e) {
+          n++;
+          var tipo = (e.tipo === 'tiempo' || e.tipo === 'reps') ? e.tipo : mode;
+          var ex = { id: 'ex-' + Date.now() + '-' + uid5(), name: str(e.name), series: str(e.series), reps: str(e.reps), carga: str(e.carga).replace(/\s*lbs?$/i, ''), rpe: str(e.rpe), tipo: tipo, segundos: str(e.segundos) };
+          if (e.lado) ex.lado = true;
+          return ex;
+        }) };
+    }) };
+  }) };
+  if (!n) throw new Error('sin ejercicios');
+  if (r.mensajeInicial) out.mensajeInicial = str(r.mensajeInicial);
+  if (Array.isArray(r.aclaraciones)) out.aclaraciones = r.aclaraciones.map(str).filter(Boolean);
+  out.publicadaEn = new Date().toISOString();
+  return { rutina: out, total: n };
+}
+function rutinaPegarPublicar(clientId) {
+  var msg = document.getElementById('rt-paste-msg'), raw = (document.getElementById('rt-paste-input').value || '').trim();
+  var res;
+  try { res = rutinaDesdeTexto(raw); } catch (e) { msg.textContent = 'El texto no está completo. Copia todo desde { hasta } y vuelve a pegarlo.'; return; }
+  var c = CLIENTS[clientId] || {}, previa = getRutinaData(clientId), nuevos = {};
+  res.rutina.days.forEach(function(d) { d.blocks.forEach(function(b) { b.exercises.forEach(function(e) { if (!bancoBuscar(e.name)) nuevos[e.name.toLowerCase()] = e.name; }); }); });
+  var listaNuevos = Object.keys(nuevos).map(function(k) { return nuevos[k]; });
+  var resumen = res.rutina.days.map(function(d, i) { var k = 0; d.blocks.forEach(function(b) { k += b.exercises.length; }); return (i + 1) + '. ' + d.name + ' · ' + k + ' ejercicios'; }).join('\n');
+  if (!confirm('Rutina de ' + (c.name || 'este cliente') + ':\n\n' + resumen + '\n\n' + (listaNuevos.length ? listaNuevos.length + ' ejercicios nuevos se agregan a tu banco (sin video todavía).\n\n' : '') + ((previa.days || []).length ? '⚠️ Reemplaza la rutina que tiene ahora.\n\n' : '') + 'La va a ver en su cuenta. ¿Publicar?')) return;
+  withAdminAuth(function() {
+    saveRutinaData(clientId, res.rutina);
+    var db = getDB();
+    listaNuevos.forEach(function(nombre) {
+      var item = { nombre: nombre };
+      if (!db) return; var nuevo = db.ref('exerciseBank').push(); nuevo.set(item).then(function() { EXERCISE_BANK[nuevo.key] = item; localStorage.setItem('fa_exercise_bank', JSON.stringify(EXERCISE_BANK)); renderExerciseBankDatalist(); });
+    });
+    acpRenderShell();
+    alert('✓ Rutina publicada. Ya la ve en su cuenta.');
+  });
+}
+function bancoBuscar(nombre) {
+  var n = String(nombre || '').trim().toLowerCase();
+  var id = Object.keys(EXERCISE_BANK).find(function(k) { return EXERCISE_BANK[k] && String(EXERCISE_BANK[k].nombre || '').trim().toLowerCase() === n; });
+  return id || null;
 }
 
 // ── Pestaña Alimentación: encuesta de la clienta, copiar datos para Claude,
@@ -8602,8 +8670,12 @@ function saveExerciseBankItem() {
   withAdminAuth(function() {
     var db = getDB();
     if (!db) { alert('No se pudo conectar con Firebase.'); return; }
-    db.ref('exerciseBank').push(item).then(function(ref) {
-      EXERCISE_BANK[ref.key] = item;
+    var existente = bancoBuscar(nombre);
+    var guardar = existente
+      ? db.ref('exerciseBank/' + existente).update({ video: item.video || EXERCISE_BANK[existente].video || null, grupo: item.grupo || EXERCISE_BANK[existente].grupo || null, vertical: item.vertical || null }).then(function() { return { key: existente }; })
+      : (function() { var r = db.ref('exerciseBank').push(); return r.set(item).then(function() { return { key: r.key }; }); })();
+    guardar.then(function(ref) {
+      EXERCISE_BANK[ref.key] = Object.assign({}, EXERCISE_BANK[ref.key] || {}, item, existente ? { video: item.video || EXERCISE_BANK[existente].video } : {});
       localStorage.setItem('fa_exercise_bank', JSON.stringify(EXERCISE_BANK));
       renderExerciseBankDatalist();
       renderExerciseBankList();
