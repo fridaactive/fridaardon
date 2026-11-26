@@ -1,33 +1,27 @@
-# Jocelyn · Mes 1 (desde el 1 de diciembre de 2026) · BORRADOR por aprobar
+# Jocelyn · Mes 1 (desde el 1 de diciembre de 2026) · BORRADOR v2 por aprobar
 
-3 días de fuerza en casa, 45 min, glúteo y piernas. 2 días de caminata de 25 min en días sin fuerza.
-Equipo: mancuernas de 25 lbs (sugerido comprar de 5 y 10 lbs), bandas, mat, silla firme.
-Cuidar el pie derecho: nada de saltos ni cuerda, no cargar peso apoyada en las puntas.
+Objetivo del mes: movilidad, control corporal, aprender los ejercicios. Intensidad baja.
+3 días FULL BODY en casa (~45 min) + 2 días de caminata de 25 min en días sin fuerza.
+Semana: Lun Día 1 · Mar caminar · Mié Día 2 · Jue caminar · Vie o Sáb Día 3.
+Equipo: mancuernas de 25 lbs + comprar de 5 y 10 lbs, bandas, mat, silla firme.
+Pie derecho: nada de saltos ni cuerda, no cargar peso en las puntas; plancha sobre rodillas si molesta.
 
-Semana sugerida: Lun Día 1 · Mar caminar · Mié Día 2 · Jue Día 3 · Sáb caminar.
+Formato de cada día:
+- Calentamiento · 2 rondas (40 s c/u, 15 s entre ejercicios)
+- Principal · 3 rondas (30 s entre ejercicios, 90 s entre rondas)
+- Finisher de core · 3 rondas (2 de core + 1 estiramiento)
 
-## Día 1 · Glúteo y pierna (fuerza)
-- Calentamiento (40 s c/u): Movilidad de dedos y tobillo · Puente de glúteo con banda · Caminata lateral con banda · Sentadilla con peso corporal
-- Principal (descanso 60 s):
-  - Puente de glúteo con mancuerna 4 × 12 (pausa 2 s arriba) · 25 lbs
-  - Peso muerto rumano con mancuernas 4 × 10 · 25 lbs c/mano
-  - Sentadilla goblet con mancuerna 3 × 12 · 25 lbs
-  - Sentadilla búlgara con mancuernas 3 × 10 c/pierna · 10 lbs c/mano (empeine apoyado en la silla)
-  - Patada de glúteo con banda 3 × 15 c/pierna
-- Core: Plancha frontal 3 × 30 s · Dead bug 3 × 10 c/lado
-- Estiramiento (40 s): Estiramiento de flexor de cadera · Estiramiento de glúteo en figura 4 · Estiramiento de isquiotibiales
+## Día 1
+- Calentamiento · 2 rondas: Gato-vaca · Movilidad de cadera 90/90 · Movilidad de dedos y tobillo · Puente de glúteo con banda
+- Principal · 3 rondas: Sentadilla goblet con mancuerna 12 (10 lbs) · Remo inclinado con mancuernas 12 (10 lbs c/mano) · Puente de glúteo con mancuerna 12 (25 lbs) · Press de hombro con mancuernas 10 (5 lbs c/mano)
+- Finisher · 3 rondas: Dead bug 10 c/lado · Plancha frontal 20 s · Estiramiento de flexor de cadera 30 s c/lado
 
-## Día 2 · Torso y core
-- Calentamiento: Rotación torácica en cuadrupedia · Aperturas con banda · Círculos de brazos · Gato-vaca
-- En parejas, 3 vueltas (descanso 45 s):
-  - Remo inclinado con mancuernas 12 (10 lbs) + Press de pecho en el piso con mancuernas 12 (10 lbs)
-  - Press de hombro con mancuernas 12 (5 lbs) + Elevaciones laterales con mancuernas 12 (5 lbs)
-  - Curl de bíceps con mancuernas 12 (10 lbs) + Extensión de tríceps con mancuerna sobre la cabeza 12 (10 lbs)
-- Core (40 s, 2 vueltas): Plancha lateral · Bird dog · Elevación de piernas acostada
-- Estiramiento: Estiramiento de pecho en pared · Postura del niño · Gato-vaca
+## Día 2
+- Calentamiento · 2 rondas: Rotación torácica en cuadrupedia · Aperturas con banda · Sentadilla con peso corporal · Caminata lateral con banda
+- Principal · 3 rondas: Peso muerto rumano con mancuernas 12 (10 lbs c/mano) · Press de pecho en el piso con mancuernas 12 (10 lbs c/mano) · Subida a silla 10 c/pierna (sin peso) · Remo con mancuerna a una mano 10 c/lado (10 lbs)
+- Finisher · 3 rondas: Bird dog 10 c/lado · Plancha lateral 20 s c/lado · Estiramiento de glúteo en figura 4 30 s c/lado
 
-## Día 3 · Glúteo y pierna (circuito, 40 s trabajo / 20 s descanso)
-- Calentamiento: igual al Día 1
-- Circuito 1 × 3: Sentadilla sumo con mancuerna · Puente de glúteo a una pierna · Subida a silla con mancuernas · Patada lateral acostada con banda
-- Circuito 2 × 3: Peso muerto rumano a una pierna con mancuerna · Abducción de cadera sentada con banda · Sentadilla isométrica en pared
-- Pie y estiramiento: Equilibrio en un pie (30 s c/lado) · Estiramiento de flexor de cadera · Estiramiento de glúteo en figura 4
+## Día 3
+- Calentamiento · 2 rondas: Círculos de brazos · Movilidad de dedos y tobillo · Puente de glúteo con banda · Equilibrio en un pie 20 s c/lado
+- Principal · 3 rondas: Sentadilla sumo con mancuerna 12 (25 lbs) · Flexiones con rodillas apoyadas 8–10 · Peso muerto rumano a una pierna con mancuerna 8 c/pierna (5 lbs, con apoyo en la pared) · Pájaros con mancuernas 12 (5 lbs c/mano)
+- Finisher · 3 rondas: Elevación de piernas acostada 10 · Plancha frontal 20 s · Postura del niño 30 s
