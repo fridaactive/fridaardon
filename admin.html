@@ -2486,7 +2486,6 @@ function rutinaDesdeTexto(raw) {
   if (!n) throw new Error('sin ejercicios');
   if (r.mensajeInicial) out.mensajeInicial = str(r.mensajeInicial);
   if (parseInt(r.metaMin)) out.metaMin = parseInt(r.metaMin);
-  if (Array.isArray(r.porConseguir)) out.porConseguir = r.porConseguir.map(str).filter(Boolean);
   if (Array.isArray(r.aclaraciones)) out.aclaraciones = r.aclaraciones.map(str).filter(Boolean);
   out.publicadaEn = new Date().toISOString();
   return { rutina: out, total: n };

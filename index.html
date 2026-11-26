@@ -149,14 +149,13 @@
   .rt-ex-thumb { width:2.9rem; height:2.9rem; border-radius:12px; flex-shrink:0; background:linear-gradient(180deg, rgba(15,63,168,0.2), rgba(7,11,26,0.7)), var(--blue); display:flex; align-items:center; justify-content:center; overflow:hidden; }
   .rt-ex-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
   .rt-ex-thumb svg { width:13px; height:13px; }
-  .rt-mat { margin:0 0 0.9rem; animation:faUp 0.4s cubic-bezier(0.2,0.8,0.2,1) both; }
-  .rt-mat-h { font-size:0.62rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:0.45rem; }
-  .rt-mat-list { display:flex; flex-wrap:wrap; gap:0.4rem; }
-  .rt-mat-chip { display:inline-flex; align-items:center; gap:0.3rem; background:var(--surface,#121a36); border:1px solid var(--border); color:var(--text); font-size:0.74rem; font-weight:700; padding:0.38rem 0.7rem; border-radius:999px; }
-  .rt-mat-chip small { color:var(--muted); font-weight:600; font-size:0.68rem; }
-  .rt-mat-chip.falta { border-color:var(--cream); }
-  .rt-mat-chip em { font-style:normal; background:var(--cream); color:#0D1B3E; font-size:0.58rem; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; padding:0.12rem 0.45rem; border-radius:999px; transform:rotate(-3deg); margin-left:0.15rem; }
-  .rt-mat-falta { margin-top:0.45rem; font-size:0.7rem; color:var(--cream); font-weight:700; }
+  .rt-mat { background:var(--surface,#121a36); border:1px solid var(--border); border-radius:18px; padding:0.8rem 1rem; margin:0 0 0.9rem; animation:faUp 0.4s cubic-bezier(0.2,0.8,0.2,1) both; }
+  .rt-mat-h { display:inline-block; font-family:'DM Sans',sans-serif; font-size:0.66rem; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; background:var(--cream); color:#0D1B3E; padding:0.25rem 0.7rem; border-radius:999px; transform:rotate(-2deg); margin-bottom:0.6rem; }
+  .rt-mat-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  .rt-mat-list li { display:flex; align-items:center; gap:0.55rem; font-size:0.82rem; font-weight:700; color:var(--text); }
+  .rt-mat-list small { color:var(--muted); font-weight:600; font-size:0.72rem; }
+  .rt-mat-ico { width:1.25rem; height:1.25rem; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .rt-mat-ico svg { width:0.75rem; height:0.75rem; fill:none; stroke:#fff; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
   .rt-ex-t { flex:1; min-width:0; }
   .rt-ex-t .ex-name, .rt-ex-t .ex-prescribed { display:block; }
   .rt-ex-t .ex-prescribed { margin-bottom:0; }
@@ -4446,9 +4445,8 @@ function rtDayHeroHtml(day) {
 
 // ── Material del día ──
 // Se arma solo a partir de los nombres de los ejercicios (y las libras
-// sugeridas). Si la rutina trae day.materiales, se usa esa lista. Lo que
-// esté en rutina.porConseguir (ej. "Tobillera para polea") sale marcado
-// con la etiqueta "Por conseguir".
+// sugeridas). Si la rutina trae day.materiales, se usa esa lista.
+// Se muestra dentro de cada día, como una listita.
 var RT_MATERIAL_REGLAS = [
   { re: /mancuerna/i, nombre: 'Mancuernas', libras: true },
   { re: /kettlebell|pesa rusa/i, nombre: 'Kettlebell' },
@@ -4478,23 +4476,12 @@ function rtMaterialesDia(day) {
   });
   return out;
 }
-function rtPorConseguir(nombre) {
-  var lista = (currentRutinaData && currentRutinaData.porConseguir) || [], n = String(nombre).toLowerCase();
-  return lista.some(function(x) { x = String(x).toLowerCase(); return x.indexOf(n) > -1 || n.indexOf(x) > -1 || (n.split(' ')[0].length > 3 && x.indexOf(n.split(' ')[0]) > -1); });
-}
 function rtMaterialHtml(day) {
   var mats = rtMaterialesDia(day);
   if (!mats.length) return '';
-  var falta = (currentRutinaData && currentRutinaData.porConseguir) || [];
-  var h = '<div class="rt-mat"><div class="rt-mat-h">🧰 Material de hoy</div><div class="rt-mat-list">';
-  mats.forEach(function(m) {
-    var pc = rtPorConseguir(m.nombre);
-    h += '<span class="rt-mat-chip' + (pc ? ' falta' : '') + '">' + escapeHtml(m.nombre) + (m.detalle ? ' <small>' + escapeHtml(m.detalle) + '</small>' : '') + (pc ? '<em>Por conseguir</em>' : '') + '</span>';
-  });
-  h += '</div>';
-  var sueltos = falta.filter(function(x) { return !mats.some(function(m) { return rtPorConseguir(m.nombre) && (String(x).toLowerCase().indexOf(m.nombre.toLowerCase().split(' ')[0]) > -1); }); });
-  if (sueltos.length) h += '<div class="rt-mat-falta">Por conseguir: ' + sueltos.map(escapeHtml).join(' · ') + '</div>';
-  return h + '</div>';
+  var h = '<div class="rt-mat"><div class="rt-mat-h">Equipo a utilizar</div><ul class="rt-mat-list">';
+  mats.forEach(function(m) { h += '<li><span class="rt-mat-ico"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span>' + escapeHtml(m.nombre) + (m.detalle ? ' <small>' + escapeHtml(m.detalle) + '</small>' : '') + '</li>'; });
+  return h + '</ul></div>';
 }
 
 function renderExerciseBlocksHtml(day) {
