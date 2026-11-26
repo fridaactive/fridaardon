@@ -1,56 +1,27 @@
-# Fátima · Mes 1 (desde el 1 de diciembre de 2026) · BORRADOR por aprobar
+# Fátima · Mes 1 (desde el 1 de diciembre de 2026) · BORRADOR v2 por aprobar
 
-4 días en gym, 1 hora, ganar músculo.
-PENDIENTE: qué equipo tiene el gym de sus apartamentos (Frida le escribió).
-- Si tiene máquinas, poleas o barra: se usan, y Frida graba esos videos en SU gimnasio (no en el estudio).
-- Abajo está la versión solo con mancuernas y bandas (por si su gym es básico). La versión con máquinas
-  es la primera que se le propuso a Frida (hip thrust con barra, jalón y remo en polea, curl femoral,
-  extensión de cuádriceps, abducción en máquina, face pull en polea, press en banco).
-Pasa ~10 h sentada: calentamientos de cadera y mucha espalda alta.
+4 días en gym, 1 hora, ganar músculo. Nivel intermedio.
+Su gym: máquina Smith, poleas dobles, mancuernas, banco ajustable, bancos con barra, cardio.
+Formato (Frida): 3 bloques × 2 ejercicios × 3 rondas = 6 ejercicios por día.
+Descanso: 30–45 s entre los 2 ejercicios, 90 s al cerrar cada ronda.
+Pendiente: ¿calentamiento?, libras de las mancuernas, ¿tobillera para polea?
 
 ## Día 1 · Glúteo y femoral
-- Calentamiento (40 s c/u): Movilidad de cadera 90/90 · Gato-vaca · Puente de glúteo con banda · Caminata lateral con banda
-- Principal (descanso 90 s):
-  - Puente de glúteo con mancuerna 4 × 12 (pausa 2 s)
-  - Peso muerto rumano con mancuernas 4 × 10
-  - Sentadilla búlgara con mancuernas 3 × 10 c/pierna
-  - Peso muerto rumano a una pierna con mancuerna 3 × 10 c/pierna
-  - Patada de glúteo con banda 3 × 15 c/pierna
-- Core: Plancha frontal 3 × 30 s · Dead bug 3 × 10 c/lado
-- Estiramiento: Estiramiento de flexor de cadera · Estiramiento de isquiotibiales · Estiramiento de glúteo en figura 4
+- Bloque 1: Hip thrust en Smith 10 · Abducción de cadera en polea 12 c/pierna
+- Bloque 2: Peso muerto rumano con mancuernas 10 · Patada de glúteo en polea 12 c/pierna
+- Bloque 3: Sentadilla búlgara con mancuernas 10 c/pierna · Curl femoral de pie en polea 12 c/pierna
 
 ## Día 2 · Espalda y hombro
-- Calentamiento: Rotación torácica en cuadrupedia · Aperturas con banda · Ángeles en la pared · Círculos de brazos
-- Principal (descanso 90 s):
-  - Remo inclinado con mancuernas 4 × 10
-  - Remo con mancuerna a una mano 3 × 10 c/lado
-  - Press de hombro con mancuernas 4 × 10
-  - Elevaciones laterales con mancuernas 3 × 15
-  - Pájaros con mancuernas 3 × 15
-  - Face pull con banda 3 × 15
-- Brazos en pareja (descanso 60 s): Curl de bíceps con mancuernas 3 × 12 + Extensión de tríceps con mancuerna sobre la cabeza 3 × 12
-- Estiramiento: Estiramiento de pecho en pared · Estiramiento de dorsal · Postura del niño
+- Bloque 1: Jalón al pecho en polea alta 10 · Press de hombro con mancuernas 10
+- Bloque 2: Remo con mancuerna a una mano 10 c/lado · Elevaciones laterales en polea 12 c/lado
+- Bloque 3: Remo en polea baja 12 · Face pull en polea 15
 
 ## Día 3 · Pierna y glúteo
-- Calentamiento: Movilidad de cadera 90/90 · Sentadilla con peso corporal · Puente de glúteo con banda · Caminata lateral con banda
-- Principal (descanso 90 s):
-  - Sentadilla goblet con mancuerna 4 × 10
-  - Zancada hacia atrás con mancuernas 3 × 10 c/pierna
-  - Sentadilla sumo con mancuerna 3 × 12
-  - Subida a silla con mancuernas 3 × 10 c/pierna
-  - Abducción de cadera sentada con banda 3 × 20
-  - Elevación de talones con mancuernas 3 × 15
-- Core: Plancha lateral 3 × 30 s c/lado · Elevación de piernas acostada 3 × 12
-- Estiramiento: Estiramiento de cuádriceps de pie · Estiramiento de flexor de cadera · Estiramiento de glúteo en figura 4
+- Bloque 1: Sentadilla en Smith 10 · Elevación de talones en Smith 15
+- Bloque 2: Zancada hacia atrás en Smith 10 c/pierna · Plancha lateral 30 s c/lado
+- Bloque 3: Subida al banco con mancuernas 10 c/pierna · Abducción de cadera en polea 15 c/pierna
 
 ## Día 4 · Pecho, hombro y brazos
-- Calentamiento: Rotación torácica en cuadrupedia · Aperturas con banda · Flexiones con rodillas apoyadas · Círculos de brazos
-- Principal (descanso 90 s):
-  - Press de pecho en el piso con mancuernas 4 × 10 (en el gym puede usar banco)
-  - Aperturas de pecho en el piso con mancuernas 3 × 12
-  - Remo inclinado con mancuernas 3 × 12
-  - Press Arnold 3 × 10
-  - Elevaciones laterales con mancuernas 3 × 15
-- Brazos en pareja: Curl martillo 3 × 12 + Fondos de tríceps en silla 3 × 12
-- Core: Pallof press con banda 3 × 10 c/lado · Bird dog 3 × 10 c/lado
-- Estiramiento: Estiramiento de pecho en pared · Postura del niño · Gato-vaca
+- Bloque 1: Press de pecho en banco con mancuernas 10 · Remo con mancuernas en banco inclinado 12
+- Bloque 2: Press Arnold 10 · Aperturas en polea 12
+- Bloque 3: Curl de bíceps en polea 12 · Extensión de tríceps en polea 12
