@@ -332,6 +332,7 @@ window.addEventListener("load", function(){ setTimeout(function(){ try { showTab
   .rtt-chips { display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.5rem; }
   .rtt-chip { font-size:0.62rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; padding:0.3rem 0.65rem; border-radius:999px; background:var(--blue); color:#fff; }
   .rtt-chip-cream { background:var(--cream); color:#0D1B3E; }
+  .rtt-exn { margin-left:auto; align-self:center; font-size:0.7rem; font-weight:800; color:var(--muted); letter-spacing:0.04em; }
   .rtt-novideo { aspect-ratio:16/9; border-radius:18px; background:var(--surface); border:1px dashed var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; color:var(--muted); font-size:0.75rem; font-weight:700; margin-bottom:0.7rem; }
   .rtt-novideo svg { width:28px; height:28px; }
   .rtt-target { text-align:center; font-family:'Archivo Black','DM Sans',sans-serif; font-size:1.25rem; color:var(--cream); margin:0.2rem 0 0.8rem; text-transform:uppercase; }
@@ -2270,7 +2271,7 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
       <div class="rtt-clock" id="rtt-clock-box"><b id="rtt-clock">00:00</b><small id="rtt-clock-meta"></small></div>
     </div>
     <div class="rtt-progress"><i id="rtt-bar" style="width:0%"></i></div>
-    <div class="rtt-chips"><span class="rtt-chip" id="rtt-blk"></span><span class="rtt-chip rtt-chip-cream" id="rtt-ronda"></span></div>
+    <div class="rtt-chips"><span class="rtt-chip" id="rtt-blk"></span><span class="rtt-chip rtt-chip-cream" id="rtt-ronda"></span><span class="rtt-exn" id="rtt-exn"></span></div>
     <div class="exs-ex-title" id="rtt-ex-title"></div>
     <div id="rtt-video"></div>
     <div class="rtt-target" id="rtt-target"></div>
@@ -4508,13 +4509,15 @@ function closeExSession() {
 var RTT = null;
 function rttSteps(day) {
   var out = [];
+  var nb = 0;
   (day.blocks || []).forEach(function(b) {
     var exs = (b.exercises || []).filter(function(e) { return e && e.name; });
     if (!exs.length) return;
+    nb++;
     var rondas = exs.reduce(function(m, e) { return Math.max(m, exsSeriesCount(e)); }, 1);
     for (var r = 0; r < rondas; r++) {
       var enRonda = exs.filter(function(e) { return exsSeriesCount(e) > r; });
-      enRonda.forEach(function(e, i) { out.push({ block: b, ex: e, r: r, rondas: rondas, i: i, n: enRonda.length }); });
+      enRonda.forEach(function(e, i) { out.push({ block: b, nb: nb, ex: e, r: r, rondas: rondas, i: i, n: enRonda.length }); });
     }
   });
   return out;
@@ -4534,7 +4537,7 @@ function startGuidedWorkout(dayId) {
   document.getElementById('rtt-start-meta').textContent = nEx + ' ejercicios · ' + blocks.length + ' bloques' + (RTT.meta ? ' · meta ' + RTT.meta + ' min' : '');
   document.getElementById('rtt-start-blocks').innerHTML = blocks.map(function(b, i) {
     var rondas = b.exercises.reduce(function(m, e) { return Math.max(m, exsSeriesCount(e)); }, 1);
-    return '<div class="rtt-sb"><span class="rtt-sb-n">' + String(i + 1).padStart(2, '0') + '</span><span class="rtt-sb-t"><b>' + escapeHtml(rttBlockLabel(b)) + '</b><small>' + b.exercises.map(function(e) { return escapeHtml(e.name); }).join(' · ') + '</small></span><span class="rtt-sb-r">' + rondas + '×</span></div>';
+    return '<div class="rtt-sb"><span class="rtt-sb-n">' + String(i + 1).padStart(2, '0') + '</span><span class="rtt-sb-t"><b>Bloque ' + (i + 1) + ' · ' + escapeHtml(rttBlockLabel(b)) + '</b><small>' + b.exercises.map(function(e) { return escapeHtml(e.name); }).join(' · ') + '</small></span><span class="rtt-sb-r">' + rondas + ' rondas</span></div>';
   }).join('');
   rttShow('start');
   document.getElementById('rt-train-modal').style.display = 'flex';
@@ -4566,8 +4569,9 @@ function rttPaint() {
   var bankItem = findExerciseBankItem(ex.name);
   clearInterval(RTT.timerInterval); RTT.timerRunning = false;
   document.getElementById('rtt-bar').style.width = (RTT.s / RTT.steps.length * 100) + '%';
-  document.getElementById('rtt-blk').textContent = rttBlockLabel(block) + ' · ' + (st.i + 1) + ' de ' + st.n;
-  document.getElementById('rtt-ronda').textContent = 'Ronda ' + (st.r + 1) + ' de ' + st.rondas;
+  document.getElementById('rtt-blk').textContent = 'Bloque ' + st.nb + ' · ' + rttBlockLabel(block);
+  document.getElementById('rtt-ronda').textContent = 'Ronda ' + (st.r + 1) + '/' + st.rondas;
+  document.getElementById('rtt-exn').textContent = 'Ejercicio ' + (st.i + 1) + '/' + st.n;
   document.getElementById('rtt-ex-title').textContent = ex.name;
   var videoUrl = bankItem && bankItem.video;
   document.getElementById('rtt-video').innerHTML = videoUrl
@@ -4647,7 +4651,7 @@ function rttAdvance() {
   if (!next) { rttFinish(); return; }
   var finBloque = next.block !== st.block, finRonda = !finBloque && next.r !== st.r;
   var sec = (finBloque || finRonda) ? (parseInt(st.block.descansoRonda, 10) || st.block.restSecs || 40) : (st.block.restSecs || 40);
-  var titulo = finBloque ? '¡' + rttBlockLabel(st.block) + ' listo!' : finRonda ? '¡Ronda ' + (st.r + 1) + ' lista!' : 'Descansa';
+  var titulo = finBloque ? '¡Bloque ' + st.nb + ' listo!' : finRonda ? '¡Ronda ' + (st.r + 1) + '/' + st.rondas + ' lista!' : 'Descansa';
   RTT.s++;
   rttPaint();
   if (sec > 0) rttRest(sec, titulo, next);
@@ -4657,7 +4661,7 @@ function rttRest(sec, titulo, next) {
   document.getElementById('rtt-rest-h').textContent = titulo;
   var thumb = (function() { var b = findExerciseBankItem(next.ex.name); return b && b.video ? getYouTubeThumbnailUrl(b.video) : null; })();
   document.getElementById('rtt-rest-next').innerHTML = '<span class="rtt-next-thumb">' + (thumb ? '<img src="' + jsAttrEscape(thumb) + '" alt="">' : '<svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>') + '</span>'
-    + '<span class="rtt-next-t"><small>Sigue · ' + escapeHtml(rttBlockLabel(next.block)) + ' · ronda ' + (next.r + 1) + '</small><b>' + escapeHtml(next.ex.name) + '</b><small>' + escapeHtml(exDosisTxt(next.block, next.ex)) + '</small></span>';
+    + '<span class="rtt-next-t"><small>Sigue · Bloque ' + next.nb + ' · ronda ' + (next.r + 1) + '/' + next.rondas + '</small><b>' + escapeHtml(next.ex.name) + '</b><small>' + escapeHtml(exDosisTxt(next.block, next.ex)) + '</small></span>';
   document.getElementById('rtt-rest').hidden = false;
   rttPaintRest();
   rttSonido('inicio');
