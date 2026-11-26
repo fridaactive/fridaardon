@@ -1,0 +1,11 @@
+{
+ "_nota": "Rutinas aprobadas por Frida que el panel carga solo en la cuenta de cada cliente. clave = SHA-256 del nombre (sin tildes, minúsculas). Subir 'version' para reemplazar.",
+ "rutinas": [
+  {
+   "cliente": "Jocelyn",
+   "clave": "6bdf07c7bd5d752c86e8d9727a1164634dc5ea23fa47da815b17d2b6908d2cc1",
+   "archivo": "clientes/jocelyn.json",
+   "version": 1
+  }
+ ]
+}

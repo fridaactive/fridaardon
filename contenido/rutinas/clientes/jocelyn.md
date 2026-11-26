@@ -1,4 +1,4 @@
-# Jocelyn · Mes 1 (desde el 1 de diciembre de 2026) · VERSIÓN FINAL, falta el ok de Frida
+# Jocelyn · Mes 1 (desde el 1 de diciembre de 2026) · APROBADA y publicada (publicar.json v1)
 
 Objetivo del mes: movilidad, control corporal, aprender los ejercicios. Intensidad baja.
 3 días FULL BODY en casa (~45 min) + 2 días de caminata de 25 min en días sin fuerza.
