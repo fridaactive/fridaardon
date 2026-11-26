@@ -7,8 +7,8 @@
   "Tu semana: lunes día 1 · martes caminar 25 min · miércoles día 2 · jueves caminar 25 min · viernes o sábado día 3.",
   "Cuida tu pie: nada de saltos. Si te molesta, haz las planchas con las rodillas apoyadas y avísame.",
   "Las libras son una guía. Si las repeticiones te salen muy fáciles, avísame y subimos.",
-  "Consigue mancuernas de 5 y 10 lbs para brazos y hombros. Las de 25 lbs son para pierna.",
-  "Cuando diga c/lado, haz el tiempo o las repeticiones de cada lado."
+  "Cuando diga c/lado, haz el tiempo o las repeticiones de cada lado.",
+  "Si tienes iPhone, sube el volumen para escuchar los sonidos del modo entreno."
  ],
  "days": [
   {
@@ -299,5 +299,8 @@
     }
    ]
   }
+ ],
+ "porConseguir": [
+  "Mancuernas de 5 y 10 lbs"
  ]
 }
