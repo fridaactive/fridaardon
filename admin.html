@@ -808,6 +808,14 @@
 .acp-basic-meta{font-size:0.78rem;color:var(--muted);margin-top:0.15rem;}
 .acp-basic-facts{display:flex;flex-wrap:wrap;justify-content:center;gap:0.4rem;margin-top:0.8rem;}
 .acp-basic-facts span{font-size:0.7rem;background:#F4F7FF;border:1px solid var(--border);border-radius:100px;padding:0.3rem 0.7rem;color:var(--text);}
+.acp-rt-meta{display:inline-block;background:#F5ECCB;color:#0D1B3E;border-radius:999px;padding:0.35rem 0.8rem;font-size:0.78rem;font-weight:700;margin-bottom:0.6rem;}
+.acp-rt-days{margin:0.2rem 0 0.4rem;}
+.acp-rt-empty{text-align:center;color:var(--muted);font-size:0.8rem;padding:1.1rem 0 0.9rem;}
+.acp-rt-main{display:block;width:100%;margin-top:0.6rem;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;box-shadow:0 4px 0 #0F3FA8;text-align:center;text-decoration:none;transition:transform .15s,box-shadow .15s;}
+.acp-rt-main:active{transform:translateY(3px);box-shadow:0 1px 0 #0F3FA8;}
+.acp-rt-tools{display:flex;gap:0.6rem;}
+.acp-rt-tools button{flex:1;background:#fff;color:var(--blue);border:1.5px solid var(--border);border-radius:12px;padding:0.65rem 0.5rem;font-weight:700;font-size:0.74rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:border-color .15s,background .15s;}
+.acp-rt-tools button:hover{border-color:var(--blue);background:#F4F7FF;}
 .acp-rday{display:flex;align-items:center;gap:0.7rem;padding:0.7rem 0.2rem;border-top:1px solid var(--border);cursor:pointer;}
 .acp-rday:first-of-type{border-top:none;}
 .acp-rday:hover .acp-rday-t{color:var(--blue);}
@@ -2385,30 +2393,35 @@ function rutinaCopiarDatos() {
 }
 
 function renderAcpRutinaHtml(clientId, c) {
-  var html = '';
-  if (acpState.uid) html += '<button type="button" class="al-btn" style="margin:0 0 1rem;" onclick="rutinaCopiarDatos()">📋 Copiar datos para Claude (armar su rutina)</button>';
-  if (acpState.uid) html += '<button type="button" onclick="acpRepetirCuestionario()" style="display:block;margin:-0.5rem 0 1rem;border:0;background:none;color:var(--muted);font-size:0.72rem;text-decoration:underline;cursor:pointer;">🔁 Pedir que vuelva a responder el cuestionario de bienvenida</button>';
-  html += '<div class="card">';
-  html += '<div class="card-label">🎯 Objetivo</div>';
-  html += '<div style="font-size:0.85rem;color:var(--text);line-height:1.5;">' + (c.meta ? escapeHtmlAdmin(c.meta) : '<span style="color:var(--muted);">Sin objetivo definido todavía.</span>') + '</div>';
-  html += '</div>';
+  // Una sola tarjeta: objetivo + días + un botón principal. Abajo, dos
+  // herramientas discretas (copiar datos para Claude, repetir cuestionario).
+  var html = '<div class="card acp-rt">';
+  html += '<div class="card-label">🏋️ Su rutina</div>';
+  html += '<div class="acp-rt-meta">🎯 ' + (c.meta ? escapeHtmlAdmin(c.meta) : 'Sin objetivo todavía') + '</div>';
   if (clientId === 'saca' && c.rutina) {
     // Caso especial heredado: Herberth tiene su rutina como HTML aparte.
-    html += '<a href="' + escapeHtmlAdmin(c.rutina) + '" target="_blank" style="display:block;text-align:center;background:var(--blue);color:#fff;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;text-decoration:none;">📋 Ver rutina →</a>';
+    html += '<a class="acp-rt-main" href="' + escapeHtmlAdmin(c.rutina) + '" target="_blank">Ver rutina ›</a></div>';
   } else {
     var rd = (JSON.parse(localStorage.getItem('fa_rutinas') || '{}')[clientId]) || null;
     var rdays = (rd && rd.days) || [];
     if (rdays.length) {
-      html += '<div class="card"><div class="card-label">🏋️ Su rutina · ' + rdays.length + (rdays.length === 1 ? ' día' : ' días') + '</div>';
+      html += '<div class="acp-rt-days">';
       rdays.forEach(function(d, i) {
         var nEx = 0; (d.blocks || []).forEach(function(b) { nEx += (b.exercises || []).length; });
         html += '<div class="acp-rday" onclick="window._rvStartDay=' + i + ';openRutinaEditor(\'' + clientId + '\')"><span class="acp-rday-n">' + String(i + 1).padStart(2, '0') + '</span><span class="acp-rday-t">' + escapeHtmlAdmin(d.name || ('Día ' + (i + 1))) + '</span><span class="acp-rday-m">' + nEx + ' ejercicios ›</span></div>';
       });
       html += '</div>';
     } else {
-      html += '<div class="card" style="text-align:center;color:var(--muted);font-size:0.8rem;">Todavía no tiene rutina armada.</div>';
+      html += '<div class="acp-rt-empty">Todavía no tiene rutina armada.</div>';
     }
-    html += '<button type="button" onclick="openRutinaEditor(\'' + clientId + '\')" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-size:0.85rem;font-family:\'DM Sans\',sans-serif;cursor:pointer;">📋 Ver / Editar rutina</button>';
+    html += '<button type="button" class="acp-rt-main" onclick="openRutinaEditor(\'' + clientId + '\')">' + (rdays.length ? 'Ver / editar rutina' : 'Armar su rutina') + '</button>';
+    html += '</div>';
+  }
+  if (acpState.uid) {
+    html += '<div class="acp-rt-tools">';
+    html += '<button type="button" onclick="rutinaCopiarDatos()">📋 Copiar datos para Claude</button>';
+    html += '<button type="button" onclick="acpRepetirCuestionario()">🔁 Repetir cuestionario</button>';
+    html += '</div>';
   }
   return html;
 }
