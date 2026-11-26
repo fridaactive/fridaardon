@@ -18,7 +18,7 @@ Formato de cada día:
 
 ## Día 2
 - Calentamiento · 2 rondas: Rotación torácica en cuadrupedia · Aperturas con banda · Caminata lateral con banda
-- Principal · 3 rondas: Peso muerto rumano con mancuernas 12 (10 lbs c/mano) · Press de pecho en el piso con mancuernas 12 (10 lbs c/mano) · Subida a silla 10 c/pierna (sin peso) · Remo con mancuerna a una mano 10 c/lado (10 lbs)
+- Principal · 3 rondas: Peso muerto rumano con mancuernas 12 (10 lbs c/mano) · Press de pecho en el piso con mancuernas 12 (10 lbs c/mano) · Subida a silla 10 c/pierna (sin peso) · Pullover con mancuerna en el piso 12 (10 lbs)
 - Finisher · 3 rondas: Bird dog 10 c/lado · Plancha lateral 20 s c/lado · Estiramiento de glúteo en figura 4 30 s c/lado
 
 ## Día 3
