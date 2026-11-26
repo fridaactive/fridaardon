@@ -8442,6 +8442,18 @@ function showExerciseBankModal() {
   renderExerciseBankList();
   document.getElementById('exercise-bank-modal').style.display = 'flex';
 }
+// Lista del banco en texto, para pegársela a Claude y saber qué
+// ejercicios ya tienen video y cuáles faltan por grabar.
+function bancoCopiarParaClaude() {
+  var items = Object.keys(EXERCISE_BANK).map(function(k) { return EXERCISE_BANK[k]; }).filter(function(x) { return x && x.nombre; });
+  items.sort(function(a, b) { return (a.nombre || '').localeCompare(b.nombre || ''); });
+  var con = items.filter(function(x) { return x.video; }), sin = items.filter(function(x) { return !x.video; });
+  var fila = function(x) { return '- ' + x.nombre + (x.grupo ? ' (' + x.grupo + ')' : '') + (x.video ? ' · ' + x.video + (x.vertical ? ' · vertical' : '') : ''); };
+  var txt = ['BANCO DE EJERCICIOS · ' + items.length + ' ejercicios', 'CON VIDEO (' + con.length + '):'].concat(con.map(fila), ['SIN VIDEO (' + sin.length + '):'], sin.map(fila)).join('\n');
+  var ok = function() { alert('✓ Banco copiado. Pégalo en el chat con Claude.'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, function() { prompt('Copia este texto:', txt); });
+  else prompt('Copia este texto:', txt);
+}
 function hideExerciseBankModal() {
   document.getElementById('exercise-bank-modal').style.display = 'none';
 }
@@ -9602,7 +9614,8 @@ function renderAhorrosMes() {
     <div class="fin-form-row"><div class="fin-form-label">Grupo muscular (opcional)</div><select class="fin-form-input" id="eb-grupo"><option value="">— Elegí un grupo —</option><option>Pierna</option><option>Glúteos</option><option>Espalda</option><option>Pecho</option><option>Hombros</option><option>Brazos</option><option>Bíceps</option><option>Tríceps</option><option>Isquiotibiales</option><option>Core/Abdomen</option><option>Cardio</option><option>Full body</option><option>Otro</option></select></div>
     <div class="fin-form-row"><div class="fin-form-label">Video de YouTube (opcional)</div><input class="fin-form-input" id="eb-video" type="text" placeholder="Pegá el link — subilo como 'No listado' en YouTube"></div>
     <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--text);margin:-0.4rem 0 1rem;cursor:pointer;"><input type="checkbox" id="eb-vertical" style="width:1.1rem;height:1.1rem;"> Video vertical (grabado con el celular)</label>
-    <button onclick="saveExerciseBankItem()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;">+ Agregar al banco</button>
+    <button onclick="saveExerciseBankItem()" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:700;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:0.6rem;">+ Agregar al banco</button>
+    <button onclick="bancoCopiarParaClaude()" style="width:100%;background:none;color:var(--blue);border:1.5px solid var(--blue);border-radius:10px;padding:0.65rem;font-weight:700;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1.25rem;">📋 Copiar banco para Claude (qué videos tengo)</button>
     <div id="exercise-bank-list"></div>
   </div>
 </div>
