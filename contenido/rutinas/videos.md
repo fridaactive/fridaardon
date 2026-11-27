@@ -2,93 +2,94 @@
 
 Estados: ✅ con video · ⏳ falta grabar · 🔁 volver a grabar
 El nombre tiene que ser IDÉNTICO al del banco de ejercicios del panel para que el video salga en la rutina.
-F = Fátima · J = Jocelyn.
-Dónde se graba: el estudio es para ejercicios de casa (mancuernas, bandas, mat, silla). Lo que lleve máquina, polea, barra o banco lo graba Frida en su gimnasio. (Pendiente: cruzar con el banco real de Frida; puede que algunos ya tengan video.)
+J = Jocelyn · F = Fátima · M = Movilidad articular (botón general).
+Dónde se graba: ESTUDIO = casa (mancuernas, bandas, mat, pared). GIMNASIO = Smith y banco.
 
-## Movilidad articular (botón general en Rutina, para todas)
+## 🎬 ESTUDIO · viernes 27 de noviembre de 2026 (39 videos)
+
+### Movilidad articular (5)
 | Ejercicio | Estado | Quién |
 |---|---|---|
-| Movilidad de cuello | ⏳ | Todas |
-| Círculos de brazos | ⏳ | Todas |
-| Círculos de cadera | ⏳ | Todas |
-| Círculos de rodillas | ⏳ | Todas |
-| Círculos de tobillos | ⏳ | Todas |
+| Movilidad de cuello | ⏳ | M |
+| Círculos de brazos | ⏳ | M J |
+| Círculos de cadera | ⏳ | M |
+| Círculos de rodillas | ⏳ | M |
+| Círculos de tobillos | ⏳ | M |
 
-## Peso corporal y mat
+### Mat y peso corporal (13)
 | Ejercicio | Estado | Quién |
 |---|---|---|
+| Gato-vaca | ⏳ | J |
+| Movilidad de cadera 90/90 | ⏳ | J |
 | Movilidad de dedos y tobillo | ⏳ | J |
-| Movilidad de cadera 90/90 | ⏳ | F |
-| Gato-vaca | ⏳ | F J |
-| Rotación torácica en cuadrupedia | ⏳ | F J |
-| Círculos de brazos | ⏳ | F J |
-| Ángeles en la pared | ⏳ | F |
-| Sentadilla con peso corporal | ⏳ | F J |
-| Flexiones con rodillas apoyadas | ⏳ | F |
-| Plancha frontal | ⏳ | F J |
-| Plancha lateral | ⏳ | F J |
-| Dead bug | ⏳ | F J |
-| Bird dog | ⏳ | F J |
-| Elevación de piernas acostada | ⏳ | F J |
-| Puente de glúteo a una pierna | ⏳ | J |
-| Sentadilla isométrica en pared | ⏳ | J |
+| Rotación torácica en cuadrupedia | ⏳ | J |
 | Equilibrio en un pie | ⏳ | J |
+| Sentadilla isométrica en pared | ⏳ | J |
+| Plancha alta con toques de hombro | ⏳ | J |
+| Plancha baja | ⏳ | J |
+| Plancha lateral | ⏳ | J F |
+| Dead bug | ⏳ | J |
+| Bird dog | ⏳ | J |
+| Elevación de piernas acostada | ⏳ | J |
+| Puente de glúteo a una pierna | ⏳ | F |
 
-## Estiramientos
+### Estiramientos (3)
 | Ejercicio | Estado | Quién |
 |---|---|---|
-| Estiramiento de flexor de cadera | ⏳ | F J |
-| Estiramiento de glúteo en figura 4 | ⏳ | F J |
-| Estiramiento de isquiotibiales | ⏳ | F J |
-| Estiramiento de cuádriceps de pie | ⏳ | F |
-| Estiramiento de pecho en pared | ⏳ | F J |
-| Estiramiento de dorsal | ⏳ | F |
-| Postura del niño | ⏳ | F J |
+| Estiramiento de flexor de cadera | ⏳ | J |
+| Estiramiento de glúteo en figura 4 | ⏳ | J |
+| Postura del niño | ⏳ | J |
 
-## Banda mini (circular)
+### Bandas (4)
 | Ejercicio | Estado | Quién |
 |---|---|---|
-| Puente de glúteo con banda | ⏳ | F J |
-| Caminata lateral con banda | ⏳ | F J |
-| Patada de glúteo con banda | ⏳ | F J |
-| Patada lateral acostada con banda | ⏳ | J |
-| Abducción de cadera sentada con banda | ⏳ | F J |
+| Caminata lateral con banda (mini) | ⏳ | J |
+| Patada de glúteo con banda (mini, en cuadrupedia) | ⏳ | J |
+| Aperturas con banda (larga) | ⏳ | J |
+| Remo sentada con banda (larga) | ⏳ | J |
+Nombre en el banco SIN lo de paréntesis.
 
-## Banda larga (de tubo o con agarres)
+### Mancuernas (14)
 | Ejercicio | Estado | Quién |
 |---|---|---|
-| Aperturas con banda | ⏳ | F J |
-| Face pull con banda | ⏳ | F |
-| Pallof press con banda | ⏳ | F |
-
-## Mancuernas
-| Ejercicio | Estado | Quién |
-|---|---|---|
-| Puente de glúteo con mancuerna | ⏳ | F J |
-| Peso muerto rumano con mancuernas | ⏳ | F J |
-| Peso muerto rumano a una pierna con mancuerna | ⏳ | F J |
-| Sentadilla goblet con mancuerna | ⏳ | F J |
-| Sentadilla sumo con mancuerna | ⏳ | F J |
-| Zancada hacia atrás con mancuernas | ⏳ | F |
-| Elevación de talones con mancuernas | ⏳ | F |
-| Remo inclinado con mancuernas | ⏳ | F J |
-| Press de pecho en el piso con mancuernas | ⏳ | F J |
-| Aperturas de pecho en el piso con mancuernas | ⏳ | F |
-| Press de hombro con mancuernas | ⏳ | F J |
+| Sentadilla goblet con mancuerna | ⏳ | J |
+| Sentadilla sumo con mancuerna | ⏳ | J F |
+| Peso muerto rumano con mancuernas | ⏳ | J F |
+| Puente de glúteo con mancuerna | ⏳ | J |
+| Press de pecho en puente de glúteo con mancuernas | ⏳ | J |
+| Abducción de cadera acostada con mancuerna | ⏳ | F |
+| Remo inclinado con mancuernas | ⏳ | J |
+| Remo al mentón con mancuernas | ⏳ | J |
+| Press de hombro con mancuernas | ⏳ | J F |
 | Press Arnold | ⏳ | F |
-| Elevaciones laterales con mancuernas | ⏳ | F J |
+| Elevaciones laterales con mancuernas | ⏳ | F |
 | Pájaros con mancuernas | ⏳ | F |
-| Curl de bíceps con mancuernas | ⏳ | F J |
-| Curl martillo | ⏳ | F |
-| Extensión de tríceps con mancuerna sobre la cabeza | ⏳ | F J |
+| Curl de bíceps con mancuernas | ⏳ | F |
+| Extensión de tríceps con mancuerna sobre la cabeza | ⏳ | F |
 
-## Silla firme
+## 🏋️ GIMNASIO · sábado 28 de noviembre de 2026 (13 videos, rutina de Fátima)
+(La rutina de Fátima todavía puede cambiar: revisar antes de ir.)
+
+### Máquina Smith (5)
 | Ejercicio | Estado | Quién |
 |---|---|---|
-| Sentadilla búlgara con mancuernas | ⏳ | F J |
-| Subida a silla con mancuernas | ⏳ | F J |
-| Remo con mancuerna a una mano | ⏳ | F |
-| Fondos de tríceps en silla | ⏳ | F |
+| Hip thrust en Smith | ⏳ | F |
+| Sentadilla en Smith | ⏳ | F |
+| Zancada hacia atrás en Smith | ⏳ | F |
+| Elevación de talones en Smith | ⏳ | F |
+| Remo inclinado en Smith | ⏳ | F |
 
-## Para enero (cuando haya banca, barra y discos)
-Hip thrust con barra · Peso muerto rumano con barra · Sentadilla con barra · Press de pecho en banco con mancuernas · Press inclinado con mancuernas · Remo con mancuernas en banco inclinado
+### Banco + mancuernas (8)
+| Ejercicio | Estado | Quién |
+|---|---|---|
+| Press de pecho en banco con mancuernas | ⏳ | F |
+| Aperturas con mancuernas en banco | ⏳ | F |
+| Remo con mancuernas en banco inclinado | ⏳ | F |
+| Remo con mancuerna a una mano | ⏳ | F |
+| Pullover con mancuerna en banco | ⏳ | F |
+| Curl femoral con mancuerna en banco | ⏳ | F |
+| Subida al banco con mancuernas | ⏳ | F |
+| Sentadilla búlgara con mancuernas | ⏳ | F |
+
+## Para enero (cuando Frida tenga banca, barra y discos)
+Hip thrust con barra · Peso muerto rumano con barra · Sentadilla con barra · Press inclinado con mancuernas
