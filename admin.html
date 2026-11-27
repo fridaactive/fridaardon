@@ -2537,7 +2537,9 @@ function rutinaHuella(n) {
 function rutinasAutoSync() {
   if (!window.crypto || !crypto.subtle || !window.fetch) return;
   fetch('contenido/rutinas/publicar.json?t=' + Date.now(), { cache: 'no-store' }).then(function(r) { return r.ok ? r.json() : null; }).then(function(man) {
-    if (!man || !Array.isArray(man.rutinas) || !man.rutinas.length) return;
+    if (!man) return;
+    if (Array.isArray(man.banco) && man.banco.length) bancoAgregar(man.banco);
+    if (!Array.isArray(man.rutinas) || !man.rutinas.length) return;
     var ids = Object.keys(CLIENTS || {});
     return Promise.all(ids.map(function(id) { return rutinaHuella(CLIENTS[id] && CLIENTS[id].name).then(function(h) { return [h, id]; }); })).then(function(pares) {
       var porHuella = {}; pares.forEach(function(p) { porHuella[p[0]] = p[1]; });

@@ -5,6 +5,15 @@ El nombre tiene que ser IDÉNTICO al del banco de ejercicios del panel para que 
 F = Fátima · J = Jocelyn.
 Dónde se graba: el estudio es para ejercicios de casa (mancuernas, bandas, mat, silla). Lo que lleve máquina, polea, barra o banco lo graba Frida en su gimnasio. (Pendiente: cruzar con el banco real de Frida; puede que algunos ya tengan video.)
 
+## Movilidad articular (botón general en Rutina, para todas)
+| Ejercicio | Estado | Quién |
+|---|---|---|
+| Movilidad de cuello | ⏳ | Todas |
+| Círculos de brazos | ⏳ | Todas |
+| Círculos de cadera | ⏳ | Todas |
+| Círculos de rodillas | ⏳ | Todas |
+| Círculos de tobillos | ⏳ | Todas |
+
 ## Peso corporal y mat
 | Ejercicio | Estado | Quién |
 |---|---|---|
