@@ -48,7 +48,7 @@ Si falta la etiqueta, se calcula igual y se marca 🧮; cuando Frida mande foto,
 | Alimento | Porción | cal | P | C | G | Notas |
 |---|---|---|---|---|---|---|
 | Queso cottage | ¼ taza (55 g) | 90 | 12 | 3 | 2.5 | 🔎 · el que más proteína da |
-| Mozzarella | 30 g (puñito rallado) | 85 | 6 | 1 | 6 | 🔎 · se derrite en huevos |
+| Mozzarella | 30 g (puñito rallado) | 85 | 6 | 1 | 6 | 🔎 · se derrite en huevos · **20 g (2 cucharadas colmadas rallada) ≈ ¼ de aguacate** (≈ 57 cal) |
 | Feta | 30 g | 75 | 4 | 1 | 6 | 🔎 · mucho sabor, poca cantidad |
 | Queso fresco | 30 g (1 rodaja) | 80 | 6 | 1 | 6 | 🔎 |
 | **Queso crema light Dos Pinos** (210 g, 7 porciones) | 1 cucharada (15 g) | 35 | 0.5 | 1.5 | 3 | ✅ etiqueta: 30 g = 70 cal, 6 g grasa, 3 g carbohidratos, 1 g proteína · Super Selectos $2.35 · **2 cucharadas ≈ ¼ de aguacate** en calorías |

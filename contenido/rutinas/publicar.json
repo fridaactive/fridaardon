@@ -7,5 +7,12 @@
    "archivo": "clientes/jocelyn.json",
    "version": 3
   }
+ ],
+ "banco": [
+  "Movilidad de cuello",
+  "Círculos de brazos",
+  "Círculos de cadera",
+  "Círculos de rodillas",
+  "Círculos de tobillos"
  ]
 }
