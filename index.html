@@ -226,7 +226,87 @@
 
   /* ── Modo entreno guiado ── */
   .rtt-bar-top { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.8rem; }
-  .rtt-clock { font-size:0.72rem; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .rtt-clock { display:flex; flex-direction:column; align-items:flex-end; line-height:1; font-variant-numeric:tabular-nums; }
+  .rtt-clock b { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; font-size:1.35rem; color:var(--text); letter-spacing:0.02em; }
+  .rtt-clock small { font-size:0.62rem; color:var(--muted); font-weight:700; margin-top:0.2rem; }
+  .rtt-clock.over b { color:var(--cream); }
+  .rtt-chips { display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.5rem; }
+  .rtt-chip { font-size:0.62rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; padding:0.3rem 0.65rem; border-radius:999px; background:var(--blue); color:#fff; }
+  .rtt-chip-cream { background:var(--cream); color:#0D1B3E; }
+  .rtt-exn { margin-left:auto; align-self:center; font-size:0.7rem; font-weight:800; color:var(--muted); letter-spacing:0.04em; }
+  .rtt-novideo { aspect-ratio:16/9; border-radius:18px; background:var(--surface); border:1px dashed var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; color:var(--muted); font-size:0.75rem; font-weight:700; margin-bottom:0.7rem; }
+  .rtt-novideo svg { width:28px; height:28px; }
+  .rtt-target { text-align:center; font-family:'Archivo Black','DM Sans',sans-serif; font-size:1.25rem; color:var(--cream); margin:0.2rem 0 0.8rem; text-transform:uppercase; }
+  .rtt-timer { display:flex; flex-direction:column; align-items:center; margin-bottom:0.8rem; }
+  .rtt-timer[hidden] { display:none; }
+  .rtt-timer .ring { width:9rem; height:9rem; position:relative; }
+  .rtt-timer .ring svg { width:100%; height:100%; transform:rotate(-90deg); }
+  .rtt-timer .ring circle { fill:none; stroke-width:4; }
+  .rtt-timer .ring .bg { stroke:rgba(255,255,255,0.12); }
+  .rtt-timer .ring .fg { stroke:var(--blue-lt2,#8FB0FF); stroke-linecap:round; transition:stroke-dashoffset 1s linear; }
+  .rtt-timer-t { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Archivo Black','DM Sans',sans-serif; font-size:2.1rem; color:#fff; font-variant-numeric:tabular-nums; }
+  .rtt-timer-lado { font-size:0.72rem; font-weight:800; color:var(--cream); letter-spacing:0.08em; text-transform:uppercase; margin-top:0.3rem; min-height:0.9rem; }
+  .rtt-main-btn { width:100%; border:none; border-radius:100px; padding:1rem; font:800 0.95rem 'DM Sans',sans-serif; background:var(--blue); color:#fff; box-shadow:0 5px 0 #0F3FA8; cursor:pointer; transition:transform .12s, box-shadow .12s; }
+  .rtt-main-btn:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+  .rtt-main-btn.running { background:var(--surface-2,#1b2547); box-shadow:0 5px 0 rgba(0,0,0,0.4); }
+  .rtt-sub-row { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-top:0.8rem; min-height:1.2rem; }
+  .rtt-sub-row .exs-last { margin:0; }
+  .rtt-skip { margin-left:auto; background:none; border:none; color:var(--muted); font:700 0.72rem 'DM Sans',sans-serif; cursor:pointer; }
+  .rtt-next { display:flex; align-items:center; gap:0.7rem; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:0.6rem 0.8rem; text-align:left; width:100%; max-width:20rem; box-sizing:border-box; }
+  .rtt-next-thumb { width:3.6rem; height:2.6rem; border-radius:10px; background:var(--blue); overflow:hidden; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .rtt-next-thumb img { width:100%; height:100%; object-fit:cover; }
+  .rtt-next-thumb svg { width:16px; height:16px; }
+  .rtt-next-t { display:flex; flex-direction:column; gap:0.1rem; min-width:0; }
+  .rtt-next-t b { color:#fff; font-size:0.9rem; }
+  .rtt-next-t small { color:rgba(255,255,255,0.65); font-size:0.68rem; }
+  .rtt-start { display:flex; flex-direction:column; padding-top:0.8rem; }
+  .rtt-start-hero { position:relative; min-height:230px; border-radius:28px; overflow:hidden; padding:1rem 1.1rem 1.2rem; margin-bottom:1rem; display:flex; flex-direction:column; justify-content:space-between;
+    background:linear-gradient(180deg, rgba(15,63,168,0.1) 20%, rgba(7,11,26,0.92) 100%), url('hero-frida.jpg') center 30%/cover no-repeat, var(--blue); box-shadow:0 6px 0 #0F3FA8; animation:faUp 0.45s cubic-bezier(0.2,0.8,0.2,1); }
+  .rtt-tilt { transform:rotate(-3deg); box-shadow:0 3px 0 #C9B57A; }
+  .rtt-start-title .fa-marker { color:#fff; }
+  .rtt-start-title .fa-marker::after { height:0.5em; bottom:0.05em; }
+  .rtt-sb { animation:faUp 0.45s cubic-bezier(0.2,0.8,0.2,1) both; }
+  .rtt-go-ico { animation:fa-chat-pulse 2s ease-in-out infinite; }
+  .rtt-go:active { transform:translateY(4px); box-shadow:0 1px 0 #0F3FA8; }
+  .rtt-in { animation:faUp 0.4s cubic-bezier(0.2,0.8,0.2,1) both; }
+  .rtt-target .rtt-target-tag { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; font-size:1.05rem; padding:0.45rem 1rem; text-transform:uppercase; box-shadow:0 4px 0 #C9B57A; }
+  .rtt-chip-cream { transform:rotate(-2deg); box-shadow:0 3px 0 #C9B57A; }
+  .rtt-chip:not(.rtt-chip-cream) { box-shadow:0 3px 0 #0F3FA8; }
+  .rtt-timer.on .ring { filter:drop-shadow(0 0 14px rgba(143,176,255,0.45)); }
+  .rtt-timer.ult .ring { animation:rttLatido 1s ease-in-out infinite; }
+  .rtt-timer.ult .ring .fg { stroke:var(--cream); }
+  @keyframes rttLatido { 0%,100% { transform:scale(1); } 50% { transform:scale(1.06); } }
+  .rtt-pop { animation:rttPop 0.5s cubic-bezier(.2,1.5,.4,1); }
+  @keyframes rttPop { from { transform:scale(0.6) rotate(-4deg); opacity:0; } to { transform:none; opacity:1; } }
+  .rtt-rest .ring { filter:drop-shadow(0 0 22px rgba(245,236,203,0.25)); }
+  .rtt-rest .fa-sticker { width:30px; height:30px; animation:faTwinkle 2.6s ease-in-out infinite; }
+  .rtt-rest-spark1 { top:18%; left:12%; }
+  .rtt-rest-spark2 { top:26%; right:14%; width:20px !important; height:20px !important; animation-delay:0.8s !important; }
+  .rtt-confeti { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+  #rtt-end-view { position:relative; }
+  .rtt-done-scr { position:relative; }
+  .rtt-done-scr .fa-sticker { width:28px; height:28px; animation:faTwinkle 2.6s ease-in-out infinite; }
+  .rtt-end-spark1 { top:5.2rem; left:18%; }
+  .rtt-end-spark2 { top:8rem; right:16%; width:20px !important; height:20px !important; animation-delay:0.9s !important; }
+  .rtt-done-scr h2 .fa-marker::after { height:0.45em; }
+  .rtt-start .in-hero-tag { align-self:flex-start; }
+  .rtt-start-title { font-family:'Archivo Black','DM Sans',sans-serif; font-weight:400; text-transform:uppercase; font-size:2.3rem; line-height:1.02; color:#fff; margin:0 0 0.45rem; }
+  .rtt-start-meta { color:#C9D3EC; font-size:0.8rem; }
+  .rtt-start-blocks { display:flex; flex-direction:column; gap:0.55rem; margin-bottom:1.4rem; }
+  .rtt-sb { display:flex; align-items:center; gap:0.8rem; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:0.75rem 0.9rem; }
+  .rtt-sb-n { font-family:'Archivo Black','DM Sans',sans-serif; color:var(--cream); font-size:1.1rem; }
+  .rtt-sb-t { flex:1; min-width:0; display:flex; flex-direction:column; gap:0.15rem; }
+  .rtt-sb-t b { font-size:0.88rem; color:var(--text); }
+  .rtt-sb-t small { font-size:0.68rem; color:var(--muted); line-height:1.35; }
+  .rtt-sb-r { font-family:'DM Sans',sans-serif; font-weight:800; color:#0D1B3E; background:var(--cream); border-radius:999px; padding:0.3rem 0.65rem; font-size:0.7rem; white-space:nowrap; transform:rotate(-3deg); box-shadow:0 3px 0 #C9B57A; }
+  .rtt-go { display:flex; align-items:center; justify-content:center; gap:0.7rem; width:100%; border:none; border-radius:100px; padding:0.8rem 1rem; background:var(--blue); color:#fff; font-family:'Archivo Black','DM Sans',sans-serif; font-size:1.05rem; text-transform:uppercase; letter-spacing:0.04em; box-shadow:0 5px 0 #0F3FA8; cursor:pointer; margin-top:auto; }
+  .rtt-go-ico { width:2.4rem; height:2.4rem; border-radius:50%; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; }
+  .rtt-go-ico svg { width:18px; height:18px; }
+  .rtt-done-scr .in-hero-tag { position:static; align-self:center; }
+  .rtt-end-time { display:flex; flex-direction:column; align-items:center; gap:0.2rem; }
+  .rtt-end-time b { font-family:'Archivo Black','DM Sans',sans-serif; font-size:2.4rem; color:var(--cream); font-variant-numeric:tabular-nums; }
+  .rtt-end-time small { color:var(--muted); font-size:0.8rem; }
+  .rtt-end-comment { width:100%; box-sizing:border-box; background:var(--surface); border:1px solid var(--border); border-radius:14px; color:var(--text); padding:0.7rem; font:0.82rem 'DM Sans',sans-serif; resize:none; }
   .rtt-progress { height:0.5rem; border-radius:0.5rem; background:var(--surface); overflow:hidden; margin-bottom:0.8rem; }
   .rtt-progress i { display:block; height:100%; background:linear-gradient(90deg,var(--blue),var(--blue-lt2,#8FB0FF)); border-radius:0.5rem; transition:width 0.5s cubic-bezier(0.2,0.8,0.2,1); }
   .rtt-step { font-size:0.72rem; color:var(--muted); font-weight:700; margin-bottom:0.2rem; }
@@ -2105,40 +2185,65 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
 
 <!-- ══════════ MODO ENTRENO GUIADO ══════════ -->
 <div id="rt-train-modal" style="display:none;position:fixed;inset:0;background:var(--night);z-index:9999;flex-direction:column;">
-  <div id="rtt-train-view" class="exs-body" style="padding-top:0.8rem;position:relative;">
+  <!-- 1. Portada del día: se revisa el plan y se toca Comenzar (ahí arranca el reloj) -->
+  <div id="rtt-start-view" class="exs-body rtt-start">
+    <div class="rtt-bar-top"><button class="exs-close" onclick="rttExit()">✕ Salir</button></div>
+    <div class="rtt-start-hero">
+      <svg class="fa-sticker fa-sticker-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+      <span class="in-hero-tag rtt-tilt">▶ MODO ENTRENO</span>
+      <div><h2 class="rtt-start-title" id="rtt-start-title"></h2>
+      <div class="rtt-start-meta" id="rtt-start-meta"></div></div>
+    </div>
+    <div class="rtt-start-blocks" id="rtt-start-blocks"></div>
+    <button type="button" class="rtt-go" onclick="rttStart()"><span class="rtt-go-ico"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>Comenzar</button>
+  </div>
+  <!-- 2. Entreno por rondas -->
+  <div id="rtt-train-view" class="exs-body" style="display:none;padding-top:0.8rem;position:relative;">
     <div class="rtt-bar-top">
       <button class="exs-close" onclick="rttExit()">✕ Salir</button>
-      <div class="rtt-clock" id="rtt-clock">00:00</div>
+      <div class="rtt-clock" id="rtt-clock-box"><b id="rtt-clock">00:00</b><small id="rtt-clock-meta"></small></div>
     </div>
     <div class="rtt-progress"><i id="rtt-bar" style="width:0%"></i></div>
-    <div class="rtt-step" id="rtt-step"></div>
+    <div class="rtt-chips"><span class="rtt-chip" id="rtt-blk"></span><span class="rtt-chip rtt-chip-cream" id="rtt-ronda"></span><span class="rtt-exn" id="rtt-exn"></span></div>
     <div class="exs-ex-title" id="rtt-ex-title"></div>
     <div id="rtt-video"></div>
-    <div class="rtt-dots" id="rtt-dots"></div>
-    <div class="rtt-big">
-      <div class="rtt-stepper"><small id="rtt-unit">Reps hechas</small><div class="row"><button type="button" onclick="rttStep('reps',-1)">−</button><span class="v" id="rtt-reps">0</span><button type="button" onclick="rttStep('reps',1)">+</button></div></div>
-      <div class="rtt-stepper"><small>Carga (lbs)</small><div class="row"><button type="button" onclick="rttStep('carga',-5)">−</button><span class="v" id="rtt-carga">0</span><button type="button" onclick="rttStep('carga',5)">+</button></div></div>
+    <div class="rtt-target" id="rtt-target"></div>
+    <div class="rtt-timer" id="rtt-timer" hidden>
+      <div class="ring"><svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="27"/><circle class="fg" id="rtt-timer-ring" cx="32" cy="32" r="27"/></svg><div class="rtt-timer-t" id="rtt-timer-t">0:40</div></div>
+      <div class="rtt-timer-lado" id="rtt-timer-lado"></div>
     </div>
-    <button type="button" class="exs-timer-btn" style="width:100%;padding:0.9rem;font-size:0.88rem;" id="rtt-done-btn" onclick="rttDoneSet()">✓ Serie hecha</button>
-    <div class="exs-last" id="rtt-last" style="display:none;justify-content:center;">↗ La vez pasada: <b id="rtt-last-val"></b></div>
+    <div class="rtt-big" id="rtt-big">
+      <div class="rtt-stepper"><small id="rtt-unit">Reps</small><div class="row"><button type="button" onclick="rttStep('reps',-1)">−</button><span class="v" id="rtt-reps">0</span><button type="button" onclick="rttStep('reps',1)">+</button></div></div>
+      <div class="rtt-stepper"><small>Libras</small><div class="row"><button type="button" onclick="rttStep('carga',-5)">−</button><span class="v" id="rtt-carga">0</span><button type="button" onclick="rttStep('carga',5)">+</button></div></div>
+    </div>
+    <button type="button" class="rtt-main-btn" id="rtt-done-btn" onclick="rttMainBtn()"></button>
+    <div class="rtt-sub-row"><span class="exs-last" id="rtt-last" style="display:none;">↗ La vez pasada: <b id="rtt-last-val"></b></span><button type="button" class="rtt-skip" onclick="rttSkipEx()">Saltar ›</button></div>
 
     <div class="rtt-rest" id="rtt-rest" hidden>
-      <h3>Descansa</h3>
+      <div class="rtt-confeti" id="rtt-rest-conf"></div>
+      <svg class="fa-sticker rtt-rest-spark1" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+      <svg class="fa-sticker rtt-rest-spark2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+      <h3 id="rtt-rest-h">Descansa</h3>
       <div class="ring">
         <svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="27"/><circle class="fg" id="rtt-rest-ring" cx="32" cy="32" r="27"/></svg>
         <div class="rtt-rest-t" id="rtt-rest-t">0:00</div>
       </div>
-      <p id="rtt-rest-next"></p>
-      <div class="row"><button class="exs-close" type="button" onclick="rttRestPlus()">+15 s</button><button class="exs-timer-btn" type="button" onclick="rttRestSkip()">Saltar</button></div>
+      <div class="rtt-next" id="rtt-rest-next"></div>
+      <div class="row"><button class="exs-close" type="button" onclick="rttRestPlus()">+15 s</button><button class="exs-timer-btn" type="button" onclick="rttRestSkip()">Saltar descanso</button></div>
     </div>
   </div>
+  <!-- 3. Final: tiempo total, comentario y guardar -->
   <div id="rtt-end-view" class="exs-body" style="display:none;">
+    <div class="rtt-confeti" id="rtt-end-conf"></div>
     <div class="rtt-done-scr">
-      <span class="in-hero-tag">¡HOY CUENTA!</span>
+      <svg class="fa-sticker rtt-end-spark1" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+      <svg class="fa-sticker rtt-end-spark2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+      <span class="in-hero-tag rtt-tilt">¡HOY CUENTA!</span>
       <div class="medal">🏆</div>
-      <h2>Entreno<br>completado</h2>
-      <p style="color:var(--muted);margin:0;font-size:0.85rem;">Tu día quedó marcado como entrenado. <b id="rtt-end-time" style="color:var(--cream)"></b></p>
-      <button type="button" class="exs-timer-btn" style="width:100%;padding:0.9rem;font-size:0.88rem;margin-top:0.5rem;" onclick="rttExit()">Volver a mi rutina</button>
+      <h2>Entreno<br><span class="fa-marker">completado</span></h2>
+      <div class="rtt-end-time"><b id="rtt-end-time"></b><small id="rtt-end-meta"></small></div>
+      <textarea id="rtt-end-comment" class="rtt-end-comment" rows="3"></textarea>
+      <button type="button" class="rtt-main-btn" onclick="rttSaveAndExit()">Guardar mi entreno</button>
     </div>
   </div>
 </div>
@@ -4344,57 +4449,139 @@ function closeExSession() {
   renderRutinaTab();
 }
 
-// ══════════ MODO ENTRENO GUIADO: serie por serie, con descanso automático ══════════
+// ══════════ MODO ENTRENO GUIADO: por rondas ══════════
+// Cada bloque se hace por rondas: ejercicio 1, 2, 3, 4… y se vuelve a
+// empezar. Al terminar cada ejercicio corre el descanso y, cuando acaba,
+// pasa solo al siguiente. El reloj total arranca al tocar Comenzar y se
+// compara con la meta de minutos de la rutina (rutina.metaMin), si tiene.
+// Bloque: restSecs = descanso entre ejercicios; descansoRonda = al cerrar
+// una ronda (si no viene, se usa restSecs).
 var RTT = null;
-function rttFlatExList(day) {
+function rttSteps(day) {
   var out = [];
-  (day.blocks || []).forEach(function(b) { (b.exercises || []).forEach(function(e) { out.push({ block: b, ex: e }); }); });
+  var nb = 0;
+  (day.blocks || []).forEach(function(b) {
+    var exs = (b.exercises || []).filter(function(e) { return e && e.name; });
+    if (!exs.length) return;
+    nb++;
+    var rondas = exs.reduce(function(m, e) { return Math.max(m, exsSeriesCount(e)); }, 1);
+    for (var r = 0; r < rondas; r++) {
+      var enRonda = exs.filter(function(e) { return exsSeriesCount(e) > r; });
+      enRonda.forEach(function(e, i) { out.push({ block: b, nb: nb, ex: e, r: r, rondas: rondas, i: i, n: enRonda.length }); });
+    }
+  });
   return out;
 }
+function rttBlockLabel(b) { return String(b.name || 'Bloque').split('·')[0].trim(); }
 function startGuidedWorkout(dayId) {
   if (PLAN_LOCKED) { alert('Tu programa caducó. Adquirí un nuevo plan para seguir registrando tus sesiones.'); return; }
   var day = currentRutinaData.days.find(function(d) { return d.id === dayId; });
   if (!day) return;
-  var list = rttFlatExList(day);
-  if (!list.length) return;
-  RTT = { dayId: dayId, list: list, i: 0, k: 0, startTs: Date.now(), clockInterval: null,
-    restInterval: null, restSecs: 0, restTotal: 0, totalSeries: list.reduce(function(a, it) { return a + exsSeriesCount(it.ex); }, 0) };
-  document.getElementById('rtt-end-view').style.display = 'none';
-  document.getElementById('rtt-train-view').style.display = '';
-  clearInterval(RTT.clockInterval);
-  RTT.clockInterval = setInterval(function() { document.getElementById('rtt-clock').textContent = rttClock(); }, 1000);
-  rttPaint();
+  var steps = rttSteps(day);
+  if (!steps.length) return;
+  RTT = { dayId: dayId, day: day, steps: steps, s: 0, startTs: null, clockInterval: null, restInterval: null, timerInterval: null,
+    restSecs: 0, restTotal: 0, meta: parseInt(currentRutinaData.metaMin, 10) || 0, finished: false, saved: false };
+  var partes = String(day.name || '').split('·');
+  document.getElementById('rtt-start-title').innerHTML = escapeHtml(partes[0].trim()) + (partes[1] ? '<br><span class="fa-marker">' + escapeHtml(partes.slice(1).join('·').trim()) + '</span>' : '');
+  var nEx = 0, blocks = (day.blocks || []).filter(function(b) { return b.exercises && b.exercises.length; });
+  blocks.forEach(function(b) { nEx += b.exercises.length; });
+  document.getElementById('rtt-start-meta').textContent = nEx + ' ejercicios · ' + blocks.length + ' bloques' + (RTT.meta ? ' · meta ' + RTT.meta + ' min' : '');
+  document.getElementById('rtt-start-blocks').innerHTML = blocks.map(function(b, i) {
+    var rondas = b.exercises.reduce(function(m, e) { return Math.max(m, exsSeriesCount(e)); }, 1);
+    return '<div class="rtt-sb" style="animation-delay:' + (0.12 + i * 0.08).toFixed(2) + 's"><span class="rtt-sb-n">' + String(i + 1).padStart(2, '0') + '</span><span class="rtt-sb-t"><b>Bloque ' + (i + 1) + ' · ' + escapeHtml(rttBlockLabel(b)) + '</b><small>' + b.exercises.map(function(e) { return escapeHtml(e.name); }).join(' · ') + '</small></span><span class="rtt-sb-r">' + rondas + ' rondas</span></div>';
+  }).join('');
+  rttShow('start');
   document.getElementById('rt-train-modal').style.display = 'flex';
 }
-function rttClock() {
-  var s = Math.floor((Date.now() - RTT.startTs) / 1000);
-  return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+function rttShow(v) {
+  document.getElementById('rtt-start-view').style.display = v === 'start' ? '' : 'none';
+  document.getElementById('rtt-train-view').style.display = v === 'train' ? '' : 'none';
+  document.getElementById('rtt-end-view').style.display = v === 'end' ? '' : 'none';
 }
-function rttDoneCount() {
-  var n = 0;
-  for (var i = 0; i < RTT.i; i++) n += exsSeriesCount(RTT.list[i].ex);
-  return n + RTT.k;
+function rttStart() {
+  RTT.startTs = Date.now();
+  rttBeepInit();
+  clearInterval(RTT.clockInterval);
+  RTT.clockInterval = setInterval(rttPaintClock, 1000);
+  rttPaintClock();
+  rttShow('train');
+  rttPaint();
+}
+function rttConfeti(n) {
+  var h = ''; for (var i = 0; i < n; i++) h += '<span class="fa-cel-bit fa-c' + (i % 7) + '" style="--x:' + Math.round(Math.random() * 100) + '%;--r:' + (Math.round(Math.random() * 720) - 360) + 'deg;--t:' + (1 + Math.random() * 1).toFixed(2) + 's;--dl:' + (Math.random() * 0.35).toFixed(2) + 's"></span>';
+  return h;
+}
+function rttElapsed() { return RTT && RTT.startTs ? Math.floor((Date.now() - RTT.startTs) / 1000) : 0; }
+function rttClock() { var s = rttElapsed(); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }
+function rttPaintClock() {
+  if (!RTT) return;
+  document.getElementById('rtt-clock').textContent = rttClock();
+  document.getElementById('rtt-clock-meta').textContent = RTT.meta ? 'de ' + RTT.meta + ' min' : '';
+  document.getElementById('rtt-clock-box').classList.toggle('over', !!RTT.meta && rttElapsed() > RTT.meta * 60);
 }
 function rttPaint() {
-  var it = RTT.list[RTT.i], block = it.block, ex = it.ex, tipo = exTipo(block, ex);
-  var seriesCount = exsSeriesCount(ex);
+  var st = RTT.steps[RTT.s], block = st.block, ex = st.ex, tipo = exTipo(block, ex);
   var bankItem = findExerciseBankItem(ex.name);
-  document.getElementById('rtt-bar').style.width = (rttDoneCount() / RTT.totalSeries * 100) + '%';
-  document.getElementById('rtt-step').textContent = 'Ejercicio ' + (RTT.i + 1) + ' de ' + RTT.list.length + ' · ' + (block.name || '');
-  document.getElementById('rtt-ex-title').textContent = ex.name;
+  clearInterval(RTT.timerInterval); RTT.timerRunning = false;
+  document.getElementById('rtt-timer').classList.remove('on', 'ult');
+  document.getElementById('rtt-bar').style.width = (RTT.s / RTT.steps.length * 100) + '%';
+  document.getElementById('rtt-blk').textContent = 'Bloque ' + st.nb + ' · ' + rttBlockLabel(block);
+  document.getElementById('rtt-ronda').textContent = 'Ronda ' + (st.r + 1) + '/' + st.rondas;
+  document.getElementById('rtt-exn').textContent = 'Ejercicio ' + (st.i + 1) + '/' + st.n;
+  var tEl = document.getElementById('rtt-ex-title'); tEl.textContent = ex.name;
+  ['rtt-ex-title', 'rtt-target', 'rtt-video'].forEach(function(id) { var el = document.getElementById(id); el.classList.remove('rtt-in'); void el.offsetWidth; el.classList.add('rtt-in'); });
   var videoUrl = bankItem && bankItem.video;
-  document.getElementById('rtt-video').innerHTML = videoUrl ? '<div class="exs-video"><iframe src="' + getYouTubeEmbedUrl(videoUrl) + '" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>' : '';
-  var dotsHtml = '';
-  for (var d = 0; d < seriesCount; d++) dotsHtml += '<i class="' + (d < RTT.k ? 'on' : (d === RTT.k ? 'cur' : '')) + '"></i>';
-  document.getElementById('rtt-dots').innerHTML = dotsHtml;
-  document.getElementById('rtt-unit').textContent = tipo === 'tiempo' ? 'Segundos' : (ex.side ? 'Reps por lado' : 'Reps hechas');
-  RTT.repsVal = parseInt(ex.reps, 10) || (tipo === 'tiempo' ? exSegundos(block, ex) : 0);
-  RTT.cargaVal = 0;
-  document.getElementById('rtt-reps').textContent = RTT.repsVal;
-  document.getElementById('rtt-carga').textContent = RTT.cargaVal;
+  document.getElementById('rtt-video').innerHTML = videoUrl
+    ? '<div class="exs-video"><iframe src="' + getYouTubeEmbedUrl(videoUrl) + '" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>'
+    : '<div class="rtt-novideo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="13" height="14" rx="3"/><path d="M16 10l5-3v10l-5-3"/></svg>Video muy pronto</div>';
+  document.getElementById('rtt-target').innerHTML = '<span class="fa-tag rtt-target-tag">' + escapeHtml(exDosisTxt(block, ex)) + '</span>';
+  var esTiempo = tipo === 'tiempo';
+  document.getElementById('rtt-timer').hidden = !esTiempo;
+  document.getElementById('rtt-big').style.display = esTiempo ? 'none' : '';
+  if (esTiempo) {
+    RTT.timerTotal = exSegundos(block, ex); RTT.timerLeft = RTT.timerTotal; RTT.lado = ex.lado ? 1 : 0;
+    rttPaintTimer();
+  } else {
+    RTT.repsVal = parseInt(ex.reps, 10) || 0;
+    RTT.cargaVal = parseInt(ex.carga, 10) || 0;
+    document.getElementById('rtt-unit').textContent = /lado|pierna/i.test(ex.reps || '') ? 'Reps por lado' : 'Reps';
+    document.getElementById('rtt-reps').textContent = RTT.repsVal;
+    document.getElementById('rtt-carga').textContent = RTT.cargaVal;
+  }
+  rttPaintMainBtn();
   var lastTxt = exLastTxt(RTT.dayId, ex.id);
   document.getElementById('rtt-last').style.display = lastTxt ? '' : 'none';
   if (lastTxt) document.getElementById('rtt-last-val').textContent = lastTxt;
+}
+function rttPaintMainBtn() {
+  var st = RTT.steps[RTT.s], btn = document.getElementById('rtt-done-btn');
+  var tiempo = exTipo(st.block, st.ex) === 'tiempo';
+  btn.classList.toggle('running', !!RTT.timerRunning);
+  btn.innerHTML = tiempo ? (RTT.timerRunning ? '⏸ Pausar' : (RTT.timerLeft < RTT.timerTotal ? '▶ Seguir' : '▶ Empezar · ' + RTT.timerTotal + ' s')) : '✓ Listo · a descansar';
+}
+function rttPaintTimer() {
+  document.getElementById('rtt-timer-t').textContent = fmtMinSec(Math.max(0, RTT.timerLeft));
+  var ring = document.getElementById('rtt-timer-ring');
+  ring.style.strokeDasharray = EX_TIMER_RING_CIRC;
+  ring.style.strokeDashoffset = EX_TIMER_RING_CIRC * (1 - Math.max(0, RTT.timerLeft) / (RTT.timerTotal || 1));
+  document.getElementById('rtt-timer-lado').textContent = RTT.lado ? (RTT.lado === 1 ? 'Lado 1' : 'Lado 2') : '';
+}
+function rttMainBtn() {
+  var st = RTT.steps[RTT.s];
+  if (exTipo(st.block, st.ex) !== 'tiempo') { rttDoneSet(); return; }
+  if (RTT.timerRunning) { clearInterval(RTT.timerInterval); RTT.timerRunning = false; rttPaintMainBtn(); return; }
+  RTT.timerRunning = true; rttPaintMainBtn(); document.getElementById('rtt-timer').classList.add('on');
+  if (RTT.timerLeft === RTT.timerTotal) rttSonido('tStart');
+  RTT.timerInterval = setInterval(function() {
+    RTT.timerLeft--;
+    rttPaintTimer();
+    document.getElementById('rtt-timer').classList.toggle('ult', RTT.timerLeft > 0 && RTT.timerLeft <= 3);
+    if (RTT.timerLeft > 0) { rttSonido(RTT.timerLeft <= 3 ? 'tUlt' : 'tTic'); return; }
+    rttSonido('tFin');
+    if (RTT.lado === 1) { RTT.lado = 2; RTT.timerLeft = RTT.timerTotal; rttPaintTimer(); rttSonido('tStart'); return; }
+    clearInterval(RTT.timerInterval); RTT.timerRunning = false;
+    rttDoneSet();
+  }, 1000);
 }
 function rttStep(key, delta) {
   if (key === 'reps') RTT.repsVal = Math.max(0, RTT.repsVal + delta);
@@ -4402,42 +4589,50 @@ function rttStep(key, delta) {
   document.getElementById('rtt-reps').textContent = RTT.repsVal;
   document.getElementById('rtt-carga').textContent = RTT.cargaVal;
 }
-function rttWriteSeries(it, k, val) {
-  var tipo = exTipo(it.block, it.ex);
-  var key = rtPendingKey(RTT.dayId, it.ex.id);
-  var pending = RT_PENDING[key] || {};
-  if (tipo === 'tiempo') {
-    pending.segundos = val;
-  } else {
-    var parts = pending.reps ? pending.reps.split('·') : [];
-    parts[k] = String(val);
-    pending.reps = parts.join('·');
-  }
+// Cada serie (ronda) se guarda en su lugar: "12·12·10" — igual para tiempo.
+function rttWriteSeries(st, val) {
+  var tipo = exTipo(st.block, st.ex), key = rtPendingKey(RTT.dayId, st.ex.id), pending = RT_PENDING[key] || {};
+  var campo = tipo === 'tiempo' ? 'segundos' : 'reps';
+  var parts = pending[campo] ? String(pending[campo]).split('·') : [];
+  parts[st.r] = String(val);
+  for (var i = 0; i < parts.length; i++) if (parts[i] == null) parts[i] = '';
+  pending[campo] = parts.join('·');
   RT_PENDING[key] = pending;
 }
 function rttDoneSet() {
-  var it = RTT.list[RTT.i];
-  rttWriteSeries(it, RTT.k, RTT.repsVal);
-  if (RTT.cargaVal) {
-    var key = rtPendingKey(RTT.dayId, it.ex.id);
-    RT_PENDING[key] = RT_PENDING[key] || {};
-    RT_PENDING[key].carga = RTT.cargaVal;
-  }
-  var seriesCount = exsSeriesCount(it.ex);
-  var nextLbl;
-  if (RTT.k < seriesCount - 1) { RTT.k++; nextLbl = 'Sigue: serie ' + (RTT.k + 1) + ' de ' + it.ex.name.toLowerCase(); }
-  else if (RTT.i < RTT.list.length - 1) { RTT.i++; RTT.k = 0; nextLbl = 'Sigue: ' + RTT.list[RTT.i].ex.name.toLowerCase(); }
-  else { rttFinish(); return; }
-  rttPaint();
-  rttRest(it.block.restSecs || 40, nextLbl);
+  var st = RTT.steps[RTT.s], tiempo = exTipo(st.block, st.ex) === 'tiempo';
+  rttWriteSeries(st, tiempo ? RTT.timerTotal : RTT.repsVal);
+  if (!tiempo && RTT.cargaVal) { var key = rtPendingKey(RTT.dayId, st.ex.id); RT_PENDING[key].carga = RTT.cargaVal; }
+  rttAdvance();
 }
-function rttRest(sec, label) {
+function rttSkipEx() { clearInterval(RTT.timerInterval); RTT.timerRunning = false; rttAdvance(); }
+function rttAdvance() {
+  var st = RTT.steps[RTT.s], next = RTT.steps[RTT.s + 1];
+  if (!next) { rttFinish(); return; }
+  var finBloque = next.block !== st.block, finRonda = !finBloque && next.r !== st.r;
+  var sec = (finBloque || finRonda) ? (parseInt(st.block.descansoRonda, 10) || st.block.restSecs || 40) : (st.block.restSecs || 40);
+  var titulo = finBloque ? '¡Bloque ' + st.nb + ' listo!' : finRonda ? '¡Ronda ' + (st.r + 1) + '/' + st.rondas + ' lista!' : 'Descansa';
+  RTT.s++;
+  rttPaint();
+  if (sec > 0) rttRest(sec, titulo, next);
+}
+function rttRest(sec, titulo, next) {
   RTT.restTotal = sec; RTT.restSecs = sec;
-  document.getElementById('rtt-rest-next').textContent = label;
+  var h = document.getElementById('rtt-rest-h'); h.textContent = titulo; h.classList.remove('rtt-pop'); void h.offsetWidth; h.classList.add('rtt-pop');
+  document.getElementById('rtt-rest-conf').innerHTML = titulo === 'Descansa' ? '' : rttConfeti(22);
+  var thumb = (function() { var b = findExerciseBankItem(next.ex.name); return b && b.video ? getYouTubeThumbnailUrl(b.video) : null; })();
+  document.getElementById('rtt-rest-next').innerHTML = '<span class="rtt-next-thumb">' + (thumb ? '<img src="' + jsAttrEscape(thumb) + '" alt="">' : '<svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>') + '</span>'
+    + '<span class="rtt-next-t"><small>Sigue · Bloque ' + next.nb + ' · ronda ' + (next.r + 1) + '/' + next.rondas + '</small><b>' + escapeHtml(next.ex.name) + '</b><small>' + escapeHtml(exDosisTxt(next.block, next.ex)) + '</small></span>';
   document.getElementById('rtt-rest').hidden = false;
   rttPaintRest();
+  rttSonido('dStart');
   clearInterval(RTT.restInterval);
-  RTT.restInterval = setInterval(function() { RTT.restSecs--; rttPaintRest(); if (RTT.restSecs <= 0) rttEndRest(); }, 1000);
+  RTT.restInterval = setInterval(function() {
+    RTT.restSecs--;
+    rttPaintRest();
+    if (RTT.restSecs > 0) rttSonido('dTic');
+    else { rttSonido('dFin'); rttEndRest(); rttAutoStart(); }
+  }, 1000);
 }
 function rttPaintRest() {
   document.getElementById('rtt-rest-t').textContent = fmtMinSec(Math.max(0, RTT.restSecs));
@@ -4446,21 +4641,125 @@ function rttPaintRest() {
   ring.style.strokeDasharray = EX_TIMER_RING_CIRC;
   ring.style.strokeDashoffset = EX_TIMER_RING_CIRC * (1 - pct);
 }
-function rttEndRest() { clearInterval(RTT.restInterval); document.getElementById('rtt-rest').hidden = true; }
-function rttRestSkip() { rttEndRest(); }
+function rttEndRest() { if (RTT) clearInterval(RTT.restInterval); document.getElementById('rtt-rest').hidden = true; }
+function rttRestSkip() { rttEndRest(); rttAutoStart(); }
+// Al terminar el descanso, si lo que sigue es por tiempo, arranca solo.
+function rttAutoStart() {
+  if (!RTT || RTT.finished) return;
+  var st = RTT.steps[RTT.s];
+  if (st && exTipo(st.block, st.ex) === 'tiempo' && !RTT.timerRunning && RTT.timerLeft === RTT.timerTotal) setTimeout(function() { if (RTT && !RTT.timerRunning) rttMainBtn(); }, 900);
+}
 function rttRestPlus() { RTT.restSecs += 15; RTT.restTotal = Math.max(RTT.restTotal, RTT.restSecs); rttPaintRest(); }
+// ── Sonidos del modo entreno ──
+// Dos juegos bien distintos, fuertes y en tonos que la bocina del celular
+// sí reproduce:
+//   TRABAJO (ejercicio por tiempo): "bip-bip-biiip" al empezar, tic agudo
+//     cada segundo, 3 bips más fuertes al final y un "buzzer" al terminar.
+//   DESCANSO: "ding-dong" al empezar, tic grave cada segundo y una
+//     escalera de campanitas al terminar.
+// Se generan como audio WAV y suenan con un <audio>, que en iPhone se
+// escucha aunque el celular esté en silencio (con el volumen del celular).
+var RTT_SND = { el: null, urls: {}, cola: [], sonando: false };
+function rttSynth(notas) {
+  var sr = 22050, fin = 0;
+  notas.forEach(function(n) { fin = Math.max(fin, n.t + n.d); });
+  var len = Math.ceil((fin + 0.03) * sr), buf = new Float32Array(len);
+  notas.forEach(function(n) {
+    var i0 = Math.floor(n.t * sr), nl = Math.floor(n.d * sr);
+    for (var i = 0; i < nl && i0 + i < len; i++) {
+      var x = i / sr, ph = (x * n.f) % 1, v;
+      if (n.w === 'square') v = ph < 0.5 ? 1 : -1;
+      else if (n.w === 'saw') v = 2 * ph - 1;
+      else if (n.w === 'tri') v = 1 - 4 * Math.abs(ph - 0.5);
+      else v = Math.sin(2 * Math.PI * ph);
+      var env = Math.min(1, i / (sr * 0.004)) * (n.bell ? Math.exp(-2 * x / n.d) : Math.min(1, (nl - i) / (sr * 0.012)));
+      buf[i0 + i] += v * env * (n.g || 1);
+    }
+  });
+  var pk = 0; for (var j = 0; j < len; j++) pk = Math.max(pk, Math.abs(buf[j]));
+  var dv = new DataView(new ArrayBuffer(44 + len * 2)), w = function(o, t) { for (var k = 0; k < t.length; k++) dv.setUint8(o + k, t.charCodeAt(k)); };
+  w(0, 'RIFF'); dv.setUint32(4, 36 + len * 2, true); w(8, 'WAVE'); w(12, 'fmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
+  dv.setUint32(24, sr, true); dv.setUint32(28, sr * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true); w(36, 'data'); dv.setUint32(40, len * 2, true);
+  for (var m = 0; m < len; m++) { var y = pk > 0.001 ? Math.tanh(1.6 * buf[m] / pk) / Math.tanh(1.6) : 0; dv.setInt16(44 + m * 2, Math.max(-1, Math.min(1, y)) * 32000, true); }
+  var bytes = new Uint8Array(dv.buffer), bin = ''; for (var q = 0; q < bytes.length; q++) bin += String.fromCharCode(bytes[q]);
+  return 'data:audio/wav;base64,' + btoa(bin);
+}
+function rttBeepInit() {
+  try {
+    if (!RTT_SND.urls.tStart) {
+      var u = RTT_SND.urls;
+      u.silencio = rttSynth([{ f: 1, t: 0, d: 0.05, g: 1e-9 }]);
+      u.tStart = rttSynth([{ f: 1568, t: 0, d: 0.11, w: 'square' }, { f: 1568, t: 0.2, d: 0.11, w: 'square' }, { f: 2093, t: 0.4, d: 0.38, w: 'square' }]);
+      u.tTic = rttSynth([{ f: 2500, t: 0, d: 0.035, w: 'square', g: 0.6 }]);
+      u.tUlt = rttSynth([{ f: 1760, t: 0, d: 0.16, w: 'square' }]);
+      u.tFin = rttSynth([{ f: 880, t: 0, d: 0.75, w: 'saw' }, { f: 1109, t: 0, d: 0.75, w: 'saw' }, { f: 1319, t: 0, d: 0.75, w: 'saw', g: 0.7 }]);
+      u.dStart = rttSynth([{ f: 1319, t: 0, d: 0.45, w: 'tri', bell: true }, { f: 988, t: 0.3, d: 0.7, w: 'tri', bell: true }]);
+      u.dTic = rttSynth([{ f: 1000, t: 0, d: 0.06, w: 'tri', g: 0.55 }]);
+      u.dFin = rttSynth([{ f: 1047, t: 0, d: 0.3, w: 'tri', bell: true }, { f: 1319, t: 0.13, d: 0.3, w: 'tri', bell: true }, { f: 1568, t: 0.26, d: 0.3, w: 'tri', bell: true }, { f: 2093, t: 0.39, d: 0.75, w: 'tri', bell: true }]);
+    }
+    if (!RTT_SND.el) { RTT_SND.el = new Audio(); RTT_SND.el.preload = 'auto'; RTT_SND.el.addEventListener('ended', rttSndSiguiente); }
+    // Se "desbloquea" con el toque en Comenzar (requisito del celular).
+    RTT_SND.el.volume = 1; RTT_SND.el.src = RTT_SND.urls.silencio; var pr = RTT_SND.el.play(); if (pr && pr.catch) pr.catch(function() {});
+  } catch (e) {}
+}
+// Los tics se omiten si está sonando otra cosa; los demás esperan su turno.
+function rttSonido(tipo) {
+  if (/Fin$/.test(tipo)) { try { if (navigator.vibrate) navigator.vibrate([150, 80, 250]); } catch (e) {} }
+  if (!RTT_SND.el || !RTT_SND.urls[tipo]) return;
+  if (RTT_SND.sonando) { if (!/Tic$/.test(tipo)) RTT_SND.cola.push(tipo); return; }
+  rttSndPlay(tipo);
+}
+function rttSndPlay(tipo) {
+  try { RTT_SND.sonando = true; RTT_SND.el.src = RTT_SND.urls[tipo]; var pr = RTT_SND.el.play(); if (pr && pr.catch) pr.catch(function() { RTT_SND.sonando = false; }); } catch (e) { RTT_SND.sonando = false; }
+}
+function rttSndSiguiente() { RTT_SND.sonando = false; var t = RTT_SND.cola.shift(); if (t) rttSndPlay(t); }
 function rttFinish() {
-  clearInterval(RTT.clockInterval);
+  clearInterval(RTT.clockInterval); clearInterval(RTT.timerInterval);
   rttEndRest();
-  var elapsed = rttClock();
-  var hoyKey = localKey(new Date());
-  if (!CURRENT_DIAS_ENTRENADOS[hoyKey]) toggleDiaEntrenado(hoyKey);
-  document.getElementById('rtt-end-time').textContent = elapsed + ' entrenados.';
-  document.getElementById('rtt-train-view').style.display = 'none';
-  document.getElementById('rtt-end-view').style.display = '';
+  RTT.finished = true; RTT.duracion = rttElapsed();
+  document.getElementById('rtt-end-time').textContent = rttClock();
+  document.getElementById('rtt-end-meta').textContent = RTT.meta ? (RTT.duracion <= RTT.meta * 60 ? 'Dentro de tu meta de ' + RTT.meta + ' min 🙌' : 'Tu meta es ' + RTT.meta + ' min') : 'de entreno';
+  document.getElementById('rtt-end-conf').innerHTML = rttConfeti(34);
+  var c = document.getElementById('rtt-end-comment'); c.value = ''; c.placeholder = DAY_COMMENT_PLACEHOLDER;
+  rttShow('end');
+}
+// Guarda la sesión (entrenoLogs) con lo registrado en las rondas y marca
+// el día si quedaron todas las series. Se llama al tocar "Guardar mi
+// entreno" o, si sale sin tocarlo, al cerrar.
+function rttSaveSession(comentario) {
+  if (!RTT || RTT.saved) return;
+  RTT.saved = true;
+  var day = RTT.day, ejercicios = {};
+  (day.blocks || []).forEach(function(b) { (b.exercises || []).forEach(function(e) {
+    var p = RT_PENDING[rtPendingKey(day.id, e.id)];
+    if (!p) return;
+    var rec = {}; ['reps', 'segundos', 'carga'].forEach(function(k) { if (p[k] != null && p[k] !== '') rec[k] = String(p[k]); });
+    if (Object.keys(rec).length) ejercicios[e.id] = rec;
+  }); });
+  if (!Object.keys(ejercicios).length) return;
+  var diaCompleto = dayFullyLogged(day, ejercicios);
+  var entry = { fecha: new Date().toISOString().slice(0, 10), dayId: day.id, dayName: day.name, ejercicios: ejercicios, ts: Date.now(), duracionSeg: RTT.duracion || rttElapsed() };
+  if (comentario) entry.comentario = comentario;
+  db().ref('clientasPortal/' + currentUid + '/entrenoLogs').push(entry).then(function() {
+    (day.blocks || []).forEach(function(b) { (b.exercises || []).forEach(function(e) { delete RT_PENDING[rtPendingKey(day.id, e.id)]; }); });
+    var hoyKey = localKey(new Date());
+    if (!CURRENT_DIAS_ENTRENADOS[hoyKey] && (!entrenoAutoMarcado() || diaCompleto)) toggleDiaEntrenado(hoyKey);
+    return db().ref('clientasPortal/' + currentUid + '/entrenoLogs').once('value');
+  }).then(function(snap) {
+    if (snap) { CURRENT_ENTRENO_LOGS = snap.val() || {}; renderTrainingTracker(CURRENT_DIAS_ENTRENADOS); renderRutinaTab(); }
+  }).catch(function(e) { alert('No se pudo guardar: ' + e.message); });
+}
+function rttSaveAndExit() {
+  rttSaveSession((document.getElementById('rtt-end-comment').value || '').trim());
+  rttExit();
+  celebrate('💪', '¡Entreno guardado!', 'Excelente trabajo hoy.');
 }
 function rttExit() {
-  if (RTT) { clearInterval(RTT.clockInterval); rttEndRest(); }
+  if (RTT) {
+    if (RTT.startTs && !RTT.finished && !confirm('¿Salir del entreno? Lo que llevas queda guardado.')) return;
+    clearInterval(RTT.clockInterval); clearInterval(RTT.timerInterval); rttEndRest();
+    if (RTT.finished) rttSaveSession('');
+  }
   RTT = null;
   document.getElementById('rt-train-modal').style.display = 'none';
   renderRutinaTab();
