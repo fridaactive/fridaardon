@@ -808,6 +808,18 @@
 .acp-basic-meta{font-size:0.78rem;color:var(--muted);margin-top:0.15rem;}
 .acp-basic-facts{display:flex;flex-wrap:wrap;justify-content:center;gap:0.4rem;margin-top:0.8rem;}
 .acp-basic-facts span{font-size:0.7rem;background:#F4F7FF;border:1px solid var(--border);border-radius:100px;padding:0.3rem 0.7rem;color:var(--text);}
+.track-com{position:absolute;top:-3px;right:-3px;width:11px;height:11px;border-radius:50%;background:#E5383B;border:2px solid #fff;box-shadow:0 1px 4px rgba(229,56,59,0.5);cursor:pointer;z-index:2;}
+.acp-com-bg{position:fixed;inset:0;z-index:10001;background:rgba(5,14,40,0.45);display:flex;align-items:flex-end;justify-content:center;padding:1rem;animation:faCelIn .2s ease;}
+.acp-com-card{background:#fff;border-radius:22px;padding:1.1rem 1.2rem 1.2rem;width:100%;max-width:440px;max-height:70vh;overflow-y:auto;box-shadow:0 6px 0 #0F3FA8;}
+.acp-com-top{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.7rem;}
+.acp-com-top button{border:none;background:none;font-size:1.1rem;color:var(--muted);cursor:pointer;}
+.acp-com-item{border-top:1px solid var(--border);padding:0.7rem 0;}
+.acp-com-item:first-of-type{border-top:none;padding-top:0;}
+.acp-com-meta{display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;font-size:0.72rem;color:var(--muted);margin-bottom:0.3rem;}
+.acp-com-meta b{color:var(--text);font-size:0.8rem;}
+.acp-com-tag{background:#F5ECCB;color:#0D1B3E;font-weight:800;padding:0.12rem 0.5rem;border-radius:999px;transform:rotate(-2deg);}
+.acp-com-txt{font-size:0.85rem;line-height:1.45;color:var(--text);white-space:pre-line;}
+@keyframes faCelIn{from{opacity:0}to{opacity:1}}
 .acp-rt-meta{display:inline-block;background:#F5ECCB;color:#0D1B3E;border-radius:999px;padding:0.35rem 0.8rem;font-size:0.78rem;font-weight:700;margin-bottom:0.6rem;}
 .acp-rt-days{margin:0.2rem 0 0.4rem;}
 .acp-rt-empty{text-align:center;color:var(--muted);font-size:0.8rem;padding:1.1rem 0 0.9rem;}
@@ -2754,6 +2766,34 @@ function toggleAdminDiaEntrenado(uid, key, el) {
   acpRenderShell();
 }
 
+// ── Comentarios de entreno en el calendario ──
+// Cada sesión guardada (entrenoLogs) puede traer un comentario: el del final
+// del entreno, el de "Terminar por hoy" o el del día. Esos días llevan un
+// puntito rojo; al tocarlo se ven los comentarios de ese día.
+function acpDiaLocal(log) {
+  if (log && log.ts) { var d = new Date(log.ts); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  return log && log.fecha;
+}
+function acpComentariosPorDia(portal) {
+  var logs = (portal && portal.entrenoLogs) || {}, out = {};
+  Object.keys(logs).forEach(function(k) { var l = logs[k]; if (!l || !l.comentario) return; var d = acpDiaLocal(l); (out[d] = out[d] || []).push(l); });
+  return out;
+}
+function acpVerComentarios(key) {
+  var lista = (acpComentariosPorDia(acpState.portal)[key] || []).sort(function(a, b) { return (a.ts || 0) - (b.ts || 0); });
+  if (!lista.length) return;
+  var p = key.split('-'), fecha = parseInt(p[2], 10) + ' de ' + MESES_LARGOS_ADMIN[parseInt(p[1], 10) - 1];
+  var html = '<div class="acp-com-card" onclick="event.stopPropagation()"><div class="acp-com-top"><div class="card-label" style="margin:0;flex:1;">💬 Comentarios · ' + fecha + '</div><button type="button" onclick="this.closest(\'.acp-com-bg\').remove()">✕</button></div>';
+  lista.forEach(function(l) {
+    var min = l.duracionSeg ? Math.round(l.duracionSeg / 60) : 0;
+    html += '<div class="acp-com-item"><div class="acp-com-meta"><b>' + escapeHtmlAdmin(l.dayName || 'Entreno') + '</b>' + (l.terminadoAntes ? '<span class="acp-com-tag">Terminó antes</span>' : '') + (min ? '<span>' + min + ' min</span>' : '') + '</div><div class="acp-com-txt">' + escapeHtmlAdmin(l.comentario) + '</div></div>';
+  });
+  html += '</div>';
+  var bg = document.createElement('div'); bg.className = 'acp-com-bg'; bg.innerHTML = html;
+  bg.onclick = function() { bg.remove(); };
+  document.body.appendChild(bg);
+}
+
 // Navegar el calendario de "Historial de entrenos" un mes hacia atrás (-1)
 // o hacia adelante (1) — los límites (hasta dónde hay registros, nunca
 // más allá del mes actual) ya los calcula renderAdminClientProfile al
@@ -2854,6 +2894,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
   // lo que marca cualquiera de las dos lo ve la otra.
   // Caritas de cómo se sintió (clientasPortal/{uid}/sentir) y resumen del mes
   var sentirMap = (portal && portal.sentir) || {};
+  var comMap = acpComentariosPorDia(portal);
   calHtml += '<div class="track-days">';
   DAY_NAMES_ADMIN.forEach(function(d) { calHtml += '<div class="track-day-header">' + d + '</div>'; });
   for (var i = 0; i < firstDay; i++) calHtml += '<div class="track-day empty"></div>';
@@ -2861,7 +2902,7 @@ function renderAdminClientProfile(clientId, uid, portal) {
     var key = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     var done = !!diasEntrenados[key];
     var cara = SENTIR_LABELS[sentirMap[key]] ? sentirMap[key] : null;
-    calHtml += '<div class="track-day' + (done ? ' done' : '') + '" style="cursor:pointer;position:relative;overflow:visible;" onclick="toggleAdminDiaEntrenado(\'' + uid + '\',\'' + key + '\',this)" title="Marcar/desmarcar como entrenado' + (cara ? ' · ' + SENTIR_LABELS[cara] : '') + '">' + day + (cara ? '<span class="track-face"><span class="fa-emoji">' + SENTIR_EMOJI[cara] + '</span></span>' : '') + '</div>';
+    calHtml += '<div class="track-day' + (done ? ' done' : '') + '" style="cursor:pointer;position:relative;overflow:visible;" onclick="toggleAdminDiaEntrenado(\'' + uid + '\',\'' + key + '\',this)" title="Marcar/desmarcar como entrenado' + (cara ? ' · ' + SENTIR_LABELS[cara] : '') + '">' + day + (cara ? '<span class="track-face"><span class="fa-emoji">' + SENTIR_EMOJI[cara] + '</span></span>' : '') + (comMap[key] ? '<span class="track-com" title="Dejó un comentario" onclick="event.stopPropagation();acpVerComentarios(\'' + key + '\')"></span>' : '') + '</div>';
   }
   calHtml += '</div>';
 

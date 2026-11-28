@@ -251,6 +251,9 @@
   .rtt-main-btn.running { background:var(--surface-2,#1b2547); box-shadow:0 5px 0 rgba(0,0,0,0.4); }
   .rtt-sub-row { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-top:0.8rem; min-height:1.2rem; }
   .rtt-sub-row .exs-last { margin:0; }
+  .rtt-stop { display:flex; align-items:center; justify-content:center; gap:0.45rem; margin:1.1rem auto 0; background:none; border:1.5px solid rgba(245,236,203,0.45); color:var(--cream); border-radius:999px; padding:0.55rem 1.1rem; font:800 0.78rem 'DM Sans',sans-serif; cursor:pointer; }
+  .rtt-stop svg { width:12px; height:12px; fill:var(--cream); }
+  .rtt-stop:active { transform:scale(0.96); }
   .rtt-skip { margin-left:auto; background:none; border:none; color:var(--muted); font:700 0.72rem 'DM Sans',sans-serif; cursor:pointer; }
   .rtt-next { display:flex; align-items:center; gap:0.7rem; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:0.6rem 0.8rem; text-align:left; width:100%; max-width:20rem; box-sizing:border-box; }
   .rtt-next-thumb { width:3.6rem; height:2.6rem; border-radius:10px; background:var(--blue); overflow:hidden; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -2218,6 +2221,7 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
     </div>
     <button type="button" class="rtt-main-btn" id="rtt-done-btn" onclick="rttMainBtn()"></button>
     <div class="rtt-sub-row"><span class="exs-last" id="rtt-last" style="display:none;">↗ La vez pasada: <b id="rtt-last-val"></b></span><button type="button" class="rtt-skip" onclick="rttSkipEx()">Saltar ›</button></div>
+    <button type="button" class="rtt-stop" onclick="rttTerminarHoy()"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg>Terminar por hoy</button>
 
     <div class="rtt-rest" id="rtt-rest" hidden>
       <div class="rtt-confeti" id="rtt-rest-conf"></div>
@@ -2238,9 +2242,9 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
     <div class="rtt-done-scr">
       <svg class="fa-sticker rtt-end-spark1" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
       <svg class="fa-sticker rtt-end-spark2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
-      <span class="in-hero-tag rtt-tilt">¡HOY CUENTA!</span>
+      <span class="in-hero-tag rtt-tilt" id="rtt-end-tag">¡HOY CUENTA!</span>
       <div class="medal">🏆</div>
-      <h2>Entreno<br><span class="fa-marker">completado</span></h2>
+      <h2 id="rtt-end-h">Entreno<br><span class="fa-marker">completado</span></h2>
       <div class="rtt-end-time"><b id="rtt-end-time"></b><small id="rtt-end-meta"></small></div>
       <textarea id="rtt-end-comment" class="rtt-end-comment" rows="3"></textarea>
       <button type="button" class="rtt-main-btn" onclick="rttSaveAndExit()">Guardar mi entreno</button>
@@ -4713,14 +4717,24 @@ function rttSndPlay(tipo) {
   try { RTT_SND.sonando = true; RTT_SND.el.src = RTT_SND.urls[tipo]; var pr = RTT_SND.el.play(); if (pr && pr.catch) pr.catch(function() { RTT_SND.sonando = false; }); } catch (e) { RTT_SND.sonando = false; }
 }
 function rttSndSiguiente() { RTT_SND.sonando = false; var t = RTT_SND.cola.shift(); if (t) rttSndPlay(t); }
+// Terminar antes: igual cuenta como entreno del día y se le pregunta qué pasó.
+function rttTerminarHoy() {
+  if (!RTT || !RTT.startTs) return;
+  if (!confirm('¿Terminar tu entreno por hoy? Igual cuenta como entrenado.')) return;
+  RTT.terminadoAntes = true;
+  rttFinish();
+}
 function rttFinish() {
   clearInterval(RTT.clockInterval); clearInterval(RTT.timerInterval);
   rttEndRest();
   RTT.finished = true; RTT.duracion = rttElapsed();
+  var antes = !!RTT.terminadoAntes;
+  document.getElementById('rtt-end-tag').textContent = antes ? '¡HOY TAMBIÉN CUENTA!' : '¡HOY CUENTA!';
+  document.getElementById('rtt-end-h').innerHTML = antes ? 'Entreno<br><span class="fa-marker">terminado</span>' : 'Entreno<br><span class="fa-marker">completado</span>';
   document.getElementById('rtt-end-time').textContent = rttClock();
-  document.getElementById('rtt-end-meta').textContent = RTT.meta ? (RTT.duracion <= RTT.meta * 60 ? 'Dentro de tu meta de ' + RTT.meta + ' min 🙌' : 'Tu meta es ' + RTT.meta + ' min') : 'de entreno';
+  document.getElementById('rtt-end-meta').textContent = antes ? 'Cada minuto suma 💙' : RTT.meta ? (RTT.duracion <= RTT.meta * 60 ? 'Dentro de tu meta de ' + RTT.meta + ' min 🙌' : 'Tu meta es ' + RTT.meta + ' min') : 'de entreno';
   document.getElementById('rtt-end-conf').innerHTML = rttConfeti(34);
-  var c = document.getElementById('rtt-end-comment'); c.value = ''; c.placeholder = DAY_COMMENT_PLACEHOLDER;
+  var c = document.getElementById('rtt-end-comment'); c.value = ''; c.placeholder = antes ? '¿Qué pasó hoy? Cuéntale a Frida por qué terminaste antes: cansancio, tiempo, alguna molestia…' : DAY_COMMENT_PLACEHOLDER;
   rttShow('end');
 }
 // Guarda la sesión (entrenoLogs) con lo registrado en las rondas y marca
@@ -4736,14 +4750,15 @@ function rttSaveSession(comentario) {
     var rec = {}; ['reps', 'segundos', 'carga'].forEach(function(k) { if (p[k] != null && p[k] !== '') rec[k] = String(p[k]); });
     if (Object.keys(rec).length) ejercicios[e.id] = rec;
   }); });
-  if (!Object.keys(ejercicios).length) return;
-  var diaCompleto = dayFullyLogged(day, ejercicios);
-  var entry = { fecha: new Date().toISOString().slice(0, 10), dayId: day.id, dayName: day.name, ejercicios: ejercicios, ts: Date.now(), duracionSeg: RTT.duracion || rttElapsed() };
+  if (!Object.keys(ejercicios).length && !comentario && !RTT.terminadoAntes) return;
+  var entry = { fecha: localKey(new Date()), dayId: day.id, dayName: day.name, ejercicios: ejercicios, ts: Date.now(), duracionSeg: RTT.duracion || rttElapsed() };
   if (comentario) entry.comentario = comentario;
+  if (RTT.terminadoAntes) entry.terminadoAntes = true;
   db().ref('clientasPortal/' + currentUid + '/entrenoLogs').push(entry).then(function() {
     (day.blocks || []).forEach(function(b) { (b.exercises || []).forEach(function(e) { delete RT_PENDING[rtPendingKey(day.id, e.id)]; }); });
     var hoyKey = localKey(new Date());
-    if (!CURRENT_DIAS_ENTRENADOS[hoyKey] && (!entrenoAutoMarcado() || diaCompleto)) toggleDiaEntrenado(hoyKey);
+    // Terminar el recorrido (completo o "por hoy") siempre cuenta el día.
+    if (!CURRENT_DIAS_ENTRENADOS[hoyKey]) toggleDiaEntrenado(hoyKey);
     return db().ref('clientasPortal/' + currentUid + '/entrenoLogs').once('value');
   }).then(function(snap) {
     if (snap) { CURRENT_ENTRENO_LOGS = snap.val() || {}; renderTrainingTracker(CURRENT_DIAS_ENTRENADOS); renderRutinaTab(); }
@@ -5008,7 +5023,7 @@ function guardarSesion(dayIndex, btnEl) {
   var comentario = commentEl ? commentEl.value.trim() : '';
 
   var entry = {
-    fecha: new Date().toISOString().slice(0, 10),
+    fecha: localKey(new Date()),
     dayId: day.id,
     dayName: day.name,
     ejercicios: ejercicios,
