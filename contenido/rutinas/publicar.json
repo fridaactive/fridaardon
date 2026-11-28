@@ -6,6 +6,12 @@
    "clave": "6bdf07c7bd5d752c86e8d9727a1164634dc5ea23fa47da815b17d2b6908d2cc1",
    "archivo": "clientes/jocelyn.json",
    "version": 3
+  },
+  {
+   "cliente": "Fátima",
+   "clave": "02d3791c65bb7694a8d21e59d5336bddefff39f78648ff58baf083124fd6daaf",
+   "archivo": "clientes/fatima.json",
+   "version": 1
   }
  ],
  "banco": [

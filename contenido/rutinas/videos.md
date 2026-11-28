@@ -67,29 +67,33 @@ Nombre en el banco SIN lo de paréntesis.
 | Curl de bíceps con mancuernas | ⏳ | F |
 | Extensión de tríceps con mancuerna sobre la cabeza | ⏳ | F |
 
-## 🏋️ GIMNASIO · sábado 28 de noviembre de 2026 (13 videos, rutina de Fátima)
-(La rutina de Fátima todavía puede cambiar: revisar antes de ir.)
+## 🏋️ GIMNASIO · sábado 28 de noviembre de 2026 (14 videos, rutina final de Fátima)
 
-### Máquina Smith (5)
+### Con banco (6)
 | Ejercicio | Estado | Quién |
 |---|---|---|
-| Hip thrust en Smith | ⏳ | F |
-| Sentadilla en Smith | ⏳ | F |
-| Zancada hacia atrás en Smith | ⏳ | F |
-| Elevación de talones en Smith | ⏳ | F |
-| Remo inclinado en Smith | ⏳ | F |
-
-### Banco + mancuernas (8)
-| Ejercicio | Estado | Quién |
-|---|---|---|
-| Press de pecho en banco con mancuernas | ⏳ | F |
-| Aperturas con mancuernas en banco | ⏳ | F |
-| Remo con mancuernas en banco inclinado | ⏳ | F |
-| Remo con mancuerna a una mano | ⏳ | F |
+| Press de hombro sentada en banco con mancuernas | ⏳ | F |
+| Hip thrust con mancuerna | ⏳ | F |
 | Pullover con mancuerna en banco | ⏳ | F |
-| Curl femoral con mancuerna en banco | ⏳ | F |
-| Subida al banco con mancuernas | ⏳ | F |
-| Sentadilla búlgara con mancuernas | ⏳ | F |
+| Curl de bíceps sentada con mancuernas | ⏳ | F |
+| Fondos de tríceps en banco | ⏳ | F |
+| Press de pecho en banco con mancuernas | ⏳ | F |
+
+### Sin banco: mancuernas, bandas y mat (8)
+| Ejercicio | Estado | Quién |
+|---|---|---|
+| Sentadilla con salto | ⏳ | F |
+| Zancadas caminando con mancuernas | ⏳ | F |
+| Zancada hacia atrás con mancuernas | ⏳ | F |
+| Curl de bíceps alternado con mancuernas | ⏳ | F |
+| Copa de tríceps con mancuerna | ⏳ | F |
+| Mountain climbers | ⏳ | F |
+| Abducción en cuadrupedia con banda | ⏳ | F |
+| Monkey kicks con banda | ⏳ | F |
+
+Fátima también usa (ya estaban en la lista del estudio): Sentadilla goblet con mancuerna · Peso muerto rumano con mancuernas · Puente de glúteo con mancuerna · Elevaciones laterales con mancuernas · Remo inclinado con mancuernas · Sentadilla sumo con mancuerna · Caminata lateral con banda · Remo al mentón con mancuernas · Elevación de piernas acostada.
+
+Ya no se usan (del borrador anterior de Fátima): Abducción de cadera acostada con mancuerna · Press Arnold · Pájaros con mancuernas · Curl de bíceps con mancuernas · Extensión de tríceps con mancuerna sobre la cabeza · Puente de glúteo a una pierna · todo lo de la máquina Smith.
 
 ## Para enero (cuando Frida tenga banca, barra y discos)
 Hip thrust con barra · Peso muerto rumano con barra · Sentadilla con barra · Press inclinado con mancuernas

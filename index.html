@@ -4480,7 +4480,8 @@ function rttSteps(day) {
   });
   return out;
 }
-function rttBlockLabel(b) { return String(b.name || 'Bloque').split('·')[0].trim(); }
+function rttBlockLabel(b) { var l = String(b.name || '').split('·')[0].trim(); return /^bloque(\s*\d+)?$/i.test(l) ? '' : l; }
+function rttBlockTxt(n, b) { var l = rttBlockLabel(b); return 'Bloque ' + n + (l ? ' · ' + l : ''); }
 function startGuidedWorkout(dayId) {
   if (PLAN_LOCKED) { alert('Tu programa caducó. Adquirí un nuevo plan para seguir registrando tus sesiones.'); return; }
   var day = currentRutinaData.days.find(function(d) { return d.id === dayId; });
@@ -4496,7 +4497,7 @@ function startGuidedWorkout(dayId) {
   document.getElementById('rtt-start-meta').textContent = nEx + ' ejercicios · ' + blocks.length + ' bloques' + (RTT.meta ? ' · meta ' + RTT.meta + ' min' : '');
   document.getElementById('rtt-start-blocks').innerHTML = blocks.map(function(b, i) {
     var rondas = b.exercises.reduce(function(m, e) { return Math.max(m, exsSeriesCount(e)); }, 1);
-    return '<div class="rtt-sb" style="animation-delay:' + (0.12 + i * 0.08).toFixed(2) + 's"><span class="rtt-sb-n">' + String(i + 1).padStart(2, '0') + '</span><span class="rtt-sb-t"><b>Bloque ' + (i + 1) + ' · ' + escapeHtml(rttBlockLabel(b)) + '</b><small>' + b.exercises.map(function(e) { return escapeHtml(e.name); }).join(' · ') + '</small></span><span class="rtt-sb-r">' + rondas + ' rondas</span></div>';
+    return '<div class="rtt-sb" style="animation-delay:' + (0.12 + i * 0.08).toFixed(2) + 's"><span class="rtt-sb-n">' + String(i + 1).padStart(2, '0') + '</span><span class="rtt-sb-t"><b>' + escapeHtml(rttBlockTxt(i + 1, b)) + '</b><small>' + b.exercises.map(function(e) { return escapeHtml(e.name); }).join(' · ') + '</small></span><span class="rtt-sb-r">' + rondas + ' rondas</span></div>';
   }).join('');
   rttShow('start');
   document.getElementById('rt-train-modal').style.display = 'flex';
@@ -4533,7 +4534,7 @@ function rttPaint() {
   clearInterval(RTT.timerInterval); RTT.timerRunning = false;
   document.getElementById('rtt-timer').classList.remove('on', 'ult');
   document.getElementById('rtt-bar').style.width = (RTT.s / RTT.steps.length * 100) + '%';
-  document.getElementById('rtt-blk').textContent = 'Bloque ' + st.nb + ' · ' + rttBlockLabel(block);
+  document.getElementById('rtt-blk').textContent = rttBlockTxt(st.nb, block);
   document.getElementById('rtt-ronda').textContent = 'Ronda ' + (st.r + 1) + '/' + st.rondas;
   document.getElementById('rtt-exn').textContent = 'Ejercicio ' + (st.i + 1) + '/' + st.n;
   var tEl = document.getElementById('rtt-ex-title'); tEl.textContent = ex.name;
@@ -4809,10 +4810,10 @@ var RT_MATERIAL_REGLAS = [
   { re: /polea/i, nombre: 'Polea' },
   { re: /(patada|abducci[oó]n|curl femoral|aducci[oó]n).*polea|polea.*(patada|abducci[oó]n|curl femoral)/i, nombre: 'Tobillera para polea' },
   { re: /banda|liga/i, nombre: 'Banda elástica' },
-  { re: /banco/i, nombre: 'Banco' },
+  { re: /banco|hip thrust con mancuerna/i, nombre: 'Banco' },
   { re: /silla/i, nombre: 'Silla firme' },
   { re: /pared/i, nombre: 'Pared' },
-  { re: /plancha|dead bug|bird dog|puente|gato|cuadrupedia|acostad|estiramiento|postura del ni|en el piso|90\/90|elevaci[oó]n de piernas|rotaci[oó]n tor/i, nombre: 'Mat' }
+  { re: /plancha|dead bug|bird dog|puente|gato|cuadrupedia|acostad|estiramiento|postura del ni|en el piso|90\/90|elevaci[oó]n de piernas|rotaci[oó]n tor|mountain|monkey|abdominal|crunch/i, nombre: 'Mat' }
 ];
 function rtMaterialesDia(day) {
   if (Array.isArray(day.materiales) && day.materiales.length) return day.materiales.map(function(n) { return { nombre: String(n) }; });

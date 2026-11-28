@@ -1,0 +1,295 @@
+{
+ "metaMin": 45,
+ "mensajeInicial": "¡Hola, Fátima! Bienvenida 💙 Esta rutina es para ganar músculo: 4 días a la semana, 3 bloques por día con 2 ejercicios cada uno. Concéntrate en la técnica y en sentir cada músculo trabajar. Cualquier duda, escríbeme. ¡A darle!",
+ "aclaraciones": [
+  "Cada bloque lo realizas 3 veces.",
+  "Te doy sugerencias de pesos: puedes bajarle o aumentarle según qué tan segura te sientas con la técnica del ejercicio.",
+  "Cuando usas una mancuerna en cada mano, el peso es por brazo.",
+  "Descansa 45 segundos entre los 2 ejercicios y 90 segundos al terminar cada ronda.",
+  "Si tienes iPhone, sube el volumen para escuchar los sonidos del modo entreno."
+ ],
+ "days": [
+  {
+   "name": "Día 1 · Pierna completa",
+   "blocks": [
+    {
+     "name": "Bloque 1 · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 45,
+     "descansoRonda": 90,
+     "exercises": [
+      {
+       "name": "Sentadilla goblet con mancuerna",
+       "series": "3",
+       "reps": "12",
+       "tipo": "reps",
+       "carga": "15"
+      },
+      {
+       "name": "Sentadilla con salto",
+       "series": "3",
+       "reps": "10",
+       "tipo": "reps"
+      }
+     ]
+    },
+    {
+     "name": "Bloque 2 · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 45,
+     "descansoRonda": 90,
+     "exercises": [
+      {
+       "name": "Zancadas caminando con mancuernas",
+       "series": "3",
+       "reps": "12-16 pasos",
+       "tipo": "reps",
+       "carga": "5-10"
+      },
+      {
+       "name": "Peso muerto rumano con mancuernas",
+       "series": "3",
+       "reps": "10-12",
+       "tipo": "reps",
+       "carga": "10-15"
+      }
+     ]
+    },
+    {
+     "name": "Bloque 3 · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 45,
+     "descansoRonda": 90,
+     "exercises": [
+      {
+       "name": "Puente de glúteo con mancuerna",
+       "series": "3",
+       "reps": "15",
+       "tipo": "reps",
+       "carga": "25"
+      },
+      {
+       "name": "Abducción en cuadrupedia con banda",
+       "series": "3",
+       "reps": "12 c/pierna",
+       "tipo": "reps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Día 2 · Tren superior",
+   "blocks": [
+    {
+     "name": "Bloque 1 · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 45,
+     "descansoRonda": 90,
+     "exercises": [
+      {
+       "name": "Press de hombro sentada en banco con mancuernas",
+       "series": "3",
+       "reps": "10-12",
+       "tipo": "reps",
+       "carga": "5-10"
+      },
+      {
+       "name": "Mountain climbers",
+       "series": "3",
+       "tipo": "tiempo",
+       "segundos": "30"
+      }
+     ]
+    },
+    {
+     "name": "Bloque 2 · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 45,
+     "descansoRonda": 90,
+     "exercises": [
+      {
+       "name": "Elevaciones laterales con mancuernas",
+       "series": "3",
+       "reps": "10-12",
+       "tipo": "reps",
+       "carga": "3-5"
+      },
+      {
+       "name": "Copa de tríceps con mancuerna",
+       "series": "3",
+       "reps": "10-12",
+       "tipo": "reps",
+       "carga": "10-15"
+      }
+     ]
+    },
+    {
+     "name": "Bloque 3 · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 45,
+     "descansoRonda": 90,
+     "exercises": [
+      {
+       "name": "Remo inclinado con mancuernas",
+       "series": "3",
+       "reps": "12-15",
+       "tipo": "reps",
+       "carga": "10"
+      },
+      {
+       "name": "Curl de bíceps alternado con mancuernas",
+       "series": "3",
+       "reps": "12-15",
+       "tipo": "reps",
+       "carga": "5-10"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Día 3 · Glúteos",
+   "blocks": [
+    {
+     "name": "Bloque 1 · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 45,
+     "descansoRonda": 90,
+     "exercises": [
+      {
+       "name": "Hip thrust con mancuerna",
+       "series": "3",
+       "reps": "15",
+       "tipo": "reps",
+       "carga": "30-40"
+      },
+      {
+       "name": "Monkey kicks con banda",
+       "series": "3",
+       "reps": "12 c/pierna",
+       "tipo": "reps"
+      }
+     ]
+    },
+    {
+     "name": "Bloque 2 · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 45,
+     "descansoRonda": 90,
+     "exercises": [
+      {
+       "name": "Zancada hacia atrás con mancuernas",
+       "series": "3",
+       "reps": "8-12 c/pierna",
+       "tipo": "reps",
+       "carga": "10"
+      }
+     ]
+    },
+    {
+     "name": "Bloque 3 · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 45,
+     "descansoRonda": 90,
+     "exercises": [
+      {
+       "name": "Sentadilla sumo con mancuerna",
+       "series": "3",
+       "reps": "12-15",
+       "tipo": "reps",
+       "carga": "25"
+      },
+      {
+       "name": "Caminata lateral con banda",
+       "series": "3",
+       "reps": "10 pasos c/lado",
+       "tipo": "reps"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Día 4 · Tren superior",
+   "blocks": [
+    {
+     "name": "Bloque 1 · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 45,
+     "descansoRonda": 90,
+     "exercises": [
+      {
+       "name": "Pullover con mancuerna en banco",
+       "series": "3",
+       "reps": "10-12",
+       "tipo": "reps",
+       "carga": "15"
+      },
+      {
+       "name": "Curl de bíceps sentada con mancuernas",
+       "series": "3",
+       "reps": "8-12",
+       "tipo": "reps",
+       "carga": "5"
+      }
+     ]
+    },
+    {
+     "name": "Bloque 2 · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 45,
+     "descansoRonda": 90,
+     "exercises": [
+      {
+       "name": "Remo al mentón con mancuernas",
+       "series": "3",
+       "reps": "10-12",
+       "tipo": "reps",
+       "carga": "10-15"
+      },
+      {
+       "name": "Fondos de tríceps en banco",
+       "series": "3",
+       "reps": "8-10",
+       "tipo": "reps"
+      }
+     ]
+    },
+    {
+     "name": "Bloque 3 · 3 rondas",
+     "mode": "reps",
+     "workSecs": 40,
+     "restSecs": 45,
+     "descansoRonda": 90,
+     "exercises": [
+      {
+       "name": "Press de pecho en banco con mancuernas",
+       "series": "3",
+       "reps": "10",
+       "tipo": "reps",
+       "carga": "5-10"
+      },
+      {
+       "name": "Elevación de piernas acostada",
+       "series": "3",
+       "reps": "10",
+       "tipo": "reps"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
