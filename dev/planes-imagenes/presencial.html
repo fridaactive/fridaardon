@@ -1,0 +1,74 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1080px;height:1350px;background:#070B1A;font-family:'DM Sans',sans-serif;color:#fff;overflow:hidden;position:relative}
+.glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(28,85,229,.45),rgba(28,85,229,0) 65%);top:-420px;right:-300px}
+.glow2{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(28,85,229,.25),rgba(28,85,229,0) 65%);bottom:-380px;left:-260px}
+.wrap{position:relative;padding:50px 64px 0}
+.brand{font-family:'Archivo Black';font-size:22px;letter-spacing:6px;color:#F5ECCB}
+h1{font-family:'Archivo Black';font-size:70px;line-height:.95;text-transform:uppercase;margin-top:18px;letter-spacing:-1px}
+h1 span{color:#1C55E5}
+.sub{font-size:28px;color:#C9D3F0;margin-top:16px}
+.sub b{color:#F5ECCB;font-weight:700;font-style:italic}
+.card{background:#111A36;border-radius:28px;padding:26px 34px;margin-top:18px;border:1px solid rgba(255,255,255,.06)}
+.card.hero{background:linear-gradient(135deg,#1C55E5,#0F3FA8);border:none}
+.head{display:flex;justify-content:space-between;align-items:baseline}
+.title{font-family:'Archivo Black';font-size:30px;text-transform:uppercase;letter-spacing:.5px}
+.desc{font-size:21px;color:#C9D3F0;margin-top:4px}
+.hero .desc{color:#DCE6FF}
+.tag{font-size:16px;font-weight:800;letter-spacing:2px;text-transform:uppercase;background:#F5ECCB;color:#0D1B3E;padding:7px 14px;border-radius:99px;white-space:nowrap}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.tier{background:rgba(7,11,26,.35);border-radius:18px;padding:16px 18px}
+.card:not(.hero) .tier{background:#0A1128}
+.tn{font-size:17px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#F5ECCB}
+.tp{font-family:'Archivo Black';font-size:44px;margin-top:4px;line-height:1}
+.tp small{font-family:'DM Sans';font-size:19px;font-weight:500;color:#C9D3F0}
+.hero .tp small{color:#DCE6FF}
+.td{font-size:17px;color:#C9D3F0;margin-top:6px}
+.hero .td{color:#DCE6FF}
+.online{display:flex;justify-content:space-between;align-items:center}
+.big{font-family:'Archivo Black';font-size:60px;line-height:1}
+.big small{font-family:'DM Sans';font-size:22px;font-weight:500;color:#C9D3F0}
+.extra{margin-top:18px;border:2px dashed rgba(245,236,203,.55);border-radius:22px;padding:20px 30px;display:flex;justify-content:space-between;align-items:center}
+.extra .t{font-size:23px;font-weight:700;color:#F5ECCB}
+.extra .t span{display:block;font-size:19px;font-weight:400;color:#C9D3F0;margin-top:2px}
+.extra .p{font-family:'Archivo Black';font-size:40px;color:#F5ECCB}
+.inc{font-size:19px;font-weight:700;color:#F5ECCB;margin-top:8px}
+.note{display:inline-block;margin-top:14px;font-size:18px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#0D1B3E;background:#F5ECCB;padding:7px 14px;border-radius:99px}
+.hero .inc{color:#F5ECCB}
+.hero .big small{color:#DCE6FF}
+.foot{position:absolute;bottom:44px;left:64px;right:64px;display:flex;justify-content:space-between;font-size:22px;font-weight:700;color:#C9D3F0}
+.foot b{color:#fff}
+</style></head><body>
+<div class="glow"></div><div class="glow2"></div>
+<div class="wrap">
+  <div class="brand">FRIDA ACTIVE</div>
+  <h1>Planes de<br><span>entrenamiento</span></h1>
+  <p class="sub">Personalizados a tu nivel y a tu ritmo. <b>Tu hora para ti.</b></p>
+  <div class="card hero">
+    <div class="head"><div><div class="title">1:1 Presencial</div><div class="desc">Entrenamos juntas y yo llevo todo el equipo</div></div></div>
+    <div class="tiers">
+      <div class="tier"><div class="tn">Sesión</div><div class="tp">$30</div><div class="td">Una sesión</div></div>
+      <div class="tier"><div class="tn">Starter</div><div class="tp">$240<small>/mes</small></div><div class="td">2x semana · 8 sesiones</div></div>
+      <div class="tier"><div class="tn">Active</div><div class="tp">$360<small>/mes</small></div><div class="td">3x semana · 12 sesiones</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="head"><div><div class="title">1:1 por videollamada</div><div class="desc">Te guío en vivo + acceso a fridaactive.com</div></div><div class="tag">Incluye guía de alimentación</div></div>
+    <div class="tiers">
+      <div class="tier"><div class="tn">Sesión</div><div class="tp">$20</div><div class="td">Una sesión</div></div>
+      <div class="tier"><div class="tn">Starter</div><div class="tp">$160<small>/mes</small></div><div class="td">2x semana · 8 sesiones</div></div>
+      <div class="tier"><div class="tn">Active</div><div class="tp">$240<small>/mes</small></div><div class="td">3x semana · 12 sesiones</div></div>
+    </div>
+  </div>
+  <div class="card online">
+    <div><div class="title">Rutina online</div><div class="desc">Tu plan personalizado en fridaactive.com,<br>para gym o casa</div><div class="inc">✓ Incluye guía de alimentación</div></div>
+    <div class="big">$50<small>/mes</small></div>
+  </div>
+  <div class="extra">
+    <div class="t">+ Plan de alimentación<span>Nutricionista deportivo · solo para el plan presencial</span></div>
+    <div class="p">+$20</div>
+  </div>
+</div>
+<div class="foot"><span>fridaactive.com</span><span><b>@fridaactive</b></span><span>Escríbeme por WhatsApp 💬</span></div>
+</body></html>

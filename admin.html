@@ -1079,6 +1079,13 @@
       <button id="qq-close" style="background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;">✕</button>
     </div>
 
+    <!-- Imágenes de planes para compartir por WhatsApp -->
+    <div id="qq-planes" style="margin-bottom:1.25rem;">
+      <div style="font-size:0.8rem;font-weight:700;color:var(--text);margin-bottom:0.15rem;">Imágenes de planes</div>
+      <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.6rem;">Elegí la que tenga resaltado el plan que te preguntaron y compartila por WhatsApp.</div>
+      <div id="qq-planes-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;"></div>
+    </div>
+
     <div class="fin-form-row"><div class="fin-form-label">Nombre del prospecto</div><input class="fin-form-input" id="qq-name" type="text" placeholder="Ej: María González"></div>
     <div class="fin-form-row"><div class="fin-form-label">Precio por sesión ($)</div><input class="fin-form-input" id="qq-price" type="number" placeholder="Ej: 20"></div>
     <div style="display:flex;gap:0.6rem;margin-bottom:0.85rem;">
@@ -4483,6 +4490,44 @@ function openQuickQuote() {
   document.getElementById('qq-preview').style.display = 'none';
   document.getElementById('quick-quote-modal').style.display = 'flex';
   renderQQCalendar();
+  renderQQPlanes();
+}
+
+// Imágenes de planes (carpeta /planes). Para actualizar precios: reemplazar los PNG y subir PLANES_VERSION.
+var PLANES_VERSION = '2027-01';
+var PLANES_IMGS = [
+  { file: 'planes-presencial.png', label: 'Presencial resaltado' },
+  { file: 'planes-videollamada.png', label: 'Videollamada resaltado' },
+  { file: 'planes-rutina-online.png', label: 'Rutina online resaltado' },
+  { file: 'planes-presencial-precio-anterior.png', label: 'Precio anterior (solo Ángela)' }
+];
+
+function renderQQPlanes() {
+  var grid = document.getElementById('qq-planes-grid');
+  if (!grid) return;
+  grid.innerHTML = PLANES_IMGS.map(function(p, i) {
+    var src = 'planes/' + p.file + '?v=' + PLANES_VERSION;
+    return '<div style="background:var(--blue-lt);border-radius:12px;padding:0.4rem;">' +
+      '<img src="' + src + '" alt="' + p.label + '" loading="lazy" style="width:100%;border-radius:8px;display:block;">' +
+      '<div style="font-size:0.65rem;font-weight:700;color:var(--text);margin:0.35rem 0.1rem;">' + p.label + '</div>' +
+      '<button type="button" onclick="shareQQPlan(' + i + ')" style="width:100%;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0.5rem;font-size:0.7rem;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Compartir</button>' +
+      '</div>';
+  }).join('');
+}
+
+function shareQQPlan(i) {
+  var p = PLANES_IMGS[i];
+  var src = 'planes/' + p.file + '?v=' + PLANES_VERSION;
+  fetch(src).then(function(r) { return r.blob(); }).then(function(blob) {
+    var file = new File([blob], p.file, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      return navigator.share({ files: [file] });
+    }
+    window.open(src, '_blank');
+  }).catch(function(err) {
+    if (err && err.name === 'AbortError') return;
+    window.open(src, '_blank');
+  });
 }
 
 function closeQuickQuote() {
