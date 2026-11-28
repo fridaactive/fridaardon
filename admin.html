@@ -459,6 +459,21 @@
     .pwc-toggle { display:block; }
   }
   .content-wrap { padding:1rem 1.25rem 5rem; max-width:900px; margin:0 auto; }
+  .grab-card { background:#fff; border:1.5px solid var(--border); border-radius:20px; padding:0.9rem 1rem 1rem; margin-bottom:1.1rem; box-shadow:0 5px 0 #0F3FA8; }
+  .grab-hdr { display:flex; align-items:center; gap:0.6rem; width:100%; background:none; border:none; padding:0; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .grab-tag { background:#F5ECCB; color:#0D1B3E; font-weight:800; font-size:0.8rem; padding:0.35rem 0.8rem; border-radius:999px; transform:rotate(-2deg); box-shadow:0 3px 0 #C9B57A; }
+  .grab-count { margin-left:auto; font-size:0.85rem; color:var(--muted); } .grab-count b { font-family:'Archivo Black','DM Sans',sans-serif; color:var(--blue); font-size:1.1rem; }
+  .grab-chev { color:var(--muted); }
+  .grab-bar { height:6px; border-radius:6px; background:#EEF2FA; overflow:hidden; margin:0.7rem 0 0.3rem; } .grab-bar i { display:block; height:100%; background:linear-gradient(90deg,#1C55E5,#8FB0FF); transition:width .4s; }
+  .grab-grupo { font-family:'Archivo Black','DM Sans',sans-serif; font-size:0.72rem; letter-spacing:0.04em; text-transform:uppercase; color:#0D1B3E; margin:1rem 0 0.35rem; }
+  .grab-row { display:flex; align-items:center; gap:0.6rem; padding:0.5rem 0; border-top:1px solid var(--border); }
+  .grab-check { width:1.7rem; height:1.7rem; flex-shrink:0; border-radius:8px; border:2px solid #C9D3EC; background:#fff; color:#fff; font-weight:900; font-size:0.95rem; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+  .grab-row.ok .grab-check { background:#1C55E5; border-color:#1C55E5; box-shadow:0 2px 0 #0F3FA8; }
+  .grab-n { font-family:'Archivo Black','DM Sans',sans-serif; color:var(--blue); font-size:0.8rem; min-width:1.4rem; }
+  .grab-name { flex:1; font-size:0.86rem; font-weight:700; color:var(--text); cursor:pointer; line-height:1.3; }
+  .grab-row.ok .grab-name { color:var(--muted); text-decoration:line-through; }
+  .grab-ref { flex-shrink:0; font-size:0.72rem; font-weight:800; color:#fff; background:#E5383B; border-radius:999px; padding:0.32rem 0.7rem; text-decoration:none; box-shadow:0 2px 0 #9E1F22; }
+  .grab-tip { font-size:0.7rem; color:var(--muted); margin-top:0.8rem; line-height:1.4; }
   .content-intro { font-size:0.75rem; color:var(--muted); margin-bottom:0.9rem; line-height:1.5; }
   .content-week-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:1.1rem 0 0.5rem; }
   .content-card { display:block; width:100%; text-align:left; background:#fff; border:1.5px solid var(--border-b,#ccdaf5); border-radius:14px; padding:0.9rem 1rem; margin-bottom:0.6rem; cursor:pointer; font-family:'DM Sans',sans-serif; }
@@ -1454,6 +1469,7 @@
   </div>
 
   <div class="content-wrap" id="content-view" style="display:none">
+    <div id="grab-card"></div>
     <div class="content-intro">Tus videos de Instagram: cuándo grabar, editar y publicar cada uno. Toca un video para ver el guion completo.</div>
     <div id="content-list"><div class="content-intro">Cargando…</div></div>
   </div>
@@ -6564,7 +6580,46 @@ function switchPlanTab(tab) {
   else renderCalendar();
 }
 
+// ── EJERCICIOS POR GRABAR (videos de técnica para las rutinas) ──
+// La lista vive en contenido/rutinas/grabar.json (la arma Claude). Frida
+// marca cada uno al grabarlo; el check se guarda en Firebase en
+// contentStatus/ej-<id> (mismo lugar que el estado de los videos).
+var GRAB_LIST = [], GRAB_OPEN = true;
+function grabCargar() {
+  fetch('contenido/rutinas/grabar.json?v=' + Date.now(), { cache: 'no-store' }).then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(d) { GRAB_LIST = (d && d.items) || []; grabRender(); }).catch(function() {});
+}
+function grabHecho(id) { return !!(CONTENT_STATUS && CONTENT_STATUS['ej-' + id]); }
+function grabToggle(id) {
+  var v = !grabHecho(id);
+  CONTENT_STATUS['ej-' + id] = v || null;
+  if (!v) delete CONTENT_STATUS['ej-' + id];
+  localStorage.setItem('fa_content_status', JSON.stringify(CONTENT_STATUS));
+  withAdminAuth(function() { fbSet('contentStatus/ej-' + id, v ? true : null); });
+  grabRender();
+}
+function grabRender() {
+  var el = document.getElementById('grab-card'); if (!el || !GRAB_LIST.length) return;
+  var hechos = GRAB_LIST.filter(function(it) { return grabHecho(it.id); }).length, total = GRAB_LIST.length;
+  var h = '<div class="grab-card"><button type="button" class="grab-hdr" onclick="GRAB_OPEN=!GRAB_OPEN;grabRender()">'
+    + '<span class="grab-tag">🎥 Ejercicios por grabar</span><span class="grab-count"><b>' + hechos + '</b>/' + total + '</span><span class="grab-chev">' + (GRAB_OPEN ? '▴' : '▾') + '</span></button>'
+    + '<div class="grab-bar"><i style="width:' + Math.round(hechos / total * 100) + '%"></i></div>';
+  if (GRAB_OPEN) {
+    var grupo = '';
+    GRAB_LIST.forEach(function(it, i) {
+      if (it.grupo !== grupo) { grupo = it.grupo; h += '<div class="grab-grupo">' + escHtml(grupo) + '</div>'; }
+      var ok = grabHecho(it.id);
+      h += '<div class="grab-row' + (ok ? ' ok' : '') + '"><button type="button" class="grab-check" onclick="grabToggle(\'' + it.id + '\')" aria-label="Marcar ' + escHtml(it.nombre) + '">' + (ok ? '✓' : '') + '</button>'
+        + '<span class="grab-n">' + (i + 1) + '</span><span class="grab-name" onclick="grabToggle(\'' + it.id + '\')">' + escHtml(it.nombre) + '</span>'
+        + '<a class="grab-ref" href="' + escHtml(it.ref) + '" target="_blank" rel="noopener">▶ Ver</a></div>';
+    });
+    h += '<div class="grab-tip">Toca ▶ Ver para ver una referencia en YouTube. Al subir tu video, ponle en el banco el mismo nombre exacto.</div>';
+  }
+  el.innerHTML = h + '</div>';
+}
+
 function renderContentList() {
+  if (!GRAB_LIST.length) grabCargar(); else grabRender();
   var el = document.getElementById('content-list');
   if (!el) return;
   if (!CONTENT_PLAN.length) {

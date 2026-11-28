@@ -1,0 +1,287 @@
+{
+ "_nota": "Lista de ejercicios por grabar (la ve Frida en Planificación → Contenido). El check se guarda en Firebase contentStatus/ej-<id>.",
+ "items": [
+  {
+   "id": "movilidad-de-cuello",
+   "nombre": "Movilidad de cuello",
+   "grupo": "Movilidad articular",
+   "ref": "https://www.youtube.com/results?search_query=Movilidad%20de%20cuello%20t%C3%A9cnica"
+  },
+  {
+   "id": "circulos-de-brazos",
+   "nombre": "Círculos de brazos",
+   "grupo": "Movilidad articular",
+   "ref": "https://www.youtube.com/results?search_query=C%C3%ADrculos%20de%20brazos%20t%C3%A9cnica"
+  },
+  {
+   "id": "circulos-de-cadera",
+   "nombre": "Círculos de cadera",
+   "grupo": "Movilidad articular",
+   "ref": "https://www.youtube.com/results?search_query=C%C3%ADrculos%20de%20cadera%20t%C3%A9cnica"
+  },
+  {
+   "id": "circulos-de-rodillas",
+   "nombre": "Círculos de rodillas",
+   "grupo": "Movilidad articular",
+   "ref": "https://www.youtube.com/results?search_query=C%C3%ADrculos%20de%20rodillas%20t%C3%A9cnica"
+  },
+  {
+   "id": "circulos-de-tobillos",
+   "nombre": "Círculos de tobillos",
+   "grupo": "Movilidad articular",
+   "ref": "https://www.youtube.com/results?search_query=C%C3%ADrculos%20de%20tobillos%20t%C3%A9cnica"
+  },
+  {
+   "id": "gato-vaca",
+   "nombre": "Gato-vaca",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/results?search_query=gato%20vaca%20ejercicio%20movilidad%20columna"
+  },
+  {
+   "id": "movilidad-de-cadera-90-90",
+   "nombre": "Movilidad de cadera 90/90",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/results?search_query=movilidad%20de%20cadera%2090%2090"
+  },
+  {
+   "id": "movilidad-de-dedos-y-tobillo",
+   "nombre": "Movilidad de dedos y tobillo",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/watch?v=6XX3R9ibBfw"
+  },
+  {
+   "id": "rotacion-toracica-en-cuadrupedia",
+   "nombre": "Rotación torácica en cuadrupedia",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/watch?v=RDKH2bhrdJk"
+  },
+  {
+   "id": "equilibrio-en-un-pie",
+   "nombre": "Equilibrio en un pie",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/watch?v=7SF7AYh2_Yw"
+  },
+  {
+   "id": "sentadilla-isometrica-en-pared",
+   "nombre": "Sentadilla isométrica en pared",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/watch?v=JaZNYM3zAP0"
+  },
+  {
+   "id": "sentadilla-con-salto",
+   "nombre": "Sentadilla con salto",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/results?search_query=Sentadilla%20con%20salto%20t%C3%A9cnica"
+  },
+  {
+   "id": "mountain-climbers",
+   "nombre": "Mountain climbers",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/results?search_query=mountain%20climbers%20t%C3%A9cnica"
+  },
+  {
+   "id": "plancha-alta-con-toques-de-hombro",
+   "nombre": "Plancha alta con toques de hombro",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/results?search_query=Plancha%20alta%20con%20toques%20de%20hombro%20t%C3%A9cnica"
+  },
+  {
+   "id": "plancha-baja",
+   "nombre": "Plancha baja",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/results?search_query=Plancha%20baja%20t%C3%A9cnica"
+  },
+  {
+   "id": "plancha-lateral",
+   "nombre": "Plancha lateral",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/results?search_query=Plancha%20lateral%20t%C3%A9cnica"
+  },
+  {
+   "id": "dead-bug",
+   "nombre": "Dead bug",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/results?search_query=dead%20bug%20ejercicio%20t%C3%A9cnica"
+  },
+  {
+   "id": "bird-dog",
+   "nombre": "Bird dog",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/results?search_query=bird%20dog%20ejercicio%20t%C3%A9cnica"
+  },
+  {
+   "id": "elevacion-de-piernas-acostada",
+   "nombre": "Elevación de piernas acostada",
+   "grupo": "Mat y peso corporal",
+   "ref": "https://www.youtube.com/results?search_query=Elevaci%C3%B3n%20de%20piernas%20acostada%20t%C3%A9cnica"
+  },
+  {
+   "id": "estiramiento-de-flexor-de-cadera",
+   "nombre": "Estiramiento de flexor de cadera",
+   "grupo": "Estiramientos",
+   "ref": "https://www.youtube.com/results?search_query=Estiramiento%20de%20flexor%20de%20cadera%20t%C3%A9cnica"
+  },
+  {
+   "id": "estiramiento-de-gluteo-en-figura-4",
+   "nombre": "Estiramiento de glúteo en figura 4",
+   "grupo": "Estiramientos",
+   "ref": "https://www.youtube.com/results?search_query=Estiramiento%20de%20gl%C3%BAteo%20en%20figura%204%20t%C3%A9cnica"
+  },
+  {
+   "id": "postura-del-nino",
+   "nombre": "Postura del niño",
+   "grupo": "Estiramientos",
+   "ref": "https://www.youtube.com/results?search_query=Postura%20del%20ni%C3%B1o%20t%C3%A9cnica"
+  },
+  {
+   "id": "aperturas-con-banda",
+   "nombre": "Aperturas con banda",
+   "grupo": "Bandas",
+   "ref": "https://www.youtube.com/watch?v=smSSXITNpCI"
+  },
+  {
+   "id": "remo-sentada-con-banda",
+   "nombre": "Remo sentada con banda",
+   "grupo": "Bandas",
+   "ref": "https://www.youtube.com/results?search_query=Remo%20sentada%20con%20banda%20t%C3%A9cnica"
+  },
+  {
+   "id": "caminata-lateral-con-banda",
+   "nombre": "Caminata lateral con banda",
+   "grupo": "Bandas",
+   "ref": "https://www.youtube.com/watch?v=YCqrtnr6g5g"
+  },
+  {
+   "id": "patada-de-gluteo-con-banda",
+   "nombre": "Patada de glúteo con banda",
+   "grupo": "Bandas",
+   "ref": "https://www.youtube.com/results?search_query=Patada%20de%20gl%C3%BAteo%20con%20banda%20t%C3%A9cnica"
+  },
+  {
+   "id": "abduccion-en-cuadrupedia-con-banda",
+   "nombre": "Abducción en cuadrupedia con banda",
+   "grupo": "Bandas",
+   "ref": "https://www.youtube.com/results?search_query=Abducci%C3%B3n%20en%20cuadrupedia%20con%20banda%20t%C3%A9cnica"
+  },
+  {
+   "id": "monkey-kicks-con-banda",
+   "nombre": "Monkey kicks con banda",
+   "grupo": "Bandas",
+   "ref": "https://www.youtube.com/results?search_query=monkey%20kicks%20banda%20gluteo"
+  },
+  {
+   "id": "sentadilla-goblet-con-mancuerna",
+   "nombre": "Sentadilla goblet con mancuerna",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Sentadilla%20goblet%20con%20mancuerna%20t%C3%A9cnica"
+  },
+  {
+   "id": "sentadilla-sumo-con-mancuerna",
+   "nombre": "Sentadilla sumo con mancuerna",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Sentadilla%20sumo%20con%20mancuerna%20t%C3%A9cnica"
+  },
+  {
+   "id": "peso-muerto-rumano-con-mancuernas",
+   "nombre": "Peso muerto rumano con mancuernas",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Peso%20muerto%20rumano%20con%20mancuernas%20t%C3%A9cnica"
+  },
+  {
+   "id": "zancadas-caminando-con-mancuernas",
+   "nombre": "Zancadas caminando con mancuernas",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Zancadas%20caminando%20con%20mancuernas%20t%C3%A9cnica"
+  },
+  {
+   "id": "zancada-hacia-atras-con-mancuernas",
+   "nombre": "Zancada hacia atrás con mancuernas",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Zancada%20hacia%20atr%C3%A1s%20con%20mancuernas%20t%C3%A9cnica"
+  },
+  {
+   "id": "puente-de-gluteo-con-mancuerna",
+   "nombre": "Puente de glúteo con mancuerna",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Puente%20de%20gl%C3%BAteo%20con%20mancuerna%20t%C3%A9cnica"
+  },
+  {
+   "id": "press-de-pecho-en-puente-de-gluteo-con-mancuernas",
+   "nombre": "Press de pecho en puente de glúteo con mancuernas",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Press%20de%20pecho%20en%20puente%20de%20gl%C3%BAteo%20con%20mancuernas%20t%C3%A9cnica"
+  },
+  {
+   "id": "remo-inclinado-con-mancuernas",
+   "nombre": "Remo inclinado con mancuernas",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Remo%20inclinado%20con%20mancuernas%20t%C3%A9cnica"
+  },
+  {
+   "id": "remo-al-menton-con-mancuernas",
+   "nombre": "Remo al mentón con mancuernas",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Remo%20al%20ment%C3%B3n%20con%20mancuernas%20t%C3%A9cnica"
+  },
+  {
+   "id": "press-de-hombro-con-mancuernas",
+   "nombre": "Press de hombro con mancuernas",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Press%20de%20hombro%20con%20mancuernas%20t%C3%A9cnica"
+  },
+  {
+   "id": "elevaciones-laterales-con-mancuernas",
+   "nombre": "Elevaciones laterales con mancuernas",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Elevaciones%20laterales%20con%20mancuernas%20t%C3%A9cnica"
+  },
+  {
+   "id": "curl-de-biceps-alternado-con-mancuernas",
+   "nombre": "Curl de bíceps alternado con mancuernas",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Curl%20de%20b%C3%ADceps%20alternado%20con%20mancuernas%20t%C3%A9cnica"
+  },
+  {
+   "id": "copa-de-triceps-con-mancuerna",
+   "nombre": "Copa de tríceps con mancuerna",
+   "grupo": "Mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=copa%20de%20triceps%20con%20mancuerna%20t%C3%A9cnica"
+  },
+  {
+   "id": "hip-thrust-con-mancuerna",
+   "nombre": "Hip thrust con mancuerna",
+   "grupo": "Banco y mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=hip%20thrust%20con%20mancuerna%20en%20banco%20t%C3%A9cnica"
+  },
+  {
+   "id": "press-de-pecho-en-banco-con-mancuernas",
+   "nombre": "Press de pecho en banco con mancuernas",
+   "grupo": "Banco y mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Press%20de%20pecho%20en%20banco%20con%20mancuernas%20t%C3%A9cnica"
+  },
+  {
+   "id": "press-de-hombro-sentada-en-banco-con-mancuernas",
+   "nombre": "Press de hombro sentada en banco con mancuernas",
+   "grupo": "Banco y mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Press%20de%20hombro%20sentada%20en%20banco%20con%20mancuernas%20t%C3%A9cnica"
+  },
+  {
+   "id": "pullover-con-mancuerna-en-banco",
+   "nombre": "Pullover con mancuerna en banco",
+   "grupo": "Banco y mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=pullover%20con%20mancuerna%20en%20banco%20t%C3%A9cnica"
+  },
+  {
+   "id": "curl-de-biceps-sentada-con-mancuernas",
+   "nombre": "Curl de bíceps sentada con mancuernas",
+   "grupo": "Banco y mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=Curl%20de%20b%C3%ADceps%20sentada%20con%20mancuernas%20t%C3%A9cnica"
+  },
+  {
+   "id": "fondos-de-triceps-en-banco",
+   "nombre": "Fondos de tríceps en banco",
+   "grupo": "Banco y mancuernas",
+   "ref": "https://www.youtube.com/results?search_query=fondos%20de%20triceps%20en%20banco%20t%C3%A9cnica"
+  }
+ ]
+}
