@@ -381,9 +381,13 @@ window.addEventListener("load", function(){ setTimeout(function(){ try { showTab
   .rtt-main-btn.running { background:var(--surface-2,#1b2547); box-shadow:0 5px 0 rgba(0,0,0,0.4); }
   .rtt-sub-row { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-top:0.8rem; min-height:1.2rem; }
   .rtt-sub-row .exs-last { margin:0; }
-  .rtt-stop { display:flex; align-items:center; justify-content:center; gap:0.45rem; margin:1.1rem auto 0; background:none; border:1.5px solid rgba(245,236,203,0.45); color:var(--cream); border-radius:999px; padding:0.55rem 1.1rem; font:800 0.78rem 'DM Sans',sans-serif; cursor:pointer; }
-  .rtt-stop svg { width:12px; height:12px; fill:var(--cream); }
-  .rtt-stop:active { transform:scale(0.96); }
+  #rtt-train-view { display:flex; flex-direction:column; }
+  .rtt-stop { display:flex; align-items:center; justify-content:center; gap:0.55rem; width:100%; margin:1.5rem 0 0.4rem; padding:0.85rem 1rem; background:#E5383B; color:#fff; border:none; border-radius:100px; font:800 0.9rem 'DM Sans',sans-serif; cursor:pointer; box-shadow:0 5px 0 #9E1F22; transition:transform .12s, box-shadow .12s; }
+  .rtt-stop svg { width:22px; height:22px; }
+  .rtt-stop .oct { fill:#fff; }
+  .rtt-stop .sq { fill:#E5383B; }
+  .rtt-stop:active { transform:translateY(4px); box-shadow:0 1px 0 #9E1F22; }
+  .rtt-sub-row + .rtt-stop { margin-top:auto; }
   .rtt-skip { margin-left:auto; background:none; border:none; color:var(--muted); font:700 0.72rem 'DM Sans',sans-serif; cursor:pointer; }
   .rtt-next { display:flex; align-items:center; gap:0.7rem; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:0.6rem 0.8rem; text-align:left; width:100%; max-width:20rem; box-sizing:border-box; }
   .rtt-next-thumb { width:3.6rem; height:2.6rem; border-radius:10px; background:var(--blue); overflow:hidden; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -2023,7 +2027,7 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
             <span style="font-size:0.72rem;font-weight:700;color:var(--blue);" id="pf-ficha-pct">0%</span>
           </div>
           <div class="pf-complete-track"><div class="pf-complete-fill" id="pf-ficha-fill" style="width:0%;"></div></div>
-          <div class="pf-ficha-text">Completala para que Frida tenga toda tu información a mano.</div>
+          <div class="pf-ficha-text">Complétala para que yo tenga toda tu información a mano.</div>
           <button class="pf-edit-btn" onclick="openFichaModal()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7v.5h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/></svg>
             Completar mi ficha
@@ -2057,7 +2061,7 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
         <div class="card transf-card">
           <div class="transf-hdr">
             <div class="card-label" style="margin-bottom:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M4 8h2.5l1.8-2h7.4l1.8 2H20v11H4Z"/><circle cx="12" cy="13.5" r="3.2"/></svg> Tu transformación</div>
-            <div class="transf-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="5" y="10" width="14" height="9" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Privadas · solo Frida y tú</div>
+            <div class="transf-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="5" y="10" width="14" height="9" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Privadas · solo tú y yo</div>
           </div>
           <div id="transformacion-list"><div class="empty-note">Cargando…</div></div>
         </div>
@@ -2351,7 +2355,7 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
     </div>
     <button type="button" class="rtt-main-btn" id="rtt-done-btn" onclick="rttMainBtn()"></button>
     <div class="rtt-sub-row"><span class="exs-last" id="rtt-last" style="display:none;">↗ La vez pasada: <b id="rtt-last-val"></b></span><button type="button" class="rtt-skip" onclick="rttSkipEx()">Saltar ›</button></div>
-    <button type="button" class="rtt-stop" onclick="rttTerminarHoy()"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg>Terminar por hoy</button>
+    <button type="button" class="rtt-stop" onclick="rttTerminarHoy()"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="oct" d="M8 2h8l6 6v8l-6 6H8l-6-6V8z"/><rect class="sq" x="8.5" y="8.5" width="7" height="7" rx="1"/></svg>Terminar entreno</button>
 
     <div class="rtt-rest" id="rtt-rest" hidden>
       <div class="rtt-confeti" id="rtt-rest-conf"></div>
@@ -2441,7 +2445,7 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
           <option value="Avanzado">Avanzado</option>
         </select>
       </div>
-      <div class="ficha-field-row"><div class="ficha-field-label">Notas</div><textarea class="cq-input ficha-field" data-field="notas" rows="3" placeholder="Lo que quieras contarle a Frida..." style="resize:vertical;"></textarea></div>
+      <div class="ficha-field-row"><div class="ficha-field-label">Notas</div><textarea class="cq-input ficha-field" data-field="notas" rows="3" placeholder="Lo que quieras contarme..." style="resize:vertical;"></textarea></div>
     </div>
 
     <div id="ficha-plan" class="ficha-content" style="display:none;">
@@ -2451,7 +2455,7 @@ body.portal-dark .anuncio-card .anuncio-text{flex:1;min-width:0}
       <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">1 mes <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Pago mensual</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$50</span></div></div>
       <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">3 meses <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Te queda a $45 por mes</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$135</span></div></div>
       <div class="ficha-promo-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.82rem;font-weight:700;">6 meses <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">Te queda a $40 por mes</span></span><span style="font-size:0.82rem;font-weight:700;color:var(--blue);">$240</span></div></div>
-      <div class="ficha-promo-card" style="margin-bottom:0;"><div style="font-size:0.82rem;font-weight:700;">Online 1:1 (videollamada)</div><div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem;">Consultá precio y disponibilidad con Frida.</div></div>
+      <div class="ficha-promo-card" style="margin-bottom:0;"><div style="font-size:0.82rem;font-weight:700;">Online 1:1 (videollamada)</div><div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem;">Consúltame precio y disponibilidad.</div></div>
     </div>
 
     <div id="ficha-save-wrap" style="margin-top:0.5rem;">
@@ -2665,7 +2669,7 @@ function renderInicioTab() {
       + '</button>';
   } else {
     h += '<div class="in-hero in-hero-static"><span class="in-hero-tag">TU PLAN</span><span class="in-hero-bottom"><span>'
-      + '<span class="in-hero-title">Tu hora para ti</span><span class="in-hero-meta">Tus sesiones con Frida y tu progreso, en un solo lugar.</span></span></span></div>';
+      + '<span class="in-hero-title">Tu hora para ti</span><span class="in-hero-meta">Tus sesiones conmigo y tu progreso, en un solo lugar.</span></span></span></div>';
   }
 
   // Orden: entreno de hoy → resumen (semana, mes, programa) → check-in → cómo te sientes → Mi ciclo → meta del mes
@@ -2755,7 +2759,7 @@ function medallasEstado() {
   var c = inicioCounts(), meta = metaDelMes();
   return [
     { id: 'primer', kind: 'bronce', tier: 'Bronce', name: 'Primer paso', how: 'Marca tu primer día entrenado.', ok: anyDia },
-    { id: 'perfil', kind: 'plata', tier: 'Plata', name: 'Perfil completo', how: 'Pon tu foto, cuéntanos de ti, llena tu ficha y sube tu primera foto de progreso (solo la ven Frida y tú).', ok: perfilOk },
+    { id: 'perfil', kind: 'plata', tier: 'Plata', name: 'Perfil completo', how: 'Pon tu foto, cuéntanos de ti, llena tu ficha y sube tu primera foto de progreso (solo la vemos tú y yo).', ok: perfilOk },
     { id: 'semanas2', kind: 'oro', tier: 'Oro', name: 'Semanas completas', how: 'Completa tus ' + metaSemanal() + ' entrenos de la semana durante 2 semanas (no tienen que ser seguidas). Llevas ' + Math.min(semanasCompletas(dias), 2) + ' de 2.', ok: semanasCompletas(dias) >= 2 },
     { id: 'meta-' + localKey(now).slice(0, 7), kind: 'trofeo', tier: 'Trofeo', name: 'Meta de ' + mesNombre, how: 'Completa tus ' + meta + ' entrenos del mes, tu perfil y ficha, y sube tu foto del mes' + (PREMIO_MES && PREMIO_MES.texto ? '. Ganas: ' + PREMIO_MES.texto : '') + '.', ok: premioRequisitos(c, meta).every(function(r) { return r.ok; }) },
     { id: 'diamante', kind: 'diamante', tier: 'Diamante', name: 'Constancia', how: 'Completa tu meta del mes en 3 meses distintos (por ejemplo noviembre, diciembre y enero). Llevas ' + Math.min(metasCumplidas, 3) + ' de 3. ¡La más valiosa de todas!', ok: metasCumplidas >= 3 }
@@ -2777,7 +2781,7 @@ function perfilExtrasHtml() {
   var now = new Date(), mk = localKey(now).slice(0, 7);
   var fotosMes = (CURRENT_PORTAL_DATA && CURRENT_PORTAL_DATA.fotosProgreso || {})[mk];
   if (now.getDate() <= 7 && !(fotosMes && fotosMes.inicio)) {
-    h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\');setTimeout(function(){var t=document.querySelector(\'.transf-card\');if(t)t.scrollIntoView({behavior:\'smooth\',block:\'start\'});},350)"><span>📸</span><span><b>Esta semana es día de foto</b><small>🔒 Tus fotos son privadas: solo las ven Frida y tú. Sirven para ver cuánto has avanzado.</small></span></button>';
+    h += '<button type="button" class="in-nudge" onclick="showTab(\'tab-perfil\');setTimeout(function(){var t=document.querySelector(\'.transf-card\');if(t)t.scrollIntoView({behavior:\'smooth\',block:\'start\'});},350)"><span>📸</span><span><b>Esta semana es día de foto</b><small>🔒 Tus fotos son privadas: solo las vemos tú y yo. Sirven para ver cuánto has avanzado.</small></span></button>';
   }
   return h;
 }
@@ -2793,7 +2797,7 @@ function renderBienestarTab() {
   var h = '<div class="bw-hero"><span class="fa-tag">BIENESTAR</span><h2>La comida es <span>tu aliada</span></h2><p>Tu guía de alimentación, tu menú de la semana y tu lista de súper.</p></div>';
   var d = alData(), eleg = alElegible();
   var titulo, texto, boton = '', accion = '', top = '<div class="bw-card-ico">🥗</div>';
-  if (!eleg) { titulo = 'Tu guía de alimentación'; texto = 'Viene incluida en los planes online y por videollamada. Pregúntale a Frida por la tuya.'; }
+  if (!eleg) { titulo = 'Tu guía de alimentación'; texto = 'Viene incluida en los planes online y por videollamada. Pregúntame por la tuya.'; }
   else if (d.guia) {
     var g = d.guia, hoy = alHoy(g), cal = g.calorias;
     titulo = 'Tu guía está lista'; boton = 'Ver mi guía'; accion = 'openGuiaAlimentacion()';
@@ -2806,8 +2810,8 @@ function renderBienestarTab() {
     } else if (hoy.menu.libre) { top = '<div class="bw-card-ico">🎉</div>'; titulo = 'Hoy es tu día flexible'; texto = 'Disfruta sin culpa. En tu guía tienes ideas para hoy.'; }
     else texto = 'Tu menú de la semana, tu lista de súper y postres con proteína.';
   }
-  else if (d.encuesta) { titulo = 'Frida está preparando tu guía'; texto = 'Ya tiene tus respuestas. Te aparecerá aquí en unos días.'; top = '<div class="bw-card-ico">👩‍🍳</div>'; }
-  else { titulo = 'Desbloquea tu guía'; texto = 'Responde unas preguntas (3 minutos) y Frida arma tu guía con tu menú y tu lista de súper.'; boton = 'Empezar'; accion = 'startEncuestaAlimentacion()'; }
+  else if (d.encuesta) { titulo = 'Estoy preparando tu guía'; texto = 'Ya tengo tus respuestas. Te aparecerá aquí en unos días.'; top = '<div class="bw-card-ico">👩‍🍳</div>'; }
+  else { titulo = 'Desbloquea tu guía'; texto = 'Responde unas preguntas (3 minutos) y te armo tu guía con tu menú y tu lista de súper.'; boton = 'Empezar'; accion = 'startEncuestaAlimentacion()'; }
   h += '<div class="bw-card faUp"' + (accion ? ' onclick="' + accion + '" role="button" tabindex="0"' : '') + '>' + top
     + '<b>' + titulo + '</b><p>' + texto + '</p>' + (boton ? '<span class="bw-card-btn">' + boton + ' →</span>' : '') + '</div>';
   if (eleg && d.guia) h += '<div class="bw-atajos">' + alAtajosHtml(d.guia) + '</div>';
@@ -2854,8 +2858,8 @@ function rewardsInicioHtml(c) {
     + '<div class="in-goal-track"><div class="in-goal-fill" style="width:' + pct + '%"></div></div>'
     + '<div class="in-goal-rq">' + rq.map(function(r) { return '<span class="' + (r.ok ? 'ok' : '') + '"' + (r.go ? ' onclick="' + r.go + '"' : '') + '>' + (r.ok ? '✅' : '⬜') + ' ' + r.txt + '</span>'; }).join('') + '</div>'
     + (logrado
-        ? '<div class="in-goal-prize">🎉 <b>¡Lo lograste!</b> ' + (premio ? 'Tu premio: ' + premio + '. Frida te escribirá para entregártelo.' : 'Frida te tiene una sorpresa.') + '</div>'
-        : '<div class="in-goal-prize">🎁 ' + (premio ? 'Ganas: <b>' + premio + '</b>' : 'Frida te tiene una sorpresa') + ' al completar las ' + rq.length + ' · te ' + (faltan === 1 ? 'falta 1' : 'faltan ' + faltan) + '</div>')
+        ? '<div class="in-goal-prize">🎉 <b>¡Lo lograste!</b> ' + (premio ? 'Tu premio: ' + premio + '. Te escribiré para entregártelo.' : 'Te tengo una sorpresa.') + '</div>'
+        : '<div class="in-goal-prize">🎁 ' + (premio ? 'Ganas: <b>' + premio + '</b>' : 'Te tengo una sorpresa') + ' al completar las ' + rq.length + ' · te ' + (faltan === 1 ? 'falta 1' : 'faltan ' + faltan) + '</div>')
     + '<div class="in-goal-how-txt">' + (entrenoAutoMarcado() ? 'Cada entreno que terminas en Rutina suma solo.' : 'Marca como entrenado cada día que entrenes.') + '</div>'
     + '</div>';
   return h;
@@ -2880,7 +2884,7 @@ function sentirHtml() {
   FA_SENTIR.forEach(function(si) {
     h += '<button type="button" class="' + (sel && sel.id === si.id ? 'sel' : '') + '" onclick="guardarSentir(\'' + si.id + '\')" aria-label="' + si.label + '">' + faCaraImg(si.id) + '<span>' + si.label + '</span></button>';
   });
-  h += '</div>' + (sel ? '<div class="in-feel-tip">💙 ' + sel.tip + '</div>' : '<div class="in-feel-note">Frida verá tu carita en su panel para acompañarte mejor 💙</div>') + '</div>';
+  h += '</div>' + (sel ? '<div class="in-feel-tip">💙 ' + sel.tip + '</div>' : '<div class="in-feel-note">Veré tu carita para acompañarte mejor 💙</div>') + '</div>';
   return h;
 }
 function guardarSentir(id) {
@@ -3186,7 +3190,7 @@ function checkNewMedals() {
   seen.push(nueva.id);
   try { localStorage.setItem(storeKey, JSON.stringify(seen)); } catch (e) {}
   setTimeout(function() {
-    var premio = nueva.id.indexOf('meta-') === 0 && PREMIO_MES && PREMIO_MES.texto ? ' Ganaste: ' + PREMIO_MES.texto + '. Frida te escribirá 💙' : '';
+    var premio = nueva.id.indexOf('meta-') === 0 && PREMIO_MES && PREMIO_MES.texto ? ' Ganaste: ' + PREMIO_MES.texto + '. Te escribiré 💙' : '';
     saveMedalDate(nueva.id);
     celebrate('<div class="fa-cel-medal">' + medalSvg(nueva.kind, true) + '</div>', '¡Nueva insignia!', nueva.name + ' · ' + nueva.tier + '.' + premio);
   }, 1400);
@@ -3930,7 +3934,7 @@ function startEncuestaAlimentacion() {
       CURRENT_PORTAL_DATA.alimentacion = Object.assign({}, alData(), { encuesta: enc });
       setLoading(false);
       showScreen('screen-dashboard'); showTab('tab-inicio'); renderInicioTab();
-      celebrate('🥗', '¡Listo!', 'Frida ya tiene tus respuestas y va a preparar tu guía de alimentación. Te avisamos aquí cuando esté lista.');
+      celebrate('🥗', '¡Listo!', 'Ya tengo tus respuestas y voy a preparar tu guía de alimentación. Te avisamos aquí cuando esté lista.');
     }).catch(function(e) { setLoading(false); document.getElementById('cq-error').textContent = 'No se pudo guardar: ' + e.message; });
   };
   cqAnswers = {};
@@ -3946,9 +3950,9 @@ function alimentacionInicioHtml() {
     return '<button type="button" class="in-nudge al-nudge" onclick="openGuiaAlimentacion()"><span>🥗</span><span><b>Tu guía de alimentación</b><small>Tu menú de hoy, tus calorías y tu lista de súper.</small></span></button>';
   }
   if (d.encuesta) {
-    return '<div class="in-nudge al-nudge" style="cursor:default"><span>👩‍🍳</span><span><b>Frida está preparando tu guía</b><small>Ya tiene tus respuestas. Te aparecerá aquí en unos días.</small></span></div>';
+    return '<div class="in-nudge al-nudge" style="cursor:default"><span>👩‍🍳</span><span><b>Estoy preparando tu guía</b><small>Ya tengo tus respuestas. Te aparecerá aquí en unos días.</small></span></div>';
   }
-  return '<button type="button" class="in-nudge al-nudge" onclick="startEncuestaAlimentacion()"><span>🥗</span><span><b>Desbloquea tu guía de alimentación</b><small>Responde unas preguntas (3 minutos) y Frida arma tu guía con tu lista de súper.</small></span></button>';
+  return '<button type="button" class="in-nudge al-nudge" onclick="startEncuestaAlimentacion()"><span>🥗</span><span><b>Desbloquea tu guía de alimentación</b><small>Responde unas preguntas (3 minutos) y te armo tu guía con tu lista de súper.</small></span></button>';
 }
 
 // ── Vista de la guía ──
@@ -4141,7 +4145,7 @@ function alComentHtml(mi, nombre) {
   var c = ((alData().comentarios || {})[mi] || {}).texto || '';
   return '<details class="al-com"' + (c ? ' open' : '') + '><summary>✏️ ¿Algo que no te gustó o cambiarías de tu ' + escapeHtml(nombre) + '?</summary>'
     + '<textarea id="al-com-' + mi + '" rows="3" placeholder="Ej.: no me gusta la avena, prefiero algo salado a las 7 am, agrégame más fruta…">' + escapeHtml(c) + '</textarea>'
-    + '<div class="al-com-f"><small id="al-com-msg-' + mi + '">' + (c ? 'Frida ya lo tiene. Lo verá en tu próxima guía 💙' : 'Frida lo lee para tu próxima guía.') + '</small><button type="button" onclick="alGuardarComent(' + mi + ')">Enviar</button></div></details>';
+    + '<div class="al-com-f"><small id="al-com-msg-' + mi + '">' + (c ? 'Ya lo tengo. Lo tomaré en cuenta en tu próxima guía 💙' : 'Lo leo para tu próxima guía.') + '</small><button type="button" onclick="alGuardarComent(' + mi + ')">Enviar</button></div></details>';
 }
 function alGuardarComent(mi) {
   var ta = document.getElementById('al-com-' + mi), msg = document.getElementById('al-com-msg-' + mi);
@@ -4152,7 +4156,7 @@ function alGuardarComent(mi) {
     CURRENT_PORTAL_DATA.alimentacion = CURRENT_PORTAL_DATA.alimentacion || {};
     var cm = CURRENT_PORTAL_DATA.alimentacion.comentarios = CURRENT_PORTAL_DATA.alimentacion.comentarios || {};
     if (val) cm[mi] = val; else delete cm[mi];
-    msg.textContent = txt ? '✓ ¡Gracias! Frida lo verá para tu próxima guía 💙' : 'Listo, se borró.';
+    msg.textContent = txt ? '✓ ¡Gracias! Lo tomaré en cuenta en tu próxima guía 💙' : 'Listo, se borró.';
   }).catch(function(e) { msg.textContent = 'No se pudo guardar. Intenta de nuevo.'; console.warn('comentario', e.message); });
 }
 // Página de cada comida: foto (o dibujito), nombre, calorías, ingredientes y preparación.
@@ -4691,7 +4695,8 @@ function rttPaintMainBtn() {
   var st = RTT.steps[RTT.s], btn = document.getElementById('rtt-done-btn');
   var tiempo = exTipo(st.block, st.ex) === 'tiempo';
   btn.classList.toggle('running', !!RTT.timerRunning);
-  btn.innerHTML = tiempo ? (RTT.timerRunning ? '⏸ Pausar' : (RTT.timerLeft < RTT.timerTotal ? '▶ Seguir' : '▶ Empezar · ' + RTT.timerTotal + ' s')) : '✓ Listo · a descansar';
+  var ultimo = RTT.s >= RTT.steps.length - 1;
+  btn.innerHTML = tiempo ? (RTT.timerRunning ? '⏸ Pausar' : (RTT.timerLeft < RTT.timerTotal ? '▶ Seguir' : '▶ Empezar · ' + RTT.timerTotal + ' s')) : (ultimo ? '✓ Finalizar entreno' : '✓ Siguiente ejercicio');
 }
 function rttPaintTimer() {
   document.getElementById('rtt-timer-t').textContent = fmtMinSec(Math.max(0, RTT.timerLeft));
@@ -4850,7 +4855,7 @@ function rttSndSiguiente() { RTT_SND.sonando = false; var t = RTT_SND.cola.shift
 // Terminar antes: igual cuenta como entreno del día y se le pregunta qué pasó.
 function rttTerminarHoy() {
   if (!RTT || !RTT.startTs) return;
-  if (!confirm('¿Terminar tu entreno por hoy? Igual cuenta como entrenado.')) return;
+  if (!confirm('¿Terminar tu entreno aquí? Igual cuenta como entrenado.')) return;
   RTT.terminadoAntes = true;
   rttFinish();
 }
@@ -4864,7 +4869,7 @@ function rttFinish() {
   document.getElementById('rtt-end-time').textContent = rttClock();
   document.getElementById('rtt-end-meta').textContent = antes ? 'Cada minuto suma 💙' : RTT.meta ? (RTT.duracion <= RTT.meta * 60 ? 'Dentro de tu meta de ' + RTT.meta + ' min 🙌' : 'Tu meta es ' + RTT.meta + ' min') : 'de entreno';
   document.getElementById('rtt-end-conf').innerHTML = rttConfeti(34);
-  var c = document.getElementById('rtt-end-comment'); c.value = ''; c.placeholder = antes ? '¿Qué pasó hoy? Cuéntale a Frida por qué terminaste antes: cansancio, tiempo, alguna molestia…' : DAY_COMMENT_PLACEHOLDER;
+  var c = document.getElementById('rtt-end-comment'); c.value = ''; c.placeholder = antes ? '¿Qué pasó hoy? Cuéntame por qué terminaste antes: cansancio, tiempo, alguna molestia…' : DAY_COMMENT_PLACEHOLDER;
   rttShow('end');
 }
 // Guarda la sesión (entrenoLogs) con lo registrado en las rondas y marca
@@ -6443,7 +6448,7 @@ var PLAN_NEVER_SET = false;
 function planWaLink(texto) { return 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(texto); }
 function renderPlanLockedCard() {
   var title = PLAN_NEVER_SET ? 'Elige tu plan y empezamos' : 'Tu programa caducó';
-  var text = PLAN_NEVER_SET ? 'Tu cuenta ya está lista. Cuando elijas tu plan, Frida arma tu rutina y tu guía de alimentación, y aquí se desbloquea todo.' : 'Renueva tu plan para seguir viendo esta sección.';
+  var text = PLAN_NEVER_SET ? 'Tu cuenta ya está lista. Cuando elijas tu plan, te armo tu rutina y tu guía de alimentación, y aquí se desbloquea todo.' : 'Renueva tu plan para seguir viendo esta sección.';
   var fila = function(nombre, sub, precio, msg) {
     return '<a class="pf-locked-price-row pf-plan-pick" href="' + planWaLink(msg) + '" target="_blank" rel="noopener"><span class="plan-name">' + nombre + '<span class="plan-sub">' + sub + '</span></span><span class="plan-price">' + precio + ' <b>›</b></span></a>';
   };
@@ -6611,7 +6616,7 @@ function apuntarmeAnuncio(id) {
   db().ref().update(upd).then(function() {
     CURRENT_PORTAL_DATA.apuntados = CURRENT_PORTAL_DATA.apuntados || {}; CURRENT_PORTAL_DATA.apuntados[id] = true;
     loadAnuncios();
-    celebrate('🙌', '¡Listo!', 'Frida ya recibió tu mensaje y te escribirá con los detalles.');
+    celebrate('🙌', '¡Listo!', 'Ya recibí tu mensaje y te escribo con los detalles.');
   }).catch(function(e) { alert('No se pudo enviar: ' + e.message); });
 }
 function cerrarAnuncio(id) {
